@@ -30,17 +30,17 @@ class GenericModel extends BaseModel{
     public function getAttributes(){
 
         $variables = get_class_vars('UsuarioModel');
-        $atributos = array();
+        $attributes = array();
         
 
-        foreach($variables as $llave => $valor){
+        foreach($variables as $key => $value){
 
-            if(!in_array($llave, $this->exclude)){
+            if(!in_array($key, $this->exclude)){
                 
-                $atributos[] = $llave;
+                $attributes[] = $key;
             }
         }
-        return $atributos;
+        return $attributes;
     }
 
     //Método para asignar los atributos del objeto que heradará esta clase o el que se envíe como parámetro
@@ -48,34 +48,34 @@ class GenericModel extends BaseModel{
 
         try {
             
-            $atributos = $this->getAttributes();
+            $attributes = $this->getAttributes();
             
-            $objetoFinal = array();
+            $finalObject = array();
 
             //Obtenemos el objeto desde el modelo
             if($obj == null){
 
-                foreach ($atributos as $indice => $llave) {
+                foreach ($attributes as $index => $key) {
 
-                    if(isset($this->{$llave})){
+                    if(isset($this->{$key})){
 
-                        $objetoFinal[$llave] = $this->{$llave};
+                        $finalObject[$key] = $this->{$key};
                     }
                 }  
 
-                return $objetoFinal;
+                return $finalObject;
             }
 
             //Corregir el objeto que recibimos con los atributos del modelo
-            foreach ($atributos as $indice => $llave) {
+            foreach ($attributes as $index => $key) {
 
-                if(isset($obj[$llave])){
+                if(isset($obj[$key])){
 
-                    $objetoFinal[$llave] = $obj[$llave];
+                    $finalObject[$key] = $obj[$key];
                 }
             }
 
-            return $objetoFinal;
+            return $finalObject;
 
         } catch (PDOException $error) {
 
@@ -88,13 +88,13 @@ class GenericModel extends BaseModel{
         
         try {
 
-            $atributos = $this->getAttributes();
+            $attributes = $this->getAttributes();
             
-            foreach($atributos as $indice => $llave){
+            foreach($attributes as $index => $key){
 
-                if(isset($obj[$llave])){
+                if(isset($obj[$key])){
 
-                    $this->{$llave} = $obj[$llave];
+                    $this->{$key} = $obj[$key];
                 }
             }
             
@@ -120,14 +120,14 @@ class GenericModel extends BaseModel{
         return parent::update($obj);
     }
 
-    public function __get($nombreAtributo){
+    public function __get($attributeName){
 
-        return $this->{$nombreAtributo};
+        return $this->{$attributeName};
     }
 
-    public function __set($nombreAtributo, $valor){
+    public function __set($attributeName, $value){
 
-        $this->{$nombreAtributo} = $valor;
+        $this->{$attributeName} = $value;
     }
 
 }

@@ -12,7 +12,7 @@ class BaseModel{
     public function __construct($table = null){
 
         $this->connection = (new Database())->connect();
-        $this->tabla = $table;
+        $this->table = $table;
     }  
 
     //Método para obtener todos los registros de una tabla
@@ -20,7 +20,7 @@ class BaseModel{
         try {
 
             $this->sql = "SELECT * FROM {$this->table} {$this->wheres}";
-
+            
             $query = $this->connection->prepare($this->sql);
             $query->execute();
 
@@ -73,13 +73,14 @@ class BaseModel{
             
             $keys = "";
 
-            foreach($obj as $key){
+            foreach($obj as $key => $value){
 
                 $keys .= "`$key`=:$key,";
             }
 
             $keys = rtrim($keys,',');
             $this->sql = "UPDATE $this->table SET $keys $this->wheres";
+
             $affectedRows = $this->execute($obj);
 
             return $affectedRows;

@@ -2,9 +2,9 @@
 
 > ### Autores:
 >
-> - @Oriana Blanco.
 > - @Francis Baloa.
 > - @Enrique Chacón.
+> - @Oriana Blanco.
 >
 > Estudiantes de la Universidad Politécnica Territorial de Aragua (UPTA).
 

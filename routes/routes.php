@@ -1,26 +1,19 @@
 <?php
 
 //Ruta principal
-Router::get('/',UsuarioController::class);
+Router::get('/',homepageController::class);
 
-Router::get('/listarusuarios',UsuarioController::class . '@listarUsuarios');
-Router::get('/registrarusuario', UsuarioController::class . '@formRegistrarUsuario');
+//Usuario - Vistas
+Router::get('/usuarios',UsuarioController::class . '@index');
+Router::get('/usuarios/registrar', UsuarioController::class . '@formRegistrarUsuario');
+Router::get('/usuarios/actualizar/:id', UsuarioController::class . '@formActualizarUsuarios');
 
-Router::post('/registrarusuario/registrar', UsuarioController::class . '@insertarUsuario');
-
-
-Router::get('/hola',function(Request $hola){
-    return 'hola' . $hola->hola;
-});
-
-Router::get('/hola/:id', function($id,Request $hola){
-    echo $id;
-});
-
-Router::patch('/patch', function(Request $hola){
-    return 'esto es un patch';
-});
-
+//Usuario - API
+Router::get('/usuarios/consulta',UsuarioController::class . '@listarUsuarios');
+Router::get('/usuarios/consulta/:id',UsuarioController::class . '@listarUsuarioPorId');
+Router::post('/usuarios/registrar', UsuarioController::class . '@insertarUsuario');
+Router::put('/usuarios/actualizar', UsuarioController::class . '@actualizarUsuario');
+Router::delete('/usuarios/eliminar/:id', UsuarioController::class . '@eliminarUsuario')
 
 
 

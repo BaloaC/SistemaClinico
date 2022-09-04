@@ -71,7 +71,7 @@ class Router{
                 return $recordUri->call();
             }
         }
-
+    
         //Muestra el mensaje de error 404
         header('Content-Type: text/html; charset=utf-8');
         echo 'La uri (<a href="' . $uri . '"> '. $uri .'</a>)no se encuentra registrada en el metodo: ' . $method;

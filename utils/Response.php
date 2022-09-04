@@ -51,31 +51,31 @@ class Response{
         switch($code){
 
             case 'CORRECTO':
-                return [1, 'Se ha realizado la operación de manera exitosa!'];
+                return [true, 'Se ha realizado la operación de manera exitosa!'];
 
             case 'INSERCION_EXITOSA':
-                return [1,'Se ha insertado el registro correctamente!'];
+                return [true,'Se ha insertado el registro correctamente!'];
 
             case 'ACTUALIZACION_EXITOSA':
-                return [1, 'Se ha actualizado el registro correctamente!'];
+                return [true, 'Se ha actualizado el registro correctamente!'];
 
             case 'ELIMINACION_EXITOSA':
-                return [1, 'Se ha eliminado el registro correctamente!'];
+                return [true, 'Se ha eliminado el registro correctamente!'];
 
             case 'ERROR':
-                return [-1, 'Se ha producido un error al realizar la operación']; 
+                return [false, 'Se ha producido un error al realizar la operación']; 
 
             case 'INSERCION_FALLIDA':
-                return [-1, 'No se ha insertado correctamente el registro'];
+                return [false, 'No se ha insertado correctamente el registro'];
 
             case 'ACTUALIZACION_FALLIDA':
-                return [-1, 'No se ha actualizado correctamente el registro'];
+                return [false, 'No se ha actualizado correctamente el registro'];
 
             case 'ELIMINACION_FALLIDA':
-                return [-1, 'No se ha eliminado correctamente el registro'];
+                return [false, 'No se ha eliminado correctamente el registro'];
             
             default: 
-                return [-1, 'No se ha establecido ningún mensaje'];
+                return [false, 'No se ha establecido ningún mensaje'];
         }
     }
 
