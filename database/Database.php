@@ -6,7 +6,7 @@ class Database{
     private $host = '127.0.0.1';
     private $user = 'root';
     private $pass = '';
-    private $db = 'usuarios_mvc';
+    private $db = 'prueba_proyecto';
     private $charset = 'utf8mb4';
 
     public function connect(){

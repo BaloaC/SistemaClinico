@@ -25,7 +25,7 @@ class UsuarioController extends Controller{
     public function insertarUsuario(/*Request $request*/){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-
+        var_dump($_POST);
         $_usuarioModel = new UsuarioModel();
         $id = $_usuarioModel->insert($_POST);
         $mensaje = ($id > 0);
