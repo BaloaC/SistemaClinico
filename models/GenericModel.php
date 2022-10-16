@@ -29,7 +29,7 @@ class GenericModel extends BaseModel{
     //Obtenemos los atributos de la clase que heredará esta
     public function getAttributes(){
 
-        $variables = get_class_vars('UsuarioModel');
+        $variables = get_class_vars($this->className);
         $attributes = array();
         
 
