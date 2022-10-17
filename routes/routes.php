@@ -12,9 +12,20 @@ Router::get('/usuarios/actualizar/:id', UsuarioController::class . '@formActuali
 Router::get('/usuarios/consulta',UsuarioController::class . '@listarUsuarios');
 Router::get('/usuarios/consulta/:id',UsuarioController::class . '@listarUsuarioPorId');
 Router::post('/usuarios/registrar', UsuarioController::class . '@insertarUsuario');
-Router::put('/usuarios/actualizar', UsuarioController::class . '@actualizarUsuario');
-Router::delete('/usuarios/eliminar/:id', UsuarioController::class . '@eliminarUsuario')
+Router::put('/usuarios/actualizar/:id', UsuarioController::class . '@actualizarUsuario');
+Router::delete('/usuarios/eliminar/:id', UsuarioController::class . '@eliminarUsuario');
 
+//Pacientes - Vistas
+Router::get('/pacientes',PacienteController::class . '@index');
+Router::get('/pacientes/registrar', PacienteController::class . '@formRegistrarPaciente');
+Router::get('/pacientes/actualizar/:id', PacienteController::class . '@formActualizarPaciente');
+
+//Pacientes - API
+Router::get('/pacientes/consulta',PacienteController::class . '@listarPacientes');
+Router::get('/pacientes/:id',PacienteController::class . '@listarPacientePorId');
+Router::post('/pacientes', PacienteController::class . '@insertarPaciente');
+Router::put('/pacientes/:id', PacienteController::class . '@actualizarPaciente');
+Router::delete('/pacientes/:id', PacienteController::class . '@eliminarPaciente')
 
 
 ?>

@@ -18,7 +18,7 @@
         </tbody>
     </table>
     
-
+    <button>clic</button>
 
     <script src="<?php echo Url::to('assets/js/welcome/welcome.js'); ?>"></script>
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>

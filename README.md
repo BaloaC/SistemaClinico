@@ -23,6 +23,10 @@
 > - En los modelos colocar los mismos atributos que se encuentren en la base de datos, ya si se necesitan más añadirlos.
 > - Gracias  a contar con un autoloader, no es necesario usar require/include de las clases. Solo considerar agregar las rutas en `config.php` en caso de añadir nuevas carpetas.
 
+### Base de Daotos:
+
+- **tipo_paciente**: Este campo corresponde a la tabla pacientes y es un enum de 3 valores numéricos, el primer valor (1) corresponde a natural, el segundo valor (2) corresponde a asegurado y el tercer valor (3) corresponde a beneficiario, deben ser enviados como int y no string a la base de datos según sea el caso del paciente
+
 > #### Estructura del proyecto:
 >
 > - **assets**: En esta carpeta se encontrarán todos los recursos **CSS** y **JS**.

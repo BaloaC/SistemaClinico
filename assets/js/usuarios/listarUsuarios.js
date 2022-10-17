@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         
-        const response = await fetch("http://127.0.0.1/proyectofeo/usuarios/consulta"),
+        const response = await fetch("http://127.0.0.1/codigo_backend/usuarios/consulta"),
 
         json = await response.json();
 
