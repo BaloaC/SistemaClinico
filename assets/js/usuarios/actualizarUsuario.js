@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () =>{
         
         if(idUsuario !== null && idUsuario > 0){
             
-            const response = await fetch('http://127.0.0.1/proyectofeo/usuarios/consulta/' + idUsuario),
+            const response = await fetch('http://127.0.0.1/codigo_backend/usuarios/consulta/' + idUsuario),
 
             json = await response.json();
 
@@ -60,7 +60,7 @@ document.addEventListener("submit", async event => {
             body: JSON.stringify(user),
         };
 
-        const response = await fetch("http://127.0.0.1/proyectofeo/usuarios/actualizar", options);
+        const response = await fetch("http://127.0.0.1/codigo_backend/usuarios/actualizar", options);
 
         json = await response.json();
 

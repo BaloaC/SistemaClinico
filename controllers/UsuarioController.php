@@ -17,22 +17,46 @@ class UsuarioController extends Controller{
         return $this->view('usuarios/registrarUsuario');
     }
 
-    public function formActualizarUsuarios($idUsuario){
+    public function formActualizarUsuarios($usuario_id){
         
-        return $this->view('usuarios/actualizarUsuario', ['idUsuario' => $idUsuario]);
+        return $this->view('usuarios/actualizarUsuario', ['usuario_id' => $usuario_id]);
     } 
 
     public function insertarUsuario(/*Request $request*/){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         var_dump($_POST);
-        $_usuarioModel = new UsuarioModel();
-        $id = $_usuarioModel->insert($_POST);
-        $mensaje = ($id > 0);
 
-        $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+        // Creando los strings para las validaciones
+        $camposNumericos = array("rol");
+        $validarUsuario = new Validate;
 
-        return $respuesta->json($mensaje ? 200 : 400);
+        switch($_POST) {
+            case $validarUsuario->isEmpty($_POST):
+                return $respuesta = new Response('DATOS_INVALIDOS');
+            case $validarUsuario->isNumber($_POST, $camposNumericos):
+                return $respuesta = new Response('DATOS_INVALIDOS');
+
+            case $validarUsuario->isDuplicated('usuario', 'nombre', $_POST["nombre"]):
+                return $respuesta = new Response('DATOS_DUPLICADOS');
+
+            // case $validarUsuario->isDuplicated('usuario', 'nombre', $_POST["nombre"]):
+            //     return $respuesta = new Response(false, 'Ese nombre de usuario ya existe');
+            default: 
+
+            $claveEncriptada = password_hash($_POST["clave"], PASSWORD_DEFAULT);
+            $clave = array('clave' => $claveEncriptada);
+            $ArrayNuevo = array_replace($_POST, $clave);
+            $data = $validarUsuario->dataScape($ArrayNuevo);
+
+            $_usuarioModel = new UsuarioModel();
+            $id = $_usuarioModel->insert($data);
+            $mensaje = ($id > 0);
+
+            $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+
+            return $respuesta->json($mensaje ? 200 : 400);
+        }
     }
 
     public function listarUsuarios(){
@@ -47,10 +71,10 @@ class UsuarioController extends Controller{
         return $respuesta->json(200);
     }
 
-    public function listarUsuarioPorId($idUsuario){
+    public function listarUsuarioPorId($usuario_id){
 
         $_usuarioModel = new UsuarioModel();
-        $usuario = $_usuarioModel->where('usuarios_id','=',$idUsuario)->getFirst();
+        $usuario = $_usuarioModel->where('usuario_id','=',$usuario_id)->getFirst();
         $mensaje = ($usuario != null);
 
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
@@ -59,26 +83,42 @@ class UsuarioController extends Controller{
         return $respuesta->json($mensaje ? 200 : 400);
     }
 
-    public function actualizarUsuario(){
+    public function actualizarUsuario($usuario_id){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
+        // Creando los strings para las validaciones
+        $camposNumericos = array("rol");
+        $validarUsuario = new Validate;
 
-        $_usuarioModel = new UsuarioModel();
+        switch($_POST) {
+            case ($validarUsuario->isEmpty($_POST)):
+                return $respuesta = new Response('DATOS_INVALIDOS');
+            case $validarUsuario->isNumber($_POST, $camposNumericos):
+                return $respuesta = new Response('DATOS_INVALIDOS');
+            case array_key_exists('nombre', $_POST):
+                if ($validarUsuario->isDuplicated('usuario', 'nombre', $_POST["nombre"])) {
+                    return $respuesta = new Response(false, 'Ese nombre de usuario ya existe');
+                }
+            default: 
+            $data = $validarUsuario->dataScape($_POST);
 
-        $actualizado = $_usuarioModel->where('usuarios_id','=',$_POST['idUsuario'])->update($_POST);
-        $mensaje = ($actualizado > 0);
+            $_usuarioModel = new UsuarioModel();
 
-        $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        $respuesta->setData($actualizado);
-
-        return $respuesta->json($mensaje ? 200 : 400);
+            $actualizado = $_usuarioModel->where('usuario_id','=',$usuario_id)->update($data);
+            $mensaje = ($actualizado > 0);
+    
+            $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+            $respuesta->setData($actualizado);
+    
+            return $respuesta->json($mensaje ? 200 : 400);
+        }
     }
 
-    public function eliminarUsuario($idUsuario){
+    public function eliminarUsuario($usuario_id){
 
         $_usuarioModel = new UsuarioModel();
 
-        $eliminado = $_usuarioModel->where('usuarios_id','=',$idUsuario)->delete();
+        $eliminado = $_usuarioModel->where('usuario_id','=',$usuario_id)->delete();
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

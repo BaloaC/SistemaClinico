@@ -17,6 +17,8 @@
         </thead>
     </table>
 
+    <button>clickame</button>
+
     <script src="<?php echo Url::to('assets/js/usuarios/listarUsuarios.js'); ?>"></script>
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
 </body>

@@ -23,7 +23,7 @@ document.addEventListener("submit", async event => {
             body: JSON.stringify(user),
         };
 
-        const response = await fetch("http://127.0.0.1/proyectofeo/usuarios/registrar", options);
+        const response = await fetch("http://127.0.0.1/codigo_backend/usuarios/registrar", options);
 
         json = await response.json();
 

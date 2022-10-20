@@ -2,7 +2,7 @@ addEventListener('DOMContentLoaded', async (target) =>{
 
     target.preventDefault();
 
-    const response = await fetch('http://127.0.0.1/proyectomvc/listarusuarios'),
+    const response = await fetch('http://127.0.0.1/codigo_backend/listarusuarios'),
     json = await response.json();
 
     let tbody = document.querySelector('#tbody-user');
