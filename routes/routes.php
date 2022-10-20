@@ -13,7 +13,9 @@ Router::get('/usuarios/consulta',UsuarioController::class . '@listarUsuarios');
 Router::get('/usuarios/consulta/:id',UsuarioController::class . '@listarUsuarioPorId');
 Router::post('/usuarios/registrar', UsuarioController::class . '@insertarUsuario');
 Router::put('/usuarios/actualizar', UsuarioController::class . '@actualizarUsuario');
-Router::delete('/usuarios/eliminar/:id', UsuarioController::class . '@eliminarUsuario')
+Router::delete('/usuarios/eliminar/:id', UsuarioController::class . '@eliminarUsuario');
+
+Router::post('/pacientes/registrar', PacientesController::class . '@insertarPacientes');
 
 
 

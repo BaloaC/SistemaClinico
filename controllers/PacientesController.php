@@ -1,6 +1,6 @@
 <?php
 
-class PacienteController extends Controller{
+class PacientesController extends Controller{
 
     //Método index (vista principal)
     public function index(){
