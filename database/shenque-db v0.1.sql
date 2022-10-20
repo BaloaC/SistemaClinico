@@ -439,6 +439,8 @@ CREATE TABLE IF NOT EXISTS shenque_db.usuario (
   usuario_id INT NOT NULL AUTO_INCREMENT,
   nombre VARCHAR(16) NOT NULL,
   clave VARCHAR(100) NOT NULL,
+  tokken VARCHAR(10) UNIQUE,
+  rol INT NOT NULL,
   fecha_creacion DATETIME NOT NULL,
   PRIMARY KEY (usuario_id));
 

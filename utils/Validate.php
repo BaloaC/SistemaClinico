@@ -36,7 +36,7 @@ class Validate extends BaseModel{
             if(is_numeric(array_search($key,$validate))){
                 
                 $table = rtrim($key,'_id');
-                $sql = "SELECT $key FROM $table WHERE $key = $value";
+                $sql = "SELECT $key FROM $table WHERE $key = '$value'";
                 $query = $this->connection->prepare($sql);
                 $query->execute();
                 
@@ -64,7 +64,7 @@ class Validate extends BaseModel{
     //Validar que un registro no se encuentre duplicado
     public function isDuplicated($table, $column, $value){
 
-        $sql = "SELECT $column FROM $table WHERE $column = $value";
+        $sql = "SELECT $column FROM $table WHERE $column = '$value'";
         $query = $this->connection->prepare($sql);
         $query->execute();
                 

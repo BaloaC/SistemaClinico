@@ -66,7 +66,7 @@ class Response{
                 return [false, 'Se ha producido un error al realizar la operación']; 
 
             case 'INSERCION_FALLIDA':
-                return [false, '400, No se ha insertado correctamente el registro'];
+                return [false, 'Error 400, No se ha insertado correctamente el registro'];
 
             case 'ACTUALIZACION_FALLIDA':
                 return [false, 'No se ha actualizado correctamente el registro'];
@@ -75,10 +75,13 @@ class Response{
                 return [false, 'No se ha eliminado correctamente el registro'];
 
             case 'DATOS_INVALIDOS':
-                    return [false, '400, Faltan datos o los datos son inválidos'];
+                    return [false, 'Error 400, Faltan datos o los datos son inválidos'];
             
             case 'DATOS_DUPLICADOS':
-                return [false, '400, Ya existe un registro con la misma información'];
+                return [false, 'Error 400, Ya existe un registro con la misma información'];
+
+            case 'NOT_FOUND':
+                return [false, 'Error 404, Recurso no encontrado'];
 
             default: 
                 return [false, 'No se ha establecido ningún mensaje'];

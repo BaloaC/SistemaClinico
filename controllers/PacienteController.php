@@ -13,9 +13,9 @@ class PacienteController extends Controller{
         return $this->view('pacientes/registrarPacientes');
     }
 
-    public function formActualizarPaciente($idPaciente){
+    public function formActualizarPaciente($paciente_id){
         
-        return $this->view('pacientes/actualizarPacientes', ['idPaciente' => $idPaciente]);
+        return $this->view('pacientes/actualizarPacientes', ['paciente_id' => $paciente_id]);
     } 
 
     public function insertarPaciente(/*Request $request*/){
@@ -38,8 +38,8 @@ class PacienteController extends Controller{
                 return $respuesta = new Response('DATOS_INVALIDOS');
             case $validarPaciente->isDuplicated('paciente', 'cedula', $_POST["cedula"]):
                 return $respuesta = new Response('DATOS_DUPLICADOS');
-            case $validarPaciente->isDate($_POST['fecha_nacimiento']):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+            // case $validarPaciente->isDate($_POST['fecha_nacimiento']):
+            //     return $respuesta = new Response('DATOS_INVALIDOS');
             default: 
             $data = $validarPaciente->dataScape($_POST);
 
@@ -65,10 +65,10 @@ class PacienteController extends Controller{
         return $respuesta->json(200);
     }
 
-    public function listarPacientePorId($idPaciente){
+    public function listarPacientePorId($paciente_id){
 
         $_pacienteModel = new PacienteModel();
-        $paciente = $_pacienteModel->where('paciente_id','=',$idPaciente)->getFirst();
+        $paciente = $_pacienteModel->where('paciente_id','=',$paciente_id)->getFirst();
         $mensaje = ($paciente != null);
 
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
@@ -77,29 +77,55 @@ class PacienteController extends Controller{
         return $respuesta->json($mensaje ? 200 : 400);
     }
 
-    public function actualizarPaciente(){
+    public function actualizarPaciente($paciente_id){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
+        // Creando los strings para las validaciones
+        $camposNumericos = array("cedula", "edad", "telefono");
+        $camposString = array("nombres", "apellidos");
+        $camposKey = array("paciente_id"); // Esta variable es el array que se pasara por existInDB
 
-        $_pacienteModel = new PacienteModel();
+        $validarPaciente = new Validate;
+        switch($_POST) {
+            case ($validarPaciente->isEmpty($_POST)):
+                return $respuesta = new Response('DATOS_INVALIDOS');
+            case $validarPaciente->isNumber($_POST, $camposNumericos):
+                return $respuesta = new Response('DATOS_INVALIDOS');
+            case $validarPaciente->isString($_POST, $camposString):
+                return $respuesta = new Response('DATOS_INVALIDOS');
+            case $validarPaciente->existsInDB($_POST, $camposKey):   
+                return $respuesta = new Response('NOT_FOUND');
+            case array_key_exists('cedula', $_POST):
+                if ( $validarPaciente->isDuplicated('paciente', 'cedula', $_POST["cedula"]) ) {
+                    return $respuesta = new Response('DATOS_DUPLICADOS');
+                }
+            // case $validarPaciente->isDuplicated('paciente', 'cedula', $_POST["cedula"]):
+            //     return $respuesta = new Response('DATOS_DUPLICADOS');
+            // case $validarPaciente->isDate($_POST['fecha_nacimiento']):
+            //     return $respuesta = new Response('DATOS_INVALIDOS');
+            default: 
+            $data = $validarPaciente->dataScape($_POST);
 
-        $actualizado = $_pacienteModel->where('paciente_id','=',$_POST['idPaciente'])->update($_POST);
-        $mensaje = ($actualizado > 0);
+            $_pacienteModel = new PacienteModel();
 
-        $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        $respuesta->setData($actualizado);
+            $actualizado = $_pacienteModel->where('paciente_id','=',$paciente_id)->update($data);
+            $mensaje = ($actualizado > 0);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+            $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+            $respuesta->setData($actualizado);
+
+            return $respuesta->json($mensaje ? 200 : 400);
+            }
     }
 
-    public function eliminarPaciente($idPaciente){
+    public function eliminarPaciente($paciente_id){
 
         $_pacienteModel = new PacienteModel();
 
-        $eliminado = $_pacienteModel->where('paciente_id','=',$idPaciente)->delete();
+        $eliminado = $_pacienteModel->where('paciente_id','=',$paciente_id)->delete();
         $mensaje = ($eliminado > 0);
 
-        $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');
+        $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'NOT_FOUND');
         $respuesta->setData($eliminado);
 
         return $respuesta->json($mensaje ? 200 : 400);

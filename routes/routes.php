@@ -1,5 +1,11 @@
 <?php
 
+//Login - vista
+Router::get('/login',LoginController::class . '@index');
+
+//Login - API
+Router::post('/login',LoginController::class . '@entrar');
+
 //Ruta principal
 Router::get('/',homepageController::class);
 
@@ -10,10 +16,10 @@ Router::get('/usuarios/actualizar/:id', UsuarioController::class . '@formActuali
 
 //Usuario - API
 Router::get('/usuarios/consulta',UsuarioController::class . '@listarUsuarios');
-Router::get('/usuarios/consulta/:id',UsuarioController::class . '@listarUsuarioPorId');
-Router::post('/usuarios/registrar', UsuarioController::class . '@insertarUsuario');
-Router::put('/usuarios/actualizar/:id', UsuarioController::class . '@actualizarUsuario');
-Router::delete('/usuarios/eliminar/:id', UsuarioController::class . '@eliminarUsuario');
+Router::get('/usuarios/:id',UsuarioController::class . '@listarUsuarioPorId');
+Router::post('/usuarios', UsuarioController::class . '@insertarUsuario');
+Router::put('/usuarios/:id', UsuarioController::class . '@actualizarUsuario');
+Router::delete('/usuarios/:id', UsuarioController::class . '@eliminarUsuario');
 
 //Pacientes - Vistas
 Router::get('/pacientes',PacienteController::class . '@index');
