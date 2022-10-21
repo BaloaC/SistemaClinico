@@ -104,11 +104,33 @@ class Validate extends BaseModel{
         }
     }
 
+    // Para verificar si la fecha es anterior a hoy se tiene que pasar true por $bool, para evaluar que sea posterior a hoy se pasa false por $bool
+    public function isToday($date, $bool, $format = 'Y-m-d') {
+        $hoy = date($format);
+        $menor = $date < $hoy;
+        
+        if ($bool == true) {
+            $resultado = $menor ? true : false;
+            return $resultado;
+        } else {
+            $resultado = $menor ? false : true;
+            return $resultado;
+        }
+    }
+
     //Validar que una fecha sea válida
     public function isDate($date, $format = 'Y-m-d'){
 
         $d = DateTime::createFromFormat($format,$date);
-        return $d && $d->format($format) === $date;
+
+        $bool = $d && $d->format($format) === $date;
+        $resultado = $bool ? false : true;
+        return $resultado;
+        // if ($d && $d->format($format) === $date) {
+        //     return false;  
+        // } else {
+        //     return true;
+        // }
     }
 
     //Validar cédula de identidad

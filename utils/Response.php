@@ -77,6 +77,9 @@ class Response{
             case 'DATOS_INVALIDOS':
                     return [false, 'Error 400, Faltan datos o los datos son inválidos'];
             
+            case 'FECHA_INVALIDA':
+                return [false, 'Error 404, El formato de fecha no es válido'];
+
             case 'DATOS_DUPLICADOS':
                 return [false, 'Error 400, Ya existe un registro con la misma información'];
 

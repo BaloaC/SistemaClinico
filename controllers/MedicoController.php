@@ -18,20 +18,38 @@ class MedicoController extends Controller{
         return $this->view('medicos/actualizarMedicos', ['idMedico' => $idMedico]);
     } 
 
-    public function insertarMedicos(/*Request $request*/){
+    public function insertarMedico(/*Request $request*/){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        var_dump($_POST);
-        $_medicoModel = new MedicoModel();
-        $id = $_medicoModel->insert($_POST);
-        $mensaje = ($id > 0);
+        
+        // Creando los strings para las validaciones
+        $camposNumericos = array("cedula", "telefono");
+        $camposString = array("nombres", "apellidos", "direccion");
+        $validarMedico = new Validate;
 
-        $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+        switch($_POST) {
+            case ($validarMedico->isEmpty($_POST)):
+                return $respuesta = new Response('DATOS_INVALIDOS');
+            case $validarMedico->isNumber($_POST, $camposNumericos):
+                return $respuesta = new Response('DATOS_INVALIDOS');
+            case $validarMedico->isString($_POST, $camposString):
+                return $respuesta = new Response('DATOS_INVALIDOS');
+            case $validarMedico->isDuplicated('medico', 'cedula', $_POST["cedula"]):
+                return $respuesta = new Response('DATOS_DUPLICADOS');
+            default: 
+            $data = $validarMedico->dataScape($_POST);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+            $_medicoModel = new MedicoModel();
+            $id = $_medicoModel->insert($data);
+            $mensaje = ($id > 0);
+
+            $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+
+            return $respuesta->json($mensaje ? 200 : 400);
+        }
     }
 
-    public function listarMedico(){
+    public function listarMedicos(){
 
         $_medicoModel = new MedicoModel();
         $lista = $_medicoModel->getAll();
@@ -43,10 +61,10 @@ class MedicoController extends Controller{
         return $respuesta->json(200);
     }
 
-    public function listarMedicosPorId($idMedico){
+    public function listarMedicoPorId($medico_id){
 
         $_medicoModel = new MedicoModel();
-        $medico = $_medicoModel->where('medico_id','=',$idMedico)->getFirst();
+        $medico = $_medicoModel->where('medico_id','=',$medico_id)->getFirst();
         $mensaje = ($medico != null);
 
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
@@ -55,26 +73,48 @@ class MedicoController extends Controller{
         return $respuesta->json($mensaje ? 200 : 400);
     }
 
-    public function actualizarMedico(){
+    public function actualizarMedico($medico_id){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
 
-        $_medicoModel = new MedicoModel();
+        // Creando los strings para las validaciones
+        $camposNumericos = array("cedula", "telefono");
+        $camposString = array("nombres", "apellidos", "direccion");
+        $camposKey = array("medico_id");
+        $validarMedico = new Validate;
 
-        $actualizado = $_medicoModel->where('medico_id','=',$_POST['idMedico'])->update($_POST);
-        $mensaje = ($actualizado > 0);
+        switch($_POST) {
+            case ($validarMedico->isEmpty($_POST)):
+                return $respuesta = new Response('DATOS_INVALIDOS');
+            case $validarMedico->isNumber($_POST, $camposNumericos):
+                return $respuesta = new Response('DATOS_INVALIDOS');
+            case $validarMedico->isString($_POST, $camposString):
+                return $respuesta = new Response('DATOS_INVALIDOS');
+            case $validarMedico->existsInDB($_POST, $camposKey):   
+                return $respuesta = new Response('NOT_FOUND'); 
+            case array_key_exists('cedula', $_POST):
+                if ( $validarMedico->isDuplicated('medico', 'cedula', $_POST["cedula"]) ) {
+                    return $respuesta = new Response('DATOS_DUPLICADOS');
+                }
+            default: 
+            $data = $validarMedico->dataScape($_POST);
 
-        $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        $respuesta->setData($actualizado);
+            $_medicoModel = new MedicoModel();
+            $actualizado = $_medicoModel->where('medico_id','=',$medico_id)->update($_POST);
+            $mensaje = ($actualizado > 0);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+            $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+            $respuesta->setData($actualizado);
+
+            return $respuesta->json($mensaje ? 200 : 400);
+        }
     }
 
-    public function eliminarMedico($idMedico){
+    public function eliminarMedico($medico_id){
 
         $_medicoModel = new MedicoModel();
 
-        $eliminado = $_medicoModel->where('medico_id','=',$idMedico)->delete();
+        $eliminado = $_medicoModel->where('medico_id','=',$medico_id)->delete();
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

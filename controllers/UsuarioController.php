@@ -36,18 +36,17 @@ class UsuarioController extends Controller{
                 return $respuesta = new Response('DATOS_INVALIDOS');
             case $validarUsuario->isNumber($_POST, $camposNumericos):
                 return $respuesta = new Response('DATOS_INVALIDOS');
-
             case $validarUsuario->isDuplicated('usuario', 'nombre', $_POST["nombre"]):
                 return $respuesta = new Response('DATOS_DUPLICADOS');
-
-            // case $validarUsuario->isDuplicated('usuario', 'nombre', $_POST["nombre"]):
-            //     return $respuesta = new Response(false, 'Ese nombre de usuario ya existe');
             default: 
 
             $claveEncriptada = password_hash($_POST["clave"], PASSWORD_DEFAULT);
             $clave = array('clave' => $claveEncriptada);
             $ArrayNuevo = array_replace($_POST, $clave);
             $data = $validarUsuario->dataScape($ArrayNuevo);
+
+            $hoy = date('Y-m-d h:i:s');
+            $data['fecha_creacion'] = $hoy;
 
             $_usuarioModel = new UsuarioModel();
             $id = $_usuarioModel->insert($data);

@@ -31,7 +31,29 @@ Router::get('/pacientes/consulta',PacienteController::class . '@listarPacientes'
 Router::get('/pacientes/:id',PacienteController::class . '@listarPacientePorId');
 Router::post('/pacientes', PacienteController::class . '@insertarPaciente');
 Router::put('/pacientes/:id', PacienteController::class . '@actualizarPaciente');
-Router::delete('/pacientes/:id', PacienteController::class . '@eliminarPaciente')
+Router::delete('/pacientes/:id', PacienteController::class . '@eliminarPaciente');
 
+//Medicos - Vistas
+Router::get('/medicos',MedicoController::class . '@index');
+Router::get('/medicos/registrar', MedicoController::class . '@formRegistrarMedico');
+Router::get('/medicos/actualizar/:id', MedicoController::class . '@formActualizarMedico');
 
+//Medicos - API
+Router::get('/medicos/consulta',MedicoController::class . '@listarmedicos');
+Router::get('/medicos/:id',MedicoController::class . '@listarMedicoPorId');
+Router::post('/medicos', MedicoController::class . '@insertarMedico');
+Router::put('/medicos/:id', MedicoController::class . '@actualizarMedico');
+Router::delete('/medicos/:id', MedicoController::class . '@eliminarMedico');
+
+//Especialidad - Vistas
+Router::get('/especialidades',EspecialidadController::class . '@index');
+Router::get('/especialidades/registrar', EspecialidadController::class . '@formRegistrarEspecialidad');
+Router::get('/especialidades/actualizar/:id', EspecialidadController::class . '@formActualizarEspecialidad');
+
+//Especialidad - API
+Router::get('/especialidades/consulta',EspecialidadController::class . '@listarEspecialidades');
+Router::get('/especialidades/:id',EspecialidadController::class . '@listarEspecialidadPorId');
+Router::post('/especialidades', EspecialidadController::class . '@insertarEspecialidad');
+Router::put('/especialidades/:id', EspecialidadController::class . '@actualizarEspecialidad');
+Router::delete('/especialidades/:id', EspecialidadController::class . '@eliminarEspecialidad');
 ?>
