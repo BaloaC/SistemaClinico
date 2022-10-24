@@ -36,16 +36,20 @@ class MedicoController extends Controller{
                 return $respuesta = new Response('DATOS_INVALIDOS');
             case $validarMedico->isDuplicated('medico', 'cedula', $_POST["cedula"]):
                 return $respuesta = new Response('DATOS_DUPLICADOS');
-            default: 
-            $data = $validarMedico->dataScape($_POST);
+            default:
+                $newForm = array_slice($_POST, 0, -1);                 
+                $data = $validarMedico->dataScape($newForm);
 
-            $_medicoModel = new MedicoModel();
-            $id = $_medicoModel->insert($data);
-            $mensaje = ($id > 0);
+                $_medicoModel = new MedicoModel();
+                $id = $_medicoModel->insert($data);
 
-            $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+                if ($id > 0) {
+                    $insertarEspecialidad = new MedicoEspecialidadController;
+                    $mensaje = $insertarEspecialidad->insertarMedicoEspecialidad($_POST);
 
-            return $respuesta->json($mensaje ? 200 : 400);
+                    $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+                    return $respuesta->json($mensaje ? 200 : 400);                    
+                }
         }
     }
 
@@ -73,6 +77,16 @@ class MedicoController extends Controller{
         return $respuesta->json($mensaje ? 200 : 400);
     }
 
+    public function RetornarID($cedula){
+
+        $_medicoModel = new MedicoModel();
+        $medico = $_medicoModel->where('cedula','=',$cedula)->getFirst();
+        $mensaje = ($medico != null);
+        $respuesta = $mensaje ? $medico->medico_id : false;
+        return $respuesta;
+        
+    }
+
     public function actualizarMedico($medico_id){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
@@ -96,19 +110,46 @@ class MedicoController extends Controller{
                 if ( $validarMedico->isDuplicated('medico', 'cedula', $_POST["cedula"]) ) {
                     return $respuesta = new Response('DATOS_DUPLICADOS');
                 }
+
             default: 
-            $data = $validarMedico->dataScape($_POST);
+                $data = $validarMedico->dataScape($_POST);
+                $_medicoModel = new MedicoModel();
 
-            $_medicoModel = new MedicoModel();
-            $actualizado = $_medicoModel->where('medico_id','=',$medico_id)->update($_POST);
-            $mensaje = ($actualizado > 0);
+                if ( array_key_exists('especialidad_id', $data) ) {
+                    $especialidad = array(
+                        'especialidad_id' => $data['especialidad_id'],
+                        'medico_id' => $medico_id
+                    );
 
-            $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-            $respuesta->setData($actualizado);
+                    $insertarEspecialidad = new MedicoEspecialidadController;
+                    $mensajeEspecialidad = $insertarEspecialidad->actualizarMedicoEspecialidad($especialidad);
+                    
+                    unset($data['especialidad_id']);
+                    if ($mensajeEspecialidad == true) {
 
-            return $respuesta->json($mensaje ? 200 : 400);
-        }
+                        $actualizado = $_medicoModel->where('medico_id','=',$medico_id)->update($data);
+                        $mensaje = ($actualizado > 0);
+
+                        $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+                        $respuesta->setData($actualizado);
+
+                        return $respuesta->json($mensaje ? 200 : 400);
+                    }
+
+                } else {
+                    $actualizado = $_medicoModel->where('medico_id','=',$medico_id)->update($data);
+                    $mensaje = ($actualizado > 0);
+
+                    $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+                    $respuesta->setData($actualizado);
+                    return $respuesta->json($mensaje ? 200 : 400);
+                }
+            }
+
+                
+                
     }
+ 
 
     public function eliminarMedico($medico_id){
 

@@ -40,9 +40,9 @@ class Validate extends BaseModel{
                 $query = $this->connection->prepare($sql);
                 $query->execute();
                 
-                if(empty($query->rowCount() > 0)){
-
-                    return true;
+                if($query->rowCount() > 0){
+                    
+                    return $value;
                 }
             }
         }

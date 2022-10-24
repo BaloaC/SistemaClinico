@@ -41,6 +41,7 @@ Router::get('/medicos/actualizar/:id', MedicoController::class . '@formActualiza
 //Medicos - API
 Router::get('/medicos/consulta',MedicoController::class . '@listarmedicos');
 Router::get('/medicos/:id',MedicoController::class . '@listarMedicoPorId');
+Router::get('/medicos/cedula/:ci',MedicoController::class . '@listarMedicoPorCI');
 Router::post('/medicos', MedicoController::class . '@insertarMedico');
 Router::put('/medicos/:id', MedicoController::class . '@actualizarMedico');
 Router::delete('/medicos/:id', MedicoController::class . '@eliminarMedico');
@@ -56,4 +57,16 @@ Router::get('/especialidades/:id',EspecialidadController::class . '@listarEspeci
 Router::post('/especialidades', EspecialidadController::class . '@insertarEspecialidad');
 Router::put('/especialidades/:id', EspecialidadController::class . '@actualizarEspecialidad');
 Router::delete('/especialidades/:id', EspecialidadController::class . '@eliminarEspecialidad');
+
+//Meidco-Especialidad - Vistas
+// Router::get('/especialidades',EspecialidadController::class . '@index');
+// Router::get('/especialidades/registrar', EspecialidadController::class . '@formRegistrarEspecialidad');
+// Router::get('/especialidades/actualizar/:id', EspecialidadController::class . '@formActualizarEspecialidad');
+
+//Meidco-Especialidad - API
+Router::get('/medico_especialidades/consulta',EspecialidadController::class . '@listarMedicosEspecialidades');
+Router::get('/medico_especialidades/:id',EspecialidadController::class . '@listarMedicosEspecialidadPorId');
+Router::post('/medico_especialidades/:post', EspecialidadController::class . '@insertarMedicoEspecialidad');
+Router::put('/medico_especialidades/:id', EspecialidadController::class . '@actualizarMedicoEspecialidad');
+Router::delete('/medico_especialidades/:id', EspecialidadController::class . '@eliminarMedicoEspecialidad');
 ?>

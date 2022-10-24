@@ -91,20 +91,34 @@ class PacienteController extends Controller{
         switch($_POST) {
             case ($validarPaciente->isEmpty($_POST)):
                 return $respuesta = new Response('DATOS_INVALIDOS');
+
             case $validarPaciente->isNumber($_POST, $camposNumericos):
                 return $respuesta = new Response('DATOS_INVALIDOS');
+
             case $validarPaciente->isString($_POST, $camposString):
                 return $respuesta = new Response('DATOS_INVALIDOS');
+                
             case $validarPaciente->existsInDB($_POST, $camposKey):   
-                return $respuesta = new Response('NOT_FOUND');            
+                return $respuesta = new Response('NOT_FOUND');         
+
             case array_key_exists('cedula', $_POST):
                 if ( $validarPaciente->isDuplicated('paciente', 'cedula', $_POST["cedula"]) ) {
                     return $respuesta = new Response('DATOS_DUPLICADOS');
                 }
-            case $validarPaciente->isDate($_POST['fecha_nacimiento']):
-                return $respuesta = new Response('DATOS_INVALIDOS');
-            case $validarPaciente->isToday($_POST['fecha_nacimiento'], false):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+
+            case array_key_exists('fecha_nacimiento', $_POST):
+                if ( $validarPaciente->isDate($_POST['fecha_nacimiento']) ) {
+                    return $respuesta = new Response('DATOS_INVALIDOS');
+                }
+                
+            case array_key_exists('fecha_nacimiento', $_POST):
+                if ( $validarPaciente->isToday($_POST['fecha_nacimiento'], false) ) {
+                    return $respuesta = new Response('DATOS_INVALIDOS');
+                }
+            // case $validarPaciente->isDate($_POST['fecha_nacimiento']):
+            //     return $respuesta = new Response('DATOS_INVALIDOS');
+            // case $validarPaciente->isToday($_POST['fecha_nacimiento'], false):
+            //     return $respuesta = new Response('DATOS_INVALIDOS');
             default: 
             $data = $validarPaciente->dataScape($_POST);
 
