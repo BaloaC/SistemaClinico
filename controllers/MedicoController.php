@@ -29,13 +29,17 @@ class MedicoController extends Controller{
 
         switch($_POST) {
             case ($validarMedico->isEmpty($_POST)):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
             case $validarMedico->isNumber($_POST, $camposNumericos):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
             case $validarMedico->isString($_POST, $camposString):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
             case $validarMedico->isDuplicated('medico', 'cedula', $_POST["cedula"]):
-                return $respuesta = new Response('DATOS_DUPLICADOS');
+                $respuesta = new Response('DATOS_DUPLICADOS');
+                return $respuesta->json(400);
             default:
                 $newForm = array_slice($_POST, 0, -1);                 
                 $data = $validarMedico->dataScape($newForm);
@@ -46,9 +50,9 @@ class MedicoController extends Controller{
                 if ($id > 0) {
                     $insertarEspecialidad = new MedicoEspecialidadController;
                     $mensaje = $insertarEspecialidad->insertarMedicoEspecialidad($_POST);
-
+                    
                     $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-                    return $respuesta->json($mensaje ? 200 : 400);                    
+                    return $respuesta->json($mensaje ? 201 : 400);
                 }
         }
     }
@@ -92,24 +96,32 @@ class MedicoController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
 
         // Creando los strings para las validaciones
-        $camposNumericos = array("cedula", "telefono");
+        $camposNumericos = array("cedula", "telefono","especialidad_id");
         $camposString = array("nombres", "apellidos", "direccion");
         $camposKey = array("medico_id");
         $validarMedico = new Validate;
 
         switch($_POST) {
             case ($validarMedico->isEmpty($_POST)):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400); 
             case $validarMedico->isNumber($_POST, $camposNumericos):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400); 
             case $validarMedico->isString($_POST, $camposString):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400); 
             case $validarMedico->existsInDB($_POST, $camposKey):   
-                return $respuesta = new Response('NOT_FOUND'); 
+                $respuesta = new Response('NOT_FOUND'); 
+                return $respuesta->json(404); 
             case array_key_exists('cedula', $_POST):
                 if ( $validarMedico->isDuplicated('medico', 'cedula', $_POST["cedula"]) ) {
-                    return $respuesta = new Response('DATOS_DUPLICADOS');
+                    $respuesta = new Response('DATOS_DUPLICADOS');
+                    return $respuesta->json(400); 
                 }
+            case !$validarMedico->isDuplicated('medico', 'medico_id', $medico_id):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
 
             default: 
                 $data = $validarMedico->dataScape($_POST);
@@ -121,19 +133,30 @@ class MedicoController extends Controller{
                         'medico_id' => $medico_id
                     );
 
+
+                    
                     $insertarEspecialidad = new MedicoEspecialidadController;
                     $mensajeEspecialidad = $insertarEspecialidad->actualizarMedicoEspecialidad($especialidad);
-                    
                     unset($data['especialidad_id']);
-                    if ($mensajeEspecialidad == true) {
-
-                        $actualizado = $_medicoModel->where('medico_id','=',$medico_id)->update($data);
+                    $validarData = $validarMedico->isEmpty($data);
+                    return var_dump($mensajeEspecialidad);
+                    if ($mensajeEspecialidad == false) {
+                        $respuesta = new Response('ACTUALIZACION_FALLIDA');
+                        return $respuesta->json(400);
+                    }
+                    
+                    if ($validarData == true) {
+                        
+                        $actualizado = $_medicoModel->where('medico_id','=',$especialidad['medico_id'])->update($data);
                         $mensaje = ($actualizado > 0);
 
                         $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
                         $respuesta->setData($actualizado);
 
                         return $respuesta->json($mensaje ? 200 : 400);
+                    } else {
+                            $respuesta = new Response($mensajeEspecialidad ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+                            return $respuesta->json($mensajeEspecialidad ? 200 : 400);
                     }
 
                 } else {

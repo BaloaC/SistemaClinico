@@ -42,7 +42,9 @@ class Validate extends BaseModel{
                 
                 if($query->rowCount() > 0){
                     
-                    return $value;
+                    return true;
+                } else {
+                    return false;
                 }
             }
         }
@@ -72,6 +74,23 @@ class Validate extends BaseModel{
 
             return true;
         }
+    }
+
+    public function isDuplicatedId($id1, $id2, $value1, $value2, $table) {
+       
+        $sql = "SELECT * FROM $table WHERE $id1 = '$value1' AND $id2 = '$value2'";
+        $query = $this->connection->prepare($sql);
+        $query->execute();
+        // $result = $query->fetchAll(PDO::FETCH_OBJ);
+        
+        if ( $query->rowCount() > 0 ) {
+            
+            return true;
+        } else {
+            
+            return false;
+        }
+        
     }
 
     //Validar que ciertos datos sean números
@@ -126,11 +145,6 @@ class Validate extends BaseModel{
         $bool = $d && $d->format($format) === $date;
         $resultado = $bool ? false : true;
         return $resultado;
-        // if ($d && $d->format($format) === $date) {
-        //     return false;  
-        // } else {
-        //     return true;
-        // }
     }
 
     //Validar cédula de identidad

@@ -120,10 +120,10 @@ CREATE TABLE IF NOT EXISTS shenque_db.cita (
 -- -----------------------------------------------------
 -- Table shenque_db.dias_semana
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS shenque_db.dias_semana (
-  dias_semana_id INT NOT NULL AUTO_INCREMENT,
-  nombre VARCHAR(45) NOT NULL,
-  PRIMARY KEY (dias_semana_id));
+-- CREATE TABLE IF NOT EXISTS shenque_db.dias_semana (
+--   dias_semana_id INT NOT NULL AUTO_INCREMENT,
+--   nombre VARCHAR(45) NOT NULL,
+--   PRIMARY KEY (dias_semana_id));
 
 -- -----------------------------------------------------
 -- Table shenque_db.horario
@@ -131,20 +131,8 @@ CREATE TABLE IF NOT EXISTS shenque_db.dias_semana (
 CREATE TABLE IF NOT EXISTS shenque_db.horario (
   horario_id INT NOT NULL AUTO_INCREMENT,
   medico_id INT NOT NULL,
-  dias_semana_id INT NOT NULL,
-  hora_entrada VARCHAR(45) NOT NULL,
-  hora_salida VARCHAR(45) NOT NULL,
-  PRIMARY KEY (horario_id),
-  CONSTRAINT fk_horario_medico
-    FOREIGN KEY (medico_id)
-    REFERENCES shenque_db.medico (medico_id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_horario_dias_semana
-    FOREIGN KEY (dias_semana_id)
-    REFERENCES shenque_db.dias_semana (dias_semana_id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+  dias_semana enum('lunes','martes','miercoles','jueves','viernes','sabado') NOT NULL,
+  PRIMARY KEY (horario_id));
 
 -- -----------------------------------------------------
 -- Table shenque_db.consulta
@@ -214,8 +202,9 @@ CREATE TABLE IF NOT EXISTS shenque_db.seguro (
   nombre VARCHAR(45) NOT NULL,
   rif VARCHAR(45) NOT NULL,
   direccion VARCHAR(45) NOT NULL,
+  telefono INT NOT NULL,
   porcentaje FLOAT NOT NULL,
-  tipo_seguro INT NOT NULL,
+  tipo_seguro enum('1','2') NOT NULL,
   PRIMARY KEY (seguro_id));
 
 -- -----------------------------------------------------
@@ -316,7 +305,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.medico_especialidad (
     FOREIGN KEY (medico_id)
     REFERENCES shenque_db.medico (medico_id)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION, 
+    ON UPDATE NO ACTION,
   CONSTRAINT fk_medico_especialidad_especialidad
     FOREIGN KEY (especialidad_id)
     REFERENCES shenque_db.especialidad (especialidad_id)

@@ -28,11 +28,14 @@ class EspecialidadController extends Controller{
 
         switch($_POST) {
             case $validarEspecialidad->isEmpty($_POST):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
             case $validarEspecialidad->isString($_POST, $camposString):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
             case $validarEspecialidad->isDuplicated('especialidad', 'nombre', $_POST["nombre"]):
-                return $respuesta = new Response('DATOS_DUPLICADOS');
+                $respuesta = new Response('DATOS_DUPLICADOS');
+                return $respuesta->json(400);
             default: 
             $data = $validarEspecialidad->dataScape($_POST);
 
@@ -42,7 +45,7 @@ class EspecialidadController extends Controller{
 
             $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
             
-            return $respuesta->json($mensaje ? 200 : 400);
+            return $respuesta->json($mensaje ? 201 : 400);
         }
     }
 
@@ -81,16 +84,17 @@ class EspecialidadController extends Controller{
 
         switch($_POST) {
             case ($validarEspecialidad->isEmpty($_POST)):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
             case $validarEspecialidad->isString($_POST, $camposString):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
             case $validarEspecialidad->existsInDB($_POST, $camposKey):   
-                return $respuesta = new Response('NOT_FOUND'); 
+                $respuesta = new Response('NOT_FOUND'); 
+                return $respuesta->json(404);
             case $validarEspecialidad->isDuplicated('especialidad', 'nombre', $_POST["nombre"]):
-                return $respuesta = new Response('DATOS_DUPLICADOS');
-            // case array_key_exists('cedula', $_POST):
-            //     if ( $validarEspecialidad->isDuplicated('medico', 'cedula', $_POST["cedula"]) ) {
-            //         return $respuesta = new Response('DATOS_DUPLICADOS');
+                $respuesta = new Response('DATOS_DUPLICADOS');
+                return $respuesta->json(400);
             //     }
             default: 
             $data = $validarEspecialidad->dataScape($_POST);

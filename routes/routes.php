@@ -58,15 +58,47 @@ Router::post('/especialidades', EspecialidadController::class . '@insertarEspeci
 Router::put('/especialidades/:id', EspecialidadController::class . '@actualizarEspecialidad');
 Router::delete('/especialidades/:id', EspecialidadController::class . '@eliminarEspecialidad');
 
-//Meidco-Especialidad - Vistas
-// Router::get('/especialidades',EspecialidadController::class . '@index');
-// Router::get('/especialidades/registrar', EspecialidadController::class . '@formRegistrarEspecialidad');
-// Router::get('/especialidades/actualizar/:id', EspecialidadController::class . '@formActualizarEspecialidad');
-
 //Meidco-Especialidad - API
 Router::get('/medico_especialidades/consulta',EspecialidadController::class . '@listarMedicosEspecialidades');
 Router::get('/medico_especialidades/:id',EspecialidadController::class . '@listarMedicosEspecialidadPorId');
 Router::post('/medico_especialidades/:post', EspecialidadController::class . '@insertarMedicoEspecialidad');
 Router::put('/medico_especialidades/:id', EspecialidadController::class . '@actualizarMedicoEspecialidad');
 Router::delete('/medico_especialidades/:id', EspecialidadController::class . '@eliminarMedicoEspecialidad');
+
+
+//Horarios - Vistas
+Router::get('/horarios',HorarioController::class . '@index');
+Router::get('/horarios/registrar', HorarioController::class . '@formRegistrarHorario');
+Router::get('/horarios/actualizar/:id', HorarioController::class . '@formActualizarHorario');
+
+//Horarios - API
+Router::get('/horarios/consulta',HorarioController::class . '@listarHorarios');
+Router::get('/horarios/:id',HorarioController::class . '@listarHorarioPorId');
+Router::post('/horarios', HorarioController::class . '@insertarHorario');
+Router::put('/horarios/:id', HorarioController::class . '@actualizarHorario');
+Router::delete('/horarios/:id', HorarioController::class . '@eliminarHorario');
+
+//Seguros - Vistas
+Router::get('/seguros',SeguroController::class . '@index');
+Router::get('/seguros/registrar', SeguroController::class . '@formRegistrarSeguro');
+Router::get('/seguros/actualizar/:id', SeguroController::class . '@formActualizarSeguro');
+
+//Seguros - API
+Router::get('/seguros/consulta',SeguroController::class . '@listarSeguros');
+Router::get('/seguros/:id',SeguroController::class . '@listarSeguroPorId');
+Router::post('/seguros', SeguroController::class . '@insertarSeguro');
+Router::put('/seguros/:id', SeguroController::class . '@actualizarSeguro');
+Router::delete('/seguros/:id', SeguroController::class . '@eliminarSeguro');
+
+//Empresa - Vistas
+Router::get('/empresas',EmpresaController::class . '@index');
+Router::get('/empresas/registrar', EmpresaController::class . '@formRegistrarEmpresa');
+Router::get('/empresas/actualizar/:id', EmpresaController::class . '@formActualizarEmpresa');
+
+//Empresa - API
+Router::get('/empresas/consulta',EmpresaController::class . '@listarEmpresas');
+Router::get('/empresas/:id',EmpresaController::class . '@listarEmpresaPorId');
+Router::post('/empresas', EmpresaController::class . '@insertarEmpresa');
+Router::put('/empresas/:id', EmpresaController::class . '@actualizarEmpresa');
+Router::delete('/empresas/:id', EmpresaController::class . '@eliminarEmpresa');
 ?>

@@ -25,13 +25,13 @@ class MedicoEspecialidadController extends Controller{
             
             switch($newForm) {
                 case $validarMedicoEspecialidad->isEmpty($newForm):
-                    return $respuesta = new Response('DATOS_INVALIDOS');
+                    return false;
                 case $validarMedicoEspecialidad->isNumber($newForm, $camposNumericos):
-                    return $respuesta = new Response('DATOS_INVALIDOS');
+                    return false;
                 case !($validarMedicoEspecialidad->existsInDB($newForm, $camposKey1)):   
-                    return $respuesta = new Response('NOT_FOUND'); 
+                    return false; 
                 case !($validarMedicoEspecialidad->isDuplicated('especialidad', 'especialidad_id', $newForm['especialidad_id'])):   
-                    return $respuesta = new Response('NOT_FOUND'); 
+                    return false; 
 
                 default: 
                 $data = $validarMedicoEspecialidad->dataScape($newForm);
@@ -75,22 +75,32 @@ class MedicoEspecialidadController extends Controller{
 
         // Creando los strings para las validaciones
         $camposKey1 = array("medico_id");
-        $camposNumericos = array("especialidad_id", "medico_id");
+
         $validarMedicoEspecialidad = new Validate;
         
         switch($form) {
             case $validarMedicoEspecialidad->isEmpty($form):
-                return $respuesta = new Response('DATOS_INVALIDOS');
-            case $validarMedicoEspecialidad->isNumber($form, $camposNumericos):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+                return false;
+                
             case !($validarMedicoEspecialidad->existsInDB($form, $camposKey1)):   
-                return $respuesta = new Response('NOT_FOUND'); 
-            case !($validarMedicoEspecialidad->isDuplicated('especialidad', 'especialidad_id', $form['especialidad_id'])):   
-                return $respuesta = new Response('NOT_FOUND'); 
+                return false;
+                                
+            // case $validarMedicoEspecialidad->isDuplicated('medico_especialidad', 'medico_id', $form['medico_id']):
+            //     if ( $validarMedicoEspecialidad->isDuplicated('medico_especialidad', 'especialidad_id', $form['especialidad_id']) == true ) {
+            //         return false;
+            //     }
 
             default: 
-            $data = $validarMedicoEspecialidad->dataScape($form);
 
+            
+            $val1 = $validarMedicoEspecialidad->isDuplicated('medico_especialidad', 'medico_id', $form['medico_id']);
+            $val2 = $validarMedicoEspecialidad->isDuplicated('medico_especialidad', 'especialidad_id', $form['especialidad_id']);
+
+            if ($val1 == true && $val2 == true) {
+                return false;
+            }
+
+            $data = $validarMedicoEspecialidad->dataScape($form);
             $_medicoEspecialidadModel = new MedicoEspecialidadModel();
             $id = $_medicoEspecialidadModel->insert($data);
             $mensaje = ($id > 0);

@@ -54,10 +54,10 @@ class Response{
                 return [true, 'Se ha realizado la operación de manera exitosa!'];
 
             case 'INSERCION_EXITOSA':
-                return [true,'201, Se ha insertado el registro correctamente!'];
+                return [true,'Se ha insertado el registro correctamente!'];
 
             case 'ACTUALIZACION_EXITOSA':
-                return [true, '201, Se ha actualizado el registro correctamente!'];
+                return [true, 'Se ha actualizado el registro correctamente!'];
 
             case 'ELIMINACION_EXITOSA':
                 return [true, 'Se ha eliminado el registro correctamente!'];
@@ -66,7 +66,7 @@ class Response{
                 return [false, 'Se ha producido un error al realizar la operación']; 
 
             case 'INSERCION_FALLIDA':
-                return [false, 'Error 400, No se ha insertado correctamente el registro'];
+                return [false, 'No se ha insertado correctamente el registro'];
 
             case 'ACTUALIZACION_FALLIDA':
                 return [false, 'No se ha actualizado correctamente el registro'];
@@ -75,13 +75,13 @@ class Response{
                 return [false, 'No se ha eliminado correctamente el registro'];
 
             case 'DATOS_INVALIDOS':
-                    return [false, 'Error 400, Faltan datos o los datos son inválidos'];
+                    return [false, 'Faltan datos o los datos son inválidos'];
             
             case 'FECHA_INVALIDA':
-                return [false, 'Error 404, El formato de fecha no es válido'];
+                return [false, 'Error 404, El formato de la fecha o la hora no es válido'];
 
             case 'DATOS_DUPLICADOS':
-                return [false, 'Error 400, Ya existe un registro con la misma información'];
+                return [false, 'Ya existe un registro con la misma información'];
 
             case 'NOT_FOUND':
                 return [false, 'Error 404, Recurso no encontrado'];

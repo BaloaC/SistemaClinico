@@ -18,17 +18,43 @@ class HorarioController extends Controller{
         return $this->view('consultas/actualizarHorarios', ['idHorario' => $idHorario]);
     } 
 
-    public function insertarHorarios(/*Request $request*/){
+    public function insertarHorario(/*Request $request*/){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        var_dump($_POST);
-        $_horarioModel = new HorarioModel();
-        $id = $_horarioModel->insert($_POST);
-        $mensaje = ($id > 0);
+        
+        for ($i=0; $i < count($_POST); $i++) { 
+            $newForm = array();
+            $newForm['medico_id'] = $_POST[$i]['medico_id'];
+            $newForm['dias_semana'] = $_POST[$i]['dias_semana'];
+            
+            $camposNumericos = array("medico_id");
+            $camposString = array("dias_semana");
+            $validarHorario = new Validate;
 
-        $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+            switch($newForm) {
+                case ($validarHorario->isEmpty($newForm)):
+                    return $respuesta = new Response('DATOS_INVALIDOS');
+                case $validarHorario->isNumber($newForm, $camposNumericos):
+                    return $respuesta = new Response('DATOS_INVALIDOS');
+                case $validarHorario->isString($newForm, $camposString):
+                    return $respuesta = new Response('DATOS_INVALIDOS');
+                case !($validarHorario->existsInDB($newForm, $camposNumericos)):   
+                    return $respuesta = new Response('NOT_FOUND'); 
+                default: 
+                $data = $validarHorario->dataScape($newForm);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+                    return $data;
+                $_horarioModel = new HorarioModel();
+                $id = $_horarioModel->insert($data);
+                $mensaje = ($id > 0);
+    
+                if (!$mensaje) {
+                    $respuesta = new Response('INSERCION_FALLIDA');
+                    return $respuesta->json($mensaje ? 200 : 400);
+                }
+            }
+   
+        }
     }
 
     public function listarHorarios(){
