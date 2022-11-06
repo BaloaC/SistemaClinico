@@ -1,17 +1,20 @@
-document.addEventListener("submit", async event => {
+const path = location.pathname.split('/');
 
-    event.preventDefault();
+document.addEventListener("submit", async e => {
 
-    const data = new FormData(event.target),
-        values = Object.fromEntries(data.entries()),
-        user = {
-
-            nombres: values.nombres,
-            apellidos: values.apellidos,
-            correo: values.correo,
-        };
+    e.preventDefault();
+    const $alert = document.querySelector(".alert");
 
     try {
+
+        const formData = new FormData(e.target),
+            data = {};
+
+        formData.forEach((value, key) => (data[key] = value));
+
+        if (data.clave !== data.confirmarClave) throw { message: "Las contraseñas no coinciden" };
+        if (!(new RegExp(/^[1-9A-Za-zÁáÉéÍíÓóÚúÑñÜü\s]+$/).test(data.nombre))) throw { message: "Nombre de usuario inválido" };
+        if (!(data.rol > 0 && data.rol <= 5)) throw { message: "Nivel de usuario inválido" };
 
         const options = {
 
@@ -20,25 +23,28 @@ document.addEventListener("submit", async event => {
             headers: {
                 "Content-type": "application/json; charset=utf-8",
             },
-            body: JSON.stringify(user),
+            body: JSON.stringify(data),
         };
 
-        const response = await fetch("http://127.0.0.1/codigo_backend/usuarios/registrar", options);
+        const response = await fetch(`/${path[1]}/usuarios/registrar`, options);
 
         json = await response.json();
 
-        console.log(json);
+        if (!json.code) throw { result: json };
 
-        if (json.code === true) {
+        $alert.classList.remove("alert-danger");
+        $alert.classList.add("alert-success");
+        $alert.classList.remove("d-none");
+        $alert.textContent = "Usuario registrado correctamente!";
 
-            alert("Usuario registrado correctamente");
+        e.target.reset();
 
-        } else {
-
-            throw new Error("El usuario no se ha registrado correctamente!");
-        }
     } catch (error) {
 
-        alert(error);
+        let message = error.message || error.result.message;
+
+        $alert.classList.remove("d-none");
+        $alert.classList.add("alert-danger");
+        $alert.textContent = `${message}`;
     }
 });

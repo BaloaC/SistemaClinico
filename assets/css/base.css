@@ -1,0 +1,22 @@
+body{
+    background: linear-gradient(to bottom, #0c3df4 0%, #02b5ff 100%);
+    min-height: 100vh;
+}
+
+* {
+    /* font */
+}
+
+form > input{
+    width: 100%;
+}
+
+form > input[type="submit"]{
+    width: auto;
+    display: block;
+    margin: 25px auto;
+}
+
+label{
+    padding-top: 10px !important;
+}

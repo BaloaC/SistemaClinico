@@ -1,0 +1,22 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Inspiration&family=Noto+Sans+JP:wght@300&family=Pacifico&family=Roboto:wght@100&display=swap'); */
+@import url('base.css');
+@import url('nav.css');
+
+section{
+    height: 100vh;
+}
+
+section:nth-child(-n+2){
+    /* background: #fff !important; */
+}
+
+.bg-img{
+    display:flex;
+    margin:auto;
+    background-color: #f8f9fa38;
+    border-radius: 50%;
+    width: 90px;
+    height: 75px;
+    align-items: center;
+    justify-content: center;
+}
