@@ -21,10 +21,9 @@ class PacienteController extends Controller{
     public function insertarPaciente(/*Request $request*/){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        var_dump($_POST);
 
         // Creando los strings para las validaciones
-        $camposNumericos = array("cedula", "edad", "telefono");
+        $camposNumericos = array("cedula", "edad", "telefono", "tipo_paciente");
         $camposString = array("nombres", "apellidos");
 
         $validarPaciente = new Validate;
@@ -56,14 +55,41 @@ class PacienteController extends Controller{
 
             default: 
             $data = $validarPaciente->dataScape($_POST);
-
             $_pacienteModel = new PacienteModel();
-            $id = $_pacienteModel->insert($data);
-            $mensaje = ($id > 0);
 
-            $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+            if ( $data['tipo_paciente'] != 1 ) {
+                
+                $newForm = array(
+                    'seguro_id' => $data['seguro_id'],
+                    'empresa_id' => $data['empresa_id'],
+                    'tipo_seguro' => $data['tipo_seguro'],
+                    'cobertura_general' => $data['cobertura_general'],
+                    'fecha_contra' => $data['fecha_contra'],
+                    'saldo_disponible' => $data['saldo_disponible']
+                );
 
-            return $respuesta->json($mensaje ? 201 : 400);
+                $id = $_pacienteModel->insert($data);
+                
+                if ( $id > 0 ) {
+                    $insertarPacienteSeguro = new PacienteSeguroController;
+                    $mensaje = $insertarPacienteSeguro->insertarPacienteSeguro($data);
+                    
+                    if ($mensaje == true) {
+                        return $mensaje;
+                    } else {
+                      
+                        $respuesta = new Response('INSERCION_EXITOSA');
+                        return $respuesta->json(201);
+                    }
+                }
+
+            } else {
+             
+                $id = $_pacienteModel->insert($data);
+                $mensaje = ($id > 0);
+                $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+                return $respuesta->json($mensaje ? 201 : 400);
+            }
         }
     }
 
@@ -95,7 +121,7 @@ class PacienteController extends Controller{
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         // Creando los strings para las validaciones
-        $camposNumericos = array("cedula", "edad", "telefono");
+        $camposNumericos = array("cedula", "edad", "telefono", "tipo_paciente");
         $camposString = array("nombres", "apellidos");
         $camposKey = array("paciente_id"); // Esta variable es el array que se pasara por existInDB
 
@@ -134,22 +160,20 @@ class PacienteController extends Controller{
                     $respuesta = new Response('DATOS_INVALIDOS');
                     return $respuesta->json(400);
                 }
-            // case $validarPaciente->isDate($_POST['fecha_nacimiento']):
-            //     return $respuesta = new Response('DATOS_INVALIDOS');
-            // case $validarPaciente->isToday($_POST['fecha_nacimiento'], false):
-            //     return $respuesta = new Response('DATOS_INVALIDOS');
+            
             default: 
-            $data = $validarPaciente->dataScape($_POST);
+                $data = $validarPaciente->dataScape($_POST);
+                $_pacienteModel = new PacienteModel();
 
-            $_pacienteModel = new PacienteModel();
+                
+                
+                $actualizado = $_pacienteModel->where('paciente_id','=',$paciente_id)->update($data);
+                $mensaje = ($actualizado > 0);
 
-            $actualizado = $_pacienteModel->where('paciente_id','=',$paciente_id)->update($data);
-            $mensaje = ($actualizado > 0);
+                $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+                $respuesta->setData($actualizado);
 
-            $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-            $respuesta->setData($actualizado);
-
-            return $respuesta->json($mensaje ? 200 : 400);
+                return $respuesta->json($mensaje ? 200 : 400);
             }
     }
 
@@ -164,6 +188,16 @@ class PacienteController extends Controller{
         $respuesta->setData($eliminado);
 
         return $respuesta->json($mensaje ? 200 : 400);
+    }
+
+    public function RetornarID($cedula){
+
+        $_pacienteModel = new PacienteModel();
+        $paciente = $_pacienteModel->where('cedula','=',$cedula)->getFirst();
+        $mensaje = ($paciente != null);
+        $respuesta = $mensaje ? $paciente->paciente_id : false;
+        return $respuesta;
+        
     }
 }
 

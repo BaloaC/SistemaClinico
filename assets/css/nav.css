@@ -1,0 +1,24 @@
+
+nav {
+    background-color: #019de1 !important;
+}
+
+a.nav-link{
+    color: white;
+}
+
+@media screen and (min-width:992px){
+
+    .navbar-collapse{
+        flex-grow: 0 !important;
+    }
+} 
+
+
+/* ---- Para el bg del nav vertical ---- */
+
+/* @media only screen and (max-width:768px){
+    .list-nav{
+        background-color: red;
+    }
+}  */

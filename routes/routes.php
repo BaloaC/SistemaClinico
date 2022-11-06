@@ -9,6 +9,9 @@ Router::post('/login',LoginController::class . '@entrar');
 //Ruta principal
 Router::get('/',homepageController::class);
 
+//Home - Vista
+Router::get('/home',homepageController::class . '@index');
+
 //Usuario - Vistas
 Router::get('/usuarios',UsuarioController::class . '@index');
 Router::get('/usuarios/registrar', UsuarioController::class . '@formRegistrarUsuario');
@@ -32,6 +35,9 @@ Router::get('/pacientes/:id',PacienteController::class . '@listarPacientePorId')
 Router::post('/pacientes', PacienteController::class . '@insertarPaciente');
 Router::put('/pacientes/:id', PacienteController::class . '@actualizarPaciente');
 Router::delete('/pacientes/:id', PacienteController::class . '@eliminarPaciente');
+
+//PacienteSeguro - API
+Router::put('/paciente/seguro/:id', PacienteSeguroController::class . '@actualizarPacienteSeguro');
 
 //Medicos - Vistas
 Router::get('/medicos',MedicoController::class . '@index');

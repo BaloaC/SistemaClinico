@@ -23,11 +23,16 @@ class SeguroEmpresaController extends Controller{
             
             switch($post) {
                 case $validarSeguroEmpresa->isEmpty($post):
-                    return false;
+                    $respuesta = new Response('DATOS_INVALIDOS');
+                    return $respuesta->json(400);
+
                 case $validarSeguroEmpresa->isNumber($post, $camposNumericos):
-                    return false;
+                    $respuesta = new Response('DATOS_INVALIDOS');
+                    return $respuesta->json(400);
+
                 case !($validarSeguroEmpresa->existsInDB($post, $camposKey1)):   
-                    return false; 
+                    $respuesta = new Response('DATOS_INVALIDOS');
+                    return $respuesta->json(400);
                 // case !($validarSeguroEmpresa->isDuplicated('especialidad', 'especialidad_id', $post['especialidad_id'])):   
                 //     return false; 
 
@@ -53,11 +58,16 @@ class SeguroEmpresaController extends Controller{
 
             switch($form) {
                 case $validarSeguroEmpresa->isEmpty($form):
-                    return false;
+                    $respuesta = new Response('DATOS_INVALIDOS');
+                    return $respuesta->json(400);
+
                 case !($validarSeguroEmpresa->existsInDB($form, $camposKey1)):   
-                    return false; 
+                    $respuesta = new Response('DATOS_INVALIDOS');
+                    return $respuesta->json(400);
+                    
                 case $validarSeguroEmpresa->isDuplicatedId('empresa_id', 'seguro_id', $form['empresa_id'], $form['seguro_id'], 'seguro_empresa'):
-                    return false;
+                    $respuesta = new Response('DATOS_DUPLICADOS');
+                    return $respuesta->json(400);
 
                 default: 
                 $data = $validarSeguroEmpresa->dataScape($form);

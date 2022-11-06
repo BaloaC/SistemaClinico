@@ -1,0 +1,12 @@
+@import url('base.css');
+
+body{
+    background: #d3d3d3 !important;
+}
+
+@media screen and (max-width: 575px) {
+    .login-container{
+        overflow: hidden;
+        height: 100%;
+    }
+}

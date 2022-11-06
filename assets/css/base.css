@@ -1,0 +1,46 @@
+body{
+    background: linear-gradient(to bottom, #0c3df4 0%, #02b5ff 100%);
+    min-height: 100vh;
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0 !important;
+}
+
+h1 { font-weight: bold; }
+
+.lt-spacing-1 { letter-spacing: 1rem; }
+.fs-7 { font-size: 3rem !important; }
+
+form > input{
+    width: 100%;
+}
+
+form > input[type="submit"]{
+    width: auto;
+    display: block;
+    margin: 25px auto;
+}
+
+select {
+    border-radius: 30px !important;
+    padding: 0.3rem !important;
+    font-size: 16px !important;
+}
+
+label{
+    padding-top: 10px !important;
+}
+
+.bg-blue-c {
+    background-color: #100e99 !important;
+}
+
+.bg-light-blue {
+    background: #019de1;
+}
+
+.border-light-c {
+    border-color: rgba(255, 255, 255, 0.744);
+}

@@ -55,10 +55,18 @@ class EmpresaController extends Controller{
  
                  if ($id > 0) {
                      $insertarSeguroEmpresa = new SeguroEmpresaController;
-                     $mensaje = $insertarSeguroEmpresa->insertarSeguroEmpresa($_POST);
+                     $mensaje = $insertarSeguroEmpresa->insertarSeguroEmpresa($data);
                      
-                     $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-                     return $respuesta->json($mensaje ? 201 : 400);
+                     if ($mensaje == true) {
+                        return $mensaje;
+                    } else {
+                      
+                        $respuesta = new Response('INSERCION_EXITOSA');
+                        return $respuesta->json(201);
+                    }
+
+                    // $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+                    // return $respuesta->json($mensaje ? 201 : 400);
                  }
          }
     }
