@@ -7,7 +7,13 @@ Router::get('/login',LoginController::class . '@index');
 Router::post('/login',LoginController::class . '@entrar');
 
 //Ruta principal
-Router::get('/',homepageController::class);
+Router::get('/',welcomeController::class);
+
+//Ruta de pruebas
+Router::get('/test',welcomeController::class . '@test');
+
+//Home - Vista
+Router::get('/home',homepageController::class . '@index');
 
 //Usuario - Vistas
 Router::get('/usuarios',UsuarioController::class . '@index');

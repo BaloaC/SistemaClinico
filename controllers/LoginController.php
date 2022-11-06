@@ -11,6 +11,9 @@ class LoginController extends Controller{
     public function entrar(){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
+
+        //var_dump($_POST);
+
         $camposKey = array("nombre", "clave");
 
         $validarLogin = new Validate;
@@ -35,7 +38,14 @@ class LoginController extends Controller{
                     $actualizado = $_UsuarioModel->where('nombre','=',$_POST['nombre'])->update($tokken);
                     $mensaje = ($actualizado > 0);
                     
-                    return $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+                    $tokken['usuario_id'] = $usuario->usuario_id;
+                    $tokken['rol'] = $usuario->rol;
+
+                    $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+                    $respuesta->setData($tokken);
+
+                    return $respuesta;
+
                 } else {
                     return $respuesta = new Response(false, 'DATOS_INVALIDOS');
                 }
