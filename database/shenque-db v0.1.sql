@@ -245,7 +245,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.paciente_seguro (
   paciente_id INT NOT NULL,
   seguro_id INT NOT NULL,
   empresa_id INT NOT NULL,
-  tipo_seguro INT NOT NULL,
+  tipo_seguro enum('1','2') NOT NULL,
   cobertura_general FLOAT NOT NULL,
   fecha_contra DATE NOT NULL,
   saldo_disponible FLOAT NOT NULL,
