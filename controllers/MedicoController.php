@@ -23,7 +23,7 @@ class MedicoController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         
         // Creando los strings para las validaciones
-        $camposNumericos = array("cedula", "telefono");
+        $camposNumericos = array("cedula", "telefono", "paciente_id");
         $camposString = array("nombres", "apellidos", "direccion");
         $validarMedico = new Validate;
 
@@ -41,18 +41,24 @@ class MedicoController extends Controller{
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(400);
             default:
-                $newForm = array_slice($_POST, 0, -1);                 
-                $data = $validarMedico->dataScape($newForm);
-
+                $newForm = array("especialidad_id" => $_POST['especialidad_id']);
+                $data = $validarMedico->dataScape($_POST);
+                unset($data['especialidad_id']);
                 $_medicoModel = new MedicoModel();
                 $id = $_medicoModel->insert($data);
-
+                
                 if ($id > 0) {
                     $insertarEspecialidad = new MedicoEspecialidadController;
-                    $mensaje = $insertarEspecialidad->insertarMedicoEspecialidad($_POST);
+                    $mensaje = $insertarEspecialidad->insertarMedicoEspecialidad($newForm);
                     
-                    $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-                    return $respuesta->json($mensaje ? 201 : 400);
+                    if ($mensaje == true) {
+                        
+                        return $mensaje;
+                    } else {
+                     
+                        $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+                        return $respuesta->json($mensaje ? 201 : 400);
+                    }
                 }
         }
     }
@@ -133,31 +139,29 @@ class MedicoController extends Controller{
                         'medico_id' => $medico_id
                     );
 
-
-                    
                     $insertarEspecialidad = new MedicoEspecialidadController;
                     $mensajeEspecialidad = $insertarEspecialidad->actualizarMedicoEspecialidad($especialidad);
                     unset($data['especialidad_id']);
                     $validarData = $validarMedico->isEmpty($data);
-                    return var_dump($mensajeEspecialidad);
+
                     if ($mensajeEspecialidad == false) {
-                        $respuesta = new Response('ACTUALIZACION_FALLIDA');
-                        return $respuesta->json(400);
-                    }
-                    
-                    if ($validarData == true) {
+                        if ($validarData != true) {
                         
-                        $actualizado = $_medicoModel->where('medico_id','=',$especialidad['medico_id'])->update($data);
-                        $mensaje = ($actualizado > 0);
-
-                        $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-                        $respuesta->setData($actualizado);
-
-                        return $respuesta->json($mensaje ? 200 : 400);
+                            $actualizado = $_medicoModel->where('medico_id','=',$especialidad['medico_id'])->update($data);
+                            $mensaje = ($actualizado > 0);
+    
+                            $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+                            $respuesta->setData($actualizado);
+    
+                            return $respuesta->json($mensaje ? 200 : 400);
+                        } else {
+                            
+                            $respuesta = new Response('ACTUALIZACION_EXITOSA');
+                                return $respuesta->json(200);
+                        }
                     } else {
-                            $respuesta = new Response($mensajeEspecialidad ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-                            return $respuesta->json($mensajeEspecialidad ? 200 : 400);
-                    }
+                        return 'esta cayendo aki';
+                    }      
 
                 } else {
                     $actualizado = $_medicoModel->where('medico_id','=',$medico_id)->update($data);

@@ -45,7 +45,7 @@ class PacienteSeguroController extends Controller{
                     return $respuesta->json(404);
 
                 case !$validarPacienteSeguro->isDuplicatedId('empresa_id', 'seguro_id', $form['empresa_id'], $form['seguro_id'], 'seguro_empresa'):
-                    $respuesta = new Response('DATOS_INVALIDOS');
+                    $respuesta = new Response('DATOS_DUPLICADOS');
                     return $respuesta->json(400);
 
                 default: 

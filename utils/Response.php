@@ -78,13 +78,13 @@ class Response{
                     return [false, 'Faltan datos o los datos son inválidos'];
             
             case 'FECHA_INVALIDA':
-                return [false, 'Error 404, El formato de la fecha o la hora no es válido'];
+                return [false, 'El formato de la fecha o la hora no es válido'];
 
             case 'DATOS_DUPLICADOS':
                 return [false, 'Ya existe un registro con la misma información'];
 
             case 'NOT_FOUND':
-                return [false, 'Error 404, Recurso no encontrado'];
+                return [false, 'Recurso no encontrado'];
 
             default: 
                 return [false, 'No se ha establecido ningún mensaje'];

@@ -2,10 +2,8 @@
 
 class MedicoEspecialidadController extends Controller{
 
-    public function insertarMedicoEspecialidad($post){
-
-        $newForm = array_slice($_POST, -1);
-        
+    public function insertarMedicoEspecialidad($form){
+      
         $medico = new MedicoController;
         $medicoActualizar = $medico->RetornarID($_POST['cedula']);
         
@@ -16,31 +14,43 @@ class MedicoEspecialidadController extends Controller{
 
         } else {
             
-            $newForm['medico_id'] = $medicoActualizar; 
+            $form['medico_id'] = $medicoActualizar; 
             
             // Creando los strings para las validaciones
             $camposKey1 = array("medico_id");
             $camposNumericos = array("especialidad_id", "medico_id");
             $validarMedicoEspecialidad = new Validate;
             
-            switch($newForm) {
-                case $validarMedicoEspecialidad->isEmpty($newForm):
-                    return false;
-                case $validarMedicoEspecialidad->isNumber($newForm, $camposNumericos):
-                    return false;
-                case !($validarMedicoEspecialidad->existsInDB($newForm, $camposKey1)):   
-                    return false; 
-                case !($validarMedicoEspecialidad->isDuplicated('especialidad', 'especialidad_id', $newForm['especialidad_id'])):   
-                    return false; 
+            switch($form) {
+                case $validarMedicoEspecialidad->isEmpty($form):
+                    $respuesta = new Response('DATOS_INVALIDOS');
+                    return $respuesta->json(400);
+
+                case $validarMedicoEspecialidad->isNumber($form, $camposNumericos):
+                    $respuesta = new Response('DATOS_INVALIDOS');
+                    return $respuesta->json(400);
+
+                case !($validarMedicoEspecialidad->existsInDB($form, $camposKey1)):   
+                    $respuesta = new Response('NOT_FOUND');         
+                    return $respuesta->json(404);
+
+                case !($validarMedicoEspecialidad->isDuplicated('especialidad', 'especialidad_id', $form['especialidad_id'])):   
+                    $respuesta = new Response('DATOS_INVALIDOS');
+                    return $respuesta->json(400);
+
+                case $validarMedicoEspecialidad->isDuplicatedId('medico_id', 'especialidad_id', $form['medico_id'], $form['especialidad_id'], 'medico_especialidad'):
+                    $respuesta = new Response('DATOS_DUPLICADOS');
+                    return $respuesta->json(400);
 
                 default: 
-                $data = $validarMedicoEspecialidad->dataScape($newForm);
+                    $data = $validarMedicoEspecialidad->dataScape($form);
 
-                $_medicoEspecialidadModel = new MedicoEspecialidadModel();
-                $id = $_medicoEspecialidadModel->insert($data);
-                $mensaje = ($id > 0);
+                    $_medicoEspecialidadModel = new MedicoEspecialidadModel();
+                    $id = $_medicoEspecialidadModel->insert($data);
+                    $mensaje = ($id > 0);
 
-                $respuesta = $mensaje ? true : false;
+                    $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+                    return $respuesta->json($mensaje ? 201 : 400);
                 
                 return $respuesta;
             }
@@ -80,31 +90,29 @@ class MedicoEspecialidadController extends Controller{
         
         switch($form) {
             case $validarMedicoEspecialidad->isEmpty($form):
-                return false;
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
                 
             case !($validarMedicoEspecialidad->existsInDB($form, $camposKey1)):   
-                return false;
+                $respuesta = new Response('NOT_FOUND');         
+                return $respuesta->json(404);
                                 
-            // case $validarMedicoEspecialidad->isDuplicated('medico_especialidad', 'medico_id', $form['medico_id']):
-            //     if ( $validarMedicoEspecialidad->isDuplicated('medico_especialidad', 'especialidad_id', $form['especialidad_id']) == true ) {
-            //         return false;
-            //     }
+                case !$validarMedicoEspecialidad->isDuplicated('especialidad', 'especialidad_id', $form['especialidad_id']):
+                    $respuesta = new Response('NOT_FOUND');
+                    return $respuesta->json(404);
+
+            case $validarMedicoEspecialidad->isDuplicatedId('medico_id', 'especialidad_id', $form['medico_id'], $form['especialidad_id'], 'medico_especialidad'):
+                $respuesta = new Response('DATOS_DUPLICADOS');
+                return $respuesta->json(400);
 
             default: 
-
-            
-            $val1 = $validarMedicoEspecialidad->isDuplicated('medico_especialidad', 'medico_id', $form['medico_id']);
-            $val2 = $validarMedicoEspecialidad->isDuplicated('medico_especialidad', 'especialidad_id', $form['especialidad_id']);
-
-            if ($val1 == true && $val2 == true) {
-                return false;
-            }
 
             $data = $validarMedicoEspecialidad->dataScape($form);
             $_medicoEspecialidadModel = new MedicoEspecialidadModel();
             $id = $_medicoEspecialidadModel->insert($data);
             $mensaje = ($id > 0);
-            $respuesta = $mensaje ? true : false;
+
+            $respuesta = ($mensaje ? false : new Response('INSERCION_FALLIDA'));
             return $respuesta;
         }
     }
