@@ -76,7 +76,10 @@ class Response{
 
             case 'DATOS_INVALIDOS':
                     return [false, 'Faltan datos o los datos son inválidos'];
-            
+
+            case 'DATOS_VACIOS':
+                return [false, 'Los datos del formulario no pueden estar vacíos'];
+                    
             case 'FECHA_INVALIDA':
                 return [false, 'El formato de la fecha o la hora no es válido'];
 
@@ -85,6 +88,9 @@ class Response{
 
             case 'NOT_FOUND':
                 return [false, 'Recurso no encontrado'];
+            
+            case 'DUPLICATE_APPOINTMENT':
+                return [false, 'Ya existe una cita registrada en ese momento'];
 
             default: 
                 return [false, 'No se ha establecido ningún mensaje'];

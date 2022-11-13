@@ -46,7 +46,8 @@ class EmpresaController extends Controller{
              default:
                 $data = $validarEmpresa->dataScape($_POST);
                 $newForm = array(
-                    "seguro_id" => $data['seguro_id']
+                    "seguro_id" => $data['seguro_id'],
+                    "rif" => $data['rif']
                 );
 
                 unset($data['seguro_id']);
@@ -55,7 +56,7 @@ class EmpresaController extends Controller{
  
                  if ($id > 0) {
                      $insertarSeguroEmpresa = new SeguroEmpresaController;
-                     $mensaje = $insertarSeguroEmpresa->insertarSeguroEmpresa($data);
+                     $mensaje = $insertarSeguroEmpresa->insertarSeguroEmpresa($newForm);
                      
                      if ($mensaje == true) {
                         return $mensaje;
@@ -64,9 +65,6 @@ class EmpresaController extends Controller{
                         $respuesta = new Response('INSERCION_EXITOSA');
                         return $respuesta->json(201);
                     }
-
-                    // $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-                    // return $respuesta->json($mensaje ? 201 : 400);
                  }
          }
     }

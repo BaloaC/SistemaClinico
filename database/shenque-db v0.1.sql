@@ -96,36 +96,6 @@ CREATE TABLE IF NOT EXISTS shenque_db.medico (
   PRIMARY KEY (medico_id));
 
 -- -----------------------------------------------------
--- Table shenque_db.cita
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS shenque_db.cita (
-  cita_id INT NOT NULL AUTO_INCREMENT,
-  paciente_id INT NOT NULL,
-  medico_id INT NOT NULL,
-  fecha_cita DATE NOT NULL,
-  motivo_cita VARCHAR(45) NOT NULL,
-  cedula_titular INT NOT NULL,
-  PRIMARY KEY (cita_id),
-  CONSTRAINT fk_cita_paciente
-    FOREIGN KEY (paciente_id)
-    REFERENCES shenque_db.paciente (paciente_id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_cita_medico
-    FOREIGN KEY (medico_id)
-    REFERENCES shenque_db.medico (medico_id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
-
--- -----------------------------------------------------
--- Table shenque_db.dias_semana
--- -----------------------------------------------------
--- CREATE TABLE IF NOT EXISTS shenque_db.dias_semana (
---   dias_semana_id INT NOT NULL AUTO_INCREMENT,
---   nombre VARCHAR(45) NOT NULL,
---   PRIMARY KEY (dias_semana_id));
-
--- -----------------------------------------------------
 -- Table shenque_db.horario
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS shenque_db.horario (
@@ -281,7 +251,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.seguro_empresa (
     ON UPDATE NO ACTION,
   CONSTRAINT fk_seguro_empresa_seguro
     FOREIGN KEY (seguro_id)
-    REFERENCES shenque_db.Seguro (seguro_id)
+    REFERENCES shenque_db.seguro (seguro_id)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
@@ -312,6 +282,37 @@ CREATE TABLE IF NOT EXISTS shenque_db.medico_especialidad (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
+-- -----------------------------------------------------
+-- Table shenque_db.cita
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS shenque_db.cita (
+  cita_id INT NOT NULL AUTO_INCREMENT,
+  paciente_id INT NOT NULL,
+  medico_id INT NOT NULL,
+  especialidad_id INT NOT NULL,
+  fecha_cita DATETIME NOT NULL,
+  motivo_cita VARCHAR(45) NOT NULL,
+  cedula_titular INT NOT NULL,
+  clave INT,
+  tipo_cita enum('1','2') NOT NULL,
+  estatus enum('1','2','3') NOT NULL,
+  PRIMARY KEY (cita_id),
+  CONSTRAINT fk_cita_paciente
+    FOREIGN KEY (paciente_id)
+    REFERENCES shenque_db.paciente (paciente_id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_cita_medico
+    FOREIGN KEY (medico_id)
+    REFERENCES shenque_db.medico (medico_id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_cita_especialidad
+    FOREIGN KEY (especialidad_id)
+    REFERENCES shenque_db.especialidad (especialidad_id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+    
 -- -----------------------------------------------------
 -- Table shenque_db.examen
 -- -----------------------------------------------------

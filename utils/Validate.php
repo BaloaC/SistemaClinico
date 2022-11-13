@@ -147,6 +147,16 @@ class Validate extends BaseModel{
         return $resultado;
     }
 
+    //Validar que una fecha con hora sea válida
+    public function isDataTime($date, $format = 'Y-m-d H:i'){
+
+        $d = DateTime::createFromFormat($format,$date);
+
+        $bool = $d && $d->format($format) === $date;
+        $resultado = $bool ? false : true;
+        return $resultado;
+    }
+
     //Validar cédula de identidad
     public function isCedula($cedula){
 

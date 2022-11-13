@@ -107,4 +107,16 @@ Router::get('/empresas/:id',EmpresaController::class . '@listarEmpresaPorId');
 Router::post('/empresas', EmpresaController::class . '@insertarEmpresa');
 Router::put('/empresas/:id', EmpresaController::class . '@actualizarEmpresa');
 Router::delete('/empresas/:id', EmpresaController::class . '@eliminarEmpresa');
+
+//Cita - Vistas
+Router::get('/citas',CitaController::class . '@index');
+Router::get('/citas/registrar', CitaController::class . '@formRegistrarCita');
+Router::get('/citas/actualizar/:id', CitaController::class . '@formActualizarCita');
+
+//Cita - API
+Router::get('/citas/consulta',CitaController::class . '@listarCitas');
+Router::get('/citas/:id',CitaController::class . '@listarCitaPorId');
+Router::post('/citas', CitaController::class . '@insertarCita');
+Router::put('/citas/:id', CitaController::class . '@actualizarCita');
+Router::delete('/citas/:id', CitaController::class . '@eliminarCita');
 ?>

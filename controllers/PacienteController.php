@@ -199,6 +199,17 @@ class PacienteController extends Controller{
         return $respuesta;
         
     }
+
+    
+    public function RetornarTipo($paciente_id){
+
+        $_pacienteModel = new PacienteModel();
+        $paciente = $_pacienteModel->where('paciente_id','=',$paciente_id)->getFirst();
+        $mensaje = ($paciente != null);
+        $respuesta = $mensaje ? $paciente->tipo_paciente : false;
+        return $respuesta;
+        
+    }
 }
 
 
