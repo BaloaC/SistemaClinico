@@ -109,7 +109,7 @@ class MedicoController extends Controller{
 
         switch($_POST) {
             case ($validarMedico->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400); 
             case $validarMedico->isNumber($_POST, $camposNumericos):
                 $respuesta = new Response('DATOS_INVALIDOS');

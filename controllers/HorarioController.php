@@ -33,25 +33,33 @@ class HorarioController extends Controller{
 
             switch($newForm) {
                 case ($validarHorario->isEmpty($newForm)):
-                    return $respuesta = new Response('DATOS_INVALIDOS');
+                    $respuesta = new Response('DATOS_VACIOS');
+                    return $respuesta->json(400);
+
                 case $validarHorario->isNumber($newForm, $camposNumericos):
-                    return $respuesta = new Response('DATOS_INVALIDOS');
+                    $respuesta = new Response('DATOS_INVALIDOS');
+                    return $respuesta->json(400);
+
                 case $validarHorario->isString($newForm, $camposString):
-                    return $respuesta = new Response('DATOS_INVALIDOS');
+                    $respuesta = new Response('DATOS_INVALIDOS');
+                    return $respuesta->json(400);
+
                 case !($validarHorario->existsInDB($newForm, $camposNumericos)):   
-                    return $respuesta = new Response('NOT_FOUND'); 
+                    $respuesta = new Response('NOT_FOUND'); 
+                    return $respuesta->json(400);
+
                 default: 
-                $data = $validarHorario->dataScape($newForm);
+                    $data = $validarHorario->dataScape($newForm);
 
                     return $data;
-                $_horarioModel = new HorarioModel();
-                $id = $_horarioModel->insert($data);
-                $mensaje = ($id > 0);
-    
-                if (!$mensaje) {
-                    $respuesta = new Response('INSERCION_FALLIDA');
-                    return $respuesta->json($mensaje ? 200 : 400);
-                }
+                    $_horarioModel = new HorarioModel();
+                    $id = $_horarioModel->insert($data);
+                    $mensaje = ($id > 0);
+        
+                    if (!$mensaje) {
+                        $respuesta = new Response('INSERCION_FALLIDA');
+                        return $respuesta->json($mensaje ? 200 : 400);
+                    }
             }
    
         }

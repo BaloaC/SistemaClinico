@@ -23,23 +23,23 @@ class MedicoEspecialidadController extends Controller{
             
             switch($form) {
                 case $validarMedicoEspecialidad->isEmpty($form):
-                    $respuesta = new Response('DATOS_INVALIDOS');
+                    $respuesta = new Response(false, 'Los datos de especialidad están vacíos');
                     return $respuesta->json(400);
 
                 case $validarMedicoEspecialidad->isNumber($form, $camposNumericos):
-                    $respuesta = new Response('DATOS_INVALIDOS');
+                    $respuesta = new Response(false, 'Los datos del médico o especialidad son erróneos');
                     return $respuesta->json(400);
 
                 case !($validarMedicoEspecialidad->existsInDB($form, $camposKey1)):   
-                    $respuesta = new Response('NOT_FOUND');         
+                    $respuesta = new Response(false, 'No se encontraron resultados del médico indicado');         
                     return $respuesta->json(404);
 
                 case !($validarMedicoEspecialidad->isDuplicated('especialidad', 'especialidad_id', $form['especialidad_id'])):   
-                    $respuesta = new Response('DATOS_INVALIDOS');
+                    $respuesta = new Response(false, 'No se encontraron resultados de la especialidad indicada');
                     return $respuesta->json(400);
 
                 case $validarMedicoEspecialidad->isDuplicatedId('medico_id', 'especialidad_id', $form['medico_id'], $form['especialidad_id'], 'medico_especialidad'):
-                    $respuesta = new Response('DATOS_DUPLICADOS');
+                    $respuesta = new Response(false,'Ya existe un registro con esa información');
                     return $respuesta->json(400);
 
                 default: 

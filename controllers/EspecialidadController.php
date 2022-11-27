@@ -28,7 +28,7 @@ class EspecialidadController extends Controller{
 
         switch($_POST) {
             case $validarEspecialidad->isEmpty($_POST):
-                $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
             case $validarEspecialidad->isString($_POST, $camposString):
                 $respuesta = new Response('DATOS_INVALIDOS');
@@ -84,7 +84,7 @@ class EspecialidadController extends Controller{
 
         switch($_POST) {
             case ($validarEspecialidad->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
             case $validarEspecialidad->isString($_POST, $camposString):
                 $respuesta = new Response('DATOS_INVALIDOS');

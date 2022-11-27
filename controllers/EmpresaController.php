@@ -22,19 +22,13 @@ class EmpresaController extends Controller{
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         
-         // Creando los strings para las validaciones
-         $camposString = array("nombre", "direccion");
          $validarEmpresa = new Validate;
         
          switch($_POST) {
              case ($validarEmpresa->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
-                
-             case $validarEmpresa->isString($_POST, $camposString):
-                 $respuesta = new Response('DATOS_INVALIDOS');
-                 return $respuesta->json(400);
-
+        
              case $validarEmpresa->isDuplicated('empresa', 'nombre', $_POST["nombre"]):
                  $respuesta = new Response('DATOS_DUPLICADOS');
                  return $respuesta->json(400);
@@ -57,7 +51,7 @@ class EmpresaController extends Controller{
                  if ($id > 0) {
                      $insertarSeguroEmpresa = new SeguroEmpresaController;
                      $mensaje = $insertarSeguroEmpresa->insertarSeguroEmpresa($newForm);
-                     
+
                      if ($mensaje == true) {
                         return $mensaje;
                     } else {
@@ -96,20 +90,14 @@ class EmpresaController extends Controller{
     public function actualizarEmpresa($empresa_id){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-
-         // Creando los strings para las validaciones
-         $camposString = array("nombre", "direccion");
+         
          $validarEmpresa = new Validate;
         
          switch($_POST) {
             case $validarEmpresa->isEmpty($_POST):
-                $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
                 
-            case $validarEmpresa->isString($_POST, $camposString):
-                 $respuesta = new Response('DATOS_INVALIDOS');
-                 return $respuesta->json(400);
-
             case array_key_exists('empresa', $_POST):
                 if ($validarEmpresa->isDuplicated('empresa', 'nombre', $_POST["nombre"])) {
                     $respuesta = new Response('DATOS_DUPLICADOS');

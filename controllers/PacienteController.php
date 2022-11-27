@@ -30,7 +30,7 @@ class PacienteController extends Controller{
         
         switch($_POST) {
             case ($validarPaciente->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 
             case $validarPaciente->isNumber($_POST, $camposNumericos):
@@ -128,7 +128,7 @@ class PacienteController extends Controller{
         $validarPaciente = new Validate;
         switch($_POST) {
             case ($validarPaciente->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 
             case $validarPaciente->isNumber($_POST, $camposNumericos):

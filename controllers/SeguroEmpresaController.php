@@ -23,16 +23,16 @@ class SeguroEmpresaController extends Controller{
             
             switch($post) {
                 case $validarSeguroEmpresa->isEmpty($post):
-                    $respuesta = new Response('DATOS_INVALIDOS');
-                    return $respuesta->json(403);
+                    $respuesta = new Response(false, 'No existen datos del seguro');
+                    return $respuesta->json(400);
 
                 case !$validarSeguroEmpresa->isDuplicated('seguro', 'seguro_id', $_POST['seguro_id']):
-                    $respuesta = new Response('DATOS_INVALIDOS');
-                    return $respuesta->json(401);
+                    $respuesta = new Response(false, 'El seguro indicado no existe o es inválido');
+                    return $respuesta->json(400);
 
                 case $validarSeguroEmpresa->isNumber($post, $camposNumericos):
-                    $respuesta = new Response('DATOS_INVALIDOS');
-                    return $respuesta->json(402);
+                    $respuesta = new Response(false, 'Información de empresa o seguro erróneos');
+                    return $respuesta->json(400);
 
                 default: 
                     $data = $validarSeguroEmpresa->dataScape($post);

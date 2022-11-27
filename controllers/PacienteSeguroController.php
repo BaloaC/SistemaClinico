@@ -25,27 +25,27 @@ class PacienteSeguroController extends Controller{
             
             switch($_POST) {
                 case ($validarPacienteSeguro->isEmpty($form)):
-                    $respuesta = new Response('DATOS_INVALIDOS');
+                    $respuesta = new Response(false, 'Los datos del seguro están vacíos');
                     return $respuesta->json(400);
 
                 case $validarPacienteSeguro->isNumber($form, $camposNumericos):
-                    $respuesta = new Response('DATOS_INVALIDOS');
+                    $respuesta = new Response(false, 'Los datos del seguro son inválidos');
                     return $respuesta->json(400);
 
                 case $validarPacienteSeguro->isDate($form['fecha_contra']):
-                    $respuesta = new Response('FECHA_INVALIDA');
+                    $respuesta = new Response(false, 'La fecha indicada en el registro del seguro es inválida');
                     return $respuesta->json(400);
 
                 case !$validarPacienteSeguro->existsInDB($form, $campoId1):   
-                    $respuesta = new Response('NOT_FOUND');         
+                    $respuesta = new Response(false, 'No se encontraron resultados del seguro indicado');         
                     return $respuesta->json(404);
 
                 case !$validarPacienteSeguro->existsInDB($form, $campoId2):   
-                    $respuesta = new Response('NOT_FOUND');         
+                    $respuesta = new Response(false, 'No se encontraron resultados de la empresa indicada');         
                     return $respuesta->json(404);
 
                 case !$validarPacienteSeguro->isDuplicatedId('empresa_id', 'seguro_id', $form['empresa_id'], $form['seguro_id'], 'seguro_empresa'):
-                    $respuesta = new Response('DATOS_DUPLICADOS');
+                    $respuesta = new Response(false, 'Ya existe un registro con la misma información');
                     return $respuesta->json(400);
 
                 default: 
@@ -73,7 +73,7 @@ class PacienteSeguroController extends Controller{
         
         switch($_POST) {
             case ($validarSeguroPaciente->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 
             case $validarSeguroPaciente->isNumber($_POST, $camposNumericos):

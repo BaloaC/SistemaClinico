@@ -111,15 +111,17 @@ class SeguroController extends Controller{
                 if ($validarSeguro->isDuplicated('seguro', 'nombre', $_POST["nombre"])) {
                     $respuesta = new Response('DATOS_DUPLICADOS');
                     return $respuesta->json(400);  
-                }
-
-            case array_key_exists('rif', $_POST):
-                if ($validarSeguro->isDuplicated('seguro', 'rif', $_POST["rif"])) {
-                    $respuesta = new Response('DATOS_DUPLICADOS');
-                    return $respuesta->json(400);  
-                }
+                };
             
             default: 
+
+            if (array_key_exists('rif', $_POST)) {
+                if ($validarSeguro->isDuplicated('seguro', 'rif', $_POST["rif"])) {
+                    $respuesta = new Response('DATOS_DUPLICADOS');
+                    return $respuesta->json(404);  
+                }
+            }
+
             $data = $validarSeguro->dataScape($_POST);
                 
             $_seguroModel = new SeguroModel();
@@ -129,7 +131,7 @@ class SeguroController extends Controller{
 
             $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
             $respuesta->setData($actualizado);
-
+            
             return $respuesta->json($mensaje ? 200 : 400);
         }
     }
