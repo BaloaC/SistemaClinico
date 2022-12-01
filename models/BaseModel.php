@@ -36,7 +36,7 @@ class BaseModel{
     public function getFirst(){
 
         $list = $this->getAll();
-
+        
         if(count($list) > 0){
 
             return $list[0];
@@ -123,6 +123,40 @@ class BaseModel{
         $this->wheres .= "$key $condition " . ((is_string($value)) ? "\"$value\"" : $value) . " ";
 
         return $this;
+    }
+
+    // Armar los inner del inner join
+    public function listInner($obj) {
+        $inner = array();
+
+        foreach ($obj as $key => $ref) {
+            $line = "INNER JOIN $key ON $key.$key"."_id = $ref".".$key"."_id";
+            $inner[] = $line;
+        }
+        
+        return implode(" ", $inner);
+    }
+
+    // Armar el inner join completo
+    public function innerJoin($obj, $listInner, $table) {
+
+        try {
+            
+            $inner_join = implode(", ", $obj);
+            $this->table = $table;
+            $inners = $listInner;
+
+            $this->sql = "SELECT $inner_join FROM $this->table"." $inners $this->wheres";
+            
+            $query = $this->connection->prepare($this->sql);
+            $query->execute();
+            
+            return $query->fetchAll(PDO::FETCH_OBJ);
+
+        } catch (PDOException $error) {
+            
+            return $error->getMessage();
+        }
     }
 
     //Método para ejectuar una consulta

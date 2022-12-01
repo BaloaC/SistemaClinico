@@ -65,26 +65,84 @@ class MedicoController extends Controller{
 
     public function listarMedicos(){
 
-        $_medicoModel = new MedicoModel();
-        $lista = $_medicoModel->getAll();
-        $mensaje = (count($lista) > 0);
+        // $_medicoModel = new MedicoModel();
+        // $lista = $_medicoModel->getAll();
+        // $mensaje = (count($lista) > 0);
      
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($lista);
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        // $respuesta->setData($lista);
 
-        return $respuesta->json(200);
+        // return $respuesta->json(200);
+        $arrayInner = array(
+            "medico" => "medico_especialidad",
+            "especialidad" => "medico_especialidad",
+        );
+
+        $arraySelect = array(
+            "*"
+        );
+
+        $_medicoModel = new MedicoModel();
+        $inners = $_medicoModel->listInner($arrayInner);
+        $medico = $_medicoModel->innerJoin($arraySelect, $inners, "medico_especialidad");
+
+        $resultado = array();
+        array_push($resultado, $medico);
+        
+        $_medicoModel = new MedicoModel();
+        $medico2 = $_medicoModel->getAll();
+
+        array_push($resultado, $medico2);
+        $mensaje = ($resultado != null);
+        
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($resultado);
+        return $respuesta->json($mensaje ? 200 : 404);
+
     }
 
     public function listarMedicoPorId($medico_id){
 
+        // $_medicoModel = new MedicoModel();
+        // $medico = $_medicoModel->where('medico_id','=',$medico_id)->getFirst();
+        // $mensaje = ($medico != null);
+
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        // $respuesta->setData($medico);
+
+        // return $respuesta->json($mensaje ? 200 : 400);
+
+        $arrayInner = array(
+            "medico" => "medico_especialidad",
+            "especialidad" => "medico_especialidad",
+        );
+
+        $arraySelect = array(
+            "*"
+        );
+
         $_medicoModel = new MedicoModel();
-        $medico = $_medicoModel->where('medico_id','=',$medico_id)->getFirst();
+        $inners = $_medicoModel->listInner($arrayInner);
+        
+        $medico = $_medicoModel->where('medico.medico_id','=',$medico_id)->innerJoin($arraySelect, $inners, "medico_especialidad");
         $mensaje = ($medico != null);
 
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($medico);
+        if ( $mensaje ) {
+            
+            $respuesta = new Response('CORRECTO');
+            $respuesta->setData($medico);
+            return $respuesta->json(200);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+        } else {
+
+            $_medicoModel = new MedicoModel();
+            $medico = $_medicoModel->where('medico_id','=',$medico_id)->getFirst();
+            $mensaje = ($medico != null);
+
+            $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+            $respuesta->setData($medico);
+            return $respuesta->json($mensaje ? 200 : 404);
+        }
     }
 
     public function RetornarID($cedula){

@@ -65,26 +65,94 @@ class EmpresaController extends Controller{
 
     public function listarEmpresas(){
 
-        $_EmpresaModel = new EmpresaModel();
-        $lista = $_EmpresaModel->getAll();
-        $mensaje = (count($lista) > 0);
+        // $_EmpresaModel = new EmpresaModel();
+        // $lista = $_EmpresaModel->getAll();
+        // $mensaje = (count($lista) > 0);
      
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($lista);
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        // $respuesta->setData($lista);
 
-        return $respuesta->json(200);
+        // return $respuesta->json(200);
+        $arrayInner = array(
+            "empresa" => "seguro_empresa",
+            "seguro" => "seguro_empresa",
+        );
+
+        $arraySelect = array(
+            "empresa.empresa_id",
+            "empresa.nombre AS nombre_empresa",
+            "empresa.rif",
+            "empresa.direccion",
+            "seguro.nombre",
+            "seguro.seguro_id"
+        );
+
+        $_empresaModel = new EmpresaModel();
+        $inners = $_empresaModel->listInner($arrayInner);
+        $empresa = $_empresaModel->innerJoin($arraySelect, $inners, "seguro_empresa");
+
+        $resultado = array();
+        array_push($resultado, $empresa);
+        
+        $_empresaModel = new EmpresaModel();
+        $empresa2 = $_empresaModel->getAll();
+
+        array_push($resultado, $empresa2);
+        $mensaje = ($resultado != null);
+        
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($resultado);
+        return $respuesta->json($mensaje ? 200 : 404);
+
     }
 
-    public function listarEmpresasPorId($empresa_id){
+    public function listarEmpresaPorId($empresa_id){
 
-        $_EmpresaModel = new EmpresaModel();
-        $empresa = $_EmpresaModel->where('empresa_id','=',$empresa_id)->getFirst();
+        // $_EmpresaModel = new EmpresaModel();
+        // $empresa = $_EmpresaModel->where('empresa_id','=',$empresa_id)->getFirst();
+        // $mensaje = ($empresa != null);
+
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        // $respuesta->setData($empresa);
+
+        // return $respuesta->json($mensaje ? 200 : 400);
+
+        $arrayInner = array(
+            "empresa" => "seguro_empresa",
+            "seguro" => "seguro_empresa",
+        );
+
+        $arraySelect = array(
+            "empresa.empresa_id",
+            "empresa.nombre AS nombre_empresa",
+            "empresa.rif",
+            "empresa.direccion",
+            "seguro.nombre",
+            "seguro.seguro_id"
+        );
+
+        $_empresaModel = new EmpresaModel();
+        $inners = $_empresaModel->listInner($arrayInner);
+        
+        $empresa = $_empresaModel->where('empresa.empresa_id','=',$empresa_id)->innerJoin($arraySelect, $inners, "seguro_empresa");
         $mensaje = ($empresa != null);
 
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($empresa);
+        if ( $mensaje ) {
+            
+            $respuesta = new Response('CORRECTO');
+            $respuesta->setData($empresa);
+            return $respuesta->json(200);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+        } else {
+
+            $_empresaModel = new EmpresaModel();
+            $empresa = $_empresaModel->where('empresa_id','=',$empresa_id)->getFirst();
+            $mensaje = ($empresa != null);
+
+            $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+            $respuesta->setData($empresa);
+            return $respuesta->json($mensaje ? 200 : 404);
+        }
     }
 
     public function actualizarEmpresa($empresa_id){

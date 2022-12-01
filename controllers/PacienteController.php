@@ -95,26 +95,105 @@ class PacienteController extends Controller{
 
     public function listarPacientes(){
 
-        $_pacienteModel = new PacienteModel();
-        $lista = $_pacienteModel->getAll();
-        $mensaje = (count($lista) > 0);
+        // $_pacienteModel = new PacienteModel();
+        // $lista = $_pacienteModel->getAll();
+        // $mensaje = (count($lista) > 0);
      
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($lista);
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        // $respuesta->setData($lista);
 
-        return $respuesta->json(200);
+        // return $respuesta->json(200);
+        $arrayInner = array(
+            "paciente" => "paciente_seguro",
+            "seguro" => "paciente_seguro",
+            "empresa" => "paciente_seguro"
+        );
+
+        $arraySelect = array(
+            "paciente.paciente_id",
+            "paciente.cedula",
+            "paciente.nombres AS nombre_paciente",
+            "paciente.apellidos",
+            "paciente.fecha_nacimiento",
+            "paciente.edad",
+            "paciente.telefono",
+            "paciente.direccion",
+            "paciente.tipo_paciente",
+            "paciente_seguro.tipo_seguro",
+            "paciente_seguro.cobertura_general",
+            "paciente_seguro.fecha_contra",
+            "paciente_seguro.saldo_disponible",
+            "empresa.nombre AS nombre_empresa",
+            "seguro.nombre AS nombre_seguro"
+        );
+
+        $_pacienteModel = new PacienteModel();
+        $inners = $_pacienteModel->listInner($arrayInner);
+        $paciente = $_pacienteModel->innerJoin($arraySelect, $inners, "paciente_seguro");
+
+        $resultado = array();
+        array_push($resultado, $paciente);
+        
+        $_pacienteModel = new PacienteModel();
+        $paciente2 = $_pacienteModel->getAll();
+
+        array_push($resultado, $paciente2);
+        $mensaje = ($resultado != null);
+        
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($resultado);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function listarPacientePorId($paciente_id){
+        $arrayInner = array(
+            "paciente" => "paciente_seguro",
+            "seguro" => "paciente_seguro",
+            "empresa" => "paciente_seguro"
+        );
+
+        $arraySelect = array(
+            "paciente.paciente_id",
+            "paciente.cedula",
+            "paciente.nombres AS nombre_paciente",
+            "paciente.apellidos",
+            "paciente.fecha_nacimiento",
+            "paciente.edad",
+            "paciente.telefono",
+            "paciente.direccion",
+            "paciente.tipo_paciente",
+            "paciente_seguro.tipo_seguro",
+            "paciente_seguro.cobertura_general",
+            "paciente_seguro.fecha_contra",
+            "paciente_seguro.saldo_disponible",
+            "empresa.nombre AS nombre_empresa",
+            "seguro.nombre AS nombre_seguro"
+        );
 
         $_pacienteModel = new PacienteModel();
-        $paciente = $_pacienteModel->where('paciente_id','=',$paciente_id)->getFirst();
+        $inners = $_pacienteModel->listInner($arrayInner);
+        
+        $paciente = $_pacienteModel->where('paciente.paciente_id','=',$paciente_id)->innerJoin($arraySelect, $inners, "paciente_seguro");
+        
         $mensaje = ($paciente != null);
 
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($paciente);
+        if ( $mensaje ) {
+            
+            $respuesta = new Response('CORRECTO');
+            $respuesta->setData($paciente);
+            return $respuesta->json(200);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+        } else {
+
+            $_pacienteModel = new PacienteModel();
+            $paciente = $_pacienteModel->where('paciente_id','=',$paciente_id)->getFirst();
+            
+            $mensaje = ($paciente != null);
+
+            $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+            $respuesta->setData($paciente);
+            return $respuesta->json($mensaje ? 200 : 404);
+        }
     }
 
     public function actualizarPaciente($paciente_id){

@@ -63,26 +63,100 @@ class SeguroController extends Controller{
 
     public function listarSeguros(){
 
-        $_seguroModel = new SeguroModel();
-        $lista = $_seguroModel->getAll();
-        $mensaje = (count($lista) > 0);
+        // $_seguroModel = new SeguroModel();
+        // $lista = $_seguroModel->getAll();
+        // $mensaje = (count($lista) > 0);
      
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($lista);
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        // $respuesta->setData($lista);
 
-        return $respuesta->json(200);
+        // return $respuesta->json(200);
+
+        $arrayInner = array(
+            "empresa" => "seguro_empresa",
+            "seguro" => "seguro_empresa",
+        );
+
+        $arraySelect = array(
+            "empresa.empresa_id",
+            "empresa.nombre AS nombre_empresa",
+            "seguro.nombre AS nombre_seguro",
+            "seguro.seguro_id",
+            "seguro.rif",
+            "seguro.direccion",
+            "seguro.telefono",
+            "seguro.porcentaje",
+            "seguro.tipo_seguro"
+        );
+
+        $_seguroModel = new SeguroModel();
+        $inners = $_seguroModel->listInner($arrayInner);
+        $seguro = $_seguroModel->innerJoin($arraySelect, $inners, "seguro_empresa");
+
+        $resultado = array();
+        array_push($resultado, $seguro);
+        
+        $_seguroModel = new SeguroModel();
+        $seguro2 = $_seguroModel->getAll();
+
+        array_push($resultado, $seguro2);
+        $mensaje = ($resultado != null);
+        
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($resultado);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 
-    public function listarSeguroPorId($idSeguro){
+    public function listarSeguroPorId($seguro_id){
+
+        // $_seguroModel = new SeguroModel();
+        // $seguro = $_seguroModel->where('seguro_id','=',$idSeguro)->getFirst();
+        // $mensaje = ($seguro != null);
+
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        // $respuesta->setData($seguro);
+
+        // return $respuesta->json($mensaje ? 200 : 400);
+
+        $arrayInner = array(
+            "empresa" => "seguro_empresa",
+            "seguro" => "seguro_empresa",
+        );
+
+        $arraySelect = array(
+            "empresa.empresa_id",
+            "empresa.nombre AS nombre_empresa",
+            "seguro.nombre AS nombre_seguro",
+            "seguro.seguro_id",
+            "seguro.rif",
+            "seguro.direccion",
+            "seguro.telefono",
+            "seguro.porcentaje",
+            "seguro.tipo_seguro"
+        );
 
         $_seguroModel = new SeguroModel();
-        $seguro = $_seguroModel->where('seguro_id','=',$idSeguro)->getFirst();
+        $inners = $_seguroModel->listInner($arrayInner);
+        
+        $seguro = $_seguroModel->where('seguro.seguro_id','=',$seguro_id)->innerJoin($arraySelect, $inners, "seguro_empresa");
         $mensaje = ($seguro != null);
 
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($seguro);
+        if ( $mensaje ) {
+            
+            $respuesta = new Response('CORRECTO');
+            $respuesta->setData($seguro);
+            return $respuesta->json(200);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+        } else {
+
+            $_seguroModel = new SeguroModel();
+            $seguro = $_seguroModel->where('seguro_id','=',$seguro_id)->getFirst();
+            $mensaje = ($seguro != null);
+
+            $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+            $respuesta->setData($seguro);
+            return $respuesta->json($mensaje ? 200 : 404);
+        }
     }
 
     public function actualizarSeguro($seguro_id){
