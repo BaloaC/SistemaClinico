@@ -135,8 +135,8 @@ class PacienteController extends Controller{
         array_push($resultado, $paciente);
         
         $_pacienteModel = new PacienteModel();
-        $paciente2 = $_pacienteModel->getAll();
-
+        $paciente2 = $_pacienteModel->where('tipo_paciente','=',1)->getAll();
+        
         array_push($resultado, $paciente2);
         $mensaje = ($resultado != null);
         

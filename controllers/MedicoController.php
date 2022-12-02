@@ -65,14 +65,6 @@ class MedicoController extends Controller{
 
     public function listarMedicos(){
 
-        // $_medicoModel = new MedicoModel();
-        // $lista = $_medicoModel->getAll();
-        // $mensaje = (count($lista) > 0);
-     
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        // $respuesta->setData($lista);
-
-        // return $respuesta->json(200);
         $arrayInner = array(
             "medico" => "medico_especialidad",
             "especialidad" => "medico_especialidad",
@@ -85,20 +77,29 @@ class MedicoController extends Controller{
         $_medicoModel = new MedicoModel();
         $inners = $_medicoModel->listInner($arrayInner);
         $medico = $_medicoModel->innerJoin($arraySelect, $inners, "medico_especialidad");
-
         $resultado = array();
-        array_push($resultado, $medico);
-        
+
         $_medicoModel = new MedicoModel();
         $medico2 = $_medicoModel->getAll();
 
-        array_push($resultado, $medico2);
+        foreach ($medico2 as $medicos) {
+        
+            $id = $medicos->medico_id;
+            $validarMedico = new Validate;
+            $respuesta = $validarMedico->isDuplicated('medico_especialidad', 'medico_id', $id);
+            
+            if($respuesta){  continue; }
+            else { array_push($medico, $medicos); }
+
+        }
+
+        array_push($resultado, $medico);
         $mensaje = ($resultado != null);
         
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        
         $respuesta->setData($resultado);
         return $respuesta->json($mensaje ? 200 : 404);
-
     }
 
     public function listarMedicoPorId($medico_id){

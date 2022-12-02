@@ -91,15 +91,29 @@ class SeguroController extends Controller{
 
         $_seguroModel = new SeguroModel();
         $inners = $_seguroModel->listInner($arrayInner);
+        //return $inners;
         $seguro = $_seguroModel->innerJoin($arraySelect, $inners, "seguro_empresa");
-
-        $resultado = array();
-        array_push($resultado, $seguro);
-        
+        $resultado = array();   
+             
         $_seguroModel = new SeguroModel();
         $seguro2 = $_seguroModel->getAll();
 
-        array_push($resultado, $seguro2);
+        foreach ($seguro2 as $seguros) {
+        
+            $id = $seguros->seguro_id;
+            $validarSeguro = new Validate;
+            $respuesta = $validarSeguro->isDuplicated('seguro_empresa', 'seguro_id', $id);
+            
+            if($respuesta){
+                    
+                continue;
+            } else {
+
+                array_push($seguro, $seguros);
+            }
+        }
+
+        array_push($resultado, $seguro);
         $mensaje = ($resultado != null);
         
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');

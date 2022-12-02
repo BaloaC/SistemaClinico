@@ -65,14 +65,6 @@ class EmpresaController extends Controller{
 
     public function listarEmpresas(){
 
-        // $_EmpresaModel = new EmpresaModel();
-        // $lista = $_EmpresaModel->getAll();
-        // $mensaje = (count($lista) > 0);
-     
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        // $respuesta->setData($lista);
-
-        // return $respuesta->json(200);
         $arrayInner = array(
             "empresa" => "seguro_empresa",
             "seguro" => "seguro_empresa",
@@ -92,12 +84,27 @@ class EmpresaController extends Controller{
         $empresa = $_empresaModel->innerJoin($arraySelect, $inners, "seguro_empresa");
 
         $resultado = array();
-        array_push($resultado, $empresa);
         
+
         $_empresaModel = new EmpresaModel();
         $empresa2 = $_empresaModel->getAll();
 
-        array_push($resultado, $empresa2);
+        foreach ($empresa2 as $empresas) {
+            
+            $id = $empresas->empresa_id;
+            $validarEmpresa = new Validate;
+            $respuesta = $validarEmpresa->isDuplicated('seguro_empresa', 'empresa_id', $id);
+            
+            if($respuesta){
+                    
+                continue;
+            } else {
+                // $resultado = $empresas;
+                array_push($empresa, $empresas);
+            }
+        }
+        array_push($resultado, $empresa);
+        ksort($resultado);
         $mensaje = ($resultado != null);
         
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
