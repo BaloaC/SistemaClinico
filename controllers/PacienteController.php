@@ -95,14 +95,6 @@ class PacienteController extends Controller{
 
     public function listarPacientes(){
 
-        // $_pacienteModel = new PacienteModel();
-        // $lista = $_pacienteModel->getAll();
-        // $mensaje = (count($lista) > 0);
-     
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        // $respuesta->setData($lista);
-
-        // return $respuesta->json(200);
         $arrayInner = array(
             "paciente" => "paciente_seguro",
             "seguro" => "paciente_seguro",
@@ -126,20 +118,20 @@ class PacienteController extends Controller{
             "empresa.nombre AS nombre_empresa",
             "seguro.nombre AS nombre_seguro"
         );
-
+        $newArray = array();
+        $_pacienteModel = new PacienteModel();
+        $paciente = $_pacienteModel->where('tipo_paciente','=',1)->getAll();
+        
         $_pacienteModel = new PacienteModel();
         $inners = $_pacienteModel->listInner($arrayInner);
-        $paciente = $_pacienteModel->innerJoin($arraySelect, $inners, "paciente_seguro");
-
-        $resultado = array();
-        array_push($resultado, $paciente);
+        $inner = $_pacienteModel->innerJoin($arraySelect, $inners, "paciente_seguro");
+                
+        if ( !empty($inner) ) {
+            $paciente2 = $inner;    
+        }      
         
-        $_pacienteModel = new PacienteModel();
-        $paciente2 = $_pacienteModel->where('tipo_paciente','=',1)->getAll();
-        
-        array_push($resultado, $paciente2);
+        $resultado = array_merge($paciente, $paciente2);
         $mensaje = ($resultado != null);
-        
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($resultado);
         return $respuesta->json($mensaje ? 200 : 404);

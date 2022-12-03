@@ -63,15 +63,6 @@ class SeguroController extends Controller{
 
     public function listarSeguros(){
 
-        // $_seguroModel = new SeguroModel();
-        // $lista = $_seguroModel->getAll();
-        // $mensaje = (count($lista) > 0);
-     
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        // $respuesta->setData($lista);
-
-        // return $respuesta->json(200);
-
         $arrayInner = array(
             "empresa" => "seguro_empresa",
             "seguro" => "seguro_empresa",
@@ -80,57 +71,48 @@ class SeguroController extends Controller{
         $arraySelect = array(
             "empresa.empresa_id",
             "empresa.nombre AS nombre_empresa",
-            "seguro.nombre AS nombre_seguro",
-            "seguro.seguro_id",
-            "seguro.rif",
-            "seguro.direccion",
-            "seguro.telefono",
-            "seguro.porcentaje",
-            "seguro.tipo_seguro"
+            "empresa.rif",
+            "empresa.direccion"
         );
-
+                     
         $_seguroModel = new SeguroModel();
-        $inners = $_seguroModel->listInner($arrayInner);
-        //return $inners;
-        $seguro = $_seguroModel->innerJoin($arraySelect, $inners, "seguro_empresa");
+        $seguro = $_seguroModel->getAll();
         $resultado = array();   
-             
-        $_seguroModel = new SeguroModel();
-        $seguro2 = $_seguroModel->getAll();
 
-        foreach ($seguro2 as $seguros) {
+        foreach ($seguro as $seguros) {
         
             $id = $seguros->seguro_id;
             $validarSeguro = new Validate;
+            // Verificamos si hay que aplicarle un inner join a ese seguro en específico
             $respuesta = $validarSeguro->isDuplicated('seguro_empresa', 'seguro_id', $id);
+            $newArray = get_object_vars($seguros);
             
             if($respuesta){
-                    
-                continue;
-            } else {
+                
+                $newArray['empresas'] = '';
+                $_seguroModel = new SeguroModel();
+                $inners = $_seguroModel->listInner($arrayInner);
+                $EmpresaSeguro = $_seguroModel->where('seguro.seguro_id','=',$id)->innerJoin($arraySelect, $inners, "seguro_empresa");
+                $arraySeguro = array();
 
-                array_push($seguro, $seguros);
-            }
+                foreach ($EmpresaSeguro as $empresas) {
+                    // Guardamos cada empresa en un array
+                    $arraySeguro[] = $empresas;
+                }
+                // Agregamos las empresas en el seguro al que pertenecen
+                $newArray['empresas'] = $arraySeguro;
+                $resultado[] = $newArray;
+
+            } else { $resultado[] = $newArray; } // Si no necesita inner join, lo agregamos tal cual como está
         }
 
-        array_push($resultado, $seguro);
         $mensaje = ($resultado != null);
-        
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($resultado);
         return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function listarSeguroPorId($seguro_id){
-
-        // $_seguroModel = new SeguroModel();
-        // $seguro = $_seguroModel->where('seguro_id','=',$idSeguro)->getFirst();
-        // $mensaje = ($seguro != null);
-
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        // $respuesta->setData($seguro);
-
-        // return $respuesta->json($mensaje ? 200 : 400);
 
         $arrayInner = array(
             "empresa" => "seguro_empresa",

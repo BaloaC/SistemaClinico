@@ -85,7 +85,6 @@ class EmpresaController extends Controller{
 
         $resultado = array();
         
-
         $_empresaModel = new EmpresaModel();
         $empresa2 = $_empresaModel->getAll();
 
@@ -98,8 +97,12 @@ class EmpresaController extends Controller{
             if($respuesta){
                     
                 continue;
+            } else if ( !empty($empresa) ) {
+                
+                array_push($empresa, $empresas);
             } else {
                 // $resultado = $empresas;
+                $empresa = array();
                 array_push($empresa, $empresas);
             }
         }

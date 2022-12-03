@@ -54,6 +54,18 @@ INNER JOIN empresa on empresa.empresa_id = seguro_empresa.empresa_id
 INNER JOIN seguro on seguro.seguro_id = seguro_empresa.seguro_id
 where seguro.seguro_id = 1;
 
+-- empresas de seguro/empresa
+
+select
+	empresa.empresa_id,
+    empresa.nombre AS nombre_empresa,
+    empresa.rif,
+    empresa.direccion
+from seguro_empresa
+INNER JOIN empresa on empresa.empresa_id = seguro_empresa.empresa_id
+INNER JOIN seguro on seguro.seguro_id = seguro_empresa.seguro_id
+where seguro.seguro_id = 1;
+
 
 -- medico/especialidad
 select *
