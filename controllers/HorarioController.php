@@ -47,18 +47,22 @@ class HorarioController extends Controller{
                 case !($validarHorario->existsInDB($newForm, $camposNumericos)):   
                     $respuesta = new Response('NOT_FOUND'); 
                     return $respuesta->json(400);
+                
+                case $validarHorario->isDuplicatedId('medico_id', 'dias_semana', $newForm['medico_id'], $newForm['dias_semana'], 'horario'):
+                    $respuesta = new Response('DATOS_DUPLICADOS'); 
+                    return $respuesta->json(400);
 
                 default: 
                     $data = $validarHorario->dataScape($newForm);
 
-                    return $data;
+                    //sreturn $data;
                     $_horarioModel = new HorarioModel();
                     $id = $_horarioModel->insert($data);
                     $mensaje = ($id > 0);
         
                     if (!$mensaje) {
                         $respuesta = new Response('INSERCION_FALLIDA');
-                        return $respuesta->json($mensaje ? 200 : 400);
+                        return $respuesta->json($mensaje ? 201 : 400);
                     }
             }
    

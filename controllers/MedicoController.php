@@ -64,7 +64,16 @@ class MedicoController extends Controller{
     }
 
     public function listarMedicos(){
+        // datos para los horarios
+        $arrayInnerHorario = array (
+            "medico" => "horario"
+        );
 
+        $arraySelectHorario = array(
+            "horario.dias_semana"
+        );
+
+        //  datos para la especialidad
         $arrayInner = array(
             "medico" => "medico_especialidad",
             "especialidad" => "medico_especialidad",
@@ -93,7 +102,24 @@ class MedicoController extends Controller{
 
         }
 
+        foreach ($medico as $medicos) {
+            
+            $medicoHorario = get_object_vars($medicos);
+            $id = $medicos->medico_id;
+
+            $_medicoModel = new MedicoModel();
+            $inners = $_medicoModel->listInner($arrayInnerHorario);
+            $horario = $_medicoModel->where('medico.medico_id','=',$id)->innerJoin($arraySelectHorario, $inners, "horario");
+            
+            if ($horario ) {
+                $medicoHorario['horarios'] = $horario;
+            }
+            
+            array_push($medico, $medicoHorario);
+        }
+
         array_push($resultado, $medico);
+
         $mensaje = ($resultado != null);
         
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
@@ -104,46 +130,53 @@ class MedicoController extends Controller{
 
     public function listarMedicoPorId($medico_id){
 
-        // $_medicoModel = new MedicoModel();
-        // $medico = $_medicoModel->where('medico_id','=',$medico_id)->getFirst();
-        // $mensaje = ($medico != null);
-
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        // $respuesta->setData($medico);
-
-        // return $respuesta->json($mensaje ? 200 : 400);
-
-        $arrayInner = array(
+        $arrayInnerEspecialidad = array(
             "medico" => "medico_especialidad",
             "especialidad" => "medico_especialidad",
         );
 
-        $arraySelect = array(
+        $arraySelectEspecialidad = array(
             "*"
         );
 
+        $arrayInnerHorario = array (
+            "medico" => "horario"
+        );
+
+        $arraySelectHorario = array(
+            "horario.dias_semana"
+        );
+
+        // Formando la relación medico/especialidad
         $_medicoModel = new MedicoModel();
-        $inners = $_medicoModel->listInner($arrayInner);
+        $innersEspecialidad = $_medicoModel->listInner($arrayInnerEspecialidad);
         
-        $medico = $_medicoModel->where('medico.medico_id','=',$medico_id)->innerJoin($arraySelect, $inners, "medico_especialidad");
+        $medico = $_medicoModel->where('medico.medico_id','=',$medico_id)->innerJoin($arraySelectEspecialidad, $innersEspecialidad, "medico_especialidad");
+        
         $mensaje = ($medico != null);
-
-        if ( $mensaje ) {
+        
+        if ( !$mensaje ) {
             
-            $respuesta = new Response('CORRECTO');
-            $respuesta->setData($medico);
-            return $respuesta->json(200);
-
-        } else {
-
             $_medicoModel = new MedicoModel();
             $medico = $_medicoModel->where('medico_id','=',$medico_id)->getFirst();
-            $mensaje = ($medico != null);
+            $newArray = get_object_vars($medico);
+        }
 
-            $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        // formando la relación medico/horario
+        $_medicoModel = new MedicoModel();
+        $innersHorario = $_medicoModel->listInner($arrayInnerHorario);
+        
+        $medico2 = $_medicoModel->where('medico.medico_id','=',$medico_id)->innerJoin($arraySelectHorario, $innersHorario, "horario");
+        $mensaje2 = ($medico2 != null);
+        
+        if ( $mensaje2 ) {
+            
+            $medico['horario'] = $medico2;
+        }
+
+            $respuesta = new Response($medico ? 'CORRECTO' : 'NOT_FOUND');
             $respuesta->setData($medico);
             return $respuesta->json($mensaje ? 200 : 404);
-        }
     }
 
     public function RetornarID($cedula){

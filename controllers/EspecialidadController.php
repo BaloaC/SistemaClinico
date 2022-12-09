@@ -51,14 +51,53 @@ class EspecialidadController extends Controller{
 
     public function listarEspecialidades(){
 
-        $_especialidadModel = new EspecialidadModel();
-        $lista = $_especialidadModel->getAll();
-        $mensaje = (count($lista) > 0);
-     
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($lista);
+        $arrayInner = array(
+            "medico" => "medico_especialidad",
+            "especialidad" => "medico_especialidad",
+        );
 
-        return $respuesta->json(200);
+        $arraySelect = array(
+            "medico.medico_id",
+            "medico.nombres",
+            "medico.apellidos"
+        );
+
+        $_especialidadModel = new EspecialidadModel();
+        $especialidad = $_especialidadModel->getAll();
+        $resultado = array();
+
+        foreach ($especialidad as $especialidades) {
+        
+            $id = $especialidades->especialidad_id;
+            $validarEspecialidad = new Validate;
+
+            // Verificamos si hay que aplicarle un inner join a ese seguro en específico
+            $respuesta = $validarEspecialidad->isDuplicated('medico_especialidad', 'especialidad_id', $id);
+            $newArray = get_object_vars($especialidades);
+            
+            if($respuesta){
+                
+                $newArray['medicos'] = '';
+                $_medicoModel = new MedicoModel();
+                $inners = $_medicoModel->listInner($arrayInner);
+                $medicoEspecialidad = $_medicoModel->where('especialidad.especialidad_id','=',$id)->innerJoin($arraySelect, $inners, "medico_especialidad");
+                $arrayMedico = array();
+
+                foreach ($medicoEspecialidad as $medicos) {
+                    // Guardamos cada empresa en un array
+                    $arrayMedico[] = $medicos;
+                }
+                // Agregamos las empresas en el seguro al que pertenecen
+                $newArray['medicos'] = $arrayMedico;
+                $resultado[] = $newArray;
+
+            } else { $resultado[] = $newArray; } // Si no necesita inner join, lo agregamos tal cual como está
+        }
+        
+        $mensaje = ($resultado != null);
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($resultado);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function listarEspecialidadPorId($especialidad_id){

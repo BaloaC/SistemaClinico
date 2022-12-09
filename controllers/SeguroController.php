@@ -120,38 +120,51 @@ class SeguroController extends Controller{
         );
 
         $arraySelect = array(
+            // "empresa.empresa_id",
+            // "empresa.nombre AS nombre_empresa",
             "empresa.empresa_id",
             "empresa.nombre AS nombre_empresa",
-            "seguro.nombre AS nombre_seguro",
-            "seguro.seguro_id",
-            "seguro.rif",
-            "seguro.direccion",
-            "seguro.telefono",
-            "seguro.porcentaje",
-            "seguro.tipo_seguro"
+            "empresa.rif",
+            "empresa.direccion"
+            //"seguro.nombre AS nombre_seguro"
+            // "seguro.seguro_id",
+            // "seguro.rif",
+            // "seguro.direccion",
+            // "seguro.telefono",
+            // "seguro.porcentaje",
+            // "seguro.tipo_seguro"
         );
 
         $_seguroModel = new SeguroModel();
-        $inners = $_seguroModel->listInner($arrayInner);
-        
-        $seguro = $_seguroModel->where('seguro.seguro_id','=',$seguro_id)->innerJoin($arraySelect, $inners, "seguro_empresa");
-        $mensaje = ($seguro != null);
+        $seguro = $_seguroModel->getFirst();
+        $arraySeguro = get_object_vars($seguro);
 
-        if ( $mensaje ) {
-            
-            $respuesta = new Response('CORRECTO');
-            $respuesta->setData($seguro);
-            return $respuesta->json(200);
+        if ($seguro) {
 
+            $inners = $_seguroModel->listInner($arrayInner);
+            $empresa = $_seguroModel->where('seguro.seguro_id','=',$seguro_id)->innerJoin($arraySelect, $inners, "seguro_empresa");
+            $mensaje = ($empresa != null);
+
+            if ( $mensaje ) {
+                
+                $arraySeguro['empresas'] = $empresa;
+            } 
+            // else {
+
+            //     $_seguroModel = new SeguroModel();
+            //     $seguro = $_seguroModel->where('seguro_id','=',$seguro_id)->getFirst();
+            //     $mensaje = ($seguro != null);
+
+            //     $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+            //     $respuesta->setData($seguro);
+            //     return $respuesta->json($mensaje ? 200 : 404);
+            // }
+            $respuesta = new Response($arraySeguro ? 'CORRECTO' : 'ERROR');
+            $respuesta->setData($arraySeguro);
+            return $respuesta->json($arraySeguro ? '200' : '400');
         } else {
-
-            $_seguroModel = new SeguroModel();
-            $seguro = $_seguroModel->where('seguro_id','=',$seguro_id)->getFirst();
-            $mensaje = ($seguro != null);
-
-            $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-            $respuesta->setData($seguro);
-            return $respuesta->json($mensaje ? 200 : 404);
+            $respuesta = new Response('NOT_FOUND');
+            return $respuesta->json(404);
         }
     }
 

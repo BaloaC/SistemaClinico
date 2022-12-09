@@ -55,7 +55,6 @@ INNER JOIN seguro on seguro.seguro_id = seguro_empresa.seguro_id
 where seguro.seguro_id = 1;
 
 -- empresas de seguro/empresa
-
 select
 	empresa.empresa_id,
     empresa.nombre AS nombre_empresa,
@@ -73,6 +72,15 @@ from medico_especialidad
 INNER JOIN medico on medico.medico_id = medico_especialidad.medico_id
 INNER JOIN especialidad on especialidad.especialidad_id = medico_especialidad.especialidad_id
 where medico.medico_id = 3;
+
+
+-- medico/horario
+SELECT
+	horario.dias_semana
+from horario
+INNER JOIN medico on medico.medico_id = horario.medico_id
+where medico.medico_id = 3;
+
 
 
 
