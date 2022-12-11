@@ -84,48 +84,41 @@ class MedicoController extends Controller{
         );
 
         $_medicoModel = new MedicoModel();
-        $inners = $_medicoModel->listInner($arrayInner);
-        $medico = $_medicoModel->innerJoin($arraySelect, $inners, "medico_especialidad");
-        $resultado = array();
+        $medico2 = $_medicoModel->where('estatus_med','=','1')->getAll();
 
-        $_medicoModel = new MedicoModel();
-        $medico2 = $_medicoModel->getAll();
+        if ($medico2) {
+            $resultado = array();
 
-        foreach ($medico2 as $medicos) {
-        
-            $id = $medicos->medico_id;
-            $validarMedico = new Validate;
-            $respuesta = $validarMedico->isDuplicated('medico_especialidad', 'medico_id', $id);
-            
-            if($respuesta){  continue; }
-            else { array_push($medico, $medicos); }
+            foreach ($medico2 as $medicos) {
 
-        }
-
-        foreach ($medico as $medicos) {
-            
-            $medicoHorario = get_object_vars($medicos);
-            $id = $medicos->medico_id;
-
-            $_medicoModel = new MedicoModel();
-            $inners = $_medicoModel->listInner($arrayInnerHorario);
-            $horario = $_medicoModel->where('medico.medico_id','=',$id)->innerJoin($arraySelectHorario, $inners, "horario");
-            
-            if ($horario ) {
-                $medicoHorario['horarios'] = $horario;
+                $_medicoModel = new MedicoModel();
+                $inners = $_medicoModel->listInner($arrayInner);
+                $medico = $_medicoModel->where('medico.medico_id','=',$medicos->medico_id)->where('medico.estatus_med','=','1')->innerJoin($arraySelect, $inners, "medico_especialidad");
+                
+                if ($medico) {
+                    $medicos=$medico;
+                }
+                
+                $_medicoModel = new MedicoModel();
+                $innersH = $_medicoModel->listInner($arrayInnerHorario);
+                $horario = $_medicoModel->where('medico.medico_id','=',$medicos[0]->medico_id)->where('medico.estatus_med','=','1')->innerJoin($arraySelectHorario, $innersH, "horario");
+                
+                if ($horario) {
+                    $medico[0]->horario = $horario;
+                }
+                
+                $arrayMedico = get_object_vars($medicos[0]);
+                $resultado[] = $arrayMedico;
             }
-            
-            array_push($medico, $medicoHorario);
+
+            $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
+            $respuesta->setData($resultado);
+            return $respuesta->json($resultado ? 200 : 404);
+
+        } else {
+            $respuesta = new Response('NOT_FOUND');
+            return $respuesta->json(404);
         }
-
-        array_push($resultado, $medico);
-
-        $mensaje = ($resultado != null);
-        
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        
-        $respuesta->setData($resultado);
-        return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function listarMedicoPorId($medico_id){
@@ -151,27 +144,30 @@ class MedicoController extends Controller{
         $_medicoModel = new MedicoModel();
         $innersEspecialidad = $_medicoModel->listInner($arrayInnerEspecialidad);
         
-        $medico = $_medicoModel->where('medico.medico_id','=',$medico_id)->innerJoin($arraySelectEspecialidad, $innersEspecialidad, "medico_especialidad");
+        $medico = $_medicoModel->where('medico.medico_id','=',$medico_id)->where('medico.estatus_med','=','1')->innerJoin($arraySelectEspecialidad, $innersEspecialidad, "medico_especialidad");
         
         $mensaje = ($medico != null);
         
         if ( !$mensaje ) {
             
             $_medicoModel = new MedicoModel();
-            $medico = $_medicoModel->where('medico_id','=',$medico_id)->getFirst();
-            $newArray = get_object_vars($medico);
+            $medico = $_medicoModel->where('medico_id','=',$medico_id)->where('estatus_med','=','1')->getFirst();
+
+            if ($medico) { $newArray = get_object_vars($medico);
+            }else { $newArray=false; }
+            
         }
 
         // formando la relación medico/horario
         $_medicoModel = new MedicoModel();
         $innersHorario = $_medicoModel->listInner($arrayInnerHorario);
         
-        $medico2 = $_medicoModel->where('medico.medico_id','=',$medico_id)->innerJoin($arraySelectHorario, $innersHorario, "horario");
+        $medico2 = $_medicoModel->where('medico.medico_id','=',$medico_id)->where('estatus_med','=','1')->innerJoin($arraySelectHorario, $innersHorario, "horario");
         $mensaje2 = ($medico2 != null);
         
         if ( $mensaje2 ) {
             
-            $medico['horario'] = $medico2;
+            $medico[0]->horario = $medico2;
         }
 
             $respuesta = new Response($medico ? 'CORRECTO' : 'NOT_FOUND');
@@ -182,7 +178,7 @@ class MedicoController extends Controller{
     public function RetornarID($cedula){
 
         $_medicoModel = new MedicoModel();
-        $medico = $_medicoModel->where('cedula','=',$cedula)->getFirst();
+        $medico = $_medicoModel->where('cedula','=',$cedula)->where('estatus_med','=','1')->getFirst();
         $mensaje = ($medico != null);
         $respuesta = $mensaje ? $medico->medico_id : false;
         return $respuesta;
@@ -200,26 +196,36 @@ class MedicoController extends Controller{
         $validarMedico = new Validate;
 
         switch($_POST) {
+            
             case ($validarMedico->isEmpty($_POST)):
                 $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400); 
+                return $respuesta->json(400);
+
+            case $validarMedico->isEliminated("medico", 'estatus_med', $medico_id):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
+
             case $validarMedico->isNumber($_POST, $camposNumericos):
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400); 
+
             case $validarMedico->isString($_POST, $camposString):
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400); 
+
             case $validarMedico->existsInDB($_POST, $camposKey):   
                 $respuesta = new Response('NOT_FOUND'); 
                 return $respuesta->json(404); 
+
+            case !$validarMedico->isDuplicated('medico', 'medico_id', $medico_id):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
+            
             case array_key_exists('cedula', $_POST):
                 if ( $validarMedico->isDuplicated('medico', 'cedula', $_POST["cedula"]) ) {
                     $respuesta = new Response('DATOS_DUPLICADOS');
                     return $respuesta->json(400); 
                 }
-            case !$validarMedico->isDuplicated('medico', 'medico_id', $medico_id):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
 
             default: 
                 $data = $validarMedico->dataScape($_POST);
@@ -273,8 +279,11 @@ class MedicoController extends Controller{
     public function eliminarMedico($medico_id){
 
         $_medicoModel = new MedicoModel();
+        $data = array(
+            "estatus_med" => "2"
+        );
 
-        $eliminado = $_medicoModel->where('medico_id','=',$medico_id)->delete();
+        $eliminado = $_medicoModel->where('medico_id','=',$medico_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

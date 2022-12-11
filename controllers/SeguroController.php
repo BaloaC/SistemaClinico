@@ -76,7 +76,7 @@ class SeguroController extends Controller{
         );
                      
         $_seguroModel = new SeguroModel();
-        $seguro = $_seguroModel->getAll();
+        $seguro = $_seguroModel->where('estatus_seg', '=', '1')->getAll();
         $resultado = array();   
 
         foreach ($seguro as $seguros) {
@@ -92,7 +92,7 @@ class SeguroController extends Controller{
                 $newArray['empresas'] = '';
                 $_seguroModel = new SeguroModel();
                 $inners = $_seguroModel->listInner($arrayInner);
-                $EmpresaSeguro = $_seguroModel->where('seguro.seguro_id','=',$id)->innerJoin($arraySelect, $inners, "seguro_empresa");
+                $EmpresaSeguro = $_seguroModel->where('seguro.seguro_id','=',$id)->where('seguro.estatus_seg', '=', '1')->innerJoin($arraySelect, $inners, "seguro_empresa");
                 $arraySeguro = array();
 
                 foreach ($EmpresaSeguro as $empresas) {
@@ -120,48 +120,32 @@ class SeguroController extends Controller{
         );
 
         $arraySelect = array(
-            // "empresa.empresa_id",
-            // "empresa.nombre AS nombre_empresa",
             "empresa.empresa_id",
             "empresa.nombre AS nombre_empresa",
             "empresa.rif",
             "empresa.direccion"
-            //"seguro.nombre AS nombre_seguro"
-            // "seguro.seguro_id",
-            // "seguro.rif",
-            // "seguro.direccion",
-            // "seguro.telefono",
-            // "seguro.porcentaje",
-            // "seguro.tipo_seguro"
         );
 
         $_seguroModel = new SeguroModel();
-        $seguro = $_seguroModel->getFirst();
-        $arraySeguro = get_object_vars($seguro);
+        $seguro = $_seguroModel->where('seguro.seguro_id','=',$seguro_id)->where('estatus_seg', '=', '1')->getFirst();
 
         if ($seguro) {
 
+            $arraySeguro = get_object_vars($seguro);
+
             $inners = $_seguroModel->listInner($arrayInner);
-            $empresa = $_seguroModel->where('seguro.seguro_id','=',$seguro_id)->innerJoin($arraySelect, $inners, "seguro_empresa");
+            $empresa = $_seguroModel->where('seguro.seguro_id','=',$seguro_id)->where('estatus_seg', '=', '1')->innerJoin($arraySelect, $inners, "seguro_empresa");
             $mensaje = ($empresa != null);
 
             if ( $mensaje ) {
                 
                 $arraySeguro['empresas'] = $empresa;
             } 
-            // else {
-
-            //     $_seguroModel = new SeguroModel();
-            //     $seguro = $_seguroModel->where('seguro_id','=',$seguro_id)->getFirst();
-            //     $mensaje = ($seguro != null);
-
-            //     $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-            //     $respuesta->setData($seguro);
-            //     return $respuesta->json($mensaje ? 200 : 404);
-            // }
+            
             $respuesta = new Response($arraySeguro ? 'CORRECTO' : 'ERROR');
             $respuesta->setData($arraySeguro);
             return $respuesta->json($arraySeguro ? '200' : '400');
+            
         } else {
             $respuesta = new Response('NOT_FOUND');
             return $respuesta->json(404);
@@ -189,6 +173,10 @@ class SeguroController extends Controller{
             case $validarSeguro->isString($_POST, $camposString):
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
+
+            case $validarSeguro->isEliminated("seguro", 'estatus_seg', $seguro_id):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
 
             case array_key_exists('nombre', $_POST):
                 if ($validarSeguro->isDuplicated('seguro', 'nombre', $_POST["nombre"])) {
@@ -222,8 +210,11 @@ class SeguroController extends Controller{
     public function eliminarSeguro($idSeguro){
 
         $_seguroModel = new SeguroModel();
+        $data = array(
+            "estatus_seg" => "2"
+        );
 
-        $eliminado = $_seguroModel->where('seguro_id','=',$idSeguro)->delete();
+        $eliminado = $_seguroModel->where('seguro_id','=',$idSeguro)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

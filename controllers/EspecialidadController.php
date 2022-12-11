@@ -63,7 +63,7 @@ class EspecialidadController extends Controller{
         );
 
         $_especialidadModel = new EspecialidadModel();
-        $especialidad = $_especialidadModel->getAll();
+        $especialidad = $_especialidadModel->where('estatus_esp', '=', '1')->getAll();
         $resultado = array();
 
         foreach ($especialidad as $especialidades) {
@@ -80,7 +80,7 @@ class EspecialidadController extends Controller{
                 $newArray['medicos'] = '';
                 $_medicoModel = new MedicoModel();
                 $inners = $_medicoModel->listInner($arrayInner);
-                $medicoEspecialidad = $_medicoModel->where('especialidad.especialidad_id','=',$id)->innerJoin($arraySelect, $inners, "medico_especialidad");
+                $medicoEspecialidad = $_medicoModel->where('especialidad.especialidad_id','=',$id)->where('especialidad.estatus_esp', '=', '1')->innerJoin($arraySelect, $inners, "medico_especialidad");
                 $arrayMedico = array();
 
                 foreach ($medicoEspecialidad as $medicos) {
@@ -103,13 +103,13 @@ class EspecialidadController extends Controller{
     public function listarEspecialidadPorId($especialidad_id){
 
         $_especialidadModel = new EspecialidadModel();
-        $medico = $_especialidadModel->where('especialidad_id','=',$especialidad_id)->getFirst();
+        $medico = $_especialidadModel->where('especialidad_id','=',$especialidad_id)->where('estatus_esp', '=', '1')->getFirst();
         $mensaje = ($medico != null);
 
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($medico);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function actualizarEspecialidad($especialidad_id){
@@ -125,12 +125,19 @@ class EspecialidadController extends Controller{
             case ($validarEspecialidad->isEmpty($_POST)):
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
+
+            case $validarEspecialidad->isEliminated("especialidad", 'estatus_esp', $especialidad_id):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
+
             case $validarEspecialidad->isString($_POST, $camposString):
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
+
             case $validarEspecialidad->existsInDB($_POST, $camposKey):   
                 $respuesta = new Response('NOT_FOUND'); 
                 return $respuesta->json(404);
+
             case $validarEspecialidad->isDuplicated('especialidad', 'nombre', $_POST["nombre"]):
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(400);
@@ -152,8 +159,11 @@ class EspecialidadController extends Controller{
     public function eliminarEspecialidad($especialidad_id){
 
         $_especialidadModel = new EspecialidadModel();
+        $data = array(
+            "estatus_esp" => "2"
+        );
 
-        $eliminado = $_especialidadModel->where('especialidad_id','=',$especialidad_id)->delete();
+        $eliminado = $_especialidadModel->where('especialidad_id','=',$especialidad_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

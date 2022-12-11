@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.paciente (
   telefono VARCHAR(45) NULL,
   direccion VARCHAR(45) NOT NULL,
   tipo_paciente enum('1','2','3') NOT NULL,
+  estatus_pac enum('1','2') NOT NULL DEFAULT '1',
   PRIMARY KEY (paciente_id));
 
 -- -----------------------------------------------------
@@ -93,6 +94,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.medico (
   apellidos VARCHAR(45) NOT NULL,
   telefono VARCHAR(45) NULL,
   direccion VARCHAR(45) NOT NULL,
+  estatus_med enum('1','2') NOT NULL DEFAULT '1',
   PRIMARY KEY (medico_id));
 
 -- -----------------------------------------------------
@@ -175,6 +177,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.seguro (
   telefono INT NOT NULL,
   porcentaje FLOAT NOT NULL,
   tipo_seguro enum('1','2') NOT NULL,
+  estatus_seg enum('1','2') NOT NULL DEFAULT '1',
   PRIMARY KEY (seguro_id));
 
 -- -----------------------------------------------------
@@ -185,6 +188,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.empresa (
   nombre VARCHAR(45) NOT NULL,
   rif VARCHAR(45) NOT NULL,
   direccion VARCHAR(45) NOT NULL,
+  estatus_emp enum('1','2') NOT NULL DEFAULT '1',
   PRIMARY KEY (empresa_id));
 
 -- -----------------------------------------------------
@@ -261,6 +265,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.seguro_empresa (
 CREATE TABLE IF NOT EXISTS shenque_db.especialidad (
   especialidad_id INT NOT NULL auto_increment,
   nombre VARCHAR(45) NOT NULL,
+  estatus_esp enum('1','2') NOT NULL DEFAULT '1',
   PRIMARY KEY (especialidad_id));
 
 -- -----------------------------------------------------
@@ -431,6 +436,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.usuario (
   clave VARCHAR(100) NOT NULL,
   tokken VARCHAR(10) UNIQUE,
   rol INT NOT NULL,
+  estatus_usu enum('1','2') NOT NULL DEFAULT '1', -- 1 activo / 2 eliminado
   fecha_creacion DATETIME NOT NULL,
   PRIMARY KEY (usuario_id));
 

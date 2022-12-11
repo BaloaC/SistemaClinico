@@ -53,8 +53,8 @@ class PacienteSeguroController extends Controller{
                     $_pacienteSeguroModel = new PacienteSeguroModel();
                     $id = $_pacienteSeguroModel->insert($data);
                     $mensaje = ($id > 0);
-                    
-                    $mensaje = new Response($mensaje ? false : 'ACTUALIZACION_FALLIDA');
+                
+                    $mensaje = new Response($mensaje ? false : 'INSERCION_FALLIDA');
                     return $mensaje;
             }
         }
@@ -131,8 +131,11 @@ class PacienteSeguroController extends Controller{
     public function eliminarPacienteSeguro($paciente_id){
 
         $_pacienteSeguroModel = new PacienteModel();
+        $data = array(
+            "estatus_pac" => "2"
+        );
 
-        $eliminado = $_pacienteSeguroModel->where('paciente_id','=',$paciente_id)->delete();
+        $eliminado = $_pacienteSeguroModel->where('paciente_id','=',$paciente_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'NOT_FOUND');

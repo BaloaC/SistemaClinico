@@ -81,8 +81,18 @@ from horario
 INNER JOIN medico on medico.medico_id = horario.medico_id
 where medico.medico_id = 3;
 
+-- horarios 
+SELECT 
+	horario.horario_id,
+    horario.dias_semana,
+    horario.medico_id,
+    medico.nombres
+FROM horario 
+INNER JOIN medico on medico.medico_id = horario.medico_id
 
 
 
 
 
+-- codigo para alterar tablas
+ALTER TABLE `especialidad` ADD `estatus_esp` ENUM('1', '2') NOT NULL DEFAULT '1' AFTER `nombre`;

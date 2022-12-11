@@ -81,12 +81,12 @@ class EmpresaController extends Controller{
 
         $_empresaModel = new EmpresaModel();
         $inners = $_empresaModel->listInner($arrayInner);
-        $empresa = $_empresaModel->innerJoin($arraySelect, $inners, "seguro_empresa");
+        $empresa = $_empresaModel->where('empresa.estatus_emp', '=', '1')->innerJoin($arraySelect, $inners, "seguro_empresa");
 
         $resultado = array();
         
         $_empresaModel = new EmpresaModel();
-        $empresa2 = $_empresaModel->getAll();
+        $empresa2 = $_empresaModel->where('estatus_emp', '=', '1')->getAll();
 
         foreach ($empresa2 as $empresas) {
             
@@ -118,15 +118,6 @@ class EmpresaController extends Controller{
 
     public function listarEmpresaPorId($empresa_id){
 
-        // $_EmpresaModel = new EmpresaModel();
-        // $empresa = $_EmpresaModel->where('empresa_id','=',$empresa_id)->getFirst();
-        // $mensaje = ($empresa != null);
-
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        // $respuesta->setData($empresa);
-
-        // return $respuesta->json($mensaje ? 200 : 400);
-
         $arrayInner = array(
             "empresa" => "seguro_empresa",
             "seguro" => "seguro_empresa",
@@ -144,7 +135,7 @@ class EmpresaController extends Controller{
         $_empresaModel = new EmpresaModel();
         $inners = $_empresaModel->listInner($arrayInner);
         
-        $empresa = $_empresaModel->where('empresa.empresa_id','=',$empresa_id)->innerJoin($arraySelect, $inners, "seguro_empresa");
+        $empresa = $_empresaModel->where('empresa.empresa_id','=',$empresa_id)->where('estatus_emp', '=', '1')->innerJoin($arraySelect, $inners, "seguro_empresa");
         $mensaje = ($empresa != null);
 
         if ( $mensaje ) {
@@ -156,7 +147,7 @@ class EmpresaController extends Controller{
         } else {
 
             $_empresaModel = new EmpresaModel();
-            $empresa = $_empresaModel->where('empresa_id','=',$empresa_id)->getFirst();
+            $empresa = $_empresaModel->where('empresa_id','=',$empresa_id)->where('estatus_emp', '=', '1')->getFirst();
             $mensaje = ($empresa != null);
 
             $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
@@ -176,11 +167,9 @@ class EmpresaController extends Controller{
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
                 
-            case array_key_exists('empresa', $_POST):
-                if ($validarEmpresa->isDuplicated('empresa', 'nombre', $_POST["nombre"])) {
-                    $respuesta = new Response('DATOS_DUPLICADOS');
-                    return $respuesta->json(400);
-                }
+            case $validarEmpresa->isEliminated("empresa", 'estatus_emp', $empresa_id):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
 
             case array_key_exists('rif', $_POST):
                 if ($validarEmpresa->isDuplicated('empresa', 'rif', $_POST["rif"])) {
@@ -189,6 +178,12 @@ class EmpresaController extends Controller{
                 }
 
              default:
+
+                if ($validarEmpresa->isDuplicated('empresa', 'nombre', $_POST["nombre"])) {
+                    $respuesta = new Response('DATOS_DUPLICADOS');
+                    return $respuesta->json(400);
+                }
+
                 $data = $validarEmpresa->dataScape($_POST);
                 $_EmpresaModel = new EmpresaModel();
 
@@ -253,13 +248,16 @@ class EmpresaController extends Controller{
         
     }
 
-    public function eliminarEmpresa($idEmpresa){
+    public function eliminarEmpresa($empresa_id){
 
         $_EmpresaModel = new EmpresaModel();
-
-        $eliminado = $_EmpresaModel->where('empresa_id','=',$idEmpresa)->delete();
+        $data = array(
+            "estatus_emp" => "2"
+        );
+        
+        $eliminado = $_EmpresaModel->where('empresa_id','=',$empresa_id)->update($data);
         $mensaje = ($eliminado > 0);
-
+        
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');
         $respuesta->setData($eliminado);
 
@@ -269,7 +267,7 @@ class EmpresaController extends Controller{
     public function RetornarID($rif){
 
         $_empresaModel = new EmpresaModel();
-        $empresa = $_empresaModel->where('rif','=',$rif)->getFirst();
+        $empresa = $_empresaModel->where('rif','=',$rif)->where('estatus_emp','=',"1")->getFirst();
         $mensaje = ($empresa != null);
         $respuesta = $mensaje ? $empresa->empresa_id : false;
         return $respuesta;

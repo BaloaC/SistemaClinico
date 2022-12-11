@@ -80,9 +80,9 @@ class BaseModel{
 
             $keys = rtrim($keys,',');
             $this->sql = "UPDATE $this->table SET $keys $this->wheres";
-
+            
             $affectedRows = $this->execute($obj);
-
+            
             return $affectedRows;
 
         } catch (PDOException $error) {

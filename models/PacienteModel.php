@@ -12,6 +12,7 @@ class PacienteModel extends GenericModel {
     protected $telefono;
     protected $direccion;
     protected $tipo_paciente;
+    protected $estatus_pac;
 
     public function __construct($propiedades = null) {
         parent::__construct('paciente', PacienteModel::class, $propiedades);
@@ -26,6 +27,7 @@ class PacienteModel extends GenericModel {
     public function getTelefono(){return $this->telefono;}
     public function getDireccion(){return $this->direccion;}
     public function getTipoPaciente(){return $this->tipo_paciente;}
+    public function getEstatusPac(){return $this->estatus_pac;}
 
     /* Setters */
     public function setCedula($cedula){return $this->cedula = $cedula;}
@@ -36,6 +38,7 @@ class PacienteModel extends GenericModel {
     public function setTelefono($telefono){return $this->telefono = $telefono;}
     public function setDireccion($direccion){return $this->direccion = $direccion;}
     public function setTipoPaciente($tipo_paciente){return $this->tipo_paciente = $tipo_paciente;}
+    public function setEstatusPac($estatus_pac){return $this->estatus_pac = $estatus_pac;}
 }
 
 ?>

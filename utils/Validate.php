@@ -66,6 +66,8 @@ class Validate extends BaseModel{
     //Validar que un registro no se encuentre duplicado
     public function isDuplicated($table, $column, $value){
 
+        //$status = 'estatus_' . substr($table,0, 3);
+        //$sql = "SELECT $column FROM $table WHERE $column = '$value' AND $status = '1'";
         $sql = "SELECT $column FROM $table WHERE $column = '$value'";
         $query = $this->connection->prepare($sql);
         $query->execute();
@@ -76,6 +78,7 @@ class Validate extends BaseModel{
         }
     }
 
+    // validar que una relación foránea no esté duplicada
     public function isDuplicatedId($id1, $id2, $value1, $value2, $table) {
        
         $sql = "SELECT * FROM $table WHERE $id1 = '$value1' AND $id2 = '$value2'";
@@ -91,6 +94,22 @@ class Validate extends BaseModel{
             return false;
         }
         
+    }
+
+    // validar que un registro no esta eliminado
+    public function isEliminated($table, $column, $valueID){
+
+        $var2 = '_id';
+        $id = $table . $var2;
+
+        $sql = "SELECT * FROM $table WHERE $id = '$valueID' AND $column = '2'";
+        $query = $this->connection->prepare($sql);
+        $query->execute();
+                
+        if($query->rowCount() > 0){
+
+            return true;
+        }
     }
 
     //Validar que ciertos datos sean números

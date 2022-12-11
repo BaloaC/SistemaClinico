@@ -25,16 +25,29 @@ class CitaController extends Controller{
         // Creando los strings para las validaciones
         $camposNumericos = array("paciente_id", "medico_id", "especialidad_id", "cedula_titular", "tipo_cita", "medico_id");
         $camposString = array("motivo_cita");
-        $camposExclude = array("clave");
+        //$camposExclude = array("clave");
 
         $campoId = array("paciente_id", "medico_id", "especialidad_id");
         
         $validarCita = new Validate;
         
         switch($_POST) {
-            case ($validarCita->isEmpty($_POST, $camposExclude)):
+            //case ($validarCita->isEmpty($_POST, $camposExclude)):
+            case ($validarCita->isEmpty($_POST)):
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
+
+            case $validarCita->isEliminated("paciente", 'estatus_pac', $_POST['paciente_id']):
+                $respuesta = new Response(false, 'El paciente ingresado no se ha encontrado en el sistema');
+                return $respuesta->json(404);
+
+            case $validarCita->isEliminated("medico", 'estatus_med', $_POST['medico_id']):
+                $respuesta = new Response(false, 'El médico ingresado no se ha encontrado en el sistema');
+                return $respuesta->json(404);
+
+            case $validarCita->isEliminated("especialidad", 'estatus_esp', $_POST['especialidad_id']):
+                $respuesta = new Response(false, 'La especialidad ingresada no se ha encontrado en el sistema');
+                return $respuesta->json(404);
 
             case $validarCita->isNumber($_POST, $camposNumericos):
                 $respuesta = new Response('DATOS_INVALIDOS');
@@ -72,39 +85,67 @@ class CitaController extends Controller{
                 $respuesta = new Response('DUPLICATE_APPOINTMENT');
                 return $respuesta->json(400);
 
-            case $_POST['tipo_cita'] == 1:
-                $siEsNatural = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $_POST['cedula_titular'], '1', 'paciente');
-                $siEsAsegurado = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $_POST['cedula_titular'], '2', 'paciente'); 
+            // este pedazote esta comentado porque no recuerdo pa k lo hice
+            // case $_POST['tipo_cita'] == 1:
+            //     $siEsNatural = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $_POST['cedula_titular'], '1', 'paciente');
+            //     $siEsAsegurado = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $_POST['cedula_titular'], '2', 'paciente'); 
                 
-                // verificando si es un paciente beneficiario o natural
-                if ( !$siEsNatural && !$siEsAsegurado ) {
-                    $respuesta = new Response('DATOS_INVALIDOS');
-                    return $respuesta->json(403);
-                }
+            //     // verificando si es un paciente beneficiario o natural
+            //     if ( !$siEsNatural && !$siEsAsegurado ) {
+            //         $respuesta = new Response('DATOS_INVALIDOS');
+            //         return $respuesta->json(403);
+            //     }
 
-            case $_POST['tipo_cita'] == "2":
-                if (!$validarCita->isDuplicatedId('cedula', 'tipo_paciente', $_POST['cedula_titular'], '2', 'paciente')) {
-                    $respuesta = new Response('DATOS_INVALIDOS');
-                    return $respuesta->json(402);
-                }
+            // tampoco recuerdo pa k era este otro pedazo
+            // case $_POST['tipo_cita'] == "2":
+            //     if (!$validarCita->isDuplicatedId('cedula', 'tipo_paciente', $_POST['cedula_titular'], '2', 'paciente')) {
+            //         $respuesta = new Response('DATOS_INVALIDOS');
+            //         return $respuesta->json(402);
+            //     }
 
             default: 
-                $data = $validarCita->dataScape($_POST);
-                
-                if ( $data['tipo_cita'] == 2 && !empty($data['clave']) ) {
-                    
-                    // Verificamos si la cita es de tipo asegurada y si la clave existe para que la cita sea asignada
-                    $data['estatus'] = 1;
-                
-                } else if( $data['tipo_cita'] == 1 ) {
 
-                    // Verificamos si es tipo natural para asignarla directamente
-                    $data['estatus'] = 1;
+                $data = $validarCita->dataScape($_POST);
+
+                // verificaciones si la cita es asegurada
+                if ($data['tipo_cita'] == 2 ) {
+                    
+                    // verificamos que pueda solicitar cita asegurada
+                    $siEsTitular = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '2', 'paciente');
+                    $siEsBeneficiario = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '3', 'paciente');
+                    
+                    if (!$siEsTitular && !$siEsBeneficiario) {
+                        $respuesta = new Response(false, 'El paciente ingresado no está registrado como asegurado');
+                        return $respuesta->json(400);
+                    }
+
+                    // verificamos que el titular pueda ser titular
+                    $esTitular = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], 2, 'paciente');
+                    if (!$esTitular) {
+                        $respuesta = new Response(false, 'La cédula no pertenece a ningún titular de seguro');
+                        return $respuesta->json(404);
+                    }
+
+                    // Asignamos el estatus dependiendo del contenido del campo clave
+                    if (array_key_exists("clave", $data)) {
+                        
+                        $verClave = empty($data['clave']);
+                        $data['clave'] = ($verClave ? 2 : 1 );
+
+                    } else { $data['estatus'] = 2; }
 
                 } else {
 
-                    //  estatus es 1 para asignada, 2 para pendiente y 3 para eliminada
-                    $data['estatus'] = 2;
+                    $_pacienteController = new PacienteController;
+                    $id = $_pacienteController->RetornarID($_POST['cedula_titular']);
+
+                    if ( $id != $_POST['paciente_id'] ) {
+                        
+                        $respuesta = new Response(false, 'La cédula no coincide con el paciente ingresado');
+                        return $respuesta->json(400);
+                    }
+
+                    $data['estatus'] = 1;
                 }
 
                 $_citaModel = new CitaModel();

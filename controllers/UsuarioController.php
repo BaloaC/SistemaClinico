@@ -34,8 +34,10 @@ class UsuarioController extends Controller{
         switch($_POST) {
             case $validarUsuario->isEmpty($_POST):
                 return $respuesta = new Response('DATOS_INVALIDOS');
+
             case $validarUsuario->isNumber($_POST, $camposNumericos):
                 return $respuesta = new Response('DATOS_INVALIDOS');
+
             case $validarUsuario->isDuplicated('usuario', 'nombre', $_POST["nombre"]):
                 return $respuesta = new Response('DATOS_DUPLICADOS');
             default: 
@@ -61,7 +63,8 @@ class UsuarioController extends Controller{
     public function listarUsuarios(){
 
         $_usuarioModel = new UsuarioModel();
-        $lista = $_usuarioModel->getAll();
+        
+        $lista = $_usuarioModel->where('estatus_usu', '=', '1')->getAll();
         $mensaje = (count($lista) > 0);
      
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
@@ -73,7 +76,7 @@ class UsuarioController extends Controller{
     public function listarUsuarioPorId($usuario_id){
 
         $_usuarioModel = new UsuarioModel();
-        $usuario = $_usuarioModel->where('usuario_id','=',$usuario_id)->getFirst();
+        $usuario = $_usuarioModel->where('usuario_id','=',$usuario_id)->where('estatus_usu', '=', '1')->getFirst();
         $mensaje = ($usuario != null);
 
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
@@ -91,12 +94,21 @@ class UsuarioController extends Controller{
 
         switch($_POST) {
             case ($validarUsuario->isEmpty($_POST)):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
+        
+            case $validarUsuario->isEliminated("usuario", 'estatus_usu', $usuario_id):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
+
             case $validarUsuario->isNumber($_POST, $camposNumericos):
-                return $respuesta = new Response('DATOS_INVALIDOS');
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
+
             case array_key_exists('nombre', $_POST):
                 if ($validarUsuario->isDuplicated('usuario', 'nombre', $_POST["nombre"])) {
-                    return $respuesta = new Response(false, 'Ese nombre de usuario ya existe');
+                    $respuesta = new Response(false, 'Ese nombre de usuario ya existe');
+                    return $respuesta->json(400);
                 }
             default: 
             $data = $validarUsuario->dataScape($_POST);
@@ -117,7 +129,11 @@ class UsuarioController extends Controller{
 
         $_usuarioModel = new UsuarioModel();
 
-        $eliminado = $_usuarioModel->where('usuario_id','=',$usuario_id)->delete();
+        $data = array(
+            "estatus_usu" => "2"
+        );
+
+        $eliminado = $_usuarioModel->where('usuario_id','=',$usuario_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

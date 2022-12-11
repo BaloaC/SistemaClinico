@@ -46,7 +46,7 @@ class HorarioController extends Controller{
 
                 case !($validarHorario->existsInDB($newForm, $camposNumericos)):   
                     $respuesta = new Response('NOT_FOUND'); 
-                    return $respuesta->json(400);
+                    return $respuesta->json(404);
                 
                 case $validarHorario->isDuplicatedId('medico_id', 'dias_semana', $newForm['medico_id'], $newForm['dias_semana'], 'horario'):
                     $respuesta = new Response('DATOS_DUPLICADOS'); 
@@ -71,48 +71,96 @@ class HorarioController extends Controller{
 
     public function listarHorarios(){
 
-        $_horarioModel = new HorarioModel();
-        $lista = $_horarioModel->getAll();
-        $mensaje = (count($lista) > 0);
-     
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($lista);
+        $arrayInner = array(
+            "medico" => "horario",
+        );
 
-        return $respuesta->json(200);
+        $arraySelect = array(
+            "horario.horario_id",
+            "horario.dias_semana",
+            "horario.medico_id",
+            "medico.nombres"
+        );
+
+        $_horarioModel = new HorarioModel();
+        $inners = $_horarioModel->listInner($arrayInner);
+        $mensaje = $_horarioModel->where('estatus_hor','=','1')->innerJoin($arraySelect, $inners, "horario");
+
+        $resultado = (count($mensaje) > 0);
+     
+        $respuesta = new Response($resultado ? 'CORRECTO' : 'ERROR');
+        $respuesta->setData($mensaje);
+
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 
-    public function listarHorariosPorId($idHorario){
+    public function listarHorarioPorId($horario_id){
 
         $_horarioModel = new HorarioModel();
-        $horario = $_horarioModel->where('horario_id','=',$idHorario)->getFirst();
+        $horario = $_horarioModel->where('horario_id','=',$horario_id)->where('estatus_hor','=',"1")->getFirst();
         $mensaje = ($horario != null);
 
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($horario);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 
-    public function actualizarHorario(){
+    public function actualizarHorario($horario_id){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
 
-        $_horarioModel = new HorarioModel();
+        $camposNumericos = array("medico_id");
+        $camposString = array("dias_semana");
+        $validarHorario = new Validate;
 
-        $actualizado = $_horarioModel->where('horario_id','=',$_POST['idHorario'])->update($_POST);
-        $mensaje = ($actualizado > 0);
+        switch($_POST) {
+            case ($validarHorario->isEmpty($_POST)):
+                $respuesta = new Response('DATOS_VACIOS');
+                return $respuesta->json(400);
 
-        $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        $respuesta->setData($actualizado);
+            case $validarHorario->isEliminated("horario", 'estatus_hor', $horario_id):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+            case !$validarHorario->isNumber($_POST, $camposNumericos):
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
+
+            case $validarHorario->isString($_POST, $camposString):
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
+
+            case !($validarHorario->existsInDB($_POST, $camposNumericos)):   
+                $respuesta = new Response('NOT_FOUND'); 
+                return $respuesta->json(404);
+            
+            case $validarHorario->isDuplicatedId('medico_id', 'dias_semana', $_POST['medico_id'], $_POST['dias_semana'], 'horario'):
+                $respuesta = new Response('DATOS_DUPLICADOS'); 
+                return $respuesta->json(400);
+
+            default: 
+                $data = $validarHorario->dataScape($_POST);
+
+                //sreturn $data;
+                $_horarioModel = new HorarioModel();
+                $id = $_horarioModel->where('horario_id','=',$_POST['horario_id'])->update($_POST);
+                $mensaje = ($id > 0);
+                
+                $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+                $respuesta->setData($id);
+                return $respuesta->json($mensaje ? 201 : 400);
+        }
     }
 
-    public function eliminarHorario($idHorario){
+    public function eliminarHorario($horario_id){
 
         $_horarioModel = new HorarioModel();
+        $data = array(
+            "estatus_hor" => "2"
+        );
 
-        $eliminado = $_horarioModel->where('horario_id','=',$idHorario)->delete();
+        $eliminado = $_horarioModel->where('horario_id','=',$horario_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

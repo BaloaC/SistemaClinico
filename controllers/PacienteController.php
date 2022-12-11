@@ -74,13 +74,22 @@ class PacienteController extends Controller{
                     $insertarPacienteSeguro = new PacienteSeguroController;
                     $mensaje = $insertarPacienteSeguro->insertarPacienteSeguro($data);
                     
-                    if ($mensaje == true) {
-                        return $mensaje;
-                    } else {
-                      
+                    if ($mensaje === false) {
+                        
                         $respuesta = new Response('INSERCION_EXITOSA');
                         return $respuesta->json(201);
+                    } else {
+                      
+                        return $mensaje;
                     }
+
+                    // if ($mensaje) {
+                    //     return $mensaje;
+                    // } else {
+                      
+                    //     $respuesta = new Response('INSERCION_EXITOSA');
+                    //     return $respuesta->json(201);
+                    // }
                 }
 
             } else {
@@ -120,11 +129,11 @@ class PacienteController extends Controller{
         );
         $newArray = array();
         $_pacienteModel = new PacienteModel();
-        $paciente = $_pacienteModel->where('tipo_paciente','=',1)->getAll();
+        $paciente = $_pacienteModel->where('tipo_paciente','=',1)->where('estatus_pac', '=', '1')->getAll();
         
         $_pacienteModel = new PacienteModel();
         $inners = $_pacienteModel->listInner($arrayInner);
-        $inner = $_pacienteModel->innerJoin($arraySelect, $inners, "paciente_seguro");
+        $inner = $_pacienteModel->where('estatus_pac', '=', '1')->where('paciente.estatus_pac', '=', '1')->innerJoin($arraySelect, $inners, "paciente_seguro");
                 
         if ( !empty($inner) ) {
             $paciente2 = $inner;    
@@ -165,7 +174,7 @@ class PacienteController extends Controller{
         $_pacienteModel = new PacienteModel();
         $inners = $_pacienteModel->listInner($arrayInner);
         
-        $paciente = $_pacienteModel->where('paciente.paciente_id','=',$paciente_id)->innerJoin($arraySelect, $inners, "paciente_seguro");
+        $paciente = $_pacienteModel->where('paciente.paciente_id','=',$paciente_id)->where('paciente.estatus_pac', '=', '1')->innerJoin($arraySelect, $inners, "paciente_seguro");
         
         $mensaje = ($paciente != null);
 
@@ -178,7 +187,7 @@ class PacienteController extends Controller{
         } else {
 
             $_pacienteModel = new PacienteModel();
-            $paciente = $_pacienteModel->where('paciente_id','=',$paciente_id)->getFirst();
+            $paciente = $_pacienteModel->where('paciente_id','=',$paciente_id)->where('estatus_pac', '=', '1')->getFirst();
             
             $mensaje = ($paciente != null);
 
@@ -198,6 +207,10 @@ class PacienteController extends Controller{
 
         $validarPaciente = new Validate;
         switch($_POST) {
+            case $validarPaciente->isEliminated("paciente", 'estatus_pac', $paciente_id):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
+
             case ($validarPaciente->isEmpty($_POST)):
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
@@ -214,25 +227,41 @@ class PacienteController extends Controller{
                 $respuesta = new Response('NOT_FOUND');         
                 return $respuesta->json(404);
 
-            case array_key_exists('cedula', $_POST):
+            // case array_key_exists('cedula', $_POST):
+            //     if ( $validarPaciente->isDuplicated('paciente', 'cedula', $_POST["cedula"]) ) {
+            //         $respuesta = new Response('DATOS_DUPLICADOS');
+            //         return $respuesta->json(405);
+            //     }
+
+            // case array_key_exists('fecha_nacimiento', $_POST):
+            //     if ( $validarPaciente->isDate($_POST['fecha_nacimiento']) ) {
+            //         $respuesta = new Response('DATOS_INVALIDOS');
+            //         return $respuesta->json(400);
+            //     }
+                
+            // case array_key_exists('fecha_nacimiento', $_POST):
+            //     if ( $validarPaciente->isToday($_POST['fecha_nacimiento'], false) ) {
+            //         $respuesta = new Response('DATOS_INVALIDOS');
+            //         return $respuesta->json(400);
+            //     }
+            
+            default: 
+
                 if ( $validarPaciente->isDuplicated('paciente', 'cedula', $_POST["cedula"]) ) {
                     $respuesta = new Response('DATOS_DUPLICADOS');
                     return $respuesta->json(400);
                 }
 
-            case array_key_exists('fecha_nacimiento', $_POST):
                 if ( $validarPaciente->isDate($_POST['fecha_nacimiento']) ) {
                     $respuesta = new Response('DATOS_INVALIDOS');
                     return $respuesta->json(400);
                 }
                 
-            case array_key_exists('fecha_nacimiento', $_POST):
                 if ( $validarPaciente->isToday($_POST['fecha_nacimiento'], false) ) {
                     $respuesta = new Response('DATOS_INVALIDOS');
                     return $respuesta->json(400);
                 }
-            
-            default: 
+
                 $data = $validarPaciente->dataScape($_POST);
                 $_pacienteModel = new PacienteModel();
 
@@ -251,8 +280,11 @@ class PacienteController extends Controller{
     public function eliminarPaciente($paciente_id){
 
         $_pacienteModel = new PacienteModel();
+        $data = array(
+            "estatus_pac" => "2"
+        );
 
-        $eliminado = $_pacienteModel->where('paciente_id','=',$paciente_id)->delete();
+        $eliminado = $_pacienteModel->where('paciente_id','=',$paciente_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'NOT_FOUND');
@@ -264,7 +296,7 @@ class PacienteController extends Controller{
     public function RetornarID($cedula){
 
         $_pacienteModel = new PacienteModel();
-        $paciente = $_pacienteModel->where('cedula','=',$cedula)->getFirst();
+        $paciente = $_pacienteModel->where('cedula','=',$cedula)->where('estatus_pac', '=', '1')->getFirst();
         $mensaje = ($paciente != null);
         $respuesta = $mensaje ? $paciente->paciente_id : false;
         return $respuesta;
@@ -275,7 +307,7 @@ class PacienteController extends Controller{
     public function RetornarTipo($paciente_id){
 
         $_pacienteModel = new PacienteModel();
-        $paciente = $_pacienteModel->where('paciente_id','=',$paciente_id)->getFirst();
+        $paciente = $_pacienteModel->where('paciente_id','=',$paciente_id)->where('estatus_pac', '=', '1')->getFirst();
         $mensaje = ($paciente != null);
         $respuesta = $mensaje ? $paciente->tipo_paciente : false;
         return $respuesta;
