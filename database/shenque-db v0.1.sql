@@ -104,6 +104,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.horario (
   horario_id INT NOT NULL AUTO_INCREMENT,
   medico_id INT NOT NULL,
   dias_semana enum('lunes','martes','miercoles','jueves','viernes','sabado') NOT NULL,
+  estatus_hor enum('1','2') NOT NULL DEFAULT '1',
   PRIMARY KEY (horario_id));
 
 -- -----------------------------------------------------
@@ -117,6 +118,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.consulta (
   altura FLOAT NOT NULL,
   observaciones VARCHAR(255) NULL,
   fecha_consulta DATE NOT NULL,
+  estatus_con enum('1','2') NOT NULL DEFAULT '1',
   PRIMARY KEY (consulta_id),
   CONSTRAINT fk_consulta_medico
     FOREIGN KEY (medico_id)
@@ -300,7 +302,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.cita (
   cedula_titular INT NOT NULL,
   clave INT,
   tipo_cita enum('1','2') NOT NULL,
-  estatus enum('1','2','3') NOT NULL,
+  estatus_cit enum('1','2','3') NOT NULL,
   PRIMARY KEY (cita_id),
   CONSTRAINT fk_cita_paciente
     FOREIGN KEY (paciente_id)

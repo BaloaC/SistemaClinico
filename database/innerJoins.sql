@@ -90,7 +90,25 @@ SELECT
 FROM horario 
 INNER JOIN medico on medico.medico_id = horario.medico_id
 
-
+-- citas
+SELECT 
+    paciente.nombres AS nombre_paciente,
+    medico.nombres AS nombre_medico,
+    especialidad.nombre AS nombre_especialidad,
+    cita.cita_id,
+    cita.paciente_id,
+    cita.medico_id,
+    cita.especialidad_id,
+    cita.fecha_cita,
+    cita.motivo_cita,
+    cita.cedula_titular,
+    cita.clave,
+    cita.tipo_cita,
+    cita.estatus_cit
+from cita
+INNER JOIN paciente ON paciente.paciente_id = cita.paciente_id
+INNER JOIN medico ON medico.medico_id = cita.medico_id
+INNER JOIN especialidad ON especialidad.especialidad_id = cita.especialidad_id
 
 
 

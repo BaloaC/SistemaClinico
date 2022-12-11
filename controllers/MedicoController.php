@@ -151,7 +151,7 @@ class MedicoController extends Controller{
         if ( !$mensaje ) {
             
             $_medicoModel = new MedicoModel();
-            $medico = $_medicoModel->where('medico_id','=',$medico_id)->where('estatus_med','=','1')->getFirst();
+            $medico = $_medicoModel->where('medico_id','=',$medico_id)->where('medico.estatus_med','=','1')->getFirst();
 
             if ($medico) { $newArray = get_object_vars($medico);
             }else { $newArray=false; }
@@ -162,7 +162,7 @@ class MedicoController extends Controller{
         $_medicoModel = new MedicoModel();
         $innersHorario = $_medicoModel->listInner($arrayInnerHorario);
         
-        $medico2 = $_medicoModel->where('medico.medico_id','=',$medico_id)->where('estatus_med','=','1')->innerJoin($arraySelectHorario, $innersHorario, "horario");
+        $medico2 = $_medicoModel->where('medico.medico_id','=',$medico_id)->where('medico.estatus_med','=','1')->innerJoin($arraySelectHorario, $innersHorario, "horario");
         $mensaje2 = ($medico2 != null);
         
         if ( $mensaje2 ) {

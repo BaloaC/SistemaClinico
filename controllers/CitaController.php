@@ -159,26 +159,72 @@ class CitaController extends Controller{
 
     public function listarCitas(){
 
-        $_citaModel = new CitaModel();
-        $lista = $_citaModel->getAll();
-        $mensaje = (count($lista) > 0);
-     
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($lista);
+        $arrayInner = array (
+            "paciente" => "cita",
+            "medico" => "cita",
+            "especialidad" => "cita"
+        );
 
-        return $respuesta->json(200);
+        $arraySelect = array (
+            "paciente.nombres AS nombre_paciente",
+            "medico.nombres AS nombre_medico",
+            "especialidad.nombre AS nombre_especialidad",
+            "cita.cita_id",
+            "cita.paciente_id",
+            "cita.medico_id",
+            "cita.especialidad_id",
+            "cita.fecha_cita",
+            "cita.motivo_cita",
+            "cita.cedula_titular",
+            "cita.clave",
+            "cita.tipo_cita",
+            "cita.estatus_cit"
+        );
+
+        $_citaModel = new CitaModel();
+        $inners = $_citaModel->listInner($arrayInner);
+        $lista = $_citaModel->where('estatus_cit','!=','3')->innerJoin($arraySelect, $inners, "cita");
+
+        $mensaje = (count($lista) > 0);
+
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($lista);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function listarCitaPorId($cita_id){
 
+        $arrayInner = array (
+            "paciente" => "cita",
+            "medico" => "cita",
+            "especialidad" => "cita"
+        );
+
+        $arraySelect = array (
+            "paciente.nombres AS nombre_paciente",
+            "medico.nombres AS nombre_medico",
+            "especialidad.nombre AS nombre_especialidad",
+            "cita.cita_id",
+            "cita.paciente_id",
+            "cita.medico_id",
+            "cita.especialidad_id",
+            "cita.fecha_cita",
+            "cita.motivo_cita",
+            "cita.cedula_titular",
+            "cita.clave",
+            "cita.tipo_cita",
+            "cita.estatus_cit"
+        );
+
         $_citaModel = new CitaModel();
-        $cita = $_citaModel->where('cita_id','=',$cita_id)->getFirst();
-        $mensaje = ($cita != null);
+        $inners = $_citaModel->listInner($arrayInner);
+        $lista = $_citaModel->where('cita_id','=',$cita_id)->where('estatus_cit','!=','3')->innerJoin($arraySelect, $inners, "cita");
+        $mensaje = ($lista != null);
 
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($cita);
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($lista);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function actualizarCita(){
@@ -199,8 +245,11 @@ class CitaController extends Controller{
     public function eliminarCita($cita_id){
 
         $_citaModel = new CitaModel();
+        $data = array(
+            "estatus_cita" => "3"
+        );
 
-        $eliminado = $_citaModel->where('cita_id','=',$cita_id)->delete();
+        $eliminado = $_citaModel->where('cita_id','=',$cita_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');
