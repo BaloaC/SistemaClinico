@@ -38,15 +38,15 @@ class CitaController extends Controller{
                 return $respuesta->json(400);
 
             case $validarCita->isEliminated("paciente", 'estatus_pac', $_POST['paciente_id']):
-                $respuesta = new Response(false, 'El paciente ingresado no se ha encontrado en el sistema');
+                $respuesta = new Response('PAT_NOT_FOUND');
                 return $respuesta->json(404);
 
             case $validarCita->isEliminated("medico", 'estatus_med', $_POST['medico_id']):
-                $respuesta = new Response(false, 'El médico ingresado no se ha encontrado en el sistema');
+                $respuesta = new Response('MD_NOT_FOUND');
                 return $respuesta->json(404);
 
             case $validarCita->isEliminated("especialidad", 'estatus_esp', $_POST['especialidad_id']):
-                $respuesta = new Response(false, 'La especialidad ingresada no se ha encontrado en el sistema');
+                $respuesta = new Response('SPE_NOT_FOUND');
                 return $respuesta->json(404);
 
             case $validarCita->isNumber($_POST, $camposNumericos):

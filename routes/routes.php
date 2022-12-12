@@ -119,4 +119,16 @@ Router::get('/citas/:id',CitaController::class . '@listarCitaPorId');
 Router::post('/citas', CitaController::class . '@insertarCita');
 Router::put('/citas/:id', CitaController::class . '@actualizarCita');
 Router::delete('/citas/:id', CitaController::class . '@eliminarCita');
+
+//Consulta - Vistas
+Router::get('/consultas',ConsultaController::class . '@index');
+Router::get('/consultas/registrar', ConsultaController::class . '@formRegistrarConsulta');
+Router::get('/consultas/actualizar/:id', ConsultaController::class . '@formActualizarConsulta');
+
+//Consulta - API
+Router::get('/consultas/consulta',ConsultaController::class . '@listarConsultas');
+Router::get('/consultas/:id',ConsultaController::class . '@listarConsultaPorId');
+Router::post('/consultas', ConsultaController::class . '@insertarConsulta');
+Router::put('/consultas/:id', ConsultaController::class . '@actualizarConsulta');
+Router::delete('/consultas/:id', ConsultaController::class . '@eliminarConsulta');
 ?>

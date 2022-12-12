@@ -114,6 +114,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.consulta (
   consulta_id INT NOT NULL auto_increment,
   paciente_id INT NOT NULL,
   medico_id INT NOT NULL,
+  especialidad_id INT NOT NULL,
   peso FLOAT NOT NULL,
   altura FLOAT NOT NULL,
   observaciones VARCHAR(255) NULL,
@@ -129,7 +130,12 @@ CREATE TABLE IF NOT EXISTS shenque_db.consulta (
     FOREIGN KEY (paciente_id)
     REFERENCES shenque_db.paciente (paciente_id)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    ON UPDATE NO ACTION;
+  CONSTRAINT fk_consulta_especialidad
+  FOREIGN KEY (especialidad_id)
+  REFERENCES shenque_db.especialidad (especialidad_id)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION);
 
 -- -----------------------------------------------------
 -- Table shenque_db.metodo_pago

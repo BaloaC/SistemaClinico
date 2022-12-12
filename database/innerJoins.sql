@@ -111,6 +111,28 @@ INNER JOIN medico ON medico.medico_id = cita.medico_id
 INNER JOIN especialidad ON especialidad.especialidad_id = cita.especialidad_id
 
 
+-- consulta
+SELECT 
+    paciente.nombres AS nombre_paciente, 
+    medico.nombres AS nombre_medico, 
+    especialidad.nombre AS nombre_especialidad, 
+    consulta.consulta_id, 
+    consulta.paciente_id, 
+    consulta.medico_id, 
+    consulta.especialidad_id, 
+    consulta.peso, 
+    consulta.altura, 
+    consulta.observaciones, 
+    consulta.fecha_consulta 
+from consulta 
+INNER JOIN paciente ON paciente.paciente_id = consulta.paciente_id 
+INNER JOIN medico ON medico.medico_id = consulta.medico_id 
+INNER JOIN especialidad ON especialidad.especialidad_id = consulta.especialidad_id
+
+
 
 -- codigo para alterar tablas
 ALTER TABLE `especialidad` ADD `estatus_esp` ENUM('1', '2') NOT NULL DEFAULT '1' AFTER `nombre`;
+
+-- codigo para agregar foreign key
+ALTER TABLE consulta ADD CONSTRAINT fk_consulta_especialidad FOREIGN KEY (especialidad_id) REFERENCES especialidad (especialidad_id) ON DELETE NO ACTION ON UPDATE NO ACTION

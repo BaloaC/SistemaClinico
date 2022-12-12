@@ -92,6 +92,15 @@ class Response{
             case 'DUPLICATE_APPOINTMENT':
                 return [false, 'Ya existe una cita registrada en ese momento'];
 
+            case 'MD_NOT_FOUND':
+                return [false, 'El médico ingresado no se ha encontrado en el sistema'];
+
+            case 'PAT_NOT_FOUND':
+                return [false, 'El paciente ingresado no se ha encontrado en el sistema'];
+
+            case 'SPE_NOT_FOUND':
+                return [false, 'La especialidad ingresada no se ha encontrado en el sistema'];
+
             default: 
                 return [false, 'No se ha establecido ningún mensaje'];
         }
