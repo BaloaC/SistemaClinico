@@ -333,6 +333,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.examen (
   examen_id INT NOT NULL auto_increment,
   nombre VARCHAR(45) NOT NULL,
   tipo VARCHAR(45) NOT NULL,
+  estatus_exa ENUM('1','2') NOT NULL DEFAULT '1';
   PRIMARY KEY (examen_id));
 
 -- -----------------------------------------------------

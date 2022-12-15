@@ -47,9 +47,13 @@ class ConsultaController extends Controller{
                 $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
                 return $respuesta->json(404);
 
+            case $validarConsulta->isDuplicatedId('paciente_id', 'fecha_consulta', $_POST['paciente_id'], $_POST['fecha_consulta'], 'consulta'):
+                $respuesta = new Response(false, 'La consulta ya se encuentra registrada en el sistema');
+                return $respuesta->json(400);
+
             case $validarConsulta->isNumber($_POST, $camposNumericos):
                 $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(405);
+                return $respuesta->json(400);
 
             case !$validarConsulta->existsInDB($_POST, $campoId):   
                 $respuesta = new Response('NOT_FOUND');         
@@ -64,15 +68,44 @@ class ConsultaController extends Controller{
                 return $respuesta->json(400);
 
             default:
-                $data = $validarConsulta->dataScape($_POST);    
 
+                $examenes = $_POST['examenes'];
+                unset($_POST['examenes']);
+                $data = $validarConsulta->dataScape($_POST);
+                
                 $_consultaModel = new ConsultaModel();
                 $id = $_consultaModel->insert($data);
                 $mensaje = ($id > 0);
-        
-                $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-        
-                return $respuesta->json($mensaje ? 201 : 400);
+
+                if ($mensaje) {
+                    
+                    if ($examenes) {
+                        
+                        $_consultaExamen = new ConsultaExamenController;
+                        $bool = $_consultaExamen->insertarConsultaExamen($examenes,$id);
+                        
+                        if ($bool == true) {
+                        
+                            return $bool;
+
+                        } else {
+                          
+                            $respuesta = new Response('INSERCION_EXITOSA');
+                            return $respuesta->json(201);
+                        }
+
+                    } else {
+ 
+                        $respuesta = new Response('INSERCION_EXITOSA');
+                        return $respuesta->json(201);
+                    }
+                    
+                    
+                } else {
+
+                    $respuesta = new Response('INSERCION_FALLIDA');
+                    return $respuesta->json(400);
+                }
         }
     }
 
@@ -147,7 +180,6 @@ class ConsultaController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
 
         $camposNumericos = array("paciente_id", "medico_id", "especialidad_id", "peso", "altura");
-        $campoId = array("paciente_id", "medico_id", "especialidad_id");
         $validarConsulta = new Validate;
 
         switch ($validarConsulta) {
@@ -162,54 +194,57 @@ class ConsultaController extends Controller{
             case $validarConsulta->isNumber($_POST, $camposNumericos):
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
-
-            case !$validarConsulta->existsInDB($_POST, $campoId):   
-                $respuesta = new Response('NOT_FOUND');         
-                return $respuesta->json(404);
-
-            default:
-                $data = $validarConsulta->dataScape($_POST);
                 
-                if ( array_key_exists("paciente_id", $data) ) {
+            default:
+                                
+                if ( array_key_exists("paciente_id", $_POST) ) {
                     if ($validarConsulta->isEliminated("paciente", 'estatus_pac', $_POST['paciente_id'])) {
                         $respuesta = new Response('PAT_NOT_FOUND');
                         return $respuesta->json(404);
-                    }                    
+                    } elseif (!$validarConsulta->isDuplicated('paciente', 'paciente_id', $_POST['paciente_id'])) {
+                        $respuesta = new Response('PAT_NOT_FOUND');         
+                        return $respuesta->json(404);
+                    } 
                 }
 
-                if ( array_key_exists("especialidad_id", $data) ) {
+                if ( array_key_exists("especialidad_id", $_POST) ) {
+
+                    $_consultaModel = new ConsultaModel();
+                    $especialidadConsulta = $_consultaModel->where('consulta_id','=',$consulta_id)->getFirst();
+                    $medicoConsulta = $especialidadConsulta->medico_id;
+
                     if ($validarConsulta->isEliminated("especialidad", 'estatus_esp', $_POST['especialidad_id'])) {
                         $respuesta = new Response('SPE_NOT_FOUND');
                         return $respuesta->json(404);
-                    }
-
-                    $_consultaModel = new ConsultaModel();
-                    $especialidadConsulta = $_consultaModel->where('consulta_id','=',$consulta_id);
-                    $medicoConsulta = $especialidadConsulta->medico_id;
-
-                    if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $data['especialidad_id'], $medicoConsulta, 'medico_especialidad')) {
-                        $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
+                    } elseif (!$validarConsulta->isDuplicated('especialidad', 'especialidad_id', $_POST['especialidad_id'])) {
+                        $respuesta = new Response('SPE_NOT_FOUND');         
                         return $respuesta->json(404);
-                    }
-                }
-
-                if ( array_key_exists("medico_id", $data) ) {
-                    if ($validarConsulta->isEliminated("medico", 'estatus_med', $_POST['medico_id'])) {
-                        $respuesta = new Response('MD_NOT_FOUND');
+                    } else if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $medicoConsulta, 'medico_especialidad')) {
+                        $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
                         return $respuesta->json(404);
                     }                    
 
+                }
+
+                if ( array_key_exists("medico_id", $_POST) ) {
+                    
                     $_consultaModel = new ConsultaModel();
                     $medicoConsulta = $_consultaModel->where('consulta_id','=',$consulta_id)->getFirst();
                     $especialidadConsulta = $medicoConsulta->especialidad_id;
-                    
-                    if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $especialidadConsulta, $data['medico_id'], 'medico_especialidad')) {
+
+                    if ($validarConsulta->isEliminated("medico", 'estatus_med', $_POST['medico_id'])) {
+                        $respuesta = new Response('MD_NOT_FOUND');
+                        return $respuesta->json(404);
+                    } elseif (!$validarConsulta->isDuplicated('medico', 'medico_id', $_POST['medico_id'])) {
+                        $respuesta = new Response('MD_NOT_FOUND');         
+                        return $respuesta->json(404);
+                    } else if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $especialidadConsulta, $_POST['medico_id'], 'medico_especialidad')) {
                         $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
                         return $respuesta->json(404);
                     }
                 }
 
-                if ( array_key_exists('fecha_consulta', $data) ) {
+                if ( array_key_exists('fecha_consulta', $_POST) ) {
                     if ( $validarConsulta->isDate($_POST['fecha_consulta'])) {
 
                         $respuesta = new Response('FECHA_INVALIDA');
@@ -223,14 +258,50 @@ class ConsultaController extends Controller{
                     
                 }
 
+                if ( array_key_exists('examenes', $_POST) ) {
+                    
+                    $_consultaExamen = new ConsultaExamenController;
+                    $bool = $_consultaExamen->actualizarConsultaExamen($_POST['examenes'],$consulta_id);
+                    
+                    if ($bool == true) {
+                    
+                        return $bool;
+
+                    } else {
+                        $_consultaModel = new ConsultaModel();
+                        unset($_POST['examenes']);
+                        $data = $validarConsulta->dataScape($_POST);
+
+                        $actualizado = $_consultaModel->where('consulta_id','=',$consulta_id)->where('estatus_con','=','1')->update($data);
+                        $mensaje = ($actualizado > 0);
+
+                        if (!$bool && $mensaje) {
+                            
+                            $respuesta = new Response(true, 'Todos los datos han sido actualizados exitosamente');
+                            return $respuesta->json(200);
+                            
+                        } else if ($bool && $mensaje) {
+                            
+                            $respuesta = new Response(true, 'Ha ocurrido un error con los exámenes');
+                            return $respuesta->json(400);
+
+                        } else if (!$bool && !$mensaje) {
+
+                            $respuesta = new Response(true, 'Ha ocurrido un error con los datos');
+                            return $respuesta->json(400);
+
+                        }
+                    }
+                }
+                
+                $data = $validarConsulta->dataScape($_POST);
                 $_consultaModel = new ConsultaModel();
-                $actualizado = $_consultaModel->where('consulta_id','=',$consulta_id)->update($data);
+                $actualizado = $_consultaModel->where('consulta_id','=',$consulta_id)->where('estatus_con','=','1')->update($data);
                 $mensaje = ($actualizado > 0);
-        
+
                 $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
                 $respuesta->setData($actualizado);
-        
-                return $respuesta->json($mensaje ? 201 : 400);
+                return $respuesta->json($mensaje ? 200 : 400);
         }
     }
 

@@ -131,4 +131,17 @@ Router::get('/consultas/:id',ConsultaController::class . '@listarConsultaPorId')
 Router::post('/consultas', ConsultaController::class . '@insertarConsulta');
 Router::put('/consultas/:id', ConsultaController::class . '@actualizarConsulta');
 Router::delete('/consultas/:id', ConsultaController::class . '@eliminarConsulta');
+
+//Consulta - Vistas
+Router::get('/examenes',ExamenController::class . '@index');
+Router::get('/examenes/registrar', ExamenController::class . '@formRegistrarExamen');
+Router::get('/examenes/actualizar/:id', ExamenController::class . '@formActualizarExamen');
+
+//Consulta - API
+Router::get('/examenes/consulta',ExamenController::class . '@listarExamen');
+Router::get('/examenes/:id',ExamenController::class . '@listarExamenPorId');
+Router::post('/examenes', ExamenController::class . '@insertarExamen');
+Router::put('/examenes/:id', ExamenController::class . '@actualizarExamen');
+Router::delete('/examenes/:id', ExamenController::class . '@eliminarExamen');
+
 ?>

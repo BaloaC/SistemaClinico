@@ -74,13 +74,14 @@ class PacienteController extends Controller{
                     $insertarPacienteSeguro = new PacienteSeguroController;
                     $mensaje = $insertarPacienteSeguro->insertarPacienteSeguro($data);
                     
-                    if ($mensaje === false) {
+                    if ($mensaje == true) {
                         
-                        $respuesta = new Response('INSERCION_EXITOSA');
-                        return $respuesta->json(201);
+                        return $mensaje;
+                        
                     } else {
                       
-                        return $mensaje;
+                        $respuesta = new Response('INSERCION_EXITOSA');
+                        return $respuesta->json(201);
                     }
 
                     // if ($mensaje) {
