@@ -112,22 +112,39 @@ INNER JOIN especialidad ON especialidad.especialidad_id = cita.especialidad_id
 
 
 -- consulta
-SELECT 
-    paciente.nombres AS nombre_paciente, 
-    medico.nombres AS nombre_medico, 
-    especialidad.nombre AS nombre_especialidad, 
-    consulta.consulta_id, 
-    consulta.paciente_id, 
-    consulta.medico_id, 
-    consulta.especialidad_id, 
-    consulta.peso, 
-    consulta.altura, 
-    consulta.observaciones, 
-    consulta.fecha_consulta 
-from consulta 
+SELECT
+	consulta.consulta_id,
+    consulta.peso,
+    consulta.altura,
+    consulta.observaciones,
+    consulta.fecha_consulta,
+    paciente.paciente_id,
+    paciente.nombres AS nombre_paciente,
+    medico.medico_id,
+    medico.nombres AS nombre_medico,
+    especialidad.especialidad_id,
+    especialidad.nombre AS nombre_especialidad,
+    cita.cita_id,
+    cita.fecha_cita,
+    cita.motivo_cita,
+    cita.cedula_titular,
+    cita.clave
+FROM consulta
 INNER JOIN paciente ON paciente.paciente_id = consulta.paciente_id 
-INNER JOIN medico ON medico.medico_id = consulta.medico_id 
+INNER JOIN medico ON medico.medico_id = consulta.medico_id
 INNER JOIN especialidad ON especialidad.especialidad_id = consulta.especialidad_id
+INNER JOIN cita ON cita.cita_id = consulta.cita_id
+where consulta.consulta_id = 40;
+
+
+-- consulta examen
+SELECT 
+	examen.examen_id,
+    examen.nombre
+from consulta_examen
+INNER JOIN examen on examen.examen_id = consulta_examen.examen_id
+
+
 
 
 

@@ -23,7 +23,7 @@ class ConsultaController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         
         $camposNumericos = array("paciente_id", "medico_id", "especialidad_id", "peso", "altura");
-        $campoId = array("paciente_id", "medico_id", "especialidad_id");
+        $campoId = array("paciente_id", "medico_id", "especialidad_id, cita_id");
         $validarConsulta = new Validate;
 
         switch ($validarConsulta) {
@@ -43,11 +43,15 @@ class ConsultaController extends Controller{
                 $respuesta = new Response('SPE_NOT_FOUND');
                 return $respuesta->json(404);
 
+            case $validarConsulta->isEliminated("cita", 'estatus_cit', $_POST['cita_id']):
+                $respuesta = new Response(false, 'No se encontraron resultados de la cita indicada');
+                return $respuesta->json(404);
+
             case !$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad'):
                 $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
                 return $respuesta->json(404);
 
-            case $validarConsulta->isDuplicatedId('paciente_id', 'fecha_consulta', $_POST['paciente_id'], $_POST['fecha_consulta'], 'consulta'):
+            case $validarConsulta->isDuplicatedId('paciente_id', 'cita_id', $_POST['paciente_id'], $_POST['cita_id'], 'consulta'):
                 $respuesta = new Response(false, 'La consulta ya se encuentra registrada en el sistema');
                 return $respuesta->json(400);
 
@@ -114,30 +118,69 @@ class ConsultaController extends Controller{
         $arrayInner = array (
             "paciente" => "consulta",
             "medico" => "consulta",
-            "especialidad" => "consulta"
+            "especialidad" => "consulta",
+            "cita" => "consulta"
         );
 
         $arraySelect = array(
-            "paciente.nombres AS nombre_paciente", 
-            "medico.nombres AS nombre_medico", 
-            "especialidad.nombre AS nombre_especialidad", 
-            "consulta.consulta_id", 
-            "consulta.paciente_id", 
-            "consulta.medico_id", 
-            "consulta.especialidad_id", 
-            "consulta.peso", 
-            "consulta.altura", 
-            "consulta.observaciones", 
-            "consulta.fecha_consulta"
+            "consulta.consulta_id",
+            "consulta.peso",
+            "consulta.altura",
+            "consulta.observaciones",
+            "consulta.fecha_consulta",
+            "paciente.paciente_id",
+            "paciente.nombres AS nombre_paciente",
+            "medico.medico_id",
+            "medico.nombres AS nombre_medico",
+            "especialidad.especialidad_id",
+            "especialidad.nombre AS nombre_especialidad",
+            "cita.cita_id",
+            "cita.fecha_cita",
+            "cita.motivo_cita",
+            "cita.cedula_titular",
+            "cita.clave"
+        );
+
+        //datos del inner con los exámenes
+        $arrayInnerExa = array (
+            "examen" => "consulta_examen"
+        );
+
+        $arraySelectExa = array(
+            "examen.examen_id",
+            "examen.nombre"
         );
 
         $_consultaModel = new ConsultaModel();
         $inners = $_consultaModel->listInner($arrayInner);
-        $lista = $_consultaModel->where('estatus_con','=','1')->innerJoin($arraySelect, $inners, "consulta");
+        $consulta = $_consultaModel->where('estatus_con','=','1')->innerJoin($arraySelect, $inners, "consulta");
+        $resultado = array();
 
-        $mensaje = (count($lista) > 0);     
+        foreach ($consulta as $consultas) {
+            
+            $ArrayConsulta = array();
+            $ArrayConsulta = $consultas;
+
+            $validarConsulta = new Validate;
+            //validamos si tiene examenes relacionados
+            $respuesta = $validarConsulta->isDuplicated('consulta_examen', 'consulta_id', $consultas->consulta_id);
+
+            if ($respuesta) {
+                
+                $_consultaModel = new ConsultaModel();
+                $innersExa = $_consultaModel->listInner($arrayInnerExa);
+                $consulta_examenes = $_consultaModel->where('consulta_id','=',$consultas->consulta_id)->innerJoin($arraySelectExa, $innersExa, "consulta_examen");
+                $ArrayConsulta->examenes = $consulta_examenes;
+                $resultado[] = $ArrayConsulta;
+
+            } else { $resultado[] = $consultas; }
+            
+
+        }
+
+        $mensaje = (count($resultado) > 0);     
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($lista);
+        $respuesta->setData($resultado);
 
         return $respuesta->json($mensaje ? 200 : 404);
     }
@@ -147,39 +190,73 @@ class ConsultaController extends Controller{
         $arrayInner = array (
             "paciente" => "consulta",
             "medico" => "consulta",
-            "especialidad" => "consulta"
+            "especialidad" => "consulta",
+            "cita" => "consulta"
         );
 
         $arraySelect = array(
-            "paciente.nombres AS nombre_paciente", 
-            "medico.nombres AS nombre_medico", 
-            "especialidad.nombre AS nombre_especialidad", 
-            "consulta.consulta_id", 
-            "consulta.paciente_id", 
-            "consulta.medico_id", 
-            "consulta.especialidad_id", 
-            "consulta.peso", 
-            "consulta.altura", 
-            "consulta.observaciones", 
-            "consulta.fecha_consulta"
+            "consulta.consulta_id",
+            "consulta.peso",
+            "consulta.altura",
+            "consulta.observaciones",
+            "consulta.fecha_consulta",
+            "paciente.paciente_id",
+            "paciente.nombres AS nombre_paciente",
+            "medico.medico_id",
+            "medico.nombres AS nombre_medico",
+            "especialidad.especialidad_id",
+            "especialidad.nombre AS nombre_especialidad",
+            "cita.cita_id",
+            "cita.fecha_cita",
+            "cita.motivo_cita",
+            "cita.cedula_titular",
+            "cita.clave"
+        );
+
+        //datos del inner con los exámenes
+        $arrayInnerExa = array (
+            "examen" => "consulta_examen"
+        );
+
+        $arraySelectExa = array(
+            "examen.examen_id",
+            "examen.nombre"
         );
 
         $_consultaModel = new ConsultaModel();
         $inners = $_consultaModel->listInner($arrayInner);
         $consulta = $_consultaModel->where('consulta_id','=',$consulta_id)->where('estatus_con','=','1')->innerJoin($arraySelect, $inners, "consulta");
-        $mensaje = ($consulta != null);
+        
+        if ($consulta) {
+            
+            $validarConsulta = new Validate;
+            //validamos si tiene examenes relacionados
+            $respuesta = $validarConsulta->isDuplicated('consulta_examen', 'consulta_id', $consulta_id);            
+            $resultado = $consulta;
 
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($consulta);
+            if ($respuesta) {
+                
+                $_consultaModel = new ConsultaModel();
+                $innersExa = $_consultaModel->listInner($arrayInnerExa);
+                $consulta_examenes = $_consultaModel->where('consulta_id','=',$consulta_id)->innerJoin($arraySelectExa, $innersExa, "consulta_examen");
+                $resultado[0]->examenes = $consulta_examenes;
+            } 
 
-        return $respuesta->json($mensaje ? 200 : 404);
+            $respuesta = new Response('CORRECTO');
+            $respuesta->setData($resultado);
+            return $respuesta->json(200);
+            
+        } else {
+            $respuesta = new Response('NOT_FOUND');
+            return $respuesta->json(404);
+        }
     }
 
     public function actualizarConsulta($consulta_id){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
 
-        $camposNumericos = array("paciente_id", "medico_id", "especialidad_id", "peso", "altura");
+        $camposNumericos = array("paciente_id", "medico_id", "especialidad_id", "peso", "altura", "cita_id");
         $validarConsulta = new Validate;
 
         switch ($validarConsulta) {
@@ -254,6 +331,18 @@ class ConsultaController extends Controller{
                         
                         $respuesta = new Response('FECHA_INVALIDA');
                         return $respuesta->json(400);
+                    }
+                    
+                }
+
+                if ( array_key_exists('cita_id', $_POST) ) {
+                    
+                    if ($validarConsulta->isEliminated("cita", 'estatus_cit', $_POST['cita_id'])) {
+                        $respuesta = new Response(false, 'No se encontraron resultados de la cita indicada');
+                        return $respuesta->json(404);
+                    } elseif (!$validarConsulta->isDuplicated('cita', 'cita_id', $_POST['cita_id'])) {
+                        $respuesta = new Response(false, 'No se encontraron resultados de la cita indicada');         
+                        return $respuesta->json(404);
                     }
                     
                 }
