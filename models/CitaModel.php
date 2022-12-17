@@ -12,7 +12,7 @@ class CitaModel extends GenericModel {
     protected $tipo_cita;
     protected $cedula_titular;
     protected $clave;
-    protected $estatus;
+    protected $estatus_cit;
 
     public function __construct($propiedades = null) {
         parent::__construct('cita', CitaModel::class, $propiedades);
@@ -27,7 +27,7 @@ class CitaModel extends GenericModel {
     public function getTipoCita(){return $this->tipo_cita;}
     public function getCedulaTitular(){return $this->cedula_titular;}
     public function getClave(){return $this->clave;}
-    public function getEstatus(){return $this->estatus;}
+    public function getEstatusCit(){return $this->estatus_cit;}
 
     /* Setters */
     public function setPacienteId($paciente_id){return $this->paciente_id = $paciente_id;}
@@ -38,7 +38,7 @@ class CitaModel extends GenericModel {
     public function setTipoCita($tipo_cita){return $this->tipo_cita = $tipo_cita;}
     public function setCedulaTitular($cedula_titular){return $this->cedula_titular = $cedula_titular;}
     public function setClave($clave){return $this->clave = $clave;}
-    public function setEstatus($estatus){return $this->estatus = $estatus;}
+    public function setEstatusCit($estatus_cit){return $this->estatus_cit = $estatus_cit;}
 }
 
 ?>

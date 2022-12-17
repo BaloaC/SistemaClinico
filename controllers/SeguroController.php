@@ -48,6 +48,10 @@ class SeguroController extends Controller{
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(400);
 
+            case ($_POST['tipo_seguro'] != 1 && $_POST['tipo_seguro'] != 2 ):
+                $respuesta = new Response(false, 'Datos incorrectos en el tipo de seguro');
+                return $respuesta->json(400);
+
             default: 
             $data = $validarSeguro->dataScape($_POST);
 

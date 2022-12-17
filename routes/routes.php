@@ -116,6 +116,7 @@ Router::get('/citas/actualizar/:id', CitaController::class . '@formActualizarCit
 //Cita - API
 Router::get('/citas/consulta',CitaController::class . '@listarCitas');
 Router::get('/citas/:id',CitaController::class . '@listarCitaPorId');
+Router::get('/citas/paciente/:id',CitaController::class . '@listarCitaPorPacienteId');
 Router::post('/citas', CitaController::class . '@insertarCita');
 Router::put('/citas/:id', CitaController::class . '@actualizarCita');
 Router::delete('/citas/:id', CitaController::class . '@eliminarCita');

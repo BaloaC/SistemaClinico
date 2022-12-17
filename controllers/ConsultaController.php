@@ -43,17 +43,21 @@ class ConsultaController extends Controller{
                 $respuesta = new Response('SPE_NOT_FOUND');
                 return $respuesta->json(404);
 
-            case $validarConsulta->isEliminated("cita", 'estatus_cit', $_POST['cita_id']):
+            case $validarConsulta->isEliminated("cita", 'estatus_cit', 3):
                 $respuesta = new Response(false, 'No se encontraron resultados de la cita indicada');
                 return $respuesta->json(404);
+
+            case $validarConsulta->isDuplicated('cita', 'estatus_cit', 4):
+                $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
+                return $respuesta->json(400);
 
             case !$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad'):
                 $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
                 return $respuesta->json(404);
 
-            case $validarConsulta->isDuplicatedId('paciente_id', 'cita_id', $_POST['paciente_id'], $_POST['cita_id'], 'consulta'):
-                $respuesta = new Response(false, 'La consulta ya se encuentra registrada en el sistema');
-                return $respuesta->json(400);
+            // case $validarConsulta->isDuplicatedId('paciente_id', 'cita_id', $_POST['paciente_id'], $_POST['cita_id'], 'consulta'):
+            //     $respuesta = new Response(false, 'La consulta ya se encuentra registrada en el sistema');
+            //     return $respuesta->json(400);
 
             case $validarConsulta->isNumber($_POST, $camposNumericos):
                 $respuesta = new Response('DATOS_INVALIDOS');
@@ -72,7 +76,7 @@ class ConsultaController extends Controller{
                 return $respuesta->json(400);
 
             default:
-
+            
                 $examenes = $_POST['examenes'];
                 unset($_POST['examenes']);
                 $data = $validarConsulta->dataScape($_POST);
@@ -82,6 +86,10 @@ class ConsultaController extends Controller{
                 $mensaje = ($id > 0);
 
                 if ($mensaje) {
+                    
+                    $cambioEstatus = array('estatus_cit' => '4');
+                    $_citaModel = new CitaModel;
+                    $res = $_citaModel->where('cita_id', '=', $data['cita_id'])->update($cambioEstatus);
                     
                     if ($examenes) {
                         

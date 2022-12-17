@@ -227,6 +227,18 @@ class CitaController extends Controller{
         return $respuesta->json($mensaje ? 200 : 404);
     }
 
+    public function listarCitaPorPacienteId($paciente_id){
+
+        $_citaModel = new CitaModel();
+        $lista = $_citaModel->where('estatus_cit','=','1')->where('paciente_id','=',$paciente_id)->getAll();
+        $mensaje = ($lista != null);
+
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($lista);
+
+        return $respuesta->json($mensaje ? 200 : 404);
+    }
+
     public function actualizarCita(){
 
         $_POST = json_decode(file_get_contents('php://input'), true);

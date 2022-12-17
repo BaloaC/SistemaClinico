@@ -108,36 +108,6 @@ CREATE TABLE IF NOT EXISTS shenque_db.horario (
   PRIMARY KEY (horario_id));
 
 -- -----------------------------------------------------
--- Table shenque_db.consulta
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS shenque_db.consulta (
-  consulta_id INT NOT NULL auto_increment,
-  paciente_id INT NOT NULL,
-  medico_id INT NOT NULL,
-  especialidad_id INT NOT NULL,
-  peso FLOAT NOT NULL,
-  altura FLOAT NOT NULL,
-  observaciones VARCHAR(255) NULL,
-  fecha_consulta DATE NOT NULL,
-  estatus_con enum('1','2') NOT NULL DEFAULT '1',
-  PRIMARY KEY (consulta_id),
-  CONSTRAINT fk_consulta_medico
-    FOREIGN KEY (medico_id)
-    REFERENCES shenque_db.medico (medico_id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_consulta_paciente
-    FOREIGN KEY (paciente_id)
-    REFERENCES shenque_db.paciente (paciente_id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION;
-  CONSTRAINT fk_consulta_especialidad
-  FOREIGN KEY (especialidad_id)
-  REFERENCES shenque_db.especialidad (especialidad_id)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION);
-
--- -----------------------------------------------------
 -- Table shenque_db.metodo_pago
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS shenque_db.metodo_pago (
@@ -308,7 +278,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.cita (
   cedula_titular INT NOT NULL,
   clave INT,
   tipo_cita enum('1','2') NOT NULL,
-  estatus_cit enum('1','2','3') NOT NULL,
+  estatus_cit enum('1','2','3', '4') NOT NULL,
   PRIMARY KEY (cita_id),
   CONSTRAINT fk_cita_paciente
     FOREIGN KEY (paciente_id)
@@ -323,6 +293,42 @@ CREATE TABLE IF NOT EXISTS shenque_db.cita (
   CONSTRAINT fk_cita_especialidad
     FOREIGN KEY (especialidad_id)
     REFERENCES shenque_db.especialidad (especialidad_id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- -----------------------------------------------------
+-- Table shenque_db.consulta
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS shenque_db.consulta (
+  consulta_id INT NOT NULL auto_increment,
+  paciente_id INT NOT NULL,
+  medico_id INT NOT NULL,
+  especialidad_id INT NOT NULL,
+  cita_id INT NOT NULL,
+  peso FLOAT NOT NULL,
+  altura FLOAT NOT NULL,
+  observaciones VARCHAR(255) NULL,
+  fecha_consulta DATE NOT NULL,
+  estatus_con enum('1','2') NOT NULL DEFAULT '1',
+  PRIMARY KEY (consulta_id),
+  CONSTRAINT fk_consulta_medico
+    FOREIGN KEY (medico_id)
+    REFERENCES shenque_db.medico (medico_id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_consulta_paciente
+    FOREIGN KEY (paciente_id)
+    REFERENCES shenque_db.paciente (paciente_id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+  CONSTRAINT fk_consulta_especialidad
+  FOREIGN KEY (especialidad_id)
+  REFERENCES shenque_db.especialidad (especialidad_id)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+  CONSTRAINT fk_consulta_cita
+    FOREIGN KEY (cita_id)
+    REFERENCES shenque_db.cita (cita_id)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
     
