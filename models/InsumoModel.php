@@ -10,6 +10,7 @@ class InsumoModel extends GenericModel {
     protected $cantidad_min;
     protected $precio;
     protected $fecha_Insumo;
+    protected $estatus_ins;
 
     public function __construct($propiedades = null) {
         parent::__construct('insumo', InsumoModel::class, $propiedades);
@@ -21,6 +22,7 @@ class InsumoModel extends GenericModel {
     public function getStock(){return $this->stock;}
     public function getCantidadMin(){return $this->cantidad_min;}
     public function getPrecio(){return $this->precio;}
+    public function getEstatusIns(){return $this->estatus_ins;}
 
     /* Setters */
     public function setNombre($nombre){return $this->nombre = $nombre;}
@@ -28,6 +30,7 @@ class InsumoModel extends GenericModel {
     public function setStock($stock){return $this->stock = $stock;}
     public function setCantidadMin($cantidad_min){return $this->cantidad_min = $cantidad_min;}
     public function setPrecio($precio){return $this->precio = $precio;}
+    public function setEstatusIns($estatus_ins){return $this->estatus_ins = $estatus_ins;}
 }
 
 ?>

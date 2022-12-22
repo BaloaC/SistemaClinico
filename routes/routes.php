@@ -145,4 +145,28 @@ Router::post('/examenes', ExamenController::class . '@insertarExamen');
 Router::put('/examenes/:id', ExamenController::class . '@actualizarExamen');
 Router::delete('/examenes/:id', ExamenController::class . '@eliminarExamen');
 
+//Proveedor - Vistas
+Router::get('/proveedores',ProveedorController::class . '@index');
+Router::get('/proveedores/registrar', ProveedorController::class . '@formRegistrarProveedor');
+Router::get('/proveedores/actualizar/:id', ProveedorController::class . '@formActualizarProveedor');
+
+//Proveedor - API
+Router::get('/proveedores/consulta',ProveedorController::class . '@listarProveedor');
+Router::get('/proveedores/:id',ProveedorController::class . '@listarProveedorPorId');
+Router::post('/proveedores', ProveedorController::class . '@insertarProveedor');
+Router::put('/proveedores/:id', ProveedorController::class . '@actualizarProveedor');
+Router::delete('/proveedores/:id', ProveedorController::class . '@eliminarProveedor');
+
+//Insumo - Vistas
+Router::get('/insumos',InsumoController::class . '@index');
+Router::get('/insumos/registrar', InsumoController::class . '@formRegistrarInsumo');
+Router::get('/insumos/actualizar/:id', InsumoController::class . '@formActualizarInsumo');
+
+//Insumo - API
+Router::get('/insumos/consulta',InsumoController::class . '@listarInsumo');
+Router::get('/insumos/:id',InsumoController::class . '@listarInsumoPorId');
+Router::post('/insumos', InsumoController::class . '@insertarInsumo');
+Router::put('/insumos/:id', InsumoController::class . '@actualizarInsumo');
+Router::delete('/insumos/:id', InsumoController::class . '@eliminarInsumo');
+
 ?>

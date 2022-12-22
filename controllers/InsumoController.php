@@ -8,79 +8,120 @@ class InsumoController extends Controller{
         return $this->view('insumos/index');
     }
 
-    public function formRegistrarInsumos(){
+    public function formRegistrarInsumo(){
 
         return $this->view('insumos/registrarInsumos');
     }
 
-    public function formActualizarInsumo($idInsumo){
+    public function formActualizarInsumo($insumo_id){
         
-        return $this->view('insumos/actualizarInsumos', ['idInsumo' => $idInsumo]);
+        return $this->view('insumos/actualizarInsumos', ['insumo_id' => $insumo_id]);
     } 
 
-    public function insertarInsumos(/*Request $request*/){
+    public function insertarInsumo(/*Request $request*/){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        var_dump($_POST);
-        $_insumoModel = new InsumoModel();
-        $id = $_insumoModel->insert($_POST);
-        $mensaje = ($id > 0);
+        $validacion = $this->validacion($_POST);
 
-        $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+        if (!$validacion) {
+            
+            $validarInsumo = new Validate;
+            $data = $validarInsumo->dataScape($_POST);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+            $_insumoModel = new InsumoModel();
+            $id = $_insumoModel->insert($data);
+            $mensaje = ($id > 0);
+
+            $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+            return $respuesta->json($mensaje ? 201 : 400);
+
+        } else { return $validacion; }        
     }
 
-    public function listarInsumos(){
+    public function actualizarInsumo($insumo_id){
+
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        $validacion = $this->validacion($_POST);
+
+        if (!$validacion) {
+            
+            $validarInsumo = new Validate;
+            $data = $validarInsumo->dataScape($_POST);
+
+            $_insumoModel = new InsumoModel();
+            $actualizado = $_insumoModel->where('estatus_ins','=','2')->where('insumo_id','=',$insumo_id)->update($_POST);
+            $mensaje = ($actualizado > 0);
+
+            $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+            $respuesta->setData($actualizado);
+
+            return $respuesta->json($mensaje ? 200 : 404);
+
+        } else { return $validacion; }
+    }
+
+    public function listarInsumo(){
 
         $_insumoModel = new InsumoModel();
-        $lista = $_insumoModel->getAll();
+        $lista = $_insumoModel->where('estatus_ins', '=', '2')->getAll();
         $mensaje = (count($lista) > 0);
      
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
         $respuesta->setData($lista);
+        return $respuesta->json($mensaje ? 200 : 404);
 
-        return $respuesta->json(200);
     }
 
-    public function listarInsumosPorId($idInsumo){
+    public function listarInsumoPorId($insumo_id){
 
         $_insumoModel = new InsumoModel();
-        $insumo = $_insumoModel->where('insumo_id','=',$idInsumo)->getFirst();
+        $insumo = $_insumoModel->where('estatus_ins', '=', '1')->where('insumo_id','=',$insumo_id)->getFirst();
         $mensaje = ($insumo != null);
 
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
         $respuesta->setData($insumo);
-
-        return $respuesta->json($mensaje ? 200 : 400);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 
-    public function actualizarInsumo(){
-
-        $_POST = json_decode(file_get_contents('php://input'), true);
+    public function eliminarInsumo($insumo_id){
 
         $_insumoModel = new InsumoModel();
+        $data = array(
+            "estatus_ins" => "2"
+        );
 
-        $actualizado = $_insumoModel->where('insumo_id','=',$_POST['idInsumo'])->update($_POST);
-        $mensaje = ($actualizado > 0);
-
-        $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        $respuesta->setData($actualizado);
-
-        return $respuesta->json($mensaje ? 200 : 400);
-    }
-
-    public function eliminarInsumo($idInsumo){
-
-        $_insumoModel = new InsumoModel();
-
-        $eliminado = $_insumoModel->where('insumo_id','=',$idInsumo)->delete();
+        $eliminado = $_insumoModel->where('insumo_id','=',$insumo_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');
         $respuesta->setData($eliminado);
+        return $respuesta->json($mensaje ? 200 : 404);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+    }
+
+    // Método con las validaciones generales de los formularios
+    public function validacion($data) {
+
+        $camposNumericos = array("precio");
+        $validarInsumo = new Validate;
+
+        switch($data) {
+            case ($validarInsumo->isEmpty($data)):
+               $respuesta = new Response('DATOS_VACIOS');
+               return $respuesta->json(400);
+       
+            case $validarInsumo->isDuplicated('insumo', 'nombre', $data["nombre"]):
+                $respuesta = new Response('DATOS_DUPLICADOS');
+                return $respuesta->json(400);
+
+            case $validarInsumo->isNumber($data, $camposNumericos):
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
+
+            default:
+                return false;
+        }
+
     }
 }
 
