@@ -1,40 +1,65 @@
-:root {
-    --blue: #007bff;
-    --indigo: #6610f2;
-    --purple: #6f42c1;
+@font-face {
+    font-family: 'inter';
+    src: url(../fonts/Inter-VariableFont_slnt\,wght.ttf);
 }
 
-span a { color: #6f42c1; }
-span a:hover { text-decoration: underline; }
-
-.bg-purple { background-color: var(--purple); }
-
-.purple { color: var(--purple); }
-.indigo { color: var(--indigo); }
-
-.w-74 {
-    width: 74% !important;
+body{
+    background: linear-gradient(to bottom, #019de1 0%, #100e99 100%);
+    min-height: 100vh;
+    font-family: 'inter', sans-serif;
 }
 
-.row {
+* {
+    box-sizing: border-box;
+    padding: 0 ;
+}
+
+ul { list-style: none; }
+h1 { font-weight: bold; }
+
+.lt-spacing-1 { letter-spacing: 1rem; }
+.fs-7 { font-size: 3rem !important; }
+
+form > input{
     width: 100%;
 }
 
-.opacity {
-    opacity: 0 !important;
+form > input[type="submit"]{
+    width: auto;
+    display: block;
+    margin: 25px auto;
 }
 
-.mt-6 {
-    margin-top: 5rem;
+select {
+    border-radius: 30px !important;
+    padding: 0.3rem !important;
+    font-size: 16px !important;
 }
 
-.btn.btn-secondary {
+label{
+    padding-top: 10px !important;
+}
+
+.bg-blue-c { background-color: #010066 !important; }
+.bg-light-blue { background: #019de1; }
+.bg-gradiente { background: linear-gradient(to bottom, #019de1 0%, #100e99 100%); }
+
+.border-light-c { border-color: rgb(253 253 253 / 22%) !important; }
+
+.text-blue { color: #0043ff !important; }
+.text-lightblue { color: #15f1ff !important; }
+
+.btn { border-radius:30px !important; }
+
+.btn-blue {
+    background-color: transparent;
+    border: 2px solid #0dcaf0 !important;
     color: #fff;
-    background-color: #6c757d !important;
-    border-color: #6c757d !important;
 }
 
-.btn.btn-secondary:hover {
-    background-color: #4d5257 !important;
-    border-color: #4d5257 !important;
+.btn-blue:hover {
+    background-color: rgb(255 255 255 / 17%);
+    border:  none !important;
+    color: #000 !important;
+    transition: all 0.3s ease;
 }

@@ -1,0 +1,35 @@
+
+nav {
+    /* background-color: #019de1 !important; */
+    font-weight: 600;
+}
+
+.nav-link:hover, .nav-link:focus {
+    color: #15f1ff !important;
+}
+
+nav li.nav-item:hover {
+    border-bottom: 2px solid #15f1ff;
+    transition: all 0.3s ease;
+}
+
+a.nav-link{
+    color: white;
+    margin: 0 0.3rem !important;
+}
+
+@media screen and (min-width:992px){
+
+    .navbar-collapse{
+        flex-grow: 0 !important;
+    }
+} 
+
+
+/* ---- Para el bg del nav vertical ---- */
+
+/* @media only screen and (max-width:768px){
+    .list-nav{
+        background-color: red;
+    }
+}  */
