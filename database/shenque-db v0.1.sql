@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.insumo (
   insumo_id INT NOT NULL AUTO_INCREMENT,
   nombre VARCHAR(45) NOT NULL,
   cantidad INT NOT NULL,
-  stock INT NOT NULL,
+  stock INT UNSIGNED NOT NULL,
   cantidad_min INT NOT NULL,
   precio FLOAT NOT NULL,
   estatus_ins enum('1','2') NOT NULL DEFAULT '1',

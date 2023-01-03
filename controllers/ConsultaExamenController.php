@@ -97,23 +97,6 @@ class ConsultaExamenController extends Controller{
         }
            return false;
     }
-    
-
-    public function eliminarPacienteSeguro($paciente_id){
-
-        $_pacienteSeguroModel = new ConsultaExamenModel();
-        $data = array(
-            "estatus_pac" => "2"
-        );
-
-        $eliminado = $_pacienteSeguroModel->where('paciente_id','=',$paciente_id)->update($data);
-        $mensaje = ($eliminado > 0);
-
-        $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'NOT_FOUND');
-        $respuesta->setData($eliminado);
-
-        return $respuesta->json($mensaje ? 200 : 400);
-    }
 }
 
 

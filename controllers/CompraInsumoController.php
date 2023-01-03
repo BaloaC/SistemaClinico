@@ -12,7 +12,6 @@ class CompraInsumoController extends Controller {
         foreach ($POST as $POSTS) {
             
             $POSTS['factura_compra_id'] = $id;
-            // return $POSTS;
 
             switch ($POSTS) {
                 case ($validarFactura->isEmpty($POSTS)):
@@ -38,10 +37,22 @@ class CompraInsumoController extends Controller {
                     $respuesta = $_compraInsumoModel->insert($data);
                     $mensaje = ($respuesta > 0);
 
-                    if (!$mensaje) {
-                        $respuesta = new Response(false, 'Hubo un error en el registro del insumo');
-                        $respuesta->setData($POSTS);
-                        return $respuesta->json(400);
+                    if ($mensaje) {
+
+                        // Sumando la cantidad de la factura al stock del inventario
+                        $_insumoModel = new InsumoModel();
+                        $insumo = $_insumoModel->where('insumo_id', '=', $POSTS['insumo_id'])->getFirst();
+                        $unidadesPosts = $POSTS['unidades'] + $insumo->stock;
+                        $actualizar = array('stock' => $unidadesPosts);
+                        
+                        // actualizando el stock del insumo
+                        $actualizado = $_insumoModel->where('insumo_id', '=', $POSTS['insumo_id'])->update($actualizar);
+                        if (!$actualizado) {
+                            $this->mensajeError($POSTS);
+                        }
+
+                    } else if (!$mensaje) {
+                        $this->mensajeError($POSTS);
                     }
             }
         }
@@ -66,6 +77,13 @@ class CompraInsumoController extends Controller {
         $compra_insumo = $_compraInsumoModel->where('compra_insumo.factura_compra_id','=',$factura_id)->innerJoin($arraySelect, $inners, "compra_insumo");
 
         return $compra_insumo;
+    }
+
+    // funciones para reutilizar
+    public function mensajeError($POSTS) {
+        $respuesta = new Response(false, 'Hubo un error en el registro del insumo');
+        $respuesta->setData($POSTS);
+        return $respuesta->json(400);
     }
 }
 ?>
