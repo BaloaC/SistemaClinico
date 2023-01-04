@@ -1,4 +1,4 @@
-import Cookies from "../js.cookie.min.js";
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
 const d = document,
     $alert = d.querySelector(".alert"),
@@ -43,11 +43,9 @@ const logIn = async (form) => {
         }, 1000);
 
     } catch (error) {
-
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
         $alert.textContent = "El usuario o la contraseña son inválidos";
-
     }
 
 }

@@ -26,7 +26,7 @@ document.addEventListener("submit", async e => {
             body: JSON.stringify(data),
         };
 
-        const response = await fetch(`/${path[1]}/usuarios/registrar`, options);
+        const response = await fetch(`/${path[1]}/usuarios`, options);
 
         json = await response.json();
 
