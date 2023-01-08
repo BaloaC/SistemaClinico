@@ -184,4 +184,16 @@ Router::delete('/factura/compra/:id', FacturaCompraController::class . '@elimina
 //Compra_Insumo - API
 Router::get('/factura/insumos/:id',CompraInsumoController::class . '@listarCompraInsumoPorFactura');
 
+//Factura_Seguro - Vistas
+Router::get('/factura/seguro',FacturaSeguroController::class . '@index');
+Router::get('/factura/seguro/registrar', FacturaSeguroController::class . '@formRegistrarFacturaSeguro');
+Router::get('/factura/seguro/actualizar/:id', FacturaSeguroController::class . '@formActualizarFacturaSeguro');
+
+//Factura_Seguro - API
+Router::get('/factura/seguro/consulta',FacturaSeguroController::class . '@listarFacturaSeguro');
+Router::get('/factura/seguro/:id',FacturaSeguroController::class . '@listarFacturaSeguroPorId');
+Router::post('/factura/seguro', FacturaSeguroController::class . '@insertarFacturaSeguro');
+Router::put('/factura/seguro/:id', FacturaSeguroController::class . '@actualizarFacturaSeguro');
+Router::delete('/factura/seguro/:id', FacturaSeguroController::class . '@eliminarFacturaSeguro');
+
 ?>

@@ -85,24 +85,6 @@ class CitaController extends Controller{
                 $respuesta = new Response('DUPLICATE_APPOINTMENT');
                 return $respuesta->json(400);
 
-            // este pedazote esta comentado porque no recuerdo pa k lo hice
-            // case $_POST['tipo_cita'] == 1:
-            //     $siEsNatural = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $_POST['cedula_titular'], '1', 'paciente');
-            //     $siEsAsegurado = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $_POST['cedula_titular'], '2', 'paciente'); 
-                
-            //     // verificando si es un paciente beneficiario o natural
-            //     if ( !$siEsNatural && !$siEsAsegurado ) {
-            //         $respuesta = new Response('DATOS_INVALIDOS');
-            //         return $respuesta->json(403);
-            //     }
-
-            // tampoco recuerdo pa k era este otro pedazo
-            // case $_POST['tipo_cita'] == "2":
-            //     if (!$validarCita->isDuplicatedId('cedula', 'tipo_paciente', $_POST['cedula_titular'], '2', 'paciente')) {
-            //         $respuesta = new Response('DATOS_INVALIDOS');
-            //         return $respuesta->json(402);
-            //     }
-
             default: 
 
                 $data = $validarCita->dataScape($_POST);
@@ -183,7 +165,7 @@ class CitaController extends Controller{
 
         $_citaModel = new CitaModel();
         $inners = $_citaModel->listInner($arrayInner);
-        $lista = $_citaModel->where('estatus_cit','!=','3')->innerJoin($arraySelect, $inners, "cita");
+        $lista = $_citaModel->where('estatus_cit','<','3')->innerJoin($arraySelect, $inners, "cita");
 
         $mensaje = (count($lista) > 0);
 

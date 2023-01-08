@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.seguro (
   rif VARCHAR(45) NOT NULL,
   direccion VARCHAR(45) NOT NULL,
   telefono INT NOT NULL,
-  porcentaje FLOAT NOT NULL,
+  -- porcentaje FLOAT NOT NULL, el porcentaje es 20% por defecto
   tipo_seguro enum('1','2') NOT NULL,
   estatus_seg enum('1','2') NOT NULL DEFAULT '1',
   PRIMARY KEY (seguro_id));
@@ -274,6 +274,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.cita (
   cita_id INT NOT NULL AUTO_INCREMENT,
   paciente_id INT NOT NULL,
   medico_id INT NOT NULL,
+  seguro_id INT NOT NULL,
   especialidad_id INT NOT NULL,
   fecha_cita DATETIME NOT NULL,
   motivo_cita VARCHAR(45) NOT NULL,
@@ -290,6 +291,11 @@ CREATE TABLE IF NOT EXISTS shenque_db.cita (
   CONSTRAINT fk_cita_medico
     FOREIGN KEY (medico_id)
     REFERENCES shenque_db.medico (medico_id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_cita_seguro
+    FOREIGN KEY (seguro_id)
+    REFERENCES shenque_db.seguro (seguro_id)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_cita_especialidad
@@ -427,11 +433,13 @@ CREATE TABLE IF NOT EXISTS shenque_db.factura_seguro (
   consulta_id INT NOT NULL,
   seguro_id INT NOT NULL,
   autorizacion VARCHAR(45) NOT NULL,
+  nombre_paciente VARCHAR(45) NOT NULL,
+  nombre_titular VARCHAR(45) NOT NULL,
+  nombre_especialidad VARCHAR(45) NOT NULL,
   factura_ocurrencia VARCHAR(45) NOT NULL,
-  fecha_ingreso DATE NOT NULL,
   fecha_pago_limite DATE NOT NULL,
   monto FLOAT NOT NULL,
-  estatus INT NOT NULL,
+  estatus_fac ENUM('1','2') NOT NULL DEFAULT '1',
   PRIMARY KEY (factura_seguro_id),
   CONSTRAINT fk_factura_seguro_consulta
     FOREIGN KEY (consulta_id)
