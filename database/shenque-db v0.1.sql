@@ -112,10 +112,10 @@ CREATE TABLE IF NOT EXISTS shenque_db.horario (
 -- -----------------------------------------------------
 -- Table shenque_db.metodo_pago
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS shenque_db.metodo_pago (
-  metodo_pago_id INT NOT NULL auto_increment,
-  tipo VARCHAR(45) NOT NULL,
-  PRIMARY KEY (metodo_pago_id));
+-- CREATE TABLE IF NOT EXISTS shenque_db.metodo_pago (
+--   metodo_pago_id INT NOT NULL auto_increment,
+--   tipo VARCHAR(45) NOT NULL,
+--   PRIMARY KEY (metodo_pago_id));
 
 -- -----------------------------------------------------
 -- Table shenque_db.factura_consulta
@@ -124,11 +124,12 @@ CREATE TABLE IF NOT EXISTS shenque_db.factura_consulta (
   factura_consulta_id INT NOT NULL auto_increment,
   consulta_id INT NOT NULL,
   paciente_id INT NOT NULL,
-  metodo_pago_id INT NOT NULL,
+  metodo_pago VARCHAR(20) NOT NULL,
   monto_con_iva FLOAT NOT NULL,
   monto_sin_iva FLOAT NOT NULL,
-  iva FLOAT NOT NULL,
-  autorizacion VARCHAR(45) NOT NULL,
+  -- iva FLOAT NOT NULL,
+  -- autorizacion VARCHAR(45) NOT NULL,
+  estatus_fac enum('1','2') NOT NULL DEFAULT '1',
   PRIMARY KEY (factura_consulta_id),
   CONSTRAINT fk_factura_consulta_consulta
     FOREIGN KEY (consulta_id)
@@ -138,11 +139,6 @@ CREATE TABLE IF NOT EXISTS shenque_db.factura_consulta (
   CONSTRAINT fk_factura_consulta_paciente
     FOREIGN KEY (paciente_id)
     REFERENCES shenque_db.paciente (paciente_id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_factura_consulta_metodo_pago
-    FOREIGN KEY (metodo_pago_id)
-    REFERENCES shenque_db.metodo_pago (metodo_pago_id)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
@@ -203,6 +199,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.paciente_seguro (
   cobertura_general FLOAT NOT NULL,
   fecha_contra DATE NOT NULL,
   saldo_disponible FLOAT NOT NULL,
+  estatus_pac enum('1','2') NOT NULL DEFAULT 1,
   PRIMARY KEY (paciente_seguro_id),
   CONSTRAINT fk_paciente_seguro_paciente
     FOREIGN KEY (paciente_id)
@@ -398,6 +395,8 @@ CREATE TABLE IF NOT EXISTS shenque_db.factura_medico (
   acumulado_consulta_total FLOAT NOT NULL,
   pago_total FLOAT NOT NULL,
   fecha_pago DATE NOT NULL,
+  pacientes_seguro INT NOT NULL,
+  pacientes_consulta INT NOT NULL,
   PRIMARY KEY (factura_medico_id),
   CONSTRAINT fk_factura_medico_medico
     FOREIGN KEY (medico_id)

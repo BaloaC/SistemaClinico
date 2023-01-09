@@ -108,6 +108,15 @@ class BaseModel{
     }
 
     //Método para filtrar con AND
+    public function whereDate($key,$fecha_inicio,$fecha_fin){
+
+        $this->wheres .= (strpos($this->wheres, "WHERE")) ? " AND " : " WHERE ";
+        $this->wheres .= "$key BETWEEN '$fecha_inicio' AND '$fecha_fin' ";
+        
+        return $this;
+    }
+
+    //Método para filtrar con AND
     public function where($key,$condition, $value){
 
         $this->wheres .= (strpos($this->wheres, "WHERE")) ? " AND " : " WHERE ";

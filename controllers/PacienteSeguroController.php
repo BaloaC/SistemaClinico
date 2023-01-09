@@ -128,6 +128,17 @@ class PacienteSeguroController extends Controller{
         }
     }
 
+    public function listarPacienteSeguroPorPaciente($paciente_id) {
+
+        $_pacienteSeguroModel = new PacienteModel();
+        $id = $_pacienteSeguroModel->where('estatus_pac', '=',1)->where('paciente_id','=',$paciente_id)->getFirst();
+
+        $respuesta = new Response($id ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($id);
+        return $respuesta->json($id ? 200 : 404);
+
+    }
+
     public function eliminarPacienteSeguro($paciente_id){
 
         $_pacienteSeguroModel = new PacienteModel();

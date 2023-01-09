@@ -144,9 +144,25 @@ SELECT
 from consulta_examen
 INNER JOIN examen on examen.examen_id = consulta_examen.examen_id
 
+-- factura_medico (consultass)
+SELECT 
+	consulta.consulta_id,
+    consulta.fecha_consulta,
+    consulta.medico_id,
+    factura_consulta.monto_con_iva 
+FROM factura_consulta
+INNER JOIN consulta ON consulta.consulta_id = factura_consulta.consulta_id
+where consulta.medico_id = 2 and consulta.fecha_consulta BETWEEN '2022-12-05' AND '2023-01-05'
 
-
-
+-- factura_medico (seguros)
+SELECT 
+	consulta.consulta_id
+    consulta.medico_id,
+    factura_seguro.fecha_ocurrencia,
+    factura_seguro.monto
+FROM factura_seguro
+INNER JOIN consulta ON consulta.consulta_id = factura_seguro.consulta_id
+where consulta.medico_id = 2 and factura_seguro.fecha_ocurrencia BETWEEN '2022-12-05' AND '2023-01-05'
 
 -- codigo para alterar tablas
 ALTER TABLE `especialidad` ADD `estatus_esp` ENUM('1', '2') NOT NULL DEFAULT '1' AFTER `nombre`;

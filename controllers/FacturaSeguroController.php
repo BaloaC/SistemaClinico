@@ -89,8 +89,36 @@ class FacturaSeguroController extends Controller{
                 $id = $_facturaSeguroModel->insert($insert);
                 $mensaje = ($id > 0);
                 
-                $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-                return $respuesta->json($mensaje ? 201 : 400);
+                if ($mensaje) {
+                    
+                    // Restando el monto de la factura al saldo disponible del paciente
+                    $_pacienteSeguroModel = new PacienteSeguroModel;
+                    $paciente = $_pacienteSeguroModel->where('estatus_pac','=',1)->where('paciente_id', '=',$pacienteTitular->paciente_id)->where('seguro_id','=',$seguroInfo)->getFirst();
+                    $saldo = $paciente->saldo_disponible;
+
+                    if ($data['monot'] > $saldo) {
+                        $respuesta = new Response('INSUFFICIENT_AMOUNT');
+                        return $respuesta->json(400);
+                    }
+
+                    $montoActualizado = $data['monto'] - $saldo;
+                    $update = array('saldo_disponible' => $montoActualizado);
+                    
+                    $respuesta = $paciente->where('paciente_id', '=',$pacienteTitular->paciente_id)->update($update);
+
+                    if (!$respuesta) {
+                        $respuesta = new Response(false, 'Hubo un error manipulando el saldo del paciente');
+                        return $respuesta->json(400);
+                    }
+
+                    $respuesta = new Response('INSERCION_EXITOSA');
+                    return $respuesta->json(201);
+
+                } else {
+
+                    $respuesta = new Response('INSERCION_FALLIDA');
+                    return $respuesta->json(400);
+                }
         }
     }
 

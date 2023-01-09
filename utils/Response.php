@@ -71,6 +71,9 @@ class Response{
             case 'ACTUALIZACION_FALLIDA':
                 return [false, 'No se ha actualizado correctamente el registro'];
 
+            case 'INSUFFICIENT_AMOUNT':
+                return [false, 'No existe suficiente saldo disponible para cubrir la cuota'];
+
             case 'ELIMINACION_FALLIDA':
                 return [false, 'No se ha eliminado correctamente el registro'];
 

@@ -114,7 +114,7 @@ class CitaController extends Controller{
                         $verClave = empty($data['clave']);
                         $data['clave'] = ($verClave ? 2 : 1 );
 
-                    } else { $data['estatus'] = 2; }
+                    } else { $data['estatus_cit'] = 2; }
 
                 } else {
 
@@ -127,7 +127,7 @@ class CitaController extends Controller{
                         return $respuesta->json(400);
                     }
 
-                    $data['estatus'] = 1;
+                    $data['estatus_cit'] = 1;
                 }
 
                 $_citaModel = new CitaModel();
@@ -221,20 +221,20 @@ class CitaController extends Controller{
         return $respuesta->json($mensaje ? 200 : 404);
     }
 
-    public function actualizarCita(){
+    // public function actualizarCita(){
 
-        $_POST = json_decode(file_get_contents('php://input'), true);
+    //     $_POST = json_decode(file_get_contents('php://input'), true);
 
-        $_citaModel = new CitaModel();
+    //     $_citaModel = new CitaModel();
 
-        $actualizado = $_citaModel->where('cita_id','=',$_POST['cita_id'])->update($_POST);
-        $mensaje = ($actualizado > 0);
+    //     $actualizado = $_citaModel->where('cita_id','=',$_POST['cita_id'])->update($_POST);
+    //     $mensaje = ($actualizado > 0);
 
-        $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        $respuesta->setData($actualizado);
+    //     $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+    //     $respuesta->setData($actualizado);
 
-        return $respuesta->json($mensaje ? 200 : 400);
-    }
+    //     return $respuesta->json($mensaje ? 200 : 400);
+    // }
 
     public function eliminarCita($cita_id){
 
