@@ -164,6 +164,23 @@ FROM factura_seguro
 INNER JOIN consulta ON consulta.consulta_id = factura_seguro.consulta_id
 where consulta.medico_id = 2 and factura_seguro.fecha_ocurrencia BETWEEN '2022-12-05' AND '2023-01-05'
 
+
+-- factura_medico 
+SELECT 
+	medico.nombres,
+    factura_medico.medico_id,
+    factura_medico.factura_medico_id,
+    factura_medico.acumulado_seguro_total,
+    factura_medico.acumulado_consulta_total,
+    factura_medico.pago_total,
+    factura_medico.pacientes_seguro,
+    factura_medico.pacientes_consulta,
+    factura_medico.fecha_pago
+FROM factura_medico
+INNER JOIN medico ON medico.medico_id = factura_medico.medico_id
+
+
+
 -- codigo para alterar tablas
 ALTER TABLE `especialidad` ADD `estatus_esp` ENUM('1', '2') NOT NULL DEFAULT '1' AFTER `nombre`;
 

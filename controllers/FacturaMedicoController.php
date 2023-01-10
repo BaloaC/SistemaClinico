@@ -1,6 +1,22 @@
 <?php
 
 class FacturaMedicoController extends Controller{
+    
+    protected $arrayInner = array (
+        "medico" => "factura_medico"
+    );
+
+    protected $arraySelect = array(
+        "medico.nombres",
+        "factura_medico.medico_id",
+        "factura_medico.factura_medico_id",
+        "factura_medico.acumulado_seguro_total",
+        "factura_medico.acumulado_consulta_total",
+        "factura_medico.pago_total",
+        "factura_medico.pacientes_seguro",
+        "factura_medico.pacientes_consulta",
+        "factura_medico.fecha_pago"
+    );
 
     //Método index (vista principal)
     public function index(){
@@ -18,7 +34,7 @@ class FacturaMedicoController extends Controller{
         return $this->view('facturas/medico/actualizarFacturas', ['factura_medico_id' => $factura_medico_id]);
     } 
 
-    public function insertarFacturaMedico(/*Request $request*/){
+    public function solicitarFacturaMedico(/*Request $request*/){
         
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
@@ -52,31 +68,56 @@ class FacturaMedicoController extends Controller{
     }
 
     public function listarFacturaMedico(){
-        
-        $_facturaConsultaModel = new FacturaConsultaModel();
-        $id = $_facturaConsultaModel->getAll();
-        $mensaje = ($id > 0);
 
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($id);
-        return $respuesta->json($mensaje ? 200 : 404);
+        $_facturaMedicoModel = new FacturaMedicoModel();
+        $inners = $_facturaMedicoModel->listInner($this->arrayInner);
+        $id = $_facturaMedicoModel->innerJoin($this->arraySelect, $inners, "factura_medico");
+        
+        return $this->retornarMensaje($id);
     }
 
     public function listarFacturaMedicoPorId($factura_medico_id){
 
-        $_facturaConsultaModel = new FacturaConsultaModel();
-        $id = $_facturaConsultaModel->where('factura_medico_id', '=', $factura_medico_id)->getFirst();
+        $_facturaMedicoModel = new FacturaMedicoModel();
+        $inners = $_facturaMedicoModel->listInner($this->arrayInner);
+        $id = $_facturaMedicoModel->where('factura_medico_id','=',$factura_medico_id)->innerJoin($this->arraySelect, $inners, "factura_medico");
+        
+        return $this->retornarMensaje($id);
+    }
 
-        $respuesta = new Response($id ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($id);
-        return $respuesta->json($id ? 200 : 404);
+    public function listarFacturaPorMedico($medico_id){
+        
+        $_facturaMedicoModel = new FacturaMedicoModel();
+        $inners = $_facturaMedicoModel->listInner($this->arrayInner);
+        $id = $_facturaMedicoModel->where('medico.medico_id','=',$medico_id)->innerJoin($this->arraySelect, $inners, "factura_medico");
+        
+        return $this->retornarMensaje($id);
+    }
+
+    public function listarFacturaPorFecha(){
+        
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        $validarFactura = new Validate;
+        
+        if ( $validarFactura->isDate($_POST['fecha_inicio']) || $validarFactura->isDate($_POST['fecha_fin']) ) {
+            $respuesta = new Response('FECHA_INVALIDA');
+            return $respuesta->json(400);
+
+        } else {
+
+            $_facturaMedicoModel = new FacturaMedicoModel();
+            $inners = $_facturaMedicoModel->listInner($this->arrayInner);
+            $id = $_facturaMedicoModel->whereDate('factura_medico.fecha_pago',$_POST['fecha_inicio'],$_POST['fecha_fin'])->innerJoin($this->arraySelect, $inners, "factura_medico");
+            
+            return $this->retornarMensaje($id);
+        }        
     }
 
     public function eliminarFacturaMedico($factura_medico_id){
 
         $_facturaModel = new FacturaModel();
         $data = array(
-            'estatus_fac' => '2'
+            'estatus_fac' => '3'
         );
 
         $eliminado = $_facturaModel->where('factura_medico_id','=',$factura_medico_id)->update($data);
@@ -88,6 +129,7 @@ class FacturaMedicoController extends Controller{
         return $respuesta->json($mensaje ? 200 : 400);
     }
 
+    // Funciones de utilidades
     public function contabilizarFactura($form) {
 
         // inner con las consultas
@@ -113,10 +155,13 @@ class FacturaMedicoController extends Controller{
         $pacientesConsulta = 0;
         $montoTotal = 0;
 
-        foreach ($inner as $inners) {
-            //calculo consultas
-            $montoTotal += $inners->monto_con_iva;
-            $pacientesConsulta += 1;
+        // Si no tiene consultas naturales no se realiza el foreach
+        if ($inner) {
+            foreach ($inner as $inners) {
+                //calculo consultas
+                $montoTotal += $inners->monto_con_iva;
+                $pacientesConsulta += 1;
+            }
         }
 
         $montoConsultas = $montoTotal * 50 / 100;
@@ -140,10 +185,13 @@ class FacturaMedicoController extends Controller{
         $pacientesSeguros = 0;
         $montoTotal = 0;
 
-        foreach ($innerSeguro as $inners) {
-            //calculo seguros
-            $montoTotal += $inners->monto;
-            $pacientesSeguros += 1;
+        // Si no tiene consultas por seguro no se realiza el foreach
+        if ($innerSeguro) {
+            foreach ($innerSeguro as $inners) {
+                //calculo seguros
+                $montoTotal += $inners->monto;
+                $pacientesSeguros += 1;
+            }
         }
 
         $montoSeguros = $montoTotal * 20 / 100;
@@ -160,6 +208,16 @@ class FacturaMedicoController extends Controller{
         );
 
         return $arrayInsert;
+    }
+
+    public function retornarMensaje($mensaje) {
+
+        $bool = ($mensaje > 0);
+
+        $respuesta = new Response($bool ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($mensaje);
+        return $respuesta->json($bool ? 200 : 404);
+        
     }
 }
 

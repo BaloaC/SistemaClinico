@@ -66,9 +66,9 @@ class Validate extends BaseModel{
     //Validar que un registro no se encuentre duplicado
     public function isDuplicated($table, $column, $value){
 
-        //$status = 'estatus_' . substr($table,0, 3);
-        //$sql = "SELECT $column FROM $table WHERE $column = '$value' AND $status = '1'";
-        $sql = "SELECT $column FROM $table WHERE $column = '$value'";
+        $status = 'estatus_' . substr($table,0, 3);
+        $sql = "SELECT $column FROM $table WHERE $column = '$value' AND $status != '2'";
+        // $sql = "SELECT $column FROM $table WHERE $column = '$value'";
         $query = $this->connection->prepare($sql);
         $query->execute();
                 
@@ -78,7 +78,7 @@ class Validate extends BaseModel{
         }
     }
 
-    // validar que una relación foránea no esté duplicada
+    // validar que una relación foránea o un campo no esté duplicado
     public function isDuplicatedId($id1, $id2, $value1, $value2, $table) {
        
         $sql = "SELECT * FROM $table WHERE $id1 = '$value1' AND $id2 = '$value2'";

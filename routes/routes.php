@@ -216,7 +216,9 @@ Router::get('/factura/medico/actualizar/:id', FacturaConsultaController::class .
 //Factura_Medico - API
 Router::get('/factura/medico/consulta',FacturaMedicoController::class . '@listarFacturaMedico');
 Router::get('/factura/medico/:id',FacturaMedicoController::class . '@listarFacturaMedicoPorId');
-Router::post('/factura/medico', FacturaMedicoController::class . '@insertarFacturaMedico');
+Router::get('/factura/medico/medico/:id',FacturaMedicoController::class . '@listarFacturaPorMedico');
+Router::get('/factura/fecha/',FacturaMedicoController::class . '@listarFacturaPorFecha');
+Router::post('/factura/medico', FacturaMedicoController::class . '@solicitarFacturaMedico');
 Router::put('/factura/medico/:id', FacturaMedicoController::class . '@actualizarFacturaMedico');
 Router::delete('/factura/medico/:id', FacturaMedicoController::class . '@eliminarFacturaMedico');
 

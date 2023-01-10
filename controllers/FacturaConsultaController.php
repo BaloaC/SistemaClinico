@@ -42,8 +42,13 @@ class FacturaConsultaController extends Controller{
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
             
-                //crear una funcion que verifique que el paciene pertenece a esa consulta
-                //crear una funcion que no permita crear dos facturas para la misma consulta
+            case $validarFactura->isDuplicatedId('paciente_id', 'consulta_id', $_POST['consulta_id'], $_POST['paciente_id'], 'consulta'):
+                $respuesta = new Response(false, 'La consulta indicada no coincide con el paciente ingresado');
+                return $respuesta->json(404);
+
+            case $validarFactura->isDuplicated('factura_medico','consulta_id',$_POST['consulta_id']):
+                $respuesta = new Response('DATOS_DUPLICADOS');
+                return $respuesta->json(404);
 
             default:
             
