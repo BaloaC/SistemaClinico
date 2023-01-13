@@ -252,6 +252,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.medico_especialidad (
   medico_especialidad_id INT NOT NULL auto_increment,
   medico_id INT NOT NULL,
   especialidad_id INT NOT NULL,
+  estatus_med enum('1','2') NOT NULL DEFAULT '1',
   PRIMARY KEY (medico_especialidad_id),
   CONSTRAINT fk_medico_especialidad_medico
     FOREIGN KEY (medico_id)

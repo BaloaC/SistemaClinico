@@ -35,8 +35,11 @@ class Validate extends BaseModel{
             
             if(is_numeric(array_search($key,$validate))){
                 
-                $table = rtrim($key,'_id');
-                $sql = "SELECT $key FROM $table WHERE $key = '$value'";
+                $length = strlen($key)-3;
+                $table = substr($key, 0, $length);
+                $estatus = 'estatus_' . substr($key, 0, 3);
+
+                $sql = "SELECT $key FROM $table WHERE $key = '$value' AND $estatus != 2";
                 $query = $this->connection->prepare($sql);
                 $query->execute();
                 

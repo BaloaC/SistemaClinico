@@ -114,7 +114,7 @@ class PacienteController extends Controller{
         $arraySelect = array(
             "paciente.paciente_id",
             "paciente.cedula",
-            "paciente.nombres AS nombre_paciente",
+            "paciente.nombres",
             "paciente.apellidos",
             "paciente.fecha_nacimiento",
             "paciente.edad",
@@ -157,7 +157,7 @@ class PacienteController extends Controller{
         $arraySelect = array(
             "paciente.paciente_id",
             "paciente.cedula",
-            "paciente.nombres AS nombre_paciente",
+            "paciente.nombres",
             "paciente.apellidos",
             "paciente.fecha_nacimiento",
             "paciente.edad",

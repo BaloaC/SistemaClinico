@@ -2,54 +2,33 @@
 
 class HorarioController extends Controller{
 
-    //Método index (vista principal)
-    public function index(){
-
-        return $this->view('consultas/index');
-    }
-
-    public function formRegistrarHorarios(){
-
-        return $this->view('consultas/registrarHorarios');
-    }
-
-    public function formActualizarHorario($idHorario){
+    public function insertarHorario($form, $id){
         
-        return $this->view('consultas/actualizarHorarios', ['idHorario' => $idHorario]);
-    } 
-
-    public function insertarHorario(/*Request $request*/){
-
-        $_POST = json_decode(file_get_contents('php://input'), true);
-        
-        for ($i=0; $i < count($_POST); $i++) { 
-            $newForm = array();
-            $newForm['medico_id'] = $_POST[$i]['medico_id'];
-            $newForm['dias_semana'] = $_POST[$i]['dias_semana'];
+        $medico_id = $id;
+        foreach ($form as $forms) {
             
+            $newForm = $forms;
+            $newForm['medico_id'] = $medico_id;
+
             $camposNumericos = array("medico_id");
             $camposString = array("dias_semana");
             $validarHorario = new Validate;
 
             switch($newForm) {
                 case ($validarHorario->isEmpty($newForm)):
-                    $respuesta = new Response('DATOS_VACIOS');
-                    return $respuesta->json(400);
-
-                case $validarHorario->isNumber($newForm, $camposNumericos):
-                    $respuesta = new Response('DATOS_INVALIDOS');
+                    $respuesta = new Response(false, 'Los datos de los horarios no pueden enviarse vacíos');
                     return $respuesta->json(400);
 
                 case $validarHorario->isString($newForm, $camposString):
-                    $respuesta = new Response('DATOS_INVALIDOS');
+                    $respuesta = new Response(false, 'Formato de los días de la semana inválidos');
                     return $respuesta->json(400);
 
                 case !($validarHorario->existsInDB($newForm, $camposNumericos)):   
-                    $respuesta = new Response('NOT_FOUND'); 
+                    $respuesta = new Response(false, 'El médico señalado no fue encontrado para la asignación del horario'); 
                     return $respuesta->json(404);
                 
                 case $validarHorario->isDuplicatedId('medico_id', 'dias_semana', $newForm['medico_id'], $newForm['dias_semana'], 'horario'):
-                    $respuesta = new Response('DATOS_DUPLICADOS'); 
+                    $respuesta = new Response(false, 'El horario ya se encuentra registrado'); 
                     return $respuesta->json(400);
 
                 default: 
@@ -65,7 +44,6 @@ class HorarioController extends Controller{
                         return $respuesta->json($mensaje ? 201 : 400);
                     }
             }
-   
         }
     }
 

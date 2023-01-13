@@ -52,6 +52,9 @@ Router::post('/medicos', MedicoController::class . '@insertarMedico');
 Router::put('/medicos/:id', MedicoController::class . '@actualizarMedico');
 Router::delete('/medicos/:id', MedicoController::class . '@eliminarMedico');
 
+//Medicos_especialidad - API
+Router::delete('/medicos/especialidad/:id', MedicoEspecialidadController::class . '@eliminarMedicoEspecialidad');
+
 //Especialidad - Vistas
 Router::get('/especialidades',EspecialidadController::class . '@index');
 Router::get('/especialidades/registrar', EspecialidadController::class . '@formRegistrarEspecialidad');
