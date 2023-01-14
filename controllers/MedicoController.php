@@ -11,12 +11,13 @@ class MedicoController extends Controller{
     );
 
     protected $arrayInner = array(
-        "medico" => "medico_especialidad",
+        // "medico" => "medico_especialidad",
         "especialidad" => "medico_especialidad",
     );
 
     protected $arraySelect = array(
-        "*"
+        "especialidad.nombre AS nombre_especialidad",
+        "especialidad.especialidad_id"
     );
 
     //Método index (vista principal)
@@ -109,25 +110,20 @@ class MedicoController extends Controller{
             $resultado = array();
 
             foreach ($medico2 as $medicos) {
-
+                // Especialidad
                 $_medicoModel = new MedicoModel();
                 $inners = $_medicoModel->listInner($this->arrayInner);
-                $medico = $_medicoModel->where('medico.medico_id','=',$medicos->medico_id)->where('medico.estatus_med','=','1')->innerJoin($this->arraySelect, $inners, "medico_especialidad");
+                $medico = $_medicoModel->where('medico_especialidad.medico_id','=',$medicos->medico_id)->where('medico_especialidad.estatus_med','=','1')->innerJoin($this->arraySelect, $inners, "medico_especialidad");
                 
-                if ($medico) {
-                    $medicos=$medico;
-                }
+                if ($medico) { $medicos->especialidad = $medico; }
                 
                 $_medicoModel = new MedicoModel();
                 $innersH = $_medicoModel->listInner($this->arrayInnerHorario);
-                $horario = $_medicoModel->where('medico.medico_id','=',$medicos[0]->medico_id)->where('medico.estatus_med','=','1')->innerJoin($this->arraySelectHorario, $innersH, "horario");
+                $horario = $_medicoModel->where('horario.medico_id','=',$medicos->medico_id)->where('horario.estatus_hor','=','1')->innerJoin($this->arraySelectHorario, $innersH, "horario");
                 
-                if ($horario) {
-                    $medico[0]->horario = $horario;
-                }
-                
-                $arrayMedico = get_object_vars($medicos[0]);
-                $resultado[] = $arrayMedico;
+                // Horario
+                if ($horario) { $medicos->horario = $horario; }
+                $resultado[] = $medicos;
             }
 
             $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
@@ -143,37 +139,33 @@ class MedicoController extends Controller{
     public function listarMedicoPorId($medico_id){
         
         $_medicoModel = new MedicoModel();
-        $innersEspecialidad = $_medicoModel->listInner($this->arrayInner);
+        $medicos = $_medicoModel->where('estatus_med','=','1')->where('medico_id', '=', $medico_id)->getFirst();
         
-        $medico = $_medicoModel->where('medico.medico_id','=',$medico_id)->where('medico.estatus_med','=','1')->innerJoin($this->arraySelect, $innersEspecialidad, "medico_especialidad");
+        if ($medicos) {
+            $resultado = array();
         
-        $mensaje = ($medico != null);
-        
-        if ( !$mensaje ) {
+            // Especialidad
+            $_medicoModel = new MedicoModel();
+            $inners = $_medicoModel->listInner($this->arrayInner);
+            $medico = $_medicoModel->where('medico_especialidad.medico_id','=',$medicos->medico_id)->where('medico_especialidad.estatus_med','=','1')->innerJoin($this->arraySelect, $inners, "medico_especialidad");
+            
+            if ($medico) { $medicos->especialidad = $medico; }
             
             $_medicoModel = new MedicoModel();
-            $medico = $_medicoModel->where('medico_id','=',$medico_id)->where('medico.estatus_med','=','1')->getFirst();
-
-            if ($medico) { $newArray = get_object_vars($medico);
-            }else { $newArray=false; }
+            $innersH = $_medicoModel->listInner($this->arrayInnerHorario);
+            $horario = $_medicoModel->where('horario.medico_id','=',$medicos->medico_id)->where('horario.estatus_hor','=','1')->innerJoin($this->arraySelectHorario, $innersH, "horario");
             
-        }
+            // Horario
+            if ($horario) { $medicos->horario = $horario; }
+            $resultado[] = $medicos;
 
-        // formando la relación medico/horario
-        $_medicoModel = new MedicoModel();
-        $innersHorario = $_medicoModel->listInner($this->arrayInnerHorario);
-        
-        $medico2 = $_medicoModel->where('medico.medico_id','=',$medico_id)->where('medico.estatus_med','=','1')->innerJoin($this->arraySelectHorario, $innersHorario, "horario");
-        $mensaje2 = ($medico2 != null);
-        
-        if ( $mensaje2 ) {
-            
-            $medico[0]->horario = $medico2;
+            $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
+            $respuesta->setData($resultado);
+            return $respuesta->json($resultado ? 200 : 404);
+        } else {
+            $respuesta = new Response('NOT_FOUND');
+            return $respuesta->json(404);
         }
-
-            $respuesta = new Response($medico ? 'CORRECTO' : 'NOT_FOUND');
-            $respuesta->setData($medico);
-            return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function actualizarMedico($medico_id){
