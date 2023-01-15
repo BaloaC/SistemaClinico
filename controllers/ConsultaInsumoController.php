@@ -72,6 +72,22 @@ class ConsultaInsumoController extends Controller{
         }
         return false;
     }
+
+    public function eliminarConsultaInsumo($consulta_insumo_id){
+
+        $_consultaInsumoModel = new ConsultaInsumoModel();
+        $data = array(
+            "estatus_con" => "2"
+        );
+
+        $eliminado = $_consultaInsumoModel->where('consulta_insumo_id','=',$consulta_insumo_id)->update($data);
+        $mensaje = ($eliminado > 0);
+
+        $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'NOT_FOUND');
+        $respuesta->setData($eliminado);
+
+        return $respuesta->json($mensaje ? 200 : 400);
+    }
 }
 
 
