@@ -356,6 +356,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.consulta_examen (
   consulta_examen_id INT NOT NULL auto_increment,
   consulta_id INT NOT NULL,
   examen_id INT NOT NULL,
+  estatus_con ENUM('1','2') NOT NULL DEFAULT '1';
   PRIMARY KEY (consulta_examen_id),
   CONSTRAINT fk_consulta_examen_consulta
     FOREIGN KEY (consulta_id)
@@ -375,6 +376,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.consulta_insumo (
   consulta_insumo_id INT NOT NULL auto_increment,
   insumo_id INT NOT NULL,
   consulta_id INT NOT NULL,
+  estatus_ins ENUM('1','2') NOT NULL DEFAULT '1';
   PRIMARY KEY (consulta_insumo_id),
   CONSTRAINT fk_consulta_insumo_insumo
     FOREIGN KEY (insumo_id)

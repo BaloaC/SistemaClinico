@@ -2,6 +2,52 @@
 
 class ConsultaController extends Controller{
 
+    protected $arrayInner = array (
+        "paciente" => "consulta",
+        "medico" => "consulta",
+        "especialidad" => "consulta",
+        "cita" => "consulta"
+    );
+
+    protected $arraySelect = array(
+        "consulta.consulta_id",
+        "consulta.peso",
+        "consulta.altura",
+        "consulta.observaciones",
+        "consulta.fecha_consulta",
+        "paciente.paciente_id",
+        "paciente.nombres AS nombre_paciente",
+        "medico.medico_id",
+        "medico.nombres AS nombre_medico",
+        "especialidad.especialidad_id",
+        "especialidad.nombre AS nombre_especialidad",
+        "cita.cita_id",
+        "cita.fecha_cita",
+        "cita.motivo_cita",
+        "cita.cedula_titular",
+        "cita.clave"
+    );
+    
+    //datos del inner con los exámenes
+    protected $arrayInnerExa = array (
+        "examen" => "consulta_examen"
+    );
+
+    protected $arraySelectExa = array(
+        "examen.examen_id",
+        "examen.nombre"
+    );
+
+    //datos del inner con los insumos
+    protected $arrayInnerIns = array (
+        "insumo" => "consulta_insumo"
+    );
+
+    protected $arraySelectIns = array(
+        "insumo.insumo_id",
+        "insumo.nombre"
+    );
+
     //Método index (vista principal)
     public function index(){
 
@@ -13,9 +59,9 @@ class ConsultaController extends Controller{
         return $this->view('consultas/registrarConsultas');
     }
 
-    public function formActualizarConsulta($idConsulta){
+    public function formActualizarConsulta($consulta_id){
         
-        return $this->view('consultas/actualizarConsultas', ['idConsulta' => $idConsulta]);
+        return $this->view('consultas/actualizarConsultas', ['consulta_id' => $consulta_id]);
     } 
 
     public function insertarConsulta(/*Request $request*/){
@@ -27,25 +73,14 @@ class ConsultaController extends Controller{
         $validarConsulta = new Validate;
 
         switch ($validarConsulta) {
+
+            case !$validarConsulta->existsInDB($_POST, $campoId):   
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
+
             case ($validarConsulta->isEmpty($_POST)):
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
-            
-            case $validarConsulta->isEliminated("paciente", 'estatus_pac', $_POST['paciente_id']):
-                $respuesta = new Response('PAT_NOT_FOUND');
-                return $respuesta->json(404);
-
-            case $validarConsulta->isEliminated("medico", 'estatus_med', $_POST['medico_id']):
-                $respuesta = new Response('MD_NOT_FOUND');
-                return $respuesta->json(404);
-
-            case $validarConsulta->isEliminated("especialidad", 'estatus_esp', $_POST['especialidad_id']):
-                $respuesta = new Response('SPE_NOT_FOUND');
-                return $respuesta->json(404);
-
-            case $validarConsulta->isEliminated("cita", 'estatus_cit', 3):
-                $respuesta = new Response(false, 'No se encontraron resultados de la cita indicada');
-                return $respuesta->json(404);
 
             case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita'):
                 $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
@@ -57,11 +92,7 @@ class ConsultaController extends Controller{
 
             case $validarConsulta->isNumber($_POST, $camposNumericos):
                 $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
-
-            case !$validarConsulta->existsInDB($_POST, $campoId):   
-                $respuesta = new Response('NOT_FOUND');         
-                return $respuesta->json(404);
+                return $respuesta->json(400);            
 
             case $validarConsulta->isDate($_POST['fecha_consulta']):
                 $respuesta = new Response('FECHA_INVALIDA');
@@ -118,67 +149,31 @@ class ConsultaController extends Controller{
 
     public function listarConsultas(){
 
-        $arrayInner = array (
-            "paciente" => "consulta",
-            "medico" => "consulta",
-            "especialidad" => "consulta",
-            "cita" => "consulta"
-        );
-
-        $arraySelect = array(
-            "consulta.consulta_id",
-            "consulta.peso",
-            "consulta.altura",
-            "consulta.observaciones",
-            "consulta.fecha_consulta",
-            "paciente.paciente_id",
-            "paciente.nombres AS nombre_paciente",
-            "medico.medico_id",
-            "medico.nombres AS nombre_medico",
-            "especialidad.especialidad_id",
-            "especialidad.nombre AS nombre_especialidad",
-            "cita.cita_id",
-            "cita.fecha_cita",
-            "cita.motivo_cita",
-            "cita.cedula_titular",
-            "cita.clave"
-        );
-
-        //datos del inner con los exámenes
-        $arrayInnerExa = array (
-            "examen" => "consulta_examen"
-        );
-
-        $arraySelectExa = array(
-            "examen.examen_id",
-            "examen.nombre"
-        );
-
         $_consultaModel = new ConsultaModel();
-        $inners = $_consultaModel->listInner($arrayInner);
-        $consulta = $_consultaModel->where('estatus_con','=','1')->innerJoin($arraySelect, $inners, "consulta");
+        $inners = $_consultaModel->listInner($this->arrayInner);
+        $consulta = $_consultaModel->where('consulta.estatus_con','=','1')->innerJoin($this->arraySelect, $inners, "consulta");
         $resultado = array();
+        // return $consulta;
 
         foreach ($consulta as $consultas) {
             
-            $ArrayConsulta = array();
-            $ArrayConsulta = $consultas;
+            $_consultaModel = new ConsultaModel();
+            $innersExa = $_consultaModel->listInner($this->arrayInnerExa);
+            $consulta_examenes = $_consultaModel->where('consulta_examen.consulta_id','=',$consultas->consulta_id)->where('consulta_examen.estatus_con', '=', 1)->innerJoin($this->arraySelectExa, $innersExa, "consulta_examen");
 
-            $validarConsulta = new Validate;
-            //validamos si tiene examenes relacionados
-            $respuesta = $validarConsulta->isDuplicated('consulta_examen', 'consulta_id', $consultas->consulta_id);
+            if ($consulta_examenes) {
+                $consultas->examenes = $consulta_examenes; 
+            }
 
-            if ($respuesta) {
-                
-                $_consultaModel = new ConsultaModel();
-                $innersExa = $_consultaModel->listInner($arrayInnerExa);
-                $consulta_examenes = $_consultaModel->where('consulta_id','=',$consultas->consulta_id)->innerJoin($arraySelectExa, $innersExa, "consulta_examen");
-                $ArrayConsulta->examenes = $consulta_examenes;
-                $resultado[] = $ArrayConsulta;
-
-            } else { $resultado[] = $consultas; }
+            $_consultaModel = new ConsultaModel();
+            $innersIns = $_consultaModel->listInner($this->arrayInnerIns);
+            $consulta_insumos = $_consultaModel->where('consulta_insumo.consulta_id','=',$consultas->consulta_id)->where('consulta_insumo.estatus_con', '=', 1)->innerJoin($this->arraySelectIns, $innersIns, "consulta_insumo");
             
+            if ($consulta_insumos) {
+                $consultas->insumos = $consulta_insumos; 
+            }
 
+            $resultado[] = $consultas;
         }
 
         $mensaje = (count($resultado) > 0);     
@@ -190,60 +185,27 @@ class ConsultaController extends Controller{
 
     public function listarConsultaPorId($consulta_id){
 
-        $arrayInner = array (
-            "paciente" => "consulta",
-            "medico" => "consulta",
-            "especialidad" => "consulta",
-            "cita" => "consulta"
-        );
-
-        $arraySelect = array(
-            "consulta.consulta_id",
-            "consulta.peso",
-            "consulta.altura",
-            "consulta.observaciones",
-            "consulta.fecha_consulta",
-            "paciente.paciente_id",
-            "paciente.nombres AS nombre_paciente",
-            "medico.medico_id",
-            "medico.nombres AS nombre_medico",
-            "especialidad.especialidad_id",
-            "especialidad.nombre AS nombre_especialidad",
-            "cita.cita_id",
-            "cita.fecha_cita",
-            "cita.motivo_cita",
-            "cita.cedula_titular",
-            "cita.clave"
-        );
-
-        //datos del inner con los exámenes
-        $arrayInnerExa = array (
-            "examen" => "consulta_examen"
-        );
-
-        $arraySelectExa = array(
-            "examen.examen_id",
-            "examen.nombre"
-        );
-
         $_consultaModel = new ConsultaModel();
-        $inners = $_consultaModel->listInner($arrayInner);
-        $consulta = $_consultaModel->where('consulta_id','=',$consulta_id)->where('estatus_con','=','1')->innerJoin($arraySelect, $inners, "consulta");
+        $inners = $_consultaModel->listInner($this->arrayInner);
+        $consulta = $_consultaModel->where('consulta_id','=',$consulta_id)->where('estatus_con','=','1')->innerJoin($this->arraySelect, $inners, "consulta");
         
         if ($consulta) {
             
-            $validarConsulta = new Validate;
-            //validamos si tiene examenes relacionados
-            $respuesta = $validarConsulta->isDuplicated('consulta_examen', 'consulta_id', $consulta_id);            
             $resultado = $consulta;
 
-            if ($respuesta) {
-                
-                $_consultaModel = new ConsultaModel();
-                $innersExa = $_consultaModel->listInner($arrayInnerExa);
-                $consulta_examenes = $_consultaModel->where('consulta_id','=',$consulta_id)->innerJoin($arraySelectExa, $innersExa, "consulta_examen");
-                $resultado[0]->examenes = $consulta_examenes;
-            } 
+            $_consultaModel = new ConsultaModel();
+            $innersExa = $_consultaModel->listInner($this->arrayInnerExa);
+            $consulta_examenes = $_consultaModel->where('consulta_examen.consulta_id','=',$consulta_id)->where('consulta_examen.estatus_con', '=', 1)->innerJoin($this->arraySelectExa, $innersExa, "consulta_examen");
+            
+            if ($consulta_examenes) { $resultado[0]->examenes = $consulta_examenes; } 
+
+            $_consultaModel = new ConsultaModel();
+            $innersIns = $_consultaModel->listInner($this->arrayInnerIns);
+            $consulta_insumos = $_consultaModel->where('consulta_insumo.consulta_id','=',$consulta_id)->where('consulta_insumo.estatus_con', '=', 1)->innerJoin($this->arraySelectIns, $innersIns, "consulta_insumo");
+            
+            if ($consulta_insumos) {
+                $resultado[0]->insumos = $consulta_insumos; 
+            }
 
             $respuesta = new Response('CORRECTO');
             $respuesta->setData($resultado);
