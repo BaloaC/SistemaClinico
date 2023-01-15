@@ -224,6 +224,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.seguro_empresa (
   seguro_empresa_id INT NOT NULL auto_increment,
   empresa_id INT NOT NULL,
   seguro_id INT NOT NULL,
+  estatus_seg enum('1','2') NOT NULL DEFAULT 1,
   PRIMARY KEY (seguro_empresa_id),
   CONSTRAINT fk_seguro_empresa_empresa
     FOREIGN KEY (empresa_id)

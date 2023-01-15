@@ -145,8 +145,15 @@ class Validate extends BaseModel{
         }
     }
 
-    // Para verificar si la fecha es anterior a hoy se tiene que pasar true por $bool, para evaluar que sea posterior a hoy se pasa false por $bool
     public function isToday($date, $bool, $format = 'Y-m-d') {
+        /**
+     * @access protected
+     * Este método determina si la fecha es anterior o posterior a hoy
+     *
+     * @param date $date es la fecha
+     * @param bool $bool es true si la fecha tiene que ser anterior al día de hoy y false en caso contrario
+     * @return bool
+     **/
         $hoy = date($format);
         $menor = $date < $hoy;
         

@@ -37,7 +37,7 @@ Router::put('/pacientes/:id', PacienteController::class . '@actualizarPaciente')
 Router::delete('/pacientes/:id', PacienteController::class . '@eliminarPaciente');
 
 //PacienteSeguro - API
-Router::put('/paciente/seguro/:id', PacienteSeguroController::class . '@actualizarPacienteSeguro');
+Router::delete('/paciente/seguro/:id', PacienteSeguroController::class . '@eliminarPacienteSeguro');
 
 //Medicos - Vistas
 Router::get('/medicos',MedicoController::class . '@index');
@@ -68,11 +68,11 @@ Router::put('/especialidades/:id', EspecialidadController::class . '@actualizarE
 Router::delete('/especialidades/:id', EspecialidadController::class . '@eliminarEspecialidad');
 
 //Meidco-Especialidad - API
-Router::get('/medico_especialidades/consulta',EspecialidadController::class . '@listarMedicosEspecialidades');
-Router::get('/medico_especialidades/:id',EspecialidadController::class . '@listarMedicosEspecialidadPorId');
-Router::post('/medico_especialidades/:post', EspecialidadController::class . '@insertarMedicoEspecialidad');
-Router::put('/medico_especialidades/:id', EspecialidadController::class . '@actualizarMedicoEspecialidad');
-Router::delete('/medico_especialidades/:id', EspecialidadController::class . '@eliminarMedicoEspecialidad');
+// Router::get('/medico_especialidades/consulta',EspecialidadController::class . '@listarMedicosEspecialidades');
+// Router::get('/medico_especialidades/:id',EspecialidadController::class . '@listarMedicosEspecialidadPorId');
+// Router::post('/medico_especialidades/:post', EspecialidadController::class . '@insertarMedicoEspecialidad');
+// Router::put('/medico_especialidades/:id', EspecialidadController::class . '@actualizarMedicoEspecialidad');
+// Router::delete('/medico_especialidades/:id', EspecialidadController::class . '@eliminarMedicoEspecialidad');
 
 
 //Horarios - Vistas
@@ -83,8 +83,8 @@ Router::get('/horarios/actualizar/:id', HorarioController::class . '@formActuali
 //Horarios - API
 Router::get('/horarios/consulta',HorarioController::class . '@listarHorarios');
 Router::get('/horarios/:id',HorarioController::class . '@listarHorarioPorId');
-Router::post('/horarios', HorarioController::class . '@insertarHorario');
-Router::put('/horarios/:id', HorarioController::class . '@actualizarHorario');
+// Router::post('/horarios', HorarioController::class . '@insertarHorario');
+// Router::put('/horarios/:id', HorarioController::class . '@actualizarHorario');
 Router::delete('/horarios/:id', HorarioController::class . '@eliminarHorario');
 
 //Seguros - Vistas

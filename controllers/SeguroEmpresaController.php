@@ -2,93 +2,67 @@
 
 class SeguroEmpresaController extends Controller{
 
-    public function insertarSeguroEmpresa($post){
+    public function insertarSeguroEmpresa($form, $id){
         
-        $Empresa = new EmpresaController;
-        $empresaActualizar = $Empresa->RetornarID($post['rif']);
-        
-        if ( $empresaActualizar == false ) {
-
-            $respuesta = new Response('NOT_FOUND');
-            return $respuesta->json(404);
-
-        } else {
+        $empresa_id = $id;
+        foreach ($form as $forms) {
             
-            $post['empresa_id'] = $empresaActualizar; 
-            
+            $newForm = $forms;
+            $newForm['empresa_id'] = $empresa_id;
+
             // Creando los strings para las validaciones
-            $camposKey1 = array("seguro_id");
-            $camposNumericos = array("empresa_id", "seguro_id");
+            $camposKey = array("seguro_id");
             $validarSeguroEmpresa = new Validate;
             
-            switch($post) {
-                case $validarSeguroEmpresa->isEmpty($post):
+            switch($newForm) {
+                case $validarSeguroEmpresa->isEmpty($newForm):
                     $respuesta = new Response(false, 'No existen datos del seguro');
                     return $respuesta->json(400);
 
-                case !$validarSeguroEmpresa->isDuplicated('seguro', 'seguro_id', $_POST['seguro_id']):
+                case !$validarSeguroEmpresa->existsInDB($newForm, $camposKey):
                     $respuesta = new Response(false, 'El seguro indicado no existe o es inválido');
                     return $respuesta->json(400);
 
-                case $validarSeguroEmpresa->isNumber($post, $camposNumericos):
-                    $respuesta = new Response(false, 'Información de empresa o seguro erróneos');
+                // case !$validarSeguroEmpresa->isDuplicated('seguro', 'seguro_id', $_newForm['seguro_id']):
+                //     $respuesta = new Response(false, 'El seguro indicado no existe o es inválido');
+                //     return $respuesta->json(400);
+
+                case $validarSeguroEmpresa->isDuplicatedId('seguro_id', 'empresa_id', $newForm['seguro_id'], $newForm['empresa_id'], 'seguro_empresa'): 
+                    $respuesta = new Response(false, 'La empresa ya está asociada a ese seguro');
                     return $respuesta->json(400);
 
                 default: 
-                    $data = $validarSeguroEmpresa->dataScape($post);
+                    $data = $validarSeguroEmpresa->dataScape($newForm);
                     
                     $_seguroEmpresaModel = new SeguroEmpresaModel();
                     $id = $_seguroEmpresaModel->insert($data);
+                    
                     $mensaje = ($id > 0);
+                    
+                    if (!$mensaje) {  
 
-                    $respuesta = $mensaje ? true : false;
-                    return $respuesta;
+                        $respuesta = new Response(false, 'Hubo un error insertando el seguro');
+                        return $respuesta->json(400);
+                    }
             }
         }
-    }
-
-    public function actualizarSeguroEmpresa($form){
-            
-            // Creando los strings para las validaciones
-            $camposKey1 = array("seguro_id");
-            $validarSeguroEmpresa = new Validate;
-
-            switch($form) {
-                case $validarSeguroEmpresa->isEmpty($form):
-                    $respuesta = new Response('DATOS_INVALIDOS');
-                    return $respuesta->json(400);
-
-                case !($validarSeguroEmpresa->existsInDB($form, $camposKey1)):   
-                    $respuesta = new Response('DATOS_INVALIDOS');
-                    return $respuesta->json(400);
-                    
-                case $validarSeguroEmpresa->isDuplicatedId('empresa_id', 'seguro_id', $form['empresa_id'], $form['seguro_id'], 'seguro_empresa'):
-                    $respuesta = new Response('DATOS_DUPLICADOS');
-                    return $respuesta->json(400);
-
-                default: 
-                $data = $validarSeguroEmpresa->dataScape($form);
-
-                $_seguroEmpresaModel = new SeguroEmpresaModel();
-                $id = $_seguroEmpresaModel->insert($data);
-                $mensaje = ($id > 0);
-
-                $respuesta = $mensaje ? true : false;
-                return $respuesta;            
-        }
+        return false;
     }
 
     public function eliminarSeguroEmpresa($seguro_empresa_id){
 
         $_SeguroEmpresaModel = new SeguroEmpresaModel();
+        $data = array(
+            "estatus_seg" => "2"
+        );
 
-        $eliminado = $_SeguroEmpresaModel->where('seguro_empresa_id','=',$seguro_empresa_id)->delete();
+        $eliminado = $_SeguroEmpresaModel->where('seguro_empresa_id','=',$seguro_empresa_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');
         $respuesta->setData($eliminado);
 
-        return $respuesta->json($mensaje ? 200 : 400);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 }
 ?>

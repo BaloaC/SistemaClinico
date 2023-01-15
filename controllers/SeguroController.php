@@ -13,9 +13,9 @@ class SeguroController extends Controller{
         return $this->view('seguros/registrarSeguros');
     }
 
-    public function formActualizarSeguro($idSeguro){
+    public function formActualizarSeguro($seguro_id){
         
-        return $this->view('seguros/actualizarSeguros', ['idSeguro' => $idSeguro]);
+        return $this->view('seguros/actualizarSeguros', ['seguro$seguro_id' => $seguro_id]);
     } 
 
     public function insertarSeguro(/*Request $request*/){
@@ -23,7 +23,7 @@ class SeguroController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         
         // Creando los strings para las validaciones
-        $camposNumericos = array("porcentaje", "tipo_seguro", "telefono");
+        $camposNumericos = array("tipo_seguro", "telefono");
         $camposString = array("nombre", "direccion");
         $validarSeguro = new Validate;
 
@@ -161,7 +161,7 @@ class SeguroController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
 
         // Creando los strings para las validaciones
-        $camposNumericos = array("porcentaje", "tipo_seguro", "telefono");
+        $camposNumericos = array("tipo_seguro", "telefono");
         $camposString = array("nombre", "direccion");
         $validarSeguro = new Validate;
 

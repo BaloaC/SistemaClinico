@@ -2,130 +2,66 @@
 
 class PacienteSeguroController extends Controller{
 
-    public function insertarPacienteSeguro($form){
+    public function insertarPacienteSeguro($form, $id){
 
-        $paciente = new PacienteController;
-        $pacienteActualizar = $paciente->RetornarID($form['cedula']);
+        $paciente_id = $id;
         
-        if ( $pacienteActualizar == false ) {
-
-            $respuesta = new Response('NOT_FOUND');
-            return $respuesta->json(404);
-
-        } else {
-
-            $form['paciente_id'] = $pacienteActualizar;
-
+        foreach ($form as $forms) {
+                
+            $forms['paciente_id'] = $paciente_id;
             // Creando los strings para las validaciones
-            $camposNumericos = array("seguro_id", "empresa_id", "tipo_seguro", "cobertura_general", "saldo_disponible");
-            $campoId1 = array("seguro_id");
-            $campoId2 = array("empresa_id");
-            
+            $camposNumericos = array("tipo_seguro", "cobertura_general", "saldo_disponible");
+            $campoId1 = array("seguro_id", "empresa_id","paciente_id");
             $validarPacienteSeguro = new Validate;
-            
-            switch($_POST) {
-                case ($validarPacienteSeguro->isEmpty($form)):
+
+            switch($forms) {
+                case ($validarPacienteSeguro->isEmpty($forms)):
                     $respuesta = new Response(false, 'Los datos del seguro están vacíos');
                     return $respuesta->json(400);
 
-                case $validarPacienteSeguro->isNumber($form, $camposNumericos):
+                case $validarPacienteSeguro->isNumber($forms, $camposNumericos):
                     $respuesta = new Response(false, 'Los datos del seguro son inválidos');
                     return $respuesta->json(400);
 
-                case $validarPacienteSeguro->isDate($form['fecha_contra']):
+                case $validarPacienteSeguro->isDate($forms['fecha_contra']):
                     $respuesta = new Response(false, 'La fecha indicada en el registro del seguro es inválida');
                     return $respuesta->json(400);
 
-                case !$validarPacienteSeguro->existsInDB($form, $campoId1):   
-                    $respuesta = new Response(false, 'No se encontraron resultados del seguro indicado');         
+                case !$validarPacienteSeguro->isToday($forms['fecha_contra'], true):
+                    $respuesta = new Response(false, 'La fecha indicada en el registro del seguro es inválida');
+                    return $respuesta->json(400);
+
+                case !$validarPacienteSeguro->existsInDB($forms, $campoId1):   
+                    $respuesta = new Response(false, 'No se encontraron resultados del seguro o la empresa indicada');
                     return $respuesta->json(404);
 
-                case !$validarPacienteSeguro->existsInDB($form, $campoId2):   
-                    $respuesta = new Response(false, 'No se encontraron resultados de la empresa indicada');         
-                    return $respuesta->json(404);
+                case !$validarPacienteSeguro->isDuplicatedId('empresa_id', 'seguro_id', $forms['empresa_id'], $forms['seguro_id'], 'seguro_empresa'):
+                    $respuesta = new Response(false, 'La empresa no se encuentra asociada al seguro indicado');
+                    return $respuesta->json(400);
 
-                case !$validarPacienteSeguro->isDuplicatedId('empresa_id', 'seguro_id', $form['empresa_id'], $form['seguro_id'], 'seguro_empresa'):
-                    $respuesta = new Response(false, 'Ya existe un registro con la misma información');
+                case $validarPacienteSeguro->isDuplicatedId('paciente_id', 'empresa_id', $forms['paciente_id'], $forms['empresa_id'], 'paciente_seguro'):
+                    $respuesta = new Response(false, 'Ya existe un registro con la misma información de seguro y paciente');
+                    return $respuesta->json(400);
+
+                case $forms['tipo_seguro'] > 2:
+                    $respuesta = new Response(false, 'Tipo de seguro inválido');
                     return $respuesta->json(400);
 
                 default: 
-                    $data = $validarPacienteSeguro->dataScape($form);
+
+                    $data = $validarPacienteSeguro->dataScape($forms);
                     $_pacienteSeguroModel = new PacienteSeguroModel();
                     $id = $_pacienteSeguroModel->insert($data);
                     $mensaje = ($id > 0);
-                
-                    $mensaje = new Response($mensaje ? false : 'INSERCION_FALLIDA');
-                    return $mensaje;
+                    
+                    if (!$mensaje) {  
+
+                        $respuesta = new Response('INSERCION_FALLIDA');
+                        return $respuesta->json(400);
+                    }
             }
         }
-    }
-
-    public function actualizarPacienteSeguro($paciente_id){
-        
-        $_POST = json_decode(file_get_contents('php://input'), true);
-        
-        // Creando los strings para las validaciones
-        $camposNumericos = array("seguro_id", "empresa_id", "tipo_seguro", "cobertura_general", "saldo_disponible");
-        $campoId1 = array("seguro_id");
-        $campoId2 = array("empresa_id");
-        
-        $validarSeguroPaciente = new Validate;
-        
-        switch($_POST) {
-            case ($validarSeguroPaciente->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
-
-            case $validarSeguroPaciente->isNumber($_POST, $camposNumericos):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
-
-            case !$validarSeguroPaciente->isDuplicated('paciente', 'paciente_id', $paciente_id):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
-
-            case array_key_exists('empresa_id', $_POST):
-                if ( !$validarSeguroPaciente->existsInDB($_POST, $campoId2) ) {
-                    $respuesta = new Response('NOT_FOUND');
-                    return $respuesta->json(404);
-                }
-
-            case array_key_exists('seguro_id', $_POST):
-                if ( !$validarSeguroPaciente->existsInDB($_POST, $campoId1) ) {
-                    $respuesta = new Response('NOT_FOUND');
-                    return $respuesta->json(404);
-                }
-
-            case array_key_exists('tipo_seguro', $_POST):
-                if ( $_POST['tipo_seguro'] > 2 || $_POST['tipo_seguro'] == 0 ) {
-                    $respuesta = new Response('DATOS_INVALIDOS');
-                    return $respuesta->json(400);
-                }
-
-            default: 
-
-                $data = $validarSeguroPaciente->dataScape($_POST);
-                $_pacienteSeguroModel = new PacienteSeguroModel();
-
-                if ($validarSeguroPaciente->isDuplicated('paciente_seguro', 'paciente_id', $paciente_id)) {
-                    
-                    $actualizado = $_pacienteSeguroModel->where('paciente_id','=',$paciente_id)->update($data);    
-                    $mensaje = ($actualizado > 0);
-
-                    $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-                    $respuesta->setData($actualizado);
-                    return $respuesta->json($mensaje ? 200 : 400);
-
-                } else {
-                    $data['paciente_id'] = $paciente_id;
-                    $actualizado = $_pacienteSeguroModel->insert($data);
-                    $mensaje = ($actualizado > 0);
-
-                    $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-                    $respuesta->setData($actualizado);
-                    return $respuesta->json($mensaje ? 201 : 400);
-                }
-        }
+        return false;
     }
 
     public function listarPacienteSeguroPorPaciente($paciente_id) {
@@ -139,14 +75,14 @@ class PacienteSeguroController extends Controller{
 
     }
 
-    public function eliminarPacienteSeguro($paciente_id){
+    public function eliminarPacienteSeguro($paciente_seguro_id){
 
-        $_pacienteSeguroModel = new PacienteModel();
+        $_pacienteSeguroModel = new PacienteSeguroModel();
         $data = array(
             "estatus_pac" => "2"
         );
 
-        $eliminado = $_pacienteSeguroModel->where('paciente_id','=',$paciente_id)->update($data);
+        $eliminado = $_pacienteSeguroModel->where('paciente_seguro_id','=',$paciente_seguro_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'NOT_FOUND');

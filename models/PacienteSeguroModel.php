@@ -11,6 +11,7 @@ class PacienteSeguroModel extends GenericModel {
     protected $cobertura_general;
     protected $fecha_contra;
     protected $saldo_disponible;
+    protected $estatus_pac;
 
     public function __construct($propiedades = null) {
         parent::__construct('paciente_seguro', PacienteSeguroModel::class, $propiedades);
@@ -24,6 +25,7 @@ class PacienteSeguroModel extends GenericModel {
     public function getCobertura_general(){return $this->cobertura_general;}
     public function getFechaContra(){return $this->fecha_contra;}
     public function getSaldoDisponible(){return $this->saldo_disponible;}
+    public function getEstatusPaciente(){return $this->estatus_pac;}
 
     /* Setters */
     public function setPacienteId($paciente_id){return $this->paciente_id = $paciente_id;}
@@ -33,6 +35,7 @@ class PacienteSeguroModel extends GenericModel {
     public function setCobertura_general($cobertura_general){return $this->cobertura_general = $cobertura_general;}
     public function setFechaContra($fecha_contra){return $this->fecha_contra = $fecha_contra;}
     public function setSaldoDisponible($saldo_disponible){return $this->saldo_disponible = $saldo_disponible;}
+    public function setEstatusPaciente($estatus_pac){return $this->estatus_pac = $estatus_pac;}
 }
 
 ?>
