@@ -2,26 +2,29 @@
 
 class CitaController extends Controller{
 
-    protected $arrayInner = array (
-        "paciente" => "cita",
-        "medico" => "cita",
-        "especialidad" => "cita"
-    );
-
     protected $arraySelect = array (
         "paciente.nombres AS nombre_paciente",
         "medico.nombres AS nombre_medico",
         "especialidad.nombre AS nombre_especialidad",
+        "seguro.nombre AS nombre_seguro",
         "cita.cita_id",
         "cita.paciente_id",
         "cita.medico_id",
         "cita.especialidad_id",
+        "cita.seguro_id",
         "cita.fecha_cita",
         "cita.motivo_cita",
         "cita.cedula_titular",
         "cita.clave",
         "cita.tipo_cita",
         "cita.estatus_cit"
+    );
+
+    protected $arrayInner = array (
+        "paciente" => "cita",
+        "medico" => "cita",
+        "especialidad" => "cita",
+        "seguro" => "cita"
     );
 
     //Método index (vista principal)
@@ -47,28 +50,18 @@ class CitaController extends Controller{
         // Creando los strings para las validaciones
         $camposNumericos = array("paciente_id", "medico_id", "especialidad_id", "cedula_titular", "tipo_cita", "medico_id");
         $camposString = array("motivo_cita");
-        //$camposExclude = array("clave");
-
-        $campoId = array("paciente_id", "medico_id", "especialidad_id");
+        $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id");
         
         $validarCita = new Validate;
         
         switch($_POST) {
-            //case ($validarCita->isEmpty($_POST, $camposExclude)):
+            
             case ($validarCita->isEmpty($_POST)):
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 
-            case $validarCita->isEliminated("paciente", 'estatus_pac', $_POST['paciente_id']):
-                $respuesta = new Response('PAT_NOT_FOUND');
-                return $respuesta->json(404);
-
-            case $validarCita->isEliminated("medico", 'estatus_med', $_POST['medico_id']):
-                $respuesta = new Response('MD_NOT_FOUND');
-                return $respuesta->json(404);
-
-            case $validarCita->isEliminated("especialidad", 'estatus_esp', $_POST['especialidad_id']):
-                $respuesta = new Response('SPE_NOT_FOUND');
+            case !$validarCita->existsInDB($_POST, $campoId):
+                $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
 
             case $validarCita->isNumber($_POST, $camposNumericos):
@@ -107,6 +100,10 @@ class CitaController extends Controller{
                 $respuesta = new Response('DUPLICATE_APPOINTMENT');
                 return $respuesta->json(400);
 
+            case !$validarCita->isDuplicatedId('paciente_id', 'seguro_id', $_POST['paciente_id'], $_POST['seguro_id'], 'paciente_seguro'):
+                $respuesta = new Response(false, 'Ese seguro no se encuentra asociado con el paciente indicado');
+                return $respuesta->json(400);
+
             default: 
 
                 $data = $validarCita->dataScape($_POST);
@@ -140,8 +137,9 @@ class CitaController extends Controller{
 
                 } else {
 
-                    $_pacienteController = new PacienteController;
-                    $id = $_pacienteController->RetornarID($_POST['cedula_titular']);
+                    $_citaModel = new CitaModel();
+                    $id = $_citaModel->where('cedula', '=', $_POST['cedula_titular'])->getFirst();
+                    // $id = $_pacienteController->RetornarID($_POST['cedula_titular']);
 
                     if ( $id != $_POST['paciente_id'] ) {
                         
@@ -166,8 +164,8 @@ class CitaController extends Controller{
         $_citaModel = new CitaModel();
         $inners = $_citaModel->listInner($this->arrayInner);
         $lista = $_citaModel->where('estatus_cit','!=','2')->innerJoin($this->arraySelect, $inners, "cita");
-
-        $this->retornarMensaje($lista);
+        
+        return $this->retornarMensaje($lista);
     }
 
     public function listarCitaPorId($cita_id){
@@ -176,7 +174,7 @@ class CitaController extends Controller{
         $inners = $_citaModel->listInner($this->arrayInner);
         $lista = $_citaModel->where('cita_id','=',$cita_id)->where('estatus_cit','!=','2')->innerJoin($this->arraySelect, $inners, "cita");
         
-        $this->retornarMensaje($lista);
+        return $this->retornarMensaje($lista);
     }
 
     public function listarCitaPorPacienteId($paciente_id){

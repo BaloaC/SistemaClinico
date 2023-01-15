@@ -64,8 +64,8 @@ class FacturaSeguroController extends Controller{
                 
                 //Obtener el id del seguro
                 $_seguroModel = new SeguroModel();
-                $seguroId = $citaInfo->cedula_titular;
-                $seguroInfo = $_seguroModel->where('seguro_id','=',$seguroId)->getFirst();
+                $seguroId = $citaInfo->seguro_id;
+                // $seguroInfo = $_seguroModel->where('seguro_id','=',$seguroId)->getFirst();
 
                 // sacando el límite de la fecha
                 $fecha_limite = strtotime('+30 day', strtotime($consulta->fecha_consulta,));
@@ -73,7 +73,7 @@ class FacturaSeguroController extends Controller{
 
                 $insert = array(
                     'consulta_id' => $data['consulta_id'],
-                    'seguro_id' => $seguroInfo,
+                    'seguro_id' => $seguroId,
                     'tipo_servicio' => $data['tipo_servicio'],
                     'monto' => $data['monto'],
                     'fecha_ocurrencia'=> $consulta->fecha_consulta,
@@ -93,7 +93,7 @@ class FacturaSeguroController extends Controller{
                     
                     // Restando el monto de la factura al saldo disponible del paciente
                     $_pacienteSeguroModel = new PacienteSeguroModel;
-                    $paciente = $_pacienteSeguroModel->where('estatus_pac','=',1)->where('paciente_id', '=',$pacienteTitular->paciente_id)->where('seguro_id','=',$seguroInfo)->getFirst();
+                    $paciente = $_pacienteSeguroModel->where('estatus_pac','=',1)->where('paciente_id', '=',$pacienteTitular->paciente_id)->where('seguro_id','=',$seguroId)->getFirst();
                     $saldo = $paciente->saldo_disponible;
 
                     if ($data['monot'] > $saldo) {

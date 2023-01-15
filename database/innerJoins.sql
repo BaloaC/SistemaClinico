@@ -95,6 +95,7 @@ SELECT
     paciente.nombres AS nombre_paciente,
     medico.nombres AS nombre_medico,
     especialidad.nombre AS nombre_especialidad,
+    seguro.nombre AS nombre_seguro
     cita.cita_id,
     cita.paciente_id,
     cita.medico_id,
