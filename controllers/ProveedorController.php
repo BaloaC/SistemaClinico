@@ -38,7 +38,7 @@ class ProveedorController extends Controller{
                 $_proveedorModel = new ProveedorModel();
                 $id = $_proveedorModel->insert($data);
                 $mensaje = ($id > 0);
-
+                
                 $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
                 return $respuesta->json($mensaje ? 201 : 400);
         }
@@ -47,6 +47,7 @@ class ProveedorController extends Controller{
     public function actualizarProveedor($proveedor_id){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
+        $camposId = array("proveedor_id");
         $validarProveedor = new Validate;
 
         switch($_POST) {
@@ -54,9 +55,13 @@ class ProveedorController extends Controller{
                $respuesta = new Response('DATOS_VACIOS');
                return $respuesta->json(400);
 
-            case ($validarProveedor->isEliminated('proveedor', 'estatus_pro', $proveedor_id)):
+            case $validarProveedor->existsInDB($_POST,$camposId):
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
+
+            case $validarProveedor->isDuplicated('proveedor', 'proveedor_id', $proveedor_id):
+                $respuesta = new Response('DATOS_DUPLICADOS');
+                return $respuesta->json(400);
 
             default:
                 if ( array_key_exists('nombre', $_POST)) {
@@ -71,8 +76,8 @@ class ProveedorController extends Controller{
                 $_proveedorModel = new ProveedorModel();
                 $id = $_proveedorModel->where('proveedor_id', '=', $proveedor_id)->update($data);
                 $mensaje = ($id > 0);
-
-                $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+                
+                $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
                 return $respuesta->json($mensaje ? 200 : 404);
         }
     }
@@ -82,11 +87,11 @@ class ProveedorController extends Controller{
         $_proveedorModel = new ProveedorModel();
         $lista = $_proveedorModel->where('estatus_pro', '=', '1')->getAll();
         $mensaje = (count($lista) > 0);
-     
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($lista);
+        return $this->retornarLista($mensaje, $lista);
 
-        return $respuesta->json($mensaje ? 200 : 404);
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        // $respuesta->setData($lista);
+        // return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function listarProveedorPorId($proveedor_id){
@@ -94,11 +99,11 @@ class ProveedorController extends Controller{
         $_proveedorModel = new ProveedorModel();
         $proveedor = $_proveedorModel->where('estatus_pro', '=', '1')->where('proveedor_id','=',$proveedor_id)->getFirst();
         $mensaje = ($proveedor != null);
-
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($proveedor);
-
-        return $respuesta->json($mensaje ? 200 : 404);
+        return $this->retornarLista($mensaje, $proveedor);
+        
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        // $respuesta->setData($dataReturn);
+        // return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function eliminarProveedor($proveedor_id){
@@ -117,14 +122,11 @@ class ProveedorController extends Controller{
         return $respuesta->json($mensaje ? 200 : 404);
     }
 
-    // Método con las validaciones generales de los formularios
-    public function validacion($data) {
-
-        
-
+    // Funciones
+    public function retornarLista($mensaje, $dataReturn) {
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($dataReturn);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 }
-
-
-
 ?>

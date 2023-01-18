@@ -2,6 +2,21 @@
 
 class FacturaCompraController extends Controller{
 
+    protected $arrayInner = array(
+        "proveedor" => "factura_compra"
+    );
+
+    protected $arraySelect = array(
+        "factura_compra.factura_compra_id",
+        "factura_compra.fecha_compra",
+        "factura_compra.monto_con_iva",
+        "factura_compra.monto_sin_iva",
+        "factura_compra.iva",
+        "factura_compra.excento",
+        "factura_compra.estatus_fac",
+        "proveedor.nombre AS proveedor_nombre"
+    );
+
     //Método index (vista principal)
     public function index(){
 
@@ -69,7 +84,6 @@ class FacturaCompraController extends Controller{
                         return $respuestaInsumo;
                     }
 
-
                 } else {
 
                     $respuesta = new Response('INSERCION_FALLIDA');
@@ -80,24 +94,9 @@ class FacturaCompraController extends Controller{
 
     public function listarFacturaCompra(){
 
-        $arrayInner = array(
-            "proveedor" => "factura_compra"
-        );
-
-        $arraySelect = array(
-            "factura_compra.factura_compra_id",
-            "factura_compra.fecha_compra",
-            "factura_compra.monto_con_iva",
-            "factura_compra.monto_sin_iva",
-            "factura_compra.iva",
-            "factura_compra.excento",
-            "factura_compra.estatus_fac",
-            "proveedor.nombre AS proveedor_nombre"
-        );
-
         $_compraInsumoModel = new CompraInsumoModel();
-        $inners = $_compraInsumoModel->listInner($arrayInner);
-        $factura_compra = $_compraInsumoModel->innerJoin($arraySelect, $inners, "factura_compra");
+        $inners = $_compraInsumoModel->listInner($this->arrayInner);
+        $factura_compra = $_compraInsumoModel->innerJoin($this->arraySelect, $inners, "factura_compra");
         
         $resultadoFactura = array();
 
@@ -111,31 +110,18 @@ class FacturaCompraController extends Controller{
             $resultadoFactura[] = $facturas;
         }
         
-        $respuesta = new Response($resultadoFactura ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($resultadoFactura);
-        return $respuesta->json($resultadoFactura ? 200 : 404);
+        return $this->retornarMensaje($resultadoFactura);
+        
+        // $respuesta = new Response($resultadoFactura ? 'CORRECTO' : 'NOT_FOUND');
+        // $respuesta->setData($resultadoFactura);
+        // return $respuesta->json($resultadoFactura ? 200 : 404);
     }
 
     public function listarFacturaCompraPorId($factura_id){
 
-        $arrayInner = array(
-            "proveedor" => "factura_compra"
-        );
-
-        $arraySelect = array(
-            "factura_compra.factura_compra_id",
-            "factura_compra.fecha_compra",
-            "factura_compra.monto_con_iva",
-            "factura_compra.monto_sin_iva",
-            "factura_compra.iva",
-            "factura_compra.excento",
-            "factura_compra.estatus_fac",
-            "proveedor.nombre AS proveedor_nombre"
-        );
-
         $_compraInsumoModel = new CompraInsumoModel();
-        $inners = $_compraInsumoModel->listInner($arrayInner);
-        $factura_compra = $_compraInsumoModel->where('factura_compra_id', '=', $factura_id)->innerJoin($arraySelect, $inners, "factura_compra");
+        $inners = $_compraInsumoModel->listInner($this->arrayInner);
+        $factura_compra = $_compraInsumoModel->where('factura_compra_id', '=', $factura_id)->innerJoin($this->arraySelect, $inners, "factura_compra");
         
         // Codigo para recibir los insumos que fueron comprados con esa factura
         $_compraInsumoController = new CompraInsumoController;
@@ -144,9 +130,11 @@ class FacturaCompraController extends Controller{
         $factura_compra[0]->insumos = $insumosFactura;
         $resultado = $factura_compra[0];
         
-        $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($resultado);
-        return $respuesta->json($resultado ? 200 : 404);
+        return $this->retornarMensaje($resultado);
+
+        // $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
+        // $respuesta->setData($resultado);
+        // return $respuesta->json($resultado ? 200 : 404);
     }
 
     public function eliminarFacturaCompra($factura_compra_id){
@@ -163,6 +151,14 @@ class FacturaCompraController extends Controller{
         $respuesta->setData($eliminado);
 
         return $respuesta->json($mensaje ? 200 : 400);
+    }
+
+    // funciones
+    public function retornarMensaje($resultado) {
+
+        $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($resultado);
+        return $respuesta->json($resultado ? 200 : 404);
     }
 }
 

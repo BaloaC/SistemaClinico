@@ -122,6 +122,10 @@ class PacienteController extends Controller{
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 
+            case $validarPaciente->isDuplicated('paciente', 'paciente_id', $paciente_id):
+                $respuesta = new Response('DATOS_DUPLICADOS');
+                return $respuesta->json(400);
+
             case $validarPaciente->isNumber($_POST, $camposNumericos):
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
@@ -199,10 +203,10 @@ class PacienteController extends Controller{
                 if ($pacienteSeguro) { $pacientes->seguro = $pacienteSeguro; }
                 $resultado[] = $pacientes;
             }
-
-            $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
-            $respuesta->setData($resultado);
-            return $respuesta->json($resultado ? 200 : 404);
+            return $this->retornarMensaje($resultado);
+            // $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
+            // $respuesta->setData($resultado);
+            // return $respuesta->json($resultado ? 200 : 404);
 
         } else {
             $respuesta = new Response('NOT_FOUND');
@@ -222,10 +226,10 @@ class PacienteController extends Controller{
             $pacienteSeguro = $_medicoModel->where('paciente_seguro.paciente_id','=',$paciente_id)->where('paciente_seguro.estatus_pac','=','1')->innerJoin($this->arraySelect, $inners, "paciente_seguro");
             
             if ($pacienteSeguro) { $paciente->seguro = $pacienteSeguro; }
-            
-            $respuesta = new Response($paciente ? 'CORRECTO' : 'NOT_FOUND');
-            $respuesta->setData($paciente);
-            return $respuesta->json($paciente ? 200 : 404);
+            return $this->retornarMensaje($paciente);
+            // $respuesta = new Response($paciente ? 'CORRECTO' : 'NOT_FOUND');
+            // $respuesta->setData($paciente);
+            // return $respuesta->json($paciente ? 200 : 404);
 
         } else {
             $respuesta = new Response('NOT_FOUND');
@@ -249,6 +253,7 @@ class PacienteController extends Controller{
         return $respuesta->json($mensaje ? 200 : 400);
     }
     
+    // Funciones
     public function RetornarTipo($paciente_id){
 
         $_pacienteModel = new PacienteModel();
@@ -257,6 +262,12 @@ class PacienteController extends Controller{
         $respuesta = $mensaje ? $paciente->tipo_paciente : false;
         return $respuesta;
         
+    }
+
+    public function retornarMensaje($mensaje) {
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($mensaje);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 }
 

@@ -2,6 +2,17 @@
 
 class EspecialidadController extends Controller{
 
+    protected $arrayInner = array(
+        "medico" => "medico_especialidad",
+        "especialidad" => "medico_especialidad",
+    );
+
+    protected $arraySelect = array(
+        "medico.medico_id",
+        "medico.nombres",
+        "medico.apellidos"
+    );
+
     //Método index (vista principal)
     public function index(){
 
@@ -37,30 +48,19 @@ class EspecialidadController extends Controller{
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(400);
             default: 
-            $data = $validarEspecialidad->dataScape($_POST);
+                $data = $validarEspecialidad->dataScape($_POST);
 
-            $_especialidadModel = new EspecialidadModel();
-            $id = $_especialidadModel->insert($data);
-            $mensaje = ($id > 0);
+                $_especialidadModel = new EspecialidadModel();
+                $id = $_especialidadModel->insert($data);
+                $mensaje = ($id > 0);
 
-            $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-            
-            return $respuesta->json($mensaje ? 201 : 400);
+                $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+                
+                return $respuesta->json($mensaje ? 201 : 400);
         }
     }
 
     public function listarEspecialidades(){
-
-        $arrayInner = array(
-            "medico" => "medico_especialidad",
-            "especialidad" => "medico_especialidad",
-        );
-
-        $arraySelect = array(
-            "medico.medico_id",
-            "medico.nombres",
-            "medico.apellidos"
-        );
 
         $_especialidadModel = new EspecialidadModel();
         $especialidad = $_especialidadModel->where('estatus_esp', '=', '1')->getAll();
@@ -79,8 +79,8 @@ class EspecialidadController extends Controller{
                 
                 $newArray['medicos'] = '';
                 $_medicoModel = new MedicoModel();
-                $inners = $_medicoModel->listInner($arrayInner);
-                $medicoEspecialidad = $_medicoModel->where('especialidad.especialidad_id','=',$id)->where('especialidad.estatus_esp', '=', '1')->innerJoin($arraySelect, $inners, "medico_especialidad");
+                $inners = $_medicoModel->listInner($this->arrayInner);
+                $medicoEspecialidad = $_medicoModel->where('especialidad.especialidad_id','=',$id)->where('especialidad.estatus_esp', '=', '1')->innerJoin($this->arraySelect, $inners, "medico_especialidad");
                 $arrayMedico = array();
 
                 foreach ($medicoEspecialidad as $medicos) {
@@ -126,7 +126,7 @@ class EspecialidadController extends Controller{
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 
-            case $validarEspecialidad->isEliminated("especialidad", 'estatus_esp', $especialidad_id):
+            case $validarEspecialidad->isDuplicated("especialidad", "especialidad_id", $especialidad_id):
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
 

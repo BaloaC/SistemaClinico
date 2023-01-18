@@ -127,20 +127,20 @@ class FacturaSeguroController extends Controller{
         $_facturaSeguroModel = new FacturaSeguroModel();
         $id = $_facturaSeguroModel->getAll();
         $mensaje = ($id > 0);
-
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($id);
-        return $respuesta->json($mensaje ? 200 : 404);
+        return $this->retornarMensaje($mensaje, $id);
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        // $respuesta->setData($id);
+        // return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function listarFacturaSeguroPorId($factura_seguro_id){
 
         $_facturaSeguroModel = new FacturaSeguroModel();
         $id = $_facturaSeguroModel->where('factura_seguro_id', '=', $factura_seguro_id)->getFirst();
-
-        $respuesta = new Response($id ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($id);
-        return $respuesta->json($id ? 200 : 404);
+        return $this->retornarMensaje($id, $id);
+        // $respuesta = new Response($id ? 'CORRECTO' : 'NOT_FOUND');
+        // $respuesta->setData($id);
+        // return $respuesta->json($id ? 200 : 404);
     }
 
     public function eliminarFacturaSeguro($factura_seguro_id){
@@ -157,6 +157,13 @@ class FacturaSeguroController extends Controller{
         $respuesta->setData($eliminado);
 
         return $respuesta->json($mensaje ? 200 : 400);
+    }
+
+    // Funciones
+    public function retornarMensaje($mensaje, $data) {
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($mensaje);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 }
 

@@ -68,20 +68,20 @@ class FacturaConsultaController extends Controller{
         $_facturaConsultaModel = new FacturaConsultaModel();
         $id = $_facturaConsultaModel->getAll();
         $mensaje = ($id > 0);
-
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($id);
-        return $respuesta->json($mensaje ? 200 : 404);
+        return $this->RetornarMensaje($mensaje, $id);
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        // $respuesta->setData($id);
+        // return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function listarFacturaConsultaPorId($factura_consulta_id){
         // hacer inner para mostrar las fechas, el nombre del paciente, el nombre del medico
         $_facturaConsultaModel = new FacturaConsultaModel();
         $id = $_facturaConsultaModel->where('factura_consulta_id', '=', $factura_consulta_id)->getFirst();
-
-        $respuesta = new Response($id ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($id);
-        return $respuesta->json($id ? 200 : 404);
+        return $this->RetornarMensaje($id, $id);
+        // $respuesta = new Response($id ? 'CORRECTO' : 'NOT_FOUND');
+        // $respuesta->setData($id);
+        // return $respuesta->json($id ? 200 : 404);
     }
 
     public function eliminarFacturaConsulta($factura_consulta_id){
@@ -98,6 +98,13 @@ class FacturaConsultaController extends Controller{
         $respuesta->setData($eliminado);
 
         return $respuesta->json($mensaje ? 200 : 400);
+    }
+
+    // Funciones
+    public function RetornarMensaje($mensaje, $data) {
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($data);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 }
 

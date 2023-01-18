@@ -66,9 +66,9 @@ class InsumoController extends Controller{
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
 
-            case $validarInsumo->isEliminated('insumo', 'estatus_ins', $insumo_id):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
+            case $validarInsumo->isDuplicated('insumo', 'insumo_id', $insumo_id):
+                $respuesta = new Response('DATOS_DUPLICADOS');
+                return $respuesta->json(400);
 
             default:
                 
@@ -94,11 +94,10 @@ class InsumoController extends Controller{
         $_insumoModel = new InsumoModel();
         $lista = $_insumoModel->where('estatus_ins', '=', '1')->getAll();
         $mensaje = (count($lista) > 0);
-     
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($lista);
-        return $respuesta->json($mensaje ? 200 : 404);
-
+        return $this->retornarMensaje($mensaje, $lista);
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        // $respuesta->setData($lista);
+        // return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function listarInsumoPorId($insumo_id){
@@ -106,10 +105,10 @@ class InsumoController extends Controller{
         $_insumoModel = new InsumoModel();
         $insumo = $_insumoModel->where('estatus_ins', '=', '1')->where('insumo_id','=',$insumo_id)->getFirst();
         $mensaje = ($insumo != null);
-
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($insumo);
-        return $respuesta->json($mensaje ? 200 : 404);
+        return $this->retornarMensaje($mensaje, $insumo);
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        // $respuesta->setData($insumo);
+        // return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function eliminarInsumo($insumo_id){
@@ -126,6 +125,13 @@ class InsumoController extends Controller{
         $respuesta->setData($eliminado);
         return $respuesta->json($mensaje ? 200 : 404);
 
+    }
+
+    // Funciones
+    public function retornarMensaje($mensaje, $dataReturn) {
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        $respuesta->setData($dataReturn);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 }
 

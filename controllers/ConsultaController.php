@@ -377,7 +377,6 @@ class ConsultaController extends Controller{
 
     // Funciones para reutilizar
 
-    // Insertar examen
     public function insertarExamen($informacion, $id) {
         $_consultaModel = new ConsultaModel();
 

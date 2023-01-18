@@ -203,6 +203,10 @@ class CitaController extends Controller{
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
 
+            case $validarCita->isDuplicated('cita', 'cita_id', $cita_id):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(400);    
+
             case !$validarCita->isDuplicatedId('cita_id','estatus_cit', $cita_id,3, 'cita'):
                 $respuesta = new Response(false, 'La cita seleccionada ya se encuentra asignada');
                 return $respuesta->json(400);

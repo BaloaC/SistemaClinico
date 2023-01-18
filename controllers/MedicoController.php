@@ -126,9 +126,10 @@ class MedicoController extends Controller{
                 $resultado[] = $medicos;
             }
 
-            $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
-            $respuesta->setData($resultado);
-            return $respuesta->json($resultado ? 200 : 404);
+            $this->retornarMensaje($resultado, $resultado);
+            // $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
+            // $respuesta->setData($resultado);
+            // return $respuesta->json($resultado ? 200 : 404);
 
         } else {
             $respuesta = new Response('NOT_FOUND');
@@ -159,9 +160,10 @@ class MedicoController extends Controller{
             if ($horario) { $medicos->horario = $horario; }
             $resultado[] = $medicos;
 
-            $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
-            $respuesta->setData($resultado);
-            return $respuesta->json($resultado ? 200 : 404);
+            return $this->retornarMensaje($resultado, $resultado);
+            // $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
+            // $respuesta->setData($resultado);
+            // return $respuesta->json($resultado ? 200 : 404);
         } else {
             $respuesta = new Response('NOT_FOUND');
             return $respuesta->json(404);
@@ -184,10 +186,6 @@ class MedicoController extends Controller{
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 
-            case $validarMedico->isEliminated("medico", 'estatus_med', $medico_id):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
-
             case $validarMedico->isNumber($_POST, $camposNumericos):
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400); 
@@ -200,7 +198,7 @@ class MedicoController extends Controller{
                 $respuesta = new Response('NOT_FOUND'); 
                 return $respuesta->json(404); 
 
-            case !$validarMedico->isDuplicated('medico', 'medico_id', $medico_id):
+            case $validarMedico->isDuplicated('medico', 'medico_id', $medico_id):
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
             
@@ -267,6 +265,13 @@ class MedicoController extends Controller{
         $respuesta->setData($eliminado);
 
         return $respuesta->json($mensaje ? 200 : 400);
+    }
+
+    // Funciones
+    public function retornarMensaje($mensaje, $dataReturn) {
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($dataReturn);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 }
 

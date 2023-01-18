@@ -72,7 +72,7 @@ class EmpresaController extends Controller{
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         
-        $camposKey = ($empresa_id);
+        $camposKey = array($empresa_id);
         $validarEmpresa = new Validate;
         
          switch($_POST) {
@@ -83,6 +83,10 @@ class EmpresaController extends Controller{
             case $validarEmpresa->existsInDB($_POST, $camposKey):
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
+
+            case $validarEmpresa->isDuplicated('empresa', 'empresa_id', $empresa_id):
+                $respuesta = new Response('DATOS_DUPLICADOS');
+                return $respuesta->json(400);
 
             // case $validarEmpresa->isEliminated("empresa", 'estatus_emp', $empresa_id):
             //     $respuesta = new Response('NOT_FOUND');
@@ -113,8 +117,8 @@ class EmpresaController extends Controller{
 
                     if ( $mensajeSeguro ) { return $mensajeSeguro; } 
                 }
-
-                if (!empty($data)) { //Validamos si todavía hay cosas que insertar en la actualización
+                
+                if ( !$validarEmpresa->isEmpty($_POST) ) { //Validamos si todavía hay cosas que insertar en la actualización
                     
                     $data = $validarEmpresa->dataScape($_POST);
 
@@ -127,11 +131,15 @@ class EmpresaController extends Controller{
                     $respuesta->setData($actualizado);
 
                     return $respuesta->json($mensaje ? 200 : 400);                
+                } else {
+                    $respuesta = new Response('ACTUALIZACION_EXITOSA');
+                    return $respuesta->json(200);
                 }
                 
         }
         
     }
+
     public function listarEmpresas(){
 
         $_empresaModel = new EmpresaModel();

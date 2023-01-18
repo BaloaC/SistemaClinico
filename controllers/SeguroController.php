@@ -2,6 +2,18 @@
 
 class SeguroController extends Controller{
 
+    protected $arrayInner = array(
+        "empresa" => "seguro_empresa",
+        "seguro" => "seguro_empresa",
+    );
+
+    protected $arraySelect = array(
+        "empresa.empresa_id",
+        "empresa.nombre AS nombre_empresa",
+        "empresa.rif",
+        "empresa.direccion"
+    );
+
     //Método index (vista principal)
     public function index(){
 
@@ -66,18 +78,6 @@ class SeguroController extends Controller{
     }
 
     public function listarSeguros(){
-
-        $arrayInner = array(
-            "empresa" => "seguro_empresa",
-            "seguro" => "seguro_empresa",
-        );
-
-        $arraySelect = array(
-            "empresa.empresa_id",
-            "empresa.nombre AS nombre_empresa",
-            "empresa.rif",
-            "empresa.direccion"
-        );
                      
         $_seguroModel = new SeguroModel();
         $seguro = $_seguroModel->where('estatus_seg', '=', '1')->getAll();
@@ -95,8 +95,8 @@ class SeguroController extends Controller{
                 
                 $newArray['empresas'] = '';
                 $_seguroModel = new SeguroModel();
-                $inners = $_seguroModel->listInner($arrayInner);
-                $EmpresaSeguro = $_seguroModel->where('seguro.seguro_id','=',$id)->where('seguro.estatus_seg', '=', '1')->innerJoin($arraySelect, $inners, "seguro_empresa");
+                $inners = $_seguroModel->listInner($this->arrayInner);
+                $EmpresaSeguro = $_seguroModel->where('seguro.seguro_id','=',$id)->where('seguro.estatus_seg', '=', '1')->innerJoin($this->arraySelect, $inners, "seguro_empresa");
                 $arraySeguro = array();
 
                 foreach ($EmpresaSeguro as $empresas) {
@@ -111,24 +111,13 @@ class SeguroController extends Controller{
         }
 
         $mensaje = ($resultado != null);
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($resultado);
-        return $respuesta->json($mensaje ? 200 : 404);
+        return $this->retornarMensaje($mensaje, $resultado);
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        // $respuesta->setData($resultado);
+        // return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function listarSeguroPorId($seguro_id){
-
-        $arrayInner = array(
-            "empresa" => "seguro_empresa",
-            "seguro" => "seguro_empresa",
-        );
-
-        $arraySelect = array(
-            "empresa.empresa_id",
-            "empresa.nombre AS nombre_empresa",
-            "empresa.rif",
-            "empresa.direccion"
-        );
 
         $_seguroModel = new SeguroModel();
         $seguro = $_seguroModel->where('seguro.seguro_id','=',$seguro_id)->where('estatus_seg', '=', '1')->getFirst();
@@ -137,18 +126,15 @@ class SeguroController extends Controller{
 
             $arraySeguro = get_object_vars($seguro);
 
-            $inners = $_seguroModel->listInner($arrayInner);
-            $empresa = $_seguroModel->where('seguro.seguro_id','=',$seguro_id)->where('estatus_seg', '=', '1')->innerJoin($arraySelect, $inners, "seguro_empresa");
+            $inners = $_seguroModel->listInner($this->arrayInner);
+            $empresa = $_seguroModel->where('seguro.seguro_id','=',$seguro_id)->where('estatus_seg', '=', '1')->innerJoin($this->arraySelect, $inners, "seguro_empresa");
             $mensaje = ($empresa != null);
 
-            if ( $mensaje ) {
-                
-                $arraySeguro['empresas'] = $empresa;
-            } 
-            
-            $respuesta = new Response($arraySeguro ? 'CORRECTO' : 'ERROR');
-            $respuesta->setData($arraySeguro);
-            return $respuesta->json($arraySeguro ? '200' : '400');
+            if ( $mensaje ) { $arraySeguro['empresas'] = $empresa; } 
+            return $this->retornarMensaje($arraySeguro, $arraySeguro);
+            // $respuesta = new Response($arraySeguro ? 'CORRECTO' : 'ERROR');
+            // $respuesta->setData($arraySeguro);
+            // return $respuesta->json($arraySeguro ? '200' : '400');
             
         } else {
             $respuesta = new Response('NOT_FOUND');
@@ -178,9 +164,9 @@ class SeguroController extends Controller{
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
 
-            case $validarSeguro->isEliminated("seguro", 'estatus_seg', $seguro_id):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
+            case $validarSeguro->isDuplicated("seguro", 'seguro_id', $seguro_id):
+                $respuesta = new Response('DATOS_DUPLICADOS');
+                return $respuesta->json(400);
 
             case array_key_exists('nombre', $_POST):
                 if ($validarSeguro->isDuplicated('seguro', 'nombre', $_POST["nombre"])) {
@@ -225,6 +211,13 @@ class SeguroController extends Controller{
         $respuesta->setData($eliminado);
 
         return $respuesta->json($mensaje ? 200 : 400);
+    }
+
+    // Funciones
+    public function retornarMensaje($mensaje, $data) {
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($data);
+        return $respuesta->json($mensaje ? 200 : 404);
     }
 }
 

@@ -84,7 +84,8 @@ class Validate extends BaseModel{
     // validar que una relación foránea o un campo no esté duplicado
     public function isDuplicatedId($id1, $id2, $value1, $value2, $table) {
        
-        $sql = "SELECT * FROM $table WHERE $id1 = '$value1' AND $id2 = '$value2'";
+        $status = 'estatus_' . substr($table,0, 3);
+        $sql = "SELECT * FROM $table WHERE $id1 = '$value1' AND $id2 = '$value2' AND $status != '2'";
         $query = $this->connection->prepare($sql);
         $query->execute();
         // $result = $query->fetchAll(PDO::FETCH_OBJ);
@@ -100,17 +101,17 @@ class Validate extends BaseModel{
     }
 
     // validar que un registro no esta eliminado
-    public function isEliminated($table, $column, $valueID){
+    public function isEliminated($table, $valueID){
 
         $var2 = '_id';
         $id = $table . $var2;
+        $status = 'estatus_' . substr($table,0, 3);
 
-        $sql = "SELECT * FROM $table WHERE $id = '$valueID' AND $column = '2'";
+        $sql = "SELECT * FROM $table WHERE $id = '$valueID' AND $status = '2'";
         $query = $this->connection->prepare($sql);
         $query->execute();
                 
         if($query->rowCount() > 0){
-
             return true;
         }
     }
@@ -144,9 +145,8 @@ class Validate extends BaseModel{
             }
         }
     }
-
-    public function isToday($date, $bool, $format = 'Y-m-d') {
-        /**
+    
+    /**
      * @access protected
      * Este método determina si la fecha es anterior o posterior a hoy
      *
@@ -154,6 +154,8 @@ class Validate extends BaseModel{
      * @param bool $bool es true si la fecha tiene que ser anterior al día de hoy y false en caso contrario
      * @return bool
      **/
+    public function isToday($date, $bool, $format = 'Y-m-d') {
+
         $hoy = date($format);
         $menor = $date < $hoy;
         
