@@ -50,45 +50,6 @@ class InsumoController extends Controller{
         }
     }
 
-    public function actualizarInsumo($insumo_id){
-
-        $_POST = json_decode(file_get_contents('php://input'), true);
-        $camposNumericos = array("precio");
-        $validarInsumo = new Validate;
-
-
-        switch($validarInsumo) {
-            case ($validarInsumo->isEmpty($_POST)):
-               $respuesta = new Response('DATOS_VACIOS');
-               return $respuesta->json(400);          
-
-            case $validarInsumo->isNumber($_POST, $camposNumericos):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
-
-            case $validarInsumo->isDuplicated('insumo', 'insumo_id', $insumo_id):
-                $respuesta = new Response('DATOS_DUPLICADOS');
-                return $respuesta->json(400);
-
-            default:
-                
-                if (array_key_exists('nombre', $_POST)) {
-                    if ( $validarInsumo->isDuplicated('insumo', 'nombre', $_POST["nombre"]) ) {
-                        $respuesta = new Response('DATOS_DUPLICADOS');
-                        return $respuesta->json(400);
-                    }
-                }
-
-                $data = $validarInsumo->dataScape($_POST);
-                $_insumoModel = new InsumoModel();
-                $id = $_insumoModel->where('insumo_id', '=', $insumo_id)->update($data);
-                $mensaje = ($id > 0);
-
-                $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-                return $respuesta->json($mensaje ? 200 : 404);
-        }
-    }
-
     public function listarInsumo(){
 
         $_insumoModel = new InsumoModel();

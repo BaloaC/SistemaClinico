@@ -198,10 +198,6 @@ class CitaController extends Controller{
             case $validarCita->isEmpty($_POST):
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
-            
-            case $validarCita->isEliminated('cita','estatus_cit',$cita_id):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
 
             case $validarCita->isDuplicated('cita', 'cita_id', $cita_id):
                 $respuesta = new Response('NOT_FOUND');
@@ -218,11 +214,12 @@ class CitaController extends Controller{
             default:
             
                 $data = $validarCita->dataScape($_POST);
-                $data['estatus_cit'] = 1;
-                    
+                $newArray['estatus_cit'] = 1;
+                $newArray['clave'] = $data['clave'];
+                
                 $_citaModel = new CitaModel();
 
-                $actualizado = $_citaModel->where('cita_id','=',$cita_id)->update($data);
+                $actualizado = $_citaModel->where('cita_id','=',$cita_id)->update($newArray);
                 
                 $mensaje = ($actualizado > 0);
 
