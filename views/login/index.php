@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/login.css'); ?>" />
-    <link rel="stylesheet" href="<?php echo Url::to('assets/css/bootstrap.min.css'); ?>" />
+    <link rel="stylesheet" href="<?php echo Url::to('assets/libs/bootstrap/bootstrap.min.css'); ?>" />
     <title>Login</title>
 </head>
 
@@ -18,33 +18,36 @@
                 <!-- Login content -->
                 <div class="row bg-light rounded-3 shadow w-75">
                     <!--  Imagen lateral -->
-                    <div class="col-4 col-md-4 border-end shadow-lg rounded-3 p-0">
+                    <div class="col-4 col-md-6 border-end shadow-lg rounded-3 p-0">
                         <img class="w-100 h-100" src="<?php echo Url::to('assets/img/FONDO.jpg'); ?>" alt="Fondo">
                     </div>
                     <!-- Login information -->
-                    <div class="col-md-8 col-8">
+                    <div class="col-md-6 col-8">
                         <div class="row p-4">
                             <!-- Logo -->
                             <div class="col-3 offset-lg-10 col-lg-2 p-0">
-                                <a href="../proyectofeo/">
+                                <a href="<?php echo Url::base() . "/login" ?>">
                                     <img class="w-100" src="<?php echo Url::to('assets/img/logo.png'); ?>" alt="Logo">
                                 </a>
                             </div>
                             <!-- Login form -->
-                            <div class="col-12 mt-5">
+                            <div class="col-12 mt-3">
                                 <p class="fs-4 fw-bold">Iniciar sesion</p>
-                                <p class="fs-5">Introduzca su información</p>
                                 <div class="alert d-none" role="alert"></div>
-                                <form class="login-form">
-                                    <label for="user">Nombre de usuario</label>
-                                    <input class="form-control" type="text" name="nombre" id="">
-                                    <div class="d-flex justify-content-between mt-3">
-                                        <label for="pass">Contraseña</label>
-                                        <a class="forgot-password" href="">¿Olvidaste tu contraseña?</a>
+                                <form class="login-form row">
+                                    <div class="offset-2 col-8">
+                                        <label for="user">Nombre de usuario</label>
+                                        <input class="form-control" type="text" name="nombre" id="">
+                                        
+                                        <label for="pass" class="mt-2">Contraseña</label>
+                                        <input class="form-control mb-3" type="password" name="clave">
+                                        <div class="text-end"><a href="<?php echo Url::base() . "/login/recuperar" ?>" class="forgot-password" href="">¿Olvidaste tu contraseña?</a></div>
+                                        <div class="text-center"><button type="submit text-center" class="btn btn-primary mt-3" value="Iniciar Sesion">Iniciar Sesión</button></div>
                                     </div>
-                                    <input class="form-control" type="password" name="clave">
-                                    <input type="submit" class="btn btn-primary" value="Iniciar Sesion">
                                 </form>
+                                <div class="text-center mt-5">
+                                    <p>¿Todavía no tienes una cuenta? <a href="<?php echo Url::base() . "/usuarios/registrar" ?>">Regístrate</a></p>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -100,10 +100,6 @@ class CitaController extends Controller{
                 $respuesta = new Response('DUPLICATE_APPOINTMENT');
                 return $respuesta->json(400);
 
-            case !$validarCita->isDuplicatedId('paciente_id', 'seguro_id', $_POST['paciente_id'], $_POST['seguro_id'], 'paciente_seguro'):
-                $respuesta = new Response(false, 'Ese seguro no se encuentra asociado con el paciente indicado');
-                return $respuesta->json(400);
-
             default: 
 
                 $data = $validarCita->dataScape($_POST);
@@ -114,7 +110,13 @@ class CitaController extends Controller{
                     // verificamos que pueda solicitar cita asegurada
                     $siEsTitular = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '2', 'paciente');
                     $siEsBeneficiario = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '3', 'paciente');
-                    
+                    $siSeguroAsociado = $validarCita->isDuplicatedId('paciente_id', 'seguro_id', $_POST['paciente_id'], $_POST['seguro_id'], 'paciente_seguro');
+
+                    if(!$siSeguroAsociado){
+                        $respuesta = new Response(false, 'Ese seguro no se encuentra asociado con el paciente indicado');
+                        return $respuesta->json(400);
+                    }
+
                     if (!$siEsTitular && !$siEsBeneficiario) {
                         $respuesta = new Response(false, 'El paciente ingresado no está registrado como asegurado');
                         return $respuesta->json(400);
@@ -138,14 +140,16 @@ class CitaController extends Controller{
                 } else {
 
                     $_citaModel = new CitaModel();
-                    $id = $_citaModel->where('cedula', '=', $_POST['cedula_titular'])->getFirst();
+                    $id = $_citaModel->where('cedula_titular', '=', $_POST['cedula_titular'])->getFirst();
                     // $id = $_pacienteController->RetornarID($_POST['cedula_titular']);
 
-                    if ( $id != $_POST['paciente_id'] ) {
+
+                    // ** Enrique (Esta validacion no funciona)
+                    // if ( $id->paciente_id != $_POST['paciente_id'] ) {
                         
-                        $respuesta = new Response(false, 'La cédula no coincide con el paciente ingresado');
-                        return $respuesta->json(400);
-                    }
+                    //     $respuesta = new Response(false, 'La cédula no coincide con el paciente ingresado');
+                    //     return $respuesta->json(400);
+                    // }
 
                     $data['estatus_cit'] = 1;
                 }
@@ -154,6 +158,8 @@ class CitaController extends Controller{
                 $id = $_citaModel->insert($data);
                 $mensaje = ($id > 0);
                 
+
+
                 $mensaje = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
                 return $mensaje->json($mensaje ? 201 : 400);
         }
@@ -199,16 +205,13 @@ class CitaController extends Controller{
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 
-            case $validarCita->isDuplicated('cita', 'cita_id', $cita_id):
+                // ** Enrique
+            case !$validarCita->isDuplicated('cita', 'cita_id', $cita_id):
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(400);    
 
             case !$validarCita->isDuplicatedId('cita_id','estatus_cit', $cita_id,3, 'cita'):
                 $respuesta = new Response(false, 'La cita seleccionada ya se encuentra asignada');
-                return $respuesta->json(400);
-
-            case !$validarCita->isDuplicatedId('cita_id','clave', $cita_id, null, 'cita'):
-                $respuesta = new Response(false, 'La cita seleccionada ya tiene una clave asignada');
                 return $respuesta->json(400);
 
             default:

@@ -23,7 +23,7 @@ class FacturaConsultaController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
         $camposNumericos = array('monto_con_iva','monto_sin_iva');
-        $camposId = array('consulta', 'paciente');
+        $camposId = array('consulta_id', 'paciente_id');
         
         switch ($validarFactura) {
             case ($validarFactura->isEmpty($_POST)):
@@ -34,9 +34,9 @@ class FacturaConsultaController extends Controller{
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
 
-            case $validarFactura->existsInDB($_POST, $camposId):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
+            case !$validarFactura->existsInDB($_POST, $camposId):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
 
             case $validarFactura->isEliminated('consulta', 'consulta_id',$_POST['consulta_id']):
                 $respuesta = new Response('NOT_FOUND');
@@ -46,7 +46,7 @@ class FacturaConsultaController extends Controller{
                 $respuesta = new Response(false, 'La consulta indicada no coincide con el paciente ingresado');
                 return $respuesta->json(404);
 
-            case $validarFactura->isDuplicated('factura_medico','consulta_id',$_POST['consulta_id']):
+            case !$validarFactura->isDuplicated('factura_consulta','consulta_id',$_POST['consulta_id']):
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(404);
 
@@ -86,9 +86,9 @@ class FacturaConsultaController extends Controller{
 
     public function eliminarFacturaConsulta($factura_consulta_id){
 
-        $_facturaModel = new FacturaModel();
+        $_facturaModel = new FacturaConsultaModel();
         $data = array(
-            'estatus_fac' => '3'
+            'estatus_fac' => '2'
         );
 
         $eliminado = $_facturaModel->where('factura_consulta_id','=',$factura_consulta_id)->update($data);

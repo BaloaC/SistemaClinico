@@ -164,9 +164,9 @@ class SeguroController extends Controller{
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
 
-            case $validarSeguro->isDuplicated("seguro", 'seguro_id', $seguro_id):
-                $respuesta = new Response('DATOS_DUPLICADOS');
-                return $respuesta->json(400);
+            case !$validarSeguro->isDuplicated("seguro", 'seguro_id', $seguro_id):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
 
             case array_key_exists('nombre', $_POST):
                 if ($validarSeguro->isDuplicated('seguro', 'nombre', $_POST["nombre"])) {

@@ -2,9 +2,18 @@
 
 //Login - vista
 Router::get('/login',LoginController::class . '@index');
+Router::get('/login/recuperarusuario',LoginController::class . '@recuperarUsuarioView');
 
 //Login - API
 Router::post('/login',LoginController::class . '@entrar');
+Router::post('/login/:id',LoginController::class . '@recuperarUsuario');
+
+//Preguntas - API
+Router::get('/preguntas/consulta',PreguntaSeguridadController::class . '@listarPreguntas');
+Router::get('/preguntas/:id',PreguntaSeguridadController::class . '@listarPreguntasPorId');
+Router::get('/preguntas/usuario/:id',PreguntaSeguridadController::class . '@listarPreguntasPorUsuarioId');
+Router::post('/pregunta/:id',PreguntaSeguridadController::class . '@insertarPregunta');
+Router::post('/respuesta/:id',PreguntaSeguridadController::class . '@comprobarPregunta');
 
 //Ruta principal
 Router::get('/',homepageController::class);
@@ -212,9 +221,9 @@ Router::put('/factura/consulta/:id', FacturaConsultaController::class . '@actual
 Router::delete('/factura/consulta/:id', FacturaConsultaController::class . '@eliminarFacturaConsulta');
 
 //Factura_Medico - Vistas
-Router::get('/factura/medico',FacturaConsultaController::class . '@index');
-Router::get('/factura/medico/registrar', FacturaConsultaController::class . '@formRegistrarFacturaConsulta');
-Router::get('/factura/medico/actualizar/:id', FacturaConsultaController::class . '@formActualizarFacturaConsulta');
+Router::get('/factura/medico',FacturaMedicoController::class . '@index');
+Router::get('/factura/medico/registrar', FacturaMedicoController::class . '@formRegistrarFacturaConsulta');
+Router::get('/factura/medico/actualizar/:id', FacturaMedicoController::class . '@formActualizarFacturaConsulta');
 
 //Factura_Medico - API
 Router::get('/factura/medico/consulta',FacturaMedicoController::class . '@listarFacturaMedico');

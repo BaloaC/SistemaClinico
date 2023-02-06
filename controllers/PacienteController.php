@@ -67,7 +67,7 @@ class PacienteController extends Controller{
             
             $_pacienteModel = new PacienteModel();
 
-            if ( $_POST['tipo_paciente'] = 2 ) {
+            if ( $_POST['tipo_paciente'] == 2 ) {
                 
                 $pacienteSeguro = $_POST['seguro'];
                 unset($_POST['seguro']);
@@ -113,7 +113,6 @@ class PacienteController extends Controller{
         // Creando los strings para las validaciones
         $camposNumericos = array("cedula", "edad", "telefono", "tipo_paciente");
         $camposString = array("nombres", "apellidos");
-        $camposKey = array("paciente_id"); // Esta variable es el array que se pasara por existInDB
 
         $validarPaciente = new Validate;
         switch($_POST) {
@@ -122,7 +121,7 @@ class PacienteController extends Controller{
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 
-            case $validarPaciente->isDuplicated('paciente', 'paciente_id', $paciente_id):
+            case !$validarPaciente->isDuplicated('paciente', 'paciente_id', $paciente_id):
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(400);
 
@@ -133,15 +132,11 @@ class PacienteController extends Controller{
             case $validarPaciente->isString($_POST, $camposString):
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
-                
-            case $validarPaciente->existsInDB($_POST, $camposKey):   
-                $respuesta = new Response('NOT_FOUND');         
-                return $respuesta->json(404);
             
             default: 
 
                 if ( array_key_exists('cedula', $_POST) ) {
-                    if ( $validarPaciente->isDuplicated('paciente', 'cedula', $_POST["cedula"]) ) {
+                    if ( !$validarPaciente->isDuplicated('paciente', 'cedula', $_POST["cedula"]) ) {
                         $respuesta = new Response('DATOS_DUPLICADOS');
                         return $respuesta->json(400);
                     }

@@ -32,13 +32,12 @@ class Validate extends BaseModel{
     public function existsInDB($data, $validate){
 
         foreach($data as $key => $value){
-            
+
             if(is_numeric(array_search($key,$validate))){
                 
                 $length = strlen($key)-3;
                 $table = substr($key, 0, $length);
                 $estatus = 'estatus_' . substr($key, 0, 3);
-
                 $sql = "SELECT $key FROM $table WHERE $key = '$value' AND $estatus != 2";
                 $query = $this->connection->prepare($sql);
                 $query->execute();
@@ -74,7 +73,7 @@ class Validate extends BaseModel{
         // $sql = "SELECT $column FROM $table WHERE $column = '$value'";
         $query = $this->connection->prepare($sql);
         $query->execute();
-                
+        
         if($query->rowCount() > 0){
 
             return true;
@@ -89,12 +88,10 @@ class Validate extends BaseModel{
         $query = $this->connection->prepare($sql);
         $query->execute();
         // $result = $query->fetchAll(PDO::FETCH_OBJ);
-        
+
         if ( $query->rowCount() > 0 ) {
-            
             return true;
         } else {
-            
             return false;
         }
         

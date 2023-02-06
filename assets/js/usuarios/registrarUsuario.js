@@ -1,5 +1,17 @@
 const path = location.pathname.split('/');
 
+// Animación
+document.getElementById("siguiente").addEventListener("click", (event) => {
+            
+    formInfo = document.getElementById("form-info");
+    formPreguntas = document.getElementById("form-preguntas");
+    
+    formInfo.classList.toggle("op-0");
+    setTimeout(() => {
+        formPreguntas.classList.add("form-centrar");
+    }, 500);
+})
+
 document.addEventListener("submit", async e => {
 
     e.preventDefault();
@@ -26,7 +38,7 @@ document.addEventListener("submit", async e => {
             body: JSON.stringify(data),
         };
 
-        const response = await fetch(`/${path[1]}/usuarios/registrar`, options);
+        const response = await fetch(`/${path[1]}/usuarios`, options);
 
         json = await response.json();
 

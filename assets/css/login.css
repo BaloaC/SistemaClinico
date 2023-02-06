@@ -1,13 +1,64 @@
 @import url('base.css');
 
 body{
-    background: #d3d3d3 !important;
+    background: #274462 !important;
 }
 
 img {
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
     border-radius: 8px;
+}
+
+.register-form label {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+#form-preguntas {
+    position: absolute;
+    top: -30px;
+    right: -5rem;
+    opacity: 0;
+    display: none;
+    /* transform: translateY(); */
+}
+
+.form-centrar {
+    display: block !important;
+    animation: 1016.08ms linear 0ms 1 normal forwards running moveLeft;
+}
+
+#form-info {
+    animation: all ease 2s;
+}
+
+.balls {
+    background: linear-gradient(to bottom, #019de1 0%, #100e99 100%);
+    position: absolute;
+    height: 50px;
+    width: 60px !important;
+}
+
+.ball-right {
+    bottom: 0;
+    right: 0;
+    border-top-left-radius: 1000%;
+    border-top-right-radius: 100%;
+}
+
+.ball-left {
+    top: 0;
+    left: 0;
+    border-bottom-right-radius: 1000%;
+    border-top-right-radius: 100
+}
+
+@keyframes moveLeft {
+    from { right: -4rem; opacity: 0;}
+    70% { right: -1rem; opacity: 0.9;}
+    to { right: 0rem; opacity: 1;}
 }
 
 @media screen and (max-width: 575px) {

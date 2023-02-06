@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <?php include PATH_VIEWS . '/partials/header.php'; ?>
+    <link rel="stylesheet" href="<?php echo Url::to('assets/css/paciente.css'); ?>">
+    <link rel="stylesheet" href="<?php echo Url::to('assets/css/calendario.css'); ?>">
+    <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/datatables.min.css'); ?>">
+    <link rel="stylesheet" href="<?php echo Url::to('assets/css/custom-datatables.css'); ?>">
+    <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
+    <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
+    <title>Proyecto 4 | Consultar Usuarios</title>
+</head>
+
+<body>
+    <?php include constant('PATH_VIEWS') . '/partials/nav.php'; ?>
+
+    <main>
+        <div class="container">
+            <!-- Cabezera -->
+            <div class="row">
+                <div class="col-6"><h4 class="pt-5 pb-2 text-grey">Citas</h4></div>
+                <div class="col-6 d-flex align-items-center justify-content-end">
+                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> especialidad</button>
+                </div>
+                <hr class="border-white">
+            </div>
+            <!-- Citas -->
+            <div class="row">
+                <div class="col-12 seg-container">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title text-dark m-1">Citas</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Registro-->
+        <div class="modal fade" id="modalReg" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Cita</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert d-none" role="alert"></div>
+                        <form action="" id="info-cita" class="p-3 px-4">
+                            <div class="two-inputs">
+                                <div class="row">
+                                    <label for="paciente_id">Paciente</label>
+                                    <label for="medico_id">Médico</label>
+                                </div>
+                                <div class="row">
+                                    <select name="paciente_id" id="s-paciente" class="form-control" data-active="0">
+                                        <option></option>
+                                    </select>
+
+                                    <select name="medico_id" id="s-medico" class="form-control" data-active="0">
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="two-inputs">
+                                <div class="row">
+                                    <label for="cedula_titular">Cédula Titular</label>
+                                    <label for="especialidad_id">Especialidad</label>
+                                </div>
+                                <div class="row">
+                                    <input type="number" name="cedula_titular" class="form-control mb-3">
+                                    <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="two-inputs">
+                                <div class="row">
+                                    <label for="tipo_cita">Tipo de cita</label>
+                                    <label for="seguro">Seguro</label>
+                                </div>
+                                <div class="row">
+                                    <select name="tipo_cita" id="s-tipo_cita" class="form-control mb-3">
+                                        <option></option>
+                                    </select>
+                                    <select name="seguro_id" id="s-seguro" class="form-control mb-3" data-active="0">
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="two-inputs">
+                                <div class="row">
+                                    <label for="fecha_cita">Fecha cita</label>
+                                    <label for="motivo_cita">Motivo cita</label>
+                                </div>
+                                <div class="row">
+                                    <input type="datetime-local" name="fecha_cita" id="fecha_cita" class="form-control mb-3">
+                                    <input type="text" name="motivo_cita" class="form-control mb-3">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addCita()">Registrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Actualizar-->
+        <div class="modal fade" id="modalAct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Cita</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="actAlert" class="alert d-none" role="alert"></div>
+                        <form action="" id="act-cita" class="p-3 px-4">
+                            <label for="clave">Clave</label>
+                            <input type="number" name="clave" id="clave" class="form-control">
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Info-->
+        <div class="modal fade" id="modalInfo" data-bs-keyboard="true" tabindex="-1" aria-labelledby="modalInfoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalInfoLabel">Ver cita</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row mb-5">
+                                <div class="col-12 d-flex justify-content-between">
+                                    <h2 class="fw-bold" id="paciente"></h2>
+                                    <h2 class="fw-bold" id="cedula-titular"></h2>
+                                </div>
+                            </div>
+                            <p><span>Detalles cita:</span></p>
+                            <p>Médico: <span id="nombreMedico"></span></p>
+                            <p>Especialidad: <span id="nombreEspecialidad"></span></p>
+                            <p>Tipo de cita: <span id="tipoCita"></span></p>
+                            <p>Estatus: <span id="estatusCita"></span></p>
+                            <p>Clave cita: <span id="claveCita"></span></p>
+                            <p>Fecha cita: <input type="datetime-local" id="fechaCita" class="form-control w-50" disabled></p>
+                            <p>Motivo cita: <span id="motivoCita"></span></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-actualizar" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAct">Actualizar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal alert -->
+        <div class="modal fade" id="modalAlert" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAlertLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalAlertLabel">Advertencia</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="alertMessage" class="alert alert-warning d-none" role="alert"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <?php include PATH_VIEWS . '/partials/footer.php'; ?>
+    <script src="<?php echo Url::to('assets/libs/fullcalendar/index.global.min.js'); ?>"></script>
+    <script src="<?php echo Url::to('assets/libs/fullcalendar/es.global.min.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/calendarioCitas.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/addCita.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/confirmUpdateCita.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/updateCita.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/calendarioCitas.js'); ?>"></script>
+    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>
+    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>
+
+</body>
+
+</html>

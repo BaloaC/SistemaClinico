@@ -17,8 +17,10 @@ class ConsultaController extends Controller{
         "consulta.fecha_consulta",
         "paciente.paciente_id",
         "paciente.nombres AS nombre_paciente",
+        "paciente.cedula as cedula_paciente",
         "medico.medico_id",
         "medico.nombres AS nombre_medico",
+        "medico.cedula AS cedula_medico",
         "especialidad.especialidad_id",
         "especialidad.nombre AS nombre_especialidad",
         "cita.cita_id",
@@ -84,6 +86,10 @@ class ConsultaController extends Controller{
 
             case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita'):
                 $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
+                return $respuesta->json(400);
+
+            case !$validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 1, 'cita'):
+                $respuesta = new Response(false, 'A la cita indicada no se le puede asignar una consulta');
                 return $respuesta->json(400);
 
             case !$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad'):
@@ -409,5 +415,3 @@ class ConsultaController extends Controller{
 
     }
 }
-
-?>

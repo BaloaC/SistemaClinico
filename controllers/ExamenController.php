@@ -81,11 +81,11 @@ class ExamenController extends Controller{
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
             
-            case $validarExamen->isDuplicated('examen', 'examen_id', $examen_id):
+            case !($validarExamen->isDuplicated('examen', 'examen_id', $examen_id)):
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(400);
 
-            case ($validarExamen->isDuplicated('examen', 'nombre', $_POST['nombre'])):
+            case ($validarExamen->isDuplicated('examen', 'nombre', isset($_POST['nombre']))):
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(400);
 

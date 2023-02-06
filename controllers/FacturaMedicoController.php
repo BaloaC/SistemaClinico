@@ -38,14 +38,16 @@ class FacturaMedicoController extends Controller{
         
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
-        $camposId = array('medico');
+
+        // ** Enrique
+        $camposId = array('medico_id');
         
         switch ($validarFactura) {
             case ($validarFactura->isEmpty($_POST)):
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 
-            case $validarFactura->existsInDB($_POST, $camposId):
+            case !($validarFactura->existsInDB($_POST, $camposId)):
                 $respuesta = new Response('MD_NOT_FOUND');
                 return $respuesta->json(404);
 
@@ -59,6 +61,7 @@ class FacturaMedicoController extends Controller{
                 $insert = $this->contabilizarFactura($data);
                 
                 $_facturaMedicoModel = new FacturaMedicoModel();
+
                 $id = $_facturaMedicoModel->insert($insert);
                 $mensaje = ($id > 0);
 
@@ -115,12 +118,12 @@ class FacturaMedicoController extends Controller{
 
     public function eliminarFacturaMedico($factura_medico_id){
 
-        $_facturaModel = new FacturaModel();
+        $_facturaMedicoModel = new FacturaMedicoModel();
         $data = array(
-            'estatus_fac' => '3'
+            'estatus_fac' => '2'
         );
 
-        $eliminado = $_facturaModel->where('factura_medico_id','=',$factura_medico_id)->update($data);
+        $eliminado = $_facturaMedicoModel->where('factura_medico_id','=',$factura_medico_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
@@ -150,7 +153,7 @@ class FacturaMedicoController extends Controller{
         
         $_facturaMedicoModel = new FacturaMedicoModel();
         $inners = $_facturaMedicoModel->listInner($arrayInner);
-        $inner = $_facturaMedicoModel->where('consulta.medico_id', '=', $form['medico_id'])->where('estatus_con','=',1)->where('estatus_fac','!=',3)->whereDate('consulta.fecha_consulta',$fecha_inicio,$fecha_actual)->innerJoin($arraySelect, $inners, "factura_consulta");
+        $inner = $_facturaMedicoModel->where('consulta.medico_id', '=', $form['medico_id'])->where('estatus_con','=',1)->where('estatus_fac','!=',2)->whereDate('consulta.fecha_consulta',$fecha_inicio,$fecha_actual)->innerJoin($arraySelect, $inners, "factura_consulta");
         
         $pacientesConsulta = 0;
         $montoTotal = 0;
@@ -159,13 +162,14 @@ class FacturaMedicoController extends Controller{
         if ($inner) {
             foreach ($inner as $inners) {
                 //calculo consultas
-                $montoTotal += $inners->monto_con_iva;
+                $montoTotal += $inners["monto_con_iva"];
                 $pacientesConsulta += 1;
             }
         }
 
         $montoConsultas = $montoTotal * 50 / 100;
         
+
         // inner con los seguros
         $arrayInnerSeguro = array(
             "consulta" => "factura_seguro"
@@ -180,22 +184,28 @@ class FacturaMedicoController extends Controller{
 
         $_facturaMedicoModel = new FacturaMedicoModel();
         $innersSeguro = $_facturaMedicoModel->listInner($arrayInnerSeguro);
-        $innerSeguro = $_facturaMedicoModel->where('consulta.medico_id', '=', $form['medico_id'])->where('estatus_con','=',1)->where('estatus_fac','!=',3)->whereDate('factura_seguro.fecha_ocurrencia',$fecha_inicio,$fecha_actual)->innerJoin($arraySelectSeguro, $innersSeguro, "factura_seguro");
+        $innerSeguro = $_facturaMedicoModel->where('consulta.medico_id', '=', $form['medico_id'])->where('estatus_con','=',1)->where('estatus_fac','!=',2)->whereDate('factura_seguro.fecha_ocurrencia',$fecha_inicio,$fecha_actual)->innerJoin($arraySelectSeguro, $innersSeguro, "factura_seguro");
 
         $pacientesSeguros = 0;
         $montoTotal = 0;
 
         // Si no tiene consultas por seguro no se realiza el foreach
+
         if ($innerSeguro) {
             foreach ($innerSeguro as $inners) {
                 //calculo seguros
-                $montoTotal += $inners->monto;
+                $montoTotal += $inners["monto"];
                 $pacientesSeguros += 1;
             }
+        } else{
+            $montoTotal = 0;
+            $pacientesSeguros = 0;
         }
 
         $montoSeguros = $montoTotal * 20 / 100;
         $pagoTotal = $montoConsultas + $montoSeguros;
+
+        
 
         $arrayInsert = array(
             'medico_id' => $form['medico_id'],

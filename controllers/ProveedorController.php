@@ -55,11 +55,13 @@ class ProveedorController extends Controller{
                $respuesta = new Response('DATOS_VACIOS');
                return $respuesta->json(400);
 
-            case $validarProveedor->existsInDB($_POST,$camposId):
+                // ** Enrique
+            case !$validarProveedor->existsInDB($_POST,$camposId):
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
 
-            case $validarProveedor->isDuplicated('proveedor', 'proveedor_id', $proveedor_id):
+                // ** Enrique
+            case !$validarProveedor->isDuplicated('proveedor', 'proveedor_id', $proveedor_id):
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(400);
 

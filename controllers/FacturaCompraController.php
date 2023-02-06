@@ -11,7 +11,6 @@ class FacturaCompraController extends Controller{
         "factura_compra.fecha_compra",
         "factura_compra.monto_con_iva",
         "factura_compra.monto_sin_iva",
-        "factura_compra.iva",
         "factura_compra.excento",
         "factura_compra.estatus_fac",
         "proveedor.nombre AS proveedor_nombre"
@@ -100,21 +99,24 @@ class FacturaCompraController extends Controller{
         
         $resultadoFactura = array();
 
-        foreach ($factura_compra as $facturas) {
+        if ($factura_compra) {
 
-            // Codigo para recibir los insumos que fueron comprados con esa factura
-            $_compraInsumoController = new CompraInsumoController;
-            $insumosFactura = $_compraInsumoController->listarCompraInsumoPorFactura($facturas->factura_compra_id);
+            foreach ($factura_compra as $facturas) {
 
-            $facturas->insummos = $insumosFactura;
-            $resultadoFactura[] = $facturas;
+                // Codigo para recibir los insumos que fueron comprados con esa factura
+                $_compraInsumoController = new CompraInsumoController;
+                $insumosFactura = $_compraInsumoController->listarCompraInsumoPorFactura($facturas->factura_compra_id);
+
+                $facturas->insummos = $insumosFactura;
+                $resultadoFactura[] = $facturas;
+            }
+            
+            return $this->retornarMensaje($resultadoFactura);
+            
+        } else {
+
+            return $this->retornarMensaje($factura_compra);
         }
-        
-        return $this->retornarMensaje($resultadoFactura);
-        
-        // $respuesta = new Response($resultadoFactura ? 'CORRECTO' : 'NOT_FOUND');
-        // $respuesta->setData($resultadoFactura);
-        // return $respuesta->json($resultadoFactura ? 200 : 404);
     }
 
     public function listarFacturaCompraPorId($factura_id){
@@ -123,28 +125,29 @@ class FacturaCompraController extends Controller{
         $inners = $_compraInsumoModel->listInner($this->arrayInner);
         $factura_compra = $_compraInsumoModel->where('factura_compra_id', '=', $factura_id)->innerJoin($this->arraySelect, $inners, "factura_compra");
         
-        // Codigo para recibir los insumos que fueron comprados con esa factura
-        $_compraInsumoController = new CompraInsumoController;
-        $insumosFactura = $_compraInsumoController->listarCompraInsumoPorFactura($factura_compra[0]->factura_compra_id);
-    
-        $factura_compra[0]->insumos = $insumosFactura;
-        $resultado = $factura_compra[0];
+        if ($factura_compra) {
+            // Codigo para recibir los insumos que fueron comprados con esa factura
+            $_compraInsumoController = new CompraInsumoController;
+            $insumosFactura = $_compraInsumoController->listarCompraInsumoPorFactura($factura_compra[0]->factura_compra_id);
         
-        return $this->retornarMensaje($resultado);
-
-        // $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
-        // $respuesta->setData($resultado);
-        // return $respuesta->json($resultado ? 200 : 404);
+            $factura_compra[0]->insumos = $insumosFactura;
+            $resultado = $factura_compra[0];
+            
+            return $this->retornarMensaje($resultado);
+        } else {
+            
+            return $this->retornarMensaje($factura_compra);
+        }
     }
 
     public function eliminarFacturaCompra($factura_compra_id){
 
-        $_facturaModel = new FacturaModel();
+        $_compraInsumoController = new FacturaCompraModel();
         $data = array(
             'estatus_fac' => '2'
         );
 
-        $eliminado = $_facturaModel->where('factura_compra_id','=',$factura_compra_id)->update($data);
+        $eliminado = $_compraInsumoController->where('factura_compra_id','=',$factura_compra_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
@@ -161,7 +164,3 @@ class FacturaCompraController extends Controller{
         return $respuesta->json($resultado ? 200 : 404);
     }
 }
-
-
-
-?>

@@ -46,21 +46,21 @@ class MedicoController extends Controller{
         $validarMedico = new Validate;
 
         switch($_POST) {
-            // case ($validarMedico->isEmpty($_POST)):
-            //     $respuesta = new Response('DATOS_INVALIDOS');
-            //     return $respuesta->json(400);
+            case ($validarMedico->isEmpty($_POST)):
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
 
-            // case $validarMedico->isNumber($_POST, $camposNumericos):
-            //     $respuesta = new Response('DATOS_INVALIDOS');
-            //     return $respuesta->json(400);
+            case $validarMedico->isNumber($_POST, $camposNumericos):
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
 
-            // case $validarMedico->isString($_POST, $camposString):
-            //     $respuesta = new Response('DATOS_INVALIDOS');
-            //     return $respuesta->json(400);
+            case $validarMedico->isString($_POST, $camposString):
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
 
-            // case $validarMedico->isDuplicated('medico', 'cedula', $_POST["cedula"]):
-            //     $respuesta = new Response('DATOS_DUPLICADOS');
-            //     return $respuesta->json(400);
+            case $validarMedico->isDuplicated('medico', 'cedula', $_POST["cedula"]):
+                $respuesta = new Response('DATOS_DUPLICADOS');
+                return $respuesta->json(400);
 
             default:
                 
@@ -126,7 +126,7 @@ class MedicoController extends Controller{
                 $resultado[] = $medicos;
             }
 
-            $this->retornarMensaje($resultado, $resultado);
+            return $this->retornarMensaje($resultado, $resultado);
             // $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
             // $respuesta->setData($resultado);
             // return $respuesta->json($resultado ? 200 : 404);

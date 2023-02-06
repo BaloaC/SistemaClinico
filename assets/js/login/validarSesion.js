@@ -1,4 +1,4 @@
-import Cookies from "../js.cookie.min.js";
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
 const path = location.pathname.split('/');
 
@@ -21,7 +21,7 @@ async function validateSession() {
             rol: Cookies.get("rol")
         }
 
-        let response = await fetch(`/${path[1]}/usuarios/consulta/${dataUser.usuario_id}`),
+        let response = await fetch(`/${path[1]}/usuarios/${dataUser.usuario_id}`),
             json = await response.json();
 
         if (!json.code) throw { message: "No se ha podido validar la sesión correctamente" };

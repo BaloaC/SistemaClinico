@@ -4,14 +4,16 @@
 <head>
     <?php include constant('PATH_VIEWS') . '/partials/header.php'; ?>
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/homepage.css'); ?>">
-    
+    <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/datatables.min.css'); ?>">
+    <link rel="stylesheet" href="<?php echo Url::to('assets/css/custom-datatables.css'); ?>">
     <title>Proyecto 4 | Welcome</title>
 </head>
 
-<body>
+<body class="bg-transparent">
     <?php include constant('PATH_VIEWS') . '/partials/nav.php'; ?>
 
-    <main>
+    <div class="bg-static"></div>
+    <main class="main-home">
         <header class="d-flex align-items-center justify-content-center">
             <div>
                 <h2 class="p-4">Centro Médico Hiperbárico</h2>
@@ -19,49 +21,88 @@
                 <h1 class="p-4 fw-bold text-uppercase">Shenque</h1>
             </div>
         </header>
-        <section class="bg-blue-c">
+        <section>
             <div class="container">
-                <div class="row">
+                <div class="row especialidad-container">
                     <!-- Contenido de Bienvenida -->
-                    <div class="col-12 col-lg-6 order-lg-first order-last flex-column p-5">
+                    <div class="col-12 col-lg-5 order-lg-first order-last flex-column p-5">
                         <div class="text-start">
                             <h1 class="py-4 lt-spacing-1 fs-7">¡Bienvenido!</h1>
-                            <h2 class="mb-3">@usuario</h2>
+                            <h2 class="mb-3 text-transparent">@usuario</h2>
                         </div>
-                        <select class="col-8 w-75 form-select form-select-lg my-3" name="especialidades">
-                            <option value="Ematologia">Todas las especialidades</option>
-                            <option value="ematologia completa">Neurologia</option>
-                            <option value="examen de adn">Cardiologia</option>
-                            <option value="ematologia completa">Ginecologia</option>
-                            <option value="examen de adn">Fisioterapeuta</option>
-                            <option value="ematologia completa">Psiquiatria</option>
-                            <option value="examen de adn">Medicina interna</option>
-                            <option value="ematologia completa">Odontologia</option>
-                            <option value="examen de adn">Medicina General</option>
-                            <option value="ematologia completa">Psicologia</option>
-                            <option value="examen de adn">Bionalista</option>
+                        <select class="w-60 select-transparent form-select form-select-lg mx-3" id="s-especialidades" name="especialidades" data-active="0">  
+                            <option value="all" selected>Todas las especialidades</option>    
                         </select>
-                        <select class="w-75 form-select form-select-lg my-3" name="filtrarFecha">
-                            <option value="Ematologia">Todo el año</option>
+                        <select class="w-60 select-transparent form-select form-select-lg my-3" id="s-fecha" name="filtrarFecha">
+                            <option value="year" selected>Todo el año</option>  
                         </select>
                     </div>
                     <!-- Gráfica -->
-                    <div class="col-12 col-lg-6 order-lg-last order-first bg-dark">
-                        <img src="<?php echo Url::to('assets/img/doctor (1).png'); ?>" alt="">
+                    <div class="col-12 col-lg-7 order-lg-last order-first">
+                        <div class="card card-home shadow-dark"><div id="chartdiv"></div></div>
                     </div>
                 </div>
             </div>
         </section>
-        <section class="border-bottom bg-light-blue border-light-c">
+        <section>
             <div class="container">
                 <div class="row">
-                    <div class="col-12 col-lg-6 g-dark">
-                        <img src="<?php echo Url::to('assets/img/doctor (1).png'); ?>" alt="">
+                    <div class="col-12 col-lg-7 order-2 order-lg-1">
+                        <div class="card card-home shadow-dark">
+                            <div class="card-header text-center">
+                                <h2 class="card-title text-dark m-1">Insumos por agotarse</h2>
+                            </div>
+                            <div class="card-body card-insumo">
+                                <div class="table-responsive">
+                                    <table id="pocosInsumos" class="table table-compact">
+                                        <thead>
+                                            <tr>
+                                                <th>Insumo ID</th>
+                                                <th>Nombre</th>
+                                                <th>Cant Actual</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Vendas</td>
+                                                <td>12</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>Curitas</td>
+                                                <td>2</td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>Loratadina</td>
+                                                <td>13</td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td>Paracetamol</td>
+                                                <td>18</td>
+                                            </tr>
+                                            <tr>
+                                                <td>5</td>
+                                                <td>Inyectadoras</td>
+                                                <td>50</td>
+                                            </tr>
+                                            <tr>
+                                                <td>6</td>
+                                                <td>Ibuprofeno</td>
+                                                <td>155</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- Tabla de inventario -->
-                    <div class="col-12 col-lg-6 p-4 flex-column">
+                    <div class="col-12 col-lg-5 order-1 order-lg-2 p-4 flex-column">
                         <h1 class="fw-bold mb-0">Control de Inventario</h1>
-                        <h6 class="mb-3 text-blue">Acceso Rápido</h6>
+                        <h6 class="mb-3 text-transparent">Acceso Rápido</h6>
                         <p class="pt-4 ps-">Verifique rápidamente los insumos que poseen menor cantidad en el sistema</p>
                         <button class="btn btn-blue mt-5">ir al Inventario</button>
                     </div>
@@ -109,7 +150,7 @@
                                         <p class="text-light text-lightblue">Acceso a los modulos pacientes, seguros y empresas</p>
                                     </a>
                                 </article>
-                                <article class="offset-2 col-lg-2 col-md-6 col-sm-6 p-2">
+                                <article class="offset-lg-2 col-lg-2 col-md-6 col-sm-6 p-2">
                                     <a class="text-decoration-none text-dark" href="">
                                         <div class="bg-img mb-4">
                                             <img src="<?php echo Url::to('assets/img/factura.png') ?>" alt="facturacionAlt">
@@ -118,7 +159,7 @@
                                         <p class="text-light text-lightblue">Acceso a los modulos facturas y libros</p>
                                     </a>
                                 </article>
-                                <article class="offset-2 col-lg-2 col-md-12 p-2">
+                                <article class="offset-lg-2 col-lg-2 col-md-12 p-2">
                                     <a class="text-decoration-none text-dark" href="">
                                         <div class="bg-img mb-4">
                                             <img src="<?php echo Url::to('assets/img/medicamento.png') ?>" alt="inventarioAlt">
@@ -135,8 +176,17 @@
         </footer>
     </main>
 
-    <script type="module" src="<?php echo Url::to('assets/js/login/validarSesion.js'); ?>"></script>
     <?php include constant('PATH_VIEWS') . '/partials/footer.php'; ?>
+    <script type="module" src="<?php echo Url::to('assets/js/login/validarSesion.js'); ?>"></script>
+    <script src="<?php echo Url::to('assets/js/homepage/pocosInsumos.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/libs/amcharts5/index.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/libs/amcharts5/xy.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/libs/amcharts5/Animated.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/libs/amcharts5/Responsive.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/homepage/especialidadesGraph.js'); ?>"></script>
+
+   
+
 </body>
 
 </html>

@@ -84,9 +84,9 @@ class EmpresaController extends Controller{
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
 
-            case $validarEmpresa->isDuplicated('empresa', 'empresa_id', $empresa_id):
-                $respuesta = new Response('DATOS_DUPLICADOS');
-                return $respuesta->json(400);
+            case !$validarEmpresa->isDuplicated('empresa', 'empresa_id', $empresa_id):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
 
             // case $validarEmpresa->isEliminated("empresa", 'estatus_emp', $empresa_id):
             //     $respuesta = new Response('NOT_FOUND');

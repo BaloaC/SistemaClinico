@@ -126,7 +126,7 @@ class EspecialidadController extends Controller{
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 
-            case $validarEspecialidad->isDuplicated("especialidad", "especialidad_id", $especialidad_id):
+            case !$validarEspecialidad->isDuplicated("especialidad", "especialidad_id", $especialidad_id):
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
 
@@ -134,11 +134,11 @@ class EspecialidadController extends Controller{
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
 
-            case $validarEspecialidad->existsInDB($_POST, $camposKey):   
+            case !$validarEspecialidad->existsInDB($_POST, $camposKey):   
                 $respuesta = new Response('NOT_FOUND'); 
                 return $respuesta->json(404);
 
-            case $validarEspecialidad->isDuplicated('especialidad', 'nombre', $_POST["nombre"]):
+            case $validarEspecialidad->isDuplicated('especialidad', 'nombre', isset($_POST["nombre"])):
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(400);
             //     }

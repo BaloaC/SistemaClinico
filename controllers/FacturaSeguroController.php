@@ -23,7 +23,7 @@ class FacturaSeguroController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
         $camposNumericos = array('monto');
-        $camposId = array('consulta');
+        $camposId = array('consulta_id');
         
         switch ($validarFactura) {
             case ($validarFactura->isEmpty($_POST)):
@@ -34,9 +34,9 @@ class FacturaSeguroController extends Controller{
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
 
-            case $validarFactura->existsInDB($_POST, $camposId):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
+            case !$validarFactura->existsInDB($_POST, $camposId):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
 
             case $validarFactura->isEliminated('consulta', 'consulta_id',$_POST['consulta_id']):
                 $respuesta = new Response('NOT_FOUND');
@@ -87,6 +87,7 @@ class FacturaSeguroController extends Controller{
                 
                 $_facturaSeguroModel = new FacturaSeguroModel();
                 $id = $_facturaSeguroModel->insert($insert);
+
                 $mensaje = ($id > 0);
                 
                 if ($mensaje) {
@@ -96,15 +97,15 @@ class FacturaSeguroController extends Controller{
                     $paciente = $_pacienteSeguroModel->where('estatus_pac','=',1)->where('paciente_id', '=',$pacienteTitular->paciente_id)->where('seguro_id','=',$seguroId)->getFirst();
                     $saldo = $paciente->saldo_disponible;
 
-                    if ($data['monot'] > $saldo) {
+                    if ($data['monto'] > $saldo) {
                         $respuesta = new Response('INSUFFICIENT_AMOUNT');
                         return $respuesta->json(400);
                     }
 
-                    $montoActualizado = $data['monto'] - $saldo;
+                    $montoActualizado = $saldo - $data['monto'];
                     $update = array('saldo_disponible' => $montoActualizado);
                     
-                    $respuesta = $paciente->where('paciente_id', '=',$pacienteTitular->paciente_id)->update($update);
+                    $respuesta = $_pacienteSeguroModel->where('paciente_id', '=',$pacienteTitular->paciente_id)->update($update);
 
                     if (!$respuesta) {
                         $respuesta = new Response(false, 'Hubo un error manipulando el saldo del paciente');
@@ -127,7 +128,7 @@ class FacturaSeguroController extends Controller{
         $_facturaSeguroModel = new FacturaSeguroModel();
         $id = $_facturaSeguroModel->getAll();
         $mensaje = ($id > 0);
-        return $this->retornarMensaje($mensaje, $id);
+        return $this->retornarMensaje($id, $id);
         // $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         // $respuesta->setData($id);
         // return $respuesta->json($mensaje ? 200 : 404);
@@ -145,12 +146,12 @@ class FacturaSeguroController extends Controller{
 
     public function eliminarFacturaSeguro($factura_seguro_id){
 
-        $_facturaModel = new FacturaModel();
+        $_facturaSeguroModel = new FacturaSeguroModel();
         $data = array(
             'estatus_fac' => '2'
         );
 
-        $eliminado = $_facturaModel->where('factura_seguro_id','=',$factura_seguro_id)->update($data);
+        $eliminado = $_facturaSeguroModel->where('factura_seguro_id','=',$factura_seguro_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');

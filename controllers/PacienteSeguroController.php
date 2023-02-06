@@ -39,7 +39,7 @@ class PacienteSeguroController extends Controller{
                     $respuesta = new Response(false, 'La empresa no se encuentra asociada al seguro indicado');
                     return $respuesta->json(400);
 
-                case $validarPacienteSeguro->isDuplicatedId('paciente_id', 'empresa_id', $forms['paciente_id'], $forms['empresa_id'], 'paciente_seguro'):
+                case $validarPacienteSeguro->isDuplicatedId('paciente_id', 'seguro_id', $forms['paciente_id'], $forms['seguro_id'], 'paciente_seguro'):
                     $respuesta = new Response(false, 'Ya existe un registro con la misma información de seguro y paciente');
                     return $respuesta->json(400);
 
