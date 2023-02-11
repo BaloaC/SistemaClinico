@@ -87,6 +87,41 @@ CREATE TABLE IF NOT EXISTS shenque_db.paciente (
   PRIMARY KEY (paciente_id));
 
 -- -----------------------------------------------------
+-- Table shenque_db.paciente_beneficiado
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS shenque_db.paciente_beneficiado (
+  paciente_beneficiado_id INT NOT NULL AUTO_INCREMENT,
+  paciente_id INT NOT NULL,
+  estatus_pac enum('1','2') NOT NULL DEFAULT '1',
+  PRIMARY KEY (paciente_beneficiado_id),
+  CONSTRAINT fk_pacienteBeneficiado_paciente
+    FOREIGN KEY (paciente_id)
+    REFERENCES shenque_db.paciente (paciente_id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- -----------------------------------------------------
+-- Table shenque_db.titular_beneficiado
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS shenque_db.titular_beneficiado (
+  titular_beneficiado_id INT NOT NULL AUTO_INCREMENT,
+  paciente_beneficiado_id INT NOT NULL,
+  paciente_id INT NOT NULL,
+  estatus_pac enum('1','2') NOT NULL DEFAULT '1',
+  tipo_relacion enum('1','2','3') NOT NULL,
+  PRIMARY KEY (titular_beneficiado_id),
+  CONSTRAINT fk_titular_beneficiado
+    FOREIGN KEY (paciente_beneficiado_id)
+    REFERENCES shenque_db.paciente_beneficiado (paciente_beneficiado_id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_titular_paciente
+    FOREIGN KEY (paciente_id)
+    REFERENCES shenque_db.paciente (paciente_id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+-- -----------------------------------------------------
 -- Table shenque_db.medico
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS shenque_db.medico (

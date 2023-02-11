@@ -38,20 +38,20 @@ class PreguntaSeguridadController extends Controller{
         return false;
     }
 
-    public function comprobarPregunta($usuario_id) {
+    public function comprobarPregunta() {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarUsuario = new Validate;
         
         switch($_POST) {
         
-            case !$validarUsuario->isDuplicated("usuario", "usuario_id", $usuario_id):
+            case !$validarUsuario->isDuplicated("usuario", "nombre", $_POST['nombre']):
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
 
             default: 
    
-                $usuario_id = $usuario_id;
+                $nombre = $_POST['nombre'];
                 $pregunta = $_POST['preguntas'];
                 $correcto = 0;
 
@@ -78,7 +78,7 @@ class PreguntaSeguridadController extends Controller{
                 $insert['clave'] = password_hash($_POST['nueva_clave'], PASSWORD_DEFAULT);
                 
                 $_usuarioModel = new UsuarioModel();
-                $mensaje = $_usuarioModel->where('usuario_id', '=', $usuario_id)->update($insert);
+                $mensaje = $_usuarioModel->where('nombre', '=', $nombre)->update($insert);
 
                 $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
                 return $respuesta->json($mensaje ? 201 : 400);

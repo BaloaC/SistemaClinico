@@ -48,6 +48,19 @@ Router::delete('/pacientes/:id', PacienteController::class . '@eliminarPaciente'
 //PacienteSeguro - API
 Router::delete('/paciente/seguro/:id', PacienteSeguroController::class . '@eliminarPacienteSeguro');
 
+//Paciente Beneficiado - API
+Router::get('/beneficiado/consulta',PacienteBeneficiadoController::class . '@listarPacienteBeneficiadoId');
+Router::delete('/beneficiado/:id', PacienteBeneficiadoController::class . '@eliminarPacienteBeneficiado');
+
+//Titular - API
+Router::post('/titular/:id', TitularBeneficiadoController::class . '@insertarTitularBeneficiado');
+Router::get('/titulares/:id',TitularBeneficiadoController::class . '@listarTitularesDePacienteBeneficiadoId');
+Router::get('/titularesBeneficiado/:id',TitularBeneficiadoController::class . '@listarPacienteBeneficiadoDeTitularId');
+Router::delete('/titular/:id', TitularBeneficiadoController::class . '@eliminarTitularBeneficiado');
+
+//Paciente Beneficiado - API
+Router::delete('/pacienteBeneficiado/:id', PacienteBeneficiadoController::class . '@eliminarPacienteBeneficiado');
+
 //Medicos - Vistas
 Router::get('/medicos',MedicoController::class . '@index');
 Router::get('/medicos/registrar', MedicoController::class . '@formRegistrarMedico');
@@ -76,14 +89,6 @@ Router::post('/especialidades', EspecialidadController::class . '@insertarEspeci
 Router::put('/especialidades/:id', EspecialidadController::class . '@actualizarEspecialidad');
 Router::delete('/especialidades/:id', EspecialidadController::class . '@eliminarEspecialidad');
 
-//Meidco-Especialidad - API
-// Router::get('/medico_especialidades/consulta',EspecialidadController::class . '@listarMedicosEspecialidades');
-// Router::get('/medico_especialidades/:id',EspecialidadController::class . '@listarMedicosEspecialidadPorId');
-// Router::post('/medico_especialidades/:post', EspecialidadController::class . '@insertarMedicoEspecialidad');
-// Router::put('/medico_especialidades/:id', EspecialidadController::class . '@actualizarMedicoEspecialidad');
-// Router::delete('/medico_especialidades/:id', EspecialidadController::class . '@eliminarMedicoEspecialidad');
-
-
 //Horarios - Vistas
 Router::get('/horarios',HorarioController::class . '@index');
 Router::get('/horarios/registrar', HorarioController::class . '@formRegistrarHorario');
@@ -92,8 +97,6 @@ Router::get('/horarios/actualizar/:id', HorarioController::class . '@formActuali
 //Horarios - API
 Router::get('/horarios/consulta',HorarioController::class . '@listarHorarios');
 Router::get('/horarios/:id',HorarioController::class . '@listarHorarioPorId');
-// Router::post('/horarios', HorarioController::class . '@insertarHorario');
-// Router::put('/horarios/:id', HorarioController::class . '@actualizarHorario');
 Router::delete('/horarios/:id', HorarioController::class . '@eliminarHorario');
 
 //Seguros - Vistas

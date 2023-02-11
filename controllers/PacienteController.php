@@ -51,9 +51,9 @@ class PacienteController extends Controller{
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
 
-            case $validarPaciente->isDuplicated('paciente', 'cedula', $_POST["cedula"]):
-                $respuesta = new Response('DATOS_DUPLICADOS');
-                return $respuesta->json(400);
+            // case $validarPaciente->isDuplicated('paciente', 'cedula', $_POST["cedula"]):
+            //     $respuesta = new Response('DATOS_DUPLICADOS');
+            //     return $respuesta->json(400);
 
             case $validarPaciente->isDate($_POST['fecha_nacimiento']):
                 $respuesta = new Response('FECHA_INVALIDA');
@@ -67,7 +67,7 @@ class PacienteController extends Controller{
             
             $_pacienteModel = new PacienteModel();
 
-            if ( $_POST['tipo_paciente'] == 2 ) {
+            if ( $_POST['tipo_paciente'] == 3 ) {
                 
                 $pacienteSeguro = $_POST['seguro'];
                 unset($_POST['seguro']);
@@ -96,7 +96,34 @@ class PacienteController extends Controller{
                     }
                 }
 
-            } else {
+            } else if( $_POST['tipo_paciente'] == 4 ) {
+
+                $pacienteBeneficiado = $_POST['titular'];
+                unset($_POST['titular']);
+
+                if ( $validarPaciente->isEmpty($pacienteBeneficiado) ) {
+                    $respuesta = new Response(false, 'Debe introducir los datos del titular del paciente');
+                    return $respuesta->json(400);
+                }
+
+                $data = $validarPaciente->dataScape($_POST);
+                $id = $_pacienteModel->insert($data);
+                
+                if ( $id > 0 ) {
+                    $insertarPacienteBeneficiado = new PacienteBeneficiadoController;
+                    $mensaje = $insertarPacienteBeneficiado->insertarPacienteBeneficiado($pacienteBeneficiado, $id);
+                    
+                    if ($mensaje == true) { 
+                        $_pacienteModel->where('paciente_id', '=', $id)->delete();
+                        return $mensaje; 
+
+                    } else {
+                        $respuesta = new Response('INSERCION_EXITOSA');
+                        return $respuesta->json(201);
+                    }
+                }
+
+            }else {
                 
                 $data = $validarPaciente->dataScape($_POST);
                 $id = $_pacienteModel->insert($data);
@@ -135,12 +162,12 @@ class PacienteController extends Controller{
             
             default: 
 
-                if ( array_key_exists('cedula', $_POST) ) {
-                    if ( !$validarPaciente->isDuplicated('paciente', 'cedula', $_POST["cedula"]) ) {
-                        $respuesta = new Response('DATOS_DUPLICADOS');
-                        return $respuesta->json(400);
-                    }
-                }
+                // if ( array_key_exists('cedula', $_POST) ) {
+                //     if ( !$validarPaciente->isDuplicated('paciente', 'cedula', $_POST["cedula"]) ) {
+                //         $respuesta = new Response('DATOS_DUPLICADOS');
+                //         return $respuesta->json(400);
+                //     }
+                // }
                     
                 if ( array_key_exists('fecha_nacimiento', $_POST) ) {
 
