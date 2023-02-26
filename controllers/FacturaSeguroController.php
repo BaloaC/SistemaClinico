@@ -24,6 +24,12 @@ class FacturaSeguroController extends Controller{
         $validarFactura = new Validate;
         $camposNumericos = array('monto');
         $camposId = array('consulta_id');
+
+        $token = $validarFactura->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
         
         switch ($validarFactura) {
             case ($validarFactura->isEmpty($_POST)):
@@ -80,12 +86,13 @@ class FacturaSeguroController extends Controller{
                     'especialidad_id' => $consulta->especialidad_id,
                     'nombre_especialidad' => $consulta->nombre_especialidad,
                     'nombre_paciente' => $consulta->nombre_paciente,
-                    'nombre_titular' => $pacienteTitular->nombres,
+                    'nombre_titular' => $pacienteTitular->nombre,
                     'autorizacion' => $consulta->clave,
                     'fecha_pago_limite' => $fecha_limite
                 );
                 
                 $_facturaSeguroModel = new FacturaSeguroModel();
+                $_facturaSeguroModel->byUser($token);
                 $id = $_facturaSeguroModel->insert($insert);
 
                 $mensaje = ($id > 0);
@@ -129,9 +136,6 @@ class FacturaSeguroController extends Controller{
         $id = $_facturaSeguroModel->getAll();
         $mensaje = ($id > 0);
         return $this->retornarMensaje($id, $id);
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        // $respuesta->setData($id);
-        // return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function listarFacturaSeguroPorId($factura_seguro_id){
@@ -139,19 +143,24 @@ class FacturaSeguroController extends Controller{
         $_facturaSeguroModel = new FacturaSeguroModel();
         $id = $_facturaSeguroModel->where('factura_seguro_id', '=', $factura_seguro_id)->getFirst();
         return $this->retornarMensaje($id, $id);
-        // $respuesta = new Response($id ? 'CORRECTO' : 'NOT_FOUND');
-        // $respuesta->setData($id);
-        // return $respuesta->json($id ? 200 : 404);
     }
 
     public function eliminarFacturaSeguro($factura_seguro_id){
 
+        $validarFactura = new Validate;
+        $token = $validarFactura->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
+        
         $_facturaSeguroModel = new FacturaSeguroModel();
+        $_facturaSeguroModel->byUser($token);
         $data = array(
             'estatus_fac' => '2'
         );
 
-        $eliminado = $_facturaSeguroModel->where('factura_seguro_id','=',$factura_seguro_id)->update($data);
+        $eliminado = $_facturaSeguroModel->where('factura_seguro_id','=',$factura_seguro_id)->update($data, 1);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');

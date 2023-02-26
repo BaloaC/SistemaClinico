@@ -193,6 +193,18 @@ class Validate extends BaseModel{
             return true;
         }
     }
+
+    //Validar token
+    public function validateToken($header) {
+        if (!isset($header['Authorization']) || empty($header['Authorization'])) {
+
+            return false;
+        } else {
+            
+            $token = $header['Authorization'];
+            return substr($token, 7);
+        }
+    }
 }
 
 

@@ -9,6 +9,12 @@ class CompraInsumoController extends Controller {
         $camposNumericos = array('unidades','precio_unit','precio_total');
         $camposKey = array('insumo_id');
 
+        $token = $validarFactura->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
+        
         foreach ($POST as $POSTS) {
             
             $POSTS['factura_compra_id'] = $id;
@@ -34,6 +40,7 @@ class CompraInsumoController extends Controller {
                     $data = $validarFactura->dataScape($POSTS);
 
                     $_compraInsumoModel = new CompraInsumoModel();
+                    // $_compraInsumoModel->byUser($token);
                     $respuesta = $_compraInsumoModel->insert($data);
                     $mensaje = ($respuesta > 0);
 
@@ -46,6 +53,8 @@ class CompraInsumoController extends Controller {
                         $actualizar = array('stock' => $unidadesPosts);
                         
                         // actualizando el stock del insumo
+                        $_insumoModel = new InsumoModel();
+                        $_insumoModel->byUser($token);
                         $actualizado = $_insumoModel->where('insumo_id', '=', $POSTS['insumo_id'])->update($actualizar);
                         if (!$actualizado) {
                             $this->mensajeError($POSTS);

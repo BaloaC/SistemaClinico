@@ -25,17 +25,23 @@ class EspecialidadController extends Controller{
     }
 
     public function formActualizarEspecialidad($especialidad_id){
-        
+
         return $this->view('especialidades/actualizarEspecialidades', ['especialidad_id' => $especialidad_id]);
-    } 
+    }
 
     public function insertarEspecialidad(/*Request $request*/){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        
+
         // Creando los strings para las validaciones
         $camposString = array("nombre");
         $validarEspecialidad = new Validate;
+
+        $token = $validarEspecialidad->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
 
         switch($_POST) {
             case $validarEspecialidad->isEmpty($_POST):
@@ -47,15 +53,15 @@ class EspecialidadController extends Controller{
             case $validarEspecialidad->isDuplicated('especialidad', 'nombre', $_POST["nombre"]):
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(400);
-            default: 
+            default:
                 $data = $validarEspecialidad->dataScape($_POST);
 
                 $_especialidadModel = new EspecialidadModel();
+                $_especialidadModel->byUser($token);
                 $id = $_especialidadModel->insert($data);
-                $mensaje = ($id > 0);
 
+                $mensaje = ($id > 0);
                 $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-                
                 return $respuesta->json($mensaje ? 201 : 400);
         }
     }
@@ -67,16 +73,16 @@ class EspecialidadController extends Controller{
         $resultado = array();
 
         foreach ($especialidad as $especialidades) {
-        
+
             $id = $especialidades->especialidad_id;
             $validarEspecialidad = new Validate;
 
             // Verificamos si hay que aplicarle un inner join a ese seguro en específico
             $respuesta = $validarEspecialidad->isDuplicated('medico_especialidad', 'especialidad_id', $id);
             $newArray = get_object_vars($especialidades);
-            
+
             if($respuesta){
-                
+
                 $newArray['medicos'] = '';
                 $_medicoModel = new MedicoModel();
                 $inners = $_medicoModel->listInner($this->arrayInner);
@@ -93,7 +99,7 @@ class EspecialidadController extends Controller{
 
             } else { $resultado[] = $newArray; } // Si no necesita inner join, lo agregamos tal cual como está
         }
-        
+
         $mensaje = ($resultado != null);
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($resultado);
@@ -118,8 +124,13 @@ class EspecialidadController extends Controller{
 
         // Creando los strings para las validaciones
         $camposString = array("nombres");
-        $camposKey = array("especialidad_id");
         $validarEspecialidad = new Validate;
+
+        $token = $validarEspecialidad->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
 
         switch($_POST) {
             case ($validarEspecialidad->isEmpty($_POST)):
@@ -134,19 +145,18 @@ class EspecialidadController extends Controller{
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
 
-            case !$validarEspecialidad->existsInDB($_POST, $camposKey):   
-                $respuesta = new Response('NOT_FOUND'); 
-                return $respuesta->json(404);
-
             case $validarEspecialidad->isDuplicated('especialidad', 'nombre', isset($_POST["nombre"])):
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(400);
-            //     }
-            default: 
+
+            default:
+
             $data = $validarEspecialidad->dataScape($_POST);
 
             $_especialidadModel = new EspecialidadModel();
+            $_especialidadModel->byUser($token);
             $actualizado = $_especialidadModel->where('especialidad_id','=',$especialidad_id)->update($data);
+
             $mensaje = ($actualizado > 0);
 
             $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
@@ -159,11 +169,20 @@ class EspecialidadController extends Controller{
     public function eliminarEspecialidad($especialidad_id){
 
         $_especialidadModel = new EspecialidadModel();
+        $validarEspecialidad = new Validate;
+
+        $token = $validarEspecialidad->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
+
+        $_especialidadModel->byUser($token);
         $data = array(
             "estatus_esp" => "2"
         );
 
-        $eliminado = $_especialidadModel->where('especialidad_id','=',$especialidad_id)->update($data);
+        $eliminado = $_especialidadModel->where('especialidad_id','=',$especialidad_id)->update($data, 1);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

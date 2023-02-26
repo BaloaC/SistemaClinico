@@ -38,6 +38,12 @@ class FacturaCompraController extends Controller{
         $validarFactura = new Validate;
         $camposNumericos = array('proveedor_id', 'total_productos', 'monto_con_iva', 'monto_sin_iva', 'excento');
         
+        $token = $validarFactura->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
+
         switch ($validarFactura) {
             case ($validarFactura->isEmpty($_POST)):
                 $respuesta = new Response('DATOS_VACIOS');
@@ -66,6 +72,7 @@ class FacturaCompraController extends Controller{
                 $data = $validarFactura->dataScape($_POST);
 
                 $_facturaCompraModel = new FacturaCompraModel();
+                $_facturaCompraModel->byUser($token);
                 $id = $_facturaCompraModel->insert($data);
                 $mensaje = ($id > 0);
 
@@ -141,6 +148,13 @@ class FacturaCompraController extends Controller{
     }
 
     public function eliminarFacturaCompra($factura_compra_id){
+
+        $validarFactura = new Validate;
+        $token = $validarFactura->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
 
         $_compraInsumoController = new FacturaCompraModel();
         $data = array(

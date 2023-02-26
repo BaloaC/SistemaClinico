@@ -5,7 +5,7 @@ require_once 'GenericModel.php';
 class MedicoModel extends GenericModel {
 
     protected $cedula;
-    protected $nombres;
+    protected $nombre;
     protected $apellidos;
     protected $telefono;
     protected $direccion;
@@ -18,7 +18,7 @@ class MedicoModel extends GenericModel {
 
     /* Getters */
     public function getCedula(){return $this->cedula;}
-    public function getNombres(){return $this->nombres;}
+    public function getNombre(){return $this->nombre;}
     public function getApellidos(){return $this->apellidos;}
     public function getTelefono(){return $this->telefono;}
     public function getDireccion(){return $this->direccion;}
@@ -27,7 +27,7 @@ class MedicoModel extends GenericModel {
 
     /* Setters */
     public function setCedula($cedula){return $this->cedula = $cedula;}
-    public function setNombres($nombres){return $this->nombres = $nombres;}
+    public function setNombre($nombre){return $this->nombre = $nombre;}
     public function setApellidos($apellidos){return $this->apellidos = $apellidos;}
     public function setTelefono($telefono){return $this->telefono = $telefono;}
     public function setDireccion($direccion){return $this->direccion = $direccion;}

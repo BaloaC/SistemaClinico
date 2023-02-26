@@ -39,6 +39,12 @@ class FacturaMedicoController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
 
+        $token = $validarFactura->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
+
         // ** Enrique
         $camposId = array('medico_id');
         
@@ -61,6 +67,7 @@ class FacturaMedicoController extends Controller{
                 $insert = $this->contabilizarFactura($data);
                 
                 $_facturaMedicoModel = new FacturaMedicoModel();
+                $_facturaMedicoModel->byUser($token);
 
                 $id = $_facturaMedicoModel->insert($insert);
                 $mensaje = ($id > 0);
@@ -118,12 +125,20 @@ class FacturaMedicoController extends Controller{
 
     public function eliminarFacturaMedico($factura_medico_id){
 
+        $validarFactura = new Validate;
+        $token = $validarFactura->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
+
         $_facturaMedicoModel = new FacturaMedicoModel();
+        $_facturaMedicoModel->byUser($token);
         $data = array(
             'estatus_fac' => '2'
         );
 
-        $eliminado = $_facturaMedicoModel->where('factura_medico_id','=',$factura_medico_id)->update($data);
+        $eliminado = $_facturaMedicoModel->where('factura_medico_id','=',$factura_medico_id)->update($data, 1);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
@@ -162,7 +177,7 @@ class FacturaMedicoController extends Controller{
         if ($inner) {
             foreach ($inner as $inners) {
                 //calculo consultas
-                $montoTotal += $inners["monto_con_iva"];
+                $montoTotal += $inners->monto_con_iva;
                 $pacientesConsulta += 1;
             }
         }
@@ -194,7 +209,7 @@ class FacturaMedicoController extends Controller{
         if ($innerSeguro) {
             foreach ($innerSeguro as $inners) {
                 //calculo seguros
-                $montoTotal += $inners["monto"];
+                $montoTotal += $inners->monto;
                 $pacientesSeguros += 1;
             }
         } else{

@@ -68,7 +68,10 @@ class UsuarioController extends Controller{
                     $_preguntasSeguridadModel = new PreguntaSeguridadController();
                     $pregunta = $_preguntasSeguridadModel->insertarPregunta($preguntasSeguridad, $id);
 
-                    if ($pregunta) { return $pregunta; }                    
+                    // if ($pregunta) { return $pregunta; }
+                    
+                    // $_AuditoriaController = new AuditoriaController();
+                    // $_AuditoriaController->insertarAuditoria()
 
                     $respuesta = new Response('INSERCION_EXITOSA');
                     return $respuesta->json(201);

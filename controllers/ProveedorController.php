@@ -22,13 +22,18 @@ class ProveedorController extends Controller{
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarProveedor = new Validate;
+        $token = $validarProveedor->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
 
         switch($_POST) {
             case ($validarProveedor->isEmpty($_POST)):
                $respuesta = new Response('DATOS_VACIOS');
                return $respuesta->json(400);
        
-            case $validarProveedor->isDuplicated('proveedor', 'nombre', $_POST["nombre"]):
+            case !$validarProveedor->isDuplicated('proveedor', 'nombre', $_POST["nombre"]):
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(400);
 
@@ -36,6 +41,7 @@ class ProveedorController extends Controller{
                 $data = $validarProveedor->dataScape($_POST);
 
                 $_proveedorModel = new ProveedorModel();
+                $_proveedorModel->byUser($token);
                 $id = $_proveedorModel->insert($data);
                 $mensaje = ($id > 0);
                 
@@ -47,18 +53,17 @@ class ProveedorController extends Controller{
     public function actualizarProveedor($proveedor_id){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        $camposId = array("proveedor_id");
         $validarProveedor = new Validate;
+        $token = $validarProveedor->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
 
         switch($_POST) {
             case ($validarProveedor->isEmpty($_POST)):
                $respuesta = new Response('DATOS_VACIOS');
                return $respuesta->json(400);
-
-                // ** Enrique
-            case !$validarProveedor->existsInDB($_POST,$camposId):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
 
                 // ** Enrique
             case !$validarProveedor->isDuplicated('proveedor', 'proveedor_id', $proveedor_id):
@@ -76,6 +81,7 @@ class ProveedorController extends Controller{
                 $data = $validarProveedor->dataScape($_POST);
 
                 $_proveedorModel = new ProveedorModel();
+                $_proveedorModel->byUser($token);
                 $id = $_proveedorModel->where('proveedor_id', '=', $proveedor_id)->update($data);
                 $mensaje = ($id > 0);
                 
@@ -90,10 +96,6 @@ class ProveedorController extends Controller{
         $lista = $_proveedorModel->where('estatus_pro', '=', '1')->getAll();
         $mensaje = (count($lista) > 0);
         return $this->retornarLista($mensaje, $lista);
-
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        // $respuesta->setData($lista);
-        // return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function listarProveedorPorId($proveedor_id){
@@ -102,20 +104,24 @@ class ProveedorController extends Controller{
         $proveedor = $_proveedorModel->where('estatus_pro', '=', '1')->where('proveedor_id','=',$proveedor_id)->getFirst();
         $mensaje = ($proveedor != null);
         return $this->retornarLista($mensaje, $proveedor);
-        
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        // $respuesta->setData($dataReturn);
-        // return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function eliminarProveedor($proveedor_id){
 
+        $validarProveedor = new Validate;
+        $token = $validarProveedor->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
+    
         $_proveedorModel = new ProveedorModel();
+        $_proveedorModel->byUser($token);
         $data = array(
             "estatus_pro" => "2"
         );
 
-        $eliminado = $_proveedorModel->where('proveedor_id','=',$proveedor_id)->update($data);
+        $eliminado = $_proveedorModel->where('proveedor_id','=',$proveedor_id)->update($data, 1);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

@@ -33,7 +33,7 @@ class LoginController extends Controller{
 
                 if(password_verify($clave, $claveEncriptada)){
                     $code = bin2hex(random_bytes(5));
-                    $tokken = array( 'tokken' => $code);   
+                    $tokken = array( 'tokken' => $code);
 
                     $_UsuarioModel = new UsuarioModel();
 

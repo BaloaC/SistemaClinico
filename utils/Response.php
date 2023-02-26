@@ -91,6 +91,9 @@ class Response{
 
             case 'NOT_FOUND':
                 return [false, 'Recurso no encontrado'];
+
+            case 'TOKEN_INVALID':
+                return [false, 'Token inválido'];
             
             case 'DUPLICATE_APPOINTMENT':
                 return [false, 'Ya existe una cita registrada en ese momento'];

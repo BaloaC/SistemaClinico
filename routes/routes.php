@@ -1,5 +1,11 @@
 <?php
 
+//Auditoria - API
+Router::get('/auditoria/consulta',AuditoriaController::class . '@listarAuditoria');
+Router::get('/auditoria/fecha',AuditoriaController::class . '@listarAuditoriaPorFecha');
+Router::get('/auditoria/accion',AuditoriaController::class . '@listarAuditoriaPorAccion');
+Router::get('/auditoria/:id',AuditoriaController::class . '@listarAuditoriaPorUsuario');
+
 //Login - vista
 Router::get('/login',LoginController::class . '@index');
 Router::get('/login/recuperarusuario',LoginController::class . '@recuperarUsuarioView');

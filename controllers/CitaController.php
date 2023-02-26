@@ -53,6 +53,12 @@ class CitaController extends Controller{
         $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id");
         
         $validarCita = new Validate;
+
+        $token = $validarCita->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
         
         switch($_POST) {
             
@@ -155,11 +161,10 @@ class CitaController extends Controller{
                 }
 
                 $_citaModel = new CitaModel();
+                $_citaModel->byUser($token);
                 $id = $_citaModel->insert($data);
                 $mensaje = ($id > 0);
                 
-
-
                 $mensaje = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
                 return $mensaje->json($mensaje ? 201 : 400);
         }
@@ -200,6 +205,12 @@ class CitaController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarCita = new Validate;
 
+        $token = $validarCita->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
+
         switch ($validarCita) {
             case $validarCita->isEmpty($_POST):
                 $respuesta = new Response('DATOS_VACIOS');
@@ -221,21 +232,28 @@ class CitaController extends Controller{
                 $newArray['clave'] = $data['clave'];
                 
                 $_citaModel = new CitaModel();
+                $_citaModel->byUser($token);
 
                 $actualizado = $_citaModel->where('cita_id','=',$cita_id)->update($newArray);
-                
                 $mensaje = ($actualizado > 0);
 
                 $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
                 $respuesta->setData($actualizado);
-
                 return $respuesta->json($mensaje ? 200 : 404);
         }
     }
 
     public function eliminarCita($cita_id){
 
+        $validarCita = new Validate;
+        $token = $validarCita->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
+
         $_citaModel = new CitaModel();
+        $_citaModel->byUser($token);
         $data = array(
             "estatus_cita" => "2"
         );

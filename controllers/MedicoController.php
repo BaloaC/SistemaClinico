@@ -44,6 +44,11 @@ class MedicoController extends Controller{
         $camposNumericos = array("cedula", "telefono", "paciente_id");
         $camposString = array("nombres", "apellidos", "direccion");
         $validarMedico = new Validate;
+        $token = $validarMedico->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
 
         switch($_POST) {
             case ($validarMedico->isEmpty($_POST)):
@@ -73,6 +78,7 @@ class MedicoController extends Controller{
                 $data = $validarMedico->dataScape($_POST);
                 
                 $_medicoModel = new MedicoModel();
+                $_medicoModel->byUser($token);
                 $id = $_medicoModel->insert($data);
                 
                 // Comprobando que se haya insertado el médico para formar las relaciones
@@ -127,9 +133,6 @@ class MedicoController extends Controller{
             }
 
             return $this->retornarMensaje($resultado, $resultado);
-            // $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
-            // $respuesta->setData($resultado);
-            // return $respuesta->json($resultado ? 200 : 404);
 
         } else {
             $respuesta = new Response('NOT_FOUND');
@@ -161,9 +164,6 @@ class MedicoController extends Controller{
             $resultado[] = $medicos;
 
             return $this->retornarMensaje($resultado, $resultado);
-            // $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
-            // $respuesta->setData($resultado);
-            // return $respuesta->json($resultado ? 200 : 404);
         } else {
             $respuesta = new Response('NOT_FOUND');
             return $respuesta->json(404);
@@ -177,8 +177,13 @@ class MedicoController extends Controller{
         // Creando los strings para las validaciones
         $camposNumericos = array("cedula", "telefono","especialidad_id");
         $camposString = array("nombres", "apellidos", "direccion");
-        $camposKey = array("medico_id");
         $validarMedico = new Validate;
+
+        $token = $validarMedico->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
 
         switch($_POST) {
             
@@ -194,11 +199,7 @@ class MedicoController extends Controller{
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400); 
 
-            case $validarMedico->existsInDB($_POST, $camposKey):   
-                $respuesta = new Response('NOT_FOUND'); 
-                return $respuesta->json(404); 
-
-            case $validarMedico->isDuplicated('medico', 'medico_id', $medico_id):
+            case !$validarMedico->isDuplicated('medico', 'medico_id', $medico_id):
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
             
@@ -235,12 +236,12 @@ class MedicoController extends Controller{
                 if (!empty($data)) {
                         
                     $_medicoModel = new MedicoModel();
-                    $actualizado = $_medicoModel->where('medico_id','=',$especialidad['medico_id'])->update($data);
+                    $_medicoModel->byUser($token);
+                    $actualizado = $_medicoModel->where('medico_id','=',$medico_id)->update($data);
                     $mensaje = ($actualizado > 0);
-
                     $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
                     $respuesta->setData($actualizado);
-
+                    
                     return $respuesta->json($mensaje ? 200 : 400);
 
                 } else {
@@ -252,13 +253,21 @@ class MedicoController extends Controller{
     }
 
     public function eliminarMedico($medico_id){
+        
+        $validarMedico = new Validate;
+        $token = $validarMedico->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
 
         $_medicoModel = new MedicoModel();
+        $_medicoModel->byUser($token);
         $data = array(
             "estatus_med" => "2"
         );
 
-        $eliminado = $_medicoModel->where('medico_id','=',$medico_id)->update($data);
+        $eliminado = $_medicoModel->where('medico_id','=',$medico_id)->update($data, 1);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

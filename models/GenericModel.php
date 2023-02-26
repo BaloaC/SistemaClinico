@@ -113,11 +113,11 @@ class GenericModel extends BaseModel{
     }
 
     //Método update redefinido para no tener que pasar el objeto en caso de tener los atributos establecidos
-    public function update($obj = null){
+    public function update($obj = null, $option = 0){
 
         $obj = $this->parse($obj);
 
-        return parent::update($obj);
+        return parent::update($obj, $option);
     }
 
     public function __get($attributeName){

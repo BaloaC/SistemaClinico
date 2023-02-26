@@ -16,10 +16,10 @@ class ConsultaController extends Controller{
         "consulta.observaciones",
         "consulta.fecha_consulta",
         "paciente.paciente_id",
-        "paciente.nombres AS nombre_paciente",
+        "paciente.nombre AS nombre_paciente",
         "paciente.cedula as cedula_paciente",
         "medico.medico_id",
-        "medico.nombres AS nombre_medico",
+        "medico.nombre AS nombre_medico",
         "medico.cedula AS cedula_medico",
         "especialidad.especialidad_id",
         "especialidad.nombre AS nombre_especialidad",
@@ -74,6 +74,12 @@ class ConsultaController extends Controller{
         $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id");
         $validarConsulta = new Validate;
 
+        $token = $validarConsulta->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
+
         switch ($validarConsulta) {
 
             case !$validarConsulta->existsInDB($_POST, $campoId):   
@@ -118,6 +124,7 @@ class ConsultaController extends Controller{
                 $data = $validarConsulta->dataScape($_POST);
                 
                 $_consultaModel = new ConsultaModel();
+                $_consultaModel->byUser($token);
                 $id = $_consultaModel->insert($data);
                 $mensaje = ($id > 0);
 
@@ -159,7 +166,6 @@ class ConsultaController extends Controller{
         $inners = $_consultaModel->listInner($this->arrayInner);
         $consulta = $_consultaModel->where('consulta.estatus_con','=','1')->innerJoin($this->arraySelect, $inners, "consulta");
         $resultado = array();
-        // return $consulta;
 
         foreach ($consulta as $consultas) {
             
@@ -367,12 +373,20 @@ class ConsultaController extends Controller{
 
     public function eliminarConsulta($consulta_id){
 
+        $validarConsulta = new Validate;
+        $token = $validarConsulta->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
+        
         $_consultaModel = new ConsultaModel();
+        $_consultaModel->byUser($token);
         $data = array (
             "estatus_con" => "2"
         );
 
-        $eliminado = $_consultaModel->where('consulta_id','=',$consulta_id)->update($data);
+        $eliminado = $_consultaModel->where('consulta_id','=',$consulta_id)->update($data, 1);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

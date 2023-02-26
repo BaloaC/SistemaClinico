@@ -21,14 +21,16 @@ class SeguroEmpresaController extends Controller{
 
                 case !$validarSeguroEmpresa->existsInDB($newForm, $camposKey):
                     $respuesta = new Response(false, 'El seguro indicado no existe o es inválido');
+                    $respuesta->setData($forms['seguro_id']);
                     return $respuesta->json(400);
 
-                // case !$validarSeguroEmpresa->isDuplicated('seguro', 'seguro_id', $_newForm['seguro_id']):
-                //     $respuesta = new Response(false, 'El seguro indicado no existe o es inválido');
-                //     return $respuesta->json(400);
+                case !$validarSeguroEmpresa->isDuplicated('seguro', 'seguro_id', $forms['seguro_id']):
+                    $respuesta = new Response(false, 'El seguro indicado no existe o es inválido');
+                    return $respuesta->json(400);
 
                 case $validarSeguroEmpresa->isDuplicatedId('seguro_id', 'empresa_id', $newForm['seguro_id'], $newForm['empresa_id'], 'seguro_empresa'): 
                     $respuesta = new Response(false, 'La empresa ya está asociada a ese seguro');
+                    $respuesta->setData($forms['seguro_id']);
                     return $respuesta->json(400);
 
                 default: 
@@ -42,6 +44,7 @@ class SeguroEmpresaController extends Controller{
                     if (!$mensaje) {  
 
                         $respuesta = new Response(false, 'Hubo un error insertando el seguro');
+                        $respuesta->setData($forms['seguro_id']);
                         return $respuesta->json(400);
                     }
             }

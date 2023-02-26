@@ -24,6 +24,12 @@ class InsumoController extends Controller{
         
         $camposNumericos = array("precio");
         $validarInsumo = new Validate;
+        
+        $token = $validarInsumo->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
 
         switch($validarInsumo) {
             case ($validarInsumo->isEmpty($_POST)):
@@ -42,6 +48,7 @@ class InsumoController extends Controller{
                 
                 $data = $validarInsumo->dataScape($_POST);
                 $_insumoModel = new InsumoModel();
+                $_insumoModel->byUser($token);
                 $id = $_insumoModel->insert($data);
                 $mensaje = ($id > 0);
 
@@ -56,9 +63,6 @@ class InsumoController extends Controller{
         $lista = $_insumoModel->where('estatus_ins', '=', '1')->getAll();
         $mensaje = (count($lista) > 0);
         return $this->retornarMensaje($mensaje, $lista);
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        // $respuesta->setData($lista);
-        // return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function listarInsumoPorId($insumo_id){
@@ -67,19 +71,24 @@ class InsumoController extends Controller{
         $insumo = $_insumoModel->where('estatus_ins', '=', '1')->where('insumo_id','=',$insumo_id)->getFirst();
         $mensaje = ($insumo != null);
         return $this->retornarMensaje($mensaje, $insumo);
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        // $respuesta->setData($insumo);
-        // return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function eliminarInsumo($insumo_id){
-
+        
+        $validarInsumo = new Validate;
+        $token = $validarInsumo->validateToken(apache_request_headers());
+        if (!$token) {
+            $respuesta = new Response('TOKEN_INVALID');
+            return $respuesta->json(401);
+        }
+        
         $_insumoModel = new InsumoModel();
+        $_insumoModel->byUser($token);
         $data = array(
             "estatus_ins" => "2"
         );
 
-        $eliminado = $_insumoModel->where('insumo_id','=',$insumo_id)->update($data);
+        $eliminado = $_insumoModel->where('insumo_id','=',$insumo_id)->update($data, 1);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');
