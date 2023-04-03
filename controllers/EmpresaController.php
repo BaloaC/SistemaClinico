@@ -75,7 +75,7 @@ class EmpresaController extends Controller{
     }
 
     public function actualizarEmpresa($empresa_id){
-
+        
         $_POST = json_decode(file_get_contents('php://input'), true);
         
         $camposKey = array($empresa_id);

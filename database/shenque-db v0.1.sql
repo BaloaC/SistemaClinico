@@ -490,7 +490,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.usuario (
   nombre VARCHAR(16) NOT NULL,
   clave VARCHAR(100) NOT NULL,
   tokken VARCHAR(10) UNIQUE,
-  rol INT NOT NULL,
+  rol enum('1','2','3','4','5') NOT NULL,
   estatus_usu enum('1','2') NOT NULL DEFAULT '1', -- 1 activo / 2 eliminado
   fecha_creacion DATETIME NOT NULL,
   PRIMARY KEY (usuario_id));

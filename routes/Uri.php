@@ -5,15 +5,18 @@ class Uri{
     public $uri;
     public $method;
     public $function;
+    public $nivel;
     public $matches;
     protected $request;
     protected $response;
 
-    public function __construct($uri, $method, $function){
+    public function __construct($uri, $method, $nivel, $function){
+    // public function __construct($uri, $function, $nivel){
         
         $this->uri = $uri;
         $this->method = $method;
         $this->function = $function;
+        $this->nivel = $nivel;
     }
 
     //Método para validar si una URI existe
