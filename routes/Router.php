@@ -58,25 +58,7 @@ class Router{
         // var_dump('<pre>');
 
         // Verificando Token Bearer
-        if (!isset(apache_request_headers()['Authorization'])) {
-            http_response_code(401);                    
-            echo json_encode([
-                "code" => false,
-                "message" => "Es necesario el token de seguridad"
-            ]);
-            return;
-        }
-
-        $token = MiddlewareBase::verifyToken(apache_request_headers()['Authorization']);
         
-        if (!$token) {
-            http_response_code(401);                    
-            echo json_encode([
-                "code" => false,
-                "message" => "Token de seguridad inválido"
-            ]);
-            return;
-        }
 
         $method = $_SERVER['REQUEST_METHOD'];
         
@@ -87,6 +69,8 @@ class Router{
         
         if ($method == 'POST') {
             
+            Router::comprobacionDeSeguridad(); // Comprobamos el token
+
             $uris = Router::$post["/".$uri]->uri;
             $permission = MiddlewareBase::verifyPermissions(Router::$post["/".$uri]->nivel);
             if (!$permission) { return Router::retornarMensaje($permission); }
@@ -96,6 +80,8 @@ class Router{
             }
 
         } else if ($method == 'PUT') {
+
+            Router::comprobacionDeSeguridad(); // Comprobamos el token
 
             $uri2 = preg_replace('/[^a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]+/u', '',$uri);
             $ruta =Router::$put["/".$uri2."/:id"];
@@ -109,47 +95,28 @@ class Router{
         } else if ($method == 'GET') {
 
             if ( is_numeric(substr($uri, -1)) ) {
+                
+                Router::comprobacionDeSeguridad(); // Comprobamos el token
+
+
+
                 $uri2 = preg_replace('/[^a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]+/u', '',$uri);
                 $ruta =Router::$get["/".$uri2."/:id"];
                 $permission = MiddlewareBase::verifyPermissions(Router::$get["/".$uri2."/:id"]->nivel);
-                if (!$permission) { return Router::retornarMensaje($permission); }
 
-                if ( $ruta->match($uri)) {    
-                    return $ruta->call();
-                }
+                if (!$permission) { return Router::retornarMensaje($permission); }
+                if ( $ruta->match($uri)) { return $ruta->call(); }
 
             } else {
-                $permission = MiddlewareBase::verifyPermissions(Router::$get["/".$uri]->nivel);
-                if (!$permission) { return Router::retornarMensaje($permission); }
-                
+                    // $permission = MiddlewareBase::verifyPermissions(Router::$get["/".$uri]->nivel);
+                    // if (!$permission) { return Router::retornarMensaje($permission); }
+
                     $uris = Router::$get["/".$uri]->uri;
                     if ($uris === $uri) {
                         return Router::$get["/".$uri]->call();
                     }
             }
         }
-
-        //Verifica si la uri que está solicitando el usuario se encuentra registrada...
-        
-
-        // var_dump('o');var_dump('o');
-        // foreach (Router::$put as $key => $recordUri){
-        //     var_dump($recordUri);
-        //     var_dump($recordUri->match($uri));
-        //     if($recordUri->match($uri)){
-        //         var_dump('o');
-        //         var_dump($uri);
-        //         // var_dump('a');
-        //         // var_dump($recordUri);
-        //         //     var_dump(Router::$put["/".$uri2."/:id"]);
-        //         //     var_dump(Router::$put["/".$uri2."/:id"]->matches);
-        //         // 
-                    
-        //         // } else {
-        //             return $recordUri->call();    
-        //         // }
-        //     }
-        // }
 
         // Muestra el mensaje de error 404
         header('Content-Type: text/html; charset=utf-8');
@@ -164,6 +131,24 @@ class Router{
             ]);
             return;
         }      
+    }
+
+    public static function comprobacionDeSeguridad() {
+        if (!isset(apache_request_headers()['Authorization'])) { return Router::mensajeDeSeguridad(true); 
+        } else {
+            $token = MiddlewareBase::verifyToken(apache_request_headers()['Authorization']);
+            if (!$token) { return Router::mensajeDeSeguridad(false); }
+        }
+    }
+
+    public static function mensajeDeSeguridad($bool) {
+        $mensaje = $bool ? "Es necesario el token de seguridad" : "Token de seguridad inválido";
+        http_response_code(401);                    
+        echo json_encode([
+            "code" => false,
+            "message" => $mensaje
+        ]);
+        exit();
     }
 }
 

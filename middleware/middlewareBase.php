@@ -7,7 +7,7 @@ class MiddlewareBase {
     public static function verifyToken($head) {
         
         MiddlewareBase::$token = substr($head, 7);
-        if (!isset(MiddlewareBase::$token)  || empty(MiddlewareBase::$token) ) {
+        if (!isset(MiddlewareBase::$token)  || empty(MiddlewareBase::$token && MiddlewareBase::$token != 'undefined') ) {
             
             return false;
             
@@ -21,7 +21,7 @@ class MiddlewareBase {
         $_usuarioModel = new UsuarioModel();
         $usuario = $_usuarioModel->where('tokken', '=', MiddlewareBase::$token)->getFirst();
 
-        if ($niveles != 0) {
+        if ($niveles != 0 && isset($usuario)) {
             foreach ($roles as $rol) {
                 if ($usuario->rol == $rol) {
                     return true;
