@@ -69,12 +69,16 @@ class Router{
         
         if ($method == 'POST') {
             
-            Router::comprobacionDeSeguridad(); // Comprobamos el token
+            $nivel = Router::$post["/".$uri]->nivel;
+            if ($nivel != -1) {
+                Router::comprobacionDeSeguridad(); // Comprobamos el token
+                $permission = MiddlewareBase::verifyPermissions($nivel);
+                if (!$permission) { return Router::retornarMensaje($permission); }
+            }
 
             $uris = Router::$post["/".$uri]->uri;
-            $permission = MiddlewareBase::verifyPermissions(Router::$post["/".$uri]->nivel);
-            if (!$permission) { return Router::retornarMensaje($permission); }
-
+            $nivel = Router::$post["/".$uri]->nivel;
+            
             if ($uris === $uri) {
                 return Router::$post["/".$uri]->call();
             }

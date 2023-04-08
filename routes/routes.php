@@ -11,8 +11,8 @@ Router::get('/login',LoginController::class . '@index');
 Router::get('/login/recuperarusuario',LoginController::class . '@recuperarUsuarioView');
 
 //Login - API
-Router::post('/login',LoginController::class . '@entrar');
-Router::post('/login/:id',LoginController::class . '@recuperarUsuario');
+Router::post('/login',LoginController::class . '@entrar', -1);
+Router::post('/login/:id',LoginController::class . '@recuperarUsuario', -1);
 
 //Preguntas - API
 Router::get('/preguntas/consulta',PreguntaSeguridadController::class . '@listarPreguntas');
@@ -35,7 +35,7 @@ Router::get('/usuarios/actualizar/:id', UsuarioController::class . '@formActuali
 //Usuario - API
 Router::get('/usuarios/consulta',UsuarioController::class . '@listarUsuarios', '1,5');
 Router::get('/usuarios/:id',UsuarioController::class . '@listarUsuarioPorId', '1,5');
-Router::post('/usuarios', UsuarioController::class . '@insertarUsuario',  '1,5');
+Router::post('/usuarios', UsuarioController::class . '@insertarUsuario',  -1);
 Router::put('/usuarios/:id', UsuarioController::class . '@actualizarUsuario');
 Router::delete('/usuarios/:id', UsuarioController::class . '@eliminarUsuario', '1,5');
 
