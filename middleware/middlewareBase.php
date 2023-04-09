@@ -23,7 +23,7 @@ class MiddlewareBase {
 
         if ($niveles != 0 && isset($usuario)) {
             foreach ($roles as $rol) {
-                if ($usuario->rol == $rol) {
+                if ($usuario->rol == $rol || $usuario->rol == 1) {
                     return true;
                 }
             }
@@ -34,16 +34,9 @@ class MiddlewareBase {
         
     }
 
-    // public static function token() {
-    //     $token = substr(MiddlewareBase::$header, 7);
-    //     if (!isset($token)  || empty($token) ) {
-            
-    //         return false;
-            
-    //     } else {
-    //         return true;
-    //     }
-    // }
+    public static function getToken() {
+        return MiddlewareBase::$token;
+    }
 }
 
 ?>

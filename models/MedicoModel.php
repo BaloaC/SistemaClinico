@@ -27,7 +27,7 @@ class MedicoModel extends GenericModel {
 
     /* Setters */
     public function setCedula($cedula){return $this->cedula = $cedula;}
-    public function setNombre($nombre){return $this->nombre = $nombre;}
+    public function setNombres($nombre){return $this->nombre = $nombre;}
     public function setApellidos($apellidos){return $this->apellidos = $apellidos;}
     public function setTelefono($telefono){return $this->telefono = $telefono;}
     public function setDireccion($direccion){return $this->direccion = $direccion;}

@@ -102,7 +102,7 @@ class FacturaSeguroController extends Controller{
                     // Restando el monto de la factura al saldo disponible del paciente
                     $_pacienteSeguroModel = new PacienteSeguroModel;
                     $paciente = $_pacienteSeguroModel->where('estatus_pac','=',1)->where('paciente_id', '=',$pacienteTitular->paciente_id)->where('seguro_id','=',$seguroId)->getFirst();
-                    $saldo = $paciente->saldo_disponible;
+                    $saldo = isset($paciente->saldo_disponible) ? $paciente->saldo_disponible : 0;
 
                     if ($data['monto'] > $saldo) {
                         $respuesta = new Response('INSUFFICIENT_AMOUNT');

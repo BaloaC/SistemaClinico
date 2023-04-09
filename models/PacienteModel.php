@@ -20,7 +20,7 @@ class PacienteModel extends GenericModel {
 
     /* Getters */
     public function getCedula(){return $this->cedula;}
-    public function getNombre(){return $this->nombre;}
+    public function getNombres(){return $this->nombre;}
     public function getApellidos(){return $this->apellidos;}
     public function getFechaNacimiento(){return $this->fecha_nacimiento;}
     public function getEdad(){return $this->edad;}
@@ -31,7 +31,7 @@ class PacienteModel extends GenericModel {
 
     /* Setters */
     public function setCedula($cedula){return $this->cedula = $cedula;}
-    public function setNombre($nombre){return $this->nombre = $nombre;}
+    public function setNombres($nombre){return $this->nombre = $nombre;}
     public function setApellidos($apellidos){return $this->apellidos = $apellidos;}
     public function setFechaNacimiento($fecha_nacimiento){return $this->fecha_nacimiento = $fecha_nacimiento;}
     public function setEdad($edad){return $this->edad = $edad;}

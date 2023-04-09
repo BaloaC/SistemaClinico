@@ -1,4 +1,5 @@
 const path = location.pathname.split('/')
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
 
 export default async function deleteModule(module, id, successMessage) {
@@ -12,6 +13,7 @@ export default async function deleteModule(module, id, successMessage) {
             mode: "cors", //Opcional
             headers: {
                 "Content-type": "application/json; charset=utf-8",
+                "Authorization": "Bearer " + Cookies.get("tokken")
             },
         };
 

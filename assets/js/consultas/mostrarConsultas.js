@@ -8,7 +8,7 @@ const especialidadSelect = document.getElementById("s-especialidad");
 select2OnClick({
     selectSelector: "#s-paciente",
     selectValue: "paciente_id",
-    selectNames: ["cedula", "nombres-apellidos"],
+    selectNames: ["cedula", "nombre-apellidos"],
     module: "pacientes/consulta",
     parentModal: "#modalReg",
     placeholder: "Seleccione un paciente"
@@ -18,7 +18,7 @@ select2OnClick({
 select2OnClick({
     selectSelector: "#s-medico",
     selectValue: "medico_id",
-    selectNames: ["cedula", "nombres-apellidos"],
+    selectNames: ["cedula", "nombre-apellidos"],
     module: "medicos/consulta",
     parentModal: "#modalReg",
     placeholder: "Seleccione un médico"
@@ -128,7 +128,7 @@ addEventListener("DOMContentLoaded", e => {
             searchPanes: {
                 show: false,
             },
-            targets: [0, 1, 2, 3, 4, 5],
+            targets: [0, 1, 2, 3, 4, 5, 6, 7],
         }],
         // ! rowData (Devuelve toda la fila)
         searchPanes: {
@@ -196,7 +196,7 @@ addEventListener("DOMContentLoaded", e => {
         if (data.clave == null) data.clave = "No aplica";
 
         let examenes = data.examenes !== undefined ? concatItems(data.examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen",
-        insumos = data.insumos !== undefined ? concatItems(data.insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo";
+            insumos = data.insumos !== undefined ? concatItems(data.insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo";
 
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
@@ -221,6 +221,9 @@ addEventListener("DOMContentLoaded", e => {
                 <tr>
                     <td>Insumos utilizados:</td>
                     <td>${insumos}</td>
+                </tr>
+                <tr>
+                    <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/consulta/${data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
                 </tr>
             </table>
         `

@@ -7,7 +7,8 @@ class FacturaMedicoController extends Controller{
     );
 
     protected $arraySelect = array(
-        "medico.nombres",
+        "medico.nombre",
+        "medico.apellidos",
         "factura_medico.medico_id",
         "factura_medico.factura_medico_id",
         "factura_medico.acumulado_seguro_total",
@@ -87,7 +88,7 @@ class FacturaMedicoController extends Controller{
     }
 
     public function listarFacturaMedicoPorId($factura_medico_id){
-
+        
         $_facturaMedicoModel = new FacturaMedicoModel();
         $inners = $_facturaMedicoModel->listInner($this->arrayInner);
         $id = $_facturaMedicoModel->where('factura_medico_id','=',$factura_medico_id)->innerJoin($this->arraySelect, $inners, "factura_medico");

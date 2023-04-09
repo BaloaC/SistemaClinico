@@ -2,10 +2,10 @@ import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
 const path = location.pathname.split('/');
 
-function checkRol(rol){
+function checkRol(rol) {
 
-    switch(rol){
-        case "1": return ['/home/', '/', '/test']; 
+    switch (rol) {
+        case "1": return ['/home/', '/', '/test'];
         case "2": return ['/home/'];
     }
 }
@@ -30,7 +30,7 @@ async function validateSession() {
 
         const routes = checkRol(dataUser.rol);
 
-        if(!routes.find(route => route !== path[2])) throw { message: "No es posible acceder a la página solicitada" }
+        if (!routes.find(route => route !== path[2])) throw { message: "No es posible acceder a la página solicitada" }
 
         // alert('Sesion validada correctamente');
 
@@ -41,24 +41,24 @@ async function validateSession() {
     }
 }
 
-function logOut(){
+function logOut() {
 
     Cookies.remove("usuario_id");
     Cookies.remove("usuario");
     Cookies.remove("tokken");
 
-    location = `/${path[1]}`;
+    location = `/${path[1]}/login`;
 }
 
 
 document.addEventListener("DOMContentLoaded", e => {
 
-    validateSession();
+    // validateSession();
 })
 
 document.addEventListener("click", e => {
 
-    if(e.target.matches("#btn-logout")){
+    if (e.target.matches("#btn-logout")) {
 
         e.preventDefault();
         logOut();

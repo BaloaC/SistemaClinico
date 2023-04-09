@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.compra_insumo (
 CREATE TABLE IF NOT EXISTS shenque_db.paciente (
   paciente_id INT NOT NULL AUTO_INCREMENT,
   cedula INT NOT NULL,
-  nombre VARCHAR(45) NOT NULL,
+  nombres VARCHAR(45) NOT NULL,
   apellidos VARCHAR(45) NOT NULL,
   fecha_nacimiento DATE NOT NULL,
   edad INT NOT NULL,
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.titular_beneficiado (
 CREATE TABLE IF NOT EXISTS shenque_db.medico (
   medico_id INT NOT NULL AUTO_INCREMENT,
   cedula INT NOT NULL,
-  nombre VARCHAR(45) NOT NULL,
+  nombres VARCHAR(45) NOT NULL,
   apellidos VARCHAR(45) NOT NULL,
   telefono VARCHAR(45) NULL,
   direccion VARCHAR(45) NOT NULL,
@@ -143,6 +143,14 @@ CREATE TABLE IF NOT EXISTS shenque_db.horario (
   dias_semana enum('lunes','martes','miercoles','jueves','viernes','sabado') NOT NULL,
   estatus_hor enum('1','2') NOT NULL DEFAULT '1',
   PRIMARY KEY (horario_id));
+
+-- -----------------------------------------------------
+-- Table shenque_db.metodo_pago
+-- -----------------------------------------------------
+-- CREATE TABLE IF NOT EXISTS shenque_db.metodo_pago (
+--   metodo_pago_id INT NOT NULL auto_increment,
+--   tipo VARCHAR(45) NOT NULL,
+--   PRIMARY KEY (metodo_pago_id));
 
 -- -----------------------------------------------------
 -- Table shenque_db.factura_consulta
@@ -490,7 +498,7 @@ CREATE TABLE IF NOT EXISTS shenque_db.usuario (
   nombre VARCHAR(16) NOT NULL,
   clave VARCHAR(100) NOT NULL,
   tokken VARCHAR(10) UNIQUE,
-  rol enum('1','2','3','4','5') NOT NULL,
+  rol INT NOT NULL,
   estatus_usu enum('1','2') NOT NULL DEFAULT '1', -- 1 activo / 2 eliminado
   fecha_creacion DATETIME NOT NULL,
   PRIMARY KEY (usuario_id));
@@ -500,10 +508,11 @@ CREATE TABLE IF NOT EXISTS shenque_db.usuario (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS shenque_db.auditoria (
   auditoria_id INT NOT NULL auto_increment,
-  fecha_accion TIMESTAMP NOT NULL,
+  fecha_creacion VARCHAR(45) NOT NULL,
   usuario_id INT NOT NULL,
   accion VARCHAR(45) NOT NULL,
   descripcion VARCHAR(45) NOT NULL,
+  fecha DATETIME NOT NULL,
   PRIMARY KEY (auditoria_id),
   CONSTRAINT fk_auditoria_usuario
     FOREIGN KEY (usuario_id)

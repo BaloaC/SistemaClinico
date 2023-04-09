@@ -101,13 +101,26 @@ class PreguntaSeguridadController extends Controller{
         return $this->retornarMensaje($mensaje, $preguntas);
     }
 
-    public function listarPreguntasPorUsuarioId($usuario_id){
-
+    public function listarPreguntasPorUsuarioId(){
+        
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        
+        $validarUsuario = new Validate;
+        if(!$validarUsuario->isDuplicated("usuario","nombre",$_POST['nombre_usuario'])){
+            $respuesta = new Response('NOT_FOUND');
+            return $respuesta->json(404);
+        }
+        
+        $_usuarioModel = new UsuarioModel();
+        $usuario = $_usuarioModel->where('estatus_usu','=','1')->where('nombre', '=', $_POST['nombre_usuario'])->getFirst();
+        
         $_preguntaSeguridadModel = new PreguntaSeguridadModel();
-        $preguntas = $_preguntaSeguridadModel->where('estatus_pre','=','1')->where('usuario_id', '=', $usuario_id)->getAll();
-        $mensaje = (count($preguntas) > 0);
+        $preguntas = $_preguntaSeguridadModel->where('estatus_pre','=','1')->where('usuario_id', '=', $usuario->usuario_id)->getFirst();
+        
+        $mensaje = (isset($preguntas));
         return $this->retornarMensaje($mensaje, $preguntas);
     }
+
 
     public function eliminarPreguntaSeguridad($pregunta_seguridad_id){
 

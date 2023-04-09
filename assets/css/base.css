@@ -157,8 +157,17 @@ i {
     font-size: 1.25rem;
 }
 
+.fa-sm{
+    font-size: 0.875em;
+}
+
 .fa-trash {
     color: #ec4561;
+}
+
+.fa-trash.disabled {
+    color: #777777;
+    cursor: normal;
 }
 
 .fa-edit {
@@ -184,6 +193,21 @@ i {
 
 .select-transparent option {
     color: rgb(27, 27, 27);
+}
+
+.light.badge-danger {
+    background-color: #ffe7e7;
+    color: #ff2625;
+}
+
+.light.badge-success {
+    background-color: #d5f7d9;
+    color: #21b731;
+}
+
+.light.badge-warning {
+    background-color: #fff0e1;
+    color: #ff7a01;
 }
 
 .card {
@@ -212,4 +236,28 @@ span.select2.select2-container.select2-container--bootstrap-5 {
 
 .form-control {
     margin-bottom: 1.5rem;
+}
+
+.form-control.valid {
+    border-color: green;
+}
+
+.form-control.invalid {
+    border-color: red;
+}
+
+.form-control+small {
+    color: red;
+    opacity: 0;
+    height: 0;
+    transition: opacity .4s ease-out;
+    display: none;
+}
+
+.form-control.invalid+small {
+    opacity: 1;
+    height: auto;
+    margin-bottom: 20px;
+    transition: opacity .4s ease-out;
+    display: block;
 }

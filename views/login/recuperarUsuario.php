@@ -34,14 +34,22 @@
                             <div class="offset-1 col-10 mt-3">
                                 <p class="fs-4 fw-bold">Recuperación de Contraseña</p>
                                 <div class="alert d-none" role="alert"></div>
-                                <form class="login-form row">
-                                    <label>Seleccione un método de recuperación</label>
-                                    <select name="metodo" id="select-metodo">
-                                        <option value="0">Seleccione una opción</option>
-                                        <option value="1">Pin</option>
-                                        <option value="2">Preguntas de Seguridad</option>
-                                    </select>
-                                    <div id="childForm"></div>
+                                <form method="POST" id="login-form" class="login-form row position-relative">
+                                    <div id="form-user">
+                                        <label>Introduzca su usuario</label>
+                                        <input class="form-control" type="text" name="usuario" id="usuario" data-validate="true" data-type="username" data-max-length="16" required>
+                                        <small class="form-text">Solo se permiten los siguientes caracteres: "_" y "-"</small>
+                                        <div class="text-center"><input id="siguiente" class="btn btn-primary my-5" value="Siguiente"></div>
+                                    </div>
+                                    <div id="form-recovery">
+                                        <label>Seleccione un método de recuperación</label>
+                                        <select name="metodo" id="select-metodo" required>
+                                            <option value="0">Seleccione una opción</option>
+                                            <option value="1">Pin</option>
+                                            <option value="2">Preguntas de Seguridad</option>
+                                        </select>
+                                        <div id="childForm"></div>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -50,10 +58,9 @@
             </div>
         </div>
     </div>
-    
+
     <?php include constant('PATH_VIEWS') . '/partials/footer.php'; ?>
-    <script type="module" src="<?php echo Url::to('assets/js/login/iniciarSesion.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/js/login/recuperarUsuario.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/login/recuperarUsuario.js'); ?>"></script>
 </body>
 
 </html>

@@ -6,7 +6,7 @@ function deleteFSeguro(id) {
 
 async function confirmDelete(id){
     await deleteModule("factura/seguro", id, "Factura seguro eliminada exitosamente!");
-    $('#fSeguro').DataTable().ajax.reload();
+    $('#fSeguros').DataTable().ajax.reload();
 }
 
 window.deleteFSeguro = deleteFSeguro;

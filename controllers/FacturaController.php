@@ -21,7 +21,7 @@ class FacturaController extends Controller{
     public function insertarFacturas(/*Request $request*/){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        var_dump($_POST);
+        // var_dump($_POST);
         $_facturaModel = new FacturaModel();
         $id = $_facturaModel->insert($_POST);
         $mensaje = ($id > 0);

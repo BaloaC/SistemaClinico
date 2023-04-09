@@ -4,6 +4,7 @@ class CompraInsumoController extends Controller {
 
     public function insertarCompraInsumo($POST, $facturaId){
 
+        
         $id = $facturaId;
         $validarFactura = new Validate;
         $camposNumericos = array('unidades','precio_unit','precio_total');
@@ -40,8 +41,9 @@ class CompraInsumoController extends Controller {
                     $data = $validarFactura->dataScape($POSTS);
 
                     $_compraInsumoModel = new CompraInsumoModel();
-                    // $_compraInsumoModel->byUser($token);
+                    $_compraInsumoModel->byUser($token);
                     $respuesta = $_compraInsumoModel->insert($data);
+
                     $mensaje = ($respuesta > 0);
 
                     if ($mensaje) {

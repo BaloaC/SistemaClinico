@@ -60,10 +60,20 @@ async function confirmUpdate() {
 
     try {
         const formData = new FormData($form),
+            seguro = [],
             data = {};
 
         formData.forEach((value, key) => (data[key] = value));
-        data.seguro = formData.getAll("seguro[]");
+        
+        let seguros = formData.getAll("seguro[]");
+        seguros.forEach(e => {
+            const seguro_id = {
+                seguro_id: e
+            }
+            seguro.push(seguro_id);
+        })
+
+        data.seguro = seguro;
         
         // if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
 

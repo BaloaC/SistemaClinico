@@ -65,7 +65,8 @@
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-especialidad" class="p-3 px-4">
                             <label for="nombre">Nombre especialidad</label>
-                            <input type="text" name="nombre" class="form-control mb-3">
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                            <small class="form-text">El nombre solo puede contener letras</small>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -87,7 +88,9 @@
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-especialidad" class="p-3 px-4">
                             <label for="nombre">Nombre especialidad</label>
-                            <input type="text" name="nombre" class="form-control mb-3">
+                            <input type="text" name="nombre" class="form-control mb-3"
+                            data-validate="true" data-type="name" data-max-length="45" required>
+                            <small class="form-text">El nombre solo puede contener letras</small>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -123,8 +126,6 @@
     <script type="module" src="<?php echo Url::to('assets/js/especialidades/registrarEspecialidad.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/especialidades/actualizarEspecialidad.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/especialidades/eliminarEspecialidad.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>
 </body>
 
 </html>

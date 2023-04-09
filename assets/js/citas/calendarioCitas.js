@@ -24,7 +24,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
     dateClick: async info => {
 
         if (isBeforeToday(info.date)) {
-        
+
             const alertMessage = document.getElementById("alertMessage");
 
             alertMessage.textContent = "No es posible asignar una cita antes de la fecha actual";
@@ -33,13 +33,13 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             return;
 
         }
-        
+
         const especialidadSelect = document.getElementById("s-especialidad");
 
         select2OnClick({
             selectSelector: "#s-paciente",
             selectValue: "paciente_id",
-            selectNames: ["cedula", "nombres-apellidos"],
+            selectNames: ["cedula", "nombre-apellidos"],
             module: "pacientes/consulta",
             parentModal: "#modalReg",
             placeholder: "Seleccione un paciente"
@@ -49,7 +49,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         select2OnClick({
             selectSelector: "#s-medico",
             selectValue: "medico_id",
-            selectNames: ["cedula", "nombres-apellidos"],
+            selectNames: ["cedula", "nombre-apellidos"],
             module: "medicos/consulta",
             parentModal: "#modalReg",
             placeholder: "Seleccione un médico"
@@ -76,7 +76,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
             const especialidades = await getAll("especialidades/consulta");
             $(especialidadSelect).empty().select2();
-            
+
             dinamicSelect2({
                 obj: especialidades,
                 selectSelector: especialidadSelect,
@@ -99,12 +99,11 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             staticSelect: true
         });
 
-        // TODO: Acomodar hora (utilizando moment.js maybe)
-        console.log(info);
+
         let date = new Date();
-        document.getElementById("fecha_cita").value = `${info.dateStr}T${(date.getHours())}:${date.getMinutes()}`; //new Date(info.date).toISOString().split(".")[0]
-        // console.log(new Date(info.date).toISOString().split(".")[0]);
-        // console.log(`${info.dateStr}T${date.getHours()}:${date.getMinutes()}`);
+        var DateTime = luxon.DateTime;
+        console.log(DateTime.fromISO(info.dateStr));
+        document.getElementById("fecha_cita").value = DateTime.fromISO(info.dateStr);
         modalReg.show();
     },
     navLinks: true, // can click day/week names to navigate views

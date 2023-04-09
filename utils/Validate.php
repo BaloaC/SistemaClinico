@@ -200,13 +200,10 @@ class Validate extends BaseModel{
 
             return false;
         } else {
-            
+
             $token = $header['Authorization'];
             return substr($token, 7);
         }
     }
 }
-
-
-
 ?>

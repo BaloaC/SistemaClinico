@@ -18,7 +18,9 @@
         <div class="container">
             <!-- Cabezera -->
             <div class="row">
-                <div class="col-6"><h4 class="pt-5 pb-2 text-grey">Pacientes</h4></div>
+                <div class="col-6">
+                    <h4 class="pt-5 pb-2 text-grey">Pacientes</h4>
+                </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
                     <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> paciente</button>
                 </div>
@@ -71,19 +73,11 @@
                                 <!-- Labels -->
                                 <div class="col-12 col-md-6">
                                     <label for="nombres">Nombres</label>
-                                    <input type="text" name="nombres" class="form-control mb-3">
-
-                                    <label for="apellidos">Apellidos</label>                                
-                                    <input type="text" name="apellidos" class="form-control mb-3">
-
+                                    <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                                    <small class="form-text">El nombre solo puede contener letras</small>
                                     <label for="cedula">Cédula</label>
-                                    <input type="number" name="cedula" class="form-control mb-3">
-                                    
-                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3">
-                                
-                                </div>
-                                <div class="col-12 col-md-6">
+                                    <input type="number" name="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
+                                    <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
                                     <label for="telefono">Teléfono</label>
                                     <div class="input-group mb-3">
                                         <select name="cod_tel" id="cod-tel" class="me-2">
@@ -93,41 +87,81 @@
                                             <option value="0416">0416</option>
                                             <option value="0426">0426</option>
                                         </select>
-                                        <input type="text" name="telefono" class="form-control">
+                                        <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
+                                        <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
                                     </div>
+                                    <label for="tipo_paciente">Tipo de paciente</label>
+                                    <select name="tipo_paciente" id="s-tipo_paciente" class="form-control mb-3" requried>
+                                        <option disabled selected>Seleccione el tipo de paciente...</option>
+                                        <option value="1">Natural</option>
+                                        <option value="2">Representante</option>
+                                        <option value="3">Asegurado</option>
+                                        <option value="4">Beneficiado</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-6">
+
+                                    <label for="apellidos">Apellidos</label>
+                                    <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                                    <small class="form-text">El apellido solo puede contener letras</small>
+
+                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3" required>
 
                                     <label for="direccion">Dirección</label>
-                                    <input type="text" name="direccion" class="form-control mb-3">
-
-                                    <label for="tipo_paciente">Tipo de paciente</label>
-                                    <select name="tipo_paciente" id="s-tipo_paciente" class="form-control mb-3" requried><option></option></select>
+                                    <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                                    <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                                 </div>
-                                <h5 class="mt-4 mb-3">Información del seguro</h5>
-                                <div class="col-12 col-md-6">
-                                    <label for="seguro">Seguro</label>
-                                    <select name="seguro[]" id="s-seguro" class="form-control mb-3" data-active="0" disabled multiple="multiple">
-                                        <option value="">Seleccione un seguro</option>
-                                    </select>
-                                
-                                    <label for="empresa">Empresa</label>
-                                    <select name="empresa_id" id="s-empresa" class="form-control mb-3" data-active="0" disabled>
-                                        <option value="">Consultar empresas</option>
-                                    </select>
+                                <div class="sub-menus">
+                                    <div class="submenu-beneficiado row opacity-0 d-none">
+                                        <h5 class="mt-4 mb-3">Información titulares</h5>
+                                        <div class="col-12 col-md-6">
+                                            <label for="titular">Titular</label>
+                                            <select name="titular_id" id="s-titular_id" class="form-control mb-3 titular" data-active="0" disabled required>
+                                                <option value="">Seleccione un titular</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="tipo_relacion">Tipo de relación</label>
+                                            <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3 relacion" disabled required>
+                                                <option value="" disabled>Seleccione el tipo de relación</option>
+                                                <option value="1">Seguro</option>
+                                                <option value="2">Padre/Madre</option>
+                                                <option value="3">Representante</option>
+                                            </select>
+                                        </div>
+                                        <button type="button" id="addTitular" onclick="addTitularInput()">Agregar titular</button>
+                                    </div>
+                                    <div class="submenu-seguro row opacity-0 d-none">
+                                        <h5 class="mt-4 mb-3">Información del seguro</h5>
+                                        <div class="col-12 col-md-6">
+                                            <label for="seguro">Seguro</label>
+                                            <select name="seguro[]" id="s-seguro" class="form-control mb-3" data-active="0" disabled multiple="multiple" required>
+                                                <option value="">Seleccione un seguro</option>
+                                            </select>
 
-                                    <label for="tipo_seguro">Tipo de seguro</label>
-                                    <select name="tipo_seguro" id="s-tipo_seguro" class="form-control mb-3" disabled>
-                                        <option></option>
-                                    </select>
-                                </div>  
-                                <div class="col-12 col-md-6">
-                                    <label for="fecha_contra">Fecha de Contratación</label>
-                                    <input type="date" name="fecha_contra" class="form-control mb-3" disabled>
-                                    
-                                    <label for="cobertura_general">Cobertura General</label>
-                                    <input type="number" name="cobertura_general" class="form-control mb-3" disabled>
-                                    
-                                    <label for="saldo_disponible">Saldo disponible</label>
-                                    <input type="number" name="saldo_disponible" class="form-control mb-3" disabled>
+                                            <label for="empresa">Empresa</label>
+                                            <select name="empresa_id" id="s-empresa" class="form-control mb-3" data-active="0" disabled required>
+                                                <option value="">Consultar empresas</option>
+                                            </select>
+
+                                            <label for="tipo_seguro">Tipo de seguro</label>
+                                            <select name="tipo_seguro" id="s-tipo_seguro" class="form-control mb-3" disabled required>
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="fecha_contra">Fecha de Contratación</label>
+                                            <input type="date" name="fecha_contra" class="form-control mb-3" disabled required>
+
+                                            <label for="cobertura_general">Cobertura General</label>
+                                            <input type="number" name="cobertura_general" class="form-control mb-3" disabled required>
+
+                                            <label for="saldo_disponible">Saldo disponible</label>
+                                            <input type="number" name="saldo_disponible" class="form-control mb-3" disabled required>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </form>
@@ -153,18 +187,17 @@
                                 <div class="col-12 col-md-4 paciente-info">
                                     <img src="<?php echo Url::to('assets/img/ficha.png'); ?>" alt="">
                                     <p><strong>Nombres y Apellidos:</strong> <span id="nombre_paciente"></span></p>
-                                    <p><strong>Género:</strong> <span id="genero">Static</span></p>
+                                    <!-- <p><strong>Género:</strong> <span id="genero">Static</span></p> -->
                                     <p><strong>Fecha de nacimiento:</strong> <span id="fecha"></span></p>
                                     <p><strong>Edad:</strong> <span id="edad"></span></p>
-                                    <p><strong>Alergías:</strong> <span id="alergias">Static</span></p>
-                                    <p><strong>Observación:</strong> <span id="observacion"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto tempore excepturi voluptatem sapiente. Soluta ex fugiat quidem qui consequuntur, eius eveniet cum! Illo nisi sit perspiciatis adipisci maiores a dolor!</span></p>
+                                    <!-- <p><strong>Alergías:</strong> <span id="alergias">Static</span></p> -->
+                                    <p><strong>Observación:</strong> <span id="observacion">Sin observaciones</span></p>
+                                    <a class="btn btn-sm btn-add my-3" id="consulta-pdf" href="#"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a>
                                     <button class="btn btn-white">Agregar consulta</button>
                                 </div>
                                 <div class="col-12 col-md-8 paciente-consulta">
                                     <ul class="pt-3">
-                                        <li><p>Consulta: <span id="fecha-consulta">Static</span> <br> Especialidad: <span id="especilidad">Static</span></p></li>
-                                        <li><p>Consulta: <span id="fecha-consulta">Static</span> <br> Especialidad: <span id="especilidad">Static</span></p></li>
-                                        <li><p>Consulta: <span id="fecha-consulta">Static</span> <br> Especialidad: <span id="especilidad">Static</span></p></li>
+
                                     </ul>
                                 </div>
                             </div>
@@ -188,17 +221,18 @@
                             <div class="row">
                                 <div class="col-12 col-md-6">
                                     <label for="nombres">Nombres</label>
-                                    <input type="text" name="nombres" class="form-control mb-3">
-
+                                    <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" require>
+                                    <small class="form-text">El nombre solo puede contener letras</small>
                                     <label for="apellidos">Apellidos</label>
-                                    <input type="text" name="apellidos" class="form-control mb-3">
-
+                                    <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                                    <small class="form-text">El apellido solo puede contener letras</small>
                                     <label for="cedula">Cédula</label>
-                                    <input type="number" name="cedula" class="form-control mb-3">
+                                    <input type="number" name="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
+                                    <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3">
+                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3" required>
 
                                     <label for="telefono">Teléfono</label>
                                     <div class="input-group mb-3">
@@ -209,12 +243,14 @@
                                             <option value="0416">0416</option>
                                             <option value="0426">0426</option>
                                         </select>
-                                        <input type="text" name="telefono" class="form-control">
+                                        <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
+                                        <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
                                     </div>
-                                    
+
                                     <label for="direccion">Dirección</label>
-                                    <input type="text" name="direccion" class="form-control mb-3">     
-                                    
+                                    <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                                    <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+
                                     <label for="tipo_paciente">Tipo de paciente</label>
                                     <select name="tipo_paciente" id="tipo_paciente" class="form-control mb-3" requried>
                                         <option value="1">Natural</option>
@@ -255,10 +291,12 @@
 
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/mostrarPacientes.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/pacientes/tipoPaciente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/infoPaciente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/registrarPaciente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/actualizarPaciente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/eliminarPaciente.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/pacientes/addTitular.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>
 </body>

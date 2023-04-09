@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/custom-datatables.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
+
     <title>Proyecto 4 | Facturas Médicos</title>
 </head>
 
@@ -18,9 +19,11 @@
         <div class="container">
             <!-- Cabezera -->
             <div class="row">
-                <div class="col-6"><h4 class="pt-5 pb-2 text-grey">Facturas Médicos</h4></div>
+                <div class="col-6">
+                    <h4 class="pt-5 pb-2 text-grey">Facturas Médicos</h4>
+                </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
-                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Factura</button>
+                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i>Añadir factura médico</button>
                 </div>
                 <hr class="border-white">
             </div>
@@ -66,11 +69,11 @@
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-fmedico" class="p-3 px-4">
                             <label for="medico">Médico</label>
-                            <select name="medico_id" id="s-medico" class="form-control mb-3" data-active="0">
+                            <select name="medico_id" id="s-medico" class="form-control mb-3" data-active="0" required>
                                 <option></option>
                             </select>
                             <label for="fecha_actual">Fecha de pago</label>
-                            <input type="date" name="fecha_actual" class="form-control mb-3">
+                            <input type="date" name="fecha_actual" class="form-control mb-3" required>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -104,8 +107,6 @@
     <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/mostrarFMedicos.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/registrarFMedico.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/eliminarFMedico.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>
 </body>
 
 </html>

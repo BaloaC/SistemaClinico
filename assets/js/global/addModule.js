@@ -1,4 +1,5 @@
 const path = location.pathname.split('/');
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
 export default async function addModule(module, form, data, successMessage) {
 
@@ -13,6 +14,7 @@ export default async function addModule(module, form, data, successMessage) {
             mode: "cors", //Opcional
             headers: {
                 "Content-type": "application/json; charset=utf-8",
+                "Authorization": "Bearer " + Cookies.get("tokken")
             },
             body: JSON.stringify(data),
         };
@@ -38,6 +40,10 @@ export default async function addModule(module, form, data, successMessage) {
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
         $alert.textContent = error.message || error.result.message;
+
+        setTimeout(() => {
+            $alert.classList.add("d-none");
+        }, 1500)
     }
 
 

@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/fontawesome/css/all.min.css'); ?>">
-
     <title>Proyecto 4 | Insumos</title>
 </head>
 
@@ -69,15 +68,20 @@
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-insumo" class="p-3 px-4">
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control mb-3">
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                            <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="cantidad">Cantidad</label>
-                            <input type="number" name="cantidad" class="form-control mb-3">
+                            <input type="number" name="cantidad" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
+                            <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <label for="nombre">Stock</label>
-                            <input type="number" name="stock" class="form-control mb-3">
+                            <input type="number" name="stock" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
+                            <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <label for="nombre">Cantidad mínima</label>
-                            <input type="number" name="cantidad_min" class="form-control mb-3">
+                            <input type="number" name="cantidad_min" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
+                            <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <label for="nombre">Precio</label>
-                            <input type="number" name="precio" class="form-control mb-3">
+                            <input type="number" name="precio" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <small class="form-text">El precio de ser mayor o igual a 0</small>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -99,15 +103,20 @@
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-insumo" class="p-3 px-4">
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control mb-3">
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                            <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="cantidad">Cantidad</label>
-                            <input type="number" name="cantidad" class="form-control mb-3">
+                            <input type="number" name="cantidad" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
+                            <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <label for="nombre">Stock</label>
-                            <input type="number" name="stock" class="form-control mb-3">
+                            <input type="number" name="stock" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
+                            <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <label for="nombre">Cantidad mínima</label>
-                            <input type="number" name="cantidad_min" class="form-control mb-3">
+                            <input type="number" name="cantidad_min" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
+                            <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <label for="nombre">Precio</label>
-                            <input type="number" name="precio" class="form-control mb-3">
+                            <input type="number" name="precio" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <small class="form-text">El precio de ser mayor o igual a 0</small>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -143,8 +152,6 @@
     <script type="module" src="<?php echo Url::to('assets/js/insumos/registrarInsumo.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/insumos/actualizarInsumo.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/insumos/eliminarInsumo.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>
 </body>
 
 </html>

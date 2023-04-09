@@ -11,7 +11,7 @@ class FacturaSeguroModel extends GenericModel {
     protected $monto;
     protected $tipo_servicio;
     protected $estatus_fac;
-    protected $especialidad;
+    protected $nombre_especialidad;
     protected $nombre_paciente;
     protected $nombre_titular;
     protected $clave;
@@ -29,7 +29,7 @@ class FacturaSeguroModel extends GenericModel {
     public function getTipoServicio(){return $this->tipo_servicio;}
     public function getEstatusFac(){return $this->estatus_fac;}
     public function getClave(){return $this->clave;}
-    public function getEspecialidad(){return $this->especialidad;}
+    public function getNombreEspecialidad(){return $this->nombre_especialidad;}
     public function getNombrePaciente(){return $this->nombre_paciente;}
     public function getNombreTitular(){return $this->nombre_titular;}
 
@@ -42,7 +42,7 @@ class FacturaSeguroModel extends GenericModel {
     public function setTipoServicioa($tipo_servicio){return $this->tipo_servicio = $tipo_servicio;}
     public function setEstatusFac($estatus_fac){return $this->estatus_fac = $estatus_fac;}
     public function setClave($clave){return $this->clave = $clave;}
-    public function setEspecialidad($especialidad){return $this->especialidad = $especialidad;}
+    public function setNombreEspecialidad($nombre_especialidad){return $this->nombre_especialidad = $nombre_especialidad;}
     public function setNombrePaciente($nombre_paciente){return $this->nombre_paciente = $nombre_paciente;}
     public function setNombreTitular($nombre_titular){return $this->nombre_titular = $nombre_titular;}
 }

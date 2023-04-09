@@ -58,11 +58,8 @@ cursor.lineY.set("visible", false);
 
 // Create axes
 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
-let xRenderer = am5xy.AxisRendererX.new(root, { 
+let xRenderer = am5xy.AxisRendererX.new(root, {
     minGridDistance: 30,
-    grid: {
-        "disabled": true
-    }
 });
 xRenderer.labels.template.setAll({
     rotation: -90,
@@ -86,6 +83,12 @@ let yAxis = chart.yAxes.push(
         renderer: am5xy.AxisRendererY.new(root, {}),
     })
 );
+
+// Add this line to remove the gridlines
+yAxis.get("renderer").grid.template.set("forceHidden", true);
+xAxis.get("renderer").grid.template.set("forceHidden", true);
+
+
 
 // Create series
 // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
@@ -127,6 +130,7 @@ export let title = chart.children.unshift(am5.Label.new(root,{
     dy: 1,
     id: "titleChart"
 }));
+
 
 console.log(am5.registry.entitiesById.titleChart);
 

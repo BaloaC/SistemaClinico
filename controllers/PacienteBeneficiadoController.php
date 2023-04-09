@@ -91,7 +91,7 @@ class PacienteBeneficiadoController extends Controller{
         $arraySelect = array(
             "paciente.paciente_id",
             "paciente.cedula",
-            "paciente.nombres",
+            "paciente.nombre",
             "paciente.apellidos",
             "paciente.fecha_nacimiento",
             "paciente.edad",

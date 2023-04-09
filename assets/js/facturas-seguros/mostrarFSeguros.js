@@ -46,23 +46,39 @@ addEventListener("DOMContentLoaded", e => {
             { data: "fecha_pago_limite" },
             { data: "monto" },
             {
+                data: "estatus_fac",
+                render: function (data, type, row) {
+                    if(data == 1){
+                        return `<span class="badge light badge-success">Pagada</span>`;
+                    } else{
+                        return `<span class="badge light badge-danger">Anulada</span>`;
+                    }
+                },
+            },
+            {
                 data: "factura_seguro_id",
                 render: function (data, type, row) {
-
                     // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-                    return `
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFSeguro(${data})"><i class="fas fa-trash del-consulta"></i></a>
-                    `
+                    if(row.estatus_fac == 1){
+                        return `
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFSeguro(${data})"><i class="fas fa-trash del-consulta"></i></a>
+                        `
+                    } else{ 
+                        return `
+                            <a class="del-paciente"><i class="fas fa-trash disabled del-consulta"></i></a>
+                        `;
+                    }
                 }
             }
 
         ],
+        order: [[7, 'desc'], [4, 'desc']],
         // ! Ocultar los paneles por defecto 
         columnDefs: [{
             searchPanes: {
                 show: false,
             },
-            targets: [0, 1, 2, 3, 4, 5, 6],
+            targets: [0, 1, 2, 3, 4, 5, 6, 7],
         }],
         // ! rowData (Devuelve toda la fila)
         searchPanes: {
@@ -70,57 +86,31 @@ addEventListener("DOMContentLoaded", e => {
             hideCount: true,
             collapse: true,
             initCollapsed: true,
-            // panes: [
-            //     {
-            //         header: 'Filtrar por tipo de paciente:',
-            //         options: [
-            //             {
-            //                 label: 'Paciente natural',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.tipo_paciente === "1";
-            //                 },
-            //                 className: 'paciente-natural'
-            //             },
-            //             {
-            //                 label: 'Paciente asegurado',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.tipo_paciente === "2";
-            //                 },
-            //                 className: 'paciente-asegurado'
-            //             },
-            //             {
-            //                 label: 'Paciente beneficiado',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.tipo_paciente === "3";
-            //                 },
-            //                 className: 'paciente-beneficiado'
-            //             }
-            //         ],
-            //         dtOpts: {
-            //             searching: false,
-            //             order: [[1, 'desc']]
-            //         }
-            //     },
-            //     {
-            //         header: 'Filtrar por edad:',
-            //         options: [
-            //             {
-            //                 label: 'Menores de 18 años',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.edad < 18;
-            //                 },
-            //                 className: 'may-18'
-            //             },
-            //             {
-            //                 label: 'Mayores de 18 años',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.edad > 18;
-            //                 },
-            //                 className: 'men-18'
-            //             }
-            //         ],
-            //     }
-            // ]
+            panes: [
+                {
+                    header: 'Filtrar por estatus de la factura:',
+                    options: [
+                        {
+                            label: 'Pagada',
+                            value: function (rowData, rowIdx) {
+                                return rowData.estatus_fac === "1";
+                            },
+                            className: 'factura-pagada'
+                        },
+                        {
+                            label: 'Anulada',
+                            value: function (rowData, rowIdx) {
+                                return rowData.estatus_fac === "2";
+                            },
+                            className: 'factura-anulada'
+                        },
+                    ],
+                    dtOpts: {
+                        searching: false,
+                        order: [[1, 'desc']]
+                    }
+                }
+            ]
         },
         dom: 'Plfrtip'
     });

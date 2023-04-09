@@ -11,7 +11,9 @@ async function updateMedico(id) {
     try {
 
         const json = await getById("medicos", id),
-            especialidad = await getById("especialidades", json[0].especialidad_id);
+
+        especialidad = await getById("especialidades", json[0].especialidad_id);
+        console.log(json);
 
         console.log(json, especialidad);
 
@@ -28,7 +30,7 @@ async function updateMedico(id) {
         createOptionOrSelectInstead({
             obj: especialidad,
             selectSelector: "#s-especialidad-update",
-            selectNames: ["nombre"],
+            selectNames: ["nombres"],
             selectValue: "especialidad_id"
         });
 
@@ -36,8 +38,8 @@ async function updateMedico(id) {
         $form.especialidad_id.dataset.secondValue = especialidad.especialidad_id;
         $form.cedula.value = json[0].cedula;
         $form.cedula.dataset.secondValue = json[0].cedula;
-        $form.nombres.value = json[0].nombres;
-        $form.nombres.dataset.secondValue = json[0].nombres;
+        $form.nombre.value = json[0].nombre;
+        $form.nombre.dataset.secondValue = json[0].nombre;
         $form.apellidos.value = json[0].apellidos;
         $form.apellidos.dataset.secondValue = json[0].apellidos;
         $form.telefono.value = $tel[1];
@@ -72,8 +74,13 @@ async function confirmUpdate() {
 
         formData.forEach((value, key) => (data[key] = value));
 
-        // TODO: Añadir validaciones
+        if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
+        if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
+        if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
+        if (isNaN(data.telefono) || data.telefono.length != 7) throw { message: "El número ingresado no es válido" };
+        if (isNaN(data.cod_tel) || data.cod_tel.length != 4) throw { message: "El número ingresado no es válido" };
 
         // ! Para evitar error del endpoint
         let medico_id = data.medico_id;
@@ -109,7 +116,7 @@ window.confirmUpdate = confirmUpdate;
 select2OnClick({
     selectSelector: "#s-especialidad-update",
     selectValue: "especialidad_id",
-    selectNames: ["nombre"],
+    selectNames: ["nombres"],
     module: "especialidades/consulta",
     parentModal: "#modalAct",
     placeholder: "Seleccione una especialidad",

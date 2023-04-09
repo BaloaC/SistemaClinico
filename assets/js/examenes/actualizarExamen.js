@@ -42,8 +42,10 @@ async function confirmUpdate() {
 
         formData.forEach((value, key) => (data[key] = value));
     
+        if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.tipo))) throw { message: "El tipo ingresado no es válido" };
+
 
         const parseData = deleteSecondValue("#act-examen input, #act-examen select", data);
 

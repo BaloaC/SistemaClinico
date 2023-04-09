@@ -41,6 +41,7 @@
                                             <th>Método pago</th>
                                             <th>Monto sin IVA</th>
                                             <th>Monto con IVA</th>
+                                            <th>Estatus</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -66,30 +67,44 @@
                     <div class="modal-body">
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-fconsulta" class="p-3 px-4">
-                            <div class="row">
+                            <div class="two-inputs">
                                 <!-- Labels -->
-                                <div class="col-12 col-md-6">
+                                <div class="row">
                                     <label for="paciente_id">Paciente</label>
-                                    <select name="paciente_id" id="s-paciente" class="form-control" data-active="0">
-                                        <option></option>
-                                    </select>
-                                    
                                     <label for="consulta_id">Consulta</label>
-                                    <select name="consulta_id" id="s-consulta" class="form-control" data-active="0">
+                                </div>
+                                <!-- Inputs -->
+                                <div class="row">
+                                    <select name="paciente_id" id="s-paciente" class="form-control" data-active="0" required>
                                         <option></option>
                                     </select>
-
-                                    <label for="metodo_pago">Método de pago</label>
-                                    <select name="metodo_pago" id="s-metodo-pago" class="form-control" data-active="0">
+                                    <select name="consulta_id" id="s-consulta" class="form-control" data-active="0" required>
                                         <option></option>
                                     </select>
                                 </div>
-                                <div class="col-12 col-md-6">
+                            </div>
+                            <div class="two-inputs">
+                                <!-- Labels -->
+                                <div class="row">
+                                    <label for="monto_con_iva">Método de pago</label>
                                     <label for="monto_sin_iva">Monto sin IVA</label>
-                                    <input type="number" name="monto_sin_iva" class="form-control mb-3">
-
+                                </div>
+                                <!-- Inputs -->
+                                <div class="row">
+                                    <select name="metodo_pago" id="s-metodo-pago" class="form-control" data-active="0" required>
+                                        <option></option>
+                                    </select>
+                                    <input type="number" name="monto_sin_iva" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                                </div>
+                            </div>
+                            <div class="two-inputs">
+                                <!-- Labels -->
+                                <div class="row">
                                     <label for="monto_con_iva">Monto con IVA</label>
-                                    <input type="number" name="monto_con_iva" class="form-control mb-3">
+                                </div>
+                                <!-- Inputs -->
+                                <div class="row">
+                                    <input type="number" name="monto_con_iva" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                                 </div>
                             </div>
                         </form>
@@ -126,8 +141,6 @@
     <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/mostrarFConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/registrarFConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/eliminarFConsulta.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>
 </body>
 
 </html>

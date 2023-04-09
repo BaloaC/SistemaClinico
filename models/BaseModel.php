@@ -60,6 +60,7 @@ class BaseModel{
             $this->execute($obj);
 
             $id = $this->connection->lastInsertId();
+
             $this->insertarAuditoria('Inserto', 'insert', $id);
             return $id;
 
@@ -79,18 +80,19 @@ class BaseModel{
             // Código para la auditoria
             $userAfectado = preg_replace('/[^0-9]/', '', $this->wheres);
             $this->campo = str_replace("_"," ",$this->table);
-            
-            if ($option == 0) { $this->insertarAuditoria('Actualizó', 'update', $userAfectado); }
-            else  { $this->insertarAuditoria('Eliminó', 'delete', $userAfectado); }
-
+        
             foreach($obj as $key => $value){
                 $keys .= "`$key`=:$key,";
             }
 
             $keys = rtrim($keys,',');
             $this->sql = "UPDATE $this->table SET $keys $this->wheres";
+            // return $this->sql;
+            $affectedRows = $this->execute($obj); 
             
-            $affectedRows = $this->execute($obj);            
+            if ($option == 0) { $this->insertarAuditoria('Actualizó', 'update', $userAfectado); }
+            else  { $this->insertarAuditoria('Eliminó', 'delete', $userAfectado); }
+
             return $affectedRows;
 
         } catch (PDOException $error) {
@@ -233,11 +235,12 @@ class BaseModel{
         $nombre_Insercion = $this->byUser($usuario_Afectado, 1);
         $insertar_Accion = "{$accion} {$this->campo} {$nombre_Insercion}";
     
-        $this->sql = 'INSERT INTO auditoria (usuario_id, accion, descripcion) VALUES ("'.$this->user.'", "'.$sentencia.'", "'.$insertar_Accion.'")';
-    
-        $query = $this->connection->prepare($this->sql);
-        $query->execute();
-
+        // ** Enrique
+        if($this->user !== null){
+            $this->sql = 'INSERT INTO auditoria (usuario_id, accion, descripcion) VALUES ("'.$this->user.'", "'.$sentencia.'", "'.$insertar_Accion.'")';
+            $query = $this->connection->prepare($this->sql);
+            $query->execute();
+        }
     }
 }
 

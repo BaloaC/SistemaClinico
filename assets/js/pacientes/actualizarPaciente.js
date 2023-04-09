@@ -27,8 +27,8 @@ async function updatePaciente(id) {
         }
 
         //Establecer el option con los datos del usuario
-        $form.nombres.value = json.nombres || json.nombre_paciente;
-        $form.nombres.dataset.secondValue = json.nombres || json.nombre_paciente;
+        $form.nombre.value = json.nombre || json.nombre_paciente;
+        $form.nombre.dataset.secondValue = json.nombre || json.nombre_paciente;
         $form.apellidos.value = json.apellidos;
         $form.apellidos.dataset.secondValue = json.apellidos;
         $form.cedula.value = json.cedula;
@@ -72,6 +72,14 @@ async function confirmUpdate() {
             data = {};
 
         formData.forEach((value, key) => (data[key] = value));
+
+        if (!$form.checkValidity()) { $form.reportValidity(); return; }
+        if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "Los nombre ingresado no es válido" };
+        if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "Los apellidos ingresado no es válido" };
+        if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
+        if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
+        if (isNaN(data.telefono) || data.telefono.length != 7) throw { message: "El número ingresado no es válido" };
+        if (isNaN(data.cod_tel) || data.cod_tel.length != 4) throw { message: "El número ingresado no es válido" };
 
         let $tel = data.cod_tel + data.telefono;
 

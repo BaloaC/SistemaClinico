@@ -19,7 +19,9 @@
         <div class="container">
             <!-- Cabezera -->
             <div class="row">
-                <div class="col-6"><h4 class="pt-5 pb-2 text-grey">Citas</h4></div>
+                <div class="col-6">
+                    <h4 class="pt-5 pb-2 text-grey">Citas</h4>
+                </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
                     <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> especialidad</button>
                 </div>
@@ -51,55 +53,39 @@
                     <div class="modal-body">
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-cita" class="p-3 px-4">
-                            <div class="two-inputs">
-                                <div class="row">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
                                     <label for="paciente_id">Paciente</label>
-                                    <label for="medico_id">Médico</label>
-                                </div>
-                                <div class="row">
                                     <select name="paciente_id" id="s-paciente" class="form-control" data-active="0">
                                         <option></option>
                                     </select>
-
-                                    <select name="medico_id" id="s-medico" class="form-control" data-active="0">
-                                        <option></option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="two-inputs">
-                                <div class="row">
                                     <label for="cedula_titular">Cédula Titular</label>
-                                    <label for="especialidad_id">Especialidad</label>
-                                </div>
-                                <div class="row">
-                                    <input type="number" name="cedula_titular" class="form-control mb-3">
-                                    <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
-                                        <option></option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="two-inputs">
-                                <div class="row">
+                                    <input type="number" name="cedula_titular" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
+                                    <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
                                     <label for="tipo_cita">Tipo de cita</label>
-                                    <label for="seguro">Seguro</label>
-                                </div>
-                                <div class="row">
                                     <select name="tipo_cita" id="s-tipo_cita" class="form-control mb-3">
                                         <option></option>
                                     </select>
+                                    <label for="fecha_cita">Fecha cita</label>
+                                    <input type="datetime-local" name="fecha_cita" id="fecha_cita" class="form-control mb-3">
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label for="medico_id">Médico</label>
+                                    <select name="medico_id" id="s-medico" class="form-control" data-active="0">
+                                        <option></option>
+                                    </select>
+                                    <label for="especialidad_id">Especialidad</label>
+                                    <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
+                                        <option></option>
+                                    </select>
+                                    <label for="seguro">Seguro</label>
                                     <select name="seguro_id" id="s-seguro" class="form-control mb-3" data-active="0">
                                         <option></option>
                                     </select>
-                                </div>
-                            </div>
-                            <div class="two-inputs">
-                                <div class="row">
-                                    <label for="fecha_cita">Fecha cita</label>
                                     <label for="motivo_cita">Motivo cita</label>
-                                </div>
-                                <div class="row">
-                                    <input type="datetime-local" name="fecha_cita" id="fecha_cita" class="form-control mb-3">
-                                    <input type="text" name="motivo_cita" class="form-control mb-3">
+                                    <input type="text" name="motivo_cita" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="45">
+                                    <small class="form-text">Solo se permiten letras y números</small>
                                 </div>
                             </div>
                         </form>
@@ -195,8 +181,6 @@
     <script type="module" src="<?php echo Url::to('assets/js/citas/confirmUpdateCita.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/updateCita.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/calendarioCitas.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>
 
 </body>
 

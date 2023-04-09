@@ -2,9 +2,22 @@
 
 //Auditoria - API
 Router::get('/auditoria/consulta',AuditoriaController::class . '@listarAuditoria', 1);
-Router::get('/auditoria/fecha',AuditoriaController::class . '@listarAuditoriaPorFecha', 1);
-Router::get('/auditoria/accion',AuditoriaController::class . '@listarAuditoriaPorAccion', 1);
+Router::post('/auditoria/fecha',AuditoriaController::class . '@listarAuditoriaPorFecha', 1);
+Router::post('/auditoria/accion',AuditoriaController::class . '@listarAuditoriaPorAccion', 1);
 Router::get('/auditoria/:id',AuditoriaController::class . '@listarAuditoriaPorUsuario', 1);
+
+//Auditoria - Vista
+Router::get("/auditoria",AuditoriaController::class . '@index');
+
+// PDF - Vista
+Router::get("/pdf/seguros", PdfController::class . '@pdf_seguro');
+Router::get("/pdf/facturacompra/:id", PdfController::class . '@pdf_facturaCompra', -1);
+Router::get("/pdf/facturaconsulta/:id", PdfController::class . '@pdf_facturaConsulta', -1);
+Router::get("/pdf/facturaseguro/:id", PdfController::class . '@pdf_facturaSeguro', -1);
+Router::get("/pdf/facturamedico/:id", PdfController::class . '@pdf_facturaMedico', -1);
+Router::get("/pdf/consulta/:id", PdfController::class . '@pdf_consulta', -1);
+Router::get("/pdf/insumosfaltantes", PdfController::class . '@pdf_InsumosFaltantes', -1);
+Router::get("/pdf/historialmedico/:id", PdfController::class . '@pdf_historialMedico', -1);
 
 //Login - vista
 Router::get('/login',LoginController::class . '@index');
@@ -13,13 +26,14 @@ Router::get('/login/recuperarusuario',LoginController::class . '@recuperarUsuari
 //Login - API
 Router::post('/login',LoginController::class . '@entrar', -1);
 Router::post('/login/:id',LoginController::class . '@recuperarUsuario', -1);
+Router::post('/logout',LoginController::class . '@salir', '1,2,3,4,5');
 
 //Preguntas - API
-Router::get('/preguntas/consulta',PreguntaSeguridadController::class . '@listarPreguntas');
-Router::get('/preguntas/:id',PreguntaSeguridadController::class . '@listarPreguntasPorId');
-Router::get('/preguntas/usuario/:id',PreguntaSeguridadController::class . '@listarPreguntasPorUsuarioId');
-Router::post('/pregunta/:id',PreguntaSeguridadController::class . '@insertarPregunta');
-Router::post('/respuesta/:id',PreguntaSeguridadController::class . '@comprobarPregunta');
+Router::get('/preguntas/consulta',PreguntaSeguridadController::class . '@listarPreguntas', -1   );
+Router::get('/preguntas/:id',PreguntaSeguridadController::class . '@listarPreguntasPorId', -1   );
+Router::get('/preguntas/usuario',PreguntaSeguridadController::class . '@listarPreguntasPorUsuarioId', -1    );
+Router::post('/pregunta/:id',PreguntaSeguridadController::class . '@insertarPregunta', -1   );
+Router::post('/respuesta/:id',PreguntaSeguridadController::class . '@comprobarPregunta', -1 );
 
 //Ruta principal
 Router::get('/',homepageController::class);
@@ -35,7 +49,7 @@ Router::get('/usuarios/actualizar/:id', UsuarioController::class . '@formActuali
 //Usuario - API
 Router::get('/usuarios/consulta',UsuarioController::class . '@listarUsuarios', '1,5');
 Router::get('/usuarios/:id',UsuarioController::class . '@listarUsuarioPorId', '1,5');
-Router::post('/usuarios', UsuarioController::class . '@insertarUsuario',  -1);
+Router::post('/usuarios', UsuarioController::class . '@insertarUsuario',  -1 );
 Router::put('/usuarios/:id', UsuarioController::class . '@actualizarUsuario');
 Router::delete('/usuarios/:id', UsuarioController::class . '@eliminarUsuario', '1,5');
 

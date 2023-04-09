@@ -5,7 +5,6 @@ function addInsumoInput() {
 
     clicks += 1;
     let template = `
-        <hr>
         <div class="col-12 col-md-6">
             <label for="insumo">Insumo</label>
             <select name="insumo_id" id="s-insumo${clicks}" class="form-control insumo-id" data-active="0">

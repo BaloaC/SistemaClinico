@@ -11,12 +11,12 @@ img {
 }
 
 .register-form label {
-    margin-top: 1rem;
+    /* margin-top: 1rem; */
     font-size: 0.9rem;
     font-weight: 500;
 }
 
-#form-preguntas {
+#form-preguntas,  #form-recovery{
     position: absolute;
     top: -30px;
     right: -5rem;
@@ -25,12 +25,17 @@ img {
     /* transform: translateY(); */
 }
 
+#form-recovery{
+    position: relative;
+}
+
+
 .form-centrar {
     display: block !important;
     animation: 1016.08ms linear 0ms 1 normal forwards running moveLeft;
 }
 
-#form-info {
+#form-info, #form-user {
     animation: all ease 2s;
 }
 

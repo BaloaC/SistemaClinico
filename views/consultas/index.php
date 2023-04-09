@@ -73,51 +73,54 @@
                                 <!-- Labels -->
                                 <div class="col-12 col-md-6">
                                     <label for="nombres">Paciente</label>
-                                    <select name="paciente_id" id="s-paciente" class="form-control" data-active="0">
+                                    <select name="paciente_id" id="s-paciente" class="form-control" data-active="0" required>
                                         <option></option>
                                     </select>
                                     
                                     <label for="apellidos">Médico</label>
-                                    <select name="medico_id" id="s-medico" class="form-control" data-active="0">
+                                    <select name="medico_id" id="s-medico" class="form-control" data-active="0" required>
                                         <option></option>
                                     </select>
 
                                     <label for="cedula_titular">Cédula Titular</label>
-                                    <input type="number" name="cedula_titular" class="form-control mb-3">
+                                    <input type="number" name="cedula_titular" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
+                                    <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
                                 
                                     <label for="especialidad_id">Especialidad</label>
-                                    <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
+                                    <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0" required>
                                         <option></option>
                                     </select>
 
                                     <label for="peso">Peso</label>
-                                    <input type="number" name="peso" class="form-control mb-3">
+                                    <input type="number" name="peso" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" required>
+                                    <small class="form-text">No se permiten números negativos</small>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <label for="altura">Altura</label>
-                                    <input type="number" name="altura" class="form-control mb-3">
+                                    <input type="number" name="altura" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" required>
+                                    <small class="form-text">No se permiten números negativos</small>
 
                                     <label for="cita">Cita</label>
-                                    <select name="cita_id" id="s-cita" class="form-control mb-3" data-active="0">
+                                    <select name="cita_id" id="s-cita" class="form-control" data-active="0" required>
                                         <option></option>
                                     </select>
 
                                     <label for="fecha_consulta">Fecha consulta</label>
-                                    <input type="date" name="fecha_consulta" class="form-control mb-3">
+                                    <input type="date" name="fecha_consulta" class="form-control mb-3 required">
 
                                     <label for="examenes">Exámenes</label>
-                                    <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple">
+                                    <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple" required>
                                         <option></option>
                                     </select>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <label for="insumo">Insumo</label>
-                                    <select name="insumo_id" id="s-insumo" class="form-control insumo-id" data-active="0">
+                                    <select name="insumo_id" id="s-insumo" class="form-control insumo-id" data-active="0" required>
                                         <option></option>
                                     </select>
 
                                     <label for="cantidad">Cantidad utilizada</label>
-                                    <input type="number" name="cantidad" class="form-control insumo-cant">
+                                    <input type="number" name="cantidad" class="form-control insumo-cant" required>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-primary mt-3" id="addInsumo" onclick="addInsumoInput()">Añadir otro insumo</button>
@@ -314,18 +317,12 @@
         </div>
 
     </main>
-
-    <script type="text/javascript" src="<?php echo Url::to('assets/libs/datatables/datatables.min.js'); ?>"></script>
+    
+    <?php include PATH_VIEWS . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/mostrarConsultas.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/registrarConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/eliminarConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/addInsumoInput.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/bootstrap/bootstrap.bundle.min.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/select2/select2.min.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/select2/es.js'); ?>"></script>
-    <?php include PATH_VIEWS . '/partials/footer.php'; ?>
 </body>
 
 </html>

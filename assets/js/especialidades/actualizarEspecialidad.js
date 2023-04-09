@@ -42,6 +42,10 @@ async function confirmUpdate() {
             data = {};
 
         formData.forEach((value, key) => (data[key] = value));
+        
+        if (!$form.checkValidity()) { $form.reportValidity(); return; }
+        if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+
 
         // ! Para evitar el error del enpoint al enviar la especialidad
         let especialidad_id = data.especialidad_id;

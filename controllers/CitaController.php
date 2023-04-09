@@ -3,8 +3,9 @@
 class CitaController extends Controller{
 
     protected $arraySelect = array (
-        "paciente.nombres AS nombre_paciente",
-        "medico.nombres AS nombre_medico",
+        "paciente.nombre AS nombre_paciente",
+        "paciente.cedula AS cedula_paciente",
+        "medico.nombre AS nombre_medico",
         "especialidad.nombre AS nombre_especialidad",
         "seguro.nombre AS nombre_seguro",
         "cita.cita_id",

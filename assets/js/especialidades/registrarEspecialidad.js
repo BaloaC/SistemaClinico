@@ -10,6 +10,7 @@ async function addEspecialidad() {
 
         formData.forEach((value, key) => (data[key] = value));
 
+        if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
 
         await addModule("especialidades", "info-especialidad", data, "Especialidad registrada con exito!");

@@ -15,14 +15,16 @@
         <div class="container">
             <!-- Cabezera -->
             <div class="row">
-                <div class="col-6"><h4 class="pt-5 pb-2 text-grey">Gestion de Empresas</h4></div>
+                <div class="col-6">
+                    <h4 class="pt-5 pb-2 text-grey">Gestion de Empresas</h4>
+                </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
                     <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> empresa</button>
                 </div>
                 <hr class="border-white">
             </div>
             <!-- Empresas -->
-            <div class="row" id="empresas-container">
+            <div class="row" id="card-container">
                 <!-- <a href="" data-id="21" data-bs-toggle="modal" data-bs-target="#modalInfo" class="card-container col-xl-4 col-lg-4 col-md-6 col-sm-12">
                     <div class="card overflow-hidden">
                         <div class="text-center p-5 overlay-box">
@@ -39,6 +41,11 @@
 
                     </ul>
                 </div> -->
+            </div>
+            <div class="d-flex justify-content-center">
+                <button id="boton-pagina-anterior" class="btn btn-primary">Anterior</button>
+                <div id="pagination-container" class="pagination"></div>
+                <button id="boton-pagina-siguiente" class="btn btn-primary">Siguiente</button>
             </div>
 
             <!-- Template -->
@@ -70,18 +77,21 @@
                         <form action="" id="info-empresa" class="p-3 px-4">
                             <label for="rif">Rif</label>
                             <div class="input-group mb-3">
-                                <select name="cod_rif" id="cod-rif" class="mb-4 me-2">
+                                <select name="cod_rif" id="cod-rif" class="me-2" required>
                                     <option value="J">J</option>
                                     <option value="E">E</option>
                                 </select>
-                                <input type="text" name="rif" class="form-control">
+                                <input type="text" name="rif" class="form-control" data-validate="true" data-type="rif" data-max-length="9" required>
+                                <small class="form-text col-12">El rif debe contener 9 digitos</small>
                             </div>
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control mb-3">
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                            <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="direccion">Dirección</label>
-                            <input type="text" name="direccion" class="form-control mb-3">
+                            <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                             <label for="seguro">Seguro</label>
-                            <select name="seguro[]" id="s-seguro" class="form-control mb-3" data-active="0" multiple="multiple">
+                            <select name="seguro[]" id="s-seguro" class="form-control mb-3" data-active="0" multiple="multiple" required>
                                 <option></option>
                             </select>
                         </form>
@@ -98,12 +108,17 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="nombreEmpresa"></h1>
+                        <h1 class="modal-title fs-5" id="modalInfoLabel">Ver empresa</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="container">
-                            <p>RIF<span id="rifEmpresa">:</span></p>
+                            <div class="row mb-5">
+                                <div class="col-12 d-flex justify-content-between">
+                                    <h2 class="fw-bold" id="nombreEmpresa"></h2>
+                                    <h2 class="fw-bold" id="rifEmpresa"></h2>
+                                </div>
+                            </div>
                             <p><span>Datos empresa:</span></p>
                             <p>Dirección: <span id="direcEmpresa"></span></p>
                             <p>Nombre seguro: <span id="nombreSeguro"></span></p>
@@ -111,7 +126,6 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a id="btn-eliminar" class="float-right" data-bs-toggle="modal" data-bs-target="#modalAct"><i class="fas fa-trash"></i></a>
                         <button type="button" id="btn-actualizar" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAct">Actualizar empresa</button>
                     </div>
                 </div>
@@ -131,16 +145,19 @@
                         <form action="" id="act-empresa" class="p-3 px-4">
                             <label for="rif">Rif</label>
                             <div class="input-group mb-3">
-                                <select name="cod_rif" id="cod-rif" class="me-2">
+                                <select name="cod_rif" id="cod-rif" class="me-2" required>
                                     <option value="J">J</option>
                                     <option value="E">E</option>
                                 </select>
-                                <input type="text" name="rif" class="form-control">
+                                <input type="text" name="rif" class="form-control" data-validate="true" data-type="rif" data-max-length="9" required>
+                                <small class="form-text col-12">El rif debe contener 9 digitos</small>
                             </div>
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control mb-3">
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                            <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="direccion">Dirección</label>
-                            <input type="text" name="direccion" class="form-control mb-3">
+                            <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                             <label for="seguro">Seguro</label>
                             <select name="seguro[]" id="s-seguro-update" class="form-control mb-3" data-active="0" multiple="multiple">
                                 <option></option>
@@ -174,11 +191,11 @@
         </div>
     </main>
 
+    <script type="module" src="<?php echo Url::to('assets/js/empresas/mostrarEmpresas.js'); ?>"></script>
     <?php include constant('PATH_VIEWS') . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/login/validarSesion.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/empresas/registrarEmpresa.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/empresas/actualizarEmpresa.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/empresas/mostrarEmpresas.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/empresas/eliminarEmpresa.js'); ?>"></script>
 </body>
 

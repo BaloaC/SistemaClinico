@@ -1,5 +1,7 @@
 <?php
 
+require_once 'middleware/middlewareBase.php';
+
 class LoginController extends Controller{
 
     //Método index (vista principal)
@@ -38,6 +40,7 @@ class LoginController extends Controller{
                     $_UsuarioModel = new UsuarioModel();
 
                     $actualizado = $_UsuarioModel->where('nombre','=',$_POST['nombre'])->update($tokken);
+                    // var_dump($actualizado);
                     $mensaje = ($actualizado > 0);
                     
                     $tokken['usuario_id'] = $usuario->usuario_id;
@@ -55,6 +58,19 @@ class LoginController extends Controller{
             default:
                 return $respuesta = new Response('DATOS_INVALIDOS');
         }
+    }
+
+    public function salir(){
+        
+        $token = MiddlewareBase::getToken();
+        $data = array('tokken' => "");
+        
+        $_usuarioModel = new UsuarioModel();
+        $usuario = $_usuarioModel->where('tokken','=',$token)->update($data);
+        
+        $mensaje = ($usuario > 0);
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        return $respuesta->json($mensaje ? 200 : 400);
     }
     
     public function recuperarUsuario($usuario_id) {

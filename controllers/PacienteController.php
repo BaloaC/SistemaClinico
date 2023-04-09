@@ -34,7 +34,7 @@ class PacienteController extends Controller{
 
         // Creando los strings para las validaciones
         $camposNumericos = array("cedula", "edad", "telefono", "tipo_paciente");
-        $camposString = array("nombres", "apellidos");
+        $camposString = array("nombre", "apellidos");
 
         $validarPaciente = new Validate;
         $token = $validarPaciente->validateToken(apache_request_headers());

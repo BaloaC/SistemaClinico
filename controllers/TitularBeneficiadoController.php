@@ -71,7 +71,7 @@ class TitularBeneficiadoController extends Controller{
         $arraySelect = array(
             "paciente_beneficiado.paciente_beneficiado_id",
             "paciente.paciente_id",
-            "paciente.nombres",
+            "paciente.nombre",
             "paciente.apellidos",
             "paciente.cedula",
             "paciente.fecha_nacimiento",
@@ -100,7 +100,7 @@ class TitularBeneficiadoController extends Controller{
     
         $arraySelect = array(
             "paciente.paciente_id",
-            "paciente.nombres",
+            "paciente.nombre",
             "paciente.cedula"
         );
 

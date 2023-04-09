@@ -1,4 +1,5 @@
 import deleteSecondValue from "./deleteSecondValue.js";
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
 const path = location.pathname.split('/');
 
@@ -15,6 +16,7 @@ export default async function updateModule(data, data_id, module, form, successM
             mode: "cors", //Opcional
             headers: {
                 "Content-type": "application/json; charset=utf-8",
+                "Authorization": "Bearer " + Cookies.get("tokken")
             },
             body: JSON.stringify(data),
         };

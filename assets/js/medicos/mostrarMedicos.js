@@ -18,9 +18,9 @@ async function getMedico(id) {
 
         const json = await getById("medicos/",id);
 
-        $nombreMedico.innerText = `${json[0].nombres.split(" ")[0]} ${json[0].apellidos.split(" ")[0]}`;
+        $nombreMedico.innerText = `${json[0].nombre.split(" ")[0]} ${json[0].apellidos.split(" ")[0]}`;
         $cedulaMedico.innerText = `C.I: ${json[0].cedula}`;
-        $nombresMedico.innerText = `${json[0].nombres}`;
+        $nombresMedico.innerText = `${json[0].nombre}`;
         $apellidosMedico.innerText = `${json[0].apellidos}`;
         $tlfMedico.innerText = `${json[0].telefono}`;
         $direcMedico.innerText = `${json[0].direccion}`;
@@ -53,7 +53,7 @@ export async function mostrarMedicos() {
                 $telefono = $cardTemplate.querySelector(".list-group > li:nth-child(3) > b");
 
             
-            $nombreMedico.textContent = `${el.nombres.split(" ")[0]} ${el.apellidos.split(" ")[0]}`;
+            $nombreMedico.textContent = `${el.nombre.split(" ")[0]} ${el.apellidos.split(" ")[0]}`;
             $cedula.textContent = el.cedula;
             $especialidad.textContent = el.especialidad !== undefined ? concatItems(el.especialidad, "nombre_especialidad", "No posee ninguna especialidad") : "No posee ninguna especialidad";
             $telefono.textContent = el.telefono;

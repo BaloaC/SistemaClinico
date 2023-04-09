@@ -43,6 +43,7 @@
                                             <th>Fecha ocurrencia</th>
                                             <th>Fecha pago limite</th>
                                             <th>Monto</th>
+                                            <th>Estatus</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -70,15 +71,16 @@
                         <form action="" id="info-fseguro" class="p-3 px-4">
 
                             <label for="consulta_id">Consulta</label>
-                            <select name="consulta_id" id="s-consulta" class="form-control mb-3" data-active="0">
+                            <select name="consulta_id" id="s-consulta" class="form-control mb-3" data-active="0" required>
                                 <option></option>
                             </select>
                             <label for="tipo_servico">Tipo de servicio</label>
-                            <select name="tipo_servicio" id="s-tipo-servicio" class="form-control mb-3" data-active="0">
+                            <select name="tipo_servicio" id="s-tipo-servicio" class="form-control mb-3" data-active="0" required>
                                 <option></option>
                             </select>
                             <label for="monto">Monto</label>
-                            <input type="number" name="monto" id="monto" class="form-control mb-3">
+                            <input type="number" name="monto" id="monto" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <small class="form-text">El precio de ser mayor o igual a 0</small>
                         </form>
                     </div>
                     <div class="modal-footer">

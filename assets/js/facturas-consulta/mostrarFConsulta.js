@@ -5,7 +5,7 @@ const path = location.pathname.split('/');
 select2OnClick({
     selectSelector: "#s-paciente",
     selectValue: "paciente_id",
-    selectNames: ["cedula", "nombres-apellidos"],
+    selectNames: ["cedula", "nombre-apellidos"],
     module: "pacientes/consulta",
     parentModal: "#modalReg",
     placeholder: "Seleccione un paciente"
@@ -51,13 +51,28 @@ addEventListener("DOMContentLoaded", e => {
             { data: "monto_sin_iva" },
             { data: "monto_con_iva" },
             {
+                data: "estatus_fac",
+                render: function (data, type, row) {
+                    if (data == 1) {
+                        return `<span class="badge light badge-success">Pagada</span>`;
+                    } else {
+                        return `<span class="badge light badge-danger">Anulada</span>`;
+                    }
+                },
+            },
+            {
                 data: "factura_consulta_id",
                 render: function (data, type, row) {
-
                     // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-                    return `
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFConsulta(${data})"><i class="fas fa-trash del-consulta"></i></a>
-                    `
+                    if (row.estatus_fac == 1) {
+                        return `
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFConsulta(${data})"><i class="fas fa-trash del-consulta"></i></a>
+                        `
+                    } else {
+                        return `
+                            <a class="del-paciente"><i class="fas fa-trash disabled del-consulta"></i></a>
+                        `;
+                    }
                 }
             }
 
@@ -137,6 +152,9 @@ addEventListener("DOMContentLoaded", e => {
                 <tr>
                     <td>Datos consulta:</td>
                     <td>${data.consulta_id}</td>
+                </tr>
+                <tr>
+                    <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/facturaconsulta/${data.factura_consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
                 </tr>
             </table>
         `;

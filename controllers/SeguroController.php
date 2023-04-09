@@ -127,14 +127,14 @@ class SeguroController extends Controller{
     public function listarSeguroPorId($seguro_id){
 
         $_seguroModel = new SeguroModel();
-        $seguro = $_seguroModel->where('seguro.seguro_id','=',$seguro_id)->where('estatus_seg', '=', '1')->getFirst();
+        $seguro = $_seguroModel->where('seguro.seguro_id','=',$seguro_id)->where('seguro.estatus_seg', '=', '1')->getFirst();
 
         if ($seguro) {
 
             $arraySeguro = get_object_vars($seguro);
 
             $inners = $_seguroModel->listInner($this->arrayInner);
-            $empresa = $_seguroModel->where('seguro.seguro_id','=',$seguro_id)->where('estatus_seg', '=', '1')->innerJoin($this->arraySelect, $inners, "seguro_empresa");
+            $empresa = $_seguroModel->where('seguro.seguro_id','=',$seguro_id)->where('seguro.estatus_seg', '=', '1')->innerJoin($this->arraySelect, $inners, "seguro_empresa");
             $mensaje = ($empresa != null);
 
             if ( $mensaje ) { $arraySeguro['empresas'] = $empresa; } 

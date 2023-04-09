@@ -12,13 +12,9 @@ async function addFSeguro() {
 
         formData.forEach((value, key) => (data[key] = value));
 
-        // TODO: Validar los inputs del paciente
+        if (!$form.checkValidity()) { $form.reportValidity(); return; }
+        if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto))) throw { message: "El precio ingresado es inválido" };
 
-        // if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
-
-        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-
-        // data.rif = data.cod_rif + "-" + data.rif;
 
         await addModule("factura/seguro","info-fseguro",data,"Factura seguro registrada correctamente!");
         $('#fSeguros').DataTable().ajax.reload();

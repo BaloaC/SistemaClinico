@@ -15,21 +15,21 @@ select2OnClick({
 select2OnClick({
     selectSelector: "#s-empresa",
     selectValue: "empresa_id",
-    selectNames: ["rif", "nombre_empresa"],
+    selectNames: ["rif", "nombre"],
     module: "empresas/consulta",
     parentModal: "#modalReg",
     placeholder: "Seleccione una empresa"
 });
 
-dinamicSelect2({
-    obj: [{ id: 1, text: "Natural" }, { id: 2, text: "Asegurado" }, { id: 3, text: "Beneficiado" }],
-    selectNames: ["text"],
-    selectValue: "id",
-    selectSelector: "#s-tipo_paciente",
-    placeholder: "Seleccione el tipo de paciente",
-    parentModal: "#modalReg",
-    staticSelect: true
-});
+// dinamicSelect2({
+//     obj: [{ id: 1, text: "Natural" }, { id: 2, text: "Asegurado" }, { id: 3, text: "Beneficiado" }],
+//     selectNames: ["text"],
+//     selectValue: "id",
+//     selectSelector: "#s-tipo_paciente",
+//     placeholder: "Seleccione el tipo de paciente",
+//     parentModal: "#modalReg",
+//     staticSelect: true
+// });
 
 dinamicSelect2({
     obj: [{ id: 1, text: "Acumulativo" }, { id: 2, text: "Normal" }],
@@ -63,8 +63,8 @@ addEventListener("DOMContentLoaded", e => {
             {
                 "data": function (row, type, val, meta) {
 
-                    if (row.nombres) {
-                        return row.nombres;
+                    if (row.nombre) {
+                        return row.nombre;
 
                     } else {
                         return row.nombre_paciente;
@@ -167,6 +167,7 @@ addEventListener("DOMContentLoaded", e => {
 
     function format(data) {
 
+        console.log(data);
         if (!data.nombre_seguro) data.nombre_seguro = "No aplica";
         if (!data.saldo_disponible) data.saldo_disponible = "No aplica";
 
@@ -181,12 +182,10 @@ addEventListener("DOMContentLoaded", e => {
                 <tr class="blue-td">
                     <td>Dirección:</td>
                     <td>${data.direccion}</td>
-                    <td>Seguro:</td>
-                    <td>${data.nombre_seguro}</td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <td>Saldo disponible:</td>
-                    <td>${data.saldo_disponible}</td>
                 </tr>
             </table>
         `

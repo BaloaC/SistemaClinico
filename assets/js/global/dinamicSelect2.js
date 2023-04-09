@@ -48,7 +48,7 @@ export async function select2OnClick({ selectSelector, module, selectValue, sele
     // ** Crear select en caso de que no exista
     if (!document.querySelector(selectSelector).classList.contains("select2-hidden-accessible")) {
 
-        $(selectSelector).select2({
+        const options = {
             width: selectWidth,
             placeholder,
             theme: "bootstrap-5",
@@ -57,7 +57,13 @@ export async function select2OnClick({ selectSelector, module, selectValue, sele
             closeOnSelect: !multiple,
             dropdownParent: $(parentModal),
             allowClear: multiple
-        })
+        }
+
+        if(parentModal === null){
+            delete options.dropdownParent;
+        }
+
+        $(selectSelector).select2(options);
     }
 
     $(selectSelector).on("select2:open", async function (e) {
@@ -83,9 +89,12 @@ export async function select2OnClick({ selectSelector, module, selectValue, sele
         $(selectSelector).select2("open");
     })
 
-    document.querySelector(parentModal).addEventListener("hidden.bs.modal", e => {
-        document.querySelector(selectSelector).dataset.active = 0;
-    })
+    // console.log(parentModal);
+    if(parentModal !== null){
+        document.querySelector(parentModal).addEventListener("hidden.bs.modal", e => {
+            document.querySelector(selectSelector).dataset.active = 0;
+        })
+    }
 }
 
 export function emptySelect2({ selectSelector, selectWidth = "45%", placeholder, parentModal, disable = false }) {

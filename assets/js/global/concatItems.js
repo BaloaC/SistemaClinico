@@ -1,6 +1,6 @@
 export default function concatItems(items, propItem, noneMessage) {
     let concatString = "";
-    if (items.length === 0) {
+    if (items === undefined || items.length === 0) {
         concatString = noneMessage;
     } else {
         items.forEach(item => { concatString += item[propItem] + ", "; });

@@ -28,13 +28,13 @@ class Router{
         // return Router::add('POST', $uri, $function);
     }
 
-    public static function put($uri, $nivel = 0, $function = null){
+    public static function put($uri, $function = null, $nivel = 0){
         
         Router::$put[$uri] = new Uri(self::parseUri($uri), 'PUT', $nivel, $function);
         return;
     }
 
-    public static function delete($uri, $nivel = 0, $function = null){
+    public static function delete($uri, $function = null, $nivel = 0){
         
         Router::$delete[$uri] = new Uri(self::parseUri($uri), 'DELETE', $nivel, $function);
         return;
@@ -100,15 +100,16 @@ class Router{
 
             if ( is_numeric(substr($uri, -1)) ) {
                 
-                Router::comprobacionDeSeguridad(); // Comprobamos el token
-
-
-
-                $uri2 = preg_replace('/[^a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]+/u', '',$uri);
-                $ruta =Router::$get["/".$uri2."/:id"];
-                $permission = MiddlewareBase::verifyPermissions(Router::$get["/".$uri2."/:id"]->nivel);
-
-                if (!$permission) { return Router::retornarMensaje($permission); }
+                $uri2 = preg_replace('/[^a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\/\s]+/u', '', $uri);
+                $nivel = Router::$get["/".$uri2.":id"]->nivel;
+        
+                if($nivel != -1){
+                    Router::comprobacionDeSeguridad(); // Comprobamos el token
+                    $permission = MiddlewareBase::verifyPermissions($nivel);
+                    if (!$permission) { return Router::retornarMensaje($permission); }
+                }
+                
+                $ruta =Router::$get["/".$uri2.":id"];
                 if ( $ruta->match($uri)) { return $ruta->call(); }
 
             } else {

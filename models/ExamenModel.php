@@ -5,6 +5,7 @@ require_once 'GenericModel.php';
 class ExamenModel extends GenericModel {
 
     protected $nombre;
+    protected $tipo;
     protected $estatus_exa;
 
     public function __construct($propiedades = null) {

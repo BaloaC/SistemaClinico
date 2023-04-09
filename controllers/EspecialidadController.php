@@ -9,7 +9,7 @@ class EspecialidadController extends Controller{
 
     protected $arraySelect = array(
         "medico.medico_id",
-        "medico.nombres",
+        "medico.nombre",
         "medico.apellidos"
     );
 

@@ -2,21 +2,38 @@
 
 class AuditoriaController extends Controller{
 
+    protected $arraySelect = array (
+        "auditoria.auditoria_id",
+        "auditoria.fecha_creacion",
+        "auditoria.usuario_id",
+        "auditoria.accion",
+        "auditoria.descripcion",
+        "usuario.nombre as nombre_usuario",
+    );
+
+    protected $arrayInner = array (
+        "usuario" => "auditoria",
+    );
+
     //Método index (vista principal)
     public function index(){
         return $this->view('auditoria/index');
     }
 
-    
     public function listarAuditoria(){
 
+        
         $_auditoriaModel = new AuditoriaModel();
-        $lista = $_auditoriaModel->getAll();
+
+        // ** Enrique
+        $inners = $_auditoriaModel->listInner($this->arrayInner);
+        $lista = $_auditoriaModel->innerJoin($this->arraySelect, $inners, "auditoria");
+
         return $this->retornarMensaje($lista);
     }
 
     public function listarAuditoriaPorFecha(){
-        
+
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarAuditoria = new Validate;
 
@@ -31,7 +48,11 @@ class AuditoriaController extends Controller{
         } else {
 
             $_auditoriaModel = new AuditoriaModel();
-            $id = $_auditoriaModel->whereDate('fecha_accion',$_POST['fecha_inicio'],$_POST['fecha_fin'])->getAll();
+
+            // ** Enrique
+            $inners = $_auditoriaModel->listInner($this->arrayInner);
+            $id = $_auditoriaModel->whereDate('auditoria.fecha_creacion',$_POST['fecha_inicio'],$_POST['fecha_fin'])->innerJoin($this->arraySelect, $inners, "auditoria");
+            
             return $this->retornarMensaje($id);
         }        
     }
@@ -40,7 +61,9 @@ class AuditoriaController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         $_auditoriaModel = new AuditoriaModel();
 
-        $auditoria = $_auditoriaModel->where('accion', '=', $_POST['accion'])->getAll();
+        // ** Enrique
+        $inners = $_auditoriaModel->listInner($this->arrayInner);
+        $auditoria = $_auditoriaModel->where('auditoria.accion', '=', $_POST['accion'])->innerJoin($this->arraySelect, $inners, "auditoria");
         return $this->retornarMensaje($auditoria);
     }
 
@@ -48,7 +71,9 @@ class AuditoriaController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         $_auditoriaModel = new AuditoriaModel();
 
-        $auditoria = $_auditoriaModel->where('usuario_id', '=', $usuario_id)->getAll();
+        // ** Enrique
+        $inners = $_auditoriaModel->listInner($this->arrayInner);
+        $auditoria = $_auditoriaModel->where('auditoria.usuario_id', '=', $usuario_id)->innerJoin($this->arraySelect, $inners, "auditoria");
         return $this->retornarMensaje($auditoria);
     }
 

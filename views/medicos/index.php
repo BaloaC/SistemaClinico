@@ -4,6 +4,8 @@
 <head>
     <?php include constant('PATH_VIEWS') . '/partials/header.php'; ?>
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/seguro.css'); ?>">
+    <link rel="stylesheet" href="<?php echo Url::to('assets/libs/select2/select2.min.css'); ?>">
+    <link rel="stylesheet" href="<?php echo Url::to('assets/libs/select2/select2-bootstrap5-theme.css'); ?>">
 
     <title>Proyecto 4 | Welcome</title>
 </head>
@@ -15,7 +17,9 @@
         <div class="px-5">
             <!-- Cabezera -->
             <div class="row">
-                <div class="col-6"><h4 class="pt-5 pb-2 text-grey">Gestion de Médicos</h4></div>
+                <div class="col-6">
+                    <h4 class="pt-5 pb-2 text-grey">Gestion de Médicos</h4>
+                </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
                     <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Médicos</button>
                 </div>
@@ -43,8 +47,8 @@
             </template>
         </div>
 
-       <!-- Modal Registro-->
-       <div class="modal fade" id="modalReg" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegLabel" aria-hidden="true">
+        <!-- Modal Registro-->
+        <div class="modal fade" id="modalReg" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -56,11 +60,13 @@
                         <form action="" id="info-medico" class="p-3 px-4">
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="nombres">Nombres</label>
-                                    <input type="text" name="nombres" class="form-control mb-3">
+                                    <label for="nombre">Nombres</label>
+                                    <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                                    <small class="form-text">El nombre solo puede contener letras</small>
                                     
                                     <label for="apellidos">Apellidos</label>
-                                    <input type="text" name="apellidos" class="form-control mb-3">
+                                    <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                                    <small class="form-text">El apellido solo puede contener letras</small>
                                     
                                     <label for="nombres">Teléfono</label>
                                     <div class="input-group mb-3">
@@ -71,18 +77,19 @@
                                             <option value="0416">0416</option>
                                             <option value="0426">0426</option>
                                         </select>
-                                        <input type="text" name="telefono" class="form-control">
+                                        <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
+                                        <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <label for="direccion">Dirección</label>
-                                    <input type="text" name="direccion" class="form-control mb-3">
-
+                                    <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                                    <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                                     <label for="cedula">Cédula</label>
-                                    <input type="text" name="cedula" class="form-control mb-3">
-
+                                    <input type="number" name="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
+                                    <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
                                     <label for="especialidad">Especialidad</label>
-                                    <select name="especialidad[]" id="s-especialidad" class="form-control mb-3" data-active="0" multiple="multiple">
+                                    <select name="especialidad[]" id="s-especialidad" class="form-control mb-3" data-active="0" multiple="multiple" required>
                                         <option value=""></option>
                                     </select>
                                 </div>
@@ -162,24 +169,43 @@
                     <div class="modal-body">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-medico" class="p-3 px-4">
-                            <div class="row">
-                                <div class="col-12 col-md-6">
+                            <div class="two-inputs">
+                                <!-- Labels -->
+                                <div class="row">
                                     <label for="cedula">Cédula</label>
-                                    <input type="number" name="cedula" class="form-control mb-3">
-                                    
                                     <label for="especialidad">Especialidad</label>
-                                    <select name="especialidad_id" id="s-especialidad-update" class="form-control mb-3" data-active="0">
-                                        <option></option>
-                                    </select>
-
-                                    <label for="nombres">Nombres</label>
-                                    <input type="text" name="nombres" class="form-control mb-3">
                                 </div>
-                                <div class="col-12 col-md-6">
+                                <!-- Inputs -->
+                                <div class="row">
+                                    <input type="number" name="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
+                                    <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
+                                    <select name="especialidad_id" id="s-especialidad-update" class="form-control mb-3" data-active="0" required>
+                                       <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="two-inputs">
+                                <!-- Labels -->
+                                <div class="row">
+                                    <label for="nombre">Nombres</label>
                                     <label for="apellidos">Apellidos</label>
-                                    <input type="text" name="apellidos" class="form-control mb-3">
-
+                                </div>
+                                <!-- Inputs -->
+                                <div class="row">
+                                    <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                                    <small class="form-text">El nombre solo puede contener letras</small>
+                                    <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                                    <small class="form-text">El apellido solo puede contener letras</small>
+                                </div>
+                            </div>
+                            <div class="two-inputs">
+                                <!-- Labels -->
+                                <div class="row">
                                     <label for="nombres">Teléfono</label>
+                                    <label for="apellidos">Dirección</label>
+                                </div>
+                                <!-- Inputs -->
+                                <div class="row">
                                     <div class="input-group mb-3">
                                         <select name="cod_tel" id="cod-tel" class="me-2">
                                             <option value="0412">0412</option>
@@ -188,13 +214,15 @@
                                             <option value="0416">0416</option>
                                             <option value="0426">0426</option>
                                         </select>
-                                        <input type="text" name="telefono" class="form-control">
+                                        <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
+                                        <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
                                     </div>
-
-                                    <label for="direccion">Dirección</label>
-                                    <input type="text" name="direccion" class="form-control mb-3">
+                                    <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                                    <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                                 </div>
                             </div>
+                        </form>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
                     </div>
@@ -228,7 +256,6 @@
     <script type="module" src="<?php echo Url::to('assets/js/medicos/actualizarMedico.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/mostrarMedicos.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/eliminarMedico.js'); ?>"></script>
-
 </body>
 
 </html>

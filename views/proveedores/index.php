@@ -16,10 +16,10 @@
             <!-- Cabezera -->
             <div class="row">
                 <div class="col-6">
-                    <h1 class="p-4 text-light">Gestion de Proveedores</h1>
+                <h4 class="pt-5 pb-2 text-grey">Gestion de Proveedores</h4>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
-                    <button class="btn btn-blue" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg">Añadir exámen</button>
+                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Añadir proveedor</button>
                 </div>
                 <hr class="border-white">
             </div>
@@ -55,9 +55,11 @@
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-proveedor" class="p-3 px-4">
                             <label for="nombre">Nombre Proveedor</label>
-                            <input type="text" name="nombre" class="form-control mb-3">
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                            <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="ubicacion">Ubicación</label>
-                            <input type="text" name="ubicacion" class="form-control mb-3">
+                            <input type="text" name="ubicacion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -79,9 +81,11 @@
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-proveedor" class="p-3 px-4">
                             <label for="nombre">Nombre Proveedor</label>
-                            <input type="text" name="nombre" class="form-control mb-3">
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                            <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="ubicacion">Ubicación</label>
-                            <input type="text" name="ubicacion" class="form-control mb-3">
+                            <input type="text" name="ubicacion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                         </form>
                     </div>
                     <div class="modal-footer">

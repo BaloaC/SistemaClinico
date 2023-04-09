@@ -8,11 +8,10 @@ const d = document,
 
 async function updateEspecialidad(id) {
 
-    const $form = d.getElementById("act-especialidad");
+    const $form = d.getElementById("act-insumo");
 
     try {
-        const json = await getById("especialidades", id);
-
+        const json = await getById("insumos", id);
         //Establecer el option con los datos del usuario
         $form.nombre.value = json.nombre;
         $form.nombre.dataset.secondValue = json.nombre;

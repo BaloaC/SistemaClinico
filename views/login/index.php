@@ -37,11 +37,14 @@
                                 <form class="login-form row">
                                     <div class="offset-2 col-8">
                                         <label for="user">Nombre de usuario</label>
-                                        <input class="form-control" type="text" name="nombre" id="">
+                                        <input class="form-control" type="text" name="nombre" id="" data-validate="true" data-type="username" data-max-length="16" required>
+                                        <small class="form-text">Solo se permiten los siguientes caracteres: "_" y "-"</small>
+                                        
                                         
                                         <label for="pass" class="mt-2">Contraseña</label>
-                                        <input class="form-control mb-3" type="password" name="clave">
-                                        <div class="text-end"><a href="<?php echo Url::base() . "/login/recuperar" ?>" class="forgot-password" href="">¿Olvidaste tu contraseña?</a></div>
+                                        <input class="form-control mb-3" type="password" name="clave" data-validate="true" data-type="password" data-max-length="20" required>
+                                        <small class="form-text">La contraseña debe contener al menos 8 caracteres <br> y los caracteres permitdos son: "@" y "-"</small>
+                                        <div class="text-end"><a href="<?php echo Url::base() . "/login/recuperarusuario" ?>" class="forgot-password" href="">¿Olvidaste tu contraseña?</a></div>
                                         <div class="text-center"><button type="submit text-center" class="btn btn-primary mt-3" value="Iniciar Sesion">Iniciar Sesión</button></div>
                                     </div>
                                 </form>

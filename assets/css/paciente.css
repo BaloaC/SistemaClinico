@@ -31,3 +31,7 @@
 .paciente-info p {
     margin-bottom: 0.5rem !important;
 }
+
+.sub-menus > div{
+    transition: display 1s, opacity 500ms ease-in-out;
+}

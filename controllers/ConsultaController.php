@@ -17,9 +17,11 @@ class ConsultaController extends Controller{
         "consulta.fecha_consulta",
         "paciente.paciente_id",
         "paciente.nombre AS nombre_paciente",
+        "paciente.apellidos AS apellido_paciente",
         "paciente.cedula as cedula_paciente",
         "medico.medico_id",
         "medico.nombre AS nombre_medico",
+        "medico.apellidos AS apellido_medico",
         "medico.cedula AS cedula_medico",
         "especialidad.especialidad_id",
         "especialidad.nombre AS nombre_especialidad",
@@ -165,6 +167,41 @@ class ConsultaController extends Controller{
         $_consultaModel = new ConsultaModel();
         $inners = $_consultaModel->listInner($this->arrayInner);
         $consulta = $_consultaModel->where('consulta.estatus_con','=','1')->innerJoin($this->arraySelect, $inners, "consulta");
+        $resultado = array();
+
+        foreach ($consulta as $consultas) {
+            
+            $_consultaModel = new ConsultaModel();
+            $innersExa = $_consultaModel->listInner($this->arrayInnerExa);
+            $consulta_examenes = $_consultaModel->where('consulta_examen.consulta_id','=',$consultas->consulta_id)->where('consulta_examen.estatus_con', '=', 1)->innerJoin($this->arraySelectExa, $innersExa, "consulta_examen");
+
+            if ($consulta_examenes) {
+                $consultas->examenes = $consulta_examenes; 
+            }
+
+            $_consultaModel = new ConsultaModel();
+            $innersIns = $_consultaModel->listInner($this->arrayInnerIns);
+            $consulta_insumos = $_consultaModel->where('consulta_insumo.consulta_id','=',$consultas->consulta_id)->where('consulta_insumo.estatus_con', '=', 1)->innerJoin($this->arraySelectIns, $innersIns, "consulta_insumo");
+            
+            if ($consulta_insumos) {
+                $consultas->insumos = $consulta_insumos; 
+            }
+
+            $resultado[] = $consultas;
+        }
+
+        $mensaje = (count($resultado) > 0);     
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($resultado);
+
+        return $respuesta->json($mensaje ? 200 : 404);
+    }
+
+    public function listarConsultasPorPaciente($paciente_id){
+
+        $_consultaModel = new ConsultaModel();
+        $inners = $_consultaModel->listInner($this->arrayInner);
+        $consulta = $_consultaModel->where('consulta.paciente_id','=',$paciente_id)->where('consulta.estatus_con','=','1')->innerJoin($this->arraySelect, $inners, "consulta");
         $resultado = array();
 
         foreach ($consulta as $consultas) {

@@ -19,7 +19,7 @@ class AuditoriaModel extends GenericModel{
 
     /* Setters */
     public function setUsuarioId($usuario_id){$this->usuario_id = $usuario_id;}
-    public function setAccio($accions){$this->accions = $accions;}
+    public function setAccion($accions){$this->accions = $accions;}
     public function setdescripcion($descripcion){$this->descripcion = $descripcion;}
 }
 

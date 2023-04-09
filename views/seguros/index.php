@@ -4,7 +4,6 @@
 <head>
     <?php include constant('PATH_VIEWS') . '/partials/header.php'; ?>
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/seguro.css'); ?>">
-
     <title>Proyecto 4 | Welcome</title>
 </head>
 
@@ -15,7 +14,9 @@
         <div class="px-5">
             <!-- Cabezera -->
             <div class="row">
-                <div class="col-6"><h4 class="pt-5 pb-2 text-grey">Gestion de Seguros</h4></div>
+                <div class="col-6">
+                    <h4 class="pt-5 pb-2 text-grey">Gestion de Seguros</h4>
+                </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
                     <button class="btn btn-sm btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> seguro</button>
                 </div>
@@ -54,16 +55,19 @@
                         <form action="" id="info-seguro" class="p-3 px-4">
                             <label for="rif">Rif</label>
                             <div class="input-group mb-3">
-                                <select name="cod_rif" id="cod-rif" class="me-2">
+                                <select name="cod_rif" id="cod-rif" class="me-2" required>
                                     <option value="J">J</option>
                                     <option value="E">E</option>
                                 </select>
-                                <input type="text" name="rif" class="form-control">
+                                <input type="number" name="rif" class="form-control" data-validate="true" data-type="rif" data-max-length="9" required>
+                                <small class="form-text col-12">El rif debe contener 9 digitos</small>
                             </div>
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control mb-3">
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                            <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="direccion">Dirección</label>
-                            <input type="text" name="direccion" class="form-control mb-3">
+                            <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                             <label for="telefono">Teléfono</label>
                             <div class="input-group mb-3">
                                 <select name="cod_tel" id="cod-tel" class="me-2">
@@ -73,10 +77,11 @@
                                     <option value="0416">0416</option>
                                     <option value="0426">0426</option>
                                 </select>
-                                <input type="text" name="telefono" class="form-control">
+                                <input type="number" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
+                                <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
                             </div>
                             <label for="tipo-seguro">Tipo de Seguro</label>
-                            <select name="tipo_seguro" class="form-control">
+                            <select name="tipo_seguro" class="form-control" required>
                                 <option value="">Seleccione el tipo de seguro</option>
                                 <option value="1">Acumulativo</option>
                                 <option value="2">Normal</option>
@@ -132,12 +137,15 @@
                                     <option value="J">J</option>
                                     <option value="E">E</option>
                                 </select>
-                                <input type="text" name="rif" class="form-control">
+                                <input type="text" name="rif" class="form-control" data-validate="true" data-type="rif" data-max-length="9" required>
+                                <small class="form-text col-12">El rif debe contener 9 digitos</small>
                             </div>
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control mb-3">
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                            <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="direccion">Dirección</label>
-                            <input type="text" name="direccion" class="form-control mb-3">
+                            <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                             <label for="telefono">Teléfono</label>
                             <div class="input-group mb-3">
                                 <select name="cod_tel" id="cod-tel" class="me-2">
@@ -147,10 +155,11 @@
                                     <option value="0416">0416</option>
                                     <option value="0426">0426</option>
                                 </select>
-                                <input type="text" name="telefono" class="form-control">
+                                <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
+                                <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
                             </div>
                             <label for="tipo-seguro">Tipo de Seguro</label>
-                            <select name="tipo_seguro" class="form-control mb-3">
+                            <select name="tipo_seguro" class="form-control mb-3" required>
                                 <option value="1">Acumulativo</option>
                                 <option value="2">Normal</option>
                             </select>
@@ -188,6 +197,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/seguros/actualizarSeguro.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/seguros/mostrarSeguros.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/seguros/eliminarSeguro.js'); ?>"></script>
+
 </body>
 
 </html>

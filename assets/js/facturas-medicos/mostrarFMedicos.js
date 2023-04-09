@@ -6,7 +6,7 @@ const path = location.pathname.split('/');
 select2OnClick({
     selectSelector: "#s-medico",
     selectValue: "medico_id",
-    selectNames: ["cedula", "nombres-apellidos"],
+    selectNames: ["cedula", "nombre-apellidos"],
     module: "medicos/consulta",
     parentModal: "#modalReg",
     placeholder: "Seleccione un médico",
@@ -23,7 +23,7 @@ addEventListener("DOMContentLoaded", e => {
         },
         ajax: `/${path[1]}/factura/medico/consulta/`,
         columns: [
-            { data: "nombres" },
+            { data: "nombre" },
             { data: "acumulado_seguro_total" },
             { data: "acumulado_consulta_total" },
             { data: "fecha_pago" },
@@ -34,6 +34,7 @@ addEventListener("DOMContentLoaded", e => {
 
                     // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
                     return `
+                        <a href="#" onclick="openPopup('pdf/facturamedico/${data}')"><i class="fas fa-file-export"></i></a>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFMedico(${data})"><i class="fas fa-trash del-consulta"></i></a>
                     `
                 }
