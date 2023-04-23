@@ -1,0 +1,295 @@
+@font-face {
+    font-family: 'inter';
+    src: url(../fonts/Inter-VariableFont_slnt\,wght.ttf);
+}
+
+body {
+    /* background: linear-gradient(to bottom, #019de1 0%, #100e99 100%); */
+    background: #e8eaf6;
+    min-height: 100vh;
+    font-family: 'inter', sans-serif;
+}
+
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+ul {
+    list-style: none;
+}
+
+h1 {
+    font-weight: bold;
+}
+
+h4 {
+    font-size: 1.4rem !important;
+}
+
+form > input {
+    width: 100%;
+}
+
+form > input[type="submit"] {
+    width: auto;
+    display: block;
+    margin: 25px auto;
+}
+
+select,
+.btn,
+.form-control,
+.input-group-textm,
+.select2-selection.select2-selection--single,
+.select2-search__field {
+    border-radius: 8px !important;
+}
+
+select {
+    border-color: #d5d5d5;
+    padding: 0.3rem !important;
+    font-size: 16px !important;
+}
+
+label {
+    padding-top: 10px !important;
+}
+
+i {
+    font-size: 1.5rem;
+    margin-left: 0.5rem;
+}
+
+
+.lt-spacing-1 {
+    letter-spacing: 1rem;
+}
+
+.fs-7 {
+    font-size: 3rem !important;
+}
+
+.w-60 {
+    width: 60%;
+}
+
+/* .two-inputs > .row > * {
+    width: 45%;
+}
+
+.two-inputs > .row {
+    justify-content: space-evenly;
+} */
+
+.bg-blue-c {
+    background-color: #010066 !important;
+}
+
+.bg-light-blue {
+    background: #019de1;
+}
+
+.bg-gradiente {
+    background: linear-gradient(to bottom, #019de1 0%, #100e99 100%);
+}
+
+.border-light-c {
+    border-color: rgb(253 253 253 / 22%) !important;
+}
+
+.text-blue {
+    color: #0043ff !important;
+}
+
+.text-gray {
+    color: #454a50;
+}
+
+.text-transparent {
+    color: #ffffff7d;
+}
+
+.text-lightblue {
+    color: #15f1ff !important;
+}
+
+.btn-primary:hover {
+    background-color: #0043ff !important;
+}
+
+.btn-blue {
+    background-color: transparent;
+    border: 2px solid #0dcaf0 !important;
+    color: #fff;
+}
+
+.btn-blue:hover {
+    background-color: rgb(255 255 255 / 17%);
+    border: none !important;
+    color: #000 !important;
+    transition: all 0.3s ease;
+}
+
+.btn-add {
+    background-color: #084298;
+    color: #fff;
+}
+
+.btn-add:hover {
+    background-color: #083270;
+    color: #fff;
+}
+
+.btn-blue:focus {
+    color: #fff;
+}
+
+.shadow-dark {
+    box-shadow: -1px 3px 8px 2px #26262691 !important;
+}
+
+.op-0 {
+    opacity: 0;
+}
+
+.fas {
+    font-size: 1.25rem;
+}
+
+.fa-sm {
+    font-size: 0.875em;
+}
+
+.fa-trash {
+    color: #ec4561;
+}
+
+.fa-trash.disabled {
+    color: #777777;
+    cursor: normal;
+}
+
+.fa-edit {
+    color: #222fb9;
+}
+
+.fa-eye {
+    color: #5897fb;
+}
+
+.select-transparent {
+    background: transparent;
+    border-color: #ffffffa1;
+    border-radius: 30px !important;
+    color: #fff;
+    padding-left: 0.7rem !important;
+}
+
+.select-transparent:hover {
+    background: #fff;
+    color: rgb(29, 28, 28) !important;
+}
+
+.select-transparent option {
+    color: rgb(27, 27, 27);
+}
+
+.light.badge-danger {
+    background-color: #ffe7e7;
+    color: #ff2625;
+}
+
+.light.badge-success {
+    background-color: #d5f7d9;
+    color: #21b731;
+}
+
+.light.badge-warning {
+    background-color: #fff0e1;
+    color: #ff7a01;
+}
+
+.card {
+    box-shadow: -1px 3px 8px 2px #cdcdcd;
+}
+
+.col-check label {
+    padding-top: 0 !important;
+}
+
+.modal-header,
+.card-header {
+    border-bottom: none;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+span.select2.select2-container.select2-container--bootstrap-5 {
+    width: 100% !important;
+}
+
+.card {
+    margin-bottom: 2rem;
+}
+
+.input-radios-container {
+    display: flex;
+    margin-top: 0.75rem;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.input-radios-container label {
+    padding: 0 !important;
+}
+
+.form-control.valid {
+    border-color: green;
+}
+
+.form-control.invalid {
+    border-color: red;
+}
+
+.form-control + small {
+    color: red;
+    opacity: 0;
+    height: 0;
+    transition: opacity .4s ease-out;
+    display: none;
+}
+
+.form-control.invalid + small {
+    opacity: 1;
+    height: auto;
+    margin-bottom: 20px;
+    transition: opacity .4s ease-out;
+    display: block;
+}
+
+.input-search-icon {
+    width: 4%;
+    display: flex;
+    height: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.input-search-icon i {
+    margin: 0;
+}
+
+.border-right-none {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.pagination button {
+    margin-inline: 0.5rem;
+}
