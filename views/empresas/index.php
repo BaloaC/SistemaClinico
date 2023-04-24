@@ -112,21 +112,16 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalInfoLabel">Ver empresa</h1>
+                        <h1 class="modal-title fs-5 fw-bold" id="nombreEmpresa"></h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="container">
-                            <div class="row mb-5">
-                                <div class="col-12 d-flex justify-content-between">
-                                    <h2 class="fw-bold" id="nombreEmpresa"></h2>
-                                    <h2 class="fw-bold" id="rifEmpresa"></h2>
-                                </div>
-                            </div>
+                            <p class="fw-bold" id="rifEmpresa"></p>
                             <p><span>Datos empresa:</span></p>
                             <p>Dirección: <span id="direcEmpresa"></span></p>
                             <p>Nombre seguro: <span id="nombreSeguro"></span></p>
-                            <button id="btn-eliminar" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete">Eliminar empresa</button>
+                            <a id="btn-eliminar" class="float-right" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="fas fa-trash"></i></a>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -193,6 +188,42 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal Confirmar Eliminar-->
+        <div class="modal fade" id="modalDeleteSeguro" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar relación con seguro</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="delAlertSeguro" class="alert d-none" role="alert"></div>
+                        ¿Estás seguro que deseas eliminar esta relación?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-confirmDeleteSeguro" class="btn btn-danger">Eliminar relación</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Alerta-->
+        <div class="modal fade" id="modalAlert" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Alerta</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="delAlertSeguro" class="alert alert-warning" role="alert">No es posible dejar una empresa sin seguro asociado</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-confirmDeleteSeguro" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script type="module" src="<?php echo Url::to('assets/js/empresas/mostrarEmpresas.js'); ?>"></script>
@@ -202,6 +233,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/empresas/registrarEmpresa.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/empresas/actualizarEmpresa.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/empresas/eliminarEmpresa.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/empresas/eliminarSeguroEmpresa.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/empresas/filtrarempresas.js'); ?>"></script>
 
 </body>

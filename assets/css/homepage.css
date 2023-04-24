@@ -51,7 +51,7 @@ article p > a {
 
 article p > a:hover {
     text-decoration: underline;
-    text-decoration-color:#fff;
+    text-decoration-color: #fff;
     color: inherit !important;
 }
 

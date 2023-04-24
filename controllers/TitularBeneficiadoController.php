@@ -80,7 +80,8 @@ class TitularBeneficiadoController extends Controller
             "paciente.fecha_nacimiento",
             "paciente.edad",
             "paciente.telefono",
-            "paciente.direccion"
+            "paciente.direccion",
+            "paciente.tipo_paciente"
         );
 
         $_titularBeneficiadoModel = new TitularBeneficiadoModel();
@@ -107,7 +108,8 @@ class TitularBeneficiadoController extends Controller
             "paciente.paciente_id",
             "paciente.nombre",
             "paciente.apellidos",
-            "paciente.cedula"
+            "paciente.cedula",
+            "paciente.tipo_paciente"
         );
 
         $_titularBeneficiadoModel = new TitularBeneficiadoModel();

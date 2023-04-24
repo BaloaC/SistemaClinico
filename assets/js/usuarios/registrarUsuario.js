@@ -79,7 +79,7 @@ document.addEventListener("submit", async e => {
         $alert.classList.add("alert-success");
         $alert.classList.remove("d-none");
         $alert.textContent = "Usuario registrado correctamente!";
-        // location.assign(`/${path[1]}/login`);
+        location.assign(`/${path[1]}/login`);
 
 
     } catch (error) {

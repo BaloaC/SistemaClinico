@@ -93,12 +93,13 @@
                                 </article>
                                 <article class="offset-lg-2 col-lg-2 col-md-6 col-sm-6 p-2">
                                     <p>
-                                        <div class="bg-img mb-4">
-                                            <img src="<?php echo Url::to('assets/img/cirujano.png') ?>" alt="especialidadesAlt">
-                                        </div>
-                                        <h2 class="text-light">Personal</h2>
-                                        <p class="text-light text-lightblue">Acceso a los modulos de <a href="<?php echo Url::base() . "/especialidades" ?>">especialidades</a> y 
-                                        <a href="<?php echo Url::base() . "/medicos" ?>">medicos</a></p>
+                                    <div class="bg-img mb-4">
+                                        <img src="<?php echo Url::to('assets/img/cirujano.png') ?>" alt="especialidadesAlt">
+                                    </div>
+                                    <h2 class="text-light">Personal</h2>
+                                    <p class="text-light text-lightblue">Acceso a los modulos de <a href="<?php echo Url::base() . "/especialidades" ?>">especialidades</a> y
+                                        <a href="<?php echo Url::base() . "/medicos" ?>">medicos</a>
+                                    </p>
                                     </a>
                                 </article>
                             </div>
@@ -108,32 +109,33 @@
                             <div class="row">
                                 <article class="col-lg-2 col-md-6 col-sm-6 p-2">
                                     <p>
-                                        <div class="bg-img mb-4">
-                                            <img src="<?php echo Url::to('assets/img/resultado-medico.png') ?>" alt="pacientesAlt">
-                                        </div>
-                                        <h2 class="text-light">atención Médica</h2>
-                                        <p class="text-light text-lightblue">Acceso a los modulos de <a href="<?php echo Url::base() . "/consultas" ?>">consultas</a>, <a href="<?php echo Url::base() . "/citas" ?>">citas</a>, 
-                                        <a href="<?php echo Url::base() . "/examenes" ?>">exámenes</a> y <a href="<?php echo Url::base() . "/pacientes" ?>">pacientes</a></p>
+                                    <div class="bg-img mb-4">
+                                        <img src="<?php echo Url::to('assets/img/resultado-medico.png') ?>" alt="pacientesAlt">
+                                    </div>
+                                    <h2 class="text-light">atención Médica</h2>
+                                    <p class="text-light text-lightblue">Acceso a los modulos de <a href="<?php echo Url::base() . "/consultas" ?>">consultas</a>, <a href="<?php echo Url::base() . "/citas" ?>">citas</a>,
+                                        <a href="<?php echo Url::base() . "/examenes" ?>">exámenes</a> y <a href="<?php echo Url::base() . "/pacientes" ?>">pacientes</a>
+                                    </p>
                                     </a>
                                 </article>
                                 <article class="offset-lg-2 col-lg-2 col-md-6 col-sm-6 p-2">
                                     <p>
-                                        <div class="bg-img mb-4">
-                                            <img src="<?php echo Url::to('assets/img/factura.png') ?>" alt="facturacionAlt">
-                                        </div>
-                                        <h2 class="text-light">Facturación</h2>
-                                        <p class="text-light text-lightblue">Acceso a los modulos de las facturas de <a href="<?php echo Url::base() . "/factura/compra" ?>">compra</a> , 
+                                    <div class="bg-img mb-4">
+                                        <img src="<?php echo Url::to('assets/img/factura.png') ?>" alt="facturacionAlt">
+                                    </div>
+                                    <h2 class="text-light">Facturación</h2>
+                                    <p class="text-light text-lightblue">Acceso a los modulos de las facturas de <a href="<?php echo Url::base() . "/factura/compra" ?>">compra</a> ,
                                         de <a href="<?php echo Url::base() . "/factura/seguro" ?>">seguro</a>, de <a href="<?php echo Url::base() . "/factura/consulta" ?>">consulta</a>
-                                         y de <a href="<?php echo Url::base() . "/factura/medico" ?>">médicos</a></p>
+                                        y de <a href="<?php echo Url::base() . "/factura/medico" ?>">médicos</a></p>
                                     </a>
                                 </article>
                                 <article class="offset-lg-2 col-lg-2 col-md-12 p-2">
                                     <p>
-                                        <div class="bg-img mb-4">
-                                            <img src="<?php echo Url::to('assets/img/medicamento.png') ?>" alt="inventarioAlt">
-                                        </div>
-                                        <h2 class="text-light">Inventario</h2>
-                                        <p class="text-light text-lightblue">Acceso a la gestion de <a href="<?php echo Url::base() . "/proveedores" ?>">proveedores</a> e <a href="<?php echo Url::base() . "/insumos" ?>">insumos</a></p>
+                                    <div class="bg-img mb-4">
+                                        <img src="<?php echo Url::to('assets/img/medicamento.png') ?>" alt="inventarioAlt">
+                                    </div>
+                                    <h2 class="text-light">Inventario</h2>
+                                    <p class="text-light text-lightblue">Acceso a la gestion de <a href="<?php echo Url::base() . "/proveedores" ?>">proveedores</a> e <a href="<?php echo Url::base() . "/insumos" ?>">insumos</a></p>
                                     </a>
                                 </article>
                             </div>

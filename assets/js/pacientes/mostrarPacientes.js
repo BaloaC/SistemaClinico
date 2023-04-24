@@ -90,7 +90,8 @@ addEventListener("DOMContentLoaded", e => {
                 data: "paciente_id",
                 render: function (data, type, row) {
 
-                    return `<a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
+                    return `
+                    <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a> --> 
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-paciente" onclick="updatePaciente(${data})"><i class="fas fa-edit act-paciente"></i></a>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deletePaciente(${data})"><i class="fas fa-trash del-paciente"></i></a>
                     `

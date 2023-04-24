@@ -42,7 +42,7 @@ async function confirmUpdate() {
             data = {};
 
         formData.forEach((value, key) => (data[key] = value));
-        
+
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
 
@@ -51,8 +51,8 @@ async function confirmUpdate() {
         let especialidad_id = data.especialidad_id;
 
         const parseData = deleteSecondValue("#act-especialidad input, #act-especialidad select", data);
-        
-        await updateModule(parseData, "especialidad_id","especialidades","act-especialidad","Especialidad actualizada exitosamente!");
+
+        await updateModule(parseData, "especialidad_id", "especialidades", "act-especialidad", "Especialidad actualizada exitosamente!");
 
         $('#especialidades').DataTable().ajax.reload();
 
@@ -70,7 +70,3 @@ async function confirmUpdate() {
 }
 
 window.confirmUpdate = confirmUpdate;
-d.getElementById("act-especialidad").addEventListener('submit', (event) => {
-    event.preventDefault();
-    confirmUpdate();
-})

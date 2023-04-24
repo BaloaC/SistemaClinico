@@ -4,8 +4,9 @@ import { medicosPagination } from "./medicosPagination.js";
 import { mostrarMedicos } from "./mostrarMedicos.js";
 
 async function addMedico() {
-    const $form = document.getElementById("info-medico")
-        alert = document.querySelector(".alert")
+    const $form = document.getElementById("info-medico"),
+        $alert = document.querySelector(".alert")
+
     try {
         const formData = new FormData($form),
             data = {},
@@ -17,7 +18,7 @@ async function addMedico() {
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
         if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
-        // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
+        if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
         if (isNaN(data.telefono) || data.telefono.length != 7) throw { message: "El número ingresado no es válido" };
         if (isNaN(data.cod_tel) || data.cod_tel.length != 4) throw { message: "El número ingresado no es válido" };
 
@@ -46,20 +47,16 @@ async function addMedico() {
 
         await addModule("medicos", "info-medico", data, "Médico registrado exitosamente!");
         const listadoMedico = await getAll("medicos/consulta");
-        let form = document.getElementById("info-medico").elements;
-        Array.from(form).forEach(element => { element.classList.remove('valid'); })
         medicosPagination(listadoMedico);
+        console.log("sd");
+        $("#s-especialidad").val([]).trigger('change'); //Vaciar select2
 
     } catch (error) {
         console.log(error);
-        alert.classList.remove("d-none");
-        alert.classList.add("alert-danger");
-        alert.textContent = error.message || error.result.message;
+        $alert.classList.remove("d-none");
+        $alert.classList.add("alert-danger");
+        $alert.textContent = error.message || error.result.message;
     }
 }
 
 window.addMedico = addMedico;
-document.getElementById("info-medico").addEventListener('submit', (event) => {
-    event.preventDefault();
-    addMedico();
-})

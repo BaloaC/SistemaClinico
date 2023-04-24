@@ -8,7 +8,8 @@ class EmpresaController extends Controller{
 
     protected $arraySelect = array(
         "seguro.nombre",
-        "seguro.seguro_id"
+        "seguro.seguro_id",
+        "seguro_empresa.seguro_empresa_id"
     );
 
     //Método index (vista principal)
@@ -227,7 +228,3 @@ class EmpresaController extends Controller{
         return $respuesta->json($mensaje ? 200 : 400);
     }
 }
-
-
-
-?>

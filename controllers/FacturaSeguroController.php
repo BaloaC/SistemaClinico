@@ -176,7 +176,3 @@ class FacturaSeguroController extends Controller{
         return $respuesta->json(200);
     }
 }
-
- 
-
-?>

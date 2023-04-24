@@ -22,7 +22,7 @@ dinamicSelect2({
 });
 
 dinamicSelect2({
-    obj: [{ id: "month", text: "En el mes actual" }],
+    obj: [{ id: "month", text: "Mensual" }],
     selectNames: ["text"],
     selectValue: "id",
     selectSelector: "#s-fecha",

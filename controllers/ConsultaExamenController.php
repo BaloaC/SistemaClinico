@@ -3,9 +3,15 @@
 class ConsultaExamenController extends Controller{
 
     public function insertarConsultaExamen($form, $id){
-        
+        // echo $form;
+        // echo '<pre>';
+
+        // if (!is_array($form)) {
+        //     $form = explode(' ', $form);
+        // }
+        // echo $form;
         foreach ($form as $forms) {
-            
+            // echo $forms;
             $newForm = $forms;
             $newForm['consulta_id'] = $id;
             $camposNumericos = array("examen_id", "consulta_id");
@@ -29,7 +35,7 @@ class ConsultaExamenController extends Controller{
                     return $respuesta->json(404);
 
                 case $validarConsultaExamen->isDuplicatedId('consulta_id', 'examen_id', $newForm['consulta_id'], $newForm['examen_id'], 'consulta_examen'):
-                    $respuesta = new Response(false, 'Ese examén ya está registrado en la consulta');
+                    $respuesta = new Response(false, 'Ese examen ya está registrado en la consulta');
                     return $respuesta->json(400);
 
                 default: 
@@ -93,7 +99,7 @@ class ConsultaExamenController extends Controller{
     //                 return $respuesta->json(404);
 
     //             case $validarConsultaExamen->isDuplicatedId('consulta_id', 'examen_id', $newForm['consulta_id'], $newForm['examen_id'], 'consulta_examen'):
-    //                 $respuesta = new Response(false, 'Ese examén ya está registrado en la consulta');
+    //                 $respuesta = new Response(false, 'Ese examen ya está registrado en la consulta');
     //                 return $respuesta->json(400);
 
     //             default: 

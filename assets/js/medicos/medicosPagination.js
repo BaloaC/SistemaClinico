@@ -165,7 +165,7 @@ export function medicosPagination(registros) {
             if (!botonPaginaAnterior || !botonPaginaSiguiente) {
                 return;
             }
-
+    
             // Actualizar el botón de página anterior
             if (paginaActual === 1) {
                 botonPaginaAnterior.setAttribute('disabled', 'disabled');

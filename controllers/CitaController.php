@@ -124,7 +124,7 @@ class CitaController extends Controller
                     // verificamos que pueda solicitar cita asegurada
                     $siEsTitular = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '3', 'paciente');
                     $siEsBeneficiario = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '4', 'paciente');
-                    $siSeguroAsociado = $validarCita->isDuplicatedId('paciente_id', 'seguro_id', $_POST['paciente_id'], $_POST['seguro_id'], 'paciente_seguro');
+                    $siSeguroAsociado = $validarCita->isDuplicatedId('paciente_id', 'seguro_id', $_POST['paciente_titular_id'], $_POST['seguro_id'], 'paciente_seguro');
 
                     if (!$siSeguroAsociado) {
                         $respuesta = new Response(false, 'Ese seguro no se encuentra asociado con el paciente indicado');

@@ -34,8 +34,8 @@ async function updateProveedor(id) {
 window.updateProveedor = updateProveedor;
 
 async function confirmUpdate() {
-    const $form = document.getElementById("act-proveedor");
-        alert = document.getElementById("actAlert");
+    const $form = document.getElementById("act-proveedor"),
+        $alert = document.getElementById("actAlert");
 
     try {
         const formData = new FormData($form),
@@ -44,8 +44,8 @@ async function confirmUpdate() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.ubicacion))) throw { message: "La ubicación ingresada no es válida" };
+        if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.ubicacion))) throw { message: "La ubicación ingresada no es válida" };
 
         const parseData = deleteSecondValue("#act-proveedor input, #act-proveedor select", data);
 
@@ -56,19 +56,15 @@ async function confirmUpdate() {
 
     } catch (error) {
         console.log(error);
-        alert.classList.remove("d-none");
-        alert.classList.add("alert-danger");
+        $alert.classList.remove("d-none");
+        $alert.classList.add("alert-danger");
         let message = error.message || error.result.message;
-        alert.textContent = message;
+        $alert.textContent = message;
 
         setTimeout(() => {
-            alert.classList.add("d-none");
+            $alert.classList.add("d-none");
         }, 3000)
     }
 }
 
 window.confirmUpdate = confirmUpdate;
-document.getElementById("act-proveedor").addEventListener('submit', (event) => {
-    event.preventDefault();
-    confirmUpdate();
-})

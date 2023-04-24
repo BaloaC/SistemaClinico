@@ -104,7 +104,3 @@ class InsumoController extends Controller{
         return $respuesta->json(200);
     }
 }
-
-
-
-?>

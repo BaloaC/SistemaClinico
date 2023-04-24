@@ -51,14 +51,14 @@ class ConsultaInsumoController extends Controller
                         $_insumoModel = new InsumoModel();
                         $insumo = $_insumoModel->where('insumo_id', '=', $newForm['insumo_id'])->getFirst();
 
-                        if ($newForm['cantidad'] > $insumo->stock) {
+                        if ($newForm['cantidad'] > $insumo->cantidad) {
 
                             $respuesta = new Response(false, 'Cantidad de insumos mayor a la que hay en existencia');
                             return $respuesta->json(400);
                         }
 
-                        $unidadesPosts = $insumo->stock - $newForm['cantidad'];
-                        $actualizar = array('stock' => $unidadesPosts);
+                        $unidadesPosts = $insumo->cantidad - $newForm['cantidad'];
+                        $actualizar = array('cantidad' => $unidadesPosts);
 
                         // actualizando el stock del insumo
                         $actualizado = $_insumoModel->where('insumo_id', '=', $newForm['insumo_id'])->update($actualizar);

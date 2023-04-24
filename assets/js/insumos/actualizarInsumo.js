@@ -65,7 +65,3 @@ async function confirmUpdate() {
 }
 
 window.confirmUpdate = confirmUpdate;
-d.getElementById("act-insumo").addEventListener('submit', (event) => {
-    event.preventDefault();
-    confirmUpdate();
-})

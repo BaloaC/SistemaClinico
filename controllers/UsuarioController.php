@@ -166,7 +166,3 @@ class UsuarioController extends Controller{
         return $respuesta->json($mensaje ? 200 : 400);
     }
 }
-
-
-
-?>

@@ -54,53 +54,75 @@
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-cita" class="p-3 px-4">
                             <div class="row">
-                                <div class="col-12 col-md-6">
-                                    <label for="paciente_id">Paciente</label>
-                                    <select name="paciente_id" id="s-paciente" class="form-control" data-active="0">
-                                        <option></option>
-                                    </select>
-                                    <label for="input-radios-container" class="d-none">Tipo de paciente</label>
-                                    <div class="input-radios-container d-none">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoPacienteTitular" onchange="tipoPaciente(this)" value="titular" checked required>
-                                            <label class="form-check-label" for="inlineRadio1">Titular</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoPacienteBeneficiado" onchange="tipoPaciente(this)" value="beneficiado" required>
-                                            <label class="form-check-label" for="inlineRadio2">Beneficiado</label>
+                                <div class="row">
+                                    <h5>Información del Paciente</h5>
+                                    <div class="col-12 col-md-6">
+                                        <label for="paciente_id">Paciente</label>
+                                        <select name="paciente_id" id="s-paciente" class="form-control" data-active="0">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="input-radios-container" class="d-none">Tipo de paciente</label>
+                                        <div class="input-radios-container d-none">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoPacienteTitular" onchange="tipoPaciente(this)" value="titular" checked required>
+                                                <label class="form-check-label" for="inlineRadio1">Titular</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoPacienteBeneficiado" onchange="tipoPaciente(this)" value="beneficiado" required>
+                                                <label class="form-check-label" for="inlineRadio2">Beneficiado</label>
+                                            </div>
                                         </div>
                                     </div>
-                                    <label for="titular_id" class="d-none">Beneficiado</label>
-                                    <select name="titular_id" id="s-titular" class="form-control d-none" data-active="0" data-create="0">
-                                        <option></option>
-                                    </select>
-                                    <!-- <label for="cedula_titular">Cédula Titular</label>
-                                    <input type="number" name="cedula_titular" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required> -->
-                                    <!-- <small class="form-text">La cédula debe contener entre 6 o 8 números</small> -->
-                                    <label for="fecha_cita">Fecha cita</label>
-                                    <input type="datetime-local" name="fecha_cita" id="fecha_cita" class="form-control mb-3">
-                                    <label for="tipo_cita">Tipo de cita</label>
-                                    <select name="tipo_cita" id="s-tipo_cita" class="form-control mb-3">
-                                        <option></option>
-                                    </select>
                                 </div>
+                                <div class="row mt-4">
+                                    <h5>Información de la Cita</h4>
+                                    <div class="col-12 col-md-6">
+                                        <label for="fecha_cita">Fecha cita</label>
+                                        <input type="datetime-local" name="fecha_cita" id="fecha_cita" class="form-control mb-3">
 
-                                <div class="col-12 col-md-6">
-                                    <label for="medico_id">Médico</label>
-                                    <select name="medico_id" id="s-medico" class="form-control" data-active="0">
-                                        <option></option>
-                                    </select>
-                                    <label for="especialidad_id">Especialidad</label>
-                                    <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
-                                        <option></option>
-                                    </select>
-                                    <label for="seguro" class="d-none">Seguro</label>
-                                    <select name="seguro_id" id="s-seguro" class="form-control mb-3" data-active="0">
-                                        <option></option>
-                                    </select>
-                                    <label for="motivo_cita">Motivo cita</label>
-                                    <input type="text" name="motivo_cita" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="45">
-                                    <small class="form-text">Solo se permiten letras y números</small>
+                                        <label for="tipo_cita">Tipo de cita</label>
+                                        <select name="tipo_cita" id="s-tipo_cita" class="form-control mb-3">
+                                            <option></option>
+                                        </select>
+
+                                        <label for="titular_id" class="d-none">Titular</label>
+                                        <select name="titular_id" id="s-titular" class="form-control d-none" data-active="0" data-create="0">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <!-- <label for="cedula_titular">Cédula Titular</label>
+                                        <input type="number" name="cedula_titular" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required> -->
+                                        <!-- <small class="form-text">La cédula debe contener entre 6 o 8 números</small> -->
+                                        <label for="motivo_cita">Motivo cita</label>
+                                        <input type="text" name="motivo_cita" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="45">
+                                        <small class="form-text">Solo se permiten letras y números</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <label for="seguro" class="d-none">Seguro</label>
+                                        <select name="seguro_id" id="s-seguro" class="form-control mb-3" data-active="0">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <h5>Información del médico</h2>
+                                    <div class="col-12 col-md-6">
+                                        <label for="medico_id">Médico</label>
+                                        <select name="medico_id" id="s-medico" class="form-control" data-active="0">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="especialidad_id">Especialidad</label>
+                                        <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
+                                            <option></option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -140,17 +162,12 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalInfoLabel">Ver cita</h1>
+                        <h1 class="modal-title fs-5 fw-bold" id="paciente"></h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="container">
-                            <div class="row mb-5">
-                                <div class="col-12 d-flex justify-content-between">
-                                    <h2 class="fw-bold" id="paciente"></h2>
-                                    <h2 class="fw-bold" id="cedula-titular"></h2>
-                                </div>
-                            </div>
+                            <p class="fw-bold" id="cedula-titular"></p>
                             <p><span>Detalles cita:</span></p>
                             <p>Médico: <span id="nombreMedico"></span></p>
                             <p>Especialidad: <span id="nombreEspecialidad"></span></p>

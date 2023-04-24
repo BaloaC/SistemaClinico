@@ -10,7 +10,7 @@
 }
 
 form,
-.modal-dialog-scrollable .modal-body{
+.modal-dialog-scrollable .modal-body {
     overflow: hidden;
 }
 
@@ -26,14 +26,14 @@ form,
     color: white;
 }
 
-.list-seg > li > a{
+.list-seg > li > a {
     font-size: 24px;
     font-weight: 600;
     color: white;
     text-decoration: none;
 }
 
-.list-seg > li{
+.list-seg > li {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,34 +41,40 @@ form,
     min-width: 12rem;
     margin-bottom: 2rem;
 }
- 
-.overlay-box{
+
+.overlay-box {
     /* background: linear-gradient(to bottom, #019de1 0%, #100e99 100%); */
     background-color: #084298;
     padding: 3rem;
     text-align: center;
 }
 
-.card{
+.card {
     margin-bottom: 2rem;
 }
 
-.card-container{
+.card-container {
     text-decoration: none;
 }
 
-.card-container:hover{
+.card-container:hover {
     color: initial;
 }
 
-.list-group-item{
+.list-group-item {
     display: flex;
     justify-content: space-between;
 }
 
-.text-muted{
+.text-muted {
     text-align: right;
 }
+
+.btn-empresa {
+    background-color: #dddddd;
+}
+
+
 /* a:hover {
     color: #15f1ff !important;
 } */

@@ -4,7 +4,7 @@ import { empresasPagination } from "./empresasPagination.js";
 import { mostrarEmpresas } from "./mostrarEmpresas.js";
 
 async function addEmpresa() {
-    const $form = document.getElementById("info-empresa");
+    const $form = document.getElementById("info-empresa"),
         alert = document.querySelector(".alert")
 
     try {
@@ -37,6 +37,7 @@ async function addEmpresa() {
         })
         const listadoEmpresas = await getAll("empresas/consulta");
         empresasPagination(listadoEmpresas);
+        $("#s-seguro").val([]).trigger('change');
 
     } catch (error) {
         console.log(error);

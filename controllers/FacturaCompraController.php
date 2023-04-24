@@ -1,6 +1,7 @@
 <?php
 
-class FacturaCompraController extends Controller{
+class FacturaCompraController extends Controller
+{
 
     protected $arrayInner = array(
         "proveedor" => "factura_compra"
@@ -17,27 +18,31 @@ class FacturaCompraController extends Controller{
     );
 
     //Método index (vista principal)
-    public function index(){
+    public function index()
+    {
 
         return $this->view('facturas/index');
     }
 
-    public function formRegistrarFacturas(){
+    public function formRegistrarFacturas()
+    {
 
         return $this->view('facturas/registrarFacturas');
     }
 
-    public function formActualizarFactura($idFactura){
-        
-        return $this->view('facturas/actualizarFacturas', ['idFactura' => $idFactura]);
-    } 
+    public function formActualizarFactura($idFactura)
+    {
 
-    public function insertarFacturaCompra(/*Request $request*/){
+        return $this->view('facturas/actualizarFacturas', ['idFactura' => $idFactura]);
+    }
+
+    public function insertarFacturaCompra(/*Request $request*/)
+    {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
         $camposNumericos = array('proveedor_id', 'total_productos', 'monto_con_iva', 'monto_sin_iva', 'excento');
-        
+
         $token = $validarFactura->validateToken(apache_request_headers());
         if (!$token) {
             $respuesta = new Response('TOKEN_INVALID');
@@ -64,10 +69,10 @@ class FacturaCompraController extends Controller{
             case $validarFactura->isToday($_POST['fecha_compra'], false):
                 $respuesta = new Response('FECHA_INVALIDA');
                 return $respuesta->json(400);
-            
+
             default:
                 $insumos = $_POST['insumos'];
-                
+
                 unset($_POST['insumos']);
                 $data = $validarFactura->dataScape($_POST);
 
@@ -77,19 +82,18 @@ class FacturaCompraController extends Controller{
                 $mensaje = ($id > 0);
 
                 if ($mensaje) {
-                    
+
                     $_compraInsumoController = new CompraInsumoController;
                     $respuestaInsumo = $_compraInsumoController->insertarCompraInsumo($insumos, $id);
-                    
+
                     if (!$respuestaInsumo) {
-                        
+
                         $respuesta = new Response('INSERCION_EXITOSA');
                         return $respuesta->json(201);
                     } else {
-                        $_facturaCompraModel->where('factura_compra_id','=',$id)->delete();
+                        $_facturaCompraModel->where('factura_compra_id', '=', $id)->delete();
                         return $respuestaInsumo;
                     }
-
                 } else {
 
                     $respuesta = new Response('INSERCION_FALLIDA');
@@ -98,12 +102,13 @@ class FacturaCompraController extends Controller{
         }
     }
 
-    public function listarFacturaCompra(){
+    public function listarFacturaCompra()
+    {
 
         $_compraInsumoModel = new CompraInsumoModel();
         $inners = $_compraInsumoModel->listInner($this->arrayInner);
         $factura_compra = $_compraInsumoModel->innerJoin($this->arraySelect, $inners, "factura_compra");
-        
+
         $resultadoFactura = array();
 
         if ($factura_compra) {
@@ -117,37 +122,38 @@ class FacturaCompraController extends Controller{
                 $facturas->insummos = $insumosFactura;
                 $resultadoFactura[] = $facturas;
             }
-            
+
             return $this->retornarMensaje($resultadoFactura);
-            
         } else {
 
             return $this->retornarMensaje($factura_compra);
         }
     }
 
-    public function listarFacturaCompraPorId($factura_id){
+    public function listarFacturaCompraPorId($factura_id)
+    {
 
         $_compraInsumoModel = new CompraInsumoModel();
         $inners = $_compraInsumoModel->listInner($this->arrayInner);
         $factura_compra = $_compraInsumoModel->where('factura_compra_id', '=', $factura_id)->innerJoin($this->arraySelect, $inners, "factura_compra");
-        
+
         if ($factura_compra) {
             // Codigo para recibir los insumos que fueron comprados con esa factura
             $_compraInsumoController = new CompraInsumoController;
             $insumosFactura = $_compraInsumoController->listarCompraInsumoPorFactura($factura_compra[0]->factura_compra_id);
-        
+
             $factura_compra[0]->insumos = $insumosFactura;
             $resultado = $factura_compra[0];
-            
+
             return $this->retornarMensaje($resultado);
         } else {
-            
+
             return $this->retornarMensaje($factura_compra);
         }
     }
 
-    public function eliminarFacturaCompra($factura_compra_id){
+    public function eliminarFacturaCompra($factura_compra_id)
+    {
 
         $validarFactura = new Validate;
         $token = $validarFactura->validateToken(apache_request_headers());
@@ -161,7 +167,7 @@ class FacturaCompraController extends Controller{
             'estatus_fac' => '2'
         );
 
-        $eliminado = $_compraInsumoController->where('factura_compra_id','=',$factura_compra_id)->update($data);
+        $eliminado = $_compraInsumoController->where('factura_compra_id', '=', $factura_compra_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
@@ -171,7 +177,8 @@ class FacturaCompraController extends Controller{
     }
 
     // funciones
-    public function retornarMensaje($resultado) {
+    public function retornarMensaje($resultado)
+    {
 
         $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($resultado);

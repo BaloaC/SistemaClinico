@@ -2,9 +2,9 @@ const path = location.pathname.split('/')
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
 
-export default async function deleteModule(module, id, successMessage) {
+export default async function deleteModule(module, id, successMessage, modal = "#modalDelete", alert = "delAlert") {
 
-    const $alert = document.getElementById("delAlert");
+    const $alert = document.getElementById(alert);
 
     try {
         const options = {
@@ -29,7 +29,7 @@ export default async function deleteModule(module, id, successMessage) {
         $alert.textContent = successMessage;
 
         setTimeout(() => {
-            $("#modalDelete").modal("hide");
+            $(modal).modal("hide");
             $alert.classList.add("d-none");
         }, 500);
 

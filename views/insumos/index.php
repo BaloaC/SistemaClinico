@@ -19,7 +19,9 @@
         <div class="container">
             <!-- Cabezera -->
             <div class="row">
-                <div class="col-6"><h4 class="pt-5 pb-2 text-grey">Insumos</h4></div>
+                <div class="col-6">
+                    <h4 class="pt-5 pb-2 text-grey">Insumos</h4>
+                </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
                     <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Insumo</button>
                 </div>

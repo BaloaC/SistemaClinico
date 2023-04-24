@@ -35,7 +35,7 @@ async function updateExamen(id) {
 window.updateExamen = updateExamen;
 
 async function confirmUpdate() {
-    const $form = document.getElementById("act-examen");
+    const $form = document.getElementById("act-examen"),
         alert = document.getElementById("actAlert");
 
     try {

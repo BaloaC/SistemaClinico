@@ -24,14 +24,14 @@ async function updateEmpresa(id) {
             }
         }
 
-        json.seguro.forEach(el => {
-            createOptionOrSelectInstead({
-                obj: el,
-                selectSelector: "#s-seguro-update",
-                selectNames: ["nombre"],
-                selectValue: "seguro_id"
-            });
-        });
+        // json.seguro.forEach(el => {
+        //     createOptionOrSelectInstead({
+        //         obj: el,
+        //         selectSelector: "#s-seguro-update",
+        //         selectNames: ["nombre"],
+        //         selectValue: "seguro_id"
+        //     });
+        // });
 
         //Establecer el option con los datos del usuario
         $form.nombre.value = json.nombre;

@@ -5,13 +5,17 @@ function addInsumoInput() {
 
     clicks += 1;
     let template = `
-        <div class="col-12 col-md-6">
-            <label for="insumo">Insumo</label>
-            <select name="insumo_id" id="s-insumo${clicks}" class="form-control insumo-id" data-active="0">
-                <option></option>
-            </select>
-            <label for="cantidad">Cantidad utilizada</label>
-            <input type="number" name="cantidad" class="form-control insumo-cant">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <label for="insumo">Insumo</label>
+                <select name="insumo_id" id="s-insumo${clicks}" class="form-control insumo-id" data-active="0">
+                    <option></option>
+                </select>
+            </div>
+            <div class="col-12 col-md-6">
+                <label for="cantidad">Cantidad utilizada</label>
+                <input type="number" name="cantidad" class="form-control insumo-cant">    
+            </div>
         </div>
     `;
     document.getElementById("addInsumo").insertAdjacentHTML("beforebegin", template);

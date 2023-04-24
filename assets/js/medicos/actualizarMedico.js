@@ -11,12 +11,11 @@ async function updateMedico(id) {
     const $form = document.getElementById("act-medico");
 
     try {
-        const json = await getById("medicos", id),
 
-            especialidad = await getById("especialidades", json[0].especialidad_id);
+        const json = await getById("medicos", id);
+
+        // especialidad = await getById("especialidades", json[0].especialidad_id);
         console.log(json);
-
-        console.log(json, especialidad);
 
         // Obtener código telefónico
         let $telCod = json[0].telefono.slice(0, 4),
@@ -28,15 +27,18 @@ async function updateMedico(id) {
             }
         }
 
-        createOptionOrSelectInstead({
-            obj: especialidad,
-            selectSelector: "#s-especialidad-update",
-            selectNames: ["nombres"],
-            selectValue: "especialidad_id"
-        });
+        json[0].especialidad.forEach(el => {
+            createOptionOrSelectInstead({
+                obj: el,
+                selectSelector: "#s-especialidad-update",
+                selectNames: ["nombre_especialidad"],
+                selectValue: "especialidad_id"
+            });
+        })
+
 
         //Establecer el option con los datos del usuario
-        $form.especialidad_id.dataset.secondValue = especialidad.especialidad_id;
+        // $form.especialidad_id.dataset.secondValue = especialidad.especialidad_id;
         $form.cedula.value = json[0].cedula;
         $form.cedula.dataset.secondValue = json[0].cedula;
         $form.nombre.value = json[0].nombre;
@@ -88,7 +90,7 @@ async function confirmUpdate() {
         let $tel = data.cod_tel + data.telefono;
 
         const parseData = deleteSecondValue("#act-medico input, #act-medico select", data);
-
+        parseData.medico_id = medico_id;
         // ** Si no existe tel o cod_tel en la data, añadirle el tel completo
         if ('telefono' in parseData || 'cod_tel' in parseData) { parseData.telefono = $tel }
 
@@ -119,7 +121,7 @@ window.confirmUpdate = confirmUpdate;
 select2OnClick({
     selectSelector: "#s-especialidad-update",
     selectValue: "especialidad_id",
-    selectNames: ["nombres"],
+    selectNames: ["nombre"],
     module: "especialidades/consulta",
     parentModal: "#modalAct",
     placeholder: "Seleccione una especialidad",

@@ -1,5 +1,6 @@
 import addModule from "../global/addModule.js";
 import getAge from "../global/getAge.js";
+import getById from "../global/getById.js";
 
 async function addConsulta() {
 
@@ -12,6 +13,11 @@ async function addConsulta() {
             examenes = [];
 
         formData.forEach((value, key) => (data[key] = value));
+
+        const infoCita = await getById("citas", data.cita_id);
+        data.cedula_titular = infoCita[0].cedula_titular;
+        data.especialidad_id = infoCita[0].especialidad_id;
+        data.medico_id = infoCita[0].medico_id;
 
         let examen = formData.getAll("examenes[]");
         examen.forEach(e => {
@@ -37,6 +43,7 @@ async function addConsulta() {
 
         if (insumos.length != 0) { data.insumos = insumos; }
 
+
         // TODO: Validar los inputs del paciente
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
@@ -52,7 +59,9 @@ async function addConsulta() {
         // data.rif = data.cod_rif + "-" + data.rif;
 
         await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!");
-
+        Array.from(document.getElementById("info-consulta").elements).forEach(element => {
+            element.classList.remove('valid');
+        })
         $('#consultas').DataTable().ajax.reload();
 
     } catch (error) {
@@ -64,4 +73,8 @@ async function addConsulta() {
 }
 
 window.addConsulta = addConsulta;
+document.getElementById("info-consulta").addEventListener('submit', (event) => {
+    event.preventDefault();
+    addConsulta();  
+})
 

@@ -15,20 +15,20 @@ select2OnClick({
 });
 
 // TODO: Colocar en la vista los horarios disponible de este medico
-select2OnClick({
-    selectSelector: "#s-medico",
-    selectValue: "medico_id",
-    selectNames: ["cedula", "nombre-apellidos"],
-    module: "medicos/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione un médico"
-});
+// select2OnClick({
+//     selectSelector: "#s-medico",
+//     selectValue: "medico_id",
+//     selectNames: ["cedula", "nombre-apellidos"],
+//     module: "medicos/consulta",
+//     parentModal: "#modalReg",
+//     placeholder: "Seleccione un médico"
+// });
 
-emptySelect2({
-    selectSelector: especialidadSelect,
-    placeholder: "Debe seleccionar un médico",
-    parentModal: "#modalReg"
-})
+// emptySelect2({
+//     selectSelector: especialidadSelect,
+//     placeholder: "Debe seleccionar un médico",
+//     parentModal: "#modalReg"
+// })
 
 select2OnClick({
     selectSelector: "#s-cita",
@@ -49,15 +49,15 @@ select2OnClick({
     multiple: true
 });
 
-select2OnClick({
-    selectSelector: "#s-examen",
-    selectValue: "examen_id",
-    selectNames: ["nombre"],
-    module: "examenes/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione los exámenes",
-    multiple: true
-});
+// select2OnClick({
+//     selectSelector: "#s-examen",
+//     selectValue: "examen_id",
+//     selectNames: ["nombre"],
+//     module: "examenes/consulta",
+//     parentModal: "#modalReg",
+//     placeholder: "Seleccione los exámenes",
+//     multiple: true
+// });
 
 select2OnClick({
     selectSelector: "#s-insumo",
@@ -68,24 +68,24 @@ select2OnClick({
     placeholder: "Seleccione el insumo"
 });
 
-especialidadSelect.disabled = true;
+// especialidadSelect.disabled = true;
 // TODO: Al seleccionar/cambiar el valor del medico, cargar unicamente sus especialidades, crear el input vacio afuera
-$("#s-medico").on("change", async function (e) {
+// $("#s-medico").on("change", async function (e) {
 
-    const especialidades = await getAll("especialidades/consulta");
-    $(especialidadSelect).empty().select2();
+//     const especialidades = await getAll("especialidades/consulta");
+//     $(especialidadSelect).empty().select2();
 
-    dinamicSelect2({
-        obj: especialidades,
-        selectSelector: especialidadSelect,
-        selectValue: "especialidad_id",
-        selectNames: ["nombre"],
-        parentModal: "#modalReg",
-        placeholder: "Seleccione una especialidad"
-    });
+//     dinamicSelect2({
+//         obj: especialidades,
+//         selectSelector: especialidadSelect,
+//         selectValue: "especialidad_id",
+//         selectNames: ["nombre"],
+//         parentModal: "#modalReg",
+//         placeholder: "Seleccione una especialidad"
+//     });
 
-    especialidadSelect.disabled = false;
-})
+//     especialidadSelect.disabled = false;
+// })
 
 
 addEventListener("DOMContentLoaded", e => {

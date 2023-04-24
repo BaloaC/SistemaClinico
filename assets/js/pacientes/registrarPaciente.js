@@ -60,7 +60,7 @@ async function addPaciente() {
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "Los nombre ingresado no es válido" };
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "Los apellidos ingresado no es válido" };
         if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
-        if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
+        // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
         if (isNaN(data.telefono) || data.telefono.length != 7) throw { message: "El número ingresado no es válido" };
         if (isNaN(data.cod_tel) || data.cod_tel.length != 4) throw { message: "El número ingresado no es válido" };
 
@@ -68,6 +68,9 @@ async function addPaciente() {
         
     
         await addModule("pacientes","info-paciente",data,"Paciente registrado correctamente!");
+        Array.from(document.getElementById("info-paciente").elements).forEach(element => {
+            element.classList.remove('valid');
+        })
 
         $('#pacientes').DataTable().ajax.reload();
 
@@ -80,5 +83,9 @@ async function addPaciente() {
 }
 
 window.addPaciente = addPaciente;
+document.getElementById("info-paciente").addEventListener('submit', (event) => {
+    event.preventDefault();
+    addPaciente();
+})
 
 

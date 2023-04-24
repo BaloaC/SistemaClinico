@@ -91,7 +91,3 @@ class PacienteSeguroController extends Controller{
         return $respuesta->json(200);
     }
 }
-
-
-
-?>

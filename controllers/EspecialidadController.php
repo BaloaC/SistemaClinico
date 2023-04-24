@@ -191,7 +191,3 @@ class EspecialidadController extends Controller{
         return $respuesta->json($mensaje ? 200 : 400);
     }
 }
-
-
-
-?>

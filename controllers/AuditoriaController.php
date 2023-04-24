@@ -90,5 +90,3 @@ class AuditoriaController extends Controller{
         return $respuesta->json(200);
     }
 }
-
-?>

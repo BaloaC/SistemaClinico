@@ -97,9 +97,9 @@ class Router
 
             Router::comprobacionDeSeguridad(); // Comprobamos el token
 
-            $uri2 = preg_replace('/[^a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]+/u', '', $uri);
-            $ruta = Router::$put["/" . $uri2 . "/:id"];
-            $permission = MiddlewareBase::verifyPermissions(Router::$put["/" . $uri2 . "/:id"]->nivel);
+            $uri2 = preg_replace('/[^a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\/\s]+/u', '', $uri);
+            $ruta = Router::$put["/" . $uri2 . ":id"];
+            $permission = MiddlewareBase::verifyPermissions(Router::$put["/" . $uri2 . ":id"]->nivel);
             if (!$permission) {
                 return Router::retornarMensaje($permission);
             }

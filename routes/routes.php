@@ -143,6 +143,9 @@ Router::post('/empresas', EmpresaController::class . '@insertarEmpresa', '2');
 Router::put('/empresas/:id', EmpresaController::class . '@actualizarEmpresa', '2');
 Router::delete('/empresas/:id', EmpresaController::class . '@eliminarEmpresa', '2');
 
+// SeguroEmpresa
+Router::delete("/seguroempresa/:id", SeguroEmpresaController::class . '@eliminarSeguroEmpresa', '1,2');
+
 //Cita - Vistas
 Router::get('/citas', CitaController::class . '@index');
 Router::get('/citas/registrar', CitaController::class . '@formRegistrarCita');
@@ -176,8 +179,8 @@ Router::get('/examenes/actualizar/:id', ExamenController::class . '@formActualiz
 //Exámenes - API
 Router::get('/examenes/consulta', ExamenController::class . '@listarExamen',  '2,4,5');
 Router::get('/examenes/:id', ExamenController::class . '@listarExamenPorId',  '2,4,5');
-Router::post('/examenes', ExamenController::class . '@insertarExamen',  '2,5');
-Router::put('/examenes/:id', ExamenController::class . '@actualizarExamen',  '2,5');
+Router::post('/examenes', ExamenController::class . '@insertarExamen',  '2');
+Router::put('/examenes/:id', ExamenController::class . '@actualizarExamen',  '2');
 Router::delete('/examenes/:id', ExamenController::class . '@eliminarExamen',  '2');
 
 //Proveedor - Vistas

@@ -88,6 +88,8 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             const infoPaciente = await getById("pacientes", paciente_id);
             const inputRadioBeneficiado = document.getElementById("tipoPacienteBeneficiado");
 
+            console.log(infoPaciente);
+
             if (infoPaciente.tipo_paciente == 2 || infoPaciente.tipo_paciente == 4) {
                 document.querySelector(".input-radios-container").classList.remove("d-none");
                 document.querySelector("label[for='input-radios-container'").classList.remove("d-none");
@@ -108,8 +110,6 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                 document.querySelector("label[for='titular_id'").classList.add("d-none");
                 $('#s-titular').next('.select2-container').fadeOut('slow');
             }
-
-
         })
 
         async function tipoPaciente(inputRadio) {
@@ -134,6 +134,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
                         let paciente_id = inputRadio.dataset.pacienteId;
                         let tipo_paciente = inputRadio.dataset.tipoPaciente;
+                        console.log(tipo_paciente);
                         let infoPaciente;
 
                         if (tipo_paciente == 2) {
@@ -144,12 +145,15 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
                         if ('result' in infoPaciente && infoPaciente.result.code === false) return;
 
+                        console.log(infoPaciente);
+
                         infoPaciente.forEach((el) => {
 
-                            if (tipo_paciente == 1) el.tipo_paciente = "Natural";
-                            else if (tipo_paciente == 4) el.tipo_paciente = "Representante";
-                            else if (tipo_paciente == 3) el.tipo_paciente = "Asegurado";
-                            else if (tipo_paciente == 2) el.tipo_paciente = "Beneficiado";
+
+                            if (el.tipo_paciente == 1) el.tipo_paciente = "Natural";
+                            else if (el.tipo_paciente == 2) el.tipo_paciente = "Representante";
+                            else if (el.tipo_paciente == 3) el.tipo_paciente = "Asegurado";
+                            else if (el.tipo_paciente == 4) el.tipo_paciente = "Beneficiado";
 
                             if ($("#s-titular").find(`option[value="${el.paciente_id}"]`).length) {
                                 $("#s-titular").val(el.paciente_id);

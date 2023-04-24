@@ -44,10 +44,10 @@
                                     <select class="form-select" name="rol" required>
                                         <option value="" disabled>Seleccione un nivel de usuario...</option>
                                         <!-- <option value="1">Admin</option> -->
-                                        <option value="2">Médico</option>
-                                        <option value="3">Gerente</option>
+                                        <option value="2">Gerente</option>
+                                        <option value="3">Contador</option>
                                         <option value="4">Analista</option>
-                                        <option value="5">Enfermera</option>
+                                        <option value="5">Facultativo de salud</option>
                                     </select>
                                     <div class="text-center"><input type="button" id="siguiente" class="btn btn-primary my-5" value="Siguiente"></div>
                                 </div>

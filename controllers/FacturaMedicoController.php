@@ -246,7 +246,3 @@ class FacturaMedicoController extends Controller{
         
     }
 }
-
- 
-
-?>

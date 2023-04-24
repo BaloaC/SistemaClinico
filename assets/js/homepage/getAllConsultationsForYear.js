@@ -4,11 +4,6 @@ import { series, xAxis } from "./especialidadesGraph.js";
 export default async function getAllConsultationsForYear(bySpeciality) {
     const consultations = await getAll("consultas/consulta");
     let [enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    
-    if (consultations == undefined) {
-        document.getElementById('chartdiv').innerHTML = `<h4 class="text-gray justify-content-center fs-4 d-flex align-items-center h-100" >No hay consultas disponibles por los momentos</h4>`
-        return
-    }
 
     let consultationsYear;
     if(bySpeciality === "all"){
@@ -51,8 +46,6 @@ export default async function getAllConsultationsForYear(bySpeciality) {
         { meses: "Noviembre", value: noviembre },
         { meses: "Diciembre", value: diciembre },
     ];
-
-    console.log('con',allConsultations)
 
     xAxis.data.setAll(allConsultations);
     series.data.setAll(allConsultations);

@@ -14,10 +14,28 @@ async function getEmpresa(id) {
             $btnEliminar = document.getElementById("btn-confirmDelete");
 
         const json = await getById("empresas/", id);
+        let seguros = "";
 
         $nombreEmpresa.innerText = `${json.nombre}`;
         $rifEmpresa.innerText = `${json.rif}`;
         $direcEmpresa.innerText = `${json.direccion}`;
+
+
+        json.seguro.forEach(el => {
+            console.log(json.seguro.length);
+            seguros += `
+                <button class="btn btn-sm btn-empresa" id="btn-add" value="${el.seguro_empresa_id}" ${json.seguro.length > 1
+                    ? `onclick=(deleteSeguroEmpresa(${el.seguro_empresa_id})) data-bs-toggle="modal" data-bs-target="#modalDeleteSeguro"`
+                    : `data-bs-toggle="modal" data-bs-target="#modalAlert"`}>
+                    <i class="fa-sm fas fa-times"></i> 
+                    ${el.nombre}
+                </button>
+            `;
+        });
+
+        $nombreSeguro.innerHTML = seguros;
+
+
         // $nombreSeguro.innerText = `${json[0].nombre}`;
         $btnActualizar.setAttribute("onclick", `updateEmpresa(${id})`);
         $btnEliminar.setAttribute("onclick", `deleteEmpresa(${id})`);

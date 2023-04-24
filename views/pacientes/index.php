@@ -75,9 +75,12 @@
                                     <label for="nombres">Nombres</label>
                                     <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
                                     <small class="form-text">El nombre solo puede contener letras</small>
-                                    <label for="cedula">Cédula</label>
-                                    <input type="number" name="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
-                                    <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
+
+                                    <label for="apellidos">Apellidos</label>
+                                    <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                                    <small class="form-text">El apellido solo puede contener letras</small>
+
+                                    
                                     <label for="telefono">Teléfono</label>
                                     <div class="input-group mb-3">
                                         <select name="cod_tel" id="cod-tel" class="me-2">
@@ -90,6 +93,20 @@
                                         <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
                                         <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
                                     </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="direccion">Dirección</label>
+                                    <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                                    <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+
+                                    <label for="cedula">Cédula</label>
+                                    <input type="number" name="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
+                                    <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
+
+                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3" required>
+                                </div>
+                                <div class="col-12 col-md-6 mt-4">
                                     <label for="tipo_paciente">Tipo de paciente</label>
                                     <select name="tipo_paciente" id="s-tipo_paciente" class="form-control mb-3" requried>
                                         <option disabled selected>Seleccione el tipo de paciente...</option>
@@ -98,19 +115,6 @@
                                         <option value="3">Asegurado</option>
                                         <option value="4">Beneficiado</option>
                                     </select>
-                                </div>
-                                <div class="col-12 col-md-6">
-
-                                    <label for="apellidos">Apellidos</label>
-                                    <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                                    <small class="form-text">El apellido solo puede contener letras</small>
-
-                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3" required>
-
-                                    <label for="direccion">Dirección</label>
-                                    <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
-                                    <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                                 </div>
                                 <div class="sub-menus">
                                     <div class="submenu-beneficiado row opacity-0 d-none">

@@ -101,7 +101,14 @@ async function addCita() {
         }
 
         data.cedula_titular = infoTitular.cedula;
+        console.log(data);
+        if (data.tipo_cita == 1) {
+            data.seguro_id = 1;
+        }
 
+        if (infoTitular.tipo_paciente == 3 && data.tipo_cita == 2) {
+            data.paciente_titular_id = infoTitular.paciente_id;
+        }
 
 
         await addModule("citas", "info-cita", data, "Cita agendada exitosamente!");

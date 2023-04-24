@@ -232,7 +232,3 @@ class SeguroController extends Controller{
         return $respuesta->json(200);
     }
 }
-
-
-
-?>
