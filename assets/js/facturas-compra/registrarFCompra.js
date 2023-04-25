@@ -73,6 +73,8 @@ async function addFCompra() {
         // data.rif = data.cod_rif + "-" + data.rif;
 
         await addModule("factura/compra","info-fcompra",data,"Factura compra registrada correctamente!");
+        let formCompra = document.getElementById("info-fcompra");
+        formCompra.reset()
         $('#fCompra').DataTable().ajax.reload();
 
     } catch (error) {

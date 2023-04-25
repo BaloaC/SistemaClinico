@@ -1,7 +1,9 @@
 const path = location.pathname.split('/');
+import { removeAddAnalist,removeAddMD } from "../global/validateRol.js";
+
 
 addEventListener("DOMContentLoaded", e => {
-
+    removeAddAnalist(); removeAddMD();
     let especialidades = $('#especialidades').DataTable({
 
         bAutoWidth: false,

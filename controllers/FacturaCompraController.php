@@ -18,27 +18,19 @@ class FacturaCompraController extends Controller
     );
 
     //Método index (vista principal)
-    public function index()
-    {
-
+    public function index() {
         return $this->view('facturas/index');
     }
 
-    public function formRegistrarFacturas()
-    {
-
+    public function formRegistrarFacturas() {
         return $this->view('facturas/registrarFacturas');
     }
 
-    public function formActualizarFactura($idFactura)
-    {
-
+    public function formActualizarFactura($idFactura) {
         return $this->view('facturas/actualizarFacturas', ['idFactura' => $idFactura]);
     }
 
-    public function insertarFacturaCompra(/*Request $request*/)
-    {
-
+    public function insertarFacturaCompra(/*Request $request*/) {
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
         $camposNumericos = array('proveedor_id', 'total_productos', 'monto_con_iva', 'monto_sin_iva', 'excento');

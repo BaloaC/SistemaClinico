@@ -18,6 +18,9 @@ async function addFConsulta() {
 
 
         await addModule("factura/consulta","info-fconsulta",data,"Factura consulta registrada correctamente!");
+        Array.from(document.getElementById("info-fconsulta").elements).forEach(element => {
+            element.classList.remove('valid');
+        })
         $('#fConsulta').DataTable().ajax.reload();
 
     } catch (error) {

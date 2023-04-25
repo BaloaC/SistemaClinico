@@ -1,9 +1,13 @@
 import concatItems from "../global/concatItems.js";
 import getAll from "../global/getAll.js";
+import { removeAddAccountant, removeAddAnalist, removeAddMD } from "../global/validateRol.js";
 
 const listadoExamenes = await getAll("examenes/consulta");
 const registros = listadoExamenes != typeof Array ? listadoExamenes : undefined;
 console.log(registros);
+removeAddAccountant();
+removeAddAnalist();
+removeAddMD();
 // Configurar la paginación
 const registrosPorPagina = 6;
 let paginaActual = 1;

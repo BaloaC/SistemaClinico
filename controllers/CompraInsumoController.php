@@ -51,8 +51,8 @@ class CompraInsumoController extends Controller {
                         // Sumando la cantidad de la factura al stock del inventario
                         $_insumoModel = new InsumoModel();
                         $insumo = $_insumoModel->where('insumo_id', '=', $POSTS['insumo_id'])->getFirst();
-                        $unidadesPosts = $POSTS['unidades'] + $insumo->stock;
-                        $actualizar = array('stock' => $unidadesPosts);
+                        $unidadesPosts = $POSTS['unidades'] + $insumo->cantidad;
+                        $actualizar = array('cantidad' => $unidadesPosts);
                         
                         // actualizando el stock del insumo
                         $_insumoModel = new InsumoModel();

@@ -58,6 +58,12 @@ class FacturaSeguroController extends Controller{
                 $json = json_decode($consultaArray);
                 $consulta = $json->data['0'];
                 
+                // validando que el paciente sea asegurado
+                if (!$validarFactura->isDuplicated('paciente_seguro', 'paciente_id', $consulta->paciente_id)) {
+                    $respuesta = new Response(false, 'El paciente de la consulta no es asegurado');
+                    return $respuesta->json(400);
+                }
+
                 // ID para obtener el resto de la información
                 $cita = $consulta->cita_id;
                 $_citaModel = new CitaModel();
@@ -91,6 +97,16 @@ class FacturaSeguroController extends Controller{
                     'fecha_pago_limite' => $fecha_limite
                 );
                 
+                // validando que el paciente pueda cubrir el saldo
+                $_pacienteSeguroModel = new PacienteSeguroModel;
+                $paciente = $_pacienteSeguroModel->where('estatus_pac','=',1)->where('paciente_id', '=',$pacienteTitular->paciente_id)->where('seguro_id','=',$seguroId)->getFirst();
+                $saldo = isset($paciente->saldo_disponible) ? $paciente->saldo_disponible : 0;
+                
+                if ($data['monto'] > $saldo) {
+                    $respuesta = new Response('INSUFFICIENT_AMOUNT');
+                    return $respuesta->json(400);
+                }
+
                 $_facturaSeguroModel = new FacturaSeguroModel();
                 $_facturaSeguroModel->byUser($token);
                 $id = $_facturaSeguroModel->insert($insert);
@@ -100,18 +116,8 @@ class FacturaSeguroController extends Controller{
                 if ($mensaje) {
                     
                     // Restando el monto de la factura al saldo disponible del paciente
-                    $_pacienteSeguroModel = new PacienteSeguroModel;
-                    $paciente = $_pacienteSeguroModel->where('estatus_pac','=',1)->where('paciente_id', '=',$pacienteTitular->paciente_id)->where('seguro_id','=',$seguroId)->getFirst();
-                    $saldo = isset($paciente->saldo_disponible) ? $paciente->saldo_disponible : 0;
-
-                    if ($data['monto'] > $saldo) {
-                        $respuesta = new Response('INSUFFICIENT_AMOUNT');
-                        return $respuesta->json(400);
-                    }
-
                     $montoActualizado = $saldo - $data['monto'];
                     $update = array('saldo_disponible' => $montoActualizado);
-                    
                     $respuesta = $_pacienteSeguroModel->where('paciente_id', '=',$pacienteTitular->paciente_id)->update($update);
 
                     if (!$respuesta) {

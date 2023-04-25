@@ -8,9 +8,14 @@ class MiddlewareBase {
         
         MiddlewareBase::$token = substr($head, 7);
         if (!isset(MiddlewareBase::$token)  || empty(MiddlewareBase::$token && MiddlewareBase::$token != 'undefined') ) {
-            
+            return false;  
+        } 
+
+        $_usuarioModel = new UsuarioModel();
+        $usuario = $_usuarioModel->where('tokken', '=', 'MiddlewareBase::$token')->getFirst();
+        
+        if (!$usuario) {
             return false;
-            
         } else {
             return true;
         }

@@ -2,8 +2,8 @@ import { select2OnClick } from "../global/dinamicSelect2.js";
 import getById from "../global/getById.js";
 import getAll from "../global/getAll.js";
 import concatItems from "../global/concatItems.js";
-
-
+import { removeAddAnalist } from "../global/validateRol.js";
+removeAddAnalist();
 async function getMedico(id) {
     try {
 

@@ -105,7 +105,7 @@
                                                 <td><input type="number" name="precio_unit" min="0" class="form-control insumo-uprecio" oninput="calcularMonto(this)" required></td>
                                                 <td><input type="number" name="unidades" min="0" class="form-control insumo-unid" oninput="calcularMonto(this)" required></td>
                                                 <td><b class="monto-total-p">$0.00</b></td>
-                                                <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)" required></td>
+                                                <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
                                             </tr>
                                         </tbody>
                                     </table>

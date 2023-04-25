@@ -62,13 +62,7 @@ class Router
     }
 
     //Método para ejectuar método HTTP
-    public static function submit()
-    {
-        // var_dump('<pre>');
-
-        // Verificando Token Bearer
-
-
+    public static function submit() {
         $method = $_SERVER['REQUEST_METHOD'];
 
         $uri = isset($_GET['uri']) ? $_GET['uri'] : '';

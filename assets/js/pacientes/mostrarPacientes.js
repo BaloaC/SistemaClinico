@@ -1,5 +1,7 @@
 import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
-
+import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
+removeAddAccountant();
+removeAddAnalist();
 const path = location.pathname.split('/');
 
 select2OnClick({

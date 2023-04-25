@@ -69,7 +69,6 @@ class FacturaMedicoController extends Controller{
                 
                 $_facturaMedicoModel = new FacturaMedicoModel();
                 $_facturaMedicoModel->byUser($token);
-
                 $id = $_facturaMedicoModel->insert($insert);
                 $mensaje = ($id > 0);
 
@@ -166,10 +165,10 @@ class FacturaMedicoController extends Controller{
         $fecha_actual = $_POST['fecha_actual'];
         $fecha_inicio = strtotime('-1 month', strtotime($fecha_actual));
         $fecha_inicio = date('Y-m-d', $fecha_inicio);
-        
-        $_facturaMedicoModel = new FacturaMedicoModel();
-        $inners = $_facturaMedicoModel->listInner($arrayInner);
-        $inner = $_facturaMedicoModel->where('consulta.medico_id', '=', $form['medico_id'])->where('estatus_con','=',1)->where('estatus_fac','!=',2)->whereDate('consulta.fecha_consulta',$fecha_inicio,$fecha_actual)->innerJoin($arraySelect, $inners, "factura_consulta");
+
+        $_facturaConsultaModel = new FacturaConsultaModel();
+        $inners = $_facturaConsultaModel->listInner($arrayInner);
+        $inner = $_facturaConsultaModel->where('consulta.medico_id', '=', $form['medico_id'])->where('consulta.estatus_con','=',1)->where('factura_consulta.estatus_fac','!=',2)->whereDate('consulta.fecha_consulta',$fecha_inicio,$fecha_actual)->innerJoin($arraySelect, $inners, "factura_consulta");
         
         $pacientesConsulta = 0;
         $montoTotal = 0;

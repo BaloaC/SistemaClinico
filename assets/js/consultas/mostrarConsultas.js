@@ -1,6 +1,7 @@
 import concatItems from "../global/concatItems.js";
 import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
+import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
 
 const path = location.pathname.split('/');
 const especialidadSelect = document.getElementById("s-especialidad");
@@ -89,7 +90,8 @@ select2OnClick({
 
 
 addEventListener("DOMContentLoaded", e => {
-
+    removeAddAccountant();
+    removeAddAnalist()
     let consultas = $('#consultas').DataTable({
 
         bAutoWidth: false,
