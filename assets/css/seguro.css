@@ -1,0 +1,80 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Inspiration&family=Noto+Sans+JP:wght@300&family=Pacifico&family=Roboto:wght@100&display=swap'); */
+@import url('base.css');
+@import url('nav.css');
+
+.list-seg {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 3rem 0;
+}
+
+form,
+.modal-dialog-scrollable .modal-body {
+    overflow: hidden;
+}
+
+.list-seg > li > article {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 128px;
+    height: 128px;
+    border-radius: 60px;
+    background-color: #ffffff33;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.list-seg > li > a {
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+}
+
+.list-seg > li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-width: 12rem;
+    margin-bottom: 2rem;
+}
+
+.overlay-box {
+    /* background: linear-gradient(to bottom, #019de1 0%, #100e99 100%); */
+    background-color: #084298;
+    padding: 3rem;
+    text-align: center;
+}
+
+.card {
+    margin-bottom: 2rem;
+}
+
+.card-container {
+    text-decoration: none;
+}
+
+.card-container:hover {
+    color: initial;
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.text-muted {
+    text-align: right;
+}
+
+.btn-empresa {
+    background-color: #dddddd;
+}
+
+
+/* a:hover {
+    color: #15f1ff !important;
+} */

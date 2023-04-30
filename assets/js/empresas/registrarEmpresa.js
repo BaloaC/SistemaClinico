@@ -1,0 +1,55 @@
+import addModule from "../global/addModule.js";
+import getAll from "../global/getAll.js";
+import { empresasPagination } from "./empresasPagination.js";
+import { mostrarEmpresas } from "./mostrarEmpresas.js";
+
+async function addEmpresa() {
+    const $form = document.getElementById("info-empresa"),
+        alert = document.querySelector(".alert")
+
+    try {
+        const formData = new FormData($form),
+            data = {},
+            seguro = [];
+
+        formData.forEach((value, key) => (data[key] = value));
+
+        let seguros = formData.getAll("seguro[]");
+        seguros.forEach(e => {
+            const seguro_id = {
+                seguro_id: e
+            }
+            seguro.push(seguro_id);
+        })
+
+        if (!$form.checkValidity()) { $form.reportValidity(); return; }
+        if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
+        if (!isNaN(data.cod_rif) || data.cod_rif.length !== 1) throw { message: "El RIF ingresado es inválido" };
+        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
+
+        data.seguro = seguro;
+        data.rif = data.cod_rif + "-" + data.rif;
+
+        await addModule("empresas", "info-empresa", data, "Empresa registrada exitosamente!");
+        Array.from(document.getElementById("info-empresa").elements).forEach(element => {
+            element.classList.remove('valid');
+        })
+        const listadoEmpresas = await getAll("empresas/consulta");
+        empresasPagination(listadoEmpresas);
+        $("#s-seguro").val([]).trigger('change');
+
+    } catch (error) {
+        console.log(error);
+        alert.classList.remove("d-none");
+        alert.classList.add("alert-danger");
+        alert.textContent = error.message || error.result.message;
+    }
+}
+
+window.addEmpresa = addEmpresa;
+document.getElementById("info-empresa").addEventListener('submit', event => {
+    event.preventDefault();
+    addEmpresa();
+})
+

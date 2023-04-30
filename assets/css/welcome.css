@@ -1,0 +1,64 @@
+@import url('base.css');
+@import url('nav.css');
+
+@font-face {
+    font-family: Forum;
+    src: url('../fonts/Forum-Regular.otf');
+}
+
+* {
+    font-family: Forum;
+}
+
+body {
+    overflow: hidden;
+    background: linear-gradient(to bottom, #babab8 0%, #b1b0ac 100%);
+}
+
+.btn-login {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 2rem;
+    text-decoration: none;
+    color: #000;
+    border: 1px solid #6e6e6e;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    padding: 20px;
+}
+
+.btn-login:hover {
+    color: #6e6e6e;
+}
+
+.title {
+    font-size: 4rem;
+    font-weight: normal;
+}
+
+.select2 {
+    margin-bottom: 1.5rem;
+}
+
+
+@media screen and (max-width: 772px) {
+    .img-welcome {
+        /* display:none !important; */
+    }
+
+    .title {
+        font-size: 2.5rem;
+    }
+
+    .btn-login {
+        padding: 10px;
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 880px) {
+    .img-welcome {
+        height: 100%;
+    }
+}
