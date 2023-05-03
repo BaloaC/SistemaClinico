@@ -3,6 +3,8 @@ import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import isBeforeToday from "../global/isBeforeToday.js";
 import parseCitas from "./parseCitas.js";
+import tipoAsegurado from "./tipoAsegurado.js";
+import tipoTitular from "./tipoTitular.js";
 
 const module = "citas",
     modalReg = new bootstrap.Modal("#modalReg"),
@@ -87,112 +89,67 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             let paciente_id = this.value;
             const infoPaciente = await getById("pacientes", paciente_id);
             const inputRadioBeneficiado = document.getElementById("tipoPacienteBeneficiado");
+            const inputTipoCita = document.getElementById("s-tipo_cita");
+            const inputTipoCitaDefault = inputTipoCita.querySelector("option[value='default']");
+            
+            // ** Una vez se elija el paciente, permitir el cambio de tipo cita
+            if(inputTipoCitaDefault !== null){
+                inputTipoCita.removeChild(inputTipoCitaDefault);
+                inputTipoCita.disabled = false;
+            }
 
             console.log(infoPaciente);
 
+            // ** Si es representante o beneficiario
             if (infoPaciente.tipo_paciente == 2 || infoPaciente.tipo_paciente == 4) {
                 document.querySelector(".input-radios-container").classList.remove("d-none");
                 document.querySelector("label[for='input-radios-container'").classList.remove("d-none");
                 document.getElementById("tipoPacienteBeneficiado").dataset.pacienteId = paciente_id;
                 document.getElementById("tipoPacienteBeneficiado").dataset.tipoPaciente = infoPaciente.tipo_paciente;
+                document.querySelector("label[for='seguro']").classList.add("d-none");
+                inputTipoCita.querySelector("option[value='2']").disabled = true;
+                inputTipoCita.querySelector("option[value='1']").selected = true;
+                $('#s-seguro').next('.select2-container').fadeOut('slow');
 
+                // ** Si esta selccionado como beneficiado
                 if (inputRadioBeneficiado.checked) {
                     $('#s-titular').next('.select2-container').fadeIn('slow');
                     document.querySelector("label[for='titular_id'").classList.remove("d-none");
                     document.querySelector("#s-titular").dataset.active = 0;
-                    tipoPaciente(inputRadioBeneficiado);
+                    tipoTitular(inputRadioBeneficiado);
                 } else {
                     $('#s-titular').next('.select2-container').fadeOut('slow');
                 }
-            } else {
+
+            // ** Si es asegurado
+            } else if(infoPaciente.tipo_paciente == 3){
+                // $('#s-seguro').next('.select2-container').fadeIn('slow');
+                // document.querySelector("label[for='seguro']").classList.remove("d-none");
+                document.querySelector("#s-seguro").dataset.active = 0;
+                tipoAsegurado(infoPaciente.paciente_id);
+
+                // ** En caso de la cita sea natural ocultar el select de seguros
+                if(inputTipoCita.value == 1){
+                    document.querySelector("label[for='seguro']").classList.add("d-none");
+                    $('#s-seguro').next('.select2-container').fadeOut('slow');
+                }
+                
                 document.querySelector(".input-radios-container").classList.add("d-none");
                 document.querySelector("label[for='input-radios-container").classList.add("d-none");
                 document.querySelector("label[for='titular_id'").classList.add("d-none");
                 $('#s-titular').next('.select2-container').fadeOut('slow');
+                inputTipoCita.querySelector("option[value='2']").disabled = false;
+            } else {
+                document.querySelector(".input-radios-container").classList.add("d-none");
+                document.querySelector("label[for='input-radios-container").classList.add("d-none");
+                document.querySelector("label[for='titular_id'").classList.add("d-none");
+                inputTipoCita.querySelector("option[value='2']").disabled = true;
+                inputTipoCita.querySelector("option[value='1']").selected = true;
+                document.querySelector("label[for='seguro']").classList.add("d-none");
+                $('#s-seguro').next('.select2-container').fadeOut('slow');
+                $('#s-titular').next('.select2-container').fadeOut('slow');
             }
         })
-
-        async function tipoPaciente(inputRadio) {
-            if (inputRadio.value === "beneficiado") {
-                const titularSelect = document.getElementById("s-titular");
-                document.querySelector("label[for='titular_id'").classList.remove("d-none");
-
-                if (titularSelect.dataset.create == 0) {
-                    emptySelect2({
-                        selectSelector: titularSelect,
-                        placeholder: "Seleccione un paciente",
-                        parentModal: "#modalReg",
-                        disable: false,
-                    });
-                }
-
-                $("#s-titular").on("select2:open", async function (e) {
-                    if (document.querySelector("#s-titular").dataset.active == 0) {
-
-                        // Vaciar opciones del elemento select
-                        $("#s-titular").empty();
-
-                        let paciente_id = inputRadio.dataset.pacienteId;
-                        let tipo_paciente = inputRadio.dataset.tipoPaciente;
-                        console.log(tipo_paciente);
-                        let infoPaciente;
-
-                        if (tipo_paciente == 2) {
-                            infoPaciente = await getById("titularesBeneficiado", paciente_id);
-                        } else {
-                            infoPaciente = await getById("titulares", paciente_id);
-                        }
-
-                        if ('result' in infoPaciente && infoPaciente.result.code === false) return;
-
-                        console.log(infoPaciente);
-
-                        infoPaciente.forEach((el) => {
-
-
-                            if (el.tipo_paciente == 1) el.tipo_paciente = "Natural";
-                            else if (el.tipo_paciente == 2) el.tipo_paciente = "Representante";
-                            else if (el.tipo_paciente == 3) el.tipo_paciente = "Asegurado";
-                            else if (el.tipo_paciente == 4) el.tipo_paciente = "Beneficiado";
-
-                            if ($("#s-titular").find(`option[value="${el.paciente_id}"]`).length) {
-                                $("#s-titular").val(el.paciente_id);
-                            } else {
-                                let newOption = new Option(selectText(["cedula", "nombre-apellidos", "tipo_paciente"], el), el.paciente_id, false, false);
-                                $("#s-titular").append(newOption);
-                            }
-                        });
-
-                        // Construir uno nuevo con la información que necesitas
-                        emptySelect2({
-                            selectSelector: titularSelect,
-                            placeholder: "Seleccione un paciente",
-                            parentModal: "#modalReg",
-                            disable: false,
-                        });
-
-                        $("#s-titular").val(0).trigger("change.select2");
-                        $("#s-titular").select2("close");
-                        document.querySelector("#s-titular").dataset.active = 1;
-                    }
-
-                    $("#s-titular").select2("open");
-                });
-
-                if ("#modalReg" !== null) {
-                    document.querySelector("#modalReg").addEventListener("hidden.bs.modal", (e) => {
-                        document.querySelector("#s-titular").dataset.active = 0;
-                    });
-                }
-                // $('#s-titular').next('.select2-container').fadeOut('slow');
-                // $('#s-titular').next('.select2-container').fadeIn('slow');
-            } else {
-                $('#s-titular').next('.select2-container').fadeOut('slow');
-                document.querySelector("label[for='titular_id'").classList.add("d-none");
-            }
-        }
-
-        window.tipoPaciente = tipoPaciente;
 
 
         // TODO: Colocar en la vista los horarios disponible de este medico
@@ -211,17 +168,17 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             parentModal: "#modalReg"
         })
 
-        select2OnClick({
-            selectSelector: "#s-seguro",
-            selectValue: "seguro_id",
-            selectNames: ["rif", "nombre"],
-            module: "seguros/consulta",
-            parentModal: "#modalReg",
-            placeholder: "Seleccione un seguro"
-        });
+        // select2OnClick({
+        //     selectSelector: "#s-seguro",
+        //     selectValue: "seguro_id",
+        //     selectNames: ["rif", "nombre"],
+        //     module: "seguros/consulta",
+        //     parentModal: "#modalReg",
+        //     placeholder: "Seleccione un seguro"
+        // });
 
-        $('#s-seguro').next('.select2-container').fadeOut('slow');
-        seguroSelect.disabled = true;
+        // $('#s-seguro').next('.select2-container').fadeOut('slow');
+        // seguroSelect.disabled = true;
         especialidadSelect.disabled = true;
 
         $("#s-medico").on("change", async function (e) {
@@ -244,15 +201,15 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             especialidadSelect.disabled = false;
         })
 
-        dinamicSelect2({
-            obj: [{ id: 1, text: "Normal" }, { id: 2, text: "Asegurada" }],
-            selectNames: ["text"],
-            selectValue: "id",
-            selectSelector: "#s-tipo_cita",
-            placeholder: "Seleccione el tipo de cita",
-            parentModal: "#modalReg",
-            staticSelect: true
-        });
+        // dinamicSelect2({
+        //     obj: [{ id: 1, text: "Normal" }, { id: 2, text: "Asegurada" }],
+        //     selectNames: ["text"],
+        //     selectValue: "id",
+        //     selectSelector: "#s-tipo_cita",
+        //     placeholder: "Seleccione el tipo de cita",
+        //     parentModal: "#modalReg",
+        //     staticSelect: true
+        // });
 
         $("#s-tipo_cita").on("change", function (e) {
 
@@ -260,10 +217,10 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
             if (tipo_cita == 1) {
                 $('#s-seguro').next('.select2-container').fadeOut('slow');
-                document.querySelector("label[for='seguro'").classList.add("d-none");
+                document.querySelector("label[for='seguro']").classList.add("d-none");
             } else {
                 $('#s-seguro').next('.select2-container').fadeIn('slow');
-                document.querySelector("label[for='seguro'").classList.remove("d-none");
+                document.querySelector("label[for='seguro']").classList.remove("d-none");
                 seguroSelect.disabled = false;
             }
         })

@@ -40,6 +40,9 @@ citasSelect.disabled = true;
 $("#s-paciente").on("change", async function (e) {
 
     let paciente_id = this.value;
+
+    if(!paciente_id) return;
+
     let infoCitas = await getById("citas/paciente", paciente_id);
 
     $(citasSelect).empty().select2();
@@ -48,11 +51,11 @@ $("#s-paciente").on("change", async function (e) {
 
     dinamicSelect2({
         obj: infoCitas,
-        selectSelector: citasSelect,
+        selectSelector: citasSelect ?? [],
         selectValue: "cita_id",
         selectNames: ["cita_id", "motivo_cita"],
         parentModal: "#modalReg",
-        placeholder: "Seleccione una cita"
+        placeholder: "Seleccione un paciente"
     });
 
     citasSelect.disabled = false;

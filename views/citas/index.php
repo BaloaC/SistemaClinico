@@ -66,11 +66,11 @@
                                         <label for="input-radios-container" class="d-none">Tipo de paciente</label>
                                         <div class="input-radios-container d-none">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoPacienteTitular" onchange="tipoPaciente(this)" value="titular" checked required>
+                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoPacienteTitular" onchange="tipoTitular(this)" value="titular" checked required>
                                                 <label class="form-check-label" for="inlineRadio1">Titular</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoPacienteBeneficiado" onchange="tipoPaciente(this)" value="beneficiado" required>
+                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoPacienteBeneficiado" onchange="tipoTitular(this)" value="beneficiado" required>
                                                 <label class="form-check-label" for="inlineRadio2">Beneficiado</label>
                                             </div>
                                         </div>
@@ -83,8 +83,10 @@
                                             <input type="datetime-local" name="fecha_cita" id="fecha_cita" class="form-control mb-3">
 
                                             <label for="tipo_cita">Tipo de cita</label>
-                                            <select name="tipo_cita" id="s-tipo_cita" class="form-control mb-3">
-                                                <option></option>
+                                            <select name="tipo_cita" id="s-tipo_cita" class="form-control mb-3" disabled>
+                                                <option value="default" disabled selected>Debe seleccionar un paciente</option>
+                                                <option value="1">Normal</option>
+                                                <option value="2">Asegurada</option>
                                             </select>
 
                                             <label for="titular_id" class="d-none">Titular</label>
@@ -104,7 +106,7 @@
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <label for="seguro" class="d-none">Seguro</label>
-                                        <select name="seguro_id" id="s-seguro" class="form-control mb-3" data-active="0">
+                                        <select name="seguro_id" id="s-seguro" class="form-control mb-3 d-none" data-active="0" data-create="0">
                                             <option></option>
                                         </select>
                                     </div>

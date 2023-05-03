@@ -92,11 +92,11 @@
                                     <h5>Información de la Consulta</h5>
                                     <div class="col-12 col-md-6">
                                         <label for="peso">Peso</label>
-                                        <input type="number" name="peso" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" required>
+                                        <input type="number" step="any" name="peso" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" required>
                                         <small class="form-text">No se permiten números negativos</small>
 
                                         <label for="altura">Altura</label>
-                                        <input name="altura" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" required>
+                                        <input type="number" step="any" name="altura" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" required>
                                         <small class="form-text">No se permiten números negativos</small>
                                     </div>
                                     <div class="col-12 col-md-6">
@@ -112,15 +112,20 @@
 
                                 <div class="row mt-4">
                                     <h5>Insumos utilizados en la Consulta</h5>
-                                    <div class="col-12 col-md-6">
-                                        <label for="insumo">Insumo</label>
-                                        <select id="s-insumo" class="form-control insumo-id" data-active="0">
-                                            <option></option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <label for="cantidad">Cantidad utilizada</label>
-                                        <input type="number" class="form-control insumo-cant">
+                                    <div class="row align-items-center">
+                                        <div class="col-3 col-md-1">
+                                            <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <label for="insumo">Insumo</label>
+                                            <select id="s-insumo" class="form-control insumo-id" data-active="0">
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <label for="cantidad" class="p-0">Cantidad utilizada</label>
+                                            <input type="number" class="form-control insumo-cant">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -324,6 +329,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/consultas/registrarConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/eliminarConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/addInsumoInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/deleteInsumoInput.js'); ?>"></script>
 </body>
 
 </html>

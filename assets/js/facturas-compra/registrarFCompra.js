@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import deleteElementByClass from "../global/deleteElementByClass.js";
 import getAge from "../global/getAge.js";
 
 async function addFCompra() {
@@ -74,7 +75,15 @@ async function addFCompra() {
 
         await addModule("factura/compra","info-fcompra",data,"Factura compra registrada correctamente!");
         let formCompra = document.getElementById("info-fcompra");
-        formCompra.reset()
+        formCompra.reset();
+        deleteElementByClass("newInput");
+        $("#s-proveedor").val([]).trigger('change');
+        $("#s-insumo").val([]).trigger('change');
+        document.querySelector("td > .monto-total-p").textContent = "$0.00";
+        document.getElementById("productos-totales").textContent = "0";
+        document.getElementById("monto-sin-iva").textContent = "$0.00";
+        document.getElementById("iva").textContent = "$0.00";
+        document.getElementById("monto-total").textContent = "$0.00";
         $('#fCompra').DataTable().ajax.reload();
 
     } catch (error) {

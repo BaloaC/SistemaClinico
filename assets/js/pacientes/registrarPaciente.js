@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import deleteElementByClass from "../global/deleteElementByClass.js";
 import getAge from "../global/getAge.js";
 
 async function addPaciente() {
@@ -71,6 +72,8 @@ async function addPaciente() {
         Array.from(document.getElementById("info-paciente").elements).forEach(element => {
             element.classList.remove('valid');
         })
+        $("#s-titular_id").val([]).trigger('change');
+        deleteElementByClass("newInput");
 
         $('#pacientes').DataTable().ajax.reload();
 

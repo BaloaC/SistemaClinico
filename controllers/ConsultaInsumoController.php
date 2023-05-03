@@ -1,19 +1,18 @@
 <?php
 
-class ConsultaInsumoController extends Controller
-{
+class ConsultaInsumoController extends Controller{
 
-    public function insertarConsultaInsumo($form, $id)
-    {
+    public function insertarConsultaInsumo($form, $id){
 
         if (!is_array($form)) {
             return false;
         }
 
+        $insumo_id = $id;
         foreach ($form as $forms) {
 
             $newForm = $forms;
-            $newForm['consulta_id'] = $id;
+            $newForm['consulta_id'] = $insumo_id;
             $camposNumericos = array("insumo_id", "consulta_id");
             $validarConsultaInsumo = new Validate;
 
@@ -42,8 +41,8 @@ class ConsultaInsumoController extends Controller
 
                     $data = $validarConsultaInsumo->dataScape($newForm);
                     $_consultaInsumoModel = new ConsultaInsumoModel();
-                    $id = $_consultaInsumoModel->insert($data);
-                    $mensaje = ($id > 0);
+                    $idInsumo = $_consultaInsumoModel->insert($data);
+                    $mensaje = ($idInsumo > 0);
 
                     if ($mensaje) {
 
@@ -77,8 +76,7 @@ class ConsultaInsumoController extends Controller
         return false;
     }
 
-    public function eliminarConsultaInsumo($consulta_insumo_id)
-    {
+    public function eliminarConsultaInsumo($consulta_insumo_id){
 
         $_consultaInsumoModel = new ConsultaInsumoModel();
         $data = array(

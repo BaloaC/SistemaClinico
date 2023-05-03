@@ -9,6 +9,7 @@ function addInsumoInput() {
     let clone = document.importNode(insumoTemplate, true);
 
     clone.getElementById("s-insumo").id = `s-insumo${clicks}`;
+    clone.querySelector("tr").classList.add("newInput");
     document.getElementById("insumos-list").appendChild(clone);
     
     select2OnClick({

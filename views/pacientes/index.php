@@ -119,20 +119,25 @@
                                 <div class="sub-menus">
                                     <div class="submenu-beneficiado row opacity-0 d-none">
                                         <h5 class="mt-4 mb-3">Información titulares</h5>
-                                        <div class="col-12 col-md-6">
-                                            <label for="titular">Titular</label>
-                                            <select name="titular_id" id="s-titular_id" class="form-control mb-3 titular" data-active="0" disabled required>
-                                                <option value="">Seleccione un titular</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label for="tipo_relacion">Tipo de relación</label>
-                                            <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3 relacion" disabled required>
-                                                <option value="" disabled>Seleccione el tipo de relación</option>
-                                                <option value="1">Seguro</option>
-                                                <option value="2">Padre/Madre</option>
-                                                <option value="3">Representante</option>
-                                            </select>
+                                        <div class="row align-items-center">
+                                            <div class="col-12 col-md-1">
+                                                <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>
+                                            </div>
+                                            <div class="col-12 col-md-5">
+                                                <label for="titular">Titular</label>
+                                                <select name="titular_id" id="s-titular_id" class="form-control mb-3 titular" data-active="0" disabled required>
+                                                    <option value="">Seleccione un titular</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12 col-md-5">
+                                                <label for="tipo_relacion">Tipo de relación</label>
+                                                <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3 relacion" disabled required>
+                                                    <option value="" disabled>Seleccione el tipo de relación</option>
+                                                    <option value="1">Seguro</option>
+                                                    <option value="2">Padre/Madre</option>
+                                                    <option value="3">Representante</option>
+                                                </select>
+                                            </div>
                                         </div>
                                         <button type="button" class="btn btn-primary w-25" id="addTitular" onclick="addTitularInput()">Agregar titular</button>
                                     </div>
@@ -300,7 +305,8 @@
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/registrarPaciente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/actualizarPaciente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/eliminarPaciente.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/pacientes/addTitular.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/pacientes/addTitularInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/pacientes/deleteTitularInput.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>
 </body>

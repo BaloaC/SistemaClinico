@@ -1,5 +1,6 @@
 import addModule from "../global/addModule.js";
 import getAge from "../global/getAge.js";
+import deleteElementByClass from "../global/deleteElementByClass.js";
 import getById from "../global/getById.js";
 
 async function addConsulta() {
@@ -13,6 +14,8 @@ async function addConsulta() {
             examenes = [];
 
         formData.forEach((value, key) => (data[key] = value));
+
+        if (!$form.checkValidity()) { $form.reportValidity(); return; }
 
         const infoCita = await getById("citas", data.cita_id);
         data.cedula_titular = infoCita[0].cedula_titular;
@@ -46,7 +49,6 @@ async function addConsulta() {
 
         // TODO: Validar los inputs del paciente
 
-        if (!$form.checkValidity()) { $form.reportValidity(); return; }
         // if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
         // if (!(/^[0-9]*\.?[0-9]+$/.test(data.altura))) throw { message: "La altura no es válida" };
         // if (!(/^[0-9]*\.?[0-9]+$/.test(data.peso))) throw { message: "La cédula no es válida" };
@@ -62,6 +64,14 @@ async function addConsulta() {
         Array.from(document.getElementById("info-consulta").elements).forEach(element => {
             element.classList.remove('valid');
         })
+        $form.reset();
+        $('#s-paciente').val([]).trigger('change');
+        $('#s-examen').val([]).trigger('change');
+        $('#s-insumo').val([]).trigger('change');
+        $('#s-cita').val([]).trigger('change');
+        $('#s-cita').empty().trigger('change');
+        document.getElementById("s-cita").disabled = true;
+        deleteElementByClass("newInput");
         $('#consultas').DataTable().ajax.reload();
 
     } catch (error) {

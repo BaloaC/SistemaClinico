@@ -141,6 +141,13 @@ class Router
                     return Router::$get[$uri]->call();
                 }
 
+                if(strpos($uri, "preguntas/usuario/") !== false){
+                    
+                    $uri2 = preg_replace('/\/[a-z]$/i', '', $uri);
+                    var_dump("/" . $uri2 . "/:id");
+                    return Router::$get["/" . $uri2 . "/:id"]->call();
+                }
+
                 $uris = Router::$get["/" . $uri]->uri;
                 if ($uris === $uri) {
                     return Router::$get["/" . $uri]->call();
