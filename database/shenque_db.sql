@@ -182,7 +182,6 @@ CREATE TABLE `factura_consulta` (
   `consulta_id` int(11) NOT NULL,
   `paciente_id` int(11) NOT NULL,
   `metodo_pago` varchar(20) NOT NULL,
-  `monto_con_iva` float NOT NULL,
   `monto_sin_iva` float NOT NULL,
   `estatus_fac` enum('1','2') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

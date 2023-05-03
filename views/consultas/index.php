@@ -111,7 +111,7 @@
                                 </div>
 
                                 <div class="row mt-4">
-                                    <h5>Insumos utilizados en la Consulta</h5>
+                                    <h5>Insumos utilizados en la Consulta (Opcional)</h5>
                                     <div class="row align-items-center">
                                         <div class="col-3 col-md-1">
                                             <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>

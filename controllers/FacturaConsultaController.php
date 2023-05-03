@@ -27,7 +27,7 @@ class FacturaConsultaController extends Controller
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
-        $camposNumericos = array('monto_con_iva', 'monto_sin_iva');
+        $camposNumericos = array('monto_sin_iva');
         $camposId = array('consulta_id', 'paciente_id');
 
         $token = $validarFactura->validateToken(apache_request_headers());

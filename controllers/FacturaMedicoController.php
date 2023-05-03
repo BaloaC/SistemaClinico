@@ -159,7 +159,7 @@ class FacturaMedicoController extends Controller{
             "consulta.consulta_id",
             "consulta.fecha_consulta",
             "consulta.medico_id",
-            "factura_consulta.monto_con_iva"
+            "factura_consulta.monto_sin_iva"
         );
 
         $fecha_actual = $_POST['fecha_actual'];
@@ -177,7 +177,7 @@ class FacturaMedicoController extends Controller{
         if ($inner) {
             foreach ($inner as $inners) {
                 //calculo consultas
-                $montoTotal += $inners->monto_con_iva;
+                $montoTotal += $inners->monto_sin_iva;
                 $pacientesConsulta += 1;
             }
         }
