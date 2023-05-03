@@ -120,8 +120,7 @@ addEventListener("DOMContentLoaded", e => {
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
                 <tr>
-                    <td>Datos consulta:</td>
-                    <td>${data.consulta_id}</td>
+                    <td>Datos consulta: ${data.consulta_id}</td>
                 </tr>
             </table>
         `;

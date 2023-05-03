@@ -33,7 +33,9 @@ async function addExamen() {
 }
 
 window.addExamen = addExamen;
-document.getElementById("info-examen").addEventListener('submit', (event) => {
-    event.preventDefault();
-    addExamen();
+document.getElementsByName('tipo')[0].addEventListener('keydown', (event) => {
+    if (event.key == 'Enter') {
+        event.preventDefault();
+        addExamen();
+    }
 })

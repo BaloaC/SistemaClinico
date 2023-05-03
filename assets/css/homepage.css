@@ -187,3 +187,11 @@ article p > a:hover {
 .select2 {
     margin-top: 1.5rem;
 }
+
+.text-no-graph {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    color: #000;
+    text-align: center;
+}
