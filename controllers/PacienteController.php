@@ -9,7 +9,9 @@ class PacienteController extends Controller{
 
     protected $arraySelect = array(
         "empresa.nombre AS nombre_empresa",
-        "seguro.nombre AS nombre_seguro"
+        "seguro.nombre AS nombre_seguro",
+        "seguro.seguro_id",
+        "empresa.empresa_id"
     );
 
     //Método index (vista principal)
@@ -253,7 +255,7 @@ class PacienteController extends Controller{
 
             $_medicoModel = new MedicoModel();
             $inners = $_medicoModel->listInner($this->arrayInner);
-            $pacienteSeguro = $_medicoModel->where('paciente_seguro.paciente_id','=',$paciente_id)->where('paciente_seguro.estatus_pac','=','1')->innerJoin($this->arraySelect, $inners, "paciente_seguro");
+            $pacienteSeguro = $_medicoModel->where('paciente_seguro.paciente_id','=',$paciente_id)->where('seguro.estatus_seg','=','1')->where('paciente_seguro.estatus_pac','=','1')->innerJoin($this->arraySelect, $inners, "paciente_seguro");
             
             if ($pacienteSeguro) { $paciente->seguro = $pacienteSeguro; }
             return $this->retornarMensaje($paciente);

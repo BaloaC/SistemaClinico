@@ -70,3 +70,7 @@ async function confirmUpdate() {
 }
 
 window.confirmUpdate = confirmUpdate;
+document.getElementById("act-especialidad").addEventListener('submit', (event) => {
+    event.preventDefault();
+    confirmUpdate();
+})

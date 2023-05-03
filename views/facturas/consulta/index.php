@@ -75,8 +75,8 @@
                                     <select name="paciente_id" id="s-paciente" class="form-control" data-active="0" required>
                                         <option></option>
                                     </select>
-                                    <label for="monto_sin_iva">Monto sin IVA</label>
-                                    <input type="number" name="monto_sin_iva" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                                    <label for="monto_sin_iva">Monto</label>
+                                    <input type="number" name="monto_sin_iva" oninput="calcularIva(this)" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
                                     <label for="monto_con_iva">Método de pago</label>
                                     <select name="metodo_pago" id="s-metodo-pago" class="form-control" data-active="0" required>
                                         <option></option>
@@ -87,8 +87,8 @@
                                     <select name="consulta_id" id="s-consulta" class="form-control" data-active="0" required>
                                         <option></option>
                                     </select>
-                                    <label for="monto_con_iva">Monto con IVA</label>
-                                    <input type="number" name="monto_con_iva" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                                    <label for="monto_con_iva">Monto total</label>
+                                    <input type="number" name="monto_con_iva" id="monto_con_iva" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" disabled>
                                 </div>
                             </div>
                         </form>

@@ -80,9 +80,9 @@ export let xAxis = chart.xAxes.push(
 let yAxis = chart.yAxes.push(
     am5xy.ValueAxis.new(root, {
         maxDeviation: 0.3,
-        min: 0,
-        strictMinMax: true,
-        maxPrecision: 0,
+        // min: 0,
+        // strictMinMax: true,
+        // maxPrecision: 0,
         renderer: am5xy.AxisRendererY.new(root, {}),
     })
 );

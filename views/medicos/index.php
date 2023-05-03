@@ -156,6 +156,8 @@
                             <p>Apellidos: <span id="apellidosMedico"></span></p>
                             <p>Teléfono: <span id="tlfMedico"></span></p>
                             <p>Dirección: <span id="direcMedico"></span></p>
+                            <p>Especialidad: <span id="especialidadMedico"></span></p>
+                            <p>Horario: <span id="horarioMedico"></span></p>
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
@@ -239,6 +241,42 @@
         </div>
     </main>
 
+    <!-- Modal Confirmar Eliminar-->
+    <div class="modal fade" id="modalDeleteRelacion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabelRelacion" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalDeleteLabelRelacion">Eliminar relación con seguro</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="delAlertRelacion" class="alert d-none" role="alert"></div>
+                    ¿Estás seguro que deseas eliminar esta relación?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn-confirmDeleteRelacion" class="btn btn-danger">Eliminar relación</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Alerta-->
+    <div class="modal fade" id="modalAlert" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalDeleteLabel">Alerta</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="delAlertSeguro" class="alert alert-warning" role="alert">No es posible dejar una empresa sin seguro asociado</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn-confirmDeleteSeguro" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <?php include constant('PATH_VIEWS') . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/mostrarMedicos.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/registrarMedico.js'); ?>"></script>
@@ -247,6 +285,8 @@
     <script type="module" src="<?php echo Url::to('assets/js/medicos/actualizarMedico.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/eliminarMedico.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/filtrarMedicos.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/medicos/eliminarHorarioMedico.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/medicos/eliminarEspecialidadMedico.js'); ?>"></script>
 </body>
 
 </html>

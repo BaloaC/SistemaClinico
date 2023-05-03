@@ -14,8 +14,9 @@ async function addFConsulta() {
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto_sin_iva))) throw { message: "El monto sin iva ingresado es inválido" };
-        if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto_con_iva))) throw { message: "El monto con iva ingresado es inválido" };
+        // if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto_con_iva))) throw { message: "El monto con iva ingresado es inválido" };
 
+        data.monto_con_iva = (parseFloat(data.monto_sin_iva) * 0.16) + parseFloat(data.monto_sin_iva)
 
         await addModule("factura/consulta","info-fconsulta",data,"Factura consulta registrada correctamente!");
         Array.from(document.getElementById("info-fconsulta").elements).forEach(element => {

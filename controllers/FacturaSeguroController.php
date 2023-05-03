@@ -58,11 +58,12 @@ class FacturaSeguroController extends Controller{
                 $json = json_decode($consultaArray);
                 $consulta = $json->data['0'];
                 
+                
                 // validando que el paciente sea asegurado
-                if (!$validarFactura->isDuplicated('paciente_seguro', 'paciente_id', $consulta->paciente_id)) {
-                    $respuesta = new Response(false, 'El paciente de la consulta no es asegurado');
-                    return $respuesta->json(400);
-                }
+                // if (!$validarFactura->isDuplicated('paciente_seguro', 'paciente_id', $consulta->paciente_id)) {
+                //     $respuesta = new Response(false, 'El paciente de la consulta no es asegurado');
+                //     return $respuesta->json(400);
+                // }
 
                 // ID para obtener el resto de la información
                 $cita = $consulta->cita_id;

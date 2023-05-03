@@ -27,12 +27,12 @@
             <ul class="list-nav navbar-nav align-items-center">
                 <li class="nav-item"><a class="nav-link rol-1 rol-2 rol-3 rol-4 rol-5 rol-0" href="<?php echo Url::base() . "/home" ?>"><i class="fas fa-home"></i> Inicio</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle rol-1 rol-2 rol-4" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle rol-1 rol-2 rol-4 rol-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-stethoscope"></i>Personal
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/especialidades" ?>">Especialidades</a></li>
-                        <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/medicos" ?>">Médicos</a></li>
+                        <li><a class="dropdown-item rol-1 rol-2 rol-4" href="<?php echo Url::base() . "/medicos" ?>">Médicos</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

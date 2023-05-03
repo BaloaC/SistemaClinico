@@ -62,7 +62,7 @@ class Router
     }
 
     //Método para ejectuar método HTTP
-    public static function submit() {
+    public static function submit(){
         $method = $_SERVER['REQUEST_METHOD'];
 
         $uri = isset($_GET['uri']) ? $_GET['uri'] : '';
@@ -139,6 +139,13 @@ class Router
 
                 if ($uri === "/") {
                     return Router::$get[$uri]->call();
+                }
+
+                if(strpos($uri, "preguntas/usuario/") !== false){
+                    
+                    $uri2 = preg_replace('/\/[a-z]$/i', '', $uri);
+                    var_dump("/" . $uri2 . "/:id");
+                    return Router::$get["/" . $uri2 . "/:id"]->call();
                 }
 
                 $uris = Router::$get["/" . $uri]->uri;

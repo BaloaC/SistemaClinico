@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import deleteElementByClass from "../global/deleteElementByClass.js";
 import getAge from "../global/getAge.js";
 
 async function addPaciente() {
@@ -19,7 +20,7 @@ async function addPaciente() {
 
 
         // Crear objeto depediendo el tipo de paciente
-        if(data.tipo_paciente == 3){
+        if (data.tipo_paciente == 3) {
             let seguros = formData.getAll("seguro[]");
             seguros.forEach(el => {
                 const seguro_id = {
@@ -33,14 +34,14 @@ async function addPaciente() {
                 seguro.push(seguro_id);
             })
 
-            if(seguros.length === 0) throw {message: "No se ha enviado ningún seguro"};
+            if (seguros.length === 0) throw { message: "No se ha enviado ningún seguro" };
             data.seguro = seguro;
-        
-        } else if(data.tipo_paciente == 4){
-            const titulares = document.querySelectorAll(".titular"),
-            relacion = document.querySelectorAll(".relacion");
 
-            titulares.forEach((value, key)  => {
+        } else if (data.tipo_paciente == 4) {
+            const titulares = document.querySelectorAll(".titular"),
+                relacion = document.querySelectorAll(".relacion");
+
+            titulares.forEach((value, key) => {
                 // TODO: Validar que ambos valores se envien
                 console.log(relacion[key].value);
                 const titular_id = {
@@ -50,7 +51,7 @@ async function addPaciente() {
                 titular.push(titular_id);
             })
 
-            if(titular.length === 0) throw {message: "No se ha seleccionado ningún titular"};
+            if (titular.length === 0) throw { message: "No se ha seleccionado ningún titular" };
             data.titular = titular;
         }
 
@@ -65,12 +66,14 @@ async function addPaciente() {
         if (isNaN(data.cod_tel) || data.cod_tel.length != 4) throw { message: "El número ingresado no es válido" };
 
         data.telefono = data.cod_tel + data.telefono;
-        
-    
-        await addModule("pacientes","info-paciente",data,"Paciente registrado correctamente!");
+
+
+        await addModule("pacientes", "info-paciente", data, "Paciente registrado correctamente!");
         Array.from(document.getElementById("info-paciente").elements).forEach(element => {
             element.classList.remove('valid');
         })
+        $("#s-titular_id").val([]).trigger('change');
+        deleteElementByClass("newInput");
 
         $('#pacientes').DataTable().ajax.reload();
 

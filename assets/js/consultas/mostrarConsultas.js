@@ -1,6 +1,7 @@
 import concatItems from "../global/concatItems.js";
 import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
+import getById from "../global/getById.js";
 import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
 
 const path = location.pathname.split('/');
@@ -25,20 +26,49 @@ select2OnClick({
 //     placeholder: "Seleccione un médico"
 // });
 
-// emptySelect2({
-//     selectSelector: especialidadSelect,
-//     placeholder: "Debe seleccionar un médico",
-//     parentModal: "#modalReg"
-// })
 
-select2OnClick({
-    selectSelector: "#s-cita",
-    selectValue: "cita_id",
-    selectNames: ["cita_id", "motivo_cita"],
-    module: "citas/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione una cita"
-});
+const citasSelect = document.getElementById("s-cita");
+
+emptySelect2({
+    selectSelector: citasSelect,
+    placeholder: "Debe seleccionar un paciente",
+    parentModal: "#modalReg"
+})
+
+citasSelect.disabled = true;
+
+$("#s-paciente").on("change", async function (e) {
+
+    let paciente_id = this.value;
+
+    if(!paciente_id) return;
+
+    let infoCitas = await getById("citas/paciente", paciente_id);
+
+    $(citasSelect).empty().select2();
+
+    if ('result' in infoCitas && infoCitas.result.code === false) infoCitas = [];
+
+    dinamicSelect2({
+        obj: infoCitas,
+        selectSelector: citasSelect ?? [],
+        selectValue: "cita_id",
+        selectNames: ["cita_id", "motivo_cita"],
+        parentModal: "#modalReg",
+        placeholder: "Seleccione un paciente"
+    });
+
+    citasSelect.disabled = false;
+})
+
+// select2OnClick({
+//     selectSelector: "#s-cita",
+//     selectValue: "cita_id",
+//     selectNames: ["cita_id", "motivo_cita"],
+//     module: "citas/consulta",
+//     parentModal: "#modalReg",
+//     placeholder: "Seleccione una cita"
+// });
 
 select2OnClick({
     selectSelector: "#s-examen",
@@ -91,7 +121,7 @@ select2OnClick({
 
 addEventListener("DOMContentLoaded", e => {
     removeAddAccountant();
-    removeAddAnalist()
+    removeAddAnalist();
     let consultas = $('#consultas').DataTable({
 
         bAutoWidth: false,

@@ -8,7 +8,8 @@ class MedicoController extends Controller
     );
 
     protected $arraySelectHorario = array(
-        "horario.dias_semana"
+        "horario.dias_semana",
+        "horario.horario_id"
     );
 
     protected $arrayInner = array(
@@ -18,7 +19,8 @@ class MedicoController extends Controller
 
     protected $arraySelect = array(
         "especialidad.nombre AS nombre_especialidad",
-        "especialidad.especialidad_id"
+        "especialidad.especialidad_id",
+        "medico_especialidad.medico_especialidad_id"
     );
 
     //Método index (vista principal)

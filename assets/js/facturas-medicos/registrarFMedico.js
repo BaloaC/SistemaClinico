@@ -15,8 +15,16 @@ async function addFMedico() {
         // TODO: Validar los inputs del paciente
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
 
+        // Obtener la fecha actual en la zona horaria local
+        const fechaActual = luxon.DateTime.local();
 
-        await addModule("factura/medico","info-fmedico",data,"Factura medico registrada correctamente!");
+        // Formatear la fecha en el formato deseado
+        const fechaFormateada = fechaActual.toFormat('yyyy-MM-dd');
+
+        data.fecha_actual = fechaFormateada;
+
+
+        await addModule("factura/medico", "info-fmedico", data, "Factura medico registrada correctamente!");
         $('#fMedicos').DataTable().ajax.reload();
 
     } catch (error) {

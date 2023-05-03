@@ -9,7 +9,9 @@ class MiddlewareBase {
         MiddlewareBase::$token = substr($head, 7);
         if (!isset(MiddlewareBase::$token)  || empty(MiddlewareBase::$token && MiddlewareBase::$token != 'undefined') ) {
             return false;  
-        } 
+        } else{
+            return true;
+        }
 
         $_usuarioModel = new UsuarioModel();
         $usuario = $_usuarioModel->where('tokken', '=', 'MiddlewareBase::$token')->getFirst();
@@ -25,7 +27,6 @@ class MiddlewareBase {
         $roles = explode(",", $niveles);
         $_usuarioModel = new UsuarioModel();
         $usuario = $_usuarioModel->where('tokken', '=', MiddlewareBase::$token)->getFirst();
-
         if ($niveles != 0 && isset($usuario)) {
             foreach ($roles as $rol) {
                 if ($usuario->rol == $rol || $usuario->rol == 1) {
@@ -34,7 +35,7 @@ class MiddlewareBase {
             }
             return false;
         } else {
-            return true;
+            return false;
         }
         
     }

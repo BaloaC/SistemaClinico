@@ -5,16 +5,19 @@ function addInsumoInput() {
 
     clicks += 1;
     let template = `
-        <div class="row">
-            <div class="col-12 col-md-6">
+        <div class="row align-items-center newInput">
+            <div class="col-3 col-md-1">
+                <button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button>
+            </div>
+            <div class="col-12 col-md-5">
                 <label for="insumo">Insumo</label>
                 <select name="insumo_id" id="s-insumo${clicks}" class="form-control insumo-id" data-active="0">
                     <option></option>
                 </select>
-            </div>
-            <div class="col-12 col-md-6">
-                <label for="cantidad">Cantidad utilizada</label>
-                <input type="number" name="cantidad" class="form-control insumo-cant">    
+                </div>
+                <div class="col-12 col-md-5">
+                <label for="cantidad" class="p-0">Cantidad utilizada</label>
+                <input type="number" name="cantidad" class="form-control insumo-cant">
             </div>
         </div>
     `;

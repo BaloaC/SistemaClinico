@@ -5,15 +5,17 @@ class ConsultaExamenController extends Controller{
     public function insertarConsultaExamen($form, $id){
         // echo $form;
         // echo '<pre>';
-
+        
         // if (!is_array($form)) {
         //     $form = explode(' ', $form);
         // }
         // echo $form;
+        $consulta_id = $id;
+
         foreach ($form as $forms) {
             // echo $forms;
             $newForm = $forms;
-            $newForm['consulta_id'] = $id;
+            $newForm['consulta_id'] = $consulta_id;
             $camposNumericos = array("examen_id", "consulta_id");
             $validarConsultaExamen = new Validate;
             
@@ -42,8 +44,8 @@ class ConsultaExamenController extends Controller{
                     
                     $data = $validarConsultaExamen->dataScape($newForm);
                     $_consultaExamenModel = new ConsultaExamenModel();
-                    $id = $_consultaExamenModel->insert($data);
-                    $mensaje = ($id > 0);
+                    $idExamen = $_consultaExamenModel->insert($data);
+                    $mensaje = ($idExamen > 0);
                     
                     if (!$mensaje) {  
 
@@ -119,7 +121,3 @@ class ConsultaExamenController extends Controller{
     //        return false;
     // }
 }
-
-
-
-?>

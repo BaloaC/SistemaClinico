@@ -17,6 +17,7 @@
             <div class="row">
                 <div class="col-6">
                     <h4 class="pt-5 pb-2 text-grey">Gestion de Empresas</h4>
+                    <p class="text-gray">Debe tener seguros registrados antes de registrar empresas</p>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
                     <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> empresa</button>
@@ -25,8 +26,8 @@
             </div>
             <!-- Empresas -->
             <div class="d-flex justify-content-end align-items-center mb-4">
-                <p class="me-2">Buscar:</p><input type="text" id="inputSearch" class="form-control w-25">
-                <button class="form-control input-search-icon btn-add" onclick="filtrarEmpresas()"><i class="fas fa-search"></i></button>
+                <input type="text" id="inputSearch" placeholder="Buscar" class="form-control w-25 border-right-none">
+                <button class="form-control input-search-icon btn-add " onclick="filtrarEmpresas()"><i class="fas fa-search"></i></button>
             </div>
             <div class="row" id="card-container">
                 <!-- <a href="" data-id="21" data-bs-toggle="modal" data-bs-target="#modalInfo" class="card-container col-xl-4 col-lg-4 col-md-6 col-sm-12">

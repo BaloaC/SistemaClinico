@@ -22,13 +22,12 @@ async function getEmpresa(id) {
 
 
         json.seguro.forEach(el => {
-            console.log(json.seguro.length);
             seguros += `
                 <button class="btn btn-sm btn-empresa" id="btn-add" value="${el.seguro_empresa_id}" ${json.seguro.length > 1
                     ? `onclick=(deleteSeguroEmpresa(${el.seguro_empresa_id})) data-bs-toggle="modal" data-bs-target="#modalDeleteSeguro"`
                     : `data-bs-toggle="modal" data-bs-target="#modalAlert"`}>
-                    <i class="fa-sm fas fa-times"></i> 
                     ${el.nombre}
+                    <i class="fa-sm fas fa-times"></i> 
                 </button>
             `;
         });

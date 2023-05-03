@@ -1,10 +1,10 @@
 <?php
 
 //Auditoria - API
-Router::get('/auditoria/consulta', AuditoriaController::class . '@listarAuditoria', 1);
-Router::post('/auditoria/fecha', AuditoriaController::class . '@listarAuditoriaPorFecha', 1);
-Router::post('/auditoria/accion', AuditoriaController::class . '@listarAuditoriaPorAccion', 1);
-Router::get('/auditoria/:id', AuditoriaController::class . '@listarAuditoriaPorUsuario', 1);
+Router::get('/auditoria/consulta', AuditoriaController::class . '@listarAuditoria');
+Router::post('/auditoria/fecha', AuditoriaController::class . '@listarAuditoriaPorFecha');
+Router::post('/auditoria/accion', AuditoriaController::class . '@listarAuditoriaPorAccion');
+Router::get('/auditoria/:id', AuditoriaController::class . '@listarAuditoriaPorUsuario');
 
 //Auditoria - Vista
 Router::get("/auditoria", AuditoriaController::class . '@index');
@@ -47,11 +47,11 @@ Router::get('/usuarios/registrar', UsuarioController::class . '@formRegistrarUsu
 Router::get('/usuarios/actualizar/:id', UsuarioController::class . '@formActualizarUsuarios');
 
 //Usuario - API
-Router::get('/usuarios/consulta', UsuarioController::class . '@listarUsuarios', '1,5');
-Router::get('/usuarios/:id', UsuarioController::class . '@listarUsuarioPorId', '1,5');
+Router::get('/usuarios/consulta', UsuarioController::class . '@listarUsuarios');
+Router::get('/usuarios/:id', UsuarioController::class . '@listarUsuarioPorId',);
 Router::post('/usuarios', UsuarioController::class . '@insertarUsuario', -1);
 Router::put('/usuarios/:id', UsuarioController::class . '@actualizarUsuario', -1);
-Router::delete('/usuarios/:id', UsuarioController::class . '@eliminarUsuario', '1,5');
+Router::delete('/usuarios/:id', UsuarioController::class . '@eliminarUsuario',);
 
 //Pacientes - Vistas
 Router::get('/pacientes', PacienteController::class . '@index');
@@ -103,8 +103,8 @@ Router::get('/especialidades/registrar', EspecialidadController::class . '@formR
 Router::get('/especialidades/actualizar/:id', EspecialidadController::class . '@formActualizarEspecialidad');
 
 //Especialidad - API
-Router::get('/especialidades/consulta', EspecialidadController::class . '@listarEspecialidades', '2,5');
-Router::get('/especialidades/:id', EspecialidadController::class . '@listarEspecialidadPorId', '2,5');
+Router::get('/especialidades/consulta', EspecialidadController::class . '@listarEspecialidades', '2,4,5');
+Router::get('/especialidades/:id', EspecialidadController::class . '@listarEspecialidadPorId', '2,4,5');
 Router::post('/especialidades', EspecialidadController::class . '@insertarEspecialidad', '2');
 Router::put('/especialidades/:id', EspecialidadController::class . '@actualizarEspecialidad', '2');
 Router::delete('/especialidades/:id', EspecialidadController::class . '@eliminarEspecialidad', '2');
@@ -144,7 +144,7 @@ Router::put('/empresas/:id', EmpresaController::class . '@actualizarEmpresa', '2
 Router::delete('/empresas/:id', EmpresaController::class . '@eliminarEmpresa', '2');
 
 // SeguroEmpresa
-Router::delete("/seguroempresa/:id", SeguroEmpresaController::class . '@eliminarSeguroEmpresa', '1,2');
+Router::delete("/seguroempresa/:id", SeguroEmpresaController::class . '@eliminarSeguroEmpresa', '2');
 
 //Cita - Vistas
 Router::get('/citas', CitaController::class . '@index');

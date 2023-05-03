@@ -72,8 +72,8 @@
                             <select name="medico_id" id="s-medico" class="form-control mb-3" data-active="0" required>
                                 <option></option>
                             </select>
-                            <label for="fecha_actual">Fecha de pago</label>
-                            <input type="date" name="fecha_actual" class="form-control mb-3" required>
+                            <!-- <label for="fecha_actual">Fecha de pago</label>
+                            <input type="date" name="fecha_actual" class="form-control mb-3" required> -->
                         </form>
                     </div>
                     <div class="modal-footer">

@@ -30,6 +30,15 @@ dinamicSelect2({
     staticSelect: true
 });
 
+function calcularIva(montoInput) {
+
+    let montoTotal = (parseFloat(montoInput.value) * 0.16) + parseFloat(montoInput.value);
+    document.getElementById("monto_con_iva").value = montoTotal.toFixed(2);
+}
+
+window.calcularIva = calcularIva;
+
+
 addEventListener("DOMContentLoaded", e => {
 
     let fConsulta = $('#fConsulta').DataTable({
