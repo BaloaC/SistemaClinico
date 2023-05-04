@@ -16,8 +16,8 @@ async function addSeguro() {
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
         if (!isNaN(data.cod_rif) || data.cod_rif.length !== 1) throw { message: "El RIF ingresado es inválido" };
-        if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
+        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
         if (isNaN(data.telefono) || data.telefono.length !== 7) throw { message: "El número ingresado no es válido" };
         if (isNaN(data.cod_tel) || data.cod_tel.length !== 4) throw { message: "El número ingresado no es válido" };
 
@@ -25,6 +25,9 @@ async function addSeguro() {
         data.rif = data.cod_rif + "-" + data.rif;
 
         await addModule("seguros", "info-seguro", data, "Seguro registrado exitosamente!")
+        Array.from(document.getElementById("info-seguro").elements).forEach(element => {
+            element.classList.remove('valid');
+        })
         const listadoSeguros = await getAll("seguros/consulta");
         segurosPagination(listadoSeguros);
 

@@ -134,16 +134,10 @@ addEventListener("DOMContentLoaded", (e) => {
         data.insummos.forEach((e) => {
             template += `
                 <tr>
-                    <td>Nombre Insumo:</td>
-                    <td>${e.insumo_nombre}</td>
-                    <td>Unidades:</td>
-                    <td>${e.unidades}</td>
-                </tr>
-                <tr class="blue-td">
-                    <td>Precio unitario:</td>
-                    <td>${e.precio_unit}</td>
-                    <td>Precio total:</td>
-                    <td>${e.precio_total}</td>
+                    <td>Nombre Insumo: ${e.insumo_nombre}</td>
+                    <td>Unidades: ${e.unidades}</td>
+                    <td>Precio unitario: ${e.precio_unit}</td>
+                    <td>Precio total: ${e.precio_total}</td>
                 </tr>
             `;
         });

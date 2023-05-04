@@ -4,7 +4,6 @@ import concatItems from "../global/concatItems.js";
 const listadoMedicos = await getAll("medicos/consulta");
 const registros = listadoMedicos != typeof Array ? listadoMedicos : undefined;
 
-console.log('r',registros);
 
 // Configurar la paginación
 const registrosPorPagina = 6;

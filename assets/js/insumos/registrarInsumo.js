@@ -1,8 +1,8 @@
 import addModule from "../global/addModule.js";
 
 async function addInsumo() {
-    const $form = document.getElementById("info-insumo"),
-        $alert = document.querySelector(".alert");
+    const $form = document.getElementById("info-insumo");
+        alert = document.querySelector(".alert");
 
     try {
         const formData = new FormData($form),
@@ -15,14 +15,23 @@ async function addInsumo() {
         if (!(/^[0-9]*\.?[0-9]+$/.test(data.precio))) throw { message: "El preciu ingresado no es válido" };
 
         await addModule("insumos", "info-insumo", data, "Insumo registrado con exito!");
+        Array.from(document.getElementById("info-insumo").elements).forEach(element => {
+            element.classList.remove('valid');
+        })
         $('#insumos').DataTable().ajax.reload();
 
     } catch (error) {
         console.log(error);
-        $alert.classList.remove("d-none");
-        $alert.classList.add("alert-danger");
-        $alert.textContent = error.message || error.result.message;
+        alert.classList.remove("d-none");
+        alert.classList.add("alert-danger");
+        alert.textContent = error.message || error.result.message;
     }
 }
 
 window.addInsumo = addInsumo;
+document.getElementsByName('precio')[0].addEventListener('keydown', (event) => {
+    if (event.key == 'Enter') {
+        event.preventDefault();
+        addInsumo();
+    }
+})

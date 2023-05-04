@@ -39,8 +39,9 @@
                     </div>
                     <!-- Gráfica -->
                     <div class="col-12 col-lg-7 order-lg-last order-first">
-                        <div class="card card-home shadow-dark">
+                        <div class="card card-home shadow-dark position-relative">
                             <div id="chartdiv"></div>
+                            <p class="text-no-graph d-none">Todavía no hay consultas registradas</p>
                         </div>
                     </div>
                 </div>
