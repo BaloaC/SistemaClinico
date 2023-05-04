@@ -1,6 +1,7 @@
 import addModule from "../global/addModule.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import getAge from "../global/getAge.js";
+import getById from "../global/getById.js";
 
 async function addPaciente() {
 
@@ -38,6 +39,14 @@ async function addPaciente() {
             data.seguro = seguro;
 
         } else if (data.tipo_paciente == 4) {
+
+            if(data.edad < 18){
+                let titular_id = document.getElementById("s-titular_id").value;
+                const infoTitular =  await getById("pacientes",titular_id);
+                data.cedula = infoTitular.cedula;
+                data.telefono = infoTitular.telefono;
+            }
+
             const titulares = document.querySelectorAll(".titular"),
                 relacion = document.querySelectorAll(".relacion");
 
@@ -62,10 +71,10 @@ async function addPaciente() {
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "Los apellidos ingresado no es válido" };
         if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
         // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
-        if (isNaN(data.telefono) || data.telefono.length != 7) throw { message: "El número ingresado no es válido" };
-        if (isNaN(data.cod_tel) || data.cod_tel.length != 4) throw { message: "El número ingresado no es válido" };
+        // if (isNaN(data.telefono) || data.telefono.length != 7) throw { message: "El número ingresado no es válido" };
+        // if (isNaN(data.cod_tel) || data.cod_tel.length != 4) throw { message: "El número ingresado no es válido" };
 
-        data.telefono = data.cod_tel + data.telefono;
+        // data.telefono = data.cod_tel + data.telefono;
 
 
         await addModule("pacientes", "info-paciente", data, "Paciente registrado correctamente!");

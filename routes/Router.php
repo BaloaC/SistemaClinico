@@ -72,20 +72,42 @@ class Router
 
         if ($method == 'POST') {
 
-            $nivel = Router::$post["/" . $uri]->nivel;
-            if ($nivel != -1) {
-                Router::comprobacionDeSeguridad(); // Comprobamos el token
-                $permission = MiddlewareBase::verifyPermissions($nivel);
-                if (!$permission) {
-                    return Router::retornarMensaje($permission);
+            if (is_numeric(substr($uri, -1))) {
+                
+                $uri2 = preg_replace('/[^a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\/\s]+/u', '', $uri);
+                $nivel = Router::$post["/" . $uri2 . ":id"]->nivel;
+
+                if ($nivel != -1) {
+                    Router::comprobacionDeSeguridad(); // Comprobamos el token
+                    $permission = MiddlewareBase::verifyPermissions($nivel);
+                    if (!$permission) {
+                        return Router::retornarMensaje($permission);
+                    }
                 }
-            }
 
-            $uris = Router::$post["/" . $uri]->uri;
-            $nivel = Router::$post["/" . $uri]->nivel;
+                $ruta = Router::$post["/" . $uri2 . ":id"];
+                if ($ruta->match($uri)) {
+                    return $ruta->call();
+                }
 
-            if ($uris === $uri) {
-                return Router::$post["/" . $uri]->call();
+            }else {
+
+                $nivel = Router::$post["/" . $uri]->nivel;
+                if ($nivel != -1) {
+                    Router::comprobacionDeSeguridad(); // Comprobamos el token
+                    $permission = MiddlewareBase::verifyPermissions($nivel);
+                    if (!$permission) {
+                        return Router::retornarMensaje($permission);
+                    }
+                }
+
+                $uris = Router::$post["/" . $uri]->uri;
+                $nivel = Router::$post["/" . $uri]->nivel;
+
+                if ($uris === $uri) {
+                    return Router::$post["/" . $uri]->call();
+                }
+
             }
         } else if ($method == 'PUT') {
 
@@ -143,9 +165,11 @@ class Router
 
                 if(strpos($uri, "preguntas/usuario/") !== false){
                     
-                    $uri2 = preg_replace('/\/[a-z]$/i', '', $uri);
-                    var_dump("/" . $uri2 . "/:id");
-                    return Router::$get["/" . $uri2 . "/:id"]->call();
+                    $uri2 = preg_replace('/\/\w+$/', '', $uri);
+                    $ruta = Router::$get["/" . $uri2 . "/:id"];
+                    if($ruta->match($uri)){
+                        return $ruta->call();
+                    }
                 }
 
                 $uris = Router::$get["/" . $uri]->uri;

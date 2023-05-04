@@ -90,7 +90,7 @@
                                             <option value="0416">0416</option>
                                             <option value="0426">0426</option>
                                         </select>
-                                        <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
+                                        <input type="text" name="telefono" id="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
                                         <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
                                     </div>
                                 </div>
@@ -100,11 +100,11 @@
                                     <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
 
                                     <label for="cedula">Cédula</label>
-                                    <input type="number" name="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
+                                    <input type="number" name="cedula" id="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
                                     <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
 
                                     <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3" required>
+                                    <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control mb-3" onchange="pacienteMenorDeEdad(this)" required>
                                 </div>
                                 <div class="col-12 col-md-6 mt-4">
                                     <label for="tipo_paciente">Tipo de paciente</label>
@@ -307,6 +307,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/eliminarPaciente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/addTitularInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/deleteTitularInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/pacientes/pacienteMenorDeEdad.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>
 </body>

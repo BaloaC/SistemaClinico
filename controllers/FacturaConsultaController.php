@@ -53,7 +53,7 @@ class FacturaConsultaController extends Controller
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(200);
 
-            case $validarFactura->isDuplicatedId('paciente_id', 'consulta_id', $_POST['consulta_id'], $_POST['paciente_id'], 'consulta'):
+            case !$validarFactura->isDuplicatedId('paciente_id', 'consulta_id', $_POST['consulta_id'], $_POST['paciente_id'], 'consulta'):
                 $respuesta = new Response(false, 'La consulta indicada no coincide con el paciente ingresado');
                 return $respuesta->json(400);
 
