@@ -35,7 +35,7 @@ class FacturaMedicoController extends Controller{
         return $this->view('facturas/medico/actualizarFacturas', ['factura_medico_id' => $factura_medico_id]);
     } 
 
-    public function solicitarFacturasMedicos(/*Request $request*/) {
+    public function solicitarFacturasMedicos(/*Request $request*/) { // método para obtener todas las facturas
         
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
@@ -57,24 +57,32 @@ class FacturaMedicoController extends Controller{
                 
                 $_medicoModel = new MedicoModel();
                 $medicoList = $_medicoModel->where('estatus_med','=', 1)->getAll();
-                echo '<pre>';
-                // var_dump($medicoList);
+                $data = $validarFactura->dataScape($_POST);
 
+                $header = apache_request_headers();
+                $token = substr($header['Authorization'], 7) ;
+                $_facturaMedicoModel = new FacturaMedicoModel();
+
+                // var_dump($data['fecha_actual']);
                 foreach ($medicoList as $medico) {
-                    var_dump('el id es', $medico->medico_id);
+                    
+                    $factura = $this->contabilizarFactura([
+                        "fecha_actual" => $data['fecha_actual'],
+	                    "medico_id" => $medico->medico_id
+                    ]);
+
+                    $_facturaMedicoModel->byUser($token);
+                    $isInserted = $_facturaMedicoModel->insert($factura);
+
+                    if ( !($isInserted  > 0) ) {
+                        $respuesta = new Response('INSERCION_FALLIDA');
+                        $respuesta->setData('Error generando la factura del medico_id' + $medico->medico_id);
+                        return $respuesta->json(400);
+                    }
                 }
-                // $data = $validarFactura->dataScape($_POST);
-                // $insert = $this->contabilizarFactura($data);
-                // $header = apache_request_headers();
-                // $token = substr($header['Authorization'], 7) ;
 
-                // $_facturaMedicoModel = new FacturaMedicoModel();
-                // $_facturaMedicoModel->byUser($token);
-                // $id = $_facturaMedicoModel->insert($insert);
-                // $mensaje = ($id > 0);
-
-                // $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-                // return $respuesta->json($mensaje ? 201 : 400);
+                $respuesta = new Response('INSERCION_EXITOSA');
+                return $respuesta->json(201);
         }
     }
 
