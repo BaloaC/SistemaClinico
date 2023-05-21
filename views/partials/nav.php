@@ -85,8 +85,8 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item rol-1" href="<?php echo Url::base() . "/auditoria" ?>">Auditoria</a></li>
-                    <li><a class="dropdown-item rol-1" onclick="openPopup('pdf/seguros')" href="#">Total de seguros</a></li>
-                    <li><a class="dropdown-item rol-1" onclick="openPopup('pdf/insumosfaltantes')" href="#">Insumos faltantes</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2" onclick="openPopup('pdf/seguros')" href="#">Total de seguros</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2" onclick="openPopup('pdf/insumosfaltantes')" href="#">Insumos faltantes</a></li>
                 </ul>
             </li>
             </ul>

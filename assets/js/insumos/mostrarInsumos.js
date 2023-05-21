@@ -14,7 +14,6 @@ addEventListener("DOMContentLoaded", e => {
             { data: "insumo_id" },
             { data: "nombre" },
             { data: "cantidad" },
-            { data: "stock" },
             { data: "cantidad_min" },
             { data: "precio" },
             {

@@ -4,26 +4,19 @@ class FacturaConsultaController extends Controller
 {
 
     //Método index (vista principal)
-    public function index()
-    {
-
+    public function index() {
         return $this->view('facturas/consulta/index');
     }
 
-    public function formRegistrarFacturaConsulta()
-    {
-
+    public function formRegistrarFacturaConsulta() {
         return $this->view('facturas/consulta/registrarFacturas');
     }
 
-    public function formActualizarFacturaConsulta($factura_consulta_id)
-    {
-
+    public function formActualizarFacturaConsulta($factura_consulta_id) {
         return $this->view('facturas/consulta/actualizarFacturas', ['factura_consulta_id' => $factura_consulta_id]);
     }
 
-    public function insertarFacturaConsulta(/*Request $request*/)
-    {
+    public function insertarFacturaConsulta(/*Request $request*/) {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
@@ -75,8 +68,7 @@ class FacturaConsultaController extends Controller
         }
     }
 
-    public function listarFacturaConsulta()
-    {
+    public function listarFacturaConsulta() {
         // hacer inner para mostrar las fechas, el nombre del paciente, el nombre del medico
         $_facturaConsultaModel = new FacturaConsultaModel();
         $id = $_facturaConsultaModel->getAll();
@@ -84,16 +76,14 @@ class FacturaConsultaController extends Controller
         return $this->RetornarMensaje($mensaje, $id);
     }
 
-    public function listarFacturaConsultaPorId($factura_consulta_id)
-    {
+    public function listarFacturaConsultaPorId($factura_consulta_id) {
         // hacer inner para mostrar las fechas, el nombre del paciente, el nombre del medico
         $_facturaConsultaModel = new FacturaConsultaModel();
         $id = $_facturaConsultaModel->where('factura_consulta_id', '=', $factura_consulta_id)->getFirst();
         return $this->RetornarMensaje($id, $id);
     }
 
-    public function eliminarFacturaConsulta($factura_consulta_id)
-    {
+    public function eliminarFacturaConsulta($factura_consulta_id) {
 
         $validarFactura = new Validate;
         $token = $validarFactura->validateToken(apache_request_headers());
@@ -118,8 +108,7 @@ class FacturaConsultaController extends Controller
     }
 
     // Funciones
-    public function RetornarMensaje($mensaje, $data)
-    {
+    public function RetornarMensaje($mensaje, $data) {
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($data);
         return $respuesta->json(200);

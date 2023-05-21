@@ -168,7 +168,7 @@ CREATE TABLE `factura_compra` (
   `monto_con_iva` float NOT NULL,
   `monto_sin_iva` float NOT NULL,
   `excento` float DEFAULT NULL,
-  `estatus_fac` enum('1','2') NOT NULL DEFAULT '1'
+  `estatus_fac` enum('1','2', '3') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -183,7 +183,7 @@ CREATE TABLE `factura_consulta` (
   `paciente_id` int(11) NOT NULL,
   `metodo_pago` varchar(20) NOT NULL,
   `monto_sin_iva` float NOT NULL,
-  `estatus_fac` enum('1','2') NOT NULL DEFAULT '1'
+  `estatus_fac` enum('1','2', '3') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------

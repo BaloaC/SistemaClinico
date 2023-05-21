@@ -30,7 +30,8 @@ class ConsultaController extends Controller
         "cita.fecha_cita",
         "cita.motivo_cita",
         "cita.cedula_titular",
-        "cita.clave"
+        "cita.clave",
+        "cita.tipo_cita"
     );
 
     //datos del inner con los exámenes

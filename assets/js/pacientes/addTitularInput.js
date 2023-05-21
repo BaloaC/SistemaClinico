@@ -5,7 +5,7 @@ async function getTitulares() {
     try {
         const pacientes = await getAll("pacientes/consulta"),
             titulares = [];
-        pacientes.filter(paciente => (paciente.tipo_paciente != 1 || paciente.tipo_paciente != 4) ? titulares.push(paciente) : null);
+        pacientes.filter(paciente => (paciente.tipo_paciente == 2 || paciente.tipo_paciente == 3) ? titulares.push(paciente) : null);
 
         return titulares;
     } catch (error) {
@@ -68,4 +68,3 @@ dinamicSelect2({
 });
 
 window.addTitularInput = addTitularInput;
-// window.addInsumoInput = addInsumoInput;

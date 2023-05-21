@@ -228,8 +228,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
 
         const fecha = luxon.DateTime.fromISO(info.dateStr);
-        const nuevaFecha = fecha.plus({ weeks: 1 });
-        const fechaFormateada = `${nuevaFecha.toISODate()}T${nuevaFecha.toFormat("HH:mm")}`;
+        const fechaFormateada = `${fecha.toISODate()}T${fecha.toFormat("HH:mm")}`;
 
         document.getElementById("fecha_cita").value = fechaFormateada; //`${info.dateStr}T${fecha_cita.hour.toString().padStart(2, '0')}:${fecha_cita.minute.toString().padStart(2, '0')}`;
         modalReg.show();

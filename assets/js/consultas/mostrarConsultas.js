@@ -233,15 +233,26 @@ addEventListener("DOMContentLoaded", e => {
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
                 <tr>
-                    <td>Peso: ${data.peso}</td>
-                    <td>Altura: ${data.altura}</td>
-                    <td>Fecha Cita: ${data.fecha_cita}</td>
-                    <td>Motivo cita: ${data.motivo_cita}</td>
+                    <td>Peso:</td>
+                    <td>${data.peso}</td>
+                    <td>Altura:</td>
+                    <td>${data.altura}</td>
+                </tr>
+                <tr class="blue-td">
+                    <td>Fecha Cita:</td>
+                    <td>${data.fecha_cita}</td>
+                    <td>Motivo cita:</td>
+                    <td>${data.motivo_cita}</td>
                 </tr>
                 <tr>
-                    <td>Clave: ${data.clave}</td>
-                    <td>Exámenes realizados: ${examenes}</td>
-                    <td>Insumos utilizados: ${insumos}</td>
+                    <td>Clave:</td>
+                    <td>${data.clave}</td>
+                    <td>Exámenes realizados:</td>
+                    <td>${examenes}</td>
+                </tr>
+                <tr>
+                    <td>Insumos utilizados:</td>
+                    <td>${insumos}</td>
                 </tr>
                 <tr>
                     <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/consulta/${data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
