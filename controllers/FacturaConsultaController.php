@@ -1,7 +1,6 @@
 <?php
 
-class FacturaConsultaController extends Controller
-{
+class FacturaConsultaController extends Controller {
 
     //Método index (vista principal)
     public function index() {
