@@ -207,19 +207,20 @@ CREATE TABLE `factura_medico` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `factura_seguro`
+-- Estructura de tabla para la tabla `consulta_seguro`
 --
 
-CREATE TABLE `factura_seguro` (
-  `factura_seguro_id` int(11) NOT NULL,
+CREATE TABLE `consulta_seguro` (
+  `consulta_seguro_id` int(11) NOT NULL,
   `consulta_id` int(11) NOT NULL,
+  `seguro_id` int(11) NOT NULL,
   `seguro_id` int(11) NOT NULL,
   `tipo_servicio` varchar(50) NOT NULL,
   `autorizacion` varchar(45) NOT NULL,
   `nombre_paciente` varchar(45) NOT NULL,
   `nombre_titular` varchar(45) NOT NULL,
   `nombre_especialidad` varchar(45) NOT NULL,
-  `fecha_ocurrencia` date NOT NULL,
+  `fecha_ocurrencia` timestamp NOT NULL,
   `fecha_pago_limite` date NOT NULL,
   `monto` float NOT NULL,
   `estatus_fac` enum('1','2') NOT NULL DEFAULT '1'
@@ -419,6 +420,24 @@ CREATE TABLE `usuario` (
   `fecha_creacion` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `factura_seguro`
+--
+CREATE TABLE `factura_seguro` (
+  `factura_seguro_id` int(11) NOT NULL,
+  `seguro_id` int(11) NOT NULL,
+  `mes` varchar(10) NOT NULL,
+  `fecha_ocurrencia` timestamp NOT NULL,
+  `fecha_vencimiento` date NOT NULL,
+  `monto` float NOT NULL,
+  `estatus_fac` enum('1','2') NOT NULL DEFAULT '1',
+    PRIMARY KEY(factura_seguro_id),
+  	foreign key (seguro_id) references seguro(seguro_id)
+    on delete NO ACTION on update NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Índices para tablas volcadas
 --
@@ -517,10 +536,10 @@ ALTER TABLE `factura_medico`
 --
 -- Indices de la tabla `factura_seguro`
 --
-ALTER TABLE `factura_seguro`
-  ADD PRIMARY KEY (`factura_seguro_id`),
-  ADD KEY `fk_factura_seguro_consulta` (`consulta_id`),
-  ADD KEY `fk_factura_seguro_seguro` (`seguro_id`);
+ALTER TABLE `consulta_seguro`
+  ADD PRIMARY KEY (`consulta_seguro_id`),
+  ADD KEY `fk_consulta_seguro_consulta` (`consulta_id`),
+  ADD KEY `fk_consulta_seguro_seguro` (`seguro_id`);
 
 --
 -- Indices de la tabla `horario`
@@ -691,8 +710,8 @@ ALTER TABLE `factura_medico`
 --
 -- AUTO_INCREMENT de la tabla `factura_seguro`
 --
-ALTER TABLE `factura_seguro`
-  MODIFY `factura_seguro_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `consulta_seguro`
+  MODIFY `consulta_seguro_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `horario`
@@ -841,11 +860,11 @@ ALTER TABLE `factura_medico`
   ADD CONSTRAINT `fk_factura_medico_medico` FOREIGN KEY (`medico_id`) REFERENCES `medico` (`medico_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Filtros para la tabla `factura_seguro`
+-- Filtros para la tabla `consulta_seguro`
 --
-ALTER TABLE `factura_seguro`
-  ADD CONSTRAINT `fk_factura_seguro_consulta` FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_factura_seguro_seguro` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `consulta_seguro`
+  ADD CONSTRAINT `fk_consulta_seguro_consulta` FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_consulta_seguro_seguro` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `medico_especialidad`
