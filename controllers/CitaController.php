@@ -32,33 +32,27 @@ class CitaController extends Controller
     );
 
     //Método index (vista principal)
-    public function index()
-    {
+    public function index() {
 
         return $this->view('citas/index');
     }
 
-    public function formRegistrarCitas()
-    {
-
+    public function formRegistrarCitas() {
         return $this->view('citas/registrarCitas');
     }
 
-    public function formActualizarCita($cita_id)
-    {
-
+    public function formActualizarCita($cita_id) {
         return $this->view('citas/actualizarCitas', ['cita_id' => $cita_id]);
     }
 
-    public function insertarCita(/*Request $request*/)
-    {
-
+    public function insertarCita(/*Request $request*/) {
         $_POST = json_decode(file_get_contents('php://input'), true);
 
         // Creando los strings para las validaciones
         $camposNumericos = array("paciente_id", "medico_id", "especialidad_id", "cedula_titular", "tipo_cita", "medico_id");
         $camposString = array("motivo_cita");
         $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id");
+        $exclude = array("seguro_id");
 
         $validarCita = new Validate;
 
@@ -67,10 +61,10 @@ class CitaController extends Controller
             $respuesta = new Response('TOKEN_INVALID');
             return $respuesta->json(401);
         }
-
+        
         switch ($_POST) {
-
-            case ($validarCita->isEmpty($_POST)):
+            
+            case ($validarCita->isEmpty($_POST, $exclude)):
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 
@@ -117,7 +111,7 @@ class CitaController extends Controller
             default:
 
                 $data = $validarCita->dataScape($_POST);
-
+                
                 // verificaciones si la cita es asegurada
                 if ($data['tipo_cita'] == 2) {
 

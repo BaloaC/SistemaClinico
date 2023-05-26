@@ -94,6 +94,28 @@ class FacturaCompraController extends Controller
         }
     }
 
+    public function actualizarFacturaCompra($factura_id) {
+        $header = apache_request_headers();
+        $token = substr($header['Authorization'], 7) ;
+        
+        $_compraInsumoController = new FacturaCompraModel();
+        $factura_compra = $_compraInsumoController->where('factura_compra_id', '=', $factura_id)->getFirst();
+
+        if ($factura_compra->estatus_fac != '1') {
+            $respuesta = new Response(false, 'No puede realizar operaciones con una factura ya cancelada o eliminada');
+            $respuesta->setData("Error al actualizar la factura $factura_id con estatus ".($factura_compra->estatus_fac == '2' ? 'pagado' : 'anulada'));
+            return $respuesta->json(400);
+        }
+
+        $_compraInsumoController->byUser($token);
+        $data = array(
+            'estatus_fac' => '2'
+        );
+        
+        $actualizado = $_compraInsumoController->where('factura_compra_id', '=', $factura_id)->update($data);
+        return $this->mensajeActualizaciónExitosa($actualizado);
+    }
+
     public function listarFacturaCompra()
     {
 
@@ -144,28 +166,19 @@ class FacturaCompraController extends Controller
         }
     }
 
-    public function eliminarFacturaCompra($factura_compra_id)
-    {
-
-        $validarFactura = new Validate;
-        $token = $validarFactura->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
-
+    public function eliminarFacturaCompra($factura_compra_id) {
+        
+        $header = apache_request_headers();
+        $token = substr($header['Authorization'], 7) ;
+        
         $_compraInsumoController = new FacturaCompraModel();
+        $_compraInsumoController->byUser($token);
         $data = array(
-            'estatus_fac' => '2'
+            'estatus_fac' => '3'
         );
 
-        $eliminado = $_compraInsumoController->where('factura_compra_id', '=', $factura_compra_id)->update($data);
-        $mensaje = ($eliminado > 0);
-
-        $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        $respuesta->setData($eliminado);
-
-        return $respuesta->json($mensaje ? 200 : 400);
+        $eliminado = $_compraInsumoController->where('factura_compra_id', '=', $factura_compra_id)->update($data, 1);
+        return $this->mensajeActualizaciónExitosa($eliminado);
     }
 
     // funciones
@@ -175,5 +188,11 @@ class FacturaCompraController extends Controller
         $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($resultado);
         return $respuesta->json(200);
+    }
+
+    public function mensajeActualizaciónExitosa($update) {
+        $isTrue = ($update > 0);
+        $respuesta = new Response($isTrue ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+        return $respuesta->json($isTrue ? 200 : 400);
     }
 }

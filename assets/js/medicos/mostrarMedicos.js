@@ -27,8 +27,8 @@ async function getMedico(id) {
                 <button class="btn btn-sm btn-empresa" id="btn-add" value="${el.horario_id}" ${json[0].horario.length > 1
                     ? `onclick=(deleteHorario(${el.horario_id})) data-bs-toggle="modal" data-bs-target="#modalDeleteRelacion"`
                     : `data-bs-toggle="modal" data-bs-target="#modalAlert"`}>
-                    <i class="fa-sm fas fa-times"></i> 
                     ${el.dias_semana}
+                    <i class="fa-sm fas fa-times"></i> 
                 </button>
             `;
         });
@@ -40,8 +40,8 @@ async function getMedico(id) {
                 <button class="btn btn-sm btn-empresa" id="btn-add" value="${el.medico_especialidad_id}" ${json[0].especialidad.length > 1
                     ? `onclick=(deleteEspecialidad(${el.medico_especialidad_id})) data-bs-toggle="modal" data-bs-target="#modalDeleteRelacion"`
                     : `data-bs-toggle="modal" data-bs-target="#modalAlert"`}>
-                    <i class="fa-sm fas fa-times"></i> 
                     ${el.nombre_especialidad}
+                    <i class="fa-sm fas fa-times"></i> 
                 </button>
             `;
         });

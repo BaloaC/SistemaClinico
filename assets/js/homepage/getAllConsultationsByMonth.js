@@ -5,6 +5,13 @@ export default async function getAllConsultationsByMonth(bySpeciality) {
     const consultations = await getAll("consultas/consulta");
     let [oneNine, teenNineteen, twentyThreetyone] = [0, 0, 0];
     
+    if (consultations == undefined || consultations.length <= 0) {
+        let mensajeEspecialidad = document.getElementsByClassName('text-no-graph')[0];
+        if (mensajeEspecialidad.classList.contains('d-none')) {
+            mensajeEspecialidad.classList.remove('d-none')
+        } 
+    }
+
     let consultationsYear;
     if(bySpeciality === "all"){
         consultationsYear = consultations.filter(consultation => new Date(consultation.fecha_consulta).getMonth() === new Date().getMonth());
@@ -29,7 +36,6 @@ export default async function getAllConsultationsByMonth(bySpeciality) {
         { meses: "10 - 19", value: teenNineteen },
         { meses: "20 - 31", value: twentyThreetyone },
     ];
-
 
     xAxis.data.setAll(allConsultations);
     series.data.setAll(allConsultations);

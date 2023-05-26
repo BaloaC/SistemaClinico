@@ -4,6 +4,13 @@ import { series, xAxis } from "./especialidadesGraph.js";
 export default async function getAllConsultationsForYear(bySpeciality) {
     const consultations = await getAll("consultas/consulta");
     let [enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    
+    if (consultations == undefined || consultations.length <= 0) {
+        let mensajeEspecialidad = document.getElementsByClassName('text-no-graph')[0];
+        if (mensajeEspecialidad.classList.contains('d-none')) {
+            mensajeEspecialidad.classList.remove('d-none')
+        } 
+    }
 
     let consultationsYear;
     if(bySpeciality === "all"){
@@ -46,7 +53,8 @@ export default async function getAllConsultationsForYear(bySpeciality) {
         { meses: "Noviembre", value: noviembre },
         { meses: "Diciembre", value: diciembre },
     ];
-
+    
     xAxis.data.setAll(allConsultations);
     series.data.setAll(allConsultations);
+    
 }

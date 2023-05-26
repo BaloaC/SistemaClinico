@@ -18,7 +18,7 @@ async function addMedico() {
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
         if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
-        if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
+        // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
         if (isNaN(data.telefono) || data.telefono.length != 7) throw { message: "El número ingresado no es válido" };
         if (isNaN(data.cod_tel) || data.cod_tel.length != 4) throw { message: "El número ingresado no es válido" };
 
@@ -48,7 +48,9 @@ async function addMedico() {
         await addModule("medicos", "info-medico", data, "Médico registrado exitosamente!");
         const listadoMedico = await getAll("medicos/consulta");
         medicosPagination(listadoMedico);
-        console.log("sd");
+        Array.from(document.getElementById("info-medico").elements).forEach(element => {
+            element.classList.remove('valid');
+        })
         $("#s-especialidad").val([]).trigger('change'); //Vaciar select2
 
     } catch (error) {

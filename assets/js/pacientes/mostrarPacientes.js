@@ -178,18 +178,9 @@ addEventListener("DOMContentLoaded", e => {
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
                 <tr>
-                    <td>Fecha de Nacimiento:</td>
-                    <td>${data.fecha_nacimiento}</td>
-                    <td>Teléfono:</td>
-                    <td>${data.telefono}</td>
-                </tr>
-                <tr class="blue-td">
-                    <td>Dirección:</td>
-                    <td>${data.direccion}</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
+                    <td>Fecha de Nacimiento: <b>${data.fecha_nacimiento}</b></td>
+                    <td>Teléfono: <b>${data.telefono}</b></td>
+                    <td>Dirección: <b>${data.direccion}</b></td>
                 </tr>
             </table>
         `

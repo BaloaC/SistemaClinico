@@ -10,7 +10,7 @@ import getAllConsultationsForYear from "./getAllConsultationsForYear.js";
 
 const especialidades = await getAll("especialidades/consulta"),
     especialidadSelect = document.getElementById("s-especialidades");
-
+    
 dinamicSelect2({
     obj: especialidades,
     selectSelector: especialidadSelect,
@@ -136,9 +136,6 @@ export let title = chart.children.unshift(am5.Label.new(root, {
     dy: 1,
     id: "titleChart"
 }));
-
-
-console.log(am5.registry.entitiesById.titleChart);
 
 // Set data
 // const data = await getAllConsultationsForYear();
