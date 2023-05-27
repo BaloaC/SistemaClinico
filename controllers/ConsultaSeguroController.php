@@ -61,6 +61,10 @@ class ConsultaSeguroController extends Controller{
             case !$validarConsulta->existsInDB($_POST, $camposId):
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(200);
+
+            case $validarConsulta->isDuplicated('consulta', 'estatus_con', '3'):
+                $respuesta = new Response(false, 'Esa consulta ya está relacionada a una factura');
+                return $respuesta->json(400);
             
             default:
             
@@ -72,12 +76,17 @@ class ConsultaSeguroController extends Controller{
                 $consulta = $_consulta->where('consulta_id', '=', $data['consulta_id'])->getFirst();
                 $_paciente = new PacienteSeguroModel();
                 $paciente = $_paciente->where('paciente_id', '=', $consulta->paciente_id)->getFirst();
-
+                
                 if ($data['monto'] > $paciente->saldo_disponible) {
                     $respuesta = new Response(false, 'Saldo insuficiente para cubrir la consulta');
-                    $respuesta->setData("'Error al procesar al paciente id ' + $paciente->paciente_id + 'con saldo ' + $paciente->saldo_disponible");
+                    $respuesta->setData("Error al procesar al paciente id $paciente->paciente_id con saldo $paciente->saldo_disponible");
                     return $respuesta->json(400);
                 }
+
+                // Obtengo la cita para insertar el seguro
+                $_cita = new CitaModel();
+                $cita = $_cita->where('cita_id', '=', $consulta->cita_id)->getFirst();
+                $data['seguro_id'] = $cita->seguro_id;
 
                 // Insertamos la consulta_seguro
                 $header = apache_request_headers();
@@ -85,6 +94,20 @@ class ConsultaSeguroController extends Controller{
                 $_consultaSeguroModel->byUser($token);
                 $id = $_consultaSeguroModel->insert($data);
                 $mensaje = ($id > 0);
+
+                // ya insertada la factura, modificamos el estatus de la consulta a pagada
+                $update = $_consulta->update(['estatus_con' => 3]);
+                $isUpdate = ($update > 0);
+
+                if (!$isUpdate) {
+                    // Si hubo un error cambiando el estatus de la consulta, borramos la factura relacionada a ella
+                    $_consultaSeguroModel = new ConsultaSeguroModel();
+                    $_consultaSeguroModel->where('consulta_seguro_id', '=', $id)->delete();
+
+                    $respuesta = new Response(false, 'Hubo un error actualizando el estatus de la consulta');
+                    $respuesta->setData('Error al colocar la consulta' + $data['consulta_id'] + 'como cancelada');
+                    return $respuesta->json(400);
+                }
 
                 if ($mensaje) {
                     
@@ -103,7 +126,7 @@ class ConsultaSeguroController extends Controller{
                     $respuesta = new Response('INSERCION_FALLIDA');
                     return $respuesta->json(400);
                 }
-
+                
                 // Restando el monto de la factura al saldo disponible del paciente
                 
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

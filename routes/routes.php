@@ -223,16 +223,16 @@ Router::delete('/factura/compra/:id', FacturaCompraController::class . '@elimina
 Router::get('/factura/insumos/:id', CompraInsumoController::class . '@listarCompraInsumoPorFactura');
 
 //Factura consulta_seguro - Vistas
-Router::get('/factura/consulta_seguro', ConsultaSeguroController::class . '@index');
-Router::get('/factura/consulta_seguro/registrar', ConsultaSeguroController::class . '@formRegistrarConsultaSeguro');
-Router::get('/factura/consulta_seguro/actualizar/:id', ConsultaSeguroController::class . '@formActualizarConsultaSeguro');
+Router::get('/factura/consultaSeguro', ConsultaSeguroController::class . '@index');
+Router::get('/factura/consultaSeguro/registrar', ConsultaSeguroController::class . '@formRegistrarConsultaSeguro');
+Router::get('/factura/consultaSeguro/actualizar/:id', ConsultaSeguroController::class . '@formActualizarConsultaSeguro');
 
 //Factura consulta_seguro - API
-Router::get('/factura/consulta_seguro/consulta', ConsultaSeguroController::class . '@listarConsultaSeguro', '2,3');
-Router::get('/factura/consulta_seguro/:id', ConsultaSeguroController::class . '@listarConsultaSeguroPorId', '2,3');
-Router::post('/factura/consulta_seguro', ConsultaSeguroController::class . '@insertarConsultaSeguro', '2,3');
-Router::put('/factura/consulta_seguro/:id', ConsultaSeguroController::class . '@actualizarConsultaSeguro', '2,3');
-Router::delete('/factura/consulta_seguro/:id', ConsultaSeguroController::class . '@eliminarConsultaSeguro', '2,3');
+Router::get('/factura/consultaSeguro/consulta', ConsultaSeguroController::class . '@listarConsultaSeguro', '2,3');
+Router::get('/factura/consultaSeguro/:id', ConsultaSeguroController::class . '@listarConsultaSeguroPorId', '2,3');
+Router::post('/factura/consultaSeguro', ConsultaSeguroController::class . '@insertarConsultaSeguro', '2,3');
+Router::put('/factura/consultaSeguro/:id', ConsultaSeguroController::class . '@actualizarConsultaSeguro', '2,3');
+Router::delete('/factura/consultaSeguro/:id', ConsultaSeguroController::class . '@eliminarConsultaSeguro', '2,3');
 
 //Factura_Seguro - Vistas
 Router::get('/factura/seguro', FacturaSeguroController::class . '@index');
@@ -242,9 +242,9 @@ Router::get('/factura/seguro/actualizar/:id', FacturaSeguroController::class . '
 //Factura_Seguro - API
 Router::get('/factura/seguro/consulta', FacturaSeguroController::class . '@listarFacturaSeguro', '2,3');
 Router::get('/factura/seguro/:id', FacturaSeguroController::class . '@listarFacturaSeguroPorSeguro', '2,3');
-Router::post('/factura/seguro', FacturaSeguroController::class . '@insertarFacturaSeguro', '2,3');
-Router::put('/factura/seguro/:id', FacturaSeguroController::class . '@actualizarFacturaSeguro', '2,3');
-Router::delete('/factura/seguro/:id', FacturaSeguroController::class . '@eliminarFacturaSeguro', '2,3');
+Router::get('/factura/facturaSeguro/:id', FacturaSeguroController::class . '@listarFacturaPorId', '2,3');
+// Router::put('/factura/seguro/:id', FacturaSeguroController::class . '@actualizarFacturaSeguro', '2,3');
+// Router::delete('/factura/seguro/:id', FacturaSeguroController::class . '@eliminarFacturaSeguro', '2,3');
 
 //Factura_Consulta - Vistas
 Router::get('/factura/consulta', FacturaConsultaController::class . '@index');

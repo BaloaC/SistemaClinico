@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `consulta` (
   `altura` float NOT NULL,
   `observaciones` varchar(255) DEFAULT NULL,
   `fecha_consulta` date NOT NULL,
-  `estatus_con` enum('1','2') NOT NULL DEFAULT '1',
+  `estatus_con` enum('1','2','3') NOT NULL DEFAULT '1',
   PRIMARY KEY (`consulta_id`),
   KEY `fk_consulta_medico` (`medico_id`),
   KEY `fk_consulta_paciente` (`paciente_id`),
