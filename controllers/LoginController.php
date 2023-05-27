@@ -36,13 +36,15 @@ class LoginController extends Controller{
                     $tokken = array( 'tokken' => $code);
 
                     $_UsuarioModel = new UsuarioModel();
-
                     $actualizado = $_UsuarioModel->where('nombre','=',$_POST['nombre'])->update($tokken);
-                    // var_dump($actualizado);
                     $mensaje = ($actualizado > 0);
                     
                     $tokken['usuario_id'] = $usuario->usuario_id;
                     $tokken['rol'] = $usuario->rol;
+
+                    // Automatización de facturas_seguro
+                    $_facturaSeguro = new FacturaSeguroController();
+                    $_facturaSeguro->insertarFacturaSeguro();
 
                     $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
                     $respuesta->setData($tokken);

@@ -241,7 +241,7 @@ Router::get('/factura/seguro/actualizar/:id', FacturaSeguroController::class . '
 
 //Factura_Seguro - API
 Router::get('/factura/seguro/consulta', FacturaSeguroController::class . '@listarFacturaSeguro', '2,3');
-Router::get('/factura/seguro/:id', FacturaSeguroController::class . '@listarFacturaSeguroPorId', '2,3');
+Router::get('/factura/seguro/:id', FacturaSeguroController::class . '@listarFacturaSeguroPorSeguro', '2,3');
 Router::post('/factura/seguro', FacturaSeguroController::class . '@insertarFacturaSeguro', '2,3');
 Router::put('/factura/seguro/:id', FacturaSeguroController::class . '@actualizarFacturaSeguro', '2,3');
 Router::delete('/factura/seguro/:id', FacturaSeguroController::class . '@eliminarFacturaSeguro', '2,3');
