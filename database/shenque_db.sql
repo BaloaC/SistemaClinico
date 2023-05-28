@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-04-2023 a las 19:18:49
--- Versión del servidor: 10.4.22-MariaDB
--- Versión de PHP: 8.1.1
+-- Tiempo de generación: 28-05-2023 a las 21:55:52
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `shenque_test`
+-- Base de datos: `shenque_db`
 --
 
 -- --------------------------------------------------------
@@ -33,7 +33,7 @@ CREATE TABLE `auditoria` (
   `usuario_id` int(11) NOT NULL,
   `accion` varchar(45) NOT NULL,
   `descripcion` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -53,7 +53,7 @@ CREATE TABLE `cita` (
   `clave` int(11) DEFAULT NULL,
   `tipo_cita` enum('1','2') NOT NULL,
   `estatus_cit` enum('1','2','3','4') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -68,7 +68,7 @@ CREATE TABLE `compra_insumo` (
   `unidades` int(11) NOT NULL,
   `precio_unit` float NOT NULL,
   `precio_total` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -86,8 +86,8 @@ CREATE TABLE `consulta` (
   `altura` float NOT NULL,
   `observaciones` varchar(255) DEFAULT NULL,
   `fecha_consulta` date NOT NULL,
-  `estatus_con` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `estatus_con` enum('1','2','3') NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -100,7 +100,7 @@ CREATE TABLE `consulta_examen` (
   `consulta_id` int(11) NOT NULL,
   `examen_id` int(11) NOT NULL,
   `estatus_con` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -113,7 +113,23 @@ CREATE TABLE `consulta_insumo` (
   `insumo_id` int(11) NOT NULL,
   `consulta_id` int(11) NOT NULL,
   `estatus_con` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `consulta_seguro`
+--
+
+CREATE TABLE `consulta_seguro` (
+  `consulta_seguro_id` int(9) UNSIGNED ZEROFILL NOT NULL,
+  `consulta_id` int(11) NOT NULL,
+  `seguro_id` int(11) NOT NULL,
+  `tipo_servicio` varchar(50) NOT NULL,
+  `fecha_ocurrencia` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `monto` float NOT NULL,
+  `estatus_con` enum('1','2') NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -127,7 +143,7 @@ CREATE TABLE `empresa` (
   `rif` varchar(45) NOT NULL,
   `direccion` varchar(45) NOT NULL,
   `estatus_emp` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -139,7 +155,7 @@ CREATE TABLE `especialidad` (
   `especialidad_id` int(11) NOT NULL,
   `nombre` varchar(45) NOT NULL,
   `estatus_esp` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -152,7 +168,7 @@ CREATE TABLE `examen` (
   `nombre` varchar(45) NOT NULL,
   `tipo` varchar(45) NOT NULL,
   `estatus_exa` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -168,8 +184,8 @@ CREATE TABLE `factura_compra` (
   `monto_con_iva` float NOT NULL,
   `monto_sin_iva` float NOT NULL,
   `excento` float DEFAULT NULL,
-  `estatus_fac` enum('1','2', '3') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `estatus_fac` enum('1','2','3') NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -178,13 +194,13 @@ CREATE TABLE `factura_compra` (
 --
 
 CREATE TABLE `factura_consulta` (
-  `factura_consulta_id` int(11) NOT NULL,
+  `factura_consulta_id` int(8) UNSIGNED ZEROFILL NOT NULL,
   `consulta_id` int(11) NOT NULL,
   `paciente_id` int(11) NOT NULL,
   `metodo_pago` varchar(20) NOT NULL,
   `monto_sin_iva` float NOT NULL,
-  `estatus_fac` enum('1','2', '3') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `estatus_fac` enum('1','2') NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -193,7 +209,7 @@ CREATE TABLE `factura_consulta` (
 --
 
 CREATE TABLE `factura_medico` (
-  `factura_medico_id` int(11) NOT NULL,
+  `factura_medico_id` int(8) UNSIGNED ZEROFILL NOT NULL,
   `medico_id` int(11) NOT NULL,
   `acumulado_seguro_total` float DEFAULT NULL,
   `acumulado_consulta_total` float DEFAULT NULL,
@@ -202,29 +218,23 @@ CREATE TABLE `factura_medico` (
   `pacientes_seguro` int(11) DEFAULT NULL,
   `pacientes_consulta` int(11) DEFAULT NULL,
   `estatus_fac` enum('1','2','3') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `consulta_seguro`
+-- Estructura de tabla para la tabla `factura_seguro`
 --
 
-CREATE TABLE `consulta_seguro` (
-  `consulta_seguro_id` int(11) NOT NULL,
-  `consulta_id` int(11) NOT NULL,
+CREATE TABLE `factura_seguro` (
+  `factura_seguro_id` int(8) UNSIGNED ZEROFILL NOT NULL,
   `seguro_id` int(11) NOT NULL,
-  `seguro_id` int(11) NOT NULL,
-  `tipo_servicio` varchar(50) NOT NULL,
-  `autorizacion` varchar(45) NOT NULL,
-  `nombre_paciente` varchar(45) NOT NULL,
-  `nombre_titular` varchar(45) NOT NULL,
-  `nombre_especialidad` varchar(45) NOT NULL,
-  `fecha_ocurrencia` timestamp NOT NULL,
-  `fecha_pago_limite` date NOT NULL,
+  `mes` varchar(10) NOT NULL,
+  `fecha_ocurrencia` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `fecha_vencimiento` date NOT NULL,
   `monto` float NOT NULL,
   `estatus_fac` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -237,7 +247,7 @@ CREATE TABLE `horario` (
   `medico_id` int(11) NOT NULL,
   `dias_semana` enum('lunes','martes','miercoles','jueves','viernes','sabado') NOT NULL,
   `estatus_hor` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -253,7 +263,7 @@ CREATE TABLE `insumo` (
   `cantidad_min` int(11) NOT NULL,
   `precio` float NOT NULL,
   `estatus_ins` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -269,7 +279,7 @@ CREATE TABLE `medico` (
   `telefono` varchar(45) DEFAULT NULL,
   `direccion` varchar(45) NOT NULL,
   `estatus_med` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -282,7 +292,7 @@ CREATE TABLE `medico_especialidad` (
   `medico_id` int(11) NOT NULL,
   `especialidad_id` int(11) NOT NULL,
   `estatus_med` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -301,8 +311,11 @@ CREATE TABLE `paciente` (
   `direccion` varchar(45) NOT NULL,
   `tipo_paciente` enum('1','2','3','4') NOT NULL,
   `estatus_pac` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `paciente`
+--
 -- --------------------------------------------------------
 
 --
@@ -313,7 +326,7 @@ CREATE TABLE `paciente_beneficiado` (
   `paciente_beneficiado_id` int(11) NOT NULL,
   `paciente_id` int(11) NOT NULL,
   `estatus_pac` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -331,7 +344,7 @@ CREATE TABLE `paciente_seguro` (
   `fecha_contra` date NOT NULL,
   `saldo_disponible` float NOT NULL,
   `estatus_pac` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -345,7 +358,7 @@ CREATE TABLE `pregunta_seguridad` (
   `pregunta` varchar(100) NOT NULL,
   `respuesta` varchar(100) NOT NULL,
   `estatus_pre` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -358,7 +371,7 @@ CREATE TABLE `proveedor` (
   `nombre` varchar(45) NOT NULL,
   `ubicacion` varchar(255) NOT NULL,
   `estatus_pro` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -374,8 +387,7 @@ CREATE TABLE `seguro` (
   `telefono` varchar(13) NOT NULL,
   `tipo_seguro` enum('1','2') NOT NULL,
   `estatus_seg` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+) ENGINE=InnoDB DEFAULT CHARS
 -- --------------------------------------------------------
 
 --
@@ -387,7 +399,7 @@ CREATE TABLE `seguro_empresa` (
   `empresa_id` int(11) NOT NULL,
   `seguro_id` int(11) NOT NULL,
   `estatus_seg` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -401,7 +413,7 @@ CREATE TABLE `titular_beneficiado` (
   `paciente_id` int(11) NOT NULL,
   `estatus_tit` enum('1','2') NOT NULL DEFAULT '1',
   `tipo_relacion` enum('1','2','3') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -418,25 +430,7 @@ CREATE TABLE `usuario` (
   `pin` varchar(100) NOT NULL,
   `estatus_usu` enum('1','2') NOT NULL DEFAULT '1',
   `fecha_creacion` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `factura_seguro`
---
-CREATE TABLE `factura_seguro` (
-  `factura_seguro_id` int(11) NOT NULL,
-  `seguro_id` int(11) NOT NULL,
-  `mes` varchar(10) NOT NULL,
-  `fecha_ocurrencia` timestamp NOT NULL,
-  `fecha_vencimiento` date NOT NULL,
-  `monto` float NOT NULL,
-  `estatus_fac` enum('1','2') NOT NULL DEFAULT '1',
-    PRIMARY KEY(factura_seguro_id),
-  	foreign key (seguro_id) references seguro(seguro_id)
-    on delete NO ACTION on update NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Índices para tablas volcadas
@@ -464,8 +458,8 @@ ALTER TABLE `cita`
 --
 ALTER TABLE `compra_insumo`
   ADD PRIMARY KEY (`compra_insumo_id`),
-  ADD KEY `fk_compra_insumo_insumo` (`insumo_id`),
-  ADD KEY `fk_compra_insumo_factura_compra` (`factura_compra_id`);
+  ADD KEY `fk_compra_insumo_factura_compra` (`factura_compra_id`),
+  ADD KEY `fk_compra_insumo_insumo` (`insumo_id`);
 
 --
 -- Indices de la tabla `consulta`
@@ -492,6 +486,14 @@ ALTER TABLE `consulta_insumo`
   ADD PRIMARY KEY (`consulta_insumo_id`),
   ADD KEY `fk_consulta_insumo_insumo` (`insumo_id`),
   ADD KEY `fk_consulta_insumo_consulta` (`consulta_id`);
+
+--
+-- Indices de la tabla `consulta_seguro`
+--
+ALTER TABLE `consulta_seguro`
+  ADD PRIMARY KEY (`consulta_seguro_id`),
+  ADD KEY `fk_factura_seguro_consulta` (`consulta_id`),
+  ADD KEY `fk_consulta_seguro` (`seguro_id`);
 
 --
 -- Indices de la tabla `empresa`
@@ -536,10 +538,9 @@ ALTER TABLE `factura_medico`
 --
 -- Indices de la tabla `factura_seguro`
 --
-ALTER TABLE `consulta_seguro`
-  ADD PRIMARY KEY (`consulta_seguro_id`),
-  ADD KEY `fk_consulta_seguro_consulta` (`consulta_id`),
-  ADD KEY `fk_consulta_seguro_seguro` (`seguro_id`);
+ALTER TABLE `factura_seguro`
+  ADD PRIMARY KEY (`factura_seguro_id`),
+  ADD KEY `seguro_id` (`seguro_id`);
 
 --
 -- Indices de la tabla `horario`
@@ -639,157 +640,163 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `auditoria`
 --
 ALTER TABLE `auditoria`
-  MODIFY `auditoria_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `auditoria_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
 
 --
 -- AUTO_INCREMENT de la tabla `cita`
 --
 ALTER TABLE `cita`
-  MODIFY `cita_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cita_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `compra_insumo`
 --
 ALTER TABLE `compra_insumo`
-  MODIFY `compra_insumo_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `compra_insumo_id` int(9) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `consulta`
 --
 ALTER TABLE `consulta`
-  MODIFY `consulta_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `consulta_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT de la tabla `consulta_examen`
 --
 ALTER TABLE `consulta_examen`
-  MODIFY `consulta_examen_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `consulta_examen_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `consulta_insumo`
 --
 ALTER TABLE `consulta_insumo`
-  MODIFY `consulta_insumo_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `consulta_insumo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `consulta_seguro`
+--
+ALTER TABLE `consulta_seguro`
+  MODIFY `consulta_seguro_id` int(9) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `empresa_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `empresa_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `especialidad`
 --
 ALTER TABLE `especialidad`
-  MODIFY `especialidad_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `especialidad_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `examen`
 --
 ALTER TABLE `examen`
-  MODIFY `examen_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `examen_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `factura_compra`
 --
 ALTER TABLE `factura_compra`
-  MODIFY `factura_compra_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `factura_compra_id` int(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `factura_consulta`
 --
 ALTER TABLE `factura_consulta`
-  MODIFY `factura_consulta_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `factura_consulta_id` int(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `factura_medico`
 --
 ALTER TABLE `factura_medico`
-  MODIFY `factura_medico_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `factura_medico_id` int(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `factura_seguro`
 --
-ALTER TABLE `consulta_seguro`
-  MODIFY `consulta_seguro_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `factura_seguro`
+  MODIFY `factura_seguro_id` int(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `horario`
 --
 ALTER TABLE `horario`
-  MODIFY `horario_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `horario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT de la tabla `insumo`
 --
 ALTER TABLE `insumo`
-  MODIFY `insumo_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `insumo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `medico`
 --
 ALTER TABLE `medico`
-  MODIFY `medico_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `medico_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `medico_especialidad`
 --
 ALTER TABLE `medico_especialidad`
-  MODIFY `medico_especialidad_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `medico_especialidad_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `paciente`
 --
 ALTER TABLE `paciente`
-  MODIFY `paciente_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `paciente_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `paciente_beneficiado`
 --
 ALTER TABLE `paciente_beneficiado`
-  MODIFY `paciente_beneficiado_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `paciente_beneficiado_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `paciente_seguro`
 --
 ALTER TABLE `paciente_seguro`
-  MODIFY `paciente_seguro_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `paciente_seguro_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `pregunta_seguridad`
 --
 ALTER TABLE `pregunta_seguridad`
-  MODIFY `pregunta_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pregunta_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedor`
 --
 ALTER TABLE `proveedor`
-  MODIFY `proveedor_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `proveedor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `seguro`
 --
 ALTER TABLE `seguro`
-  MODIFY `seguro_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `seguro_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `seguro_empresa`
 --
 ALTER TABLE `seguro_empresa`
-  MODIFY `seguro_empresa_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `seguro_empresa_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `titular_beneficiado`
 --
 ALTER TABLE `titular_beneficiado`
-  MODIFY `titular_beneficiado_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `titular_beneficiado_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `usuario_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `usuario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Restricciones para tablas volcadas
@@ -841,6 +848,13 @@ ALTER TABLE `consulta_insumo`
   ADD CONSTRAINT `fk_consulta_insumo_insumo` FOREIGN KEY (`insumo_id`) REFERENCES `insumo` (`insumo_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `consulta_seguro`
+--
+ALTER TABLE `consulta_seguro`
+  ADD CONSTRAINT `fk_consulta_seguro` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_factura_seguro_consulta` FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
 -- Filtros para la tabla `factura_compra`
 --
 ALTER TABLE `factura_compra`
@@ -860,11 +874,10 @@ ALTER TABLE `factura_medico`
   ADD CONSTRAINT `fk_factura_medico_medico` FOREIGN KEY (`medico_id`) REFERENCES `medico` (`medico_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Filtros para la tabla `consulta_seguro`
+-- Filtros para la tabla `factura_seguro`
 --
-ALTER TABLE `consulta_seguro`
-  ADD CONSTRAINT `fk_consulta_seguro_consulta` FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_consulta_seguro_seguro` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `factura_seguro`
+  ADD CONSTRAINT `factura_seguro_ibfk_1` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `medico_especialidad`

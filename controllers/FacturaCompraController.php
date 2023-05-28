@@ -103,13 +103,13 @@ class FacturaCompraController extends Controller
 
         if ($factura_compra->estatus_fac != '1') {
             $respuesta = new Response(false, 'No puede realizar operaciones con una factura ya cancelada o eliminada');
-            $respuesta->setData("Error al actualizar la factura $factura_id con estatus ".($factura_compra->estatus_fac == '2' ? 'pagado' : 'anulada'));
+            $respuesta->setData("Error al actualizar la factura $factura_id con estatus ".($factura_compra->estatus_fac == '2' ? 'anulada' : 'pagado'));
             return $respuesta->json(400);
         }
 
         $_compraInsumoController->byUser($token);
         $data = array(
-            'estatus_fac' => '2'
+            'estatus_fac' => '3'
         );
         
         $actualizado = $_compraInsumoController->where('factura_compra_id', '=', $factura_id)->update($data);
@@ -174,7 +174,7 @@ class FacturaCompraController extends Controller
         $_compraInsumoController = new FacturaCompraModel();
         $_compraInsumoController->byUser($token);
         $data = array(
-            'estatus_fac' => '3'
+            'estatus_fac' => '2'
         );
 
         $eliminado = $_compraInsumoController->where('factura_compra_id', '=', $factura_compra_id)->update($data, 1);
