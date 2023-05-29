@@ -30,26 +30,27 @@ class Validate extends BaseModel{
 
     //Validar que existan ciertas fk en la bd
     public function existsInDB($data, $validate){
-
+        
         foreach($data as $key => $value){
-
+            
             if(is_numeric(array_search($key,$validate))){
                 
                 $length = strlen($key)-3;
                 $table = substr($key, 0, $length);
                 $estatus = 'estatus_' . substr($key, 0, 3);
                 $sql = "SELECT $key FROM $table WHERE $key = '$value' AND $estatus != 2";
+                
                 $query = $this->connection->prepare($sql);
                 $query->execute();
                 
-                if($query->rowCount() > 0){
+                if(!$query->rowCount() > 0){
                     
-                    return true;
-                } else {
                     return false;
                 }
             }
         }
+        
+        return true;
     }
 
     //Validar los datos ante posible inyección de código

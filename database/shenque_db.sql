@@ -313,9 +313,28 @@ CREATE TABLE `paciente` (
   `estatus_pac` enum('1','2') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `paciente`
+-- Estructura de tabla para la tabla `antecedentes_medicos`
 --
+
+CREATE TABLE `antecedentes_medicos` (
+  `antecedentes_medicos_id` int(11) NOT NULL AUTO_INCREMENT,
+  `paciente_id` int(11) NOT NULL,
+  `tipo_antecedente_id` int(11) NOT NULL,
+  `descripcion` text NOT NULL,
+  `estatus_ant` enum('1','2') NOT NULL DEFAULT '1',
+  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+   PRIMARY KEY(antecedentes_medicos_id),
+   	FOREIGN KEY(paciente_id)
+   	REFERENCES paciente(paciente_id)
+    ON UPDATE NO ACTION ON DELETE NO ACTION,
+        FOREIGN KEY(tipo_antecedente_id)
+        REFERENCES tipo_antecedente(tipo_antecedente_id)
+        ON UPDATE NO ACTION ON DELETE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- --------------------------------------------------------
 
 --

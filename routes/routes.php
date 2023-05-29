@@ -65,6 +65,19 @@ Router::post('/pacientes', PacienteController::class . '@insertarPaciente', '2,5
 Router::put('/pacientes/:id', PacienteController::class . '@actualizarPaciente', '2,5');
 Router::delete('/pacientes/:id', PacienteController::class . '@eliminarPaciente', '2,5');
 
+//Antecedentes Médicos - Vistas
+Router::get('/antecedentes', AntecedenteMedicoController::class . '@index');
+Router::get('/antecedentes/registrar', AntecedenteMedicoController::class . '@formRegistrarAntecedente');
+Router::get('/antecedentes/actualizar/:id', AntecedenteMedicoController::class . '@formActualizarAntecedente');
+
+//Antecedentes Médicos - API
+Router::get('/antecedentes/consulta', AntecedenteMedicoController::class . '@listarAntecedentes', '2,4,5');
+Router::get('/antecedentes/:id', AntecedenteMedicoController::class . '@listarAntecedentePorId', '2,4,5');
+Router::get('/antecedentes/paciente/:id', AntecedenteMedicoController::class . '@listarAntecedentesPorPaciente', '2,4,5');
+Router::post('/antecedentes', AntecedenteMedicoController::class . '@insertarAntecedente', '2,5');
+Router::put('/antecedentes/:id', AntecedenteMedicoController::class . '@actualizarAntecedente', '2,5');
+Router::delete('/antecedentes/:id', AntecedenteMedicoController::class . '@eliminarAntecedente', '2,5');
+
 //PacienteSeguro - API
 Router::delete('/paciente/seguro/:id', PacienteSeguroController::class . '@eliminarPacienteSeguro', '2,5');
 
