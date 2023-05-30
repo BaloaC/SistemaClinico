@@ -338,6 +338,20 @@ CREATE TABLE `antecedentes_medicos` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tipo_antecedente`
+--
+
+CREATE TABLE `tipo_antecedente` (
+  `tipo_antecedente_id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) NOT NULL,
+  `fecha_creacion` datetime NOT NULL,
+  `estatus_tip` enum('1','2') NOT NULL,
+  PRIMARY KEY(tipo_antecedente_id)
+)
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `paciente_beneficiado`
 --
 
