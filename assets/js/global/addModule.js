@@ -44,6 +44,8 @@ export default async function addModule(module, form, data, successMessage) {
         setTimeout(() => {
             $alert.classList.add("d-none");
         }, 1500)
+
+        return error;
     }
 
 }

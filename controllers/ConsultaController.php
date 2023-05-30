@@ -20,6 +20,8 @@ class ConsultaController extends Controller
         "paciente.nombre AS nombre_paciente",
         "paciente.apellidos AS apellido_paciente",
         "paciente.cedula as cedula_paciente",
+        "paciente.tipo_paciente",
+        "paciente.edad",
         "medico.medico_id",
         "medico.nombre AS nombre_medico",
         "medico.apellidos AS apellido_medico",

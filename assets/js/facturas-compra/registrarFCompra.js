@@ -40,14 +40,14 @@ async function addFCompra() {
                 precio_total: $insumosTPrecio[key].textContent.slice(1)
             }
             insumos.push(insumo);
-            
+
             // console.log(insumos.every(el => el === el));
-    
-            
+
+
         })
         // let count = 0;
         // console.log(insumos.every(el => { 
-             
+
         //     if(el.insumo_id === el.insumo_id){
         //         count++;
         //     }
@@ -73,7 +73,10 @@ async function addFCompra() {
 
         // data.rif = data.cod_rif + "-" + data.rif;
 
-        await addModule("factura/compra","info-fcompra",data,"Factura compra registrada correctamente!");
+        const registroExitoso = await addModule("factura/compra", "info-fcompra", data, "Factura compra registrada correctamente!");
+
+        if (!registroExitoso.code) throw { result: registroExitoso.result };
+
         let formCompra = document.getElementById("info-fcompra");
         formCompra.reset();
         deleteElementByClass("newInput");

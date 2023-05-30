@@ -168,57 +168,64 @@ addEventListener("DOMContentLoaded", e => {
             hideCount: true,
             collapse: true,
             initCollapsed: true,
-            // panes: [
-            //     {
-            //         header: 'Filtrar por tipo de paciente:',
-            //         options: [
-            //             {
-            //                 label: 'Paciente natural',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.tipo_paciente === "1";
-            //                 },
-            //                 className: 'paciente-natural'
-            //             },
-            //             {
-            //                 label: 'Paciente asegurado',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.tipo_paciente === "2";
-            //                 },
-            //                 className: 'paciente-asegurado'
-            //             },
-            //             {
-            //                 label: 'Paciente beneficiado',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.tipo_paciente === "3";
-            //                 },
-            //                 className: 'paciente-beneficiado'
-            //             }
-            //         ],
-            //         dtOpts: {
-            //             searching: false,
-            //             order: [[1, 'desc']]
-            //         }
-            //     },
-            //     {
-            //         header: 'Filtrar por edad:',
-            //         options: [
-            //             {
-            //                 label: 'Menores de 18 años',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.edad < 18;
-            //                 },
-            //                 className: 'may-18'
-            //             },
-            //             {
-            //                 label: 'Mayores de 18 años',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.edad > 18;
-            //                 },
-            //                 className: 'men-18'
-            //             }
-            //         ],
-            //     }
-            // ]
+            panes: [
+                {
+                    header: 'Filtrar por tipo de paciente:',
+                    options: [
+                        {
+                            label: 'Paciente natural',
+                            value: function (rowData, rowIdx) {
+                                return rowData.tipo_paciente === "1";
+                            },
+                            className: 'paciente-natural'
+                        },
+                        {
+                            label: 'Paciente representante',
+                            value: function (rowData, rowIdx) {
+                                return rowData.tipo_paciente === "2";
+                            },
+                            className: 'paciente-representante'
+                        },
+                        {
+                            label: 'Paciente asegurado',
+                            value: function (rowData, rowIdx) {
+                                return rowData.tipo_paciente === "3";
+                            },
+                            className: 'paciente-asegurado'
+                        },
+                        {
+                            label: 'Paciente beneficiado',
+                            value: function (rowData, rowIdx) {
+                                return rowData.tipo_paciente === "4";
+                            },
+                            className: 'paciente-beneficiado'
+                        }
+                    ],
+                    dtOpts: {
+                        searching: false,
+                        order: [[1, 'desc']]
+                    }
+                },
+                {
+                    header: 'Filtrar por edad:',
+                    options: [
+                        {
+                            label: 'Menores de 18 años',
+                            value: function (rowData, rowIdx) {
+                                return rowData.edad < 18;
+                            },
+                            className: 'may-18'
+                        },
+                        {
+                            label: 'Mayores de 18 años',
+                            value: function (rowData, rowIdx) {
+                                return rowData.edad > 18;
+                            },
+                            className: 'men-18'
+                        }
+                    ],
+                }
+            ]
         },
         dom: 'Plfrtip'
     });

@@ -126,16 +126,23 @@ addEventListener("DOMContentLoaded", e => {
                             className: 'paciente-natural'
                         },
                         {
-                            label: 'Paciente asegurado',
+                            label: 'Paciente representante',
                             value: function (rowData, rowIdx) {
                                 return rowData.tipo_paciente === "2";
+                            },
+                            className: 'paciente-representante'
+                        },
+                        {
+                            label: 'Paciente asegurado',
+                            value: function (rowData, rowIdx) {
+                                return rowData.tipo_paciente === "3";
                             },
                             className: 'paciente-asegurado'
                         },
                         {
                             label: 'Paciente beneficiado',
                             value: function (rowData, rowIdx) {
-                                return rowData.tipo_paciente === "3";
+                                return rowData.tipo_paciente === "4";
                             },
                             className: 'paciente-beneficiado'
                         }

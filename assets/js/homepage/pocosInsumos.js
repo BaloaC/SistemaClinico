@@ -1,9 +1,21 @@
 $(document).ready(function() {
     let tabla = $('#pocosInsumos').DataTable({
-        pageLength: 5,
+        ajax: "http://127.0.0.1/proyectoFEO/insumos/consulta/",
+        columns: [
+            {
+                data: "insumo_id"
+            },
+            {
+                data: "nombre"
+            },
+            {
+                data: "cantidad"
+            },
+        ],
+        pageLength: 10,
         lengthChange: false,
         searching: false,
-        order: [[1,"asc"]],
+        order: [[2,"asc"]],
         language: {
             "decimal": ",",
             "thousands": ".",
@@ -26,16 +38,8 @@ $(document).ready(function() {
             "emptyTable": "Sin datos guardados",
         },
         bAutoWidth: false,
-        // ajax: "http://127.0.0.1/proyectofeo/usuarios/consulta/",
-        // columns: [{
-        //         data: "usuario_id"
-        //     },
-        //     {
-        //         data: "clave",
-        //         render: function(data) {
-        //             return `<span class="badge-danger">${data}</span>`;
-        //         }
-        //     }
-        // ],
     });
+
+    // Ocultar paginación
+    document.getElementById("pocosInsumos_paginate").classList.add("d-none");
 });

@@ -57,8 +57,15 @@
                             </div>
                             <div class="card-body card-insumo">
                                 <div class="table-responsive">
-                                    <table id="pocosInsumos" data-paging="false" class="table table-compact">
-                                        <h4 class="text-dark text-center">No hay insumos disponibles</h4>
+                                    <table id="pocosInsumos" class="table table-compact">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Insumo</th>
+                                                <th>Cantidad</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
                                     </table>
                                 </div>
                             </div>

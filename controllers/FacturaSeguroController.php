@@ -22,17 +22,17 @@ class FacturaSeguroController extends Controller{
     //Método index (vista principal)
     public function index(){
 
-        return $this->view('facturas/medico/index');
+        return $this->view('facturas/seguros/index');
     }
 
     public function formRegistrarFacturaMedico(){
 
-        return $this->view('facturas/medico/registrarFacturas');
+        return $this->view('facturas/seguros/registrarFacturas');
     }
 
     public function formActualizarFacturaMedico($factura_medico_id){
         
-        return $this->view('facturas/medico/actualizarFacturas', ['factura_medico_id' => $factura_medico_id]);
+        return $this->view('facturas/seguros/actualizarFacturas', ['factura_medico_id' => $factura_medico_id]);
     } 
 
     public function insertarFacturaSeguro(/*Request $request*/) { // método para obtener todas las facturas
