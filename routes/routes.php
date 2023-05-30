@@ -180,6 +180,7 @@ Router::get('/consultas/actualizar/:id', ConsultaController::class . '@formActua
 //Consulta - API
 Router::get('/consultas/consulta', ConsultaController::class . '@listarConsultas',  '2,4,5');
 Router::get('/consultas/:id', ConsultaController::class . '@listarConsultaPorId',  '2,4,5');
+Router::get('/consultas/paciente/:id', ConsultaController::class . '@listarConsultasPorPaciente',  '2,4,5');
 Router::post('/consultas', ConsultaController::class . '@insertarConsulta',  '2,4,5');
 Router::put('/consultas/:id', ConsultaController::class . '@actualizarConsulta',  '2,4,5');
 Router::delete('/consultas/:id', ConsultaController::class . '@eliminarConsulta',  '2');
