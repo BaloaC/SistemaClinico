@@ -37,13 +37,13 @@
                                     <thead>
                                         <tr>
                                             <th>Detalles</th>
-                                            <th>Nombre paciente</th>
-                                            <th>Nombre titular</th>
-                                            <th>Tipo de servicio</th>
+                                            <th>Rif</th>
+                                            <th>Nombre Seguro</th>
+                                            <th>Mes</th>
                                             <th>Fecha ocurrencia</th>
-                                            <th>Fecha pago limite</th>
+                                            <th>Fecha vencimiento</th>
                                             <th>Monto</th>
-                                            <th>Estatus</th>
+                                            <!-- <th>Estatus</th> -->
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>

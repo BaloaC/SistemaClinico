@@ -179,15 +179,11 @@ CREATE TABLE `examen` (
 --
 
 CREATE TABLE `medicamento` (
-  `medicamento_id` int(11) NOT NULL AUTO_INCREMENT,
+  `medicamento_id` int(11) NOT NULL,
   `especialidad_id` int(11) NOT NULL,
   `nombre_medicamento` varchar(45) NOT NULL,
   `tipo_medicamento` enum('1','2','3'),
-  `estatus_med` enum('1','2') NOT NULL DEFAULT '1',
-  PRIMARY KEY(medicamento_id),
-  FOREIGN KEY(especialidad_id)
-  REFERENCES especialidad(especialidad_id)
-  ON UPDATE NO ACTION ON DELETE NO ACTION
+  `estatus_med` enum('1','2') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -198,17 +194,10 @@ CREATE TABLE `medicamento` (
 
 
 CREATE TABLE `consulta_recipe` (
-  `consulta_recipe_id` int(11) NOT NULL AUTO_INCREMENT,
+  `consulta_recipe_id` int(11) NOT NULL,
   `consulta_id` int(11) NOT NULL,
   `medicamento_id` int(11) NOT NULL,
-  `uso` text NOT NULL,
-  PRIMARY KEY(consulta_recipe_id),
-  FOREIGN KEY(consulta_id)
-  REFERENCES consulta(consulta_id)
-  ON UPDATE NO ACTION ON DELETE NO ACTION,
-    FOREIGN KEY(medicamento_id)
-    REFERENCES medicamento(medicamento_id)
-    ON UPDATE NO ACTION ON DELETE NO ACTION
+  `uso` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -218,10 +207,9 @@ CREATE TABLE `consulta_recipe` (
 --
 
 CREATE TABLE `consulta_indicaciones` (
-  `consulta_indicaciones_id` int(11) NOT NULL AUTO_INCREMENT,
+  `consulta_indicaciones_id` int(11) NOT NULL,
   `consulta_id` int(11) NOT NULL,
-  `descripcion` text NOT NULL,
-  PRIMARY KEY(consulta_indicaciones_id)
+  `descripcion` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -370,38 +358,30 @@ CREATE TABLE `paciente` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `antecedentes_medicos`
+-- Estructura de tabla para la tabla `tipo_antecedente`
 --
 
-CREATE TABLE `antecedentes_medicos` (
-  `antecedentes_medicos_id` int(11) NOT NULL AUTO_INCREMENT,
-  `paciente_id` int(11) NOT NULL,
+CREATE TABLE `tipo_antecedente` (
   `tipo_antecedente_id` int(11) NOT NULL,
-  `descripcion` text NOT NULL,
-  `estatus_ant` enum('1','2') NOT NULL DEFAULT '1',
-  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-   PRIMARY KEY(antecedentes_medicos_id),
-   	FOREIGN KEY(paciente_id)
-   	REFERENCES paciente(paciente_id)
-    ON UPDATE NO ACTION ON DELETE NO ACTION,
-        FOREIGN KEY(tipo_antecedente_id)
-        REFERENCES tipo_antecedente(tipo_antecedente_id)
-        ON UPDATE NO ACTION ON DELETE NO ACTION
+  `nombre` varchar(50) NOT NULL,
+  `fecha_creacion` datetime NOT NULL,
+  `estatus_tip` enum('1','2') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tipo_antecedente`
+-- Estructura de tabla para la tabla `antecedentes_medicos`
 --
 
-CREATE TABLE `tipo_antecedente` (
-  `tipo_antecedente_id` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(50) NOT NULL,
-  `fecha_creacion` datetime NOT NULL,
-  `estatus_tip` enum('1','2') NOT NULL,
-  PRIMARY KEY(tipo_antecedente_id)
-)
+CREATE TABLE `antecedentes_medicos` (
+  `antecedentes_medicos_id` int(11) NOT NULL,
+  `paciente_id` int(11) NOT NULL,
+  `tipo_antecedente_id` int(11) NOT NULL,
+  `descripcion` text NOT NULL,
+  `estatus_ant` enum('1','2') NOT NULL DEFAULT '1',
+  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -474,7 +454,7 @@ CREATE TABLE `seguro` (
   `telefono` varchar(13) NOT NULL,
   `tipo_seguro` enum('1','2') NOT NULL,
   `estatus_seg` enum('1','2') NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARS
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 -- --------------------------------------------------------
 
 --
@@ -541,14 +521,6 @@ ALTER TABLE `cita`
   ADD KEY `fk_cita_especialidad` (`especialidad_id`);
 
 --
--- Indices de la tabla `compra_insumo`
---
-ALTER TABLE `compra_insumo`
-  ADD PRIMARY KEY (`compra_insumo_id`),
-  ADD KEY `fk_compra_insumo_factura_compra` (`factura_compra_id`),
-  ADD KEY `fk_compra_insumo_insumo` (`insumo_id`);
-
---
 -- Indices de la tabla `consulta`
 --
 ALTER TABLE `consulta`
@@ -557,6 +529,14 @@ ALTER TABLE `consulta`
   ADD KEY `fk_consulta_paciente` (`paciente_id`),
   ADD KEY `fk_consulta_especialidad` (`especialidad_id`),
   ADD KEY `fk_consulta_cita` (`cita_id`);
+
+
+-- Indices de la tabla `compra_insumo`
+
+ALTER TABLE `compra_insumo`
+  ADD PRIMARY KEY (`compra_insumo_id`),
+  ADD KEY `fk_compra_insumo_factura_compra` (`factura_compra_id`),
+  ADD KEY `fk_compra_insumo_insumo` (`insumo_id`);
 
 --
 -- Indices de la tabla `consulta_examen`
@@ -599,6 +579,24 @@ ALTER TABLE `especialidad`
 --
 ALTER TABLE `examen`
   ADD PRIMARY KEY (`examen_id`);
+
+--
+-- Indices de la tabla `medicamento`
+--
+ALTER TABLE `medicamento`
+  ADD PRIMARY KEY (`medicamento_id`);
+
+--
+-- Indices de la tabla `consulta_recipe`
+--
+ALTER TABLE `consulta_recipe`
+  ADD PRIMARY KEY (`consulta_recipe_id`);
+
+--
+-- Indices de la tabla `consulta_indicaciones`
+--
+ALTER TABLE `consulta_indicaciones`
+  ADD PRIMARY KEY (`consulta_indicaciones_id`);
 
 --
 -- Indices de la tabla `factura_compra`
@@ -660,6 +658,18 @@ ALTER TABLE `medico_especialidad`
 --
 ALTER TABLE `paciente`
   ADD PRIMARY KEY (`paciente_id`);
+
+--
+-- Indices de la tabla `tipo_antecedente`
+--
+ALTER TABLE `tipo_antecedente`
+  ADD PRIMARY KEY (`tipo_antecedente_id`);
+
+--
+-- Indices de la tabla `antecedentes_medicos`
+--
+ALTER TABLE `antecedentes_medicos`
+  ADD PRIMARY KEY (`antecedentes_medicos_id`);
 
 --
 -- Indices de la tabla `paciente_beneficiado`
@@ -739,7 +749,7 @@ ALTER TABLE `cita`
 -- AUTO_INCREMENT de la tabla `compra_insumo`
 --
 ALTER TABLE `compra_insumo`
-  MODIFY `compra_insumo_id` int(9) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `compra_insumo_id` int(11) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `consulta`
@@ -972,6 +982,32 @@ ALTER TABLE `factura_seguro`
 ALTER TABLE `medico_especialidad`
   ADD CONSTRAINT `fk_medico_especialidad_especialidad` FOREIGN KEY (`especialidad_id`) REFERENCES `especialidad` (`especialidad_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_medico_especialidad_medico` FOREIGN KEY (`medico_id`) REFERENCES `medico` (`medico_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `medicamento`
+--
+ALTER TABLE `medicamento`
+  ADD CONSTRAINT `fk_medicamento_especialidad` FOREIGN KEY (`especialidad_id`) REFERENCES `especialidad` (`especialidad_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `consulta_recipe`
+--
+ALTER TABLE `consulta_recipe`
+  ADD CONSTRAINT `fk_consulta_recipe_consulta` FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_consulta_recipe_medicamento` FOREIGN KEY (`medicamento_id`) REFERENCES `medicamento` (`medicamento_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `consulta_indicaciones`
+--
+ALTER TABLE `consulta_indicaciones`
+  ADD CONSTRAINT `fk_consulta_indicaciones_consulta` FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `antecedentes_medicos`
+--
+ALTER TABLE `antecedentes_medicos`
+  ADD CONSTRAINT `fk_antecedentes_medicos_paciente` FOREIGN KEY(paciente_id) REFERENCES paciente(paciente_id) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  ADD CONSTRAINT `fk_antecedentes_medicos_tipo_antecedente` FOREIGN KEY(tipo_antecedente_id) REFERENCES tipo_antecedente(tipo_antecedente_id) ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 --
 -- Filtros para la tabla `paciente_beneficiado`

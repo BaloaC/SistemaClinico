@@ -2,42 +2,6 @@ import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicS
 
 const path = location.pathname.split('/');
 
-select2OnClick({
-    selectSelector: "#s-paciente",
-    selectValue: "paciente_id",
-    selectNames: ["cedula", "nombre-apellidos"],
-    module: "pacientes/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione un paciente"
-});
-
-select2OnClick({
-    selectSelector: "#s-consulta",
-    selectValue: "consulta_id",
-    selectNames: ["consulta_id", "motivo_cita"],
-    module: "consultas/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione una consulta"
-});
-
-dinamicSelect2({
-    obj: [{ id: "efectivo", text: "Efectivo" }, { id: "debito", text: "Debito" }],
-    selectNames: ["text"],
-    selectValue: "id",
-    selectSelector: "#s-metodo-pago",
-    placeholder: "Seleccione un método de pago",
-    parentModal: "#modalReg",
-    staticSelect: true
-});
-
-function calcularIva(montoInput) {
-
-    let montoTotal = (parseFloat(montoInput.value) * 0.16) + parseFloat(montoInput.value);
-    document.getElementById("monto_con_iva").value = montoTotal.toFixed(2);
-}
-
-window.calcularIva = calcularIva;
-
 
 addEventListener("DOMContentLoaded", e => {
 

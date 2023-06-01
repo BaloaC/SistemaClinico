@@ -37,17 +37,17 @@ class FacturaConsultaController extends Controller {
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
 
-            case !$validarFactura->existsInDB($_POST, $camposId):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(200);
+            // case !$validarFactura->existsInDB($_POST, $camposId):
+            //     $respuesta = new Response('NOT_FOUND');
+            //     return $respuesta->json(200);
 
             case $validarFactura->isEliminated('consulta', 'consulta_id', $_POST['consulta_id']):
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(200);
 
-            case !$validarFactura->isDuplicatedId('paciente_id', 'consulta_id', $_POST['consulta_id'], $_POST['paciente_id'], 'consulta'):
-                $respuesta = new Response(false, 'La consulta indicada no coincide con el paciente ingresado');
-                return $respuesta->json(400);
+            // case !$validarFactura->isDuplicatedId('paciente_id', 'consulta_id', $_POST['consulta_id'], $_POST['paciente_id'], 'consulta'):
+            //     $respuesta = new Response(false, 'La consulta indicada no coincide con el paciente ingresado');
+            //     return $respuesta->json(400);
 
             case $validarFactura->isDuplicated('factura_consulta', 'consulta_id', $_POST['consulta_id']):
                 $respuesta = new Response('DATOS_DUPLICADOS');

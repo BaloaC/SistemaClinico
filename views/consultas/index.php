@@ -130,6 +130,40 @@
                                 </div>
                             </div>
                             <button type="button" class="btn btn-primary mt-3" id="addInsumo" onclick="addInsumoInput()">Añadir otro insumo</button>
+
+                            <div class="row mt-4">
+                                <h5>Recipes otorgados en la Consulta (Opcional)</h5>
+                                <div class="row align-items-center">
+                                    <div class="col-3 col-md-1">
+                                        <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>
+                                    </div>
+                                    <div class="col-12 col-md-5">
+                                        <label for="medicamento">Medicamento</label>
+                                        <select id="s-medicamento" class="form-control medicamento-id" data-active="0">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-5">
+                                        <label for="uso" class="p-0">Uso</label>
+                                        <input type="text" class="form-control uso-medicamento">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary mt-3" id="addRecipe" onclick="addRecipeInput()">Añadir otro insumo</button>
+
+                            <div class="row mt-4">
+                                <h5>Indicaciones mencionadas en la Consulta (Opcional)</h5>
+                                <div class="row align-items-center">
+                                    <div class="col-3 col-md-1">
+                                        <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>
+                                    </div>
+                                    <div class="col-12 col-md-5">
+                                        <label for="indicacion" class="p-0">Indicación</label>
+                                        <input type="text" name="indicacion" class="form-control indicaciones">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary mt-3" id="addIndicacion" onclick="addIndicacionInput()">Añadir otro insumo</button>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -322,6 +356,80 @@
             </div>
         </div>
 
+        <!-- Modal Registro Factura Consulta -->
+        <div class="modal fade" id="modalRegNormal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegNormalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="modalRegNormalLabel">Registrar factura consulta</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alertConsulta d-none" role="alert"></div>
+                        <form action="" id="info-fconsulta" class="p-3 px-4">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <label for="paciente_id">Paciente</label>
+                                    <select name="paciente_id" id="s-paciente-consulta" class="form-control" data-active="0" required>
+                                        <option></option>
+                                    </select>
+                                    <label for="monto_sin_iva">Monto</label>
+                                    <input type="number" name="monto_sin_iva" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
+                                    <!-- <input type="number" name="monto_sin_iva" oninput="calcularIva(this)" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8"> -->
+                                    
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="consulta_id">Consulta</label>
+                                    <select name="consulta_id" id="s-consulta-normal" class="form-control" data-active="0" required>
+                                        <option></option>
+                                    </select>
+                                    <label for="monto_con_iva">Método de pago</label>
+                                    <select name="metodo_pago" id="s-metodo-pago" class="form-control" data-active="0" required>
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addFConsulta()">Registrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Registro Factura Consulta Seguro-->
+        <div class="modal fade" id="modalRegAsegurada" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegAseguradaLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="modalRegAseguradaLabel">Registrar factura seguro</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alertConsultaSeguro d-none" role="alert"></div>
+                        <form action="" id="info-fseguro" class="p-3 px-4">
+
+                            <label for="consulta_id">Consulta</label>
+                            <select name="consulta_id" id="s-consulta-seguro" class="form-control mb-3" data-active="0" required>
+                                <option></option>
+                            </select>
+                            <label for="tipo_servico">Tipo de servicio</label>
+                            <select name="tipo_servicio" id="s-tipo-servicio" class="form-control mb-3" data-active="0" required>
+                                <option></option>
+                            </select>
+                            <label for="monto">Monto</label>
+                            <input type="number" name="monto" id="monto" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <small class="form-text">El precio de ser mayor o igual a 0</small>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addFSeguro()">Registrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
@@ -329,7 +437,11 @@
     <script type="module" src="<?php echo Url::to('assets/js/consultas/registrarConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/eliminarConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/addInsumoInput.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/consultas/deleteInsumoInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/addIndicacionInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/addRecipeInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/deleteInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/registrarFConsulta.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas-seguro/registrarConsultaSeguro.js'); ?>"></script>
 </body>
 
 </html>

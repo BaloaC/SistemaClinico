@@ -35,3 +35,7 @@
 .sub-menus > div{
     transition: display 1s, opacity 500ms ease-in-out;
 }
+
+.indicaciones, .recipes {
+    margin-bottom: 1rem;
+}

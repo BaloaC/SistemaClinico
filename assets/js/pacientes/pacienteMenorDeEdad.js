@@ -43,6 +43,7 @@ function pacienteMenorDeEdad(input) {
         telefonoInput.disabled = true;
         codTelInput.disabled = true;
         cedulaMenorNo.checked = true;
+        cedulaMenorNo.disabled = false;
 
         // Seleccionar por defecto el submenu de beneficiario
         tipoPaciente.selectedIndex = 4;
@@ -71,6 +72,7 @@ function pacienteMenorDeEdad(input) {
         telefonoInput.disabled = false;
         codTelInput.disabled = false;
         cedulaMenorNo.checked = true;
+        cedulaMenorNo.disabled = true;
 
 
         // Ciclo para habilitar los tipos de pacientes

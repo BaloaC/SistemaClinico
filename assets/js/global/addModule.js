@@ -1,10 +1,10 @@
 const path = location.pathname.split('/');
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
-export default async function addModule(module, form, data, successMessage) {
+export default async function addModule(module, form, data, successMessage, modal = "#modalReg", alert =".alert") {
 
     const $form = document.getElementById(form),
-        $alert = document.querySelector(".alert");
+        $alert = document.querySelector(alert);
 
     try {
 
@@ -31,7 +31,7 @@ export default async function addModule(module, form, data, successMessage) {
         $form.reset();
 
         setTimeout(() => {
-            $("#modalReg").modal("hide");
+            $(modal).modal("hide");
             $alert.classList.add("d-none");
         }, 500);
 

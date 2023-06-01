@@ -18,7 +18,7 @@ class ConsultaInsumoController extends Controller{
 
             switch ($_POST) {
                 case ($validarConsultaInsumo->isEmpty($newForm)):
-                    $respuesta = new Response(false, 'Los datos de los exámenes están vacíos');
+                    $respuesta = new Response(false, 'Los datos de los insumos están vacíos');
                     return $respuesta->json(400);
 
                 case $validarConsultaInsumo->isEliminated("insumo", 'estatus_ins', $forms['insumo_id']):
@@ -29,9 +29,9 @@ class ConsultaInsumoController extends Controller{
                     $respuesta = new Response(false, 'Los datos de los insumos seguro son inválidos');
                     return $respuesta->json(400);
 
-                case !$validarConsultaInsumo->existsInDB($newForm, $camposNumericos):
-                    $respuesta = new Response(false, 'No se encontraron resultados de los datos indicados en la base de datos');
-                    return $respuesta->json(404);
+                // case !$validarConsultaInsumo->existsInDB($newForm, $camposNumericos):
+                //     $respuesta = new Response(false, 'No se encontraron resultados de los datos indicados en la base de datos');
+                //     return $respuesta->json(404);
 
                 case $validarConsultaInsumo->isDuplicatedId('consulta_id', 'insumo_id', $newForm['consulta_id'], $newForm['insumo_id'], 'consulta_insumo'):
                     $respuesta = new Response(false, 'Ese insumo ya está registrado en la consulta');

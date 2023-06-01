@@ -1,10 +1,50 @@
 import addModule from "../global/addModule.js";
+import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
 import getAge from "../global/getAge.js";
+
+
+select2OnClick({
+    selectSelector: "#s-paciente-consulta",
+    selectValue: "paciente_id",
+    selectNames: ["cedula", "nombre-apellidos"],
+    module: "pacientes/consulta",
+    parentModal: "#modalRegNormal",
+    placeholder: "Seleccione un paciente"
+});
+
+select2OnClick({
+    selectSelector: "#s-consulta-normal",
+    selectValue: "consulta_id",
+    selectNames: ["consulta_id", "motivo_cita"],
+    module: "consultas/consulta",
+    parentModal: "#modalRegNormal",
+    placeholder: "Seleccione una consulta"
+});
+
+dinamicSelect2({
+    obj: [{ id: "efectivo", text: "Efectivo" }, { id: "debito", text: "Debito" }],
+    selectNames: ["text"],
+    selectValue: "id",
+    selectSelector: "#s-metodo-pago",
+    placeholder: "Seleccione un método de pago",
+    parentModal: "#modalRegNormal",
+    staticSelect: true
+});
+
+
+
+function calcularIva(montoInput) {
+
+    let montoTotal = (parseFloat(montoInput.value) * 0.16) + parseFloat(montoInput.value);
+    document.getElementById("monto_con_iva").value = montoTotal.toFixed(2);
+}
+
+window.calcularIva = calcularIva;
 
 async function addFConsulta() {
 
     const $form = document.getElementById("info-fconsulta"),
-        $alert = document.querySelector(".alert");
+        $alert = document.querySelector(".alertConsulta");
 
     try {
         const formData = new FormData($form),
@@ -18,11 +58,11 @@ async function addFConsulta() {
 
         data.monto_con_iva = (parseFloat(data.monto_sin_iva) * 0.16) + parseFloat(data.monto_sin_iva)
 
-        await addModule("factura/consulta","info-fconsulta",data,"Factura consulta registrada correctamente!");
+        await addModule("factura/consulta","info-fconsulta",data,"Factura consulta registrada correctamente!", "#modalRegNormal", ".alertConsulta");
         Array.from(document.getElementById("info-fconsulta").elements).forEach(element => {
             element.classList.remove('valid');
         })
-        $('#fConsulta').DataTable().ajax.reload();
+        $('#consultas').DataTable().ajax.reload();
 
     } catch (error) {
         console.log(error);

@@ -2,27 +2,6 @@ import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicS
 
 const path = location.pathname.split('/');
 
-// select2OnClick({
-//     selectSelector: "#s-consulta",
-//     selectValue: "consulta_id",
-//     selectNames: ["consulta_id", "motivo_cita"],
-//     module: "consultas/consulta",
-//     parentModal: "#modalReg",
-//     placeholder: "Seleccione una consulta",
-//     selectWidth: "100%"
-// });
-
-// dinamicSelect2({
-//     obj: [{ id: "consulta", text: "Consulta" }, { id: "laboratorio", text: "Laboratorio" }],
-//     selectNames: ["text"],
-//     selectValue: "id",
-//     selectSelector: "#s-tipo-servicio",
-//     placeholder: "Seleccione un tipo de servicio",
-//     parentModal: "#modalReg",
-//     staticSelect: true,
-//     selectWidth: "100%"
-// });
-
 addEventListener("DOMContentLoaded", e => {
 
     let fSeguros = $('#fSeguros').DataTable({
@@ -39,22 +18,22 @@ addEventListener("DOMContentLoaded", e => {
                 "data": null,
                 "defaultContent": ''
             },
-            { data: "rif" },
-            { data: "nombre" },
-            { data: "mes" },
+            { data: "nombre_paciente" },
+            { data: "nombre_titular" },
+            { data: "tipo_servicio" },
             { data: "fecha_ocurrencia" },
-            { data: "fecha_vencimiento" },
+            { data: "fecha_pago_limite" },
             { data: "monto" },
-            // {
-            //     data: "estatus_fac",
-            //     render: function (data, type, row) {
-            //         if(data == 1){
-            //             return `<span class="badge light badge-success">Pagada</span>`;
-            //         } else{
-            //             return `<span class="badge light badge-danger">Anulada</span>`;
-            //         }
-            //     },
-            // },
+            {
+                data: "estatus_fac",
+                render: function (data, type, row) {
+                    if(data == 1){
+                        return `<span class="badge light badge-success">Pagada</span>`;
+                    } else{
+                        return `<span class="badge light badge-danger">Anulada</span>`;
+                    }
+                },
+            },
             {
                 data: "factura_seguro_id",
                 render: function (data, type, row) {
@@ -120,7 +99,7 @@ addEventListener("DOMContentLoaded", e => {
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
                 <tr>
-                    <td>Datos consulta: ${data.factura_seguro_id}</td>
+                    <td>Datos consulta: ${data.consulta_id}</td>
                 </tr>
             </table>
         `;

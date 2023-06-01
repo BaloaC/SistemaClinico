@@ -7,7 +7,7 @@ function addInsumoInput() {
     let template = `
         <div class="row align-items-center newInput">
             <div class="col-3 col-md-1">
-                <button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button>
+                <button type="button" class="btn" onclick="deleteInput(this)"><i class="fas fa-times m-0"></i></button>
             </div>
             <div class="col-12 col-md-5">
                 <label for="insumo">Insumo</label>

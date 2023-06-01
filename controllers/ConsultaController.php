@@ -7,7 +7,8 @@ class ConsultaController extends Controller
         "paciente" => "consulta",
         "medico" => "consulta",
         "especialidad" => "consulta",
-        "cita" => "consulta"
+        "cita" => "consulta",
+        // "consulta_indicaciones" => "consulta"
     );
 
     protected $arraySelect = array(
@@ -33,7 +34,8 @@ class ConsultaController extends Controller
         "cita.motivo_cita",
         "cita.cedula_titular",
         "cita.clave",
-        "cita.tipo_cita"
+        "cita.tipo_cita",
+        // "consulta_indicaciones.descripcion"
     );
 
     //datos del inner con los exámenes
@@ -54,6 +56,20 @@ class ConsultaController extends Controller
     protected $arraySelectIns = array(
         "insumo.insumo_id",
         "insumo.nombre"
+    );
+    //datos del inner con los insumos
+    protected $arrayInnerRec = array(
+        "medicamento" => "consulta_recipe"
+    );
+
+    protected $arraySelectRec = array(
+        "consulta_recipe.consulta_recipe_id",
+        "consulta_recipe.consulta_id",
+        "consulta_recipe.consulta_recipe_id",
+        "medicamento.medicamento_id",
+        "medicamento.nombre_medicamento",
+        "medicamento.tipo_medicamento",
+        "consulta_recipe.uso"
     );
 
     //Método index (vista principal)
@@ -211,6 +227,21 @@ class ConsultaController extends Controller
                 $consultas->insumos = $consulta_insumos;
             }
 
+            $_consultaIndicacionesModel = new ConsultaIndicacionesModel();
+            $consulta_indicaciones = $_consultaIndicacionesModel->where('consulta_indicaciones.consulta_id', '=', $consultas->consulta_id)->getAll();
+
+            if($consulta_indicaciones){
+                $consultas->indicaciones = $consulta_indicaciones;
+            }
+
+            $_consultaRecipeModel = new ConsultaRecipeModel();
+            $innersRec = $_consultaRecipeModel->listInner($this->arrayInnerRec);
+            $consulta_recipes = $_consultaRecipeModel->where('consulta_recipe.consulta_id', '=', $consultas->consulta_id)->innerJoin($this->arraySelectRec, $innersRec, "consulta_recipe");
+
+            if($consulta_recipes){
+                $consultas->recipes = $consulta_recipes;
+            }
+
             $resultado[] = $consultas;
         }
 
@@ -353,16 +384,16 @@ class ConsultaController extends Controller
                     $respuesta = new Response(false, 'No se pueden enviar recipes vacíos');
                     return $respuesta->json(400);
 
-                case !$validarRecipe->existsInDB($newRecipe, $camposId):
-                    $respuesta = new Response(false, 'El medicamento indicado no se encuentra registrado en el sistema');
-                    return $respuesta->json(404);
+                // case !$validarRecipe->existsInDB($newRecipe, $camposId):
+                //     $respuesta = new Response(false, 'El medicamento indicado no se encuentra registrado en el sistema');
+                //     return $respuesta->json(404);
 
                 default:
                     
                     $data = $validarRecipe->dataScape($newRecipe);
                     $_consultaRecipeModel = new ConsultaRecipeModel();
                     $row = $_consultaRecipeModel->insert($data);
-                    var_dump($row);
+                    // var_dump($row);
                     $isInsert = ($row > 0);
 
                     if (!$isInsert) {
@@ -384,17 +415,17 @@ class ConsultaController extends Controller
             $newIndicacion = $indicacion;
             $newIndicacion['consulta_id'] = $consulta_id;
             $validarIndicacion = new Validate;
-            var_dump($newIndicacion);
+            // var_dump($newIndicacion);
             if ($validarIndicacion->isEmpty($newIndicacion)) {
                 $respuesta = new Response(false, 'No se pueden enviar indicaciones vacías');
                 return $respuesta->json(400);
             }
-            var_dump($newIndicacion);
-            echo '<pre>';
+            // var_dump($newIndicacion);
+            // echo '<pre>';
             $data = $validarIndicacion->dataScape($newIndicacion);
             $_consultaIndicacionesModel = new ConsultaIndicacionesModel();
             $row = $_consultaIndicacionesModel->insert($data);
-            var_dump($row);
+            // var_dump($row);
             $isInsert = ($row > 0);
 
             if (!$isInsert) {

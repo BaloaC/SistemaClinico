@@ -36,17 +36,17 @@ class FacturaSeguroController extends Controller{
     //Método index (vista principal)
     public function index(){
 
-        return $this->view('facturas/medico/index');
+        return $this->view('facturas/seguros/index');
     }
 
     public function formRegistrarFacturaMedico(){
 
-        return $this->view('facturas/medico/registrarFacturas');
+        return $this->view('facturas/medicos/registrarFacturas');
     }
 
     public function formActualizarFacturaMedico($factura_medico_id){
         
-        return $this->view('facturas/medico/actualizarFacturas', ['factura_medico_id' => $factura_medico_id]);
+        return $this->view('facturas/medicos/actualizarFacturas', ['factura_medico_id' => $factura_medico_id]);
     } 
 
     public function insertarFacturaSeguro(/*Request $request*/) { // método para obtener todas las facturas
@@ -63,9 +63,9 @@ class FacturaSeguroController extends Controller{
             $_seguroModel = new SeguroModel();
             $seguroList = $_seguroModel->where('estatus_seg', '=', '1')->getAll();
             
-            $header = apache_request_headers();
-            $token = substr($header['Authorization'], 7) ;
-            echo '<pre>';
+            // $header = apache_request_headers();
+            // $token = substr($header['Authorization'], 7) ;
+            // echo '<pre>';
             // Por cada seguro buscamos las facturas que tengan de las consultas
             foreach ($seguroList as $seguro) {
                 $facturaList = [];
@@ -100,7 +100,7 @@ class FacturaSeguroController extends Controller{
                 ];
 
                 $_facturaSeguroModel = new FacturaSeguroModel();
-                $_facturaSeguroModel->byUser($token);
+                // $_facturaSeguroModel->byUser($token);
                 $id = $_facturaSeguroModel->insert($facturaList);
             }
         }

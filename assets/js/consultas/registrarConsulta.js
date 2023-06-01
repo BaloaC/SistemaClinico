@@ -43,8 +43,37 @@ async function addConsulta() {
             }
             insumos.push(insumo);
         })
+        console.log(insumos);
+        if (insumos.length != 0 && insumos[0].insumo_id != "" && insumos[0].cantidad != "") { data.insumos = insumos; }
 
-        if (insumos.length != 0) { data.insumos = insumos; }
+        const medicamentos = document.querySelectorAll(".medicamento-id"),
+            medicamentoUso = document.querySelectorAll(".uso-medicamento"),
+            recipes = [];
+
+        medicamentos.forEach((value, key) => {
+            const medicamento = {
+                medicamento_id: value.value,
+                uso: medicamentoUso[key].value
+            }
+            recipes.push(medicamento);
+        })
+
+        if (recipes.length != 0 && recipes[0].medicamento_id != "" && recipes[0].uso != "") { data.recipes = recipes; }
+
+        const indicacionesList = document.querySelectorAll(".indicaciones"),
+            indicaciones = [];
+
+            indicacionesList.forEach((value, key) => {
+            const indicacion = {
+                descripcion: value.value
+            }
+            indicaciones.push(indicacion);
+        })
+
+        if (indicaciones.length != 0 && indicaciones[0].descripcion != "") { data.indicaciones = indicaciones; }
+
+
+
 
 
         // TODO: Validar los inputs del paciente
@@ -68,6 +97,7 @@ async function addConsulta() {
         $('#s-paciente').val([]).trigger('change');
         $('#s-examen').val([]).trigger('change');
         $('#s-insumo').val([]).trigger('change');
+        $('#s-medicamento').val([]).trigger('change');
         $('#s-cita').val([]).trigger('change');
         $('#s-cita').empty().trigger('change');
         document.getElementById("s-cita").disabled = true;

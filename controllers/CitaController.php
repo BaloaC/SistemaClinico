@@ -68,9 +68,9 @@ class CitaController extends Controller
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 
-            case !$validarCita->existsInDB($_POST, $campoId):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
+            // case !$validarCita->existsInDB($_POST, $campoId):
+            //     $respuesta = new Response('NOT_FOUND');
+            //     return $respuesta->json(404);
 
             case $validarCita->isNumber($_POST, $camposNumericos):
                 $respuesta = new Response('DATOS_INVALIDOS');
@@ -80,9 +80,9 @@ class CitaController extends Controller
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
 
-            case !$validarCita->existsInDB($_POST, $campoId):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
+            // case !$validarCita->existsInDB($_POST, $campoId):
+            //     $respuesta = new Response('NOT_FOUND');
+            //     return $respuesta->json(404);
 
             case !$validarCita->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad'):
                 $respuesta = new Response('NOT_FOUND');
@@ -178,7 +178,6 @@ class CitaController extends Controller
         $_citaModel = new CitaModel();
         $inners = $_citaModel->listInner($this->arrayInner);
         $lista = $_citaModel->where('estatus_cit', '!=', '2')->innerJoin($this->arraySelect, $inners, "cita");
-
         return $this->retornarMensaje($lista);
     }
 

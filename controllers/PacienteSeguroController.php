@@ -31,9 +31,9 @@ class PacienteSeguroController extends Controller{
                     $respuesta = new Response(false, 'La fecha indicada en el registro del seguro es inválida');
                     return $respuesta->json(400);
 
-                case !$validarPacienteSeguro->existsInDB($forms, $campoId1):   
-                    $respuesta = new Response(false, 'No se encontraron resultados del seguro o la empresa indicada');
-                    return $respuesta->json(404);
+                // case !$validarPacienteSeguro->existsInDB($forms, $campoId1):   
+                //     $respuesta = new Response(false, 'No se encontraron resultados del seguro o la empresa indicada');
+                //     return $respuesta->json(404);
 
                 case !$validarPacienteSeguro->isDuplicatedId('empresa_id', 'seguro_id', $forms['empresa_id'], $forms['seguro_id'], 'seguro_empresa'):
                     $respuesta = new Response(false, 'La empresa no se encuentra asociada al seguro indicado');

@@ -43,6 +43,7 @@
                         <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/consultas" ?>">Consultas</a>
                         <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/citas" ?>">Citas</a></li>
                         <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/examenes" ?>">Exámenes</a></li>
+                        <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/medicamentos" ?>">Medicamentos</a></li>
                         <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/pacientes" ?>">Pacientes</a></li>
                 </li>
             </ul>
@@ -66,7 +67,6 @@
                     <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/seguro" ?>">Factura seguro</a></li>
                     <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/consulta" ?>">Factura consulta</a></li>
                     <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/medico" ?>">Factura médico</a></li>
-                    <!-- <li><a class="dropdown-item" href="<?php echo Url::base() . "/proveedores" ?>">Proveedores</a></li> -->
                 </ul>
             </li>
             <li class="nav-item dropdown">
@@ -78,7 +78,6 @@
                     <li><a class="dropdown-item rol-1 rol-2" href="<?php echo Url::base() . "/insumos" ?>">Insumos</a></li>
                 </ul>
             </li>
-            <!-- <li class="nav-item"><a class="nav-link" href="<?php echo Url::base() . "/insumos" ?>"><i class="fas fa-syringe"></i>Inventario</a></li> -->
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle rol-1 rol-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-book-medical"></i>Reportes</a>

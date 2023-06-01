@@ -58,9 +58,9 @@ class ConsultaSeguroController extends Controller{
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
 
-            case !$validarConsulta->existsInDB($_POST, $camposId):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(200);
+            // case !$validarConsulta->existsInDB($_POST, $camposId):
+            //     $respuesta = new Response('NOT_FOUND');
+            //     return $respuesta->json(200);
 
             case $validarConsulta->isDuplicated('consulta', 'estatus_con', '3'):
                 $respuesta = new Response(false, 'Esa consulta ya está relacionada a una factura');

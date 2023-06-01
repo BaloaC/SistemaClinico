@@ -23,9 +23,9 @@ class HorarioController extends Controller{
                     $respuesta = new Response(false, 'Formato de los días de la semana inválidos');
                     return $respuesta->json(400);
 
-                case !($validarHorario->existsInDB($newForm, $camposNumericos)):   
-                    $respuesta = new Response(false, 'El médico señalado no fue encontrado para la asignación del horario'); 
-                    return $respuesta->json(404);
+                // case !($validarHorario->existsInDB($newForm, $camposNumericos)):   
+                //     $respuesta = new Response(false, 'El médico señalado no fue encontrado para la asignación del horario'); 
+                //     return $respuesta->json(404);
                 
                 case $validarHorario->isDuplicatedId('medico_id', 'dias_semana', $newForm['medico_id'], $newForm['dias_semana'], 'horario'):
                     $respuesta = new Response(false, 'El horario ya se encuentra registrado'); 

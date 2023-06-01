@@ -32,9 +32,9 @@ class ConsultaExamenController extends Controller{
                     $respuesta = new Response(false, 'Los datos de los exámenes seguro son inválidos');
                     return $respuesta->json(400);
 
-                case !$validarConsultaExamen->existsInDB($newForm, $camposNumericos):   
-                    $respuesta = new Response(false, 'No se encontraron resultados de los datos indicados en la base de datos');         
-                    return $respuesta->json(404);
+                // case !$validarConsultaExamen->existsInDB($newForm, $camposNumericos):   
+                //     $respuesta = new Response(false, 'No se encontraron resultados de los datos indicados en la base de datos');         
+                //     return $respuesta->json(404);
 
                 case $validarConsultaExamen->isDuplicatedId('consulta_id', 'examen_id', $newForm['consulta_id'], $newForm['examen_id'], 'consulta_examen'):
                     $respuesta = new Response(false, 'Ese examen ya está registrado en la consulta');

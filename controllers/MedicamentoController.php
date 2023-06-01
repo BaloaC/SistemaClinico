@@ -2,9 +2,23 @@
 
 class MedicamentoController extends Controller{
 
+    protected $arrayInner = array(
+        "especialidad" => "medicamento",
+    );
+
+    protected $arraySelect = array(
+        "medicamento.medicamento_id",
+        "medicamento.nombre_medicamento",
+        "medicamento.tipo_medicamento",
+        "medicamento.estatus_med",
+        "especialidad.especialidad_id",
+        "especialidad.nombre as nombre_especialidad",
+
+    );
+
     //Método index (vista principal)
     public function index(){
-        return $this->view('insumos/index');
+        return $this->view('medicamentos/index');
     }
 
     public function formRegistrarMedicamento(){
@@ -113,7 +127,8 @@ class MedicamentoController extends Controller{
     public function listarMedicamentos(){
 
         $_medicamentoModel = new MedicamentoModel();
-        $lista = $_medicamentoModel->where('estatus_med', '=', '1')->getAll();
+        $inners = $_medicamentoModel->listInner($this->arrayInner);
+        $lista = $_medicamentoModel->where('medicamento.estatus_med', '=', '1')->innerJoin($this->arraySelect, $inners, "medicamento");
         $mensaje = (count($lista) > 0);
         return $this->retornarMensaje($mensaje, $lista);
     }
@@ -121,7 +136,8 @@ class MedicamentoController extends Controller{
     public function listarMedicamentoPorId($medicamento_id){
 
         $_medicamentoModel = new MedicamentoModel();
-        $insumo = $_medicamentoModel->where('estatus_med', '=', '1')->where('medicamento_id','=',$medicamento_id)->getFirst();
+        $inners = $_medicamentoModel->listInner($this->arrayInner);
+        $insumo = $_medicamentoModel->where('medicamento.estatus_med', '=', '1')->where('medicamento.medicamento_id', '=', $medicamento_id)->innerJoin($this->arraySelect, $inners, "medicamento");
         $mensaje = ($insumo != null);
         return $this->retornarMensaje($mensaje, $insumo);
     }

@@ -1,7 +1,7 @@
 import addModule from "../global/addModule.js";
 
 async function addInsumo() {
-    const $form = document.getElementById("info-insumo");
+    const $form = document.getElementById("info-insumo"),
         alert = document.querySelector(".alert");
 
     try {
@@ -10,9 +10,10 @@ async function addInsumo() {
 
         formData.forEach((value, key) => (data[key] = value));
 
+        if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         // if (!(/^[1-9]\d*$/.test(data.cantidad)) || !(/^[1-9]\d*$/.test(data.stock)) || !(/^[1-9]\d*$/.test(data.cantidad_min))) throw { message: "Un campo númerico ingresado no es válido" };
-        if (!(/^[0-9]*\.?[0-9]+$/.test(data.precio))) throw { message: "El preciu ingresado no es válido" };
+        if (!(/^[0-9]*\.?[0-9]+$/.test(data.precio))) throw { message: "El precio ingresado no es válido" };
 
         await addModule("insumos", "info-insumo", data, "Insumo registrado con exito!");
         Array.from(document.getElementById("info-insumo").elements).forEach(element => {

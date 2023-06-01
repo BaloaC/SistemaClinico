@@ -186,9 +186,9 @@ Router::put('/consultas/:id', ConsultaController::class . '@actualizarConsulta',
 Router::delete('/consultas/:id', ConsultaController::class . '@eliminarConsulta',  '2');
 
 //Medicamento - Vistas
-Router::get('/medicamento', MedicamentoController::class . '@index');
-Router::get('/medicamento/registrar', MedicamentoController::class . '@formRegistrarMedicamento');
-Router::get('/medicamento/actualizar/:id', MedicamentoController::class . '@formActualizarMedicamento');
+Router::get('/medicamentos', MedicamentoController::class . '@index');
+Router::get('/medicamentos/registrar', MedicamentoController::class . '@formRegistrarMedicamento');
+Router::get('/medicamentos/actualizar/:id', MedicamentoController::class . '@formActualizarMedicamento');
 
 //Medicamento - API
 Router::get('/medicamento/consulta', MedicamentoController::class . '@listarMedicamentos',  '2,4,5');
