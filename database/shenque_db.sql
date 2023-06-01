@@ -167,6 +167,7 @@ CREATE TABLE `examen` (
   `examen_id` int(11) NOT NULL,
   `nombre` varchar(45) NOT NULL,
   `tipo` varchar(45) NOT NULL,
+  `hecho_aqui` BOOLEAN NOT NULL DEFAULT FALSE,
   `estatus_exa` enum('1','2') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

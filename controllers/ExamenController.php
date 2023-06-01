@@ -21,16 +21,11 @@ class ExamenController extends Controller{
     public function insertarExamen(/*Request $request*/){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        
+        $exclude = array('hecho_aqui');
         $validarExamen = new Validate;
-        $token = $validarExamen->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
 
         switch ($validarExamen) {
-            case ($validarExamen->isEmpty($_POST)):
+            case $validarExamen->isEmpty($_POST, $exclude):
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
             
@@ -38,10 +33,16 @@ class ExamenController extends Controller{
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(400);
 
+            case $_POST['hecho_aqui'] != 1 && $_POST['hecho_aqui'] != 0:
+                $respuesta = new Response(false, 'El campo hecho aqui solo permite valores booleanos');
+                return $respuesta->json(400);
+
             default:
                 $data = $validarExamen->dataScape($_POST);    
 
                 $_examenModel = new ExamenModel();
+                $header = apache_request_headers();
+                $token = substr($header['Authorization'], 7);
                 $_examenModel->byUser($token);
                 $id = $_examenModel->insert($data);
                 $mensaje = ($id > 0);
@@ -79,16 +80,11 @@ class ExamenController extends Controller{
     public function actualizarExamen($examen_id){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
+        $exclude = array('hecho_aqui');
         $validarExamen = new Validate;
 
-        $token = $validarExamen->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
-
         switch ($validarExamen) {
-            case ($validarExamen->isEmpty($_POST)):
+            case $validarExamen->isEmpty($_POST, $exclude):
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
             
@@ -103,7 +99,14 @@ class ExamenController extends Controller{
             default:
                 $data = $validarExamen->dataScape($_POST);    
 
+                if ( array_key_exists("hecho_aqui", $data) && $data['"hecho_aqui"'] != 0 && $data['"hecho_aqui"'] != 1) {
+                    $respuesta = new Response(false, 'El campo hecho aqui solo permite valores booleanos');
+                    return $respuesta->json(400);
+                }
+
                 $_examenModel = new ExamenModel();
+                $header = apache_request_headers();
+                $token = substr($header['Authorization'], 7);
                 $_examenModel->byUser($token);
                 $id = $_examenModel->where('examen_id', '=', $examen_id)->update($data);
                 $mensaje = ($id > 0);
