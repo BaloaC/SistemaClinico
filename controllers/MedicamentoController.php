@@ -133,6 +133,14 @@ class MedicamentoController extends Controller{
         return $this->retornarMensaje($mensaje, $lista);
     }
 
+    public function listarMedicamentosPorEspecialidad($especialidad_id){
+
+        $_medicamentoModel = new MedicamentoModel();
+        $lista = $_medicamentoModel->where('estatus_med', '=', '1')->where('especialidad_id', '=', $especialidad_id)->getAll();
+        $mensaje = (count($lista) > 0);
+        return $this->retornarMensaje($mensaje, $lista);
+    }
+
     public function listarMedicamentoPorId($medicamento_id){
 
         $_medicamentoModel = new MedicamentoModel();

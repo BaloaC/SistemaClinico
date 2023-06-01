@@ -168,6 +168,7 @@ Router::get('/citas/actualizar/:id', CitaController::class . '@formActualizarCit
 Router::get('/citas/consulta', CitaController::class . '@listarCitas',  '2,4,5');
 Router::get('/citas/:id', CitaController::class . '@listarCitaPorId',  '2,4,5');
 Router::get('/citas/paciente/:id', CitaController::class . '@listarCitaPorPacienteId',  '2,4,5');
+Router::post('/citas/:id', CitaController::class . '@reprogramarCita',  '2,4');
 Router::post('/citas', CitaController::class . '@insertarCita',  '2,5');
 Router::put('/citas/:id', CitaController::class . '@actualizarCita',  '2,4,5');
 Router::delete('/citas/:id', CitaController::class . '@eliminarCita',  '2,5');
@@ -193,10 +194,10 @@ Router::get('/medicamentos/actualizar/:id', MedicamentoController::class . '@for
 //Medicamento - API
 Router::get('/medicamento/consulta', MedicamentoController::class . '@listarMedicamentos',  '2,4,5');
 Router::get('/medicamento/:id', MedicamentoController::class . '@listarMedicamentoPorId',  '2,4,5');
-Router::get('/medicamento/paciente/:id', MedicamentoController::class . '@listarMedicamentosPorPaciente',  '2,4,5');
+Router::get('/medicamento/especialidad/:id', MedicamentoController::class . '@listarMedicamentosPorEspecialidad',  '2,4,5');
 Router::post('/medicamento', MedicamentoController::class . '@insertarMedicamento',  '2,4,5');
 Router::put('/medicamento/:id', MedicamentoController::class . '@actualizarMedicamento',  '1');
-Router::delete('/medicamento/:id', MedicamentoController::class . '@eliminarMedicamento',  '2');
+Router::delete('/medicamento/:id', MedicamentoController::class . '@eliminarMedicamento',  '1');
 
 //Exámenes - Vistas
 Router::get('/examenes', ExamenController::class . '@index');
