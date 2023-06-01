@@ -54,6 +54,16 @@ class ConsultaController extends Controller
         "insumo.nombre"
     );
 
+    //datos del inner con los recipes
+    protected $arrayInnerRec = array(
+        "medicamento" => "consulta_recipe"
+    );
+
+    protected $arraySelectRec = array(
+        "medicamento.medicamento_id",
+        "medicamento.nombre_medicamento"
+    );
+
     //Método index (vista principal)
     public function index() {
         return $this->view('consultas/index');
@@ -81,37 +91,37 @@ class ConsultaController extends Controller
         }
 
         switch ($validarConsulta) {
-            // case !$validarConsulta->existsInDB($_POST, $campoId):
-            //     $respuesta = new Response('NOT_FOUND');
-            //     return $respuesta->json(404);
+            case !$validarConsulta->existsInDB($_POST, $campoId):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
 
-            // case ($validarConsulta->isEmpty($_POST)):
-            //     $respuesta = new Response('DATOS_VACIOS');
-            //     return $respuesta->json(400);
+            case ($validarConsulta->isEmpty($_POST)):
+                $respuesta = new Response('DATOS_VACIOS');
+                return $respuesta->json(400);
 
-            // case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita'):
-            //     $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
-            //     return $respuesta->json(400);
+            case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita'):
+                $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
+                return $respuesta->json(400);
 
-            // case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 3, 'cita'):
-            //     $respuesta = new Response(false, 'A la cita indicada no se le puede asignar una consulta');
-            //     return $respuesta->json(400);
+            case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 3, 'cita'):
+                $respuesta = new Response(false, 'A la cita indicada no se le puede asignar una consulta');
+                return $respuesta->json(400);
 
-            // case !$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad'):
-            //     $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
-            //     return $respuesta->json(404);
+            case !$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad'):
+                $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
+                return $respuesta->json(404);
 
-            // case $validarConsulta->isNumber($_POST, $camposNumericos):
-            //     $respuesta = new Response('DATOS_INVALIDOS');
-            //     return $respuesta->json(400);
+            case $validarConsulta->isNumber($_POST, $camposNumericos):
+                $respuesta = new Response('DATOS_INVALIDOS');
+                return $respuesta->json(400);
 
-            // case $validarConsulta->isDate($_POST['fecha_consulta']):
-            //     $respuesta = new Response('FECHA_INVALIDA');
-            //     return $respuesta->json(400);
+            case $validarConsulta->isDate($_POST['fecha_consulta']):
+                $respuesta = new Response('FECHA_INVALIDA');
+                return $respuesta->json(400);
 
-            // case $validarConsulta->isToday($_POST['fecha_consulta'], true):
-            //     $respuesta = new Response('FECHA_INVALIDA');
-            //     return $respuesta->json(400);
+            case $validarConsulta->isToday($_POST['fecha_consulta'], true):
+                $respuesta = new Response('FECHA_INVALIDA');
+                return $respuesta->json(400);
 
             default:
                 // Separando los datos
@@ -189,32 +199,11 @@ class ConsultaController extends Controller
         $_consultaModel = new ConsultaModel();
         $inners = $_consultaModel->listInner($this->arrayInner);
         $consulta = $_consultaModel->where('consulta.estatus_con', '=', '1')->innerJoin($this->arraySelect, $inners, "consulta");
-        $resultado = array();
+        $consultaList = $this->setRelaciones($consulta);
 
-        foreach ($consulta as $consultas) {
-
-            $_consultaModel = new ConsultaModel();
-            $innersExa = $_consultaModel->listInner($this->arrayInnerExa);
-            $consulta_examenes = $_consultaModel->where('consulta_examen.consulta_id', '=', $consultas->consulta_id)->where('consulta_examen.estatus_con', '=', 1)->innerJoin($this->arraySelectExa, $innersExa, "consulta_examen");
-
-            if ($consulta_examenes) {
-                $consultas->examenes = $consulta_examenes;
-            }
-
-            $_consultaModel = new ConsultaModel();
-            $innersIns = $_consultaModel->listInner($this->arrayInnerIns);
-            $consulta_insumos = $_consultaModel->where('consulta_insumo.consulta_id', '=', $consultas->consulta_id)->where('consulta_insumo.estatus_con', '=', 1)->innerJoin($this->arraySelectIns, $innersIns, "consulta_insumo");
-
-            if ($consulta_insumos) {
-                $consultas->insumos = $consulta_insumos;
-            }
-
-            $resultado[] = $consultas;
-        }
-
-        $mensaje = (count($resultado) > 0);
+        $mensaje = (count($consultaList) > 0);
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($resultado);
+        $respuesta->setData($consultaList);
 
         return $respuesta->json(200);
     }
@@ -243,30 +232,8 @@ class ConsultaController extends Controller
                                     ->innerJoin($selectAntecedentes, $inners, "antecedentes_medicos");
 
         $resultado['antecedentes_medicos'] = $antecedentList;
-        $consultaList = [];
 
-        foreach ($consulta as $consultas) {
-
-            $_consultaModel = new ConsultaModel();
-            $innersExa = $_consultaModel->listInner($this->arrayInnerExa);
-            $consulta_examenes = $_consultaModel->where('consulta_examen.consulta_id', '=', $consultas->consulta_id)->where('consulta_examen.estatus_con', '=', 1)->innerJoin($this->arraySelectExa, $innersExa, "consulta_examen");
-
-            if ($consulta_examenes) {
-                $consultas->examenes = $consulta_examenes;
-            }
-
-            $_consultaModel = new ConsultaModel();
-            $innersIns = $_consultaModel->listInner($this->arrayInnerIns);
-            $consulta_insumos = $_consultaModel->where('consulta_insumo.consulta_id', '=', $consultas->consulta_id)->where('consulta_insumo.estatus_con', '=', 1)->innerJoin($this->arraySelectIns, $innersIns, "consulta_insumo");
-
-            if ($consulta_insumos) {
-                $consultas->insumos = $consulta_insumos;
-            }
-
-            $consultaList[] = $consultas;
-        }
-        
-
+        $consultaList = $this->setRelaciones($consulta);
         $resultado['consultas'] = $consultaList;
 
         $mensaje = (count($resultado) > 0);
@@ -302,6 +269,23 @@ class ConsultaController extends Controller
                 $resultado[0]->insumos = $consulta_insumos;
             }
 
+            $_consultaModel = new ConsultaModel();
+            $innersRec = $_consultaModel->listInner($this->arrayInnerRec);
+            $recipesList = $_consultaModel->where('consulta_recipe.consulta_id', '=', $consulta_id)
+                                            ->innerJoin($this->arraySelectRec, $innersRec, "consulta_recipe");
+            
+            if ($recipesList) {
+                $resultado[0]->recipes = $recipesList;
+            }
+
+            $_indicacionesModel = new ConsultaIndicacionesModel();
+            $indicacionesList = $_indicacionesModel->where('consulta_indicaciones.consulta_id', '=', $consulta_id)
+                                                    ->getAll();
+
+            if ($indicacionesList) {
+                $resultado[0]->indicaciones = $indicacionesList;
+            }
+
             $respuesta = new Response('CORRECTO');
             $respuesta->setData($resultado);
             return $respuesta->json(200);
@@ -335,7 +319,7 @@ class ConsultaController extends Controller
         return $respuesta->json($mensaje ? 200 : 400);
     }
 
-    // insertar consulta_recipe
+    // insertar recipe
     public function insertarRecipe($recipes, $consulta) {
 
         $consulta_id = $consulta;
@@ -437,5 +421,48 @@ class ConsultaController extends Controller
         } else {
             return false;
         }
+    }
+
+    public function setRelaciones($consulta) {
+        $resultado = [];
+        foreach ($consulta as $consultas) {
+
+            $_consultaModel = new ConsultaModel();
+            $innersExa = $_consultaModel->listInner($this->arrayInnerExa);
+            $consulta_examenes = $_consultaModel->where('consulta_examen.consulta_id', '=', $consultas->consulta_id)->where('consulta_examen.estatus_con', '=', 1)->innerJoin($this->arraySelectExa, $innersExa, "consulta_examen");
+            
+            if ($consulta_examenes) {
+                $consultas->examenes = $consulta_examenes;
+            }
+
+            $_consultaModel = new ConsultaModel();
+            $innersIns = $_consultaModel->listInner($this->arrayInnerIns);
+            $consulta_insumos = $_consultaModel->where('consulta_insumo.consulta_id', '=', $consultas->consulta_id)->where('consulta_insumo.estatus_con', '=', 1)->innerJoin($this->arraySelectIns, $innersIns, "consulta_insumo");
+
+            if ($consulta_insumos) {
+                $consultas->insumos = $consulta_insumos;
+            }
+
+            $_consultaModel = new ConsultaModel();
+            $innersRec = $_consultaModel->listInner($this->arrayInnerRec);
+            $recipesList = $_consultaModel->where('consulta_recipe.consulta_id', '=', $consultas->consulta_id)
+                                            ->innerJoin($this->arraySelectRec, $innersRec, "consulta_recipe");
+            
+            if ($recipesList) {
+                $consultas->recipes = $recipesList;
+            }
+
+            $_indicacionesModel = new ConsultaIndicacionesModel();
+            $indicacionesList = $_indicacionesModel->where('consulta_indicaciones.consulta_id', '=', $consultas->consulta_id)
+                                                    ->getAll();
+
+            if ($indicacionesList) {
+                $consultas->indicaciones = $indicacionesList;
+            }
+
+            $resultado[] = $consultas;
+        }
+
+        return $resultado;
     }
 }
