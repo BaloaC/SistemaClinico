@@ -1,38 +1,52 @@
 <?php
 
 class FacturaSeguroController extends Controller{
-    
+
     protected $arrayInner = array (
-        "medico" => "factura_medico"
+        "seguro" => "factura_seguro"
     );
 
     protected $arraySelect = array(
-        "medico.nombre",
-        "medico.apellidos",
-        "factura_medico.medico_id",
-        "factura_medico.factura_medico_id",
-        "factura_medico.acumulado_seguro_total",
-        "factura_medico.acumulado_consulta_total",
-        "factura_medico.pago_total",
-        "factura_medico.pacientes_seguro",
-        "factura_medico.pacientes_consulta",
-        "factura_medico.fecha_pago"
+        "factura_seguro.factura_seguro_id",
+        "factura_seguro.seguro_id",
+        "factura_seguro.mes",
+        "factura_seguro.fecha_ocurrencia",
+        "factura_seguro.fecha_vencimiento",
+        "factura_seguro.monto",
+        "factura_seguro.estatus_fac",
+        "seguro.nombre",
+        "seguro.rif"
     );
 
+    protected $consultaInner = array (
+        "consulta" => "consulta_seguro"
+    );
+
+    protected $consultaSelect = array(
+        "consulta.consulta_id",
+        "consulta.fecha_consulta",
+        "consulta_seguro.consulta_seguro_id",
+        "consulta_seguro.seguro_id",
+        "consulta_seguro.tipo_servicio",
+        "consulta_seguro.fecha_ocurrencia",
+        "consulta_seguro.monto",
+        "consulta_seguro.estatus_con"
+    );
+    
     //Método index (vista principal)
     public function index(){
 
-        return $this->view('facturas/seguros/index');
+        return $this->view('facturas/medico/index');
     }
 
     public function formRegistrarFacturaMedico(){
 
-        return $this->view('facturas/seguros/registrarFacturas');
+        return $this->view('facturas/medico/registrarFacturas');
     }
 
     public function formActualizarFacturaMedico($factura_medico_id){
         
-        return $this->view('facturas/seguros/actualizarFacturas', ['factura_medico_id' => $factura_medico_id]);
+        return $this->view('facturas/medico/actualizarFacturas', ['factura_medico_id' => $factura_medico_id]);
     } 
 
     public function insertarFacturaSeguro(/*Request $request*/) { // método para obtener todas las facturas
@@ -51,13 +65,16 @@ class FacturaSeguroController extends Controller{
             
             $header = apache_request_headers();
             $token = substr($header['Authorization'], 7) ;
-
+            echo '<pre>';
             // Por cada seguro buscamos las facturas que tengan de las consultas
             foreach ($seguroList as $seguro) {
                 $facturaList = [];
                 $_consultaSeguro = new ConsultaSeguroModel();
-                $consultaList = $_consultaSeguro->where('seguro_id', '=',$seguro->seguro_id)->whereDate('fecha_ocurrencia', $primer_dia, $ultimo_dia)->getAll();
-                
+                // $consultaList = $_consultaSeguro->where('seguro_id', '=',$seguro->seguro_id)->whereDate('fecha_ocurrencia', $primer_dia, $ultimo_dia)->getAll();
+                $inners = $_consultaSeguro->listInner($this->consultaInner);
+                $consultaList = $_consultaSeguro->where('consulta_seguro.estatus_con', '=', '1')->where('consulta.estatus_con', '=', '1')
+                                                ->whereDate('consulta.fecha_consulta', $primer_dia, $ultimo_dia)
+                                                ->innerJoin($this->consultaSelect, $inners, "consulta_seguro");
                 // Por cada factura en consulta, sumamos el monto para obtener el total
                 $montoConsulta = 0;
 
@@ -89,231 +106,76 @@ class FacturaSeguroController extends Controller{
         }
     }
 
-    // public function solicitarFacturaMedicoPorId(/*Request $request*/){
+    public function listarFacturaSeguro(){
+
+        $_facturaSeguroModel = new FacturaSeguroModel();
+        $inners = $_facturaSeguroModel->listInner($this->arrayInner);
+        $id = $_facturaSeguroModel->innerJoin($this->arraySelect, $inners, "factura_seguro");
         
-    //     $_POST = json_decode(file_get_contents('php://input'), true);
-    //     $validarFactura = new Validate;
+        return $this->retornarMensaje($id);
+    }
 
-    //     $token = $validarFactura->validateToken(apache_request_headers());
-    //     if (!$token) {
-    //         $respuesta = new Response('TOKEN_INVALID');
-    //         return $respuesta->json(401);
-    //     }
-
-    //     $camposId = array('medico_id');
+    public function listarFacturaSeguroPorSeguro($seguro_id){
         
-    //     switch ($validarFactura) {
-    //         case ($validarFactura->isEmpty($_POST)):
-    //             $respuesta = new Response('DATOS_VACIOS');
-    //             return $respuesta->json(400);
-
-    //         case !($validarFactura->existsInDB($_POST, $camposId)):
-    //             $respuesta = new Response('MD_NOT_FOUND');
-    //             return $respuesta->json(200);
-
-    //         case $validarFactura->isDate($_POST['fecha_actual']):
-    //             $respuesta = new Response('NOT_FOUND');
-    //             return $respuesta->json(200);
-            
-    //         default:
-                
-    //             $data = $validarFactura->dataScape($_POST);
-    //             $insert = $this->contabilizarFactura($data);
-                
-    //             $_facturaMedicoModel = new FacturaMedicoModel();
-    //             $_facturaMedicoModel->byUser($token);
-    //             $id = $_facturaMedicoModel->insert($insert);
-    //             $mensaje = ($id > 0);
-
-    //             $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-    //             return $respuesta->json($mensaje ? 201 : 400);
-    //     }
-    // }
-
-    // public function actualizarFacturaMedico($factura_medico_id){
-
-    //     $header = apache_request_headers();
-    //     $token = substr($header['Authorization'], 7);
-    //     $_facturaMedico = new FacturaMedicoModel();
-    //     $factura_medico = $_facturaMedico->where('factura_medico_id', '=', $factura_medico_id)->getFirst();
-
-    //     if ($factura_medico->estatus_fac != '1') {
-    //         $respuesta = new Response(false, 'No puede realizar operaciones con una factura ya cancelada o eliminada');
-    //         $respuesta->setData("Error al actualizar la factura $factura_medico_id con estatus ".($factura_medico->estatus_fac == '2' ? 'pagado' : 'anulada'));
-    //         return $respuesta->json(400);
-    //     }
-
-    //     $_facturaMedico->byUser($token);
-    //     $data = array(
-    //         'estatus_fac' => '2'
-    //     );
+        $_facturaSeguroModel = new FacturaSeguroModel();
+        $inners = $_facturaSeguroModel->listInner($this->arrayInner);
+        $id = $_facturaSeguroModel->where('factura_seguro.seguro_id', '=', $seguro_id)->innerJoin($this->arraySelect, $inners, "factura_seguro");
         
-    //     $actualizado = $_facturaMedico->where('factura_medico_id', '=', $factura_medico_id)->update($data);
-    //     return $this->mensajeActualizaciónExitosa($actualizado);
-    // }
+        return $this->retornarMensaje($id);
+    }
 
-    // public function listarFacturaMedico(){
-
-    //     $_facturaMedicoModel = new FacturaMedicoModel();
-    //     $inners = $_facturaMedicoModel->listInner($this->arrayInner);
-    //     $id = $_facturaMedicoModel->innerJoin($this->arraySelect, $inners, "factura_medico");
+    public function listarFacturaPorId($factura_seguro_id){
         
-    //     return $this->retornarMensaje($id);
-    // }
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        $validarFactura = new Validate;
 
-    // public function listarFacturaMedicoPorId($factura_medico_id){
+        if ( !$validarFactura->isDuplicated('factura_seguro', 'factura_seguro_id', $factura_seguro_id) ) {
+            $respuesta = new Response(false, 'No se encontró la factura indicada en la base de datos');
+            $respuesta->setData("Error en factura seguros con el id $factura_seguro_id");
+            return $respuesta->json(400);
+        }
+
+        // Obtenemos el seguro para saber por cuáles fechas filtrar
+        $_facturaSeguroModel = new FacturaSeguroModel();
+        $factura = $_facturaSeguroModel->where('factura_seguro.factura_seguro_id', '=', $factura_seguro_id)->getFirst();
         
-    //     $_facturaMedicoModel = new FacturaMedicoModel();
-    //     $inners = $_facturaMedicoModel->listInner($this->arrayInner);
-    //     $id = $_facturaMedicoModel->where('factura_medico_id','=',$factura_medico_id)->innerJoin($this->arraySelect, $inners, "factura_medico");
+        // Obtenemos las fechas
+        $fechaVencimiento = $factura->fecha_vencimiento;
+        $fechaOcurrencia = strtotime('-1 month', strtotime($fechaVencimiento));
+        $fechaOcurrencia = date('Y-m-d', $fechaOcurrencia);
+
+        $fechaMes = new DateTime($fechaOcurrencia);
+        $fechaMes->modify('first day of this month');
+        $primer_dia = $fechaMes->format("Y-m-d");
         
-    //     return $this->retornarMensaje($id);
-    // }
+        $fechaMes->modify('last day of this month');
+        $ultimo_dia = $fechaMes->format("Y-m-d");
 
-    // public function listarFacturaPorMedico($medico_id){
+        // Pedimos las consultas relacionadas a ese seguro en el mes de esa factura
+        $_consultaSeguro = new ConsultaSeguroModel();
+        $inners = $_consultaSeguro->listInner($this->consultaInner);
+        $consultaList = $_consultaSeguro->where('consulta_seguro.estatus_con', '=', '1')->where('consulta.estatus_con', '=', '1')
+                                        ->where('seguro_id', '=', $factura->seguro_id)
+                                        ->whereDate('consulta.fecha_consulta', $primer_dia, $ultimo_dia)
+                                        ->innerJoin($this->consultaSelect, $inners, "consulta_seguro");
+
+        if ( count($consultaList) > 0 ) {
+            return $this->retornarMensaje($consultaList);
+        } else {
+            $respuesta = new Response(false, "No hay consultas en el mes de $factura->mes para la factura indicada");
+            $respuesta->setData("Error con la factura id $factura->factura_seguro_id");
+            return $respuesta->json(200);
+        }
+
+    }
+
+    public function retornarMensaje($resultadoSentencia) {
+
+        $bool = ($resultadoSentencia > 0);
+
+        $respuesta = new Response($bool ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($resultadoSentencia);
+        return $respuesta->json(200);
         
-    //     $_facturaMedicoModel = new FacturaMedicoModel();
-    //     $inners = $_facturaMedicoModel->listInner($this->arrayInner);
-    //     $id = $_facturaMedicoModel->where('medico.medico_id','=',$medico_id)->innerJoin($this->arraySelect, $inners, "factura_medico");
-        
-    //     return $this->retornarMensaje($id);
-    // }
-
-    // public function listarFacturaPorFecha(){
-        
-    //     $_POST = json_decode(file_get_contents('php://input'), true);
-    //     $validarFactura = new Validate;
-        
-    //     if ( $validarFactura->isDate($_POST['fecha_inicio']) || $validarFactura->isDate($_POST['fecha_fin']) ) {
-    //         $respuesta = new Response('FECHA_INVALIDA');
-    //         return $respuesta->json(400);
-
-    //     } else {
-
-    //         $_facturaMedicoModel = new FacturaMedicoModel();
-    //         $inners = $_facturaMedicoModel->listInner($this->arrayInner);
-    //         $id = $_facturaMedicoModel->whereDate('factura_medico.fecha_pago',$_POST['fecha_inicio'],$_POST['fecha_fin'])->innerJoin($this->arraySelect, $inners, "factura_medico");
-            
-    //         return $this->retornarMensaje($id);
-    //     }        
-    // }
-
-    // public function eliminarFacturaMedico($factura_medico_id){
-
-    //     $header = apache_request_headers();
-    //     $token = substr($header['Authorization'], 7) ;
-        
-    //     $_facturaMedicoModel = new FacturaMedicoModel();
-    //     $_facturaMedicoModel->byUser($token);
-    //     $data = array(
-    //         'estatus_fac' => '3'
-    //     );
-
-    //     $eliminado = $_facturaMedicoModel->where('factura_medico_id','=',$factura_medico_id)->update($data, 1);
-    //     return $this->mensajeActualizaciónExitosa($eliminado);
-    // }
-
-    // // Funciones de utilidades
-    // public function contabilizarFactura($form) {
-
-    //     // inner con las consultas
-    //     $arrayInner = array(
-    //         "consulta" => "factura_consulta"
-    //     );
-
-    //     $arraySelect = array(
-    //         "consulta.consulta_id",
-    //         "consulta.fecha_consulta",
-    //         "consulta.medico_id",
-    //         "factura_consulta.monto_sin_iva"
-    //     );
-
-    //     $fecha_actual = $_POST['fecha_actual'];
-    //     $fecha_inicio = strtotime('-1 month', strtotime($fecha_actual));
-    //     $fecha_inicio = date('Y-m-d', $fecha_inicio);
-
-    //     $_facturaConsultaModel = new FacturaConsultaModel();
-    //     $inners = $_facturaConsultaModel->listInner($arrayInner);
-    //     $inner = $_facturaConsultaModel->where('consulta.medico_id', '=', $form['medico_id'])->where('consulta.estatus_con','=',1)->where('factura_consulta.estatus_fac','!=',2)->whereDate('consulta.fecha_consulta',$fecha_inicio,$fecha_actual)->innerJoin($arraySelect, $inners, "factura_consulta");
-        
-    //     $pacientesConsulta = 0;
-    //     $montoTotal = 0;
-
-    //     // Si no tiene consultas naturales no se realiza el foreach
-    //     if ($inner) {
-    //         foreach ($inner as $inners) {
-    //             //calculo consultas
-    //             $montoTotal += $inners->monto_sin_iva;
-    //             $pacientesConsulta += 1;
-    //         }
-    //     }
-
-    //     $montoConsultas = $montoTotal * 50 / 100;
-        
-
-    //     // inner con los seguros
-    //     $arrayInnerSeguro = array(
-    //         "consulta" => "factura_seguro"
-    //     );
-
-    //     $arraySelectSeguro = array(
-    //         "consulta.consulta_id",
-    //         "consulta.medico_id",
-    //         "factura_seguro.fecha_ocurrencia",
-    //         "factura_seguro.monto"
-    //     );
-
-    //     $_facturaMedicoModel = new FacturaMedicoModel();
-    //     $innersSeguro = $_facturaMedicoModel->listInner($arrayInnerSeguro);
-    //     $innerSeguro = $_facturaMedicoModel->where('consulta.medico_id', '=', $form['medico_id'])->where('estatus_con','=',1)->where('estatus_fac','!=',2)->whereDate('factura_seguro.fecha_ocurrencia',$fecha_inicio,$fecha_actual)->innerJoin($arraySelectSeguro, $innersSeguro, "factura_seguro");
-
-    //     $pacientesSeguros = 0;
-    //     $montoTotal = 0;
-
-    //     // Si no tiene consultas por seguro no se realiza el foreach
-
-    //     if ($innerSeguro) {
-    //         foreach ($innerSeguro as $inners) {
-    //             //calculo seguros
-    //             $montoTotal += $inners->monto;
-    //             $pacientesSeguros += 1;
-    //         }
-    //     } else{
-    //         $montoTotal = 0;
-    //         $pacientesSeguros = 0;
-    //     }
-
-    //     $montoSeguros = $montoTotal * 20 / 100;
-    //     $pagoTotal = $montoConsultas + $montoSeguros;
-
-        
-
-    //     $arrayInsert = array(
-    //         'medico_id' => $form['medico_id'],
-    //         'acumulado_seguro_total' => $montoSeguros,
-    //         'acumulado_consulta_total' => $montoConsultas,
-    //         'pago_total' => $pagoTotal,
-    //         'pacientes_seguro' => $pacientesSeguros,
-    //         'pacientes_consulta' => $pacientesConsulta,
-    //         'fecha_pago' => $fecha_actual
-    //     );
-
-    //     return $arrayInsert;
-    // }
-
-    // public function retornarMensaje($mensaje) {
-
-    //     $bool = ($mensaje > 0);
-
-    //     $respuesta = new Response($bool ? 'CORRECTO' : 'NOT_FOUND');
-    //     $respuesta->setData($mensaje);
-    //     return $respuesta->json(200);
-        
-    // }
-
-    // public function mensajeActualizaciónExitosa($update) {
-    //     $isTrue = ($update > 0);
-    //     $respuesta = new Response($isTrue ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-    //     return $respuesta->json($isTrue ? 200 : 400);
-    // }
+    }
 }

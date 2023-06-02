@@ -136,13 +136,13 @@ class FacturaMedicoController extends Controller{
 
         if ($factura_medico->estatus_fac != '1') {
             $respuesta = new Response(false, 'No puede realizar operaciones con una factura ya cancelada o eliminada');
-            $respuesta->setData("Error al actualizar la factura $factura_medico_id con estatus ".($factura_medico->estatus_fac == '2' ? 'pagado' : 'anulada'));
+            $respuesta->setData("Error al actualizar la factura $factura_medico_id con estatus ".($factura_medico->estatus_fac == '2' ? 'anulada' : 'pagado'));
             return $respuesta->json(400);
         }
 
         $_facturaMedico->byUser($token);
         $data = array(
-            'estatus_fac' => '2'
+            'estatus_fac' => '3'
         );
         
         $actualizado = $_facturaMedico->where('factura_medico_id', '=', $factura_medico_id)->update($data);
@@ -203,7 +203,7 @@ class FacturaMedicoController extends Controller{
         $_facturaMedicoModel = new FacturaMedicoModel();
         $_facturaMedicoModel->byUser($token);
         $data = array(
-            'estatus_fac' => '3'
+            'estatus_fac' => '2'
         );
 
         $eliminado = $_facturaMedicoModel->where('factura_medico_id','=',$factura_medico_id)->update($data, 1);

@@ -206,6 +206,25 @@ class ConsultaController extends Controller
         $consulta = $_consultaModel->where('consulta.paciente_id', '=', $paciente_id)->where('consulta.estatus_con', '=', '1')->innerJoin($this->arraySelect, $inners, "consulta");
         $resultado = array();
 
+        $_antecedenteModel = new AntecedenteMedicoModel();
+        $selectAntecedentes = [
+            "antecedentes_medicos.descripcion",
+            "antecedentes_medicos.antecedentes_medicos_id",
+            "tipo_antecedente.nombre AS nombre"
+        ];
+
+        $innerAntecedentes = [
+            "tipo_antecedente" => "antecedentes_medicos"
+        ];
+
+        $inners = $_antecedenteModel->listInner($innerAntecedentes);
+        $antecedentList = $_antecedenteModel->where('estatus_ant', '!=', '2')
+                                    ->where('antecedentes_medicos.paciente_id', '=', $paciente_id)
+                                    ->innerJoin($selectAntecedentes, $inners, "antecedentes_medicos");
+
+        $resultado['antecedentes_medicos'] = $antecedentList;
+        $consultaList = [];
+
         foreach ($consulta as $consultas) {
 
             $_consultaModel = new ConsultaModel();
@@ -224,8 +243,11 @@ class ConsultaController extends Controller
                 $consultas->insumos = $consulta_insumos;
             }
 
-            $resultado[] = $consultas;
+            $consultaList[] = $consultas;
         }
+        
+
+        $resultado['consultas'] = $consultaList;
 
         $mensaje = (count($resultado) > 0);
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');

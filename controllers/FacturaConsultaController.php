@@ -94,7 +94,7 @@ class FacturaConsultaController extends Controller {
         $_facturaModel = new FacturaConsultaModel();
         $_facturaModel->byUser($token);
         $data = array(
-            'estatus_fac' => '2'
+            'estatus_fac' => '3'
         );
 
         $eliminado = $_facturaModel->where('factura_consulta_id', '=', $factura_consulta_id)->update($data, 1);

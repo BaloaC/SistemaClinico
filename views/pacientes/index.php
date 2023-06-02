@@ -323,5 +323,3 @@
     <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>
 </body>
-
-</html>
