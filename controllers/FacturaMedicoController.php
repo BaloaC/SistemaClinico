@@ -35,7 +35,58 @@ class FacturaMedicoController extends Controller{
         return $this->view('facturas/medico/actualizarFacturas', ['factura_medico_id' => $factura_medico_id]);
     } 
 
-    public function solicitarFacturaMedico(/*Request $request*/){
+    public function solicitarFacturasMedicos(/*Request $request*/) { // método para obtener todas las facturas
+        
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        $validarFactura = new Validate;
+        
+        switch ($validarFactura) {
+            case ($validarFactura->isEmpty($_POST)):
+                $respuesta = new Response('DATOS_VACIOS');
+                return $respuesta->json(400);
+
+            case $validarFactura->isDate($_POST['fecha_actual']):
+                $respuesta = new Response('FECHA_INVALIDA');
+                return $respuesta->json(200);
+
+            case !$validarFactura->isToday($_POST['fecha_actual'], true):
+                $respuesta = new Response('FECHA_INVALIDA');
+                return $respuesta->json(200);
+            
+            default:
+                
+                $_medicoModel = new MedicoModel();
+                $medicoList = $_medicoModel->where('estatus_med','=', 1)->getAll();
+                $data = $validarFactura->dataScape($_POST);
+
+                $header = apache_request_headers();
+                $token = substr($header['Authorization'], 7) ;
+                $_facturaMedicoModel = new FacturaMedicoModel();
+
+                // var_dump($data['fecha_actual']);
+                foreach ($medicoList as $medico) {
+                    
+                    $factura = $this->contabilizarFactura([
+                        "fecha_actual" => $data['fecha_actual'],
+	                    "medico_id" => $medico->medico_id
+                    ]);
+
+                    $_facturaMedicoModel->byUser($token);
+                    $isInserted = $_facturaMedicoModel->insert($factura);
+
+                    if ( !($isInserted  > 0) ) {
+                        $respuesta = new Response('INSERCION_FALLIDA');
+                        $respuesta->setData('Error generando la factura del medico_id' + $medico->medico_id);
+                        return $respuesta->json(400);
+                    }
+                }
+
+                $respuesta = new Response('INSERCION_EXITOSA');
+                return $respuesta->json(201);
+        }
+    }
+
+    public function solicitarFacturaMedicoPorId(/*Request $request*/){
         
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
@@ -46,7 +97,6 @@ class FacturaMedicoController extends Controller{
             return $respuesta->json(401);
         }
 
-        // ** Enrique
         $camposId = array('medico_id');
         
         switch ($validarFactura) {
@@ -75,6 +125,28 @@ class FacturaMedicoController extends Controller{
                 $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
                 return $respuesta->json($mensaje ? 201 : 400);
         }
+    }
+
+    public function actualizarFacturaMedico($factura_medico_id){
+
+        $header = apache_request_headers();
+        $token = substr($header['Authorization'], 7);
+        $_facturaMedico = new FacturaMedicoModel();
+        $factura_medico = $_facturaMedico->where('factura_medico_id', '=', $factura_medico_id)->getFirst();
+
+        if ($factura_medico->estatus_fac != '1') {
+            $respuesta = new Response(false, 'No puede realizar operaciones con una factura ya cancelada o eliminada');
+            $respuesta->setData("Error al actualizar la factura $factura_medico_id con estatus ".($factura_medico->estatus_fac == '2' ? 'anulada' : 'pagado'));
+            return $respuesta->json(400);
+        }
+
+        $_facturaMedico->byUser($token);
+        $data = array(
+            'estatus_fac' => '3'
+        );
+        
+        $actualizado = $_facturaMedico->where('factura_medico_id', '=', $factura_medico_id)->update($data);
+        return $this->mensajeActualizaciónExitosa($actualizado);
     }
 
     public function listarFacturaMedico(){
@@ -125,13 +197,9 @@ class FacturaMedicoController extends Controller{
 
     public function eliminarFacturaMedico($factura_medico_id){
 
-        $validarFactura = new Validate;
-        $token = $validarFactura->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
-
+        $header = apache_request_headers();
+        $token = substr($header['Authorization'], 7) ;
+        
         $_facturaMedicoModel = new FacturaMedicoModel();
         $_facturaMedicoModel->byUser($token);
         $data = array(
@@ -139,12 +207,7 @@ class FacturaMedicoController extends Controller{
         );
 
         $eliminado = $_facturaMedicoModel->where('factura_medico_id','=',$factura_medico_id)->update($data, 1);
-        $mensaje = ($eliminado > 0);
-
-        $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        $respuesta->setData($eliminado);
-
-        return $respuesta->json($mensaje ? 200 : 400);
+        return $this->mensajeActualizaciónExitosa($eliminado);
     }
 
     // Funciones de utilidades
@@ -243,5 +306,11 @@ class FacturaMedicoController extends Controller{
         $respuesta->setData($mensaje);
         return $respuesta->json(200);
         
+    }
+
+    public function mensajeActualizaciónExitosa($update) {
+        $isTrue = ($update > 0);
+        $respuesta = new Response($isTrue ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+        return $respuesta->json($isTrue ? 200 : 400);
     }
 }

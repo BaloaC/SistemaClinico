@@ -58,7 +58,7 @@ addEventListener("DOMContentLoaded", e => {
             { data: "paciente_id" },
             { data: "metodo_pago" },
             { data: "monto_sin_iva" },
-            { data: "monto_con_iva" },
+            // { data: "monto_con_iva" },
             {
                 data: "estatus_fac",
                 render: function (data, type, row) {

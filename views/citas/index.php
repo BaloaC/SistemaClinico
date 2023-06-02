@@ -141,12 +141,13 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Cita</h1>
+                        <h1 class="modal-title fs-3" id="modalActLabel">Actualización de la Cita</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-cita" class="p-3 px-4">
+                            <p class="text-secondary">Las citas se mantendrán como pendientes hasta que la clave otorgada por el seguro sea insertada</p>
                             <label for="clave">Clave</label>
                             <input type="number" name="clave" id="clave" class="form-control">
 
@@ -183,7 +184,7 @@
                     <div class="modal-footer justify-content-between">
                         <a class="btn btn-sm btn-add" href="#" id="export-cita"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a>
                         <!-- <a href="#" id="export-cita"><i class="fas fa-file-export"></i></a> -->
-                        <button type="button" id="btn-actualizar" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAct">Actualizar</button>
+                        <button type="button" id="btn-actualizar" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAct">Registrar Clave</button>
                     </div>
                 </div>
             </div>

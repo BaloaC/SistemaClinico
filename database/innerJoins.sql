@@ -130,3 +130,22 @@ SELECT
     examen.nombre
 from consulta_examen
 INNER JOIN examen on examen.examen_id = consulta_examen.examen_id
+
+-- factura_seguro
+SELECT 
+	cita.cita_id,
+    consulta.consulta_id,
+    consulta.fecha_consulta,
+    especialidad.especialidad_id,
+    especialidad.nombre AS nombre_especialidad,
+    paciente.paciente_id AS paciente_id,
+    paciente.cedula AS cedula_paciente,
+    paciente.apellidos AS apellido_paciente,
+    paciente.nombre AS nombre_paciente
+from factura_seguro
+INNER JOIN consulta ON consulta.consulta_id = factura_seguro.consulta_id
+INNER JOIN paciente ON paciente.paciente_id = consulta.paciente_id
+INNER JOIN especialidad ON especialidad.especialidad_id = consulta.especialidad_id
+INNER JOIN cita ON cita.cita_id = consulta.cita_id
+
+

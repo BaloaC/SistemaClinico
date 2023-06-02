@@ -58,10 +58,6 @@ class PacienteController extends Controller{
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
 
-            // case $validarPaciente->isDuplicated('paciente', 'cedula', $_POST["cedula"]):
-            //     $respuesta = new Response('DATOS_DUPLICADOS');
-            //     return $respuesta->json(400);
-
             case $validarPaciente->isDate($_POST['fecha_nacimiento']):
                 $respuesta = new Response('FECHA_INVALIDA');
                 return $respuesta->json(400);
@@ -73,6 +69,12 @@ class PacienteController extends Controller{
             default: 
             
             $_pacienteModel = new PacienteModel();
+
+            if ( $_POST['tipo_paciente'] != 4 && $validarPaciente->isDuplicated('paciente', 'cedula', $_POST['cedula']) ) { 
+                $respuesta = new Response(false, 'Ya existe un paciente con esa cédula');
+                $respuesta->setData("Problema al insertar el paciente con la cédula ".$_POST['cedula']);
+                return $respuesta->json(400);
+            }
 
             if ( $_POST['tipo_paciente'] == 3 ) {
                 
@@ -170,14 +172,7 @@ class PacienteController extends Controller{
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
             
-            default: 
-
-                // if ( array_key_exists('cedula', $_POST) ) {
-                //     if ( !$validarPaciente->isDuplicated('paciente', 'cedula', $_POST["cedula"]) ) {
-                //         $respuesta = new Response('DATOS_DUPLICADOS');
-                //         return $respuesta->json(400);
-                //     }
-                // }
+            default:
                     
                 if ( array_key_exists('fecha_nacimiento', $_POST) ) {
 
@@ -191,6 +186,31 @@ class PacienteController extends Controller{
                         return $respuesta->json(400);
                     }   
 
+                }
+
+                if ( !array_key_exists('tipo_paciente', $_POST) && array_key_exists('cedula', $_POST)) {
+                    // Primero verificamos si el paciente es tipo beneficiado
+                    $_pacienteModel = new PacienteModel();
+                    $paciente = $_pacienteModel->where('paciente_id', '=', $paciente_id);
+                    $isRepeated = $_pacienteModel->where('cedula', '=', $_POST['cedula']);
+
+                    // Ahora validamos que la cédula no se repita
+                    if ($paciente->tipo_paciente != 4 && $isRepeated) {
+                        $respuesta = new Response(false, 'Ya existe un paciente con esa cédula');
+                        $respuesta->setData("Problema al insertar el paciente con la cédula ".$_POST['cedula']);
+                        return $respuesta->json(400);
+                    }
+                    
+                }
+
+                if ( array_key_exists('tipo_paciente', $_POST) && array_key_exists('cedula', $_POST) && $_POST['tipo_paciente'] != 4 ) {
+                    $_pacienteModel = new PacienteModel();
+                    $isRepeated = $_pacienteModel->where('cedula', '=', $_POST['cedula']);
+                    if ($isRepeated) {
+                        $respuesta = new Response(false, 'Ya existe un paciente con esa cédula');
+                        $respuesta->setData("Problema al insertar el paciente con la cédula ".$_POST['cedula']);
+                        return $respuesta->json(400);
+                    }
                 }
 
                 if ( array_key_exists('seguro', $_POST) ) {
@@ -236,9 +256,6 @@ class PacienteController extends Controller{
                 $resultado[] = $pacientes;
             }
             return $this->retornarMensaje($resultado);
-            // $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
-            // $respuesta->setData($resultado);
-            // return $respuesta->json($resultado ? 200 : 404);
 
         } else {
             $respuesta = new Response('NOT_FOUND');
@@ -259,9 +276,6 @@ class PacienteController extends Controller{
             
             if ($pacienteSeguro) { $paciente->seguro = $pacienteSeguro; }
             return $this->retornarMensaje($paciente);
-            // $respuesta = new Response($paciente ? 'CORRECTO' : 'NOT_FOUND');
-            // $respuesta->setData($paciente);
-            // return $respuesta->json($paciente ? 200 : 404);
 
         } else {
             $respuesta = new Response('NOT_FOUND');

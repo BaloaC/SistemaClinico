@@ -72,6 +72,9 @@ async function addConsulta() {
         $('#s-cita').empty().trigger('change');
         document.getElementById("s-cita").disabled = true;
         deleteElementByClass("newInput");
+        setTimeout(() => {
+            $("#modalReg").modal("hide");
+        }, 500);
         $('#consultas').DataTable().ajax.reload();
 
     } catch (error) {

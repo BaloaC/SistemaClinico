@@ -48,8 +48,8 @@ addEventListener("DOMContentLoaded", (e) => {
                     return totalInsumos;
                 },
             },
-            { data: "monto_sin_iva" },
             { data: "monto_con_iva" },
+            { data: "monto_sin_iva" },
             {
                 data: "excento",
                 render: function (data, type, row) {
