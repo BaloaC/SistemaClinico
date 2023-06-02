@@ -60,6 +60,10 @@ article p > a:hover {
     height: 365px;
 }
 
+#pocosInsumos_info{
+    display: none;
+}
+
 .bg-img {
     display: flex;
     margin: auto;

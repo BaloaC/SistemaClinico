@@ -80,7 +80,6 @@
                                     <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
                                     <small class="form-text">El apellido solo puede contener letras</small>
 
-
                                     <label for="telefono">Teléfono</label>
                                     <div class="input-group mb-3">
                                         <select name="cod_tel" id="cod-tel" class="me-2">
@@ -115,6 +114,19 @@
                                         <option value="3">Asegurado</option>
                                         <option value="4">Beneficiado</option>
                                     </select>
+                                </div>
+                                <div class="col-12 col-md-6 mt-4">
+                                    <label for="pacienteMenorLabel" class="opacity-0 d-none">¿El paciente posee cédula de identidad?</label>
+                                    <div class="pacienteMenorContainer input-radios-container opacity-0 d-none">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="cedula_beneficiario" id="cedula_menor_si" value="1" onchange="pacientePoseeCedula(this)" >
+                                            <label class="form-check-label" for="">Sí</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="cedula_beneficiario" id="cedula_menor_no" value="0" onchange="pacientePoseeCedula(this)" checked>
+                                            <label class="form-check-label" for="">No</label>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="sub-menus">
                                     <div class="submenu-beneficiado row opacity-0 d-none">

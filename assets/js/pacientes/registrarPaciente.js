@@ -41,9 +41,10 @@ async function addPaciente() {
         } else if (data.tipo_paciente == 4) {
 
             if(data.edad < 18){
+
+                if(data.cedula_beneficiario == 0) data.cedula = infoTitular.cedula;
                 let titular_id = document.getElementById("s-titular_id").value;
                 const infoTitular =  await getById("pacientes",titular_id);
-                data.cedula = infoTitular.cedula;
                 data.telefono = infoTitular.telefono;
             }
 
