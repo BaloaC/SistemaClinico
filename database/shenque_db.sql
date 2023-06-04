@@ -171,6 +171,59 @@ CREATE TABLE `examen` (
   `estatus_exa` enum('1','2') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `medicamento`
+--
+
+CREATE TABLE `medicamento` (
+  `medicamento_id` int(11) NOT NULL AUTO_INCREMENT,
+  `especialidad_id` int(11) NOT NULL,
+  `nombre_medicamento` varchar(45) NOT NULL,
+  `tipo_medicamento` enum('1','2','3'),
+  `estatus_med` enum('1','2') NOT NULL DEFAULT '1',
+  PRIMARY KEY(medicamento_id),
+  FOREIGN KEY(especialidad_id)
+  REFERENCES especialidad(especialidad_id)
+  ON UPDATE NO ACTION ON DELETE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `consulta_recipe`
+--
+
+
+CREATE TABLE `consulta_recipe` (
+  `consulta_recipe_id` int(11) NOT NULL AUTO_INCREMENT,
+  `consulta_id` int(11) NOT NULL,
+  `medicamento_id` int(11) NOT NULL,
+  `uso` text NOT NULL,
+  PRIMARY KEY(consulta_recipe_id),
+  FOREIGN KEY(consulta_id)
+  REFERENCES consulta(consulta_id)
+  ON UPDATE NO ACTION ON DELETE NO ACTION,
+    FOREIGN KEY(medicamento_id)
+    REFERENCES medicamento(medicamento_id)
+    ON UPDATE NO ACTION ON DELETE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `consulta_indicaciones`
+--
+
+CREATE TABLE `consulta_indicaciones` (
+  `consulta_indicaciones_id` int(11) NOT NULL AUTO_INCREMENT,
+  `consulta_id` int(11) NOT NULL,
+  `descripcion` text NOT NULL,
+  PRIMARY KEY(consulta_indicaciones_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- --------------------------------------------------------
 
 --
