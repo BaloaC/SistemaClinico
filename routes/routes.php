@@ -185,6 +185,19 @@ Router::post('/consultas', ConsultaController::class . '@insertarConsulta',  '2,
 Router::put('/consultas/:id', ConsultaController::class . '@actualizarConsulta',  '2,4,5');
 Router::delete('/consultas/:id', ConsultaController::class . '@eliminarConsulta',  '2');
 
+//Medicamento - Vistas
+Router::get('/medicamento', MedicamentoController::class . '@index');
+Router::get('/medicamento/registrar', MedicamentoController::class . '@formRegistrarMedicamento');
+Router::get('/medicamento/actualizar/:id', MedicamentoController::class . '@formActualizarMedicamento');
+
+//Medicamento - API
+Router::get('/medicamento/consulta', MedicamentoController::class . '@listarMedicamentos',  '2,4,5');
+Router::get('/medicamento/:id', MedicamentoController::class . '@listarMedicamentoPorId',  '2,4,5');
+Router::get('/medicamento/paciente/:id', MedicamentoController::class . '@listarMedicamentosPorPaciente',  '2,4,5');
+Router::post('/medicamento', MedicamentoController::class . '@insertarMedicamento',  '2,4,5');
+Router::put('/medicamento/:id', MedicamentoController::class . '@actualizarMedicamento',  '1');
+Router::delete('/medicamento/:id', MedicamentoController::class . '@eliminarMedicamento',  '2');
+
 //Exámenes - Vistas
 Router::get('/examenes', ExamenController::class . '@index');
 Router::get('/examenes/registrar', ExamenController::class . '@formRegistrarExamen');

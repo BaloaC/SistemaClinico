@@ -83,42 +83,44 @@ class ConsultaController extends Controller
         }
 
         switch ($validarConsulta) {
-            case !$validarConsulta->existsInDB($_POST, $campoId):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
+            // case !$validarConsulta->existsInDB($_POST, $campoId):
+            //     $respuesta = new Response('NOT_FOUND');
+            //     return $respuesta->json(404);
 
-            case ($validarConsulta->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
+            // case ($validarConsulta->isEmpty($_POST)):
+            //     $respuesta = new Response('DATOS_VACIOS');
+            //     return $respuesta->json(400);
 
-            case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita'):
-                $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
-                return $respuesta->json(400);
+            // case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita'):
+            //     $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
+            //     return $respuesta->json(400);
 
-            case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 3, 'cita'):
-                $respuesta = new Response(false, 'A la cita indicada no se le puede asignar una consulta');
-                return $respuesta->json(400);
+            // case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 3, 'cita'):
+            //     $respuesta = new Response(false, 'A la cita indicada no se le puede asignar una consulta');
+            //     return $respuesta->json(400);
 
-            case !$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad'):
-                $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
-                return $respuesta->json(404);
+            // case !$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad'):
+            //     $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
+            //     return $respuesta->json(404);
 
-            case $validarConsulta->isNumber($_POST, $camposNumericos):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
+            // case $validarConsulta->isNumber($_POST, $camposNumericos):
+            //     $respuesta = new Response('DATOS_INVALIDOS');
+            //     return $respuesta->json(400);
 
-            case $validarConsulta->isDate($_POST['fecha_consulta']):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(400);
+            // case $validarConsulta->isDate($_POST['fecha_consulta']):
+            //     $respuesta = new Response('FECHA_INVALIDA');
+            //     return $respuesta->json(400);
 
-            case $validarConsulta->isToday($_POST['fecha_consulta'], true):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(400);
+            // case $validarConsulta->isToday($_POST['fecha_consulta'], true):
+            //     $respuesta = new Response('FECHA_INVALIDA');
+            //     return $respuesta->json(400);
 
             default:
                 // Separando los datos
                 $examenes = isset($_POST['examenes']) ? $_POST['examenes'] : false;
                 $insumos = isset($_POST['insumos']) ? $_POST['insumos'] : false;
+                $recipe = isset($_POST['recipes']) ? $_POST['recipes'] : false;
+                $indicaciones = isset($_POST['indicaciones']) ? $_POST['indicaciones'] : false;
                 
                 if ($examenes) {
                     unset($_POST['examenes']);
@@ -126,7 +128,13 @@ class ConsultaController extends Controller
                 if ($insumos) {
                     unset($_POST['insumos']);
                 }
-
+                if ($recipe) {
+                    unset($_POST['recipes']);
+                }
+                if ($indicaciones) {
+                    unset($_POST['indicaciones']);
+                }
+                
                 $data = $validarConsulta->dataScape($_POST);
 
                 $_consultaModel = new ConsultaModel();
@@ -149,6 +157,20 @@ class ConsultaController extends Controller
                         $respuestaInsumo = $this->insertarInsumo($insumos, $id);
                         if ($respuestaInsumo) {
                             return $respuestaInsumo;
+                        }
+                    }
+
+                    if ($recipe) {
+
+                        $respuestaRecipe = $this->insertarRecipe($recipe, $id);
+                        if ( $respuestaRecipe) { return $respuestaRecipe; }
+                    }
+
+                    if ($indicaciones) {
+                        
+                        $respuestaIndicaciones = $this->insertarIndicaciones($indicaciones, $id);
+                        if ($respuestaIndicaciones) {
+                            return $respuestaIndicaciones;
                         }
                     }
 
@@ -313,6 +335,75 @@ class ConsultaController extends Controller
         $respuesta->setData($eliminado);
 
         return $respuesta->json($mensaje ? 200 : 400);
+    }
+
+    // insertar consulta_recipe
+    public function insertarRecipe($recipes, $consulta) {
+
+        $consulta_id = $consulta;
+        foreach ($recipes as $recipe) {
+
+            $newRecipe = $recipe;
+            $newRecipe['consulta_id'] = $consulta_id;
+            $camposId = array("medicamento_id");
+            $validarRecipe = new Validate;
+
+            switch ($_POST) {
+                case ($validarRecipe->isEmpty($newRecipe)):
+                    $respuesta = new Response(false, 'No se pueden enviar recipes vacíos');
+                    return $respuesta->json(400);
+
+                case !$validarRecipe->existsInDB($newRecipe, $camposId):
+                    $respuesta = new Response(false, 'El medicamento indicado no se encuentra registrado en el sistema');
+                    return $respuesta->json(404);
+
+                default:
+                    
+                    $data = $validarRecipe->dataScape($newRecipe);
+                    $_consultaRecipeModel = new ConsultaRecipeModel();
+                    $row = $_consultaRecipeModel->insert($data);
+                    var_dump($row);
+                    $isInsert = ($row > 0);
+
+                    if (!$isInsert) {
+                        $respuesta = new Response(false, 'Ocurrió un error insertando el recipe');
+                        $respuesta->setData("Ha ocurrido un error insertando el recipe".$newRecipe['medicamento_id']."con uso".$newRecipe['uso']);
+                        return $respuesta->json(400);
+                    }
+            }
+        }
+        return false;
+    }
+
+    // insertar indicaciones
+    public function insertarIndicaciones($indicaciones, $consulta) {
+
+        $consulta_id = $consulta;
+        foreach ($indicaciones as $indicacion) {
+
+            $newIndicacion = $indicacion;
+            $newIndicacion['consulta_id'] = $consulta_id;
+            $validarIndicacion = new Validate;
+            var_dump($newIndicacion);
+            if ($validarIndicacion->isEmpty($newIndicacion)) {
+                $respuesta = new Response(false, 'No se pueden enviar indicaciones vacías');
+                return $respuesta->json(400);
+            }
+            var_dump($newIndicacion);
+            echo '<pre>';
+            $data = $validarIndicacion->dataScape($newIndicacion);
+            $_consultaIndicacionesModel = new ConsultaIndicacionesModel();
+            $row = $_consultaIndicacionesModel->insert($data);
+            var_dump($row);
+            $isInsert = ($row > 0);
+
+            if (!$isInsert) {
+                $respuesta = new Response(false, 'Ocurrió un error insertando las indicaciones');
+                $respuesta->setData("Ha ocurrido un error insertando la indicacion".$newIndicacion['descripcion']);
+                return $respuesta->json(400);
+            }
+        }
+        return false;
     }
 
     // Funciones para reutilizar
