@@ -86,6 +86,13 @@ class Response{
             case 'FECHA_INVALIDA':
                 return [false, 'El formato de la fecha o la hora no es válido'];
 
+            case 'FECHA_POSTERIOR':
+                return [false, 'Fecha inválida, la fecha debe ser un día posterior a la de hoy'];
+
+            case 'FECHA_ANTERIOR':
+                return [false, 'Fecha inválida, la fecha debe ser un día anterior a la de hoy'];
+        
+
             case 'DATOS_DUPLICADOS':
                 return [false, 'Ya existe un registro con la misma información'];
 

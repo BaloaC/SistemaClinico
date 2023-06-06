@@ -52,7 +52,7 @@ CREATE TABLE `cita` (
   `cedula_titular` int(11) NOT NULL,
   `clave` int(11) DEFAULT NULL,
   `tipo_cita` enum('1','2') NOT NULL,
-  `estatus_cit` enum('1','2','3','4') NOT NULL
+  `estatus_cit` enum('1','2','3','4', '5') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -170,7 +170,6 @@ CREATE TABLE `examen` (
   `hecho_aqui` BOOLEAN NOT NULL DEFAULT FALSE,
   `estatus_exa` enum('1','2') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 -- --------------------------------------------------------
 

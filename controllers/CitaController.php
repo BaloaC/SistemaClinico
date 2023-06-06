@@ -182,8 +182,7 @@ class CitaController extends Controller
         return $this->retornarMensaje($lista);
     }
 
-    public function listarCitaPorId($cita_id)
-    {
+    public function listarCitaPorId($cita_id) {
 
         $_citaModel = new CitaModel();
         $inners = $_citaModel->listInner($this->arrayInner);
@@ -192,8 +191,7 @@ class CitaController extends Controller
         return $this->retornarMensaje($lista);
     }
 
-    public function listarCitaPorPacienteId($paciente_id)
-    {
+    public function listarCitaPorPacienteId($paciente_id) {
 
         $_citaModel = new CitaModel();
         $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('paciente_id', '=', $paciente_id)->getAll();
@@ -205,8 +203,7 @@ class CitaController extends Controller
         return $respuesta->json($mensaje ? 200 : 404);
     }
 
-    public function actualizarCita($cita_id)
-    {
+    public function actualizarCita($cita_id) {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarCita = new Validate;
@@ -249,8 +246,68 @@ class CitaController extends Controller
         }
     }
 
-    public function eliminarCita($cita_id)
-    {
+    public function reprogramarCita($cita_id) {
+        $_POST = json_decode(file_get_contents('php://input'), true);
+
+        $validarCita = new Validate;
+
+        switch ($validarCita) {
+            case !$validarCita->isDuplicated('cita', 'cita_id', $cita_id):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(400);
+
+            case $validarCita->isDataTime($_POST['fecha_cita']):
+                $respuesta = new Response('FECHA_INVALIDA');
+                return $respuesta->json(400);
+        
+            case $validarCita->isToday($_POST['fecha_cita'], true):
+                $respuesta = new Response('FECHA_POSTERIOR');
+                return $respuesta->json(400);
+
+            default:
+                
+                $_citaModel = new CitaModel();
+                $cita = $_citaModel->where('cita_id', '=', $cita_id)->getFirst();
+                
+                if ($cita->estatus_cit == 2 || $cita->estatus_cit == 4 || $cita->estatus_cit == 5) {
+                    $respuesta = new Response(false, 'La cita no puede estar eliminada, reprogramada o asociada a una consulta');
+                    $respuesta->setData("Ocurrió un error reprogramando la cita con estatus ".$cita->estatus_cit);
+                    return $respuesta->json(400);
+
+                } else if ( $validarCita->isDuplicatedId('medico_id', 'fecha_cita', $cita->medico_id, $_POST['fecha_cita'], 'cita') ) {
+                    $respuesta = new Response('DUPLICATE_APPOINTMENT');
+                    $respuesta->setData("Ya existe una cita el día ".$cita->fecha_cita);
+                    return $respuesta->json(400);
+                }
+                
+                // Le actualizamos el estatus a la cita original
+                $newEstatus = array( "estatus_cit" => "5" );
+                
+                $actualizado = $_citaModel->update($newEstatus);
+                $isUpdate = ($actualizado > 0);
+
+                if (!$isUpdate) {
+                    $respuesta = new Response(false, 'Ha ocurrido un error actualizando la cita actual');
+                    return $respuesta->json(400);
+                }
+                
+                // Comenzamos a insertar la cita nueva
+                $cita->fecha_cita = $_POST['fecha_cita'];
+                $newCita = get_object_vars( $cita ); // (Volvemos nuestro objeto un array)
+                unset($newCita['cita_id']);
+                unset($newCita['estatus_cit']);
+                unset($newCita['clave']);
+                
+                $_cita = new CitaModel();
+                $id = $_cita->insert($newCita);
+                $isInserted = ($id > 0);
+
+                $isInserted = new Response(false, $isInserted ? 'Cita reprogramada exitosamente' : 'Ocurrió un error reprogramando la cita');
+                return $isInserted->json($isInserted ? 201 : 400);
+        }       
+    }
+
+    public function eliminarCita($cita_id) {
 
         $validarCita = new Validate;
         $token = $validarCita->validateToken(apache_request_headers());
@@ -275,8 +332,7 @@ class CitaController extends Controller
     }
 
     // utils
-    public function retornarMensaje($mensaje)
-    {
+    public function retornarMensaje($mensaje) {
 
         $bool = ($mensaje != null);
 

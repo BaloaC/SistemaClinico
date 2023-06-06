@@ -89,7 +89,7 @@ class Validate extends BaseModel{
         $query = $this->connection->prepare($sql);
         $query->execute();
         // $result = $query->fetchAll(PDO::FETCH_OBJ);
-
+        
         if ( $query->rowCount() > 0 ) {
             return true;
         } else {
