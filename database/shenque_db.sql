@@ -47,7 +47,9 @@ CREATE TABLE `cita` (
   `medico_id` int(11) NOT NULL,
   `seguro_id` int(11) NOT NULL DEFAULT 0,
   `especialidad_id` int(11) NOT NULL,
-  `fecha_cita` datetime NOT NULL,
+  `fecha_cita` DATE NOT NULL,
+  `hora_entrada` TIME NOT NULL,
+  `hora_salida` TIME NOT NULL,
   `motivo_cita` varchar(45) NOT NULL,
   `cedula_titular` int(11) NOT NULL,
   `clave` int(11) DEFAULT NULL,
@@ -299,6 +301,8 @@ CREATE TABLE `horario` (
   `horario_id` int(11) NOT NULL,
   `medico_id` int(11) NOT NULL,
   `dias_semana` enum('lunes','martes','miercoles','jueves','viernes','sabado') NOT NULL,
+  `hora_entrada` TIME NOT NULL,
+  `hora_salida` TIME NOT NULL,
   `estatus_hor` enum('1','2') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
