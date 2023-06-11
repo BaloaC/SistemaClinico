@@ -31,6 +31,20 @@ class HorarioController extends Controller{
                     $respuesta = new Response(false, 'El horario ya se encuentra registrado'); 
                     return $respuesta->json(400);
 
+                case $validarHorario->isDate($newForm['hora_entrada'], "H:i"):
+                    $respuesta = new Response('HORA_INVALIDA');
+                    $respuesta->setData('Error en la hora de entrada '.$newForm['hora_entrada']);
+                    return $respuesta->json(400);
+    
+                case $validarHorario->isDate($newForm['hora_salida'], 'H:i'):
+                    $respuesta = new Response('HORA_INVALIDA');
+                    $respuesta->setData('Error en la hora de entrada '.$newForm['hora_salida']);
+                    return $respuesta->json(400);
+    
+                case $newForm['hora_entrada'] >= $newForm['hora_salida']:
+                    $respuesta = new Response(false, 'La hora de entrada no puede ser después de la hora de salida');
+                    return $respuesta->json(400);
+
                 default: 
                     $data = $validarHorario->dataScape($newForm);
 

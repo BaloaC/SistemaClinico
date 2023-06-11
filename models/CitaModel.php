@@ -9,6 +9,8 @@ class CitaModel extends GenericModel {
     protected $especialidad_id;
     protected $seguro_id;
     protected $fecha_cita;
+    protected $hora_entrada;
+    protected $hora_salida;
     protected $motivo_cita;
     protected $tipo_cita;
     protected $cedula_titular;
@@ -25,6 +27,8 @@ class CitaModel extends GenericModel {
     public function getEspecialidadId(){return $this->especialidad_id;}
     public function getSeguroId(){return $this->seguro_id;}
     public function getFechaCita(){return $this->fecha_cita;}
+    public function getHoraEntrada(){return $this->hora_entrada;}
+    public function getHoraSalida(){return $this->hora_salida;}
     public function getMotivoCita(){return $this->motivo_cita;}
     public function getTipoCita(){return $this->tipo_cita;}
     public function getCedulaTitular(){return $this->cedula_titular;}
@@ -37,6 +41,8 @@ class CitaModel extends GenericModel {
     public function setEspecialidadId($especialidad_id){return $this->especialidad_id = $especialidad_id;}
     public function setSeguroId($seguro_id){return $this->seguro_id = $seguro_id;}
     public function setFechaCita($fecha_cita){return $this->fecha_cita = $fecha_cita;}
+    public function setHoraEntrada($hora_entrada){return $this->hora_entrada = $hora_entrada;}
+    public function setHoraSalida($hora_salida){return $this->hora_salida = $hora_salida;}
     public function setMotivoCita($motivo_cita){return $this->motivo_cita = $motivo_cita;}
     public function setTipoCita($tipo_cita){return $this->tipo_cita = $tipo_cita;}
     public function setCedulaTitular($cedula_titular){return $this->cedula_titular = $cedula_titular;}

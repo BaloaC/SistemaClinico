@@ -1,7 +1,6 @@
 <?php
 
-class MedicoController extends Controller
-{
+class MedicoController extends Controller {
 
     protected $arrayInnerHorario = array(
         "medico" => "horario"
@@ -24,26 +23,22 @@ class MedicoController extends Controller
     );
 
     //Método index (vista principal)
-    public function index()
-    {
+    public function index() {
 
         return $this->view('medicos/index');
     }
 
-    public function formRegistrarMedicos()
-    {
+    public function formRegistrarMedicos() {
 
         return $this->view('medicos/registrarMedicos');
     }
 
-    public function formActualizarMedico($medico_id)
-    {
+    public function formActualizarMedico($medico_id) {
 
         return $this->view('medicos/actualizarMedicos', ['medico_id' => $medico_id]);
     }
 
-    public function insertarMedico(/*Request $request*/)
-    {
+    public function insertarMedico(/*Request $request*/) {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
 

@@ -85,6 +85,9 @@ class Response{
                     
             case 'FECHA_INVALIDA':
                 return [false, 'El formato de la fecha o la hora no es válido'];
+            
+            case 'HORA_INVALIDA':
+                return [false, 'El formato de la hora no es válida'];
 
             case 'FECHA_POSTERIOR':
                 return [false, 'Fecha inválida, la fecha debe ser un día posterior a la de hoy'];
@@ -92,6 +95,8 @@ class Response{
             case 'FECHA_ANTERIOR':
                 return [false, 'Fecha inválida, la fecha debe ser un día anterior a la de hoy'];
         
+            case 'FECHA_INVALIDA':
+                return [false, 'El formato de la la hora no es válido'];
 
             case 'DATOS_DUPLICADOS':
                 return [false, 'Ya existe un registro con la misma información'];
@@ -130,8 +135,3 @@ class Response{
     public function setData($data){$this->data = $data;}
 
 }
-
-
-
-
-?>
