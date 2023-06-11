@@ -7,10 +7,14 @@
     color: black;
 }
 
-.paciente-info {
+.paciente-consulta, .paciente-info {
     display: flex;
-    align-self: baseline;
     flex-direction: column;
+}
+
+
+.paciente-info {
+    align-self: baseline;
     background-color: #ff8383;
     border-radius: 5px;
     padding: 2.5rem;
@@ -38,4 +42,43 @@
 
 .indicaciones, .recipes {
     margin-bottom: 1rem;
+}
+
+.antecedente{
+    background-color: #f2f2f2;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+}
+
+.btn-link{
+    text-align: start;
+    text-decoration: none;
+    color: black;
+}
+
+.btn-link:hover{
+    color: #555555;
+}
+
+.btn-link::before {
+    position: absolute;
+    content: "";
+    font-size: 22px;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    top: 15px;
+    right: 30px;
+    color: #85878f;
+}
+
+.btn-link.collapsed::before {
+    position: absolute;
+    content: "";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    top: 15px;
+    right: 30px;
+    font-size: 22px;
+    color: #85878f;
 }

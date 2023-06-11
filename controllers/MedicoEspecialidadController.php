@@ -20,9 +20,9 @@ class MedicoEspecialidadController extends Controller{
                     $respuesta = new Response(false, 'Los datos de especialidad están vacíos');
                     return $respuesta->json(400);
 
-                // case !$validarMedicoEspecialidad->existsInDB($newForm, $camposKey):   
-                //     $respuesta = new Response(false, 'No se encontraron resultados del médico o la especialidad indicada');
-                //     return $respuesta->json(404);
+                case !$validarMedicoEspecialidad->existsInDB($newForm, $camposKey):   
+                    $respuesta = new Response(false, 'No se encontraron resultados del médico o la especialidad indicada');
+                    return $respuesta->json(404);
 
                 // --> si llega a dar error de especialida_id no encontrada, descomenten este código y eliminen especialidad_id de camposkey <--
                 // case !($validarMedicoEspecialidad->isDuplicated('especialidad', 'especialidad_id', $newForm['especialidad_id'])):   

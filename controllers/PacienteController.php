@@ -20,6 +20,11 @@ class PacienteController extends Controller{
         return $this->view('pacientes/index');
     }
 
+    public function historialMedico(){
+
+        return $this->view('pacientes/historialMedico');
+    }
+
     public function formRegistrarPacientes(){
 
         return $this->view('pacientes/registrarPacientes');

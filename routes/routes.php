@@ -57,6 +57,7 @@ Router::delete('/usuarios/:id', UsuarioController::class . '@eliminarUsuario',);
 Router::get('/pacientes', PacienteController::class . '@index');
 Router::get('/pacientes/registrar', PacienteController::class . '@formRegistrarPaciente');
 Router::get('/pacientes/actualizar/:id', PacienteController::class . '@formActualizarPaciente');
+Router::get('/pacientes/historialmedico/:id', PacienteController::class . '@historialMedico', -1);
 
 //Pacientes - API
 Router::get('/pacientes/consulta', PacienteController::class . '@listarPacientes', '2,4,5');

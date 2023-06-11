@@ -45,12 +45,12 @@ class Validate extends BaseModel{
                 
                 if(!$query->rowCount() > 0){
                     
-                    return true;
+                    return false;
                 }
             }
         }
         
-        return false;
+        return true;
     }
 
     //Validar los datos ante posible inyección de código

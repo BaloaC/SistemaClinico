@@ -380,9 +380,9 @@ class ConsultaController extends Controller
                     $respuesta = new Response(false, 'No se pueden enviar recipes vacíos');
                     return $respuesta->json(400);
 
-                // case !$validarRecipe->existsInDB($newRecipe, $camposId):
-                //     $respuesta = new Response(false, 'El medicamento indicado no se encuentra registrado en el sistema');
-                //     return $respuesta->json(404);
+                case !$validarRecipe->existsInDB($newRecipe, $camposId):
+                    $respuesta = new Response(false, 'El medicamento indicado no se encuentra registrado en el sistema');
+                    return $respuesta->json(404);
 
                 default:
                     
@@ -486,6 +486,21 @@ class ConsultaController extends Controller
 
             if ($consulta_insumos) {
                 $consultas->insumos = $consulta_insumos;
+            }
+
+            $_consultaIndicacionesModel = new ConsultaIndicacionesModel();
+            $consulta_indicaciones = $_consultaIndicacionesModel->where('consulta_indicaciones.consulta_id', '=', $consultas->consulta_id)->getAll();
+
+            if($consulta_indicaciones){
+                $consultas->indicaciones = $consulta_indicaciones;
+            }
+
+            $_consultaRecipeModel = new ConsultaRecipeModel();
+            $innersRec = $_consultaRecipeModel->listInner($this->arrayInnerRec);
+            $consulta_recipes = $_consultaRecipeModel->where('consulta_recipe.consulta_id', '=', $consultas->consulta_id)->innerJoin($this->arraySelectRec, $innersRec, "consulta_recipe");
+
+            if($consulta_recipes){
+                $consultas->recipes = $consulta_recipes;
             }
 
             $_consultaModel = new ConsultaModel();

@@ -37,9 +37,9 @@ class FacturaConsultaController extends Controller {
                 $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
 
-            // case !$validarFactura->existsInDB($_POST, $camposId):
-            //     $respuesta = new Response('NOT_FOUND');
-            //     return $respuesta->json(200);
+            case !$validarFactura->existsInDB($_POST, $camposId):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(200);
 
             case $validarFactura->isEliminated('consulta', 'consulta_id', $_POST['consulta_id']):
                 $respuesta = new Response('NOT_FOUND');
