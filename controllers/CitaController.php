@@ -1,7 +1,6 @@
 <?php
 
-class CitaController extends Controller
-{
+class CitaController extends Controller {
 
     protected $arraySelect = array(
         "paciente.nombre AS nombre_paciente",
@@ -61,9 +60,9 @@ class CitaController extends Controller
             $respuesta = new Response('TOKEN_INVALID');
             return $respuesta->json(401);
         }
-        
+
         switch ($_POST) {
-            
+
             case ($validarCita->isEmpty($_POST, $exclude)):
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
@@ -88,8 +87,18 @@ class CitaController extends Controller
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
 
-            case $validarCita->isDataTime($_POST['fecha_cita']):
+            case $validarCita->isDate($_POST['fecha_cita']):
                 $respuesta = new Response('FECHA_INVALIDA');
+                return $respuesta->json(400);
+
+            case $validarCita->isDate($_POST['hora_entrada'], "H:i"):
+                $respuesta = new Response('HORA_INVALIDA');
+                $respuesta->setData('Error en la hora de entrada '.$_POST['hora_entrada']);
+                return $respuesta->json(400);
+
+            case $validarCita->isDate($_POST['hora_salida'], 'H:i'):
+                $respuesta = new Response('HORA_INVALIDA');
+                $respuesta->setData('Error en la hora de entrada '.$_POST['hora_salida']);
                 return $respuesta->json(400);
 
             case $validarCita->isToday($_POST['fecha_cita'], true):
@@ -100,18 +109,27 @@ class CitaController extends Controller
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
 
-            case $validarCita->isDuplicatedId('medico_id', 'fecha_cita', $_POST['medico_id'], $_POST['fecha_cita'], 'cita'):
-                $respuesta = new Response('DUPLICATE_APPOINTMENT');
-                return $respuesta->json(400);
-
-            case $validarCita->isDuplicatedId('paciente_id', 'fecha_cita', $_POST['paciente_id'], $_POST['fecha_cita'], 'cita'):
-                $respuesta = new Response('DUPLICATE_APPOINTMENT');
+            case $_POST['hora_entrada'] >= $_POST['hora_salida']:
+                $respuesta = new Response(false, 'La hora de salida debe ser posteior de la hora de entrada');
                 return $respuesta->json(400);
 
             default:
 
-                $data = $validarCita->dataScape($_POST);
+                // Validamos que no haya otra cita a esa hora
+                $_citasDelDía = new CitaModel();
+                $isDuplicated = $_citasDelDía->where('fecha_cita', '=', $_POST['fecha_cita'])->where('hora_entrada', '>=', $_POST['hora_entrada'])->where('hora_entrada', '<=', $_POST['hora_salida'])
+                        ->orWhere('fecha_cita', '=', $_POST['fecha_cita'])->where('hora_entrada', '<=', $_POST['hora_entrada'])->where('hora_salida', '>=', $_POST['hora_salida'])
+                        ->orWhere('fecha_cita', '=', $_POST['fecha_cita'])->where('hora_entrada', '<=', $_POST['hora_entrada'])->where('hora_salida', '>=', $_POST['hora_entrada'])
+                        ->orWhere('fecha_cita', '=', $_POST['fecha_cita'])->where('hora_entrada', '>=', $_POST['hora_entrada'])->where('hora_salida', '<=', $_POST['hora_entrada'])
+                        ->getAll();
                 
+                if ( count($isDuplicated) > 0 ) {
+                    $respuesta = new Response('DUPLICATE_APPOINTMENT');
+                    return $respuesta->json(400);
+                }
+
+                $data = $validarCita->dataScape($_POST);
+
                 // verificaciones si la cita es asegurada
                 if ($data['tipo_cita'] == 2) {
 
@@ -149,16 +167,6 @@ class CitaController extends Controller
 
                     $_citaModel = new CitaModel();
                     $id = $_citaModel->where('cedula_titular', '=', $_POST['cedula_titular'])->getFirst();
-                    // $id = $_pacienteController->RetornarID($_POST['cedula_titular']);
-
-
-                    // ** Enrique (Esta validacion no funciona)
-                    // if ( $id->paciente_id != $_POST['paciente_id'] ) {
-
-                    //     $respuesta = new Response(false, 'La cédula no coincide con el paciente ingresado');
-                    //     return $respuesta->json(400);
-                    // }
-
                     $data['estatus_cit'] = 1;
                 }
 
@@ -172,8 +180,7 @@ class CitaController extends Controller
         }
     }
 
-    public function listarCitas()
-    {
+    public function listarCitas() {
 
         $_citaModel = new CitaModel();
         $inners = $_citaModel->listInner($this->arrayInner);
@@ -259,16 +266,16 @@ class CitaController extends Controller
             case $validarCita->isDataTime($_POST['fecha_cita']):
                 $respuesta = new Response('FECHA_INVALIDA');
                 return $respuesta->json(400);
-        
+
             case $validarCita->isToday($_POST['fecha_cita'], true):
                 $respuesta = new Response('FECHA_POSTERIOR');
                 return $respuesta->json(400);
 
             default:
-                
+
                 $_citaModel = new CitaModel();
                 $cita = $_citaModel->where('cita_id', '=', $cita_id)->getFirst();
-                
+
                 if ($cita->estatus_cit == 2 || $cita->estatus_cit == 4 || $cita->estatus_cit == 5) {
                     $respuesta = new Response(false, 'La cita no puede estar eliminada, reprogramada o asociada a una consulta');
                     $respuesta->setData("Ocurrió un error reprogramando la cita con estatus ".$cita->estatus_cit);
@@ -279,10 +286,10 @@ class CitaController extends Controller
                     $respuesta->setData("Ya existe una cita el día ".$cita->fecha_cita);
                     return $respuesta->json(400);
                 }
-                
+
                 // Le actualizamos el estatus a la cita original
                 $newEstatus = array( "estatus_cit" => "5" );
-                
+
                 $actualizado = $_citaModel->update($newEstatus);
                 $isUpdate = ($actualizado > 0);
 
@@ -290,21 +297,21 @@ class CitaController extends Controller
                     $respuesta = new Response(false, 'Ha ocurrido un error actualizando la cita actual');
                     return $respuesta->json(400);
                 }
-                
+
                 // Comenzamos a insertar la cita nueva
                 $cita->fecha_cita = $_POST['fecha_cita'];
                 $newCita = get_object_vars( $cita ); // (Volvemos nuestro objeto un array)
                 unset($newCita['cita_id']);
                 unset($newCita['estatus_cit']);
                 unset($newCita['clave']);
-                
+
                 $_cita = new CitaModel();
                 $id = $_cita->insert($newCita);
                 $isInserted = ($id > 0);
 
                 $isInserted = new Response(false, $isInserted ? 'Cita reprogramada exitosamente' : 'Ocurrió un error reprogramando la cita');
                 return $isInserted->json($isInserted ? 201 : 400);
-        }       
+        }
     }
 
     public function eliminarCita($cita_id) {

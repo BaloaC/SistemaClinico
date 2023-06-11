@@ -168,10 +168,10 @@ class Validate extends BaseModel{
 
     //Validar que una fecha sea válida
     public function isDate($date, $format = 'Y-m-d'){
-
+        
         $d = DateTime::createFromFormat($format,$date);
-
         $bool = $d && $d->format($format) === $date;
+        // var_dump($d);
         $resultado = $bool ? false : true;
         return $resultado;
     }
@@ -207,4 +207,3 @@ class Validate extends BaseModel{
         }
     }
 }
-?>
