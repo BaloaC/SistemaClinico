@@ -35,6 +35,8 @@ export default async function addModule(module, form, data, successMessage, moda
             $alert.classList.add("d-none");
         }, 500);
 
+        return json;
+
     } catch (error) {
         console.log(error);
         $alert.classList.remove("d-none");

@@ -1,7 +1,7 @@
 import { select2OnClick } from "../global/dinamicSelect2.js";
 
 let clicks = 0;
-function addRecipeInput() {
+function addRecipeInput(parentModal = "#modalReg") {
 
     clicks += 1;
     let template = `
@@ -27,7 +27,7 @@ function addRecipeInput() {
         selectValue: "medicamento_id",
         selectNames: ["nombre_medicamento"],
         module: "medicamento/consulta",
-        parentModal: "#modalReg",
+        parentModal: parentModal,
         placeholder: "Seleccione el medicamento"
     });
 }

@@ -42,7 +42,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-md-8 paciente-consulta">
-                            <button class="btn btn-sm btn-add align-self-end mb-2"><i class="fa-sm fas fa-plus"></i> Agregar consulta</button>
+                            <button class="btn btn-sm btn-add align-self-end mb-2" data-bs-toggle="modal" data-bs-target="#modalRegConsulta"><i class="fa-sm fas fa-plus"></i> Agregar consulta</button>
                             <div class="accordion consulta-accordion" id="consultaAccordion">
 
                             </div>
@@ -54,149 +54,27 @@
 
         <!-- Modal Registro-->
         <div class="modal fade" id="modalReg" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Paciente</h1>
+                        <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Antecedente</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="alert d-none" role="alert"></div>
-                        <form action="" id="info-paciente" class="p-3 px-4">
-                            <div class="row">
-                                <!-- Labels -->
-                                <div class="col-12 col-md-6">
-                                    <label for="nombres">Nombres</label>
-                                    <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                                    <small class="form-text">El nombre solo puede contener letras</small>
-
-                                    <label for="apellidos">Apellidos</label>
-                                    <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                                    <small class="form-text">El apellido solo puede contener letras</small>
-
-                                    <label for="telefono">Teléfono</label>
-                                    <div class="input-group mb-3">
-                                        <select name="cod_tel" id="cod-tel" class="me-2">
-                                            <option value="0412">0412</option>
-                                            <option value="0414">0414</option>
-                                            <option value="0424">0424</option>
-                                            <option value="0416">0416</option>
-                                            <option value="0426">0426</option>
-                                        </select>
-                                        <input type="text" name="telefono" id="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
-                                        <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label for="direccion">Dirección</label>
-                                    <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
-                                    <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
-
-                                    <label for="cedula">Cédula</label>
-                                    <input type="number" name="cedula" id="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
-                                    <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
-
-                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                                    <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control mb-3" onchange="pacienteMenorDeEdad(this)" required>
-                                </div>
-                                <div class="col-12 col-md-6 mt-4">
-                                    <label for="tipo_paciente">Tipo de paciente</label>
-                                    <select name="tipo_paciente" id="s-tipo_paciente" class="form-control mb-3" requried>
-                                        <option disabled selected>Seleccione el tipo de paciente...</option>
-                                        <option value="1">Natural</option>
-                                        <option value="2">Representante</option>
-                                        <option value="3">Asegurado</option>
-                                        <option value="4">Beneficiado</option>
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-6 mt-4">
-                                    <label for="pacienteMenorLabel" class="opacity-0 d-none">¿El paciente posee cédula de identidad?</label>
-                                    <div class="pacienteMenorContainer input-radios-container opacity-0 d-none">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="cedula_beneficiario" id="cedula_menor_si" value="1" onchange="pacientePoseeCedula(this)">
-                                            <label class="form-check-label" for="">Sí</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="cedula_beneficiario" id="cedula_menor_no" value="0" onchange="pacientePoseeCedula(this)" checked>
-                                            <label class="form-check-label" for="">No</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="sub-menus">
-                                    <div class="submenu-beneficiado row opacity-0 d-none">
-                                        <h5 class="mt-4 mb-3">Información titulares</h5>
-                                        <div class="row align-items-center">
-                                            <div class="col-12 col-md-1">
-                                                <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>
-                                            </div>
-                                            <div class="col-12 col-md-5">
-                                                <label for="titular">Titular</label>
-                                                <select name="titular_id" id="s-titular_id" class="form-control mb-3 titular" data-active="0" disabled required>
-                                                    <option value="">Seleccione un titular</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-12 col-md-5">
-                                                <label for="tipo_relacion">Tipo de relación</label>
-                                                <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3 relacion" disabled required>
-                                                    <option value="" disabled>Seleccione el tipo de relación</option>
-                                                    <option value="1">Seguro</option>
-                                                    <option value="2">Padre/Madre</option>
-                                                    <option value="3">Representante</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <button type="button" class="btn btn-primary w-25" id="addTitular" onclick="addTitularInput()">Agregar titular</button>
-                                    </div>
-                                    <div class="submenu-seguro row opacity-0 d-none">
-                                        <h5 class="mt-4 mb-3">Información del seguro</h5>
-                                        <div class="col-12 col-md-6">
-                                            <label for="seguro">Seguro</label>
-                                            <select name="seguro[]" id="s-seguro" class="form-control mb-3" data-active="0" disabled multiple="multiple" required>
-                                                <option value="">Seleccione un seguro</option>
-                                            </select>
-
-                                            <label for="empresa">Empresa</label>
-                                            <select name="empresa_id" id="s-empresa" class="form-control mb-3" data-active="0" disabled required>
-                                                <option value="">Consultar empresas</option>
-                                            </select>
-
-                                            <label for="tipo_seguro">Tipo de seguro</label>
-                                            <select name="tipo_seguro" id="s-tipo_seguro" class="form-control mb-3" disabled required>
-                                                <option></option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label for="fecha_contra">Fecha de Contratación</label>
-                                            <input type="date" name="fecha_contra" class="form-control mb-3" disabled required>
-
-                                            <label for="cobertura_general">Cobertura General</label>
-                                            <input type="number" name="cobertura_general" class="form-control mb-3" disabled required>
-
-                                            <label for="saldo_disponible">Saldo disponible</label>
-                                            <input type="number" name="saldo_disponible" class="form-control mb-3" disabled required>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
+                        <form id="info-antecedente" class="p-3 px-4">
+                            <label for="tipo_antedecente_id">Tipo de antecedente</label>
+                            <select name="tipo_antecedente_id" class="form-control mb-3" required>
+                                <option value="" disabled selected>Seleccione el tipo de antecedente</option>
+                                <option value="1">Alergía</option>
+                                <option value="2">Familiar</option>
+                            </select>
+                            <label for="descripcion">Descripción</label>
+                            <input type="text" name="descripcion" class="form-control mb-3" data-max-length="45" required>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addPaciente()">Registrar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal info -->
-        <div class="modal fade" id="modalInfo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalInfoLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalInfoLabel">Información paciente</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
+                        <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addAntecedente()">Registrar</button>
                     </div>
                 </div>
             </div>
@@ -204,56 +82,23 @@
 
         <!-- Modal Actualizar -->
         <div class="modal fade" id="modalAct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Paciente</h1>
+                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Antecedente</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
-                        <form action="" id="act-paciente" class="p-3 px-4">
-                            <div class="row">
-                                <div class="col-12 col-md-6">
-                                    <label for="nombres">Nombres</label>
-                                    <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" require>
-                                    <small class="form-text">El nombre solo puede contener letras</small>
-                                    <label for="apellidos">Apellidos</label>
-                                    <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                                    <small class="form-text">El apellido solo puede contener letras</small>
-                                    <label for="cedula">Cédula</label>
-                                    <input type="number" name="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
-                                    <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3" required>
-
-                                    <label for="telefono">Teléfono</label>
-                                    <div class="input-group mb-3">
-                                        <select name="cod_tel" id="cod-tel" class="me-2">
-                                            <option value="0412">0412</option>
-                                            <option value="0414">0414</option>
-                                            <option value="0424">0424</option>
-                                            <option value="0416">0416</option>
-                                            <option value="0426">0426</option>
-                                        </select>
-                                        <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
-                                        <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
-                                    </div>
-
-                                    <label for="direccion">Dirección</label>
-                                    <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
-                                    <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
-
-                                    <label for="tipo_paciente">Tipo de paciente</label>
-                                    <select name="tipo_paciente" id="tipo_paciente" class="form-control mb-3" requried>
-                                        <option value="1">Natural</option>
-                                        <option value="2">Asegurado</option>
-                                        <option value="3">Beneficiado</option>
-                                    </select>
-                                </div>
-                            </div>
+                        <form method="POST" id="act-antecedente" class="p-3 px-4">
+                            <label for="tipo_antecedente_id">Tipo de antecedente</label>
+                            <select name="tipo_antecedente_id" class="form-control mb-3" required>
+                                <option value="" disabled selected>Seleccione el tipo de antecedente</option>
+                                <option value="1">Alergía</option>
+                                <option value="2">Familiar</option>
+                            </select>
+                            <label for="descripcion">Descripción</label>
+                            <input type="text" name="descripcion" class="form-control mb-3" data-max-length="45" required>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -268,15 +113,128 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar Paciente</h1>
+                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar Antecedente</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div id="delAlert" class="alert d-none" role="alert"></div>
-                        ¿Está seguro que desea eliminar este paciente?
+                        ¿Está seguro que desea eliminar este antecedente?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn-confirmDelete" class="btn btn-danger">Eliminar</button>
+                        <button type="button" id="btn-confirmDelete" class="btn btn-danger" onclick="confirmDelete()">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Registo Consulta-->
+        <div class="modal fade" id="modalRegConsulta" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegConsultaLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="modalRegConsultaLabel">Registrar Consulta</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alertConsulta d-none" role="alert"></div>
+                        <form action="" id="info-consulta" class="p-3 px-4">
+                            <div class="row">
+                                <div class="row">
+                                    <h5>Información del Paciente</h5>
+                                    <div class="col-12 col-md-6">
+                                        <label for="nombres">Paciente</label>
+                                        <select name="paciente_id" id="s-paciente" class="form-control" data-active="0" required>
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="cita">Cita</label>
+                                        <select name="cita_id" id="s-cita" class="form-control" data-active="0" required>
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <h5>Información de la Consulta</h5>
+                                    <div class="col-12 col-md-6">
+                                        <label for="peso">Peso</label>
+                                        <input type="number" step="any" name="peso" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" required>
+                                        <small class="form-text">No se permiten números negativos</small>
+
+                                        <label for="altura">Altura</label>
+                                        <input type="number" step="any" name="altura" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" required>
+                                        <small class="form-text">No se permiten números negativos</small>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="examenes">Exámenes llevados a la consulta</label>
+                                        <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple">
+                                            <option></option>
+                                        </select>
+
+                                        <label for="fecha_consulta">Fecha consulta</label>
+                                        <input type="date" name="fecha_consulta" class="form-control mb-3 required">
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <h5>Insumos utilizados en la Consulta (Opcional)</h5>
+                                    <div class="row align-items-center">
+                                        <div class="col-3 col-md-1">
+                                            <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <label for="insumo">Insumo</label>
+                                            <select id="s-insumo" class="form-control insumo-id" data-active="0">
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <label for="cantidad" class="p-0">Cantidad utilizada</label>
+                                            <input type="number" class="form-control insumo-cant">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary mt-3" id="addInsumo" onclick="addInsumoInput('#modalRegConsulta')">Añadir otro insumo</button>
+
+                            <div class="row mt-4">
+                                <h5>Recipes otorgados en la Consulta (Opcional)</h5>
+                                <div class="row align-items-center">
+                                    <div class="col-3 col-md-1">
+                                        <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>
+                                    </div>
+                                    <div class="col-12 col-md-5">
+                                        <label for="medicamento">Medicamento</label>
+                                        <select id="s-medicamento" class="form-control medicamento-id" data-active="0">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-5">
+                                        <label for="uso" class="p-0">Uso</label>
+                                        <input type="text" class="form-control uso-medicamento">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary mt-3" id="addRecipe" onclick="addRecipeInput('#modalRegConsulta')">Añadir otro insumo</button>
+
+                            <div class="row mt-4">
+                                <h5>Indicaciones mencionadas en la Consulta (Opcional)</h5>
+                                <div class="row align-items-center">
+                                    <div class="col-3 col-md-1">
+                                        <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>
+                                    </div>
+                                    <div class="col-12 col-md-5">
+                                        <label for="indicacion" class="p-0">Indicación</label>
+                                        <input type="text" class="form-control indicaciones">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary mt-3" id="addIndicacion" onclick="addIndicacionInput()">Añadir otro insumo</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addConsulta()">Registrar</button>
                     </div>
                 </div>
             </div>
@@ -286,6 +244,10 @@
             <div class="antecedente">
                 <p><b>Tipo de antecedente:</b> <span id="tipo_antedecente"></span></p>
                 <p><b>Descripción</b> <span id="descripcion_antecedente"></span></p>
+                <div class="actions text-end">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-antecedente"><i class="fas fa-edit act-antecedente"></i></a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-antecedente"><i class="fas fa-trash del-antecedente"></i></a>
+                </div>
             </div>
         </template>
 
@@ -299,7 +261,14 @@
                 </div>
                 <div id="consulta1" class="collapse show" data-parent="#consultaAccordion">
                     <div class="card-body">
-                        <p>ID: <span id="consulta_id">133</span> <br> Nombre médico: <span id="nombre_medico">Francis Baloa</span> <br> Especialidad: <span id="especialidad">Psiquiatría</span> <br> Fecha consulta: <span id="fecha_consulta">2022-07-02</span> <br> Observaciones: <span id="observaciones">Dolor de Cabeza</span></p>
+                        <p><b>ID:</b> <span id="consulta_id"></span> <br>
+                            <b>Nombre médico:</b> <span id="nombre_medico"></span> <br>
+                            <b>Especialidad:</b> <span id="especialidad"></span> <br>
+                            <b>Fecha consulta:</b> <span id="fecha_consulta"></span> <br>
+                            <b>Motivo cita:</b> <span id="motivo_cita"></span> <br>
+                            <b>Indicaciones:</b> <span id="indicaciones"></span> <br>
+                            <b>Observaciones:</b> <span id="observaciones"></span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -308,9 +277,17 @@
     </main>
 
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
-    <script type="module" src="<?php echo Url::to('assets/js/pacientes/mostrarPacientes.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/historial-medico/mostrarHistorialMedico.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/historial-medico/registrarConsulta.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/historial-medico/addAntecedente.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/historial-medico/updateAntecedente.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/historial-medico/deleteAntecedente.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/addInsumoInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/addIndicacionInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/addRecipeInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/deleteInput.js'); ?>"></script>
+    <!-- <script type="module" src="<?php echo Url::to('assets/js/pacientes/mostrarPacientes.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/tipoPaciente.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/pacientes/infoPaciente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/registrarPaciente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/actualizarPaciente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/eliminarPaciente.js'); ?>"></script>
@@ -318,5 +295,5 @@
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/deleteTitularInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/pacienteMenorDeEdad.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>
+    <script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script> -->
 </body>

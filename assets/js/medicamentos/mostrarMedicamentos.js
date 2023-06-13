@@ -38,7 +38,6 @@ addEventListener("DOMContentLoaded", e => {
             {
                 data: "medicamento_id",
                 render: function (data, type, row) {
-                    // console.log(data);
                     switch(rol){
 
                         case "1": return `
@@ -56,10 +55,6 @@ addEventListener("DOMContentLoaded", e => {
                         <a class="del-medicamento"><i class="fas fa-trash disabled del-medicamento"></i></a>
                         `;
                     }
-
-                    // return `
-                    //     <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-especialidad" onclick="deleteMedicamento(${data})"><i class="fas fa-trash del-insumo"></i></a>
-                    // `
                 }
             }
 

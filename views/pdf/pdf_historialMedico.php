@@ -68,8 +68,6 @@
         .consulta p:nth-child(2) {
             width: 90%;
             margin-left: 2rem;
-            background-color: #222fb9;
-            color: #f2f2f2;
         }
     </style>
 </head>
