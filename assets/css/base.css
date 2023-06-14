@@ -170,7 +170,7 @@ i {
     color: #ec4561;
 }
 
-.fa-trash.disabled, .fa-edit.disabled {
+.fa-trash.disabled, .fa-edit.disabled, .fa-eye.disabled {
     color: #777777;
     cursor: normal;
 }

@@ -1,4 +1,5 @@
 import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
 removeAddAccountant();
 removeAddAnalist();
@@ -23,16 +24,6 @@ select2OnClick({
     placeholder: "Seleccione una empresa"
 });
 
-// dinamicSelect2({
-//     obj: [{ id: 1, text: "Natural" }, { id: 2, text: "Asegurado" }, { id: 3, text: "Beneficiado" }],
-//     selectNames: ["text"],
-//     selectValue: "id",
-//     selectSelector: "#s-tipo_paciente",
-//     placeholder: "Seleccione el tipo de paciente",
-//     parentModal: "#modalReg",
-//     staticSelect: true
-// });
-
 dinamicSelect2({
     obj: [{ id: 1, text: "Acumulativo" }, { id: 2, text: "Normal" }],
     selectNames: ["text"],
@@ -44,6 +35,8 @@ dinamicSelect2({
 });
 
 addEventListener("DOMContentLoaded", e => {
+
+    const rol = Cookies.get("rol");
 
     let pacientes = $('#pacientes').DataTable({
 
@@ -92,11 +85,39 @@ addEventListener("DOMContentLoaded", e => {
                 data: "paciente_id",
                 render: function (data, type, row) {
 
-                    return `
-                    <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a> --> 
+                    switch (rol) {
+
+                        case "1": return `
+                        <a href="pacientes/historialmedico/${data}" target="_blank" class="view-info"><i class="fas fa-eye view-info""></i></a> 
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-paciente" onclick="updatePaciente(${data})"><i class="fas fa-edit act-paciente"></i></a>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deletePaciente(${data})"><i class="fas fa-trash del-paciente"></i></a>
-                    `
+                        `;
+
+                        case "2": return `
+                        <a href="pacientes/historialmedico/${data}" target="_blank" class="view-info"><i class="fas fa-eye view-info""></i></a> 
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-paciente" onclick="updatePaciente(${data})"><i class="fas fa-edit act-paciente"></i></a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deletePaciente(${data})"><i class="fas fa-trash del-paciente"></i></a>
+                        `;
+
+                        case "4": return `
+                        <a href="pacientes/historialmedico/${data}" target="_blank" class="view-info"><i class="fas fa-eye view-info""></i></a> 
+                        <a class="act-paciente"><i class="fas fa-edit disabled act-paciente"></i></a>
+                        <a class="del-paciente"><i class="fas fa-trash disabled del-paciente"></i></a>
+                        `;
+
+                        case "5": return `
+                        <a href="pacientes/historialmedico/${data}" target="_blank" class="view-info"><i class="fas fa-eye view-info""></i></a> 
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-paciente" onclick="updatePaciente(${data})"><i class="fas fa-edit act-paciente"></i></a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deletePaciente(${data})"><i class="fas fa-trash del-paciente"></i></a>
+                        `;
+
+                        default: return `
+                        <a class="view-info"><i class="fas fa-eye disabled view-info""></i></a> 
+                        <a class="act-paciente"><i class="fas fa-edit disabled act-paciente"></i></a>
+                        <a class="del-paciente"><i class="fas fa-trash disabled del-paciente"></i></a>
+                        `;
+   
+                    }
                 }
             }
 

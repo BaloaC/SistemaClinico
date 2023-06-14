@@ -2,11 +2,88 @@ import addModule from "../global/addModule.js";
 import getAge from "../global/getAge.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import getById from "../global/getById.js";
+import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
+import mostrarHistorialMedico from "./mostrarHistorialMedico.js";
+
+const id = location.pathname.split("/")[4];
+
+select2OnClick({
+    selectSelector: "#s-paciente",
+    selectValue: "paciente_id",
+    selectNames: ["cedula", "nombre-apellidos"],
+    module: "pacientes/consulta",
+    parentModal: "#modalRegConsulta",
+    placeholder: "Seleccione un paciente"
+});
+
+const citasSelect = document.getElementById("s-cita");
+
+emptySelect2({
+    selectSelector: citasSelect,
+    placeholder: "Debe seleccionar un paciente",
+    parentModal: "#modalRegConsulta"
+})
+
+citasSelect.disabled = true;
+
+$("#s-paciente").on("change", async function (e) {
+
+    let paciente_id = this.value;
+
+    if (!paciente_id) return;
+
+    let infoCitas = await getById("citas/paciente", paciente_id);
+
+    $(citasSelect).empty().select2();
+
+    if ('result' in infoCitas && infoCitas.result.code === false) infoCitas = [];
+
+    dinamicSelect2({
+        obj: infoCitas,
+        selectSelector: citasSelect ?? [],
+        selectValue: "cita_id",
+        selectNames: ["cita_id", "motivo_cita"],
+        parentModal: "#modalRegConsulta",
+        placeholder: "Seleccione un paciente"
+    });
+
+    citasSelect.disabled = false;
+})
+
+
+select2OnClick({
+    selectSelector: "#s-examen",
+    selectValue: "examen_id",
+    selectNames: ["nombre"],
+    module: "examenes/consulta",
+    parentModal: "#modalRegConsulta",
+    placeholder: "Seleccione los exámenes",
+    multiple: true
+});
+
+select2OnClick({
+    selectSelector: "#s-insumo",
+    selectValue: "insumo_id",
+    selectNames: ["nombre"],
+    module: "insumos/consulta",
+    parentModal: "#modalRegConsulta",
+    placeholder: "Seleccione el insumo"
+});
+
+select2OnClick({
+    selectSelector: "#s-medicamento",
+    selectValue: "medicamento_id",
+    selectNames: ["nombre_medicamento"],
+    module: "medicamento/consulta",
+    parentModal: "#modalRegConsulta",
+    placeholder: "Seleccione el medicamento"
+});
+
 
 async function addConsulta() {
 
     const $form = document.getElementById("info-consulta"),
-        $alert = document.querySelector(".alert");
+        $alert = document.querySelector(".alertConsulta");
 
     try {
         const formData = new FormData($form),
@@ -43,7 +120,7 @@ async function addConsulta() {
             }
             insumos.push(insumo);
         })
-        console.log(insumos);
+        
         if (insumos.length != 0 && insumos[0].insumo_id != "" && insumos[0].cantidad != "") { data.insumos = insumos; }
 
         const medicamentos = document.querySelectorAll(".medicamento-id"),
@@ -89,7 +166,7 @@ async function addConsulta() {
 
         // data.rif = data.cod_rif + "-" + data.rif;
 
-        const registroExitoso = await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!");
+        const registroExitoso = await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!","#modalRegConsulta", ".alertConsulta");
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
@@ -106,9 +183,9 @@ async function addConsulta() {
         document.getElementById("s-cita").disabled = true;
         deleteElementByClass("newInput");
         setTimeout(() => {
-            $("#modalReg").modal("hide");
+            $("#modalRegConsulta").modal("hide");
         }, 500);
-        $('#consultas').DataTable().ajax.reload();
+        mostrarHistorialMedico(id);
 
     } catch (error) {
         console.log(error);

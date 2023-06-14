@@ -1,7 +1,7 @@
 import { select2OnClick } from "../global/dinamicSelect2.js";
 
 let clicks = 0;
-function addInsumoInput() {
+function addInsumoInput(parentModal = "#modalReg") {
 
     clicks += 1;
     let template = `
@@ -27,7 +27,7 @@ function addInsumoInput() {
         selectValue: "insumo_id",
         selectNames: ["nombre"],
         module: "insumos/consulta",
-        parentModal: "#modalReg",
+        parentModal: parentModal,
         placeholder: "Seleccione el insumo"
     });
 }
