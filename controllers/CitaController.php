@@ -67,9 +67,9 @@ class CitaController extends Controller {
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 
-            // case !$validarCita->existsInDB($_POST, $campoId):
-            //     $respuesta = new Response('NOT_FOUND');
-            //     return $respuesta->json(404);
+            case !$validarCita->existsInDB($_POST, $campoId):
+                $respuesta = new Response('NOT_FOUND');
+                return $respuesta->json(404);
 
             case $validarCita->isNumber($_POST, $camposNumericos):
                 $respuesta = new Response('DATOS_INVALIDOS');
@@ -125,6 +125,34 @@ class CitaController extends Controller {
                 
                 if ( count($isDuplicated) > 0 ) {
                     $respuesta = new Response('DUPLICATE_APPOINTMENT');
+                    return $respuesta->json(400);
+                }
+
+                // Obtenemos el día según la fecha de la cita
+                setlocale(LC_TIME, 'es_VE.UTF-8','esp');
+                $fechaCita = date($_POST['fecha_cita']);
+                $dia = strftime("%A", strtotime($fechaCita));
+
+                // Obtenemos el horario del médico ese día
+                $_horarioModel = new HorarioModel();
+                $medico = $_horarioModel->where('medico_id', '=', $_POST['medico_id'])->getAll();
+                $horarioMedico = [];
+                
+                // Validamos si atiende a esa hora
+                foreach ($medico as $horario) {
+                    if ($horario->dias_semana == $dia) {
+                        array_push($horarioMedico, $horario);
+
+                        if ($_POST['hora_entrada'] < $horario->hora_entrada || $_POST['hora_entrada'] > $horario->hora_salida || $_POST['hora_salida'] > $horario->hora_salida || $_POST['hora_salida'] < $horario->hora_entrada ) {
+                            $respuesta = new Response(false, 'El médico indicado no está disponible a esa hora');
+                            $respuesta->setData("Ocurrió un problema intentando asignar la cita, el médico se encuentra disponible ese día de ".$horario->hora_entrada." a ".$horario->hora_salida);
+                            return $respuesta->json(400);
+                        } 
+                    }
+                }
+
+                if ( count($horarioMedico) <= 0 ) {
+                    $respuesta = new Response(false, 'El médico indicado no está disponible ese día');
                     return $respuesta->json(400);
                 }
 
@@ -185,6 +213,7 @@ class CitaController extends Controller {
         $_citaModel = new CitaModel();
         $inners = $_citaModel->listInner($this->arrayInner);
         $lista = $_citaModel->where('estatus_cit', '!=', '2')->innerJoin($this->arraySelect, $inners, "cita");
+
         return $this->retornarMensaje($lista);
     }
 
