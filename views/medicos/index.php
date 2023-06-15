@@ -103,30 +103,101 @@
                                 </div>
                                 <div class="col-12 col-check mt-4">
                                     <div class="py-3">Seleccione los horarios del doctor</div>
-                                    <div class="form-check form-check-inline">
-                                        <input type="checkbox" name="horario" value="lunes" class="form-check-input">
-                                        <label for="lunes" class="form-check-label">Lunes</label>
+                                    <div class="row align-items-center">
+                                        <div class="col-md-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" name="horario" value="lunes" class="form-check-input" onchange="changeHorarioInput(this)">
+                                                <label for="lunes" class="form-check-label">Lunes</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="hora_entrada">Hora entrada</label>
+                                            <input type="time" name="hora_inicio_lunes" class="form-control mb-3" disabled>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="hora_salida">Hora salida</label>
+                                            <input type="time" name="hora_salida_lunes" class="form-control mb-3" disabled>
+                                        </div>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input type="checkbox" name="horario" value="martes" class="form-check-input">
-                                        <label for="martes" class="form-check-label">Martes</label>
+                                    <div class="row align-items-center">
+                                        <div class="col-md-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" name="horario" value="martes" class="form-check-input" onchange="changeHorarioInput(this)">
+                                                <label for="martes" class="form-check-label">Martes</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="hora_entrada">Hora entrada</label>
+                                            <input type="time" name="hora_inicio_martes" class="form-control mb-3" disabled>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="hora_salida">Hora salida</label>
+                                            <input type="time" name="hora_salida_martes" class="form-control mb-3" disabled>
+                                        </div>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input type="checkbox" name="horario" value="miercoles" class="form-check-input">
-                                        <label for="miercoles" class="form-check-label">Miercoles</label>
+                                    <div class="row align-items-center">
+                                        <div class="col-md-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" name="horario" value="miercoles" class="form-check-input" onchange="changeHorarioInput(this)">
+                                                <label for="miercoles" class="form-check-label">Miercoles</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="hora_entrada">Hora entrada</label>
+                                            <input type="time" name="hora_inicio_miercoles" class="form-control mb-3" disabled>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="hora_salida">Hora salida</label>
+                                            <input type="time" name="hora_salida_miercoles" class="form-control mb-3" disabled>
+                                        </div>
                                     </div>
-
-                                    <div class="form-check form-check-inline">
-                                        <input type="checkbox" name="horario" value="jueves" class="form-check-input">
-                                        <label for="jueves" class="form-check-label">Jueves</label>
+                                    <div class="row align-items-center">
+                                        <div class="col-md-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" name="horario" value="jueves" class="form-check-input" onchange="changeHorarioInput(this)">
+                                                <label for="jueves" class="form-check-label">Jueves</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="hora_entrada">Hora entrada</label>
+                                            <input type="time" name="hora_inicio_jueves" class="form-control mb-3" disabled>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="hora_salida">Hora salida</label>
+                                            <input type="time" name="hora_salida_jueves" class="form-control mb-3" disabled>
+                                        </div>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input type="checkbox" name="horario" value="viernes" class="form-check-input">
-                                        <label for="viernes" class="form-check-label">Viernes</label>
+                                    <div class="row align-items-center">
+                                        <div class="col-md-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" name="horario" value="viernes" class="form-check-input" onchange="changeHorarioInput(this)">
+                                                <label for="viernes" class="form-check-label">Viernes</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="hora_entrada">Hora entrada</label>
+                                            <input type="time" name="hora_inicio_viernes" class="form-control mb-3" disabled>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="hora_salida">Hora salida</label>
+                                            <input type="time" name="hora_salida_viernes" class="form-control mb-3" disabled>
+                                        </div>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input type="checkbox" name="horario" value="sabado" class="form-check-input">
-                                        <label for="sabado" class="form-check-label">Sábado</label>
+                                    <div class="row align-items-center">
+                                        <div class="col-md-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" name="horario" value="sabado" class="form-check-input" onchange="changeHorarioInput(this)">
+                                                <label for="sabado" class="form-check-label">Sabado</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="hora_entrada">Hora entrada</label>
+                                            <input type="time" name="hora_inicio_sabado" class="form-control mb-3" disabled>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label for="hora_salida">Hora salida</label>
+                                            <input type="time" name="hora_salida_sabado" class="form-control mb-3" disabled>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -287,6 +358,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/medicos/filtrarMedicos.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/eliminarHorarioMedico.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/eliminarEspecialidadMedico.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/medicos/changeHorarioInput.js'); ?>"></script>
 </body>
 
 </html>

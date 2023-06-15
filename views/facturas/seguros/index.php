@@ -43,7 +43,9 @@
                                             <th>Fecha ocurrencia</th>
                                             <th>Fecha vencimiento</th>
                                             <th>Monto</th>
-                                            <!-- <th>Estatus</th> -->
+                                            <th>Días para caducarse</th>
+                                            <th>Días caducada</th>
+                                            <th>Estatus</th> 
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>

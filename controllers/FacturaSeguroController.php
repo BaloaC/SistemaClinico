@@ -37,6 +37,11 @@ class FacturaSeguroController extends Controller{
     public function index(){
 
         return $this->view('facturas/seguros/index');
+    
+    }
+    public function segurosAge(){
+
+        return $this->view('facturas/seguros/seguros-age');
     }
 
     public function formRegistrarFacturaMedico(){

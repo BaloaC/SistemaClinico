@@ -11,13 +11,18 @@
 
 form,
 .modal-dialog-scrollable .modal-body {
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
-.list-seg > li > article {
+.seguro-dropdown-link, .list-seg > li > article,  .list-seg > li{
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+}
+
+.list-seg > li > article {
+    flex-direction: row;
     width: 128px;
     height: 128px;
     border-radius: 60px;
@@ -34,10 +39,6 @@ form,
 }
 
 .list-seg > li {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
     min-width: 12rem;
     margin-bottom: 2rem;
 }

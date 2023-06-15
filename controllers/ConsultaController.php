@@ -206,7 +206,7 @@ class ConsultaController extends Controller
     public function listarConsultas() {
         $_consultaModel = new ConsultaModel();
         $inners = $_consultaModel->listInner($this->arrayInner);
-        $consulta = $_consultaModel->where('consulta.estatus_con', '=', '1')->innerJoin($this->arraySelect, $inners, "consulta");
+        $consulta = $_consultaModel->where('consulta.estatus_con', '=', '1')->orWhere('consulta.estatus_con', '=', '3')->innerJoin($this->arraySelect, $inners, "consulta");
         $consultaList = $this->setRelaciones($consulta);
 
         foreach ($consulta as $consultas) {

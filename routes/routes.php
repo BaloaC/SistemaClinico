@@ -264,7 +264,8 @@ Router::put('/factura/consultaSeguro/:id', ConsultaSeguroController::class . '@a
 Router::delete('/factura/consultaSeguro/:id', ConsultaSeguroController::class . '@eliminarConsultaSeguro', '2,3');
 
 //Factura_Seguro - Vistas
-Router::get('/factura/seguro', FacturaSeguroController::class . '@index');
+Router::get('/factura/seguros/:id', FacturaSeguroController::class . '@index', -1);
+Router::get('/factura/seguroAge', FacturaSeguroController::class . '@segurosAge');
 Router::get('/factura/seguro/registrar', FacturaSeguroController::class . '@formRegistrarFacturaSeguro');
 Router::get('/factura/seguro/actualizar/:id', FacturaSeguroController::class . '@formActualizarFacturaSeguro');
 

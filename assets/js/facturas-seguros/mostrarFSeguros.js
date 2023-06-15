@@ -1,4 +1,5 @@
 import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
+import getById from "../global/getById.js";
 
 const path = location.pathname.split('/');
 
@@ -23,7 +24,15 @@ const path = location.pathname.split('/');
 //     selectWidth: "100%"
 // });
 
-addEventListener("DOMContentLoaded", e => {
+addEventListener("DOMContentLoaded", async e => {
+
+    const id = location.pathname.split("/")[4].split("-");
+    let listadoFacturas = await getById("factura/seguro", id[0]);
+
+    // Filtramos las facturas por el año que se consulta
+    listadoFacturas = listadoFacturas.filter(factura => factura.fecha_ocurrencia.slice(0, 4) === id[1]);
+
+    console.log(listadoFacturas);
 
     let fSeguros = $('#fSeguros').DataTable({
 
@@ -31,7 +40,7 @@ addEventListener("DOMContentLoaded", e => {
         language: {
             url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
         },
-        ajax: `/${path[1]}/factura/seguro/consulta/`,
+        data: listadoFacturas,
         columns: [
             {
                 "className": 'dt-control',
@@ -45,25 +54,67 @@ addEventListener("DOMContentLoaded", e => {
             { data: "fecha_ocurrencia" },
             { data: "fecha_vencimiento" },
             { data: "monto" },
-            // {
-            //     data: "estatus_fac",
-            //     render: function (data, type, row) {
-            //         if(data == 1){
-            //             return `<span class="badge light badge-success">Pagada</span>`;
-            //         } else{
-            //             return `<span class="badge light badge-danger">Anulada</span>`;
-            //         }
-            //     },
-            // },
+            {
+                data: "fecha_vencimiento",
+                render: function (data, type, row) {
+
+                    const fechaActual = luxon.DateTime.local();
+                    const fechaVencimiento = luxon.DateTime.fromISO(data);
+                    const diasRestantes = Math.round(fechaVencimiento.diff(fechaActual, 'days').toObject().days) + 1;
+
+                    // Si la factura está pagada o anulada rellenar este campo de fecha con dicho estatus
+                    if(row.estatus_fac == 3){
+                        return `<span class="badge light badge-success">Pagada</span>`;
+                    } else if(row.estatus_fac == 2){
+                        return `<span class="badge light badge-danger">Anulada</span>`
+                    }
+
+                    return diasRestantes < 0 ? `<span class="badge light badge-danger">Vencida</span>` : diasRestantes;
+                }
+
+            },
+            {
+                data: "fecha_vencimiento",
+                render: function (data, type, row) {
+
+                    const fechaActual = luxon.DateTime.local();
+                    const fechaVencimiento = luxon.DateTime.fromISO(data);
+                    const diasRestantes = Math.round(fechaVencimiento.diff(fechaActual, 'days').toObject().days) + 1;
+
+                    // Si la factura está pagada o anulada rellenar este campo de fecha con dicho estatus
+                    if(row.estatus_fac == 3){
+                        return `<span class="badge light badge-success">Pagada</span>`;
+                    } else if(row.estatus_fac == 2){
+                        return `<span class="badge light badge-danger">Anulada</span>`
+                    }
+
+                    return diasRestantes < 0 ? Math.abs(diasRestantes) : `<span class="badge light badge-success">Vigente</span>`;
+                }
+
+            },
+            {
+                data: "estatus_fac",
+                render: function (data, type, row) {
+                    if (data == 3) {
+                        return `<span class="badge light badge-success">Pagada</span>`;
+                    } else if (data == 1) {
+                        return `<span class="badge light badge-warning">Pendiente</span>`;
+                    } else if(data == 2) {
+                        return `<span class="badge light badge-danger">Anulada</span>`;
+                    } else {
+                        return `<span class="badge light badge-warning">Pendiente</span>`;
+                    }
+                },
+            }, 
             {
                 data: "factura_seguro_id",
                 render: function (data, type, row) {
                     // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-                    if(row.estatus_fac == 1){
+                    if (row.estatus_fac == 1) {
                         return `
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFSeguro(${data})"><i class="fas fa-trash del-consulta"></i></a>
                         `
-                    } else{ 
+                    } else {
                         return `
                             <a class="del-paciente"><i class="fas fa-trash disabled del-consulta"></i></a>
                         `;
