@@ -64,19 +64,19 @@ class LoginController extends Controller{
         
         $_POST = json_decode(file_get_contents('php://input'), true);
         
-        if ($_POST['tipo_auth'] > 2) {
+        // if ($_POST['tipo_auth'] > 2) {
             
-            $respuesta = new Response(false, 'Método de autenticación incorrecto');
-            return $respuesta->json(400);
+        //     $respuesta = new Response(false, 'Método de autenticación incorrecto');
+        //     return $respuesta->json(400);
 
-        } else if ($_POST['tipo_auth'] == 1) {
+        // } else if ($_POST['tipo_auth'] == 1) {
 
-            if ( !($_POST['auth']) ) {
+            // if ( !($_POST['auth']) ) {
                 
-                $respuesta = new Response(false, 'El pin debe estar compuesto únicamente por números');
-                return $respuesta->json(400);
+            //     $respuesta = new Response(false, 'El pin debe estar compuesto únicamente por números');
+            //     return $respuesta->json(400);
 
-            } else {
+            // } else {
 
                 $_UsuarioModel = new UsuarioModel();
                 $usuario = $_UsuarioModel->where('usuario_id','=',$usuario_id)->getFirst();
@@ -97,12 +97,11 @@ class LoginController extends Controller{
                     $respuesta = new Response(false, 'Pin incorrecto');
                     return $respuesta->json(400);
                 }
-            }
+            // }
+        // } else if ($_POST['tipo_auth'] == 2) {
 
-        } else if ($_POST['tipo_auth'] == 2) {
-
-            return 'pq cae aki';
-        }   
+        //     return 'pq cae aki';
+        // }   
     }
 
     public function insertarPregunta($usuario_id) {

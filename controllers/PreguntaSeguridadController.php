@@ -1,10 +1,8 @@
 <?php
 
-class PreguntaSeguridadController extends Controller
-{
+class PreguntaSeguridadController extends Controller {
 
-    public function insertarPregunta($form, $usuario_id)
-    {
+    public function insertarPregunta($form, $usuario_id) {
 
         // $_POST = json_decode(file_get_contents('php://input'), true);
         $validarUsuario = new Validate;
@@ -40,8 +38,7 @@ class PreguntaSeguridadController extends Controller
         return false;
     }
 
-    public function comprobarPregunta()
-    {
+    public function comprobarPregunta() {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarUsuario = new Validate;
@@ -88,8 +85,7 @@ class PreguntaSeguridadController extends Controller
         }
     }
 
-    public function listarPreguntas()
-    {
+    public function listarPreguntas() {
 
         $_preguntaSeguridadModel = new PreguntaSeguridadModel();
         $preguntas = $_preguntaSeguridadModel->where('estatus_pre', '=', '1')->getAll();
@@ -97,8 +93,7 @@ class PreguntaSeguridadController extends Controller
         return $this->retornarMensaje($mensaje, $preguntas);
     }
 
-    public function listarPreguntasPorId($pregunta_id)
-    {
+    public function listarPreguntasPorId($pregunta_id) {
 
         $_preguntaSeguridadModel = new PreguntaSeguridadModel();
         $preguntas = $_preguntaSeguridadModel->where('estatus_pre', '=', '1')->where('pregunta_id', '=', $pregunta_id)->getFirst();
@@ -106,8 +101,7 @@ class PreguntaSeguridadController extends Controller
         return $this->retornarMensaje($mensaje, $preguntas);
     }
 
-    public function listarPreguntasPorUsuarioId($nombre_usuario)
-    {
+    public function listarPreguntasPorUsuarioId($nombre_usuario) {
 
         $validarUsuario = new Validate;
 
@@ -126,8 +120,7 @@ class PreguntaSeguridadController extends Controller
     }
 
 
-    public function eliminarPreguntaSeguridad($pregunta_seguridad_id)
-    {
+    public function eliminarPreguntaSeguridad($pregunta_seguridad_id) {
 
         $_preguntaSeguridadModel = new PreguntaSeguridadModel();
         $data = array(
@@ -144,8 +137,7 @@ class PreguntaSeguridadController extends Controller
     }
 
     //utils
-    public function retornarMensaje($mensaje, $dataReturn)
-    {
+    public function retornarMensaje($mensaje, $dataReturn) {
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
         $respuesta->setData($dataReturn);
         return $respuesta->json($mensaje ? 200 : 404);

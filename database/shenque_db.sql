@@ -749,10 +749,15 @@ ALTER TABLE `cita`
   MODIFY `cita_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
+-- AUTO_INCREMENT de la tabla `cita_seguro`
+--
+ALTER TABLE `cita`
+  MODIFY `cita_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
 -- AUTO_INCREMENT de la tabla `compra_insumo`
 --
-ALTER TABLE `compra_insumo`
-  MODIFY `compra_insumo_id` int(11) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+ALTER TABLE `cita_seguro` MODIFY `cita_seguro_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `consulta`
@@ -1038,6 +1043,16 @@ ALTER TABLE `pregunta_seguridad`
 ALTER TABLE `seguro_empresa`
   ADD CONSTRAINT `fk_seguro_empresa_empresa` FOREIGN KEY (`empresa_id`) REFERENCES `empresa` (`empresa_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_seguro_empresa_seguro` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `cita_seguro`
+--
+ALTER TABLE `cita_seguro` 
+  ADD CONSTRAINT `fk_cita_cita` FOREIGN KEY (`cita_id`) REFERENCES `cita` (`cita_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE `cita_seguro`
+  ADD CONSTRAINT `fk_seguro_cita` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
 
 --
 -- Filtros para la tabla `titular_beneficiado`
