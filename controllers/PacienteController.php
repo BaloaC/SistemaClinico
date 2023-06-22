@@ -275,11 +275,86 @@ class PacienteController extends Controller{
 
         if ($paciente) {
 
-            $_medicoModel = new MedicoModel();
-            $inners = $_medicoModel->listInner($this->arrayInner);
-            $pacienteSeguro = $_medicoModel->where('paciente_seguro.paciente_id','=',$paciente_id)->where('seguro.estatus_seg','=','1')->where('paciente_seguro.estatus_pac','=','1')->innerJoin($this->arraySelect, $inners, "paciente_seguro");
+            if ($paciente->tipo_paciente == 3) { // Tratamos la informacion si es titular
+                // Agregamos datos de seguro
+                $_pacienteSeguroModel = new PacienteSeguroModel();
+                $inners = $_pacienteSeguroModel->listInner($this->arrayInner);
+                $pacienteSeguro = $_pacienteSeguroModel->where('paciente_seguro.paciente_id','=',$paciente_id)->where('seguro.estatus_seg','=','1')->where('paciente_seguro.estatus_pac','=','1')->innerJoin($this->arraySelect, $inners, "paciente_seguro");
+                $paciente->seguro = $pacienteSeguro; 
+
+                if ($pacienteSeguro) { $paciente->seguro = $pacienteSeguro; } // Agregamos el seguro si existe
+
+                // Agregamos datos del beneficiado
+                $_titularBeneficiado = new TitularBeneficiadoModel();
+                $titularBeneficiado = $_titularBeneficiado->where('paciente_id','=',$paciente_id)
+                                                        ->where('estatus_tit','=',1)
+                                                        ->getAll();
+                
+                if (count($titularBeneficiado) > 0) {
+
+                    $beneficiadosList = array();
+                    foreach ($titularBeneficiado as $beneficiado) {
+                        
+                        $_pacienteBeneficiadoModel = new PacienteBeneficiadoModel();
+                        $pacienteBeneficiado = $_pacienteBeneficiadoModel->where('paciente_beneficiado_id','=',$beneficiado->paciente_beneficiado_id)
+                                                            ->where('estatus_pac','=',1)
+                                                            ->getFirst();
+
+                        $_pacienteModel = new PacienteModel();
+                        $infoBeneficiado = $_pacienteModel->where('paciente_id','=',$pacienteBeneficiado->paciente_id)
+                                                            ->where('estatus_pac','=',1)
+                                                            ->getAll();
+                                                            
+                        $infoBeneficiado[0]->tipo_familiar = $beneficiado->tipo_familiar;
+                        $beneficiadosList[] = $infoBeneficiado[0];
+                    }
+                    
+                    if (count($beneficiadosList) > 0) {// Agregamos el beneficiado si existe
+                        $paciente->beneficiados = $beneficiadosList;
+                    }
+                }
+
+            } else if ($paciente->tipo_paciente == 4) { // Tratamos la información si es beneficiado
+                // Agregamos datos de seguro
+                $_pacienteBeneficiado = new PacienteBeneficiadoModel();
+                $pacienteBeneficiado = $_pacienteBeneficiado->where('paciente_id','=',$paciente_id)
+                                                            ->where('estatus_pac','=',1)
+                                                            ->getFirst();
+
+                $_titularBeneficiado = new TitularBeneficiadoModel();
+                $titularBeneficiado = $_titularBeneficiado->where('paciente_beneficiado_id','=',$pacienteBeneficiado->paciente_beneficiado_id)
+                                                        ->where('estatus_tit','=',1)
+                                                        ->getAll();
+
+                // Agregamos datos del titular
+                $titularesList = array();
+                foreach ($titularBeneficiado as $titular) {
+                    // Obtenemos datos del titular
+                    $_pacienteModel = new PacienteModel();
+                    $infoTitular = $_pacienteModel->where('paciente_id','=',$titular->paciente_id)
+                                                    ->where('estatus_pac','=',1)
+                                                    ->getFirst();
+
+                    $infoTitular->tipo_familiar = $titular->tipo_familiar;
+
+                    // Obtenemos los seguros del titular
+                    $_pacienteSeguroModel = new PacienteSeguroModel();
+                    $inners = $_pacienteSeguroModel->listInner($this->arrayInner);
+                    $pacienteSeguro = $_pacienteSeguroModel->where('paciente_seguro.paciente_id','=',$infoTitular->paciente_id)
+                                                            ->where('seguro.estatus_seg','=','1')
+                                                            ->where('paciente_seguro.estatus_pac','=','1')
+                                                            ->innerJoin($this->arraySelect, $inners, "paciente_seguro");
+
+                    if ($pacienteSeguro) { $infoTitular->seguro = $pacienteSeguro; } // Agregamos el seguro si existe
+
+                    $titularesList[] = $infoTitular; // Agregamos todo al objeto mayor
+                }
+                
+                if (count($titularesList) > 0) {// Agregamos el beneficiado si existe
+                    $paciente->titulares = $titularesList;
+                }                
+            }            
             
-            if ($pacienteSeguro) { $paciente->seguro = $pacienteSeguro; }
             return $this->retornarMensaje($paciente);
 
         } else {

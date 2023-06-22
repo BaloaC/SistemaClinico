@@ -340,29 +340,29 @@ class ConsultaController extends Controller
         }
     }
 
-    public function eliminarConsulta($consulta_id) {
+    // public function eliminarConsulta($consulta_id) {
 
-        $validarConsulta = new Validate;
-        $token = $validarConsulta->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
+    //     $validarConsulta = new Validate;
+    //     $token = $validarConsulta->validateToken(apache_request_headers());
+    //     if (!$token) {
+    //         $respuesta = new Response('TOKEN_INVALID');
+    //         return $respuesta->json(401);
+    //     }
 
-        $_consultaModel = new ConsultaModel();
-        $_consultaModel->byUser($token);
-        $data = array(
-            "estatus_con" => "2"
-        );
+    //     $_consultaModel = new ConsultaModel();
+    //     $_consultaModel->byUser($token);
+    //     $data = array(
+    //         "estatus_con" => "2"
+    //     );
 
-        $eliminado = $_consultaModel->where('consulta_id', '=', $consulta_id)->update($data, 1);
-        $mensaje = ($eliminado > 0);
+    //     $eliminado = $_consultaModel->where('consulta_id', '=', $consulta_id)->update($data, 1);
+    //     $mensaje = ($eliminado > 0);
 
-        $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');
-        $respuesta->setData($eliminado);
+    //     $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');
+    //     $respuesta->setData($eliminado);
 
-        return $respuesta->json($mensaje ? 200 : 400);
-    }
+    //     return $respuesta->json($mensaje ? 200 : 400);
+    // }
 
     // insertar recipe
     public function insertarRecipe($recipes, $consulta) {

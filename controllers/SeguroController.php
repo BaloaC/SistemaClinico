@@ -35,7 +35,7 @@ class SeguroController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         
         // Creando los strings para las validaciones
-        $camposNumericos = array("tipo_seguro", "telefono");
+        $camposNumericos = array("telefono");
         $validarSeguro = new Validate;
         
         $token = $validarSeguro->validateToken(apache_request_headers());
@@ -59,10 +59,6 @@ class SeguroController extends Controller{
 
             case $validarSeguro->isDuplicated('seguro', 'rif', $_POST["rif"]):
                 $respuesta = new Response('DATOS_DUPLICADOS');
-                return $respuesta->json(400);
-
-            case ($_POST['tipo_seguro'] != 1 && $_POST['tipo_seguro'] != 2 ):
-                $respuesta = new Response(false, 'Datos incorrectos en el tipo de seguro');
                 return $respuesta->json(400);
 
             default: 
@@ -149,7 +145,7 @@ class SeguroController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
 
         // Creando los strings para las validaciones
-        $camposNumericos = array("tipo_seguro", "telefono");
+        $camposNumericos = array("telefono");
 
         $validarSeguro = new Validate;
         $token = $validarSeguro->validateToken(apache_request_headers());
