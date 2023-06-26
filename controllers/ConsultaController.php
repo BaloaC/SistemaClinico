@@ -150,9 +150,11 @@ class ConsultaController extends Controller {
                     unset($_POST['indicaciones']);
                 }
 
-                if ( $_POST['es_emergencia'] != 0 && $_POST['es_emergencia'] != 1 ) {
-                    $respuesta = new Response(false, 'El atributo es_emergencia tiene que ser un booleano');
-                    return $respuesta->json(400);
+                if (isset($_POST['es_emergencia'])) {
+                    if ( $_POST['es_emergencia'] != 0 && $_POST['es_emergencia'] != 1 ) {
+                        $respuesta = new Response(false, 'El atributo es_emergencia tiene que ser un booleano');
+                        return $respuesta->json(400);
+                    }
                 }
                 
                 $data = $validarConsulta->dataScape($_POST);
