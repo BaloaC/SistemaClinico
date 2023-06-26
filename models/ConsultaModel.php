@@ -12,6 +12,7 @@ class ConsultaModel extends GenericModel {
     protected $altura;
     protected $observaciones;
     protected $fecha_consulta;
+    protected $es_emergencia;
     protected $estatus_con;
 
     public function __construct($propiedades = null) {
@@ -27,6 +28,7 @@ class ConsultaModel extends GenericModel {
     public function getAltura(){return $this->altura;}
     public function getObservaciones(){return $this->observaciones;}
     public function getFechaConsulta(){return $this->fecha_consulta;}
+    public function getEsEmergencia(){return $this->es_emergencia;}
     public function getEstatusCon(){return $this->estatus_con;}
 
     /* Setters */
@@ -38,6 +40,7 @@ class ConsultaModel extends GenericModel {
     public function setAltura($altura){return $this->altura =$altura;}
     public function setObservaciones($observaciones){return $this->observaciones =$observaciones;}
     public function setFechaConsulta($fecha_consulta){return $this->fecha_consulta =$fecha_consulta;}
+    public function setEsEmergencia($es_emergencia){return $this->es_emergencia =$es_emergencia;}
     public function setEstatusCon($estatus_con){return $this->estatus_con =$estatus_con;}
 }
 

@@ -1,7 +1,6 @@
 <?php
 
-class ConsultaController extends Controller
-{
+class ConsultaController extends Controller {
 
     protected $arrayInner = array(
         "paciente" => "consulta",
@@ -149,6 +148,11 @@ class ConsultaController extends Controller
                 }
                 if ($indicaciones) {
                     unset($_POST['indicaciones']);
+                }
+
+                if ( $_POST['es_emergencia'] != 0 && $_POST['es_emergencia'] != 1 ) {
+                    $respuesta = new Response(false, 'El atributo es_emergencia tiene que ser un booleano');
+                    return $respuesta->json(400);
                 }
                 
                 $data = $validarConsulta->dataScape($_POST);
@@ -389,7 +393,7 @@ class ConsultaController extends Controller
                     $data = $validarRecipe->dataScape($newRecipe);
                     $_consultaRecipeModel = new ConsultaRecipeModel();
                     $row = $_consultaRecipeModel->insert($data);
-                    // var_dump($row);
+                    
                     $isInsert = ($row > 0);
 
                     if (!$isInsert) {
@@ -411,17 +415,16 @@ class ConsultaController extends Controller
             $newIndicacion = $indicacion;
             $newIndicacion['consulta_id'] = $consulta_id;
             $validarIndicacion = new Validate;
-            // var_dump($newIndicacion);
+            
             if ($validarIndicacion->isEmpty($newIndicacion)) {
                 $respuesta = new Response(false, 'No se pueden enviar indicaciones vacías');
                 return $respuesta->json(400);
             }
-            // var_dump($newIndicacion);
-            // echo '<pre>';
+            
             $data = $validarIndicacion->dataScape($newIndicacion);
             $_consultaIndicacionesModel = new ConsultaIndicacionesModel();
             $row = $_consultaIndicacionesModel->insert($data);
-            // var_dump($row);
+            
             $isInsert = ($row > 0);
 
             if (!$isInsert) {
