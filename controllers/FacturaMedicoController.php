@@ -269,7 +269,8 @@ class FacturaMedicoController extends Controller{
 
         // Si no tiene consultas por seguro no se realiza el foreach
 
-        if ($innerSeguro) {
+        if (is_array($innerSeguro)) {
+
             foreach ($innerSeguro as $inners) {
                 //calculo seguros
                 $montoTotal += $inners->monto;

@@ -191,7 +191,7 @@
                                         </div>
                                         <div class="col-12 col-md-5">
                                             <label for="cantidad" class="p-0">Cantidad utilizada</label>
-                                            <input type="number" class="form-control insumo-cant">
+                                            <input type="number" step="any" class="form-control insumo-cant">
                                         </div>
                                     </div>
                                 </div>

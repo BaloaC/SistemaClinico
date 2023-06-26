@@ -90,8 +90,6 @@ async function addCita() {
 
         formData.forEach((value, key) => (data[key] = value));
 
-        data.fecha_cita = data.fecha_cita.replace("T", " ");
-
 
         if (data.tipoPacienteRadio === "beneficiado") {
             infoTitular = await getById("pacientes", data.titular_id);
@@ -103,7 +101,7 @@ async function addCita() {
         data.cedula_titular = infoTitular.cedula;
         console.log(data);
         if (data.tipo_cita == 1) {
-            data.seguro_id = 1;
+            data.seguro_id = 0;
         }
 
         if (infoTitular.tipo_paciente == 3 && data.tipo_cita == 2) {

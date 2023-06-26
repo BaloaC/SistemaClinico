@@ -16,6 +16,8 @@ class CitaController extends Controller {
         "cita.especialidad_id",
         "cita.seguro_id",
         "cita.fecha_cita",
+        "cita.hora_entrada",
+        "cita.hora_salida",
         "cita.motivo_cita",
         "cita.cedula_titular",
         "cita.clave",
@@ -291,7 +293,7 @@ class CitaController extends Controller {
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(400);
 
-            case $validarCita->isDataTime($_POST['fecha_cita']):
+            case $validarCita->isDate($_POST['fecha_cita']):
                 $respuesta = new Response('FECHA_INVALIDA');
                 return $respuesta->json(400);
 
@@ -337,7 +339,7 @@ class CitaController extends Controller {
                 $id = $_cita->insert($newCita);
                 $isInserted = ($id > 0);
 
-                $isInserted = new Response(false, $isInserted ? 'Cita reprogramada exitosamente' : 'Ocurrió un error reprogramando la cita');
+                $isInserted = new Response($isInserted, $isInserted ? 'Cita reprogramada exitosamente' : 'Ocurrió un error reprogramando la cita');
                 return $isInserted->json($isInserted ? 201 : 400);
         }
     }

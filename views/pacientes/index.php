@@ -132,8 +132,8 @@
                                     <div class="submenu-beneficiado row opacity-0 d-none">
                                         <h5 class="mt-4 mb-3">Información titulares</h5>
                                         <div class="row align-items-center">
-                                            <div class="col-12 col-md-1">
-                                                <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>
+                                            <div class="col-12 col-md-1 d-none">
+                                                <button type="button" class="btn" onclick="deleteTitularInput(this)"><i class="fas fa-times m-0"></i></button>
                                             </div>
                                             <div class="col-12 col-md-5">
                                                 <label for="titular">Titular</label>
@@ -176,10 +176,10 @@
                                             <input type="date" name="fecha_contra" class="form-control mb-3" disabled required>
 
                                             <label for="cobertura_general">Cobertura General</label>
-                                            <input type="number" name="cobertura_general" class="form-control mb-3" disabled required>
+                                            <input type="number" step="any" name="cobertura_general" class="form-control mb-3" disabled required>
 
                                             <label for="saldo_disponible">Saldo disponible</label>
-                                            <input type="number" name="saldo_disponible" class="form-control mb-3" disabled required>
+                                            <input type="number" step="any" name="saldo_disponible" class="form-control mb-3" disabled required>
                                         </div>
                                     </div>
 
@@ -275,8 +275,9 @@
                                     <label for="tipo_paciente">Tipo de paciente</label>
                                     <select name="tipo_paciente" id="tipo_paciente" class="form-control mb-3" requried>
                                         <option value="1">Natural</option>
-                                        <option value="2">Asegurado</option>
-                                        <option value="3">Beneficiado</option>
+                                        <option value="2">Representante</option>
+                                        <option value="3">Asegurado</option>
+                                        <option value="4">Beneficiado</option>
                                     </select>
                                 </div>
                             </div>

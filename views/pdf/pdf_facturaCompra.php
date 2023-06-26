@@ -41,6 +41,9 @@
 
         /* Estilos para la sección del titulo*/
 
+        #title{
+            font-size: x-large;
+        }
         .cuadro {
             display: flex;
             flex-direction: column;
@@ -91,7 +94,7 @@
         <table class="tabla">
             <thead>
                 <tr>
-                    <th colspan="4" class="text-center">Factura Compra</th>
+                    <th colspan="4" class="text-center" id="title">Factura Compra</th>
                 </tr>
                 <tr class="insumos-head">
                     <th colspan="2">Nombre del proveedor: <span id="proveedor">EMPRESAS TE QUIERO MUCHO C.A</span></th>

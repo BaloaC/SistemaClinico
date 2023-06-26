@@ -34,7 +34,7 @@
                             <div class="offset-1 col-10 mt-3">
                                 <p class="fs-4 fw-bold">Recuperación de Contraseña</p>
                                 <div class="alert d-none" role="alert"></div>
-                                <form method="POST" id="login-form" class="login-form row position-relative">
+                                <form id="login-form" class="login-form row position-relative">
                                     <div id="form-user">
                                         <label>Introduzca su usuario</label>
                                         <input class="form-control" type="text" name="usuario" id="usuario" data-validate="true" data-type="username" data-max-length="16" required>

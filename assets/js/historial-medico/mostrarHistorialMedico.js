@@ -51,8 +51,8 @@ export default async function mostrarHistorialMedico(id) {
                 } else {
                     actLink.setAttribute("data-bs-toggle","");
                     delLink.setAttribute("data-bs-toggle","")
-                    actIcon.classList.add("disabled");
-                    delIcon.classList.add("disabled");
+                    actIcon.classList.add("d-none");
+                    delIcon.classList.add("d-none");
                 }
 
 

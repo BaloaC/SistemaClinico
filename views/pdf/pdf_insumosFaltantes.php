@@ -58,6 +58,7 @@
         }
 
         #title {
+            font-size: x-large;
             text-align: center;
         }
 
@@ -65,6 +66,7 @@
         /* Tabla */
 
         .insumos-head>th {
+            font-size: large;
             text-align: center;
         }
 

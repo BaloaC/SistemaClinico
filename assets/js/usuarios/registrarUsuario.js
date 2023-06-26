@@ -52,8 +52,8 @@ document.addEventListener("submit", async e => {
                 respuesta: data.respuesta2
             },
             {
-                pregunta: data.pregunta2,
-                respuesta: data.respuesta2
+                pregunta: data.pregunta3,
+                respuesta: data.respuesta3
             }
         ];
         data.preguntas = preguntas;

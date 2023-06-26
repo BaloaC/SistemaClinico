@@ -54,28 +54,19 @@
             text-align: start;
         }
 
-        .light{
-            background-color: #222fb938 !important;
-        }
-
-        .dark{
-            background-color: #222fb9 !important;
-            color: #f2f2f2;
-        }
-
         .tabla {
             width: 950px;
             padding: 2rem;
         }
 
         #title {
-            text-align: center;
+            font-size: x-large;
         }
 
 
         /* Tabla */
 
-        .insumos-head>th {
+        .insumos-head>th, #title {
             text-align: center;
 
         }

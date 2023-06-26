@@ -22,7 +22,7 @@
                     <h4 class="pt-5 pb-2 text-grey">Facturas Consulta</h4>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
-                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Factura</button>
+                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalRegNormal"><i class="fa-sm fas fa-plus"></i> Factura</button>
                 </div>
                 <hr class="border-white">
             </div>
@@ -59,11 +59,11 @@
         </div>
 
         <!-- Modal Registro-->
-        <div class="modal fade" id="modalReg" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegLabel" aria-hidden="true">
+        <div class="modal fade" id="modalRegNormal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegNormalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalRegLabel">Registrar factura consulta</h1>
+                        <h1 class="modal-title fs-3" id="modalRegNormalLabel">Registrar factura consulta</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -72,17 +72,17 @@
                             <div class="row">
                                 <div class="col-12 col-md-6">
                                     <label for="paciente_id">Paciente</label>
-                                    <select name="paciente_id" id="s-paciente" class="form-control" data-active="0" required>
+                                    <select name="paciente_id" id="s-paciente-consulta" class="form-control" data-active="0" required>
                                         <option></option>
                                     </select>
                                     <label for="monto_sin_iva">Monto</label>
-                                    <input type="number" name="monto_sin_iva" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
+                                    <input type="number" step="any" name="monto_sin_iva" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
                                     <!-- <input type="number" name="monto_sin_iva" oninput="calcularIva(this)" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8"> -->
                                     
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <label for="consulta_id">Consulta</label>
-                                    <select name="consulta_id" id="s-consulta" class="form-control" data-active="0" required>
+                                    <select name="consulta_id" id="s-consulta-normal" class="form-control" data-active="0" required>
                                         <option></option>
                                     </select>
                                     <label for="monto_con_iva">Método de pago</label>

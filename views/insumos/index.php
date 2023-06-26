@@ -72,16 +72,16 @@
                             <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
                             <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="cantidad">Cantidad</label>
-                            <input type="number" name="cantidad" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
+                            <input type="number" step="any" name="cantidad" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <!-- <label for="nombre">Stock</label>
                             <input type="number" name="stock" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small> -->
                             <label for="nombre">Cantidad mínima</label>
-                            <input type="number" name="cantidad_min" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
+                            <input type="number" step="any" name="cantidad_min" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <label for="nombre">Precio</label>
-                            <input type="number" name="precio" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <input type="number" step="any" name="precio" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El precio de ser mayor o igual a 0</small>
                         </form>
                     </div>
@@ -107,16 +107,16 @@
                             <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
                             <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="cantidad">Cantidad</label>
-                            <input type="number" name="cantidad" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
+                            <input type="number" step="any" name="cantidad" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <!-- <label for="nombre">Stock</label>
                             <input type="number" name="stock" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small> -->
                             <label for="nombre">Cantidad mínima</label>
-                            <input type="number" name="cantidad_min" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
+                            <input type="number" step="any" name="cantidad_min" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <label for="nombre">Precio</label>
-                            <input type="number" name="precio" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <input type="number" step="any" name="precio" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El precio de ser mayor o igual a 0</small>
                         </form>
                     </div>

@@ -98,12 +98,12 @@
                                         </thead>
                                         <tbody id="insumos-list">
                                             <tr>
-                                                <td><button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button></td>
+                                                <td><div class="visible d-none"><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></div></td>
                                                 <td><select name="insumo_id" id="s-insumo" class="form-control insumo-id" data-active="0" required>
                                                         <option></option>
                                                     </select></td>
-                                                <td><input type="number" name="precio_unit" min="0" class="form-control insumo-uprecio" oninput="calcularMonto(this)" required></td>
-                                                <td><input type="number" name="unidades" min="0" class="form-control insumo-unid" oninput="calcularMonto(this)" required></td>
+                                                <td><input type="number" step="any" name="precio_unit" min="0" class="form-control insumo-uprecio" oninput="calcularMonto(this)" required></td>
+                                                <td><input type="number" step="any" name="unidades" min="0" class="form-control insumo-unid" oninput="calcularMonto(this)" required></td>
                                                 <td><b class="monto-total-p">$0.00</b></td>
                                                 <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
                                             </tr>
@@ -131,12 +131,12 @@
         <!-- Insumos template -->
         <template id="insumo-template">
             <tr>
-                <td><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></td>
+                <td><div class="visible"><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></div></td>
                 <td><select name="insumo_id" id="s-insumo" class="form-control insumo-id" data-active="0" required>
                         <option></option>
                     </select></td>
-                <td><input type="number" name="precio_unit" min="0" class="form-control insumo-uprecio" oninput="calcularMonto(this)" required></td>
-                <td><input type="number" name="unidades" min="0" class="form-control insumo-unid" oninput="calcularMonto(this)" required></td>
+                <td><input type="number" step="any" name="precio_unit" min="0" class="form-control insumo-uprecio" oninput="calcularMonto(this)" required></td>
+                <td><input type="number" step="any" name="unidades" min="0" class="form-control insumo-unid" oninput="calcularMonto(this)" required></td>
                 <td><b class="monto-total-p">$0.00</b></td>
                 <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
             </tr>

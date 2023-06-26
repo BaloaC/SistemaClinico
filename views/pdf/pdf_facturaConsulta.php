@@ -70,6 +70,7 @@
 
         #title {
             text-align: center;
+            font-size: x-large;
         }
 
 

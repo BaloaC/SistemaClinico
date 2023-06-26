@@ -54,29 +54,19 @@
             text-align: start;
         }
 
-        .light{
-            background-color: #222fb938 !important;
-        }
-
-        .dark{
-            background-color: #222fb9 !important;
-            color: #f2f2f2;
-        }
-
         .tabla {
             width: 950px;
             padding: 2rem;
         }
 
         #title {
-            text-align: center;
+            font-size: x-large;
         }
-
-
         /* Tabla */
 
-        .insumos-head>th {
+        .insumos-head>th, #sub-title, #title {
             text-align: center;
+
 
         }
 
@@ -116,7 +106,7 @@
                     <th colspan="2" id="title">Factura de pago al personal médico</th>
                 </tr>
                 <tr>
-                    <th colspan="2" id="title">Recibo de pago correspondiente a la fecha: <span id="fecha">2023-02-18</span></th>
+                    <th colspan="2" id="sub-title">Recibo de pago correspondiente a la fecha: <span id="fecha">2023-02-18</span></th>
                 </tr>
                 <tr class="insumos-head light">
                     <th>Nombre</th>

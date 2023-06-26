@@ -80,7 +80,10 @@
                                     <h5>Información de la Cita</h4>
                                         <div class="col-12 col-md-6">
                                             <label for="fecha_cita">Fecha cita</label>
-                                            <input type="datetime-local" name="fecha_cita" id="fecha_cita" class="form-control mb-3">
+                                            <input type="date" name="fecha_cita" id="fecha_cita" class="form-control mb-3">
+
+                                            <label for="hora_entrada">Hora entrada</label>
+                                            <input type="time" name="hora_entrada" id="hora_entrada" class="form-control mb-3">
 
                                             <label for="tipo_cita">Tipo de cita</label>
                                             <select name="tipo_cita" id="s-tipo_cita" class="form-control mb-3" disabled>
@@ -101,6 +104,9 @@
                                             <label for="motivo_cita">Motivo cita</label>
                                             <input type="text" name="motivo_cita" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="45">
                                             <small class="form-text">Solo se permiten letras y números</small>
+
+                                            <label for="hora_salida">Hora salida</label>
+                                            <input type="time" name="hora_salida" id="hora_salida" class="form-control mb-3">
                                         </div>
                                 </div>
                                 <div class="row">
@@ -160,6 +166,29 @@
             </div>
         </div>
 
+        <!-- Modal Reprogramar -->
+        <div class="modal fade" id="modalReprogramar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalReprogramarLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="modalReprogramarLabel">Reprogramación de citas</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="reprogramacionAlert" class="alert reprogramacionAlert d-none" role="alert"></div>
+                        <form action="" id="reprogramacion-cita" class="p-3 px-4">
+                            <p class="text-secondary">Las citas se mantendrán como pendientes hasta que la clave otorgada por el seguro sea insertada</p>
+                            <label for="clave">Nueva fecha</label>
+                            <input type="date" name="fecha_cita" id="fecha_cita_reprogramada" class="form-control" required>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmReprogramation()">Actualizar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Modal Info-->
         <div class="modal fade" id="modalInfo" data-bs-keyboard="true" tabindex="-1" aria-labelledby="modalInfoLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -177,8 +206,11 @@
                             <p>Tipo de cita: <span id="tipoCita"></span></p>
                             <p>Estatus: <span id="estatusCita"></span></p>
                             <p>Clave cita: <span id="claveCita"></span></p>
-                            <p>Fecha cita: <input type="datetime-local" id="fechaCita" class="form-control w-50" disabled></p>
+                            <p>Fecha cita: <input type="date" id="fechaCita" class="form-control w-50" disabled></p>
+                            <p>Hora entrada: <input type="time" id="horaEntradaCita" class="form-control w-50" disabled></p>
+                            <p>Hora salida: <input type="time" id="horaSalidaCita" class="form-control w-50" disabled></p>
                             <p>Motivo cita: <span id="motivoCita"></span></p>
+                            <button type="button" id="btn-reprogramar" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalReprogramar">Reprogramar Cita</button>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -217,6 +249,8 @@
     <script type="module" src="<?php echo Url::to('assets/js/citas/addCita.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/confirmUpdateCita.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/updateCita.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/reprogramationCita.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/confirmReprogramation.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/calendarioCitas.js'); ?>"></script>
 
 </body>

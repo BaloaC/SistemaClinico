@@ -115,9 +115,7 @@ addEventListener("DOMContentLoaded", async e => {
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFSeguro(${data})"><i class="fas fa-trash del-consulta"></i></a>
                         `
                     } else {
-                        return `
-                            <a class="del-paciente"><i class="fas fa-trash disabled del-consulta"></i></a>
-                        `;
+                        return `-`;
                     }
                 }
             }

@@ -101,8 +101,6 @@ addEventListener("DOMContentLoaded", e => {
 
                         case "4": return `
                         <a href="pacientes/historialmedico/${data}" target="_blank" class="view-info"><i class="fas fa-eye view-info""></i></a> 
-                        <a class="act-paciente"><i class="fas fa-edit disabled act-paciente"></i></a>
-                        <a class="del-paciente"><i class="fas fa-trash disabled del-paciente"></i></a>
                         `;
 
                         case "5": return `
@@ -111,11 +109,7 @@ addEventListener("DOMContentLoaded", e => {
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deletePaciente(${data})"><i class="fas fa-trash del-paciente"></i></a>
                         `;
 
-                        default: return `
-                        <a class="view-info"><i class="fas fa-eye disabled view-info""></i></a> 
-                        <a class="act-paciente"><i class="fas fa-edit disabled act-paciente"></i></a>
-                        <a class="del-paciente"><i class="fas fa-trash disabled del-paciente"></i></a>
-                        `;
+                        default: return `-`;
    
                     }
                 }

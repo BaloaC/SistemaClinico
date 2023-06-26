@@ -45,7 +45,7 @@ a.nav-link{
 }
 
 .nav-link:hover, .nav-link:focus {
-    color: #15f1ff !important;
+    color: #000000 !important;
 }
 
 .dropdown-menu{
@@ -68,7 +68,8 @@ a.nav-link{
 }
 
 .nav-link {
-    font-size: 14px !important;
+    font-size: 16px !important;
+    white-space: nowrap;
 }
 
 

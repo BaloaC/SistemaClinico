@@ -81,7 +81,7 @@
                                 <option></option>
                             </select>
                             <label for="monto">Monto</label>
-                            <input type="number" name="monto" id="monto" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <input type="number" step="any" name="monto" id="monto" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El precio de ser mayor o igual a 0</small>
                         </form>
                     </div>

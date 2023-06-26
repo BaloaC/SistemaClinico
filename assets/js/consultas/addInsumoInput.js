@@ -3,11 +3,19 @@ import { select2OnClick } from "../global/dinamicSelect2.js";
 let clicks = 0;
 function addInsumoInput(parentModal = "#modalReg") {
 
+
+    const inputInsumos = document.querySelectorAll(".insumo-id");
+
+    // Validamos que exista un solo insumo para poder añadirle que se pueda eliminar
+    if (inputInsumos.length === 1) {
+        document.querySelectorAll(".insumo-id")[0].parentElement.parentElement.querySelector("div").classList.remove("d-none");
+    }
+
     clicks += 1;
     let template = `
         <div class="row align-items-center newInput">
             <div class="col-3 col-md-1">
-                <button type="button" class="btn" onclick="deleteInput(this)"><i class="fas fa-times m-0"></i></button>
+                <button type="button" class="btn" onclick="deleteInput(this,'.insumo-id')"><i class="fas fa-times m-0"></i></button>
             </div>
             <div class="col-12 col-md-5">
                 <label for="insumo">Insumo</label>
@@ -17,7 +25,7 @@ function addInsumoInput(parentModal = "#modalReg") {
                 </div>
                 <div class="col-12 col-md-5">
                 <label for="cantidad" class="p-0">Cantidad utilizada</label>
-                <input type="number" name="cantidad" class="form-control insumo-cant">
+                <input type="number" step="any" name="cantidad" class="form-control insumo-cant">
             </div>
         </div>
     `;

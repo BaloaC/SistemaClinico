@@ -16,6 +16,13 @@ async function getTitulares() {
 let clicks = 0;
 async function addTitularInput() {
 
+    const inputTitulares = document.querySelectorAll(".titular");
+
+    // Validamos que exista un solo titular para poder añadirle que se pueda eliminar
+    if(inputTitulares.length === 1){
+        document.querySelectorAll(".titular")[0].parentElement.parentElement.querySelector("div").classList.remove("d-none");
+    }
+
     clicks += 1;
     let template = `
         <div class="row align-items-center newInput">

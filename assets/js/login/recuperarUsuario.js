@@ -12,6 +12,12 @@ function template(infoUser) {
             <input class="form-control" type="text" name="respuesta2" placeholder="Introduce la respuesta a la pregunta de seguridad"  required>
             <label for="respuesta2" class="mt-3">${questions(infoUser[2].pregunta)}</label>
             <input class="form-control" type="text" name="respuesta3" placeholder="Introduce la respuesta a la pregunta de seguridad" required>
+            <label for="nueva_clave" class="mt-3">Nueva clave</label>
+            <input class="form-control" type="passowrd" name="nueva_clave" placeholder="Introduzca su nueva clave" required>
+            <input type="hidden" name="pregunta1" value="${infoUser[0].pregunta}">
+            <input type="hidden" name="pregunta2" value="${infoUser[1].pregunta}">
+            <input type="hidden" name="pregunta3" value="${infoUser[2].pregunta}">
+            <input type="hidden" name="usuario_id" value="${infoUser[0].usuario_id}">
             <div class="text-center mt-3"><button type="submit" id="btnEnviar" class="btn btn-primary w-50" value="${infoUser[0].usuario_id}">Enviar</button></div>
         </div>
     `;
@@ -89,6 +95,14 @@ document.getElementById("siguiente").addEventListener("click", async (event) => 
     }
 })
 
+const input = document.getElementById('usuario');
+
+input.addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+  }
+});
+
 document.getElementById("login-form").addEventListener("submit", async (event) => {
 
     event.preventDefault();
@@ -101,7 +115,11 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
         const formData = new FormData(event.target),
             data = {};
 
+        let json;
+
         formData.forEach((value, key) => (data[key] = value));
+
+        console.log(data);
 
         const options = {
 
@@ -110,15 +128,46 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
             headers: {
                 "Content-type": "application/json; charset=utf-8",
             },
-            body: JSON.stringify({
+
+        };
+
+        if (data.metodo == 1) {
+            options.body = JSON.stringify({
                 tipo_auth: data.metodo,
                 auth: data.pin,
                 nueva_clave: data.nueva_clave
-            }),
-        };
+            })
 
-        const response = await fetch(`/${path[1]}/login/${$btnEnviar.value}`, options),
-        json = await response.json();
+            const response = await fetch(`/${path[1]}/login/${$btnEnviar.value}`, options);
+            json = await response.json();
+
+        } else {
+
+            const preguntas = [
+                {
+                    pregunta: data.pregunta1,
+                    respuesta: data.respuesta1
+                }, {
+                    pregunta: data.pregunta2,
+                    respuesta: data.respuesta2
+                }, {
+                    pregunta: data.pregunta3,
+                    respuesta: data.respuesta3
+                }
+            ]
+
+            options.body = JSON.stringify({
+                nombre: data.usuario,
+                usuario_id: data.usuario_id,
+                nueva_clave: data.nueva_clave,
+                preguntas: preguntas
+            })
+
+            const response = await fetch(`/${path[1]}/respuesta/${$btnEnviar.value}`, options);
+            json = await response.json();
+        }
+
+
 
         if (!json.code) throw { result: json };
 
@@ -130,7 +179,7 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
         setTimeout(() => {
             location.assign(`/${path[1]}/login`);
         }, 500);
-        
+
 
     } catch (error) {
 

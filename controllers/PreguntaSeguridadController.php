@@ -56,13 +56,15 @@ class PreguntaSeguridadController extends Controller
 
                 $nombre = $_POST['nombre'];
                 $pregunta = $_POST['preguntas'];
+                $usuario_id = $_POST['usuario_id'];
                 $correcto = 0;
 
                 foreach ($pregunta as $preguntas) {
 
                     $_preguntaSeguridadModel = new PreguntaSeguridadModel();
-                    $select = $_preguntaSeguridadModel->where('pregunta', '=', $preguntas['pregunta'])->getFirst();
+                    $select = $_preguntaSeguridadModel->where('pregunta', '=', $preguntas['pregunta'])->where('usuario_id', '=', $usuario_id)->getFirst();
                     $respuesta = $select->respuesta;
+
 
                     if ($preguntas['respuesta'] != $respuesta) {
 
@@ -73,7 +75,7 @@ class PreguntaSeguridadController extends Controller
                     $correcto++;
                 }
 
-                if ($correcto != 2) {
+                if ($correcto != 3) {
                     $respuesta = new Response(false, 'Respuestas de seguridad incompletas');
                     return $respuesta->json(400);
                 }

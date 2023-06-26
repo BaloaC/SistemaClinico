@@ -42,6 +42,7 @@
         /* Estilos para la sección del titulo*/
 
         .title {
+            font-size: xx-large;
             display: flex;
             justify-content: center;
             border: 1px solid black;
@@ -64,7 +65,6 @@
             padding: 1.5rem;
             margin: 1.5rem;
             border: 1px solid black;
-            background-color: #222fb938 !important;
         }
 
         .consulta {
