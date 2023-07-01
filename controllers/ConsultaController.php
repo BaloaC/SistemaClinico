@@ -176,8 +176,10 @@ class ConsultaController extends Controller {
                     $consulta_cita_id = $_consultaConCita->insert($consulta_separada[0]);
                     
                     if ($consulta_cita_id == 0) {
-                        $respuesta = new Response(false, 'Hubo un error insertando la relación con consulta_cita');
-                        $respuesta->setData( array('consulta_id' => $id) );
+                        $_consultaModel = new ConsultaModel();
+                        $_consultaModel->where('consulta_id', '=',$id)->delete();
+
+                        $respuesta = new Response(false, 'Ocurrió un error insertando la relación consulta_cita');
                         return $respuesta->json(400);
                     }
 
@@ -188,8 +190,10 @@ class ConsultaController extends Controller {
                     $consulta_sin_cita = $_consultaSinCita->insert($consulta_separada[0]);
                     
                     if ($consulta_sin_cita == 0) {
-                        $respuesta = new Response(false, 'Hubo un error insertando la relación con consulta_sin_cita');
-                        $respuesta->setData( array('consulta_id' => $id) );
+                        $_consultaModel = new ConsultaModel();
+                        $_consultaModel->where('consulta_id', '=',$id)->delete();
+                        
+                        $respuesta = new Response(false, 'Ocurrió un error insertando la relación consulta_sin_cita');
                         return $respuesta->json(400);
                     }
                 }
