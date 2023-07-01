@@ -97,40 +97,40 @@ class ConsultaController extends Controller {
             return $respuesta->json(401);
         }
 
-        switch ($validarConsulta) {
-            case !$validarConsulta->existsInDB($_POST, $campoId):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
+        // switch ($validarConsulta) {
+        //     case !$validarConsulta->existsInDB($_POST, $campoId):
+        //         $respuesta = new Response('NOT_FOUND');
+        //         return $respuesta->json(404);
 
-            case ($validarConsulta->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
+        //     case ($validarConsulta->isEmpty($_POST)):
+        //         $respuesta = new Response('DATOS_VACIOS');
+        //         return $respuesta->json(400);
 
-            case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita'):
-                $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
-                return $respuesta->json(400);
+        //     case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita'):
+        //         $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
+        //         return $respuesta->json(400);
 
-            case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 3, 'cita'):
-                $respuesta = new Response(false, 'A la cita indicada no se le puede asignar una consulta');
-                return $respuesta->json(400);
+        //     case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 3, 'cita'):
+        //         $respuesta = new Response(false, 'A la cita indicada no se le puede asignar una consulta');
+        //         return $respuesta->json(400);
 
-            case !$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad'):
-                $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
-                return $respuesta->json(404);
+        //     case !$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad'):
+        //         $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
+        //         return $respuesta->json(404);
 
-            case $validarConsulta->isNumber($_POST, $camposNumericos):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
+        //     case $validarConsulta->isNumber($_POST, $camposNumericos):
+        //         $respuesta = new Response('DATOS_INVALIDOS');
+        //         return $respuesta->json(400);
 
-            case $validarConsulta->isDate($_POST['fecha_consulta']):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(400);
+        //     case $validarConsulta->isDate($_POST['fecha_consulta']):
+        //         $respuesta = new Response('FECHA_INVALIDA');
+        //         return $respuesta->json(400);
 
-            case $validarConsulta->isToday($_POST['fecha_consulta'], true):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(400);
+        //     case $validarConsulta->isToday($_POST['fecha_consulta'], true):
+        //         $respuesta = new Response('FECHA_INVALIDA');
+        //         return $respuesta->json(400);
 
-            default:
+            // default:
                 // Separando los datos
                 $examenes = isset($_POST['examenes']) ? $_POST['examenes'] : false;
                 $insumos = isset($_POST['insumos']) ? $_POST['insumos'] : false;
@@ -158,11 +158,41 @@ class ConsultaController extends Controller {
                 }
                 
                 $data = $validarConsulta->dataScape($_POST);
+                $por_cita = isset($data['cita_id']);
+                $consulta_separada = $this->separarInformación($data, $por_cita);
+                
+                $header = apache_request_headers();
+                $token = substr($header['Authorization'], 7);
 
                 $_consultaModel = new ConsultaModel();
                 $_consultaModel->byUser($token);
-                $id = $_consultaModel->insert($data);
+                $id = $_consultaModel->insert($consulta_separada[1]);
                 $mensaje = ($id > 0);
+                
+                if ($por_cita && $mensaje) {
+
+                    $consulta_separada[0]['consulta_id'] = $id;
+                    $_consultaConCita = new ConsultaCitaModel();
+                    $consulta_cita_id = $_consultaConCita->insert($consulta_separada[0]);
+                    
+                    if ($consulta_cita_id == 0) {
+                        $respuesta = new Response(false, 'Hubo un error insertando la relación con consulta_cita');
+                        $respuesta->setData( array('consulta_id' => $id) );
+                        return $respuesta->json(400);
+                    }
+
+                } else if (!$por_cita && $mensaje) {
+
+                    $consulta_separada[0]['consulta_id'] = $id;
+                    $_consultaSinCita = new ConsultaSinCitaModel();
+                    $consulta_sin_cita = $_consultaSinCita->insert($consulta_separada[0]);
+                    
+                    if ($consulta_sin_cita == 0) {
+                        $respuesta = new Response(false, 'Hubo un error insertando la relación con consulta_sin_cita');
+                        $respuesta->setData( array('consulta_id' => $id) );
+                        return $respuesta->json(400);
+                    }
+                }
 
                 if ($mensaje) {
 
@@ -196,17 +226,25 @@ class ConsultaController extends Controller {
                         }
                     }
 
-                    $cambioEstatus = array('estatus_cit' => '4');
-                    $_citaModel = new CitaModel;
-                    $res = $_citaModel->where('cita_id', '=', $data['cita_id'])->update($cambioEstatus);
-
                     $respuesta = new Response('INSERCION_EXITOSA');
+
+                    if ($por_cita) {
+                    
+                        $cambioEstatus = array('estatus_cit' => '4');
+                        $_citaModel = new CitaModel;
+                        $res = $_citaModel->where('cita_id', '=', $data['cita_id'])->update($cambioEstatus);
+                        
+                        if ($res <= 0) {
+                            $respuesta->setData('La consulta fue insertada, pero la cita no fue actualizada correctamente, por favor actualicela manualmente para evitar errores');
+                        }
+                    }
+
                     return $respuesta->json(201);
                 } else {
                     $respuesta = new Response('INSERCION_FALLIDA');
                     return $respuesta->json(400);
                 }
-        }
+        // }
     }
 
     public function listarConsultas() {
@@ -439,6 +477,26 @@ class ConsultaController extends Controller {
     }
 
     // Funciones para reutilizar
+    public function separarInformación($informacion, $es_cita) {
+
+        if ($es_cita) {
+            $consultaConCita = array("cita_id" => $informacion['cita_id']);
+            unset($informacion['cita_id']);
+            return array($consultaConCita, $informacion);
+
+        } else {
+            $consultaSinCita = array(
+                "especialidad_id" => $informacion['especialidad_id'],
+                "medico_id" => $informacion["medico_id"],
+                "paciente_id" => $informacion["paciente_id"],
+            );
+
+            unset($informacion['especialidad_id']);
+            unset($informacion['medico_id']);
+            unset($informacion['paciente_id']);
+            return array($consultaSinCita, $informacion);
+        }
+    }
 
     public function insertarExamen($informacion, $id) {
         $_consultaModel = new ConsultaModel();

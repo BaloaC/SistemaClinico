@@ -343,6 +343,51 @@ CREATE TABLE `consulta` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `consulta_cita`
+-- codigo original (no borrar)
+
+-- CCREATE TABLE `consulta_cita` (
+--   `consulta_cita_id` int(11) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
+--   `cita_id` int(11) NOT NULL,
+--   `consulta_id` int(11) NOT NULL,
+--   `estatus_con` enum('1','2') NOT NULL DEFAULT '1',
+--    PRIMARY KEY (consulta_cita_id),
+--    FOREIGN KEY (cita_id)
+--    	REFERENCES cita (cita_id)
+--     ON DELETE NO ACTION ON UPDATE NO ACTION,
+--     	FOREIGN KEY (consulta_id)
+--         REFERENCES consulta (consulta_id)
+--         ON DELETE NO ACTION ON UPDATE NO ACTION
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `consulta_sin_cita`
+-- codigo original (no borrar)
+
+-- CREATE TABLE `consulta_sin_cita` (
+--   `consulta_sin_cita_id` int(11) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
+--   `especialidad_id` int(11) NOT NULL,
+--   `medico_id` int(11) NOT NULL,
+--   `paciente_id` int(11) NOT NULL,
+--   `estatus_con` enum('1','2') NOT NULL DEFAULT '1',
+--    PRIMARY KEY (consulta_sin_cita_id),
+--    FOREIGN KEY (especialidad_id)
+--    	REFERENCES especialidad (especialidad_id)
+--     ON DELETE NO ACTION ON UPDATE NO ACTION,
+--         FOREIGN KEY (medico_id)
+--         REFERENCES medico (medico_id)
+--         ON DELETE NO ACTION ON UPDATE NO ACTION,
+--             FOREIGN KEY (paciente_id)
+--             REFERENCES paciente (paciente_id)
+--             ON DELETE NO ACTION ON UPDATE NO ACTION
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `consulta_examen`
 --
 
