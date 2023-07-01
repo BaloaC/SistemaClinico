@@ -86,8 +86,7 @@ class ConsultaController extends Controller {
 
     public function insertarConsulta(/*Request $request*/) {
         $_POST = json_decode(file_get_contents('php://input'), true);
-
-        $camposNumericos = array("paciente_id", "medico_id", "especialidad_id", "peso", "altura");
+        $exclude = array("peso","altura","es_emergencia","observaciones");
         $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id");
         $validarConsulta = new Validate;
 
@@ -102,24 +101,8 @@ class ConsultaController extends Controller {
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
 
-            case ($validarConsulta->isEmpty($_POST)):
+            case ($validarConsulta->isEmpty($_POST, $exclude)):
                 $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
-
-            case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita'):
-                $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
-                return $respuesta->json(400);
-
-            case $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 3, 'cita'):
-                $respuesta = new Response(false, 'A la cita indicada no se le puede asignar una consulta');
-                return $respuesta->json(400);
-
-            case !$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad'):
-                $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
-                return $respuesta->json(404);
-
-            case $validarConsulta->isNumber($_POST, $camposNumericos):
-                $respuesta = new Response('DATOS_INVALIDOS');
                 return $respuesta->json(400);
 
             case $validarConsulta->isDate($_POST['fecha_consulta']):
@@ -130,7 +113,7 @@ class ConsultaController extends Controller {
                 $respuesta = new Response('FECHA_INVALIDA');
                 return $respuesta->json(400);
 
-            // default:
+            default:
                 // Separando los datos
                 $examenes = isset($_POST['examenes']) ? $_POST['examenes'] : false;
                 $insumos = isset($_POST['insumos']) ? $_POST['insumos'] : false;
@@ -171,6 +154,14 @@ class ConsultaController extends Controller {
                 
                 if ($por_cita && $mensaje) {
 
+                    if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita') ) {
+                        $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
+                        return $respuesta->json(400);
+                    } else if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 3, 'cita') ) {
+                        $respuesta = new Response(false, 'A la cita indicada no se le puede asignar una consulta');
+                        return $respuesta->json(400);
+                    }
+
                     $consulta_separada[0]['consulta_id'] = $id;
                     $_consultaConCita = new ConsultaCitaModel();
                     $consulta_cita_id = $_consultaConCita->insert($consulta_separada[0]);
@@ -184,6 +175,11 @@ class ConsultaController extends Controller {
                     }
 
                 } else if (!$por_cita && $mensaje) {
+
+                    if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad')) {
+                        $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
+                        return $respuesta->json(400);
+                    }
 
                     $consulta_separada[0]['consulta_id'] = $id;
                     $_consultaSinCita = new ConsultaSinCitaModel();
@@ -248,7 +244,7 @@ class ConsultaController extends Controller {
                     $respuesta = new Response('INSERCION_FALLIDA');
                     return $respuesta->json(400);
                 }
-        // }
+        }
     }
 
     public function listarConsultas() {
@@ -536,6 +532,7 @@ class ConsultaController extends Controller {
     }
 
     public function setRelaciones($consulta) {
+        var_dump($consulta);
         $resultado = [];
         foreach ($consulta as $consultas) {
 
