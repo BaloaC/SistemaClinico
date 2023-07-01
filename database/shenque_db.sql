@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-06-2023 a las 03:57:29
+-- Tiempo de generación: 01-07-2023 a las 23:19:16
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -248,7 +248,27 @@ INSERT INTO `auditoria` (`auditoria_id`, `fecha_creacion`, `usuario_id`, `accion
 (181, '2023-06-21 00:24:59', 5, 'insert', 'Inserto cita '),
 (182, '2023-06-21 00:26:24', 5, 'update', 'Actualizó cita seguro '),
 (183, '2023-06-21 00:49:34', 5, 'insert', 'Inserto cita '),
-(184, '2023-06-22 01:54:04', 5, 'insert', 'Inserto factura medico ');
+(184, '2023-06-22 01:54:04', 5, 'insert', 'Inserto factura medico '),
+(185, '2023-06-22 23:42:49', 4, 'insert', 'Inserto especialidad Pediatra'),
+(186, '2023-06-22 23:43:01', 4, 'update', 'Actualizó especialidad Medicina General'),
+(187, '2023-06-22 23:43:25', 4, 'insert', 'Inserto medico Juan'),
+(188, '2023-06-22 23:52:24', 4, 'insert', 'Inserto empresa probando'),
+(189, '2023-07-01 20:44:11', 5, 'insert', 'Inserto consulta '),
+(190, '2023-07-01 20:45:11', 5, 'insert', 'Inserto consulta '),
+(191, '2023-07-01 20:46:28', 5, 'insert', 'Inserto consulta '),
+(192, '2023-07-01 20:47:14', 5, 'insert', 'Inserto consulta '),
+(193, '2023-07-01 20:49:10', 5, 'insert', 'Inserto consulta '),
+(194, '2023-07-01 20:50:59', 5, 'insert', 'Inserto consulta '),
+(195, '2023-07-01 20:52:44', 5, 'insert', 'Inserto consulta '),
+(196, '2023-07-01 20:55:11', 5, 'insert', 'Inserto consulta '),
+(197, '2023-07-01 20:58:41', 5, 'insert', 'Inserto consulta '),
+(198, '2023-07-01 21:00:08', 5, 'insert', 'Inserto consulta '),
+(199, '2023-07-01 21:02:53', 5, 'insert', 'Inserto consulta '),
+(200, '2023-07-01 21:04:20', 5, 'insert', 'Inserto consulta '),
+(201, '2023-07-01 21:06:24', 5, 'insert', 'Inserto consulta '),
+(202, '2023-07-01 21:06:50', 5, 'insert', 'Inserto consulta '),
+(203, '2023-07-01 21:08:26', 5, 'insert', 'Inserto consulta '),
+(204, '2023-07-01 21:09:48', 5, 'insert', 'Inserto consulta ');
 
 -- --------------------------------------------------------
 
@@ -276,7 +296,7 @@ CREATE TABLE `cita` (
 
 INSERT INTO `cita` (`cita_id`, `paciente_id`, `medico_id`, `especialidad_id`, `fecha_cita`, `hora_salida`, `hora_entrada`, `motivo_cita`, `cedula_titular`, `tipo_cita`, `estatus_cit`) VALUES
 (27, 11, 9, 9, '2023-06-22', '09:50:00', '08:50:00', 'dolor de cabeza', 18956458, '2', '3'),
-(28, 7, 9, 9, '2023-06-22', '10:00:00', '09:51:00', 'dolor de cabeza', 18954458, '1', '1');
+(28, 7, 9, 9, '2023-06-22', '10:00:00', '09:51:00', 'dolor de cabeza', 18954458, '1', '4');
 
 -- --------------------------------------------------------
 
@@ -329,61 +349,56 @@ INSERT INTO `compra_insumo` (`compra_insumo_id`, `insumo_id`, `factura_compra_id
 
 CREATE TABLE `consulta` (
   `consulta_id` int(11) NOT NULL,
-  `paciente_id` int(11) NOT NULL,
-  `medico_id` int(11) NOT NULL,
-  `especialidad_id` int(11) NOT NULL,
-  `cita_id` int(11) NOT NULL,
-  `peso` float NOT NULL,
-  `altura` float NOT NULL,
+  `peso` float DEFAULT NULL,
+  `altura` float DEFAULT NULL,
   `observaciones` varchar(255) DEFAULT NULL,
   `fecha_consulta` date NOT NULL,
+  `es_emergencia` tinyint(1) NOT NULL DEFAULT 0,
   `estatus_con` enum('1','2','3') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `consulta`
+--
+
+INSERT INTO `consulta` (`consulta_id`, `peso`, `altura`, `observaciones`, `fecha_consulta`, `es_emergencia`, `estatus_con`) VALUES
+(53, 11, 11, NULL, '2023-06-25', 0, '1'),
+(54, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
+(55, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
+(56, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
+(57, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
+(58, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
+(59, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
+(60, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
+(61, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
+(62, 12.4, 12.6, NULL, '2023-08-23', 0, '1'),
+(63, 12.4, 12.6, NULL, '2023-08-23', 0, '1'),
+(64, 12.4, 12.6, NULL, '2023-08-23', 0, '1'),
+(65, 12.4, 12.6, NULL, '2023-08-23', 0, '1'),
+(66, 12.4, 12.6, NULL, '2023-08-23', 0, '1'),
+(67, 12.4, 12.6, NULL, '2023-08-23', 0, '1'),
+(68, 12.4, 12.6, NULL, '2023-08-23', 0, '1'),
+(69, 12.4, 12.6, NULL, '2023-08-23', 0, '1');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `consulta_cita`
--- codigo original (no borrar)
+--
 
--- CCREATE TABLE `consulta_cita` (
---   `consulta_cita_id` int(11) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
---   `cita_id` int(11) NOT NULL,
---   `consulta_id` int(11) NOT NULL,
---   `estatus_con` enum('1','2') NOT NULL DEFAULT '1',
---    PRIMARY KEY (consulta_cita_id),
---    FOREIGN KEY (cita_id)
---    	REFERENCES cita (cita_id)
---     ON DELETE NO ACTION ON UPDATE NO ACTION,
---     	FOREIGN KEY (consulta_id)
---         REFERENCES consulta (consulta_id)
---         ON DELETE NO ACTION ON UPDATE NO ACTION
--- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
--- --------------------------------------------------------
+CREATE TABLE `consulta_cita` (
+  `consulta_cita_id` int(11) NOT NULL,
+  `cita_id` int(11) NOT NULL,
+  `consulta_id` int(11) NOT NULL,
+  `estatus_con` enum('1','2') NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Estructura de tabla para la tabla `consulta_sin_cita`
--- codigo original (no borrar)
+-- Volcado de datos para la tabla `consulta_cita`
+--
 
--- CREATE TABLE `consulta_sin_cita` (
---   `consulta_sin_cita_id` int(11) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
---   `especialidad_id` int(11) NOT NULL,
---   `medico_id` int(11) NOT NULL,
---   `paciente_id` int(11) NOT NULL,
---   `estatus_con` enum('1','2') NOT NULL DEFAULT '1',
---    PRIMARY KEY (consulta_sin_cita_id),
---    FOREIGN KEY (especialidad_id)
---    	REFERENCES especialidad (especialidad_id)
---     ON DELETE NO ACTION ON UPDATE NO ACTION,
---         FOREIGN KEY (medico_id)
---         REFERENCES medico (medico_id)
---         ON DELETE NO ACTION ON UPDATE NO ACTION,
---             FOREIGN KEY (paciente_id)
---             REFERENCES paciente (paciente_id)
---             ON DELETE NO ACTION ON UPDATE NO ACTION
--- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `consulta_cita` (`consulta_cita_id`, `cita_id`, `consulta_id`, `estatus_con`) VALUES
+(4, 28, 65, '1');
 
 -- --------------------------------------------------------
 
@@ -467,6 +482,29 @@ CREATE TABLE `consulta_seguro` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `consulta_sin_cita`
+--
+
+CREATE TABLE `consulta_sin_cita` (
+  `consulta_sin_cita_id` int(11) NOT NULL,
+  `consulta_id` int(11) NOT NULL,
+  `especialidad_id` int(11) NOT NULL,
+  `medico_id` int(11) NOT NULL,
+  `paciente_id` int(11) NOT NULL,
+  `estatus_con` enum('1','2') NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `consulta_sin_cita`
+--
+
+INSERT INTO `consulta_sin_cita` (`consulta_sin_cita_id`, `consulta_id`, `especialidad_id`, `medico_id`, `paciente_id`, `estatus_con`) VALUES
+(3, 60, 9, 9, 7, '1'),
+(4, 61, 9, 9, 7, '1');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `empresa`
 --
 
@@ -485,7 +523,8 @@ CREATE TABLE `empresa` (
 INSERT INTO `empresa` (`empresa_id`, `nombre`, `rif`, `direccion`, `estatus_emp`) VALUES
 (3, 'Vasos Venezolanos', 'J-234242341', 'Complejo Industrial La Hamaca', '1'),
 (4, 'Selva C.A', 'J-155465488', 'Complejo Industrial La Hamaca', '1'),
-(5, 'Envasados Samír', 'J-256489158', 'Andrés Eloy Blanco', '1');
+(5, 'Envasados Samír', 'J-256489158', 'Andrés Eloy Blanco', '1'),
+(6, 'probando', 'J-123454312', 'probando', '1');
 
 -- --------------------------------------------------------
 
@@ -508,7 +547,8 @@ INSERT INTO `especialidad` (`especialidad_id`, `nombre`, `estatus_esp`) VALUES
 (8, 'Otorrinolaringología', '1'),
 (9, 'Pediatría', '1'),
 (10, 'Dermatología', '1'),
-(11, 'Odontología', '1');
+(11, 'Odontología', '1'),
+(12, 'Medicina General', '1');
 
 -- --------------------------------------------------------
 
@@ -737,7 +777,8 @@ INSERT INTO `medico` (`medico_id`, `cedula`, `nombre`, `apellidos`, `telefono`, 
 (10, 15962347, 'Julia Lucia', 'Vendrell Acosta', '04124596589', 'Santa Rita', '1'),
 (11, 17965238, 'Héctor Alejandro', 'Talavera Ibarra', '04244587965', 'Cagua', '1'),
 (12, 24878989, 'María Hortensia', 'Yuste Sanjuan', '04164578965', 'Santa Inés', '1'),
-(18, 11502129, 'Alberto', 'Chacón', '04125005556', 'Barrio Bolívar', '1');
+(18, 11502129, 'Alberto', 'Chacón', '04125005556', 'Barrio Bolívar', '1'),
+(19, 18596235, 'Juan', 'London', '04124589632', 'Maracay', '1');
 
 -- --------------------------------------------------------
 
@@ -766,7 +807,9 @@ INSERT INTO `medico_especialidad` (`medico_especialidad_id`, `medico_id`, `espec
 (19, 17, 7, '1'),
 (20, 17, 8, '1'),
 (21, 18, 7, '1'),
-(22, 18, 8, '1');
+(22, 18, 8, '1'),
+(23, 19, 8, '1'),
+(24, 19, 9, '1');
 
 -- --------------------------------------------------------
 
@@ -797,7 +840,11 @@ INSERT INTO `paciente` (`paciente_id`, `cedula`, `nombre`, `apellidos`, `fecha_n
 (12, 25369123, 'Andrea', 'Gutierrez', '2001-12-24', 24, '04123353781', 'Maracay', '3', '1'),
 (13, 25169123, 'Miguel', 'Gutierrez', '2001-12-24', 24, '04123353781', 'Maracay', '3', '1'),
 (14, 24587962, 'Manuel', 'Rondón', '1998-05-12', 25, '5896231', 'Maracay', '4', '1'),
-(15, 21169123, 'José', 'Londón', '2010-12-24', 24, '04123353781', 'Maracay', '4', '1');
+(15, 21169123, 'José', 'Londón', '2010-12-24', 24, '04123353781', 'Maracay', '4', '1'),
+(18, 15962354, 'paciente', 'de prueba', '1986-10-22', 36, '04124585249', 'Maracay', '3', '2'),
+(19, 15962354, 'paciente', 'de prueba', '2003-10-10', 19, '4565454', 'Cagua', '4', '1'),
+(20, 12345234, 'Probando', 'Probando', '2010-12-12', 12, '04123353781', 'Probando', '4', '1'),
+(21, 75631223, 'guayaba', 'guayaba', '1983-10-12', 39, '2345678', 'guayaba', '3', '1');
 
 -- --------------------------------------------------------
 
@@ -817,7 +864,9 @@ CREATE TABLE `paciente_beneficiado` (
 
 INSERT INTO `paciente_beneficiado` (`paciente_beneficiado_id`, `paciente_id`, `estatus_pac`) VALUES
 (4, 14, '1'),
-(5, 15, '1');
+(5, 15, '1'),
+(6, 19, '1'),
+(7, 20, '1');
 
 -- --------------------------------------------------------
 
@@ -844,7 +893,8 @@ CREATE TABLE `paciente_seguro` (
 INSERT INTO `paciente_seguro` (`paciente_seguro_id`, `paciente_id`, `seguro_id`, `empresa_id`, `tipo_seguro`, `cobertura_general`, `fecha_contra`, `saldo_disponible`, `estatus_pac`) VALUES
 (3, 12, 5, 3, '1', 2000, '2002-07-22', 2000, '1'),
 (4, 12, 6, 4, '1', 2000, '2002-07-22', 4000, '1'),
-(5, 13, 6, 4, '1', 2000, '2002-07-22', 4000, '1');
+(5, 13, 6, 4, '1', 2000, '2002-07-22', 4000, '1'),
+(6, 21, 5, 3, '1', 2000, '2012-10-10', 2000, '1');
 
 -- --------------------------------------------------------
 
@@ -870,7 +920,10 @@ INSERT INTO `pregunta_seguridad` (`pregunta_id`, `usuario_id`, `pregunta`, `resp
 (12, 4, '2', 'rocky', '1'),
 (13, 5, '1', 'amarillo', '1'),
 (14, 5, '2', 'rocky', '1'),
-(15, 5, '2', 'rocky', '1');
+(15, 5, '2', 'rocky', '1'),
+(16, 6, '1', 'amarillo', '1'),
+(17, 6, '2', 'rocky', '1'),
+(18, 6, '2', 'rocky', '1');
 
 -- --------------------------------------------------------
 
@@ -996,7 +1049,9 @@ CREATE TABLE `titular_beneficiado` (
 INSERT INTO `titular_beneficiado` (`titular_beneficiado_id`, `paciente_beneficiado_id`, `paciente_id`, `estatus_tit`, `tipo_relacion`, `tipo_familiar`) VALUES
 (4, 4, 12, '1', '1', '1'),
 (5, 5, 12, '1', '2', '1'),
-(6, 5, 13, '1', '2', '4');
+(6, 5, 13, '1', '2', '4'),
+(7, 6, 12, '1', '1', '1'),
+(8, 7, 12, '1', '1', '1');
 
 -- --------------------------------------------------------
 
@@ -1020,8 +1075,9 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`usuario_id`, `nombre`, `clave`, `tokken`, `rol`, `pin`, `estatus_usu`, `fecha_creacion`) VALUES
-(4, 'Francis', '$2y$10$k.Q.Ph9Yyy1ogJB24Q03Wu56ar6TWstSg5Au0sL9Z/j.WzvI1dhC2', 'fabb51bcd6', 2, '$2y$10$yDKhtd2MhxYC/9rbTYDoSevYCSJANGxBVJbU5VbTDSK.f1y9GXshq', '1', '2023-05-03 04:01:06'),
-(5, 'guayaba', '$2y$10$Mo3Di1i0xWuRyTHTuHVGbuu/L1L3cQF3/qgx3/POEWeH9KJGZSfii', '7ace4b41a1', 1, '$2y$10$Ya6sB9ja4ZVRhe9vkLuBpOUb.mUzlVNgcB9MvE1s8yN73IJeItx86', '1', '2023-05-20 02:51:42');
+(4, 'Francis', '$2y$10$6cnPzqlenP5878xUDF/gMu/1vI1W4lrfk4C6ggJFcrlG9zlBvMTRi', '7104d4f029', 2, '$2y$10$yDKhtd2MhxYC/9rbTYDoSevYCSJANGxBVJbU5VbTDSK.f1y9GXshq', '1', '2023-05-03 04:01:06'),
+(5, 'guayaba', '$2y$10$Mo3Di1i0xWuRyTHTuHVGbuu/L1L3cQF3/qgx3/POEWeH9KJGZSfii', '7ace4b41a1', 1, '$2y$10$Ya6sB9ja4ZVRhe9vkLuBpOUb.mUzlVNgcB9MvE1s8yN73IJeItx86', '1', '2023-05-20 02:51:42'),
+(6, 'Usuario', '$2y$10$dDTDR8PSBHK8tYDcXxL7Qeokj8pl3R3LuieZzjsojy1Y4X/MvMjxa', NULL, 2, '$2y$10$3Us1bxifY9nN5VZhEPcvjO8D7LVetjAB10L5Wy68uJGO/hqK1x6b6', '1', '2023-06-23 01:37:57');
 
 --
 -- Índices para tablas volcadas
@@ -1071,11 +1127,15 @@ ALTER TABLE `compra_insumo`
 -- Indices de la tabla `consulta`
 --
 ALTER TABLE `consulta`
-  ADD PRIMARY KEY (`consulta_id`),
-  ADD KEY `fk_consulta_medico` (`medico_id`),
-  ADD KEY `fk_consulta_paciente` (`paciente_id`),
-  ADD KEY `fk_consulta_especialidad` (`especialidad_id`),
-  ADD KEY `fk_consulta_cita` (`cita_id`);
+  ADD PRIMARY KEY (`consulta_id`);
+
+--
+-- Indices de la tabla `consulta_cita`
+--
+ALTER TABLE `consulta_cita`
+  ADD PRIMARY KEY (`consulta_cita_id`),
+  ADD KEY `cita_id` (`cita_id`),
+  ADD KEY `consulta_id` (`consulta_id`);
 
 --
 -- Indices de la tabla `consulta_examen`
@@ -1114,6 +1174,16 @@ ALTER TABLE `consulta_seguro`
   ADD PRIMARY KEY (`consulta_seguro_id`),
   ADD KEY `fk_factura_seguro_consulta` (`consulta_id`),
   ADD KEY `fk_consulta_seguro` (`seguro_id`);
+
+--
+-- Indices de la tabla `consulta_sin_cita`
+--
+ALTER TABLE `consulta_sin_cita`
+  ADD PRIMARY KEY (`consulta_sin_cita_id`),
+  ADD KEY `especialidad_id` (`especialidad_id`),
+  ADD KEY `medico_id` (`medico_id`),
+  ADD KEY `paciente_id` (`paciente_id`),
+  ADD KEY `fk_consulta_consulta` (`consulta_id`);
 
 --
 -- Indices de la tabla `empresa`
@@ -1279,7 +1349,7 @@ ALTER TABLE `antecedentes_medicos`
 -- AUTO_INCREMENT de la tabla `auditoria`
 --
 ALTER TABLE `auditoria`
-  MODIFY `auditoria_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=185;
+  MODIFY `auditoria_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
 
 --
 -- AUTO_INCREMENT de la tabla `cita`
@@ -1303,7 +1373,13 @@ ALTER TABLE `compra_insumo`
 -- AUTO_INCREMENT de la tabla `consulta`
 --
 ALTER TABLE `consulta`
-  MODIFY `consulta_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `consulta_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+
+--
+-- AUTO_INCREMENT de la tabla `consulta_cita`
+--
+ALTER TABLE `consulta_cita`
+  MODIFY `consulta_cita_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `consulta_examen`
@@ -1336,16 +1412,22 @@ ALTER TABLE `consulta_seguro`
   MODIFY `consulta_seguro_id` int(9) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT de la tabla `consulta_sin_cita`
+--
+ALTER TABLE `consulta_sin_cita`
+  MODIFY `consulta_sin_cita_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `empresa_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `empresa_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `especialidad`
 --
 ALTER TABLE `especialidad`
-  MODIFY `especialidad_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `especialidad_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `examen`
@@ -1399,37 +1481,37 @@ ALTER TABLE `medicamento`
 -- AUTO_INCREMENT de la tabla `medico`
 --
 ALTER TABLE `medico`
-  MODIFY `medico_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `medico_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `medico_especialidad`
 --
 ALTER TABLE `medico_especialidad`
-  MODIFY `medico_especialidad_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `medico_especialidad_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `paciente`
 --
 ALTER TABLE `paciente`
-  MODIFY `paciente_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `paciente_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `paciente_beneficiado`
 --
 ALTER TABLE `paciente_beneficiado`
-  MODIFY `paciente_beneficiado_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `paciente_beneficiado_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `paciente_seguro`
 --
 ALTER TABLE `paciente_seguro`
-  MODIFY `paciente_seguro_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `paciente_seguro_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `pregunta_seguridad`
 --
 ALTER TABLE `pregunta_seguridad`
-  MODIFY `pregunta_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `pregunta_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedor`
@@ -1459,13 +1541,13 @@ ALTER TABLE `tipo_antecedente`
 -- AUTO_INCREMENT de la tabla `titular_beneficiado`
 --
 ALTER TABLE `titular_beneficiado`
-  MODIFY `titular_beneficiado_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `titular_beneficiado_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `usuario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `usuario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restricciones para tablas volcadas
@@ -1500,13 +1582,11 @@ ALTER TABLE `cita_seguro`
   ADD CONSTRAINT `fk_seguro_cita` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Filtros para la tabla `consulta`
+-- Filtros para la tabla `consulta_cita`
 --
-ALTER TABLE `consulta`
-  ADD CONSTRAINT `fk_consulta_cita` FOREIGN KEY (`cita_id`) REFERENCES `cita` (`cita_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_consulta_especialidad` FOREIGN KEY (`especialidad_id`) REFERENCES `especialidad` (`especialidad_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_consulta_medico` FOREIGN KEY (`medico_id`) REFERENCES `medico` (`medico_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_consulta_paciente` FOREIGN KEY (`paciente_id`) REFERENCES `paciente` (`paciente_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `consulta_cita`
+  ADD CONSTRAINT `consulta_cita_ibfk_1` FOREIGN KEY (`cita_id`) REFERENCES `cita` (`cita_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `consulta_cita_ibfk_2` FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `consulta_recipe`
@@ -1514,6 +1594,15 @@ ALTER TABLE `consulta`
 ALTER TABLE `consulta_recipe`
   ADD CONSTRAINT `consulta_recipe_ibfk_1` FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `consulta_recipe_ibfk_2` FOREIGN KEY (`medicamento_id`) REFERENCES `medicamento` (`medicamento_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `consulta_sin_cita`
+--
+ALTER TABLE `consulta_sin_cita`
+  ADD CONSTRAINT `consulta_sin_cita_ibfk_1` FOREIGN KEY (`especialidad_id`) REFERENCES `especialidad` (`especialidad_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `consulta_sin_cita_ibfk_2` FOREIGN KEY (`medico_id`) REFERENCES `medico` (`medico_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `consulta_sin_cita_ibfk_3` FOREIGN KEY (`paciente_id`) REFERENCES `paciente` (`paciente_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_consulta_consulta` FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `medicamento`
@@ -1525,3 +1614,51 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `consulta_cita`
+-- codigo original (no borrar)
+
+-- CCREATE TABLE `consulta_cita` (
+--   `consulta_cita_id` int(11) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
+--   `cita_id` int(11) NOT NULL,
+--   `consulta_id` int(11) NOT NULL,
+--   `estatus_con` enum('1','2') NOT NULL DEFAULT '1',
+--    PRIMARY KEY (consulta_cita_id),
+--    FOREIGN KEY (cita_id)
+--    	REFERENCES cita (cita_id)
+--     ON DELETE NO ACTION ON UPDATE NO ACTION,
+--     	FOREIGN KEY (consulta_id)
+--         REFERENCES consulta (consulta_id)
+--         ON DELETE NO ACTION ON UPDATE NO ACTION
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `consulta_sin_cita`
+-- codigo original (no borrar)
+
+-- CREATE TABLE `consulta_sin_cita` (
+--   `consulta_sin_cita_id` int(11) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
+--   `especialidad_id` int(11) NOT NULL,
+--   `medico_id` int(11) NOT NULL,
+--   `paciente_id` int(11) NOT NULL,
+--   `estatus_con` enum('1','2') NOT NULL DEFAULT '1',
+--    PRIMARY KEY (consulta_sin_cita_id),
+--    FOREIGN KEY (especialidad_id)
+--    	REFERENCES especialidad (especialidad_id)
+--     ON DELETE NO ACTION ON UPDATE NO ACTION,
+--         FOREIGN KEY (medico_id)
+--         REFERENCES medico (medico_id)
+--         ON DELETE NO ACTION ON UPDATE NO ACTION,
+--             FOREIGN KEY (paciente_id)
+--             REFERENCES paciente (paciente_id)
+--             ON DELETE NO ACTION ON UPDATE NO ACTION
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
