@@ -196,7 +196,7 @@ class CitaController extends Controller {
                             return $respuesta->json(400);
                         } else {
                             // validamos que esté asociado a ese titular
-                            if ( !$validarCita->isDuplicatedId('paciente_id', 'paciente_beneficiado_id', $data['paciente_titular_id'], $data['paciente_id'], 'titular_beneficiado') ) {
+                            if ( !$validarCita->isDuplicatedId('paciente_id', 'paciente_beneficiado_id', $data['paciente_titular_id'], $pacienteBeneficiaro->paciente_beneficiado_id, 'titular_beneficiado') ) {
                                 $respuesta = new Response(false, 'El paciente indicado no tiene relación con ese titular, por favor verifique nuevamente');
                                 return $respuesta->json(400);
                             }
