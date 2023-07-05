@@ -199,6 +199,23 @@ class ConsultaController extends Controller {
                 $por_cita = isset($data['cita_id']);
                 $consulta_separada = $this->separarInformación($data, $por_cita);
                 
+                // Validaciones generales si es por cita o si es sin cita
+                if ($por_cita) {
+                    if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita') ) {
+                        $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
+                        return $respuesta->json(400);
+                    } else if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 3, 'cita') ) {
+                        $respuesta = new Response(false, 'Para realizar la consulta la cita debe tener su clave correspondiente');
+                        return $respuesta->json(400);
+                    }
+
+                } else {
+                    if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad')) {
+                        $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
+                        return $respuesta->json(400);
+                    }
+                }
+
                 $header = apache_request_headers();
                 $token = substr($header['Authorization'], 7);
 
@@ -208,14 +225,6 @@ class ConsultaController extends Controller {
                 $mensaje = ($id > 0);
                 
                 if ($por_cita && $mensaje) {
-
-                    if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita') ) {
-                        $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
-                        return $respuesta->json(400);
-                    } else if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 3, 'cita') ) {
-                        $respuesta = new Response(false, 'A la cita indicada no se le puede asignar una consulta');
-                        return $respuesta->json(400);
-                    }
 
                     $consulta_separada[0]['consulta_id'] = $id;
                     $_consultaConCita = new ConsultaCitaModel();
@@ -230,11 +239,6 @@ class ConsultaController extends Controller {
                     }
 
                 } else if (!$por_cita && $mensaje) {
-
-                    if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad')) {
-                        $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
-                        return $respuesta->json(400);
-                    }
 
                     $consulta_separada[0]['consulta_id'] = $id;
                     $_consultaSinCita = new ConsultaSinCitaModel();
@@ -420,7 +424,7 @@ class ConsultaController extends Controller {
                                 ->where('consulta.estatus_con','=',1)
                                 ->innerJoin($this->selectConsultaCita, $innersCita, "consulta_cita");
 
-        if (is_null($es_citada) || count($es_citada) == 0 ) {
+        if (is_null($es_citada) || count($es_citada) == 0 ) { // Si no es por cita, extraemos la información de consulta_sin_cita
             $_consultaSinCita = new ConsultaSinCitaModel();
             $innersConsulta = $_consultaSinCita->listInner($this->innerConsultaSinCita);
             $consultaCompleta = $_consultaSinCita->where('consulta_sin_cita.consulta_id', '=', $consulta->consulta_id)
@@ -434,15 +438,9 @@ class ConsultaController extends Controller {
             
             return $consultas[] = (object) array_merge((array) $consulta, (array) $consultaCompleta[0]);
             
-        } else {
+        } else { // Si es por cita extraemos la información de consulta_cita
             $_cita = new CitaModel();
             $cita = $_cita->where('cita_id', '=', $es_citada[0]->cita_id)->getFirst();
-
-            // $_citaSeguro = new CitaSeguroModel();
-            // $innerSeguro = $_citaSeguro->listInner($this->innerSeguro);
-            // $citaSeguro = $_citaSeguro->where('cita.estatus_cit', '=', 1)
-            //                         ->where('cita_seguro.cita_id', '=', $cita->cita_id)
-            //                         ->innerJoin($this->selectSeguro, $innerSeguro, 'cita_seguro');
 
             $relaciones = $this->setRelaciones($consulta->consulta_id);
             if (count((array) $relaciones) > 0) {
@@ -524,6 +522,7 @@ class ConsultaController extends Controller {
     // Funciones para reutilizar
     public function separarInformación($informacion, $es_cita) {
 
+        // Separamos la información según la necesitemos para insertarla en las tablas correspondientes
         if ($es_cita) {
             $consultaConCita = array("cita_id" => $informacion['cita_id']);
             unset($informacion['cita_id']);
@@ -576,7 +575,7 @@ class ConsultaController extends Controller {
         }
     }
 
-    public function setRelaciones($consulta_id) {
+    public function setRelaciones($consulta_id) { // Método para unir las relaciones de las consultas en el getAll
 
         $_consultaModel = new ConsultaModel();
         $innersExa = $_consultaModel->listInner($this->arrayInnerExa);

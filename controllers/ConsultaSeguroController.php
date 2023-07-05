@@ -72,21 +72,26 @@ class ConsultaSeguroController extends Controller{
                 $_consultaSeguroModel = new ConsultaSeguroModel();
 
                 // Obtengo la consulta para extraer el paciente y buscarlo en paciente_seguro
-                $_consulta = new ConsultaModel();
-                $consulta = $_consulta->where('consulta_id', '=', $data['consulta_id'])->getFirst();
-                $_paciente = new PacienteSeguroModel();
-                $paciente = $_paciente->where('paciente_id', '=', $consulta->paciente_id)->getFirst();
+                $_consultaCita = new ConsultaCitaModel();
+                $consulta = $_consultaCita->where('consulta_id', '=', $data['consulta_id'])->getFirst();
                 
-                if ($data['monto'] > $paciente->saldo_disponible) {
-                    $respuesta = new Response(false, 'Saldo insuficiente para cubrir la consulta');
-                    $respuesta->setData("Error al procesar al paciente id $paciente->paciente_id con saldo $paciente->saldo_disponible");
-                    return $respuesta->json(400);
-                }
-
-                // Obtengo la cita para insertar el seguro
                 $_cita = new CitaModel();
                 $cita = $_cita->where('cita_id', '=', $consulta->cita_id)->getFirst();
-                $data['seguro_id'] = $cita->seguro_id;
+                $_paciente = new PacienteModel();
+                $paciente = $_paciente->where('cedula', '=', $cita->cedula_titular)->getFirst();
+                
+                $_citaSeguro = new CitaSeguroModel();
+                $citaSeguro = $_citaSeguro->where('cita_id', '=', $consulta->cita_id)->getFirst();
+                $data['seguro_id'] = $citaSeguro->seguro_id;
+
+                $_pacienteSeguro = new PacienteSeguroModel();
+                $pacienteSeguro = $_pacienteSeguro->where('paciente_id', '=', $paciente->paciente_id)->where('seguro_id', '=', $citaSeguro->seguro_id)->getFirst();
+
+                if ($data['monto'] > $pacienteSeguro->saldo_disponible) {
+                    $respuesta = new Response(false, 'Saldo insuficiente para cubrir la consulta');
+                    $respuesta->setData("Error al procesar al paciente id $pacienteSeguro->paciente_id con saldo $pacienteSeguro->saldo_disponible");
+                    return $respuesta->json(400);
+                }
 
                 // Insertamos la consulta_seguro
                 $header = apache_request_headers();
@@ -96,7 +101,8 @@ class ConsultaSeguroController extends Controller{
                 $mensaje = ($id > 0);
 
                 // ya insertada la factura, modificamos el estatus de la consulta a pagada
-                $update = $_consulta->update(['estatus_con' => 3]);
+                $_consulta = new ConsultaModel();
+                $update = $_consulta->where('consulta_id','=',$data['consulta_id']  )->update(['estatus_con' => 3]);
                 $isUpdate = ($update > 0);
 
                 if (!$isUpdate) {
@@ -105,14 +111,14 @@ class ConsultaSeguroController extends Controller{
                     $_consultaSeguroModel->where('consulta_seguro_id', '=', $id)->delete();
 
                     $respuesta = new Response(false, 'Hubo un error actualizando el estatus de la consulta');
-                    $respuesta->setData('Error al colocar la consulta' + $data['consulta_id'] + 'como cancelada');
+                    $respuesta->setData('Error al colocar la consulta id '.$data['consulta_id'].' como cancelada');
                     return $respuesta->json(400);
                 }
-
+                
                 if ($mensaje) {
                     
-                    $montoActualizado = $paciente->saldo_disponible - $data['monto'];
-                    $respuesta = $_paciente->update([ 'saldo_disponible' => $montoActualizado ]);
+                    $montoActualizado = $pacienteSeguro->saldo_disponible - $data['monto'];
+                    $respuesta = $_pacienteSeguro->update([ 'saldo_disponible' => $montoActualizado ]);
                     if (!$respuesta) {
                         $respuesta = new Response(false, 'Hubo un error manipulando el saldo del paciente');
                         $respuesta->setData('Error al procesar al paciente id ' + $paciente->paciente_id + 'con saldo ' + $paciente->saldo_disponible);

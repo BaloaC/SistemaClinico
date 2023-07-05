@@ -340,7 +340,7 @@ class CitaController extends Controller {
             default:
 
                 $data = $validarCita->dataScape($_POST);
-                $newArray['estatus_cit'] = 1;
+                $newStatus['estatus_cit'] = 1;
                 $newArray['clave'] = $data['clave'];
 
                 $header = apache_request_headers();
@@ -348,10 +348,15 @@ class CitaController extends Controller {
 
                 $_citaSeguroModel = new CitaSeguroModel();
                 $_citaSeguroModel->byUser($token);
-
-                
                 $actualizado = $_citaSeguroModel->where('cita_id', '=', $cita_id)->update($newArray);
-                $mensaje = ($actualizado > 0);
+                $esActualizado = "";
+                
+                if ($actualizado > 0) {
+                    $_cita = new CitaModel();
+                    $esActualizado = $_cita->where('cita_id', '=', $cita_id)->update($newStatus);
+                }
+
+                $mensaje = ($esActualizado > 0);
 
                 $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
                 $respuesta->setData($actualizado);
