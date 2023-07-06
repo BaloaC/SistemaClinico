@@ -99,7 +99,7 @@ class ExamenController extends Controller{
             default:
                 $data = $validarExamen->dataScape($_POST);    
 
-                if ( array_key_exists("hecho_aqui", $data) && $data['"hecho_aqui"'] != 0 && $data['"hecho_aqui"'] != 1) {
+                if ( array_key_exists("hecho_aqui", $data) && $data["hecho_aqui"] != 0 && $data["hecho_aqui"] != 1) {
                     $respuesta = new Response(false, 'El campo hecho aqui solo permite valores booleanos');
                     return $respuesta->json(400);
                 }

@@ -16,21 +16,67 @@ export default async function mostrarHistorialMedico(id) {
         const nombre = document.getElementById("nombre_paciente");
         const fecha = document.getElementById("fecha");
         const edad = document.getElementById("edad");
+        const tipo_paciente = document.getElementById("tipo_paciente");
         const consultaPdf = document.getElementById("consulta-pdf");
+        const seguroContainer = document.querySelector(".seguro-container");
+        const templateSeguro = document.getElementById("template-seguro").content;
+        const seguroFragment = document.createDocumentFragment();
         const antecedenteContainer = document.querySelector(".antecedente-container");
         const templateAntecedente = document.getElementById("template-antecedente").content;
         const antecedenteFragment = document.createDocumentFragment();
+        const citaContainer = document.getElementById("citaAccordion");
+        const templateCita = document.getElementById("template-cita").content;
+        const citaFragment = document.createDocumentFragment();
         const consultaContainer = document.getElementById("consultaAccordion");
         const templateConsulta = document.getElementById("template-consulta").content;
         const consultaFragment = document.createDocumentFragment();
 
         const infoPaciente = await getById("pacientes", id);
         const infoConsultas = await getById("consultas/paciente", id);
+        const infoCitas = await getById("citas/paciente",id);
+
+        // Obtenemos las citas asigandas y las que están en espera
+        const listCitas = infoCitas.filter(cita => cita.estatus_cit === "1" || cita.estatus_cit === "3").sort((a,b) => b.cita_id - a.cita_id);
+
+        // Obtenemos las consultas por id de manera descendente
         const listConsultas = infoConsultas.consultas.sort((a, b) => b.consulta_id - a.consulta_id);
 
         nombre.textContent = `${infoPaciente.nombre || infoPaciente.nombre_paciente} ${infoPaciente.apellidos}`;
         fecha.textContent = `${infoPaciente.fecha_nacimiento}`;
         edad.textContent = `${infoPaciente.edad}`;
+    
+        switch(infoPaciente.tipo_paciente){
+            case "1": tipo_paciente.textContent = "Natural"; break;
+            case "2": tipo_paciente.textContent = "Representante"; break;
+            case "3": tipo_paciente.textContent = "Asegurado"; break;
+            case "4": tipo_paciente.textContent = "Beneficiado"; break;
+            default: tipo_paciente.textContent = "Desconocido"; break;
+        }
+
+
+        // ** Validamos si el paciente es asegurado y tiene seguros
+        if(infoPaciente.tipo_paciente === "3" && infoPaciente.seguro.length > 0){
+
+            infoPaciente.seguro.forEach(el => {
+
+                let nombreEmpresa = templateSeguro.getElementById("nombre_empresa");
+                let nombreSeguro = templateSeguro.getElementById("nombre_seguro");
+
+                nombreEmpresa.textContent = el.nombre_empresa;
+                nombreSeguro.textContent = el.nombre_seguro;
+
+                let clone = document.importNode(templateSeguro, true);
+                seguroFragment.appendChild(clone);
+            });
+
+            //Mostrarmos el label
+            const seguroLabel = document.getElementById("seguroLabel");
+            seguroLabel.classList.remove("d-none");
+
+            // Actualizamos el contenedor e insertamos los datos
+            seguroContainer.replaceChildren();
+            seguroContainer.appendChild(seguroFragment);
+        }
 
         // ** Validamos si el paciente cuenta con antecedetes médicos
         if (infoConsultas.antecedentes_medicos.length > 0) {
@@ -74,6 +120,58 @@ export default async function mostrarHistorialMedico(id) {
             // Actualizamos el contenedor e insertamos los datos
             antecedenteContainer.replaceChildren();
             antecedenteContainer.appendChild(p);
+        }
+
+        // ** Validamos en caso de que el paciente tenga citas pendientes
+        if (listCitas.length > 0) {
+
+            const citasLabel = document.getElementById("citasLabel");
+            citasLabel.classList.remove("d-none");
+
+            listCitas.forEach((el, i) => {
+
+                let dropdownLink = templateCita.querySelector(".btn-link");
+                let citaContainer = templateCita.querySelector(".collapse");
+                let cita_id = templateCita.getElementById("cita_id");
+                let nombre_medico = templateCita.getElementById("nombre_medico");
+                let especialidad = templateCita.getElementById("especialidad");
+                let fecha_cita = templateCita.getElementById("fecha_cita");
+                let motivo_cita = templateCita.getElementById("motivo_cita");
+                let hora_entrada = templateCita.getElementById("hora_entrada");
+                let hora_salida = templateCita.getElementById("hora_salida");
+                let tipo_cita = templateCita.getElementById("tipo_cita");
+                let estatus_cit = templateCita.getElementById("estatus_cit");
+
+                if (i === 0) {
+                    citaContainer.classList.add("show");
+                } else {
+                    citaContainer.classList.remove("show");
+                }
+
+                cita_id.textContent = el.cita_id;
+                nombre_medico.textContent = `${el.nombre_medico} ${el.apellido_medico}`;
+                especialidad.textContent = el.nombre_especialidad;
+                fecha_cita.textContent = el.fecha_cita;
+                motivo_cita.textContent = el.motivo_cita;
+                hora_entrada.textContent = el.hora_entrada;
+                hora_salida.textContent = el.hora_salida;
+                tipo_cita.textContent = el.tipo_cita === "2" ? "Asegurada" : "Natural";
+                estatus_cit.textContent = el.estatus_cit === "3" ? "Pendiente" : "Asignada";
+                
+
+                dropdownLink.innerHTML = `<b>ID:</b> ${cita_id.textContent} - <b>Nombre médico:</b> ${nombre_medico.textContent} - <b>Especialidad:</b> ${especialidad.textContent} - <b>Fecha:</b> ${fecha_cita.textContent}`;
+                dropdownLink.setAttribute("data-bs-target", `#cita-${el.cita_id}`);
+                dropdownLink.setAttribute("aria-controls", `#cita-${el.cita_id}`);
+                citaContainer.setAttribute("id", `cita-${el.cita_id}`);
+
+                let clone = document.importNode(templateCita, true);
+                citaFragment.appendChild(clone);
+            });
+
+            // Actualizamos el contenedor e insertamos los datos
+            citaContainer.replaceChildren();
+            citaContainer.appendChild(citaFragment);
+
         }
 
 
@@ -124,12 +222,12 @@ export default async function mostrarHistorialMedico(id) {
 
         } else {
             consultaPdf.classList.add("d-none");
-            const h4 = document.createElement("h4");
-            h4.textContent = "El paciente no posee consultas";
+            const h6 = document.createElement("h6");
+            h6.textContent = "El paciente no posee consultas";
 
             // Actualizamos el contenedor e insertamos los datos
             consultaContainer.replaceChildren();
-            consultaContainer.appendChild(h4);
+            consultaContainer.appendChild(h6);
         }
     } catch (error) {
         console.log(error);

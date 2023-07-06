@@ -67,8 +67,23 @@
                             <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
                             <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="tipo">Tipo</label>
-                            <input type="text" name="tipo" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                            <small class="form-text">El tipo solo puede contener letras</small>
+                            <select name="tipo" id="s-tipo" class="form-control mb-3">
+                                <option value="" disabled selected>Seleccione el tipo de exámen</option>
+                                <option value="1">Ecografía</option>
+                                <option value="2">Laboratorio</option>
+                                <option value="3">Ultrasonido</option>
+                            </select>
+                            <label for="tipo">¿Este exámen lo realizan aquí?</label>
+                            <div class="input-radios-container">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="hecho_aqui" id="tipoPacienteTitular" value="1"  required>
+                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="hecho_aqui" id="tipoPacienteBeneficiado" value="0" required>
+                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -92,7 +107,24 @@
                             <label for="nombre">Nombre exámen</label>
                             <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
                             <label for="tipo">Tipo</label>
-                            <input type="text" name="tipo" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                            <select name="tipo" id="s-tipo" class="form-control mb-3" required>
+                                <option value="" disabled selected>Seleccione el tipo de exámen</option>
+                                <option value="1">Ecografía</option>
+                                <option value="2">Laboratorio</option>
+                                <option value="3">Ultrasonido</option>
+                            </select>
+                            <label for="tipo">¿Este exámen lo realizan aquí?</label>
+                            <div class="input-radios-container">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="hecho_aqui" id="hecho_aqui_si" value="1" required>
+                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="hecho_aqui" id="hecho_aqui_no" value="0" required>
+                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                </div>
+                                <input type="hidden" name="hecho_aqui_value" id="hecho_aqui_value">
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">

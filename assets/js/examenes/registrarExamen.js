@@ -15,7 +15,7 @@ async function addExamen() {
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.tipo))) throw { message: "El tipo ingresado no es válido" };
+        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.tipo))) throw { message: "El tipo ingresado no es válido" };
 
         await addModule("examenes", "info-examen", data, "Exámen registrado exitosamente!");
         const listadoExamenes = await getAll("examenes/consulta");

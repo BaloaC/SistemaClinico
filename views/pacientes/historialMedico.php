@@ -36,6 +36,11 @@
                             <p><b>Nombres y Apellidos:</b> <span id="nombre_paciente"></span></p>
                             <p><b>Fecha de nacimiento:</b> <span id="fecha"></span></p>
                             <p><b>Edad:</b> <span id="edad"></span></p>
+                            <p><b>Tipo paciente:</b> <span id="tipo_paciente"></span></p>
+                            <p id="seguroLabel" class="d-none"><b>Seguros:</b></p>
+                            <div class="seguro-container">
+
+                            </div>
                             <p><b>Antecedentes:</b></p>
                             <div class="antecedente-container">
 
@@ -43,6 +48,11 @@
                         </div>
                         <div class="col-12 col-md-8 paciente-consulta">
                             <button class="btn btn-sm btn-add align-self-end mb-2" data-bs-toggle="modal" data-bs-target="#modalRegConsulta"><i class="fa-sm fas fa-plus"></i> Agregar consulta</button>
+                            <h5 class="pt-5 pb-2 text-grey d-none" id="citasLabel">Citas pendientes</h4>
+                            <div class="accordion citas-accordion" id="citaAccordion">
+
+                            </div>
+                            <h5 class="pt-5 pb-2 text-grey">Consultas vistas</h5>
                             <div class="accordion consulta-accordion" id="consultaAccordion">
 
                             </div>
@@ -247,6 +257,38 @@
                 <div class="actions text-end">
                     <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-antecedente"><i class="fas fa-edit act-antecedente"></i></a>
                     <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-antecedente"><i class="fas fa-trash del-antecedente"></i></a>
+                </div>
+            </div>
+        </template>
+
+        <template id="template-seguro">
+            <div class="seguro">
+                <p><b>Nombre de la empresa:</b> <span id="nombre_empresa"></span></p>
+                <p><b>Nombre del seguro:</b> <span id="nombre_seguro"></span></p>
+            </div>
+        </template>
+
+        <template id="template-cita">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <a class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cita1" aria-expanded="false" aria-controls="cita1">
+                        </a>
+                    </h2>
+                </div>
+                <div id="cita1" class="collapse show" data-parent="#citaAccordion">
+                    <div class="card-body">
+                        <p><b>ID:</b> <span id="cita_id"></span> <br>
+                            <b>Nombre médico:</b> <span id="nombre_medico"></span> <br>
+                            <b>Especialidad:</b> <span id="especialidad"></span> <br>
+                            <b>Fecha cita:</b> <span id="fecha_cita"></span> <br>
+                            <b>Motivo cita:</b> <span id="motivo_cita"></span> <br>
+                            <b>Hora entrada:</b> <span id="hora_entrada"></span> <br>
+                            <b>Hora salida:</b> <span id="hora_salida"></span> <br>
+                            <b>Tipo de cita:</b> <span id="tipo_cita"></span> <br>
+                            <b>Estatus:</b> <span id="estatus_cit"></span> <br>
+                        </p>
+                    </div>
                 </div>
             </div>
         </template>

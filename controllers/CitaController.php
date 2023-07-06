@@ -231,7 +231,8 @@ class CitaController extends Controller {
     public function listarCitaPorPacienteId($paciente_id) {
 
         $_citaModel = new CitaModel();
-        $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('paciente_id', '=', $paciente_id)->getAll();
+        $inners = $_citaModel->listInner($this->arrayInner);
+        $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('cita.paciente_id', '=', $paciente_id)->innerJoin($this->arraySelect, $inners, "cita");
         $mensaje = ($lista != null);
 
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
