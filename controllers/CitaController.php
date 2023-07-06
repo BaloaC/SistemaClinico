@@ -9,18 +9,15 @@ class CitaController extends Controller {
         "medico.nombre AS nombre_medico",
         "medico.apellidos AS apellido_medico",
         "especialidad.nombre AS nombre_especialidad",
-        "seguro.nombre AS nombre_seguro",
         "cita.cita_id",
         "cita.paciente_id",
         "cita.medico_id",
         "cita.especialidad_id",
-        "cita.seguro_id",
         "cita.fecha_cita",
         "cita.hora_entrada",
         "cita.hora_salida",
         "cita.motivo_cita",
         "cita.cedula_titular",
-        "cita.clave",
         "cita.tipo_cita",
         "cita.estatus_cit"
     );
@@ -29,7 +26,16 @@ class CitaController extends Controller {
         "paciente" => "cita",
         "medico" => "cita",
         "especialidad" => "cita",
-        "seguro" => "cita"
+    );
+
+    protected $seguroSelect = array(
+        "cita_seguro.seguro_id",
+        "seguro.nombre AS nombre_seguro",
+        "cita_seguro.clave"
+    );
+
+    protected $seguroInner = array(
+        "seguro" => "cita_seguro"
     );
 
     //Método index (vista principal)
@@ -50,19 +56,11 @@ class CitaController extends Controller {
         $_POST = json_decode(file_get_contents('php://input'), true);
 
         // Creando los strings para las validaciones
-        $camposNumericos = array("paciente_id", "medico_id", "especialidad_id", "cedula_titular", "tipo_cita", "medico_id");
         $camposString = array("motivo_cita");
         $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id");
         $exclude = array("seguro_id");
 
         $validarCita = new Validate;
-
-        $token = $validarCita->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
-
         switch ($_POST) {
 
             case ($validarCita->isEmpty($_POST, $exclude)):
@@ -72,10 +70,6 @@ class CitaController extends Controller {
             case !$validarCita->existsInDB($_POST, $campoId):
                 $respuesta = new Response('NOT_FOUND');
                 return $respuesta->json(404);
-
-            case $validarCita->isNumber($_POST, $camposNumericos):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
 
             case $validarCita->isString($_POST, $camposString):
                 $respuesta = new Response('DATOS_INVALIDOS');
@@ -164,35 +158,62 @@ class CitaController extends Controller {
                 if ($data['tipo_cita'] == 2) {
 
                     // verificamos que pueda solicitar cita asegurada
-                    $siEsTitular = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '3', 'paciente');
-                    $siEsBeneficiario = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '4', 'paciente');
-                    $siSeguroAsociado = $validarCita->isDuplicatedId('paciente_id', 'seguro_id', $_POST['paciente_titular_id'], $_POST['seguro_id'], 'paciente_seguro');
+                    /*** Estas líneas fueron comentadas porque aparentemente no hacían nada ***/
+                    // $siEsTitular = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '3', 'paciente');
+                    // $siEsBeneficiario = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '4', 'paciente');
+                    // $siSeguroAsociado = $validarCita->isDuplicatedId('paciente_id', 'seguro_id', $_POST['paciente_titular_id'], $_POST['seguro_id'], 'paciente_seguro');
 
-                    if (!$siSeguroAsociado) {
-                        $respuesta = new Response(false, 'Ese seguro no se encuentra asociado con el paciente indicado');
-                        return $respuesta->json(400);
-                    }
+                    // if (!$siEsTitular && !$siEsBeneficiario) {
+                    //     $respuesta = new Response(false, 'El paciente ingresado no está registrado como asegurado');
+                    //     return $respuesta->json(400);
+                    // }
 
-                    if (!$siEsTitular && !$siEsBeneficiario) {
-                        $respuesta = new Response(false, 'El paciente ingresado no está registrado como asegurado');
-                        return $respuesta->json(400);
-                    }
+                    // if (!$siSeguroAsociado) {
+                    //     $respuesta = new Response(false, 'Ese seguro no se encuentra asociado con el paciente indicado');
+                    //     return $respuesta->json(400);
+                    // }
+                    /*** Estas líneas fueron comentadas porque aparentemente no hacían nada ***/
 
                     // verificamos que el titular pueda ser titular
                     $esTitular = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], 3, 'paciente');
                     if (!$esTitular) {
                         $respuesta = new Response(false, 'La cédula no pertenece a ningún titular de seguro');
-                        return $respuesta->json(404);
+                        return $respuesta->json(400);
+                    }
+
+                    // Verificamos que el titular este asociado a ese seguro
+                    $esSeguroAsociado = $validarCita->isDuplicatedId('paciente_id', 'seguro_id', $data['paciente_titular_id'], $data['seguro_id'], 'paciente_seguro');
+                    if (!$esSeguroAsociado) {
+                        $respuesta = new Response(false, 'El paciente indicado no se encuentra asociado a ese seguro');
+                        return $respuesta->json(400);
+                    }
+
+                    $_pacienteModel = new PacienteBeneficiadoModel();
+                    $pacienteBeneficiaro = $_pacienteModel->where('paciente_id', '=', $data['paciente_id'])->getFirst();
+                    
+                    // Validamos que sea beneficiado
+                    if ($data['paciente_id'] != $data['paciente_titular_id']) {
+                        if ( !$pacienteBeneficiaro ) {
+                            $respuesta = new Response(false, 'El paciente indicado no es beneficiario de un seguro');
+                            return $respuesta->json(400);
+                        } else {
+                            // validamos que esté asociado a ese titular
+                            if ( !$validarCita->isDuplicatedId('paciente_id', 'paciente_beneficiado_id', $data['paciente_titular_id'], $pacienteBeneficiaro->paciente_beneficiado_id, 'titular_beneficiado') ) {
+                                $respuesta = new Response(false, 'El paciente indicado no tiene relación con ese titular, por favor verifique nuevamente');
+                                return $respuesta->json(400);
+                            }
+                        }
                     }
 
                     // Asignamos el estatus dependiendo del contenido del campo clave
                     if (array_key_exists("clave", $data)) {
 
                         $verClave = empty($data['clave']);
-                        $data['clave'] = ($verClave ? 3 : 1);
+                        $data['estatus_cit'] = ($verClave ? 3 : 1);
                     } else {
                         $data['estatus_cit'] = 3;
                     }
+
                 } else {
 
                     $_citaModel = new CitaModel();
@@ -200,13 +221,47 @@ class CitaController extends Controller {
                     $data['estatus_cit'] = 1;
                 }
 
+                $header = apache_request_headers();
+                $token = substr($header['Authorization'], 7) ;
+
                 $_citaModel = new CitaModel();
                 $_citaModel->byUser($token);
                 $id = $_citaModel->insert($data);
                 $mensaje = ($id > 0);
 
-                $mensaje = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-                return $mensaje->json($mensaje ? 201 : 400);
+                // Insertamos cita_seguro si es asegurada
+                if ($mensaje && $data['tipo_cita'] == 2) {
+                    $_citaSeguroModel = new CitaSeguroModel();
+
+                    $citaSeguro = [
+                        "cita_id" => $id,
+                        "seguro_id" => $data["seguro_id"],
+                    ];
+
+                    if ( !empty($data['clave']) ) { $citaSeguro['clave'] = $data["clave"]; }
+
+                    $isInserted = $_citaSeguroModel->insert($citaSeguro);
+
+                    if (!$isInserted) {
+                        $_citaModel = new CitaModel();
+                        $_citaModel->where('cita_id', '=', $id)->delete();
+
+                        $mensaje = new Response('INSERCION_FALLIDA');
+                        $mensaje->setData('Ocurrió un error insertando la información relacionada al seguro');
+                        return $mensaje->json(400);
+                    } else {
+                        $mensaje = new Response('INSERCION_EXITOSA');
+                        return $mensaje->json(201);
+                    }
+
+                } else if (!$mensaje && $data['tipo_cita'] == 2) {
+                    $mensaje = new Response('INSERCION_FALLIDA');
+                    return $mensaje->json(400);
+
+                } else if ($data['tipo_cita'] == 1) { // Si es cita natural no aplicamos ninguna inserción extra
+                    $mensaje = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+                    return $mensaje->json($mensaje ? 201 : 400);
+                }
         }
     }
 
@@ -216,6 +271,15 @@ class CitaController extends Controller {
         $inners = $_citaModel->listInner($this->arrayInner);
         $lista = $_citaModel->where('estatus_cit', '!=', '2')->innerJoin($this->arraySelect, $inners, "cita");
 
+        foreach ($lista as $cita) {
+            if ($cita->tipo_cita == 2) {
+                $_citaSeguroModel = new CitaSeguroModel();
+                $inners = $_citaSeguroModel->listInner($this->seguroInner);
+                $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $cita->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
+                $cita->cita_seguro = $citaSeguro;
+            }
+        }
+
         return $this->retornarMensaje($lista);
     }
 
@@ -224,8 +288,15 @@ class CitaController extends Controller {
         $_citaModel = new CitaModel();
         $inners = $_citaModel->listInner($this->arrayInner);
         $lista = $_citaModel->where('cita_id', '=', $cita_id)->where('estatus_cit', '!=', '2')->innerJoin($this->arraySelect, $inners, "cita");
+        
+        if ($lista[0]->tipo_cita == 2) {
+            $_citaSeguroModel = new CitaSeguroModel();
+            $inners = $_citaSeguroModel->listInner($this->seguroInner);
+            $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $lista[0]->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
+            $lista[0]->cita_seguro = $citaSeguro;
+        }
 
-        return $this->retornarMensaje($lista);
+        return $this->retornarMensaje($lista[0]);
     }
 
     public function listarCitaPorPacienteId($paciente_id) {
@@ -234,23 +305,28 @@ class CitaController extends Controller {
         $inners = $_citaModel->listInner($this->arrayInner);
         $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('cita.paciente_id', '=', $paciente_id)->innerJoin($this->arraySelect, $inners, "cita");
         $mensaje = ($lista != null);
+        // $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('paciente_id', '=', $paciente_id)->getAll();
 
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($lista);
+        if ($lista[0]->tipo_cita == 2) {
+            $_citaSeguroModel = new CitaSeguroModel();
+            $inners = $_citaSeguroModel->listInner($this->seguroInner);
+            $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $lista[0]->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
+            $lista[0]->cita_seguro = $citaSeguro;
+        }
 
-        return $respuesta->json($mensaje ? 200 : 404);
+        return $this->retornarMensaje($lista[0]);
+        // $mensaje = ($lista != null);
+
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        // $respuesta->setData($lista);
+
+        // return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function actualizarCita($cita_id) {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarCita = new Validate;
-
-        $token = $validarCita->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
 
         switch ($validarCita) {
             case $validarCita->isEmpty($_POST):
@@ -269,18 +345,27 @@ class CitaController extends Controller {
             default:
 
                 $data = $validarCita->dataScape($_POST);
-                $newArray['estatus_cit'] = 1;
+                $newStatus['estatus_cit'] = 1;
                 $newArray['clave'] = $data['clave'];
 
-                $_citaModel = new CitaModel();
-                $_citaModel->byUser($token);
+                $header = apache_request_headers();
+                $token = substr($header['Authorization'], 7);
 
-                $actualizado = $_citaModel->where('cita_id', '=', $cita_id)->update($newArray);
-                $mensaje = ($actualizado > 0);
+                $_citaSeguroModel = new CitaSeguroModel();
+                $_citaSeguroModel->byUser($token);
+                $actualizado = $_citaSeguroModel->where('cita_id', '=', $cita_id)->update($newArray);
+                $esActualizado = "";
+                
+                if ($actualizado > 0) {
+                    $_cita = new CitaModel();
+                    $esActualizado = $_cita->where('cita_id', '=', $cita_id)->update($newStatus);
+                }
+
+                $mensaje = ($esActualizado > 0);
 
                 $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
                 $respuesta->setData($actualizado);
-                return $respuesta->json($mensaje ? 200 : 404);
+                return $respuesta->json($mensaje ? 200 : 400);
         }
     }
 
@@ -347,12 +432,8 @@ class CitaController extends Controller {
 
     public function eliminarCita($cita_id) {
 
-        $validarCita = new Validate;
-        $token = $validarCita->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
+        $header = apache_request_headers();
+        $token = substr($header['Authorization'], 7) ;
 
         $_citaModel = new CitaModel();
         $_citaModel->byUser($token);

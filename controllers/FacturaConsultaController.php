@@ -82,29 +82,29 @@ class FacturaConsultaController extends Controller {
         return $this->RetornarMensaje($id, $id);
     }
 
-    public function eliminarFacturaConsulta($factura_consulta_id) {
+    // public function eliminarFacturaConsulta($factura_consulta_id) {
 
-        $validarFactura = new Validate;
-        $token = $validarFactura->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
+    //     $validarFactura = new Validate;
+    //     $token = $validarFactura->validateToken(apache_request_headers());
+    //     if (!$token) {
+    //         $respuesta = new Response('TOKEN_INVALID');
+    //         return $respuesta->json(401);
+    //     }
 
-        $_facturaModel = new FacturaConsultaModel();
-        $_facturaModel->byUser($token);
-        $data = array(
-            'estatus_fac' => '3'
-        );
+    //     $_facturaModel = new FacturaConsultaModel();
+    //     $_facturaModel->byUser($token);
+    //     $data = array(
+    //         'estatus_fac' => '3'
+    //     );
 
-        $eliminado = $_facturaModel->where('factura_consulta_id', '=', $factura_consulta_id)->update($data, 1);
-        $mensaje = ($eliminado > 0);
+    //     $eliminado = $_facturaModel->where('factura_consulta_id', '=', $factura_consulta_id)->update($data, 1);
+    //     $mensaje = ($eliminado > 0);
 
-        $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        $respuesta->setData($eliminado);
+    //     $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+    //     $respuesta->setData($eliminado);
 
-        return $respuesta->json($mensaje ? 200 : 400);
-    }
+    //     return $respuesta->json($mensaje ? 200 : 400);
+    // }
 
     // Funciones
     public function RetornarMensaje($mensaje, $data) {

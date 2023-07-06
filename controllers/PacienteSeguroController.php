@@ -10,7 +10,7 @@ class PacienteSeguroController extends Controller{
                 
             $forms['paciente_id'] = $paciente_id;
             // Creando los strings para las validaciones
-            $camposNumericos = array("tipo_seguro", "cobertura_general", "saldo_disponible");
+            $camposNumericos = array("cobertura_general", "saldo_disponible");
             $campoId1 = array("seguro_id", "empresa_id","paciente_id");
             $validarPacienteSeguro = new Validate;
 
@@ -41,10 +41,6 @@ class PacienteSeguroController extends Controller{
 
                 case $validarPacienteSeguro->isDuplicatedId('paciente_id', 'seguro_id', $forms['paciente_id'], $forms['seguro_id'], 'paciente_seguro'):
                     $respuesta = new Response(false, 'Ya existe un registro con la misma información de seguro y paciente');
-                    return $respuesta->json(400);
-
-                case $forms['tipo_seguro'] > 2:
-                    $respuesta = new Response(false, 'Tipo de seguro inválido');
                     return $respuesta->json(400);
 
                 default: 

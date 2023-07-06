@@ -195,20 +195,20 @@ class FacturaMedicoController extends Controller{
         }        
     }
 
-    public function eliminarFacturaMedico($factura_medico_id){
+    // public function eliminarFacturaMedico($factura_medico_id){
 
-        $header = apache_request_headers();
-        $token = substr($header['Authorization'], 7) ;
+    //     $header = apache_request_headers();
+    //     $token = substr($header['Authorization'], 7) ;
         
-        $_facturaMedicoModel = new FacturaMedicoModel();
-        $_facturaMedicoModel->byUser($token);
-        $data = array(
-            'estatus_fac' => '2'
-        );
+    //     $_facturaMedicoModel = new FacturaMedicoModel();
+    //     $_facturaMedicoModel->byUser($token);
+    //     $data = array(
+    //         'estatus_fac' => '2'
+    //     );
 
-        $eliminado = $_facturaMedicoModel->where('factura_medico_id','=',$factura_medico_id)->update($data, 1);
-        return $this->mensajeActualizaciónExitosa($eliminado);
-    }
+    //     $eliminado = $_facturaMedicoModel->where('factura_medico_id','=',$factura_medico_id)->update($data, 1);
+    //     return $this->mensajeActualizaciónExitosa($eliminado);
+    // }
 
     // Funciones de utilidades
     public function contabilizarFactura($form) {
