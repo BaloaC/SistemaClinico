@@ -145,11 +145,11 @@ class ConsultaController extends Controller {
         $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id");
         $validarConsulta = new Validate;
 
-        $token = $validarConsulta->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
+        // $token = $validarConsulta->validateToken(apache_request_headers());
+        // if (!$token) {
+        //     $respuesta = new Response('TOKEN_INVALID');
+        //     return $respuesta->json(401);
+        // }
 
         switch ($validarConsulta) {
             case !$validarConsulta->existsInDB($_POST, $campoId):
@@ -175,20 +175,23 @@ class ConsultaController extends Controller {
                 $recipe = isset($_POST['recipes']) ? $_POST['recipes'] : false;
                 $indicaciones = isset($_POST['indicaciones']) ? $_POST['indicaciones'] : false;
                 
-                if ($examenes) {
-                    unset($_POST['examenes']);
-                }
-                if ($insumos) {
+                // Eliminamos las keys que puedan ocasionar errores en el insert
+                if ($examenes) { unset($_POST['examenes']); }
+
+                if ($insumos) { 
                     unset($_POST['insumos']);
-                }
-                if ($recipe) {
-                    unset($_POST['recipes']);
-                }
-                if ($indicaciones) {
-                    unset($_POST['indicaciones']);
+                    $isValido = $this->validarInsumos($insumos);
+
+                    if ($isValido) {
+                        return $isValido;
+                    }
                 }
 
-                if (isset($_POST['es_emergencia'])) {
+                if ($recipe) { unset($_POST['recipes']); }
+                if ($indicaciones) { unset($_POST['indicaciones']); }
+
+                $es_emergencia = isset($_POST['es_emergencia']); // Validamos que el atributo emergencia sea booleano
+                if ( $es_emergencia ) {
                     if ( $_POST['es_emergencia'] != 0 && $_POST['es_emergencia'] != 1 ) {
                         $respuesta = new Response(false, 'El atributo es_emergencia tiene que ser un booleano');
                         return $respuesta->json(400);
@@ -209,7 +212,7 @@ class ConsultaController extends Controller {
                         return $respuesta->json(400);
                     }
 
-                } else {
+                } else if ( !$es_emergencia ) {
                     if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad')) {
                         $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
                         return $respuesta->json(400);
@@ -416,6 +419,151 @@ class ConsultaController extends Controller {
     //     return $respuesta->json($mensaje ? 200 : 400);
     // }
 
+    // Códigos de consultas_insumo
+    public function validarInsumos($insumos) {
+        foreach ($insumos as $insumo) {
+
+            $camposNumericos = array("insumo_id");
+            $validarConsultaInsumo = new Validate;
+
+            switch ($validarConsultaInsumo) {
+                case ($validarConsultaInsumo->isEmpty($insumo)):
+                    $respuesta = new Response(false, 'Los datos de los insumos están vacíos');
+                    return $respuesta->json(400);
+
+                case $validarConsultaInsumo->isEliminated("insumo", 'estatus_ins', $insumo['insumo_id']):
+                    $respuesta = new Response(false, 'El insumo indicado no ha sido encontrado en el sistema');
+                    return $respuesta->json(404);
+
+                case !$validarConsultaInsumo->existsInDB($insumo, $camposNumericos):
+                    $respuesta = new Response(false, 'No se encontraron resultados de los datos indicados en la base de datos');
+                    return $respuesta->json(404);
+
+                default: 
+                    $_insumoModel = new InsumoModel();
+                    $insumoExistente = $_insumoModel->where('insumo_id', '=', $insumo['insumo_id'])->getFirst();
+                    
+                    if ($insumo['cantidad'] > $insumoExistente->cantidad) {
+                        $respuesta = new Response(false, 'Cantidad de insumos mayor a la que hay en existencia');
+                        $respuesta->setData('La cantidad disponible de insumos es de '.$insumoExistente->cantidad);
+                        return $respuesta->json(400);
+                    }
+
+            }
+        }
+        return false;
+    }
+
+    public function insertarInsumo($insumos, $consulta_id) {
+        foreach ($insumos as $insumo) {
+
+            $insumo['consulta_id'] = $consulta_id;
+
+            $validarConsultaInsumo = new Validate;
+            $data = $validarConsultaInsumo->dataScape($insumo);
+
+            $_consultaInsumoModel = new ConsultaInsumoModel();
+            $idInsumo = $_consultaInsumoModel->insert($data);
+            $mensaje = ($idInsumo > 0);
+
+            if ($mensaje) {
+
+                // Restando la cantidad de la factura al stock del inventario
+                $_insumoModel = new InsumoModel();
+                $insumoExistente = $_insumoModel->where('insumo_id', '=', $insumo['insumo_id'])->getFirst();
+
+                $unidadesPosts = $insumoExistente->cantidad - $insumo['cantidad'];
+                $actualizar = array('cantidad' => $unidadesPosts);
+
+                // actualizando el stock del insumo
+                $actualizado = $_insumoModel->where('insumo_id', '=', $insumo['insumo_id'])->update($actualizar);
+                if (!$actualizado) {
+
+                    $respuesta = new Response(false, 'Hubo un error en la actualización del insumo');
+                    $respuesta->setData($insumoExistente);
+                    return $respuesta->json(400);
+                }
+
+            } else if (!$mensaje) {
+                $respuesta = new Response(false, 'Actualización del insumo fallida');
+                return $respuesta->json(400);
+            }
+        }
+        return false;
+    }
+
+    // public function eliminarConsultaInsumo($consulta_insumo_id){
+
+    //     $_consultaInsumoModel = new ConsultaInsumoModel();
+    //     $data = array(
+    //         "estatus_con" => "2"
+    //     );
+
+    //     $eliminado = $_consultaInsumoModel->where('consulta_insumo_id', '=', $consulta_insumo_id)->update($data);
+    //     $mensaje = ($eliminado > 0);
+
+    //     $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'NOT_FOUND');
+    //     $respuesta->setData($eliminado);
+
+    //     return $respuesta->json($mensaje ? 200 : 400);
+    // }
+
+    // Funciones extras
+
+    public function setRelaciones($consulta_id) { // Método para unir las relaciones de las consultas en el getAll
+
+        $_consultaModel = new ConsultaModel();
+        $innersExa = $_consultaModel->listInner($this->arrayInnerExa);
+        $consulta_examenes = $_consultaModel->where('consulta_examen.consulta_id', '=', $consulta_id)->where('consulta_examen.estatus_con', '=', 1)->innerJoin($this->arraySelectExa, $innersExa, "consulta_examen");
+        $consultas = new stdClass();
+
+        if ($consulta_examenes) {
+            $consultas->examenes = $consulta_examenes;
+        }
+
+        $_consultaModel = new ConsultaModel();
+        $innersIns = $_consultaModel->listInner($this->arrayInnerIns);
+        $consulta_insumos = $_consultaModel->where('consulta_insumo.consulta_id', '=', $consulta_id)->where('consulta_insumo.estatus_con', '=', 1)->innerJoin($this->arraySelectIns, $innersIns, "consulta_insumo");
+
+        if ($consulta_insumos) {
+            $consultas->insumos = $consulta_insumos;
+        }
+
+        $_consultaIndicacionesModel = new ConsultaIndicacionesModel();
+        $consulta_indicaciones = $_consultaIndicacionesModel->where('consulta_indicaciones.consulta_id', '=', $consulta_id)->getAll();
+
+        if($consulta_indicaciones){
+            $consultas->indicaciones = $consulta_indicaciones;
+        }
+
+        $_consultaRecipeModel = new ConsultaRecipeModel();
+        $innersRec = $_consultaRecipeModel->listInner($this->arrayInnerRec);
+        $consulta_recipes = $_consultaRecipeModel->where('consulta_recipe.consulta_id', '=', $consulta_id)->innerJoin($this->arraySelectRec, $innersRec, "consulta_recipe");
+
+        if($consulta_recipes){
+            $consultas->recipes = $consulta_recipes;
+        }
+
+        $_consultaModel = new ConsultaModel();
+        $innersRec = $_consultaModel->listInner($this->arrayInnerRec);
+        $recipesList = $_consultaModel->where('consulta_recipe.consulta_id', '=', $consulta_id)
+                                        ->innerJoin($this->arraySelectRec, $innersRec, "consulta_recipe");
+        
+        if ($recipesList) {
+            $consultas->recipes = $recipesList;
+        }
+
+        $_indicacionesModel = new ConsultaIndicacionesModel();
+        $indicacionesList = $_indicacionesModel->where('consulta_indicaciones.consulta_id', '=', $consulta_id)
+                                                ->getAll();
+
+        if ($indicacionesList) {
+            $consultas->indicaciones = $indicacionesList;
+        }
+        
+        return $consultas;
+    }
+
     public function getInformacion($consulta) {
         // Obtenemos el resto de la información de la consulta
         $_consultaCita = new ConsultaCitaModel();
@@ -557,75 +705,5 @@ class ConsultaController extends Controller {
         } else {
             return false;
         }
-    }
-
-    public function insertarInsumo($informacion, $id) {
-        $_consultaModel = new ConsultaModel();
-
-        // Insertando relación consulta_insumo
-        $_consultaInsumo = new ConsultaInsumoController;
-        $respuestaInsumo = $_consultaInsumo->insertarConsultaInsumo($informacion, $id);
-
-        if ($respuestaInsumo == true) {
-
-            $_consultaModel->where('consulta_id', '=', $id)->delete();
-            return $respuestaInsumo;
-        } else {
-            return false;
-        }
-    }
-
-    public function setRelaciones($consulta_id) { // Método para unir las relaciones de las consultas en el getAll
-
-        $_consultaModel = new ConsultaModel();
-        $innersExa = $_consultaModel->listInner($this->arrayInnerExa);
-        $consulta_examenes = $_consultaModel->where('consulta_examen.consulta_id', '=', $consulta_id)->where('consulta_examen.estatus_con', '=', 1)->innerJoin($this->arraySelectExa, $innersExa, "consulta_examen");
-        $consultas = new stdClass();
-
-        if ($consulta_examenes) {
-            $consultas->examenes = $consulta_examenes;
-        }
-
-        $_consultaModel = new ConsultaModel();
-        $innersIns = $_consultaModel->listInner($this->arrayInnerIns);
-        $consulta_insumos = $_consultaModel->where('consulta_insumo.consulta_id', '=', $consulta_id)->where('consulta_insumo.estatus_con', '=', 1)->innerJoin($this->arraySelectIns, $innersIns, "consulta_insumo");
-
-        if ($consulta_insumos) {
-            $consultas->insumos = $consulta_insumos;
-        }
-
-        $_consultaIndicacionesModel = new ConsultaIndicacionesModel();
-        $consulta_indicaciones = $_consultaIndicacionesModel->where('consulta_indicaciones.consulta_id', '=', $consulta_id)->getAll();
-
-        if($consulta_indicaciones){
-            $consultas->indicaciones = $consulta_indicaciones;
-        }
-
-        $_consultaRecipeModel = new ConsultaRecipeModel();
-        $innersRec = $_consultaRecipeModel->listInner($this->arrayInnerRec);
-        $consulta_recipes = $_consultaRecipeModel->where('consulta_recipe.consulta_id', '=', $consulta_id)->innerJoin($this->arraySelectRec, $innersRec, "consulta_recipe");
-
-        if($consulta_recipes){
-            $consultas->recipes = $consulta_recipes;
-        }
-
-        $_consultaModel = new ConsultaModel();
-        $innersRec = $_consultaModel->listInner($this->arrayInnerRec);
-        $recipesList = $_consultaModel->where('consulta_recipe.consulta_id', '=', $consulta_id)
-                                        ->innerJoin($this->arraySelectRec, $innersRec, "consulta_recipe");
-        
-        if ($recipesList) {
-            $consultas->recipes = $recipesList;
-        }
-
-        $_indicacionesModel = new ConsultaIndicacionesModel();
-        $indicacionesList = $_indicacionesModel->where('consulta_indicaciones.consulta_id', '=', $consulta_id)
-                                                ->getAll();
-
-        if ($indicacionesList) {
-            $consultas->indicaciones = $indicacionesList;
-        }
-        
-        return $consultas;
     }
 }

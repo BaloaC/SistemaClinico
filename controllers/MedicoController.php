@@ -7,8 +7,10 @@ class MedicoController extends Controller {
     );
 
     protected $arraySelectHorario = array(
+        "horario.horario_id",
         "horario.dias_semana",
-        "horario.horario_id"
+        "horario.hora_entrada",
+        "horario.hora_salida"
     );
 
     protected $arrayInner = array(
@@ -111,8 +113,7 @@ class MedicoController extends Controller {
         }
     }
 
-    public function listarMedicos()
-    {
+    public function listarMedicos() {
 
         $_medicoModel = new MedicoModel();
         $medico2 = $_medicoModel->where('estatus_med', '=', '1')->getAll();
@@ -148,8 +149,7 @@ class MedicoController extends Controller {
         }
     }
 
-    public function listarMedicoPorId($medico_id)
-    {
+    public function listarMedicoPorId($medico_id) {
 
         $_medicoModel = new MedicoModel();
         $medicos = $_medicoModel->where('estatus_med', '=', '1')->where('medico_id', '=', $medico_id)->getFirst();
@@ -183,8 +183,7 @@ class MedicoController extends Controller {
         }
     }
 
-    public function actualizarMedico($medico_id)
-    {
+    public function actualizarMedico($medico_id) {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
 
@@ -269,8 +268,7 @@ class MedicoController extends Controller {
         }
     }
 
-    public function eliminarMedico($medico_id)
-    {
+    public function eliminarMedico($medico_id) {
 
         $validarMedico = new Validate;
         $token = $validarMedico->validateToken(apache_request_headers());
@@ -295,8 +293,7 @@ class MedicoController extends Controller {
     }
 
     // Funciones
-    public function retornarMensaje($mensaje, $dataReturn)
-    {
+    public function retornarMensaje($mensaje, $dataReturn) {
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($dataReturn);
         return $respuesta->json(200);
