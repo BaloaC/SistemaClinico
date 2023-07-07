@@ -2,6 +2,54 @@
 
 class FacturaConsultaController extends Controller {
 
+    protected $selectConsulta = array(
+        "factura_consulta.factura_consulta_id",
+        "factura_consulta.consulta_id",
+        "factura_consulta.metodo_pago",
+        "factura_consulta.monto_consulta",
+        "factura_consulta.estatus_fac",
+        "consulta.fecha_consulta",
+        "consulta.es_emergencia"
+    );
+    
+    protected $innerConsulta = array("consulta" => "factura_consulta");
+
+    protected $selectGeneral = array(
+        "paciente.nombre AS nombre_paciente",
+        "paciente.apellidos",
+        "paciente.cedula",
+        "paciente.direccion",
+        "especialidad.nombre AS nombre_especialidad",
+        "medico.nombre AS nombre_medico"
+    );
+
+    protected $selectConsultaSinCita = array(
+        "consulta_sin_cita.paciente_id",
+        "consulta_sin_cita.especialidad_id",
+        "consulta_sin_cita.medico_id",
+    );
+
+    protected $innerConsultaSinCita = array(
+        "paciente" => "consulta_sin_cita",
+        "especialidad" => "consulta_sin_cita",
+        "medico" => "consulta_sin_cita"
+    );
+
+    protected $selectConsultaCita = array(
+        "consulta_cita.cita_id",
+        "cita.paciente_id",
+        "cita.especialidad_id",
+        "cita.medico_id",
+    );
+
+    protected $innerConsultaCita = array(
+        "cita" => "consulta_cita",
+        "paciente" => "cita",
+        "especialidad" => "cita",
+        "medico" => "cita"
+    );
+
+
     //Método index (vista principal)
     public function index() {
         return $this->view('facturas/consulta/index');
@@ -19,7 +67,7 @@ class FacturaConsultaController extends Controller {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
-        $camposNumericos = array('monto_sin_iva');
+        $camposNumericos = array('monto_consulta');
         $camposId = array('consulta_id', 'paciente_id');
 
         $token = $validarFactura->validateToken(apache_request_headers());
@@ -68,18 +116,37 @@ class FacturaConsultaController extends Controller {
     }
 
     public function listarFacturaConsulta() {
-        // hacer inner para mostrar las fechas, el nombre del paciente, el nombre del medico
-        $_facturaConsultaModel = new FacturaConsultaModel();
-        $id = $_facturaConsultaModel->getAll();
-        $mensaje = ($id > 0);
-        return $this->RetornarMensaje($mensaje, $id);
+        
+        // Obtenemos todas las facturas
+        $_facturaConsulta = new FacturaConsultaModel();
+        $innersConsulta = $_facturaConsulta->listInner($this->innerConsulta);
+        $facturasList = $_facturaConsulta->innerJoin($this->selectConsulta, $innersConsulta, "factura_consulta");
+        
+        // Hacemos inner para obtener los datos de las consultas
+        $consultaList = [];
+        
+        foreach ($facturasList as $factura) {
+            $consultaList[] = $this->obtenerInformacion($factura);
+        }
+        
+        $mensaje = ( count($consultaList) > 0);
+        return $this->RetornarMensaje($mensaje, $consultaList);
     }
 
     public function listarFacturaConsultaPorId($factura_consulta_id) {
-        // hacer inner para mostrar las fechas, el nombre del paciente, el nombre del medico
-        $_facturaConsultaModel = new FacturaConsultaModel();
-        $id = $_facturaConsultaModel->where('factura_consulta_id', '=', $factura_consulta_id)->getFirst();
-        return $this->RetornarMensaje($id, $id);
+
+        // Obtenemos todas las facturas
+        $_facturaConsulta = new FacturaConsultaModel();
+        $innersConsulta = $_facturaConsulta->listInner($this->innerConsulta);
+        $factura = $_facturaConsulta->where('factura_consulta_id', '=', $factura_consulta_id)
+                                        ->innerJoin($this->selectConsulta, $innersConsulta, "factura_consulta");
+        
+        $factura = (object) $factura[0];
+
+        // Hacemos inner para obtener los datos de las consultas
+        $consultaList = $this->obtenerInformacion($factura);
+        $mensaje = ( count($consultaList) > 0);
+        return $this->RetornarMensaje($mensaje, $consultaList);
     }
 
     // public function eliminarFacturaConsulta($factura_consulta_id) {
@@ -105,6 +172,55 @@ class FacturaConsultaController extends Controller {
 
     //     return $respuesta->json($mensaje ? 200 : 400);
     // }
+
+    public function obtenerInformacion($factura) {
+
+        $_consultaCita = new ConsultaCitaModel();
+        $innerConsultaCita = $_consultaCita->listInner( $this->innerConsultaCita );
+        $consulta = $_consultaCita->where('consulta_cita.consulta_id', '=',$factura->consulta_id)
+                                    ->where('cita.tipo_cita', '=', 1)                        
+                                    ->innerJoin( array_merge($this->selectConsultaCita, $this->selectGeneral), $innerConsultaCita, 'consulta_cita');
+        
+        // Si la consulta no es por cita, buscamos las que son sin cita
+        if ( is_null($consulta) || count($consulta) <= 0 ) {
+            $_consultaSinCita = new ConsultaSinCitaModel();
+            $innerConsultaSinCita = $_consultaSinCita->listInner( $this->innerConsultaSinCita );
+            $consulta = $_consultaSinCita->where('consulta_id', '=',$factura->consulta_id)
+                                            ->innerJoin( array_merge($this->selectConsultaSinCita, $this->selectGeneral) , $innerConsultaSinCita, 'consulta_sin_cita');
+        }
+
+
+        if ( isset($consulta[0]) ) {
+            $consulta = array_merge( (array) $consulta[0],  (array) $factura);
+        } else {
+            $consulta = array_merge( (array) $consulta,  (array) $factura);
+        }
+
+        $_consultaInsumo = new ConsultaInsumoModel();
+        $consultaInsumos = $_consultaInsumo->where('consulta_id', '=', $factura->consulta_id)
+                                    ->where('estatus_con', '!=', '2')
+                                    ->getAll();
+
+        // Revisamos si tienes insumos asociados
+        if ( count($consultaInsumos) > 0 ) {
+            $monto = $factura->monto_consulta;
+
+            foreach ($consultaInsumos as $consulta_insumo) {
+                
+                $_insumoModel = new InsumoModel();
+                $insumo = $_insumoModel->where('insumo_id', '=', $consulta_insumo->insumo_id)->getFirst();
+                $consulta_insumo->precio_insumo = $insumo->precio;
+                $consulta_insumo->monto_total = $consulta_insumo->cantidad * $insumo->precio;
+                $monto += $consulta_insumo->monto_total;
+            }
+            
+            $consulta['monto_consulta'] = $monto;
+            $consulta['insumos'] = $consultaInsumos;
+        }
+
+        $consultaList[] = $consulta;
+        return $consultaList[0];
+    }
 
     // Funciones
     public function RetornarMensaje($mensaje, $data) {

@@ -149,3 +149,14 @@ INNER JOIN especialidad ON especialidad.especialidad_id = consulta.especialidad_
 INNER JOIN cita ON cita.cita_id = consulta.cita_id
 
 
+-- factura consulta
+SELECT 
+    factura_consulta.factura_consulta_id,
+    factura_consulta.consulta_id,
+    factura_consulta.metodo_pago,
+    factura_consulta.monto_consulta,
+    factura_consulta.estatus_fac,
+    consulta.fecha_consulta,
+    consulta.es_emergencia
+from factura_consulta
+INNER JOIN consulta ON consulta.consulta_id = factura_consulta.consulta_id
