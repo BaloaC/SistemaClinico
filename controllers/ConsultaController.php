@@ -331,6 +331,11 @@ class ConsultaController extends Controller {
         
         $consultasPaciente = array_filter($consultas, fn($consulta) => $consulta->paciente_id == $paciente_id);
         
+        $pruebas = [];
+        foreach ($consultasPaciente as $consulta) {
+            $consultasArray[] = $consulta;
+        }
+
         $_antecedenteModel = new AntecedenteMedicoModel();
         $selectAntecedentes = [
             "antecedentes_medicos.descripcion",
@@ -350,8 +355,8 @@ class ConsultaController extends Controller {
         $resultado['antecedentes_medicos'] = $antecedentList;
         $consultasCompletas = [];
 
-        if (count($consultasPaciente)) {
-            foreach ($consultasPaciente as $consulta) {
+        if (count($consultasArray)) {
+            foreach ($consultasArray as $consulta) {
                 $consultasCompletas[] = $this->setRelaciones($consulta->consulta_id);
             }
     
@@ -360,7 +365,7 @@ class ConsultaController extends Controller {
             }
         }
         
-        $resultado['consultas'] = $consultasPaciente;
+        $resultado['consultas'] = $consultasArray;
 
         $mensaje = (count($resultado) > 0);
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
