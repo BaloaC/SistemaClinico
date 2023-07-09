@@ -2,31 +2,46 @@
 
 class ConsultaSeguroController extends Controller{
 
-    protected $arrayInner = array(
-        "consulta" => "consulta_seguro",
-        "paciente" => "consulta",
-        "especialidad" => "consulta",
-        "cita" => "consulta"
-    );
-
-    protected $arraySelect = array(
-        "cita.cita_id",
-        "consulta.consulta_id",
-        "consulta.fecha_consulta",
-        "especialidad.especialidad_id",
-        "especialidad.nombre AS nombre_especialidad",
+    protected $selectConsultas = array(
         "consulta_seguro.consulta_seguro_id",
+        "consulta_seguro.consulta_id",
         "consulta_seguro.tipo_servicio",
-        "consulta_seguro.fecha_ocurrencia",
+        "consulta_seguro.fecha_ocurrencia AS fecha_factura",
         "consulta_seguro.monto",
         "consulta_seguro.estatus_con",
-        "paciente.paciente_id",
-        "paciente.cedula AS paciente_cedula",
-        "paciente.apellidos AS paciente_apellido",
-        "paciente.nombre AS paciente_nombre",
-        "cita.cedula_titular"
+        "consulta.observaciones",
+        "consulta.fecha_consulta",
+        "consulta.es_emergencia"
     );
 
+    protected $innerConsulta = array(
+        "consulta" => "consulta_seguro",
+    );
+
+    protected $selectCitas = array(
+        "consulta_cita.consulta_cita_id",
+        "consulta_cita.cita_id",
+        "cita.paciente_id",
+        "cita.medico_id",
+        "cita.especialidad_id",
+        "cita.cedula_titular",
+        "cita.tipo_cita",
+        "paciente.nombre AS nombre_beneficiado",
+        "paciente.cedula AS cedula_beneficiado",
+        "paciente.telefono AS telefono_beneficiado",
+        "paciente.direccion AS direccion_beneficiado",
+        "paciente.fecha_nacimiento AS nacimiento_beneficiado",
+        "medico.nombre AS nombre_medico",
+        "especialidad.nombre nombre_especialidad"
+    );
+
+    protected $innerCita = array(
+        "cita" => "consulta_cita",
+        "paciente" => "cita",
+        "medico" => "cita",
+        "especialidad" => "cita"
+    );
+    
     //Método index (vista principal)
     public function index(){
 
@@ -225,29 +240,14 @@ class ConsultaSeguroController extends Controller{
     public function listarConsultaSeguro(){
         
         $_consultaSeguroModel = new ConsultaSeguroModel();
-
+        
         // Hacemos el inner de la información general
-        $inners = $_consultaSeguroModel->listInner($this->arrayInner);
-        $ConsultasSeguros = $_consultaSeguroModel
-            ->where('consulta.estatus_con', '=', '1')->where('especialidad.estatus_esp', '=', '1')
-            ->where('paciente.estatus_pac', '=', '1')->where('consulta_seguro.estatus_con', '!=', '3')
-            ->innerJoin($this->arraySelect, $inners, "consulta_seguro");
-        $consultaSeguroList = [];
+        $innersConsulta = $_consultaSeguroModel->listInner($this->innerConsulta);
+        $ConsultasSeguros = $_consultaSeguroModel->innerJoin($this->selectConsultas, $innersConsulta, "consulta_seguro");
         
         if (count($ConsultasSeguros)) {
-            foreach ($ConsultasSeguros as $consultaSeguro) {
-                $_citaModel = new CitaModel();
-                $cita = $_citaModel->where("cita_id", "=", $consultaSeguro->cita_id)->where("estatus_cit", "!=", "2")->getFirst();
-    
-                $_pacienteModel = new PacienteModel();
-                $titular = $_pacienteModel->where("cedula", "=", $consultaSeguro->cedula_titular)
-                    ->where("estatus_pac", "!=", "2")
-                    ->where("tipo_paciente", "=", "3")->getFirst();
-                
-                $consultaSeguro->nombre_titular = $titular->nombre;
-                $consultaSeguro->apellido_titular = $titular->apellidos;
-                $consultaSeguro->id_titular = $titular->paciente_id;
-                $consultaSeguroList[] = $consultaSeguro;
+            foreach ($ConsultasSeguros as $consulta) {
+                $consulta = $this->obtenerInformacion($consulta);
             }
 
         } else {
@@ -255,23 +255,22 @@ class ConsultaSeguroController extends Controller{
             return $respuesta->json(200);
         }
 
-        if (count($consultaSeguroList) > 0) {    
-            $respuesta = new Response('CORRECTO');
-            $respuesta->setData($consultaSeguroList);
-            return $respuesta->json(200);
-        
-        } else {
-            $respuesta = new Response('ERROR');
-            $respuesta->setData($consultaSeguroList);
-            return $respuesta->json(400);
-        }
+        // Comprobamos que haya una lista
+        $isExist = count($ConsultasSeguros) > 0;
+        $respuesta = new Response($isExist ? 'CORRECTO' : 'ERROR');
+        $respuesta->setData($ConsultasSeguros);
+        return $respuesta->json(200);
     }
 
     public function listarConsultaSeguroPorId($consulta_seguro_id){
 
-        $_consultaSeguroModel = new ConsultaSeguroModel();
-        $id = $_consultaSeguroModel->where('consulta_seguro_id', '=', $consulta_seguro_id)->getFirst();
-        return $this->retornarMensaje($id, $id);
+        $consultasSeguro = json_decode($this->listarConsultaSeguro());
+        $factura = array_filter($consultasSeguro->data, fn($consulta) => $consulta->consulta_seguro_id == $consulta_seguro_id);
+        
+        $isExist = count($factura) > 0;
+        $respuesta = new Response($factura ? 'CORRECTO' : 'ERROR');
+        $respuesta->setData($factura);
+        return $respuesta->json(200);
     }
 
     public function eliminarConsultaSeguro($consulta_seguro_id){
@@ -296,6 +295,23 @@ class ConsultaSeguroController extends Controller{
         $respuesta->setData($eliminado);
 
         return $respuesta->json($mensaje ? 200 : 400);
+    }
+
+    // Obtenemos la información de las citas
+    public function obtenerInformacion($consulta, $id = null) {
+        // Extraemos la información con la relación de citas
+        $_consultaCita = new ConsultaCitaModel();
+        $innersCita = $_consultaCita->listInner($this->innerCita);
+        $consultaCita = $_consultaCita->where('consulta_id', '=', $consulta->consulta_id)
+                                    ->innerJoin($this->selectCitas, $innersCita, "consulta_cita");
+        $consulta->cita = $consultaCita[0];
+
+        // Obtenemos la información del paciente titular
+        $_paciente = new PacienteModel();
+        $pacienteTitular = $_paciente->where('cedula', '=', $consulta->cita->cedula_titular)->getFirst();
+        $consulta->titular = $pacienteTitular;
+
+        return $consulta;
     }
 
     // Funciones
