@@ -139,11 +139,24 @@ class FacturaConsultaController extends Controller {
         
         // Hacemos inner para obtener los datos de las consultas
         $consultaList = [];
-        
+        $monto_total_consultas = 0;
         foreach ($facturasList as $factura) {
-            $consultaList[] = $this->obtenerInformacion($factura);
+            
+            if ( array_key_exists('date', $_GET) ) {
+                
+                $factura_consulta = $this->obtenerInformacion($factura); 
+                $consultaList['facturas'][] = $factura_consulta;
+                $monto_total_consultas += $factura_consulta['monto_consulta'];
+
+            } else {
+                $consultaList[] = $this->obtenerInformacion($factura);
+            }
         }
         
+        if ( array_key_exists('date', $_GET) ) {
+            $consultaList['monto_total'] =  round($monto_total_consultas, 2);
+
+        }
         $mensaje = ( count($consultaList) > 0);
         return $this->RetornarMensaje($mensaje, $consultaList);
     }

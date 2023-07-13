@@ -142,14 +142,32 @@ class FacturaCompraController extends Controller
 
         if ($factura_compra) {
 
+            $total_factura_iva = 0;
+            $total_factura = 0;
             foreach ($factura_compra as $facturas) {
+
+                if ( array_key_exists('date', $_GET) ) { // Si es el reporte por mes añadimos el total
+                    $total_factura_iva += $facturas->monto_con_iva;
+                    $total_factura += $facturas->monto_sin_iva;
+                }
 
                 // Codigo para recibir los insumos que fueron comprados con esa factura
                 $_compraInsumoController = new CompraInsumoController;
                 $insumosFactura = $_compraInsumoController->listarCompraInsumoPorFactura($facturas->factura_compra_id);
 
                 $facturas->insummos = $insumosFactura;
-                $resultadoFactura[] = $facturas;
+
+                if ( array_key_exists('date', $_GET) ) { // Si es el reporte por mes añadimos el total
+                    $resultadoFactura['facturas'][] = $facturas;
+
+                } else {
+                    $resultadoFactura[] = $facturas;
+                }
+            }
+
+            if ( array_key_exists('date', $_GET) ) { // Si es el reporte por mes añadimos el total
+                $resultadoFactura['monto_total'] = round($total_factura, 2);
+                $resultadoFactura['monto_total_iva'] = round($total_factura_iva, 2);
             }
 
             return $this->retornarMensaje($resultadoFactura);
