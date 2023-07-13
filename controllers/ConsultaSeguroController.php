@@ -311,6 +311,25 @@ class ConsultaSeguroController extends Controller{
         $pacienteTitular = $_paciente->where('cedula', '=', $consulta->cita->cedula_titular)->getFirst();
         $consulta->titular = $pacienteTitular;
 
+        $_consultaInsumos = new ConsultaInsumoModel();
+        $consultaInsumos = $_consultaInsumos->where('consulta_id', '=', $consulta->consulta_id)->getAll();
+
+        $monto_consulta = 0;
+        if ( count($consultaInsumos) > 0) {
+            foreach ($consultaInsumos as $insumo) {
+                $monto_insumos = 0;
+                $_insumo = new InsumoModel();
+                $insumos = $_insumo->where('insumo_id', '=', $insumo->insumo_id)->getFirst();
+                $insumo->monto_total = $insumo->cantidad * $insumos->precio;
+                $insumo->precio = $insumos->precio;
+                $monto_insumos += $insumo->monto_total;
+                $monto_consulta += $monto_insumos;
+            }
+
+            $consulta->insumos = $consultaInsumos;
+        }
+
+        $consulta->monto_total = $consulta->monto + $monto_consulta;
         return $consulta;
     }
 

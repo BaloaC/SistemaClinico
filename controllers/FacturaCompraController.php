@@ -31,10 +31,11 @@ class FacturaCompraController extends Controller
     }
 
     public function insertarFacturaCompra(/*Request $request*/) {
+
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
         $camposNumericos = array('proveedor_id', 'total_productos', 'monto_con_iva', 'monto_sin_iva', 'excento');
-
+        
         $token = $validarFactura->validateToken(apache_request_headers());
         if (!$token) {
             $respuesta = new Response('TOKEN_INVALID');
@@ -116,12 +117,26 @@ class FacturaCompraController extends Controller
         return $this->mensajeActualizaciónExitosa($actualizado);
     }
 
-    public function listarFacturaCompra()
-    {
-
+    public function listarFacturaCompra() {
+        
         $_compraInsumoModel = new CompraInsumoModel();
         $inners = $_compraInsumoModel->listInner($this->arrayInner);
-        $factura_compra = $_compraInsumoModel->innerJoin($this->arraySelect, $inners, "factura_compra");
+
+        if ( array_key_exists('date', $_GET) ) {
+            
+            $fecha_mes = DateTime::createFromFormat('Y-m-d', $_GET['date']);
+            $fecha_mes->modify('first day of this month');
+            $fecha_inicio = $fecha_mes->format("Y-m-d");
+            
+            $fecha_mes->modify('last day of this month');
+            $fecha_fin = $fecha_mes->format("Y-m-d");
+            
+            $factura_compra = $_compraInsumoModel->whereDate('fecha_compra', $fecha_inicio, $fecha_fin)
+                                                ->innerJoin($this->arraySelect, $inners, "factura_compra");
+
+        } else {
+            $factura_compra = $_compraInsumoModel->innerJoin($this->arraySelect, $inners, "factura_compra");
+        }
 
         $resultadoFactura = array();
 
@@ -144,8 +159,7 @@ class FacturaCompraController extends Controller
         }
     }
 
-    public function listarFacturaCompraPorId($factura_id)
-    {
+    public function listarFacturaCompraPorId($factura_id) {
 
         $_compraInsumoModel = new CompraInsumoModel();
         $inners = $_compraInsumoModel->listInner($this->arrayInner);
@@ -182,8 +196,7 @@ class FacturaCompraController extends Controller
     }
 
     // funciones
-    public function retornarMensaje($resultado)
-    {
+    public function retornarMensaje($resultado) {
 
         $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($resultado);
