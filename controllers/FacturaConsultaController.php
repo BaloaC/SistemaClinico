@@ -120,7 +120,22 @@ class FacturaConsultaController extends Controller {
         // Obtenemos todas las facturas
         $_facturaConsulta = new FacturaConsultaModel();
         $innersConsulta = $_facturaConsulta->listInner($this->innerConsulta);
-        $facturasList = $_facturaConsulta->innerJoin($this->selectConsulta, $innersConsulta, "factura_consulta");
+
+        if ( array_key_exists('date', $_GET) ) {
+            
+            $fecha_mes = DateTime::createFromFormat('Y-m-d', $_GET['date']);
+            $fecha_mes->modify('first day of this month');
+            $fecha_inicio = $fecha_mes->format("Y-m-d");
+            
+            $fecha_mes->modify('last day of this month');
+            $fecha_fin = $fecha_mes->format("Y-m-d");
+            
+            $facturasList = $_facturaConsulta->whereDate('fecha_consulta', $fecha_inicio, $fecha_fin)
+                                                ->innerJoin($this->selectConsulta, $innersConsulta, "factura_consulta");
+
+        } else {
+            $facturasList = $_facturaConsulta->innerJoin($this->selectConsulta, $innersConsulta, "factura_consulta");
+        }
         
         // Hacemos inner para obtener los datos de las consultas
         $consultaList = [];
