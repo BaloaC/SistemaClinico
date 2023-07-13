@@ -980,6 +980,23 @@ INSERT INTO `seguro` (`seguro_id`, `nombre`, `rif`, `direccion`, `telefono`, `ti
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `seguro_examen`
+--
+
+-- CREATE TABLE IF NOT EXISTS `seguro_examen` (
+--   `seguro_examen_id` int(11) NOT NULL AUTO_INCREMENT,
+--   `seguro_id` int(11) NOT NULL,
+--   `examenes` TEXT NOT NULL,
+--   `costos` TEXT NOT NULL,
+--   `estatus_seg` enum('1','2') NOT NULL DEFAULT '1',
+--   PRIMARY KEY (`seguro_examen_id`),
+--   KEY `fk_seguro_examen_id_seguro` (`seguro_id`),
+--   CONSTRAINT `fk_seguro_examen_id_seguro` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+-- ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `seguro_empresa`
 --
 

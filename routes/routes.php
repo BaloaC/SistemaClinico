@@ -142,8 +142,10 @@ Router::get('/seguros/actualizar/:id', SeguroController::class . '@formActualiza
 Router::get('/seguros/consulta', SeguroController::class . '@listarSeguros', '2,4');
 Router::get('/seguros/:id', SeguroController::class . '@listarSeguroPorId', '2,4');
 Router::post('/seguros', SeguroController::class . '@insertarSeguro', '2');
+Router::post('/seguros/examenes/:id', SeguroController::class . '@insertarSeguroExamen', '2');
 Router::put('/seguros/:id', SeguroController::class . '@actualizarSeguro', '2');
 Router::delete('/seguros/:id', SeguroController::class . '@eliminarSeguro', '2');
+Router::delete('/seguros/examen/:id', SeguroController::class . '@eliminarSeguroExamen', '2');
 
 //Empresa - Vistas
 Router::get('/empresas', EmpresaController::class . '@index');
