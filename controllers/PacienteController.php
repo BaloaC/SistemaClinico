@@ -42,13 +42,7 @@ class PacienteController extends Controller{
         // Creando los strings para las validaciones
         $camposNumericos = array("cedula", "edad", "telefono", "tipo_paciente");
         $camposString = array("nombre", "apellidos");
-
         $validarPaciente = new Validate;
-        $token = $validarPaciente->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
         
         switch($_POST) {
             case ($validarPaciente->isEmpty($_POST)):
@@ -93,7 +87,6 @@ class PacienteController extends Controller{
 
                 $data = $validarPaciente->dataScape($_POST);
                 $id = $_pacienteModel->insert($data);
-                $_pacienteModel->byUser($token);
                 
                 if ( $id > 0 ) {
                     $insertarPacienteSeguro = new PacienteSeguroController;
@@ -123,7 +116,6 @@ class PacienteController extends Controller{
 
                 $data = $validarPaciente->dataScape($_POST);
                 $id = $_pacienteModel->insert($data);
-                $_pacienteModel->byUser($token);
                 
                 if ( $id > 0 ) {
                     $insertarPacienteBeneficiado = new PacienteBeneficiadoController;
@@ -143,7 +135,6 @@ class PacienteController extends Controller{
                 
                 $data = $validarPaciente->dataScape($_POST);
                 $id = $_pacienteModel->insert($data);
-                $_pacienteModel->byUser($token);
                 $mensaje = ($id > 0);
                 $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
                 return $respuesta->json($mensaje ? 201 : 400);

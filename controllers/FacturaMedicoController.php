@@ -59,11 +59,8 @@ class FacturaMedicoController extends Controller{
                 $medicoList = $_medicoModel->where('estatus_med','=', 1)->getAll();
                 $data = $validarFactura->dataScape($_POST);
 
-                $header = apache_request_headers();
-                $token = substr($header['Authorization'], 7) ;
                 $_facturaMedicoModel = new FacturaMedicoModel();
 
-                // var_dump($data['fecha_actual']);
                 foreach ($medicoList as $medico) {
                     
                     $factura = $this->contabilizarFactura([
@@ -71,7 +68,6 @@ class FacturaMedicoController extends Controller{
 	                    "medico_id" => $medico->medico_id
                     ]);
 
-                    $_facturaMedicoModel->byUser($token);
                     $isInserted = $_facturaMedicoModel->insert($factura);
 
                     if ( !($isInserted  > 0) ) {
@@ -90,13 +86,6 @@ class FacturaMedicoController extends Controller{
         
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
-
-        $token = $validarFactura->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
-
         $camposId = array('medico_id');
         
         switch ($validarFactura) {
@@ -118,7 +107,6 @@ class FacturaMedicoController extends Controller{
                 $insert = $this->contabilizarFactura($data);
                 
                 $_facturaMedicoModel = new FacturaMedicoModel();
-                $_facturaMedicoModel->byUser($token);
                 $id = $_facturaMedicoModel->insert($insert);
                 $mensaje = ($id > 0);
 
@@ -129,8 +117,6 @@ class FacturaMedicoController extends Controller{
 
     public function actualizarFacturaMedico($factura_medico_id){
 
-        $header = apache_request_headers();
-        $token = substr($header['Authorization'], 7);
         $_facturaMedico = new FacturaMedicoModel();
         $factura_medico = $_facturaMedico->where('factura_medico_id', '=', $factura_medico_id)->getFirst();
 
@@ -140,7 +126,6 @@ class FacturaMedicoController extends Controller{
             return $respuesta->json(400);
         }
 
-        $_facturaMedico->byUser($token);
         $data = array(
             'estatus_fac' => '3'
         );

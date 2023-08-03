@@ -5,23 +5,23 @@ class Uri{
     public $uri;
     public $method;
     public $function;
-    public $nivel;
+    public $middlewares;
     public $matches;
     protected $request;
     protected $response;
 
-    public function __construct($uri, $method, $nivel, $function){
+    public function __construct($uri, $method, $function, $middlewares){
     // public function __construct($uri, $function, $nivel){
         
         $this->uri = $uri;
         $this->method = $method;
         $this->function = $function;
-        $this->nivel = $nivel;
+        $this->middlewares = $middlewares;
     }
 
     //Método para validar si una URI existe
     public function match($url){
-        
+        echo 'esta enel match';
         $path = preg_replace('#:([\w]+)#', '([^/]+)',$this->uri);
         $regex = "#^$path$#i";
 

@@ -35,12 +35,6 @@ class FacturaCompraController extends Controller
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
         $camposNumericos = array('proveedor_id', 'total_productos', 'monto_con_iva', 'monto_sin_iva', 'excento');
-        
-        $token = $validarFactura->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
 
         switch ($validarFactura) {
             case ($validarFactura->isEmpty($_POST)):
@@ -70,7 +64,6 @@ class FacturaCompraController extends Controller
                 $data = $validarFactura->dataScape($_POST);
 
                 $_facturaCompraModel = new FacturaCompraModel();
-                $_facturaCompraModel->byUser($token);
                 $id = $_facturaCompraModel->insert($data);
                 $mensaje = ($id > 0);
 
@@ -96,9 +89,7 @@ class FacturaCompraController extends Controller
     }
 
     public function actualizarFacturaCompra($factura_id) {
-        $header = apache_request_headers();
-        $token = substr($header['Authorization'], 7) ;
-        
+                
         $_compraInsumoController = new FacturaCompraModel();
         $factura_compra = $_compraInsumoController->where('factura_compra_id', '=', $factura_id)->getFirst();
 
@@ -108,7 +99,6 @@ class FacturaCompraController extends Controller
             return $respuesta->json(400);
         }
 
-        $_compraInsumoController->byUser($token);
         $data = array(
             'estatus_fac' => '3'
         );
@@ -200,16 +190,12 @@ class FacturaCompraController extends Controller
 
     public function eliminarFacturaCompra($factura_compra_id) {
         
-        $header = apache_request_headers();
-        $token = substr($header['Authorization'], 7) ;
-        
         $_compraInsumoController = new FacturaCompraModel();
-        $_compraInsumoController->byUser($token);
         $data = array(
             'estatus_fac' => '2'
         );
 
-        $eliminado = $_compraInsumoController->where('factura_compra_id', '=', $factura_compra_id)->update($data, 1);
+        $eliminado = $_compraInsumoController->where('factura_compra_id', '=', $factura_compra_id)->update($data);
         return $this->mensajeActualizaciónExitosa($eliminado);
     }
 

@@ -70,12 +70,6 @@ class FacturaConsultaController extends Controller {
         $camposNumericos = array('monto_consulta');
         $camposId = array('consulta_id', 'paciente_id');
 
-        $token = $validarFactura->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
-
         switch ($validarFactura) {
             case ($validarFactura->isEmpty($_POST)):
                 $respuesta = new Response('DATOS_VACIOS');
@@ -104,9 +98,7 @@ class FacturaConsultaController extends Controller {
             default:
 
                 $data = $validarFactura->dataScape($_POST);
-
                 $_facturaConsultaModel = new FacturaConsultaModel();
-                $_facturaConsultaModel->byUser($token);
                 $id = $_facturaConsultaModel->insert($data);
                 $mensaje = ($id > 0);
 

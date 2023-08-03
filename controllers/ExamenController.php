@@ -41,9 +41,6 @@ class ExamenController extends Controller{
                 $data = $validarExamen->dataScape($_POST);    
 
                 $_examenModel = new ExamenModel();
-                $header = apache_request_headers();
-                $token = substr($header['Authorization'], 7);
-                $_examenModel->byUser($token);
                 $id = $_examenModel->insert($data);
                 $mensaje = ($id > 0);
         
@@ -105,9 +102,6 @@ class ExamenController extends Controller{
                 }
 
                 $_examenModel = new ExamenModel();
-                $header = apache_request_headers();
-                $token = substr($header['Authorization'], 7);
-                $_examenModel->byUser($token);
                 $id = $_examenModel->where('examen_id', '=', $examen_id)->update($data);
                 $mensaje = ($id > 0);
         
@@ -120,19 +114,13 @@ class ExamenController extends Controller{
     public function eliminarExamen($examen_id){
 
         $validarExamen = new Validate;
-        $token = $validarExamen->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
 
         $_examenModel = new ExamenModel();
-        $_examenModel->byUser($token);
         $data = array (
             "estatus_exa" => "2"
         );
 
-        $eliminado = $_examenModel->where('examen_id','=',$examen_id)->update($data, 1);
+        $eliminado = $_examenModel->where('examen_id','=',$examen_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

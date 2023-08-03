@@ -40,8 +40,8 @@ class MedicamentoController extends Controller{
         
         switch($validarMedicamento) {
             case ($validarMedicamento->isEmpty($_POST)):
-               $respuesta = new Response('DATOS_VACIOS');
-               return $respuesta->json(400);
+                $respuesta = new Response('DATOS_VACIOS');
+                return $respuesta->json(400);
        
             case !$validarMedicamento->existsInDB($_POST, $camposId):
                 $respuesta = new Response(false, 'No se encontraron registros de esa especialidad');
@@ -54,10 +54,7 @@ class MedicamentoController extends Controller{
             default:
                 
                 $data = $validarMedicamento->dataScape($_POST);
-                $header = apache_request_headers();
-                $token = substr($header['Authorization'], 7);
                 $_medicamentoModel = new MedicamentoModel();
-                $_medicamentoModel->byUser($token);
                 $id = $_medicamentoModel->insert($data);
                 $mensaje = ($id > 0);
 
@@ -75,8 +72,8 @@ class MedicamentoController extends Controller{
         
         switch($validarMedicamento) {
             case ($validarMedicamento->isEmpty($_POST)):
-               $respuesta = new Response('DATOS_VACIOS');
-               return $respuesta->json(400);
+                $respuesta = new Response('DATOS_VACIOS');
+                return $respuesta->json(400);
 
             case !($validarMedicamento->isDuplicated('medicamento', 'medicamento_id', $medicamento)):
                 $respuesta = new Response(false, 'No se han encontrado registros del medicamento indicado');
@@ -94,10 +91,7 @@ class MedicamentoController extends Controller{
                 }
 
                 $data = $validarMedicamento->dataScape($_POST);
-                $header = apache_request_headers();
-                $token = substr($header['Authorization'], 7);
                 $_medicamentoModel = new MedicamentoModel();
-                $_medicamentoModel->byUser($token);
                 $id = $_medicamentoModel->where('medicamento_id', '=', $medicamento)->update($data);
                 $mensaje = ($id > 0);
 
@@ -108,15 +102,12 @@ class MedicamentoController extends Controller{
 
     public function eliminarMedicamento($medicamento_id){
         
-        $header = apache_request_headers();
-        $token = substr($header['Authorization'], 7);
         $_medicamentoModel = new MedicamentoModel();
-        $_medicamentoModel->byUser($token);
         $data = array(
             "estatus_med" => "2"
         );
 
-        $eliminado = $_medicamentoModel->where('medicamento_id','=',$medicamento_id)->update($data, 1);
+        $eliminado = $_medicamentoModel->where('medicamento_id','=',$medicamento_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'NOT_FOUND');

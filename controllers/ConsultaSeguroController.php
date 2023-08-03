@@ -108,10 +108,6 @@ class ConsultaSeguroController extends Controller{
                     return $respuesta->json(400);
                 }
 
-                // Insertamos la consulta_seguro
-                $header = apache_request_headers();
-                $token = substr($header['Authorization'], 7) ;
-                $_consultaSeguroModel->byUser($token);
                 $id = $_consultaSeguroModel->insert($data);
                 $mensaje = ($id > 0);
 
@@ -276,19 +272,13 @@ class ConsultaSeguroController extends Controller{
     public function eliminarConsultaSeguro($consulta_seguro_id){
 
         $validarConsulta = new Validate;
-        $token = $validarConsulta->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
         
         $_consultaSeguroModel = new ConsultaSeguroModel();
-        $_consultaSeguroModel->byUser($token);
         $data = array(
             'estatus_con' => '2'
         );
 
-        $eliminado = $_consultaSeguroModel->where('consulta_seguro_id','=',$consulta_seguro_id)->update($data, 1);
+        $eliminado = $_consultaSeguroModel->where('consulta_seguro_id','=',$consulta_seguro_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');

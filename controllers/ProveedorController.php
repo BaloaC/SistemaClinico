@@ -22,16 +22,9 @@ class ProveedorController extends Controller
         return $this->view('proveedores/actualizarProveedores', ['proveedor_id' => $proveedor_id]);
     }
 
-    public function insertarProveedor(/*Request $request*/)
-    {
-
+    public function insertarProveedor(/*Request $request*/) {
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarProveedor = new Validate;
-        $token = $validarProveedor->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
 
         switch ($_POST) {
             case ($validarProveedor->isEmpty($_POST)):
@@ -46,7 +39,6 @@ class ProveedorController extends Controller
                 $data = $validarProveedor->dataScape($_POST);
 
                 $_proveedorModel = new ProveedorModel();
-                $_proveedorModel->byUser($token);
                 $id = $_proveedorModel->insert($data);
                 $mensaje = ($id > 0);
 
@@ -55,16 +47,10 @@ class ProveedorController extends Controller
         }
     }
 
-    public function actualizarProveedor($proveedor_id)
-    {
+    public function actualizarProveedor($proveedor_id) {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarProveedor = new Validate;
-        $token = $validarProveedor->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
 
         switch ($_POST) {
             case ($validarProveedor->isEmpty($_POST)):
@@ -87,7 +73,6 @@ class ProveedorController extends Controller
                 $data = $validarProveedor->dataScape($_POST);
 
                 $_proveedorModel = new ProveedorModel();
-                $_proveedorModel->byUser($token);
                 $id = $_proveedorModel->where('proveedor_id', '=', $proveedor_id)->update($data);
                 $mensaje = ($id > 0);
 
@@ -114,23 +99,16 @@ class ProveedorController extends Controller
         return $this->retornarLista($mensaje, $proveedor);
     }
 
-    public function eliminarProveedor($proveedor_id)
-    {
+    public function eliminarProveedor($proveedor_id) {
 
         $validarProveedor = new Validate;
-        $token = $validarProveedor->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
 
         $_proveedorModel = new ProveedorModel();
-        $_proveedorModel->byUser($token);
         $data = array(
             "estatus_pro" => "2"
         );
 
-        $eliminado = $_proveedorModel->where('proveedor_id', '=', $proveedor_id)->update($data, 1);
+        $eliminado = $_proveedorModel->where('proveedor_id', '=', $proveedor_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

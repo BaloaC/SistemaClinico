@@ -8,8 +8,6 @@ class BaseModel{
     protected $table;
     protected $sql = null;
     protected $wheres = "";
-    protected $user;
-    protected $campo;
 
     public function __construct($table = null){
 
@@ -56,13 +54,10 @@ class BaseModel{
             $values = ":" . implode(", :",array_keys($obj));
             
             $this->sql = "INSERT INTO $this->table (`$keys`) VALUES($values)";
-            // echo $this->sql;
-            $this->campo = str_replace("_"," ",$this->table);
+            
             $this->execute($obj);
 
             $id = $this->connection->lastInsertId();
-
-            $this->insertarAuditoria('Inserto', 'insert', $id);
             return $id;
 
         } catch (PDOException $error) {
@@ -80,8 +75,7 @@ class BaseModel{
             $keys = "";
             // Código para la auditoria
             $userAfectado = preg_replace('/[^0-9]/', '', $this->wheres);
-            $this->campo = str_replace("_"," ",$this->table);
-        
+                    
             foreach($obj as $key => $value){
                 $keys .= "`$key`=:$key,";
             }
@@ -90,9 +84,6 @@ class BaseModel{
             $this->sql = "UPDATE $this->table SET $keys $this->wheres";
             $affectedRows = $this->execute($obj); 
             
-            if ($option == 0) { $this->insertarAuditoria('Actualizó', 'update', $userAfectado); }
-            else  { $this->insertarAuditoria('Eliminó', 'delete', $userAfectado); }
-
             return $affectedRows;
 
         } catch (PDOException $error) {
@@ -182,28 +173,6 @@ class BaseModel{
         }
     }
 
-    //Método para enviar el id del usuario que está realizando la acción
-    public function byUser($obj, $option = 0) {
-        
-        if ($option == 0) { $sql = 'SELECT * FROM usuario WHERE tokken = "'.$obj.'"';
-        } else { $sql = "SELECT * FROM $this->table WHERE $this->table"."_id = $obj"; }
-
-        $query = $this->connection->prepare($sql);
-        $query->execute();
-        $user = $query->fetchAll(PDO::FETCH_OBJ);
-        if ($option == 0) {
-            $this->user = $user[0]->usuario_id;
-        } else {
-            
-            if (isset($user[0]->nombre)) {
-                return $user[0]->nombre;
-            } else {
-                return "";   
-            }
-            
-        }
-    }
-
     //Método para ejectuar una consulta
     private function execute($obj = null){
 
@@ -232,19 +201,6 @@ class BaseModel{
         
         $this->wheres = "";
         $this->sql = null;
-    }
-
-    //Auditoria
-    private function insertarAuditoria($accion, $sentencia, $usuario_Afectado) {
-        $nombre_Insercion = $this->byUser($usuario_Afectado, 1);
-        $insertar_Accion = "{$accion} {$this->campo} {$nombre_Insercion}";
-    
-        // ** Enrique
-        if($this->user !== null){
-            $this->sql = 'INSERT INTO auditoria (usuario_id, accion, descripcion) VALUES ("'.$this->user.'", "'.$sentencia.'", "'.$insertar_Accion.'")';
-            $query = $this->connection->prepare($this->sql);
-            $query->execute();
-        }
     }
 }
 

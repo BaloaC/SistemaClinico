@@ -40,12 +40,6 @@ class SeguroController extends Controller{
         $camposNumericos = array("telefono");
         $validarSeguro = new Validate;
         
-        $token = $validarSeguro->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
-
         switch($_POST) {
             case ($validarSeguro->isEmpty($_POST)):
                 $respuesta = new Response('DATOS_INVALIDOS');
@@ -82,7 +76,6 @@ class SeguroController extends Controller{
                 
                 $data = $validarSeguro->dataScape($_POST);
                 $_seguroModel = new SeguroModel();
-                $_seguroModel->byUser($token);
                 $id = $_seguroModel->insert($data);
 
                 if ( $id > 0 ) {
@@ -168,13 +161,7 @@ class SeguroController extends Controller{
 
         // Creando los strings para las validaciones
         $camposNumericos = array("telefono");
-
         $validarSeguro = new Validate;
-        $token = $validarSeguro->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
 
         switch($_POST) {
             case ($validarSeguro->isEmpty($_POST)):
@@ -207,7 +194,6 @@ class SeguroController extends Controller{
             $data = $validarSeguro->dataScape($_POST);
                 
             $_seguroModel = new SeguroModel();
-            $_seguroModel->byUser($token);
 
             $actualizado = $_seguroModel->where('seguro_id','=',$seguro_id)->update($data);
             $mensaje = ($actualizado > 0);
@@ -221,20 +207,12 @@ class SeguroController extends Controller{
 
     public function eliminarSeguro($idSeguro){
 
-        $validarSeguro = new Validate;
-        $token = $validarSeguro->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
-
         $_seguroModel = new SeguroModel();
-        $_seguroModel->byUser($token);
         $data = array(
             "estatus_seg" => "2"
         );
 
-        $eliminado = $_seguroModel->where('seguro_id','=',$idSeguro)->update($data, 1);
+        $eliminado = $_seguroModel->where('seguro_id','=',$idSeguro)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

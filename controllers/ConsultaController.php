@@ -219,11 +219,7 @@ class ConsultaController extends Controller {
                     }
                 }
 
-                $header = apache_request_headers();
-                $token = substr($header['Authorization'], 7);
-
                 $_consultaModel = new ConsultaModel();
-                $_consultaModel->byUser($token);
                 $id = $_consultaModel->insert($consulta_separada[1]);
                 $mensaje = ($id > 0);
                 

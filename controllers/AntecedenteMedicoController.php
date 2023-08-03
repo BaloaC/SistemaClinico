@@ -49,9 +49,6 @@ class AntecedenteMedicoController extends Controller {
 
                 $data = $validarAntecedente->dataScape($_POST);
                 $_antecedenteModel = new AntecedenteMedicoModel();
-                $header = apache_request_headers();
-                $token = substr($header['Authorization'], 7) ;
-                $_antecedenteModel->byUser($token);
 
                 $isInserted = $_antecedenteModel->insert($data);
                 $mensaje = ($isInserted > 0);
@@ -117,9 +114,6 @@ class AntecedenteMedicoController extends Controller {
 
                 $data = $validarAntecedente->dataScape($_POST);
                 $_antecedenteModel = new AntecedenteMedicoModel();
-                $header = apache_request_headers();
-                $token = substr($header['Authorization'], 7) ;
-                $_antecedenteModel->byUser($token);
 
                 $isInserted = $_antecedenteModel->where('antecedentes_medicos_id', '=', $antecedentes_medicos_id)->update($data);
                 $mensaje = ($isInserted > 0);
@@ -131,11 +125,7 @@ class AntecedenteMedicoController extends Controller {
 
     public function eliminarAntecedente($antecedentes_medicos_id) {
 
-        $header = apache_request_headers();
-        $token = substr($header['Authorization'], 7) ;
-
         $_antecedenteModel = new AntecedenteMedicoModel();
-        $_antecedenteModel->byUser($token);
         $data = array(
             "estatus_ant" => "2"
         );

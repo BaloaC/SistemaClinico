@@ -17,9 +17,8 @@ class Autoloader{
 
     //Método para determinar las clases que necesitan y requerirlas en el autoloader
     public static function upload($class){
-
-        $fileName = $class . '.php';
         
+        $fileName = $class . '.php';
         $folders = require PATH_CONFIG . 'autoloader.php';
 
         //Recorremos las carpetas y si encuentra la clase retornamos true para requerirla
