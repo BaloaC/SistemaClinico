@@ -15,6 +15,7 @@ class AuditMiddleware extends Middleware {
     public function handleRequest($request = null) {}
 
     public function handleResponse($request = null) {
+        $this->getUsuario(); $this->getToken();
         $this->insertAudit();
     }
 

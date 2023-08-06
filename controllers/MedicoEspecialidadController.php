@@ -12,7 +12,7 @@ class MedicoEspecialidadController extends Controller{
             
             // Creando los strings para las validaciones
             $camposKey = array();
-            $camposNumericos = array("especialidad_id", "medico_id");
+            $camposNumericos = array("medico_id");
             $validarMedicoEspecialidad = new Validate;
             
             switch($newForm) {
@@ -28,6 +28,10 @@ class MedicoEspecialidadController extends Controller{
                 // case !($validarMedicoEspecialidad->isDuplicated('especialidad', 'especialidad_id', $newForm['especialidad_id'])):   
                 //     $respuesta = new Response(false, 'No se encontraron resultados de la especialidad indicada');
                 //     return $respuesta->json(400);
+
+                case $validarMedicoEspecialidad->isNumber($newForm, $camposNumericos):
+                    $respuesta = new Response(false, 'El costo debe ser numérico');
+                    return $respuesta->json(400);
 
                 case $validarMedicoEspecialidad->isDuplicatedId('medico_id', 'especialidad_id', $newForm['medico_id'], $newForm['especialidad_id'], 'medico_especialidad'):
                     $respuesta = new Response(false,'Ya existe un registro con esa información');

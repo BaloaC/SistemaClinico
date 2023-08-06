@@ -60,7 +60,6 @@ class EspecialidadController extends Controller{
     }
 
     public function listarEspecialidades(){
-
         $_especialidadModel = new EspecialidadModel();
         $especialidad = $_especialidadModel->where('estatus_esp', '=', '1')->getAll();
         $resultado = array();

@@ -5,10 +5,11 @@ class AuthorizationMiddleware extends Middleware {
 
     public function __construct(Array $nivel = null) {
         $this->nivel = $nivel;
-        $this->getToken(); $this->getUsuario();
     }
 
     public function handleRequest($request = null) {
+        
+        $this->getToken(); $this->getUsuario();
         
         if ($this->usuario->rol == 1) {
             return true;

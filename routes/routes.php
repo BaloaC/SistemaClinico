@@ -5,7 +5,7 @@ $AuthorizationMiddleware = new AuthorizationMiddleware();
 $AuditMiddleware = new AuditMiddleware();
 $auditCita = new AuditCita();
 
-Router::post('/prueba/:id', UsuarioController::class . '@listarUsuarioPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") ), $auditCita]);
+// Router::post('/prueba/:id', UsuarioController::class . '@listarUsuarioPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") ), $auditCita]);
 
 //Auditoria - API
 Router::get('/auditoria/consulta', AuditoriaController::class . '@listarAuditoria');

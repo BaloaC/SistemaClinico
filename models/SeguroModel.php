@@ -9,6 +9,7 @@ class SeguroModel extends GenericModel {
     protected $direccion;
     protected $telefono;
     protected $porcentaje;
+    protected $costo_consulta;
     protected $estatus_seg;
 
     public function __construct($propiedades = null) {
@@ -21,6 +22,7 @@ class SeguroModel extends GenericModel {
     public function getDireccion(){return $this->direccion;}
     public function getTelefono(){return $this->telefono;}
     public function getPorcentaje(){return $this->porcentaje;}
+    public function getCostoConsulta(){return $this->costo_consulta;}
     public function getEstatusSeg(){return $this->estatus_seg;}
 
     /* Setters */
@@ -29,6 +31,7 @@ class SeguroModel extends GenericModel {
     public function setDireccion($direccion){return $this->direccion = $direccion;}
     public function setTelefono($telefono){return $this->telefono = $telefono;}
     public function setPorcentaje($porcentaje){return $this->porcentaje = $porcentaje;}
+    public function setCostoConsulta($costo_consulta){return $this->costo_consulta = $costo_consulta;}
     public function setEstatusSeg($estatus_seg){return $this->estatus_seg = $estatus_seg;}
 }
 

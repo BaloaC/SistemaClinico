@@ -37,7 +37,7 @@ class SeguroController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         
         // Creando los strings para las validaciones
-        $camposNumericos = array("telefono");
+        $camposNumericos = array("telefono", "costo_especialidad");
         $validarSeguro = new Validate;
         
         switch($_POST) {
@@ -160,7 +160,7 @@ class SeguroController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
 
         // Creando los strings para las validaciones
-        $camposNumericos = array("telefono");
+        $camposNumericos = array("telefono","costo_especialidad");
         $validarSeguro = new Validate;
 
         switch($_POST) {
