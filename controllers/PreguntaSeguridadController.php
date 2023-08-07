@@ -102,16 +102,16 @@ class PreguntaSeguridadController extends Controller {
     }
 
     public function listarPreguntasPorUsuarioId($nombre_usuario) {
-
         $validarUsuario = new Validate;
+        $nombre = $_GET['usuario'];
 
-        if (!$validarUsuario->isDuplicated("usuario", "nombre", $nombre_usuario)) {
+        if (!$validarUsuario->isDuplicated("usuario", "nombre", $nombre)) {
             $respuesta = new Response('NOT_FOUND');
             return $respuesta->json(200);
         }
 
         $_usuarioModel = new UsuarioModel();
-        $usuario = $_usuarioModel->where('estatus_usu', '=', '1')->where('nombre', '=', $nombre_usuario)->getFirst();
+        $usuario = $_usuarioModel->where('estatus_usu', '=', '1')->where('nombre', '=', $nombre)->getFirst();
 
         $_preguntaSeguridadModel = new PreguntaSeguridadModel();
         $preguntas = $_preguntaSeguridadModel->where('estatus_pre', '=', '1')->where('usuario_id', '=', $usuario->usuario_id)->getAll();

@@ -38,7 +38,7 @@ Router::post('/login/:id', LoginController::class . '@recuperarUsuario', [$Authe
 // //Preguntas - API
 Router::get('/preguntas/consulta', PreguntaSeguridadController::class . '@listarPreguntas', [$AuthenticationMiddleware]);
 Router::get('/preguntas/:id', PreguntaSeguridadController::class . '@listarPreguntasPorId', [$AuthenticationMiddleware]);
-Router::get('/preguntas/usuario/:id', PreguntaSeguridadController::class . '@listarPreguntasPorUsuarioId', [$AuthenticationMiddleware]);
+Router::get('/preguntas/usuario', PreguntaSeguridadController::class . '@listarPreguntasPorUsuarioId');
 Router::post('/pregunta/:id', PreguntaSeguridadController::class . '@insertarPregunta', [$AuthenticationMiddleware]);
 Router::post('/respuesta/:id', PreguntaSeguridadController::class . '@comprobarPregunta', [$AuthenticationMiddleware]);
 

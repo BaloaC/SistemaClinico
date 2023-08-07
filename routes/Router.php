@@ -82,11 +82,10 @@ class Router {
             } else {
                 
                 // Verificando que la ruta esté registrada
-                // var_dump( Router::$routes[$method]["/" . $uri]->uri );
-                // var_dump($uri);
+                // echo '<pre>';
                 $uris = Router::$routes[$method]["/" . $uri]; 
-                // var_dump( $uris->uri === $uri);
-                if ( Router::$routes[$method]["/" . $uri]->middlewares ) { // Ejecutando middleware
+                
+                if ( !is_null(Router::$routes[$method]["/" . $uri]->middlewares) ) { // Ejecutando middleware
                     foreach (Router::$routes[$method]["/" . $uri]->middlewares as $middleware) {
                         $middleware->handleRequest( Router::$routes[$method]["/" . $uri] );
                     }
