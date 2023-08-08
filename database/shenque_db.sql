@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-07-2023 a las 23:19:16
+-- Tiempo de generación: 08-08-2023 a las 02:42:48
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -60,216 +60,6 @@ CREATE TABLE `auditoria` (
   `descripcion` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `auditoria`
---
-
-INSERT INTO `auditoria` (`auditoria_id`, `fecha_creacion`, `usuario_id`, `accion`, `descripcion`) VALUES
-(1, '2023-05-03 14:04:03', 4, 'insert', 'Inserto especialidad Oftamología'),
-(2, '2023-05-03 14:04:09', 4, 'insert', 'Inserto especialidad Otorrinolaringología'),
-(3, '2023-05-03 14:04:38', 4, 'insert', 'Inserto especialidad Pediatría'),
-(4, '2023-05-03 14:04:56', 4, 'insert', 'Inserto especialidad Dermatología'),
-(5, '2023-05-03 14:05:16', 4, 'insert', 'Inserto especialidad Odontología'),
-(6, '2023-05-03 14:07:44', 4, 'update', 'Actualizó especialidad Traumatología'),
-(7, '2023-05-03 14:09:22', 4, 'update', 'Actualizó especialidad Otorrinolaringología'),
-(8, '2023-05-03 14:14:09', 4, 'insert', 'Inserto medico Noemí Alejandra'),
-(9, '2023-05-03 14:18:18', 4, 'insert', 'Inserto medico Julia Lucia'),
-(10, '2023-05-03 14:19:03', 4, 'insert', 'Inserto medico Héctor Alejandro'),
-(11, '2023-05-03 14:20:37', 4, 'insert', 'Inserto medico María Hortensia'),
-(12, '2023-05-03 14:31:04', 4, 'insert', 'Inserto proveedor Proveedores Médicos C.A'),
-(13, '2023-05-03 14:41:20', 4, 'insert', 'Inserto proveedor Proveedores Cagua'),
-(14, '2023-05-03 14:43:20', 4, 'insert', 'Inserto proveedor Insumos médicos C.A'),
-(15, '2023-05-03 14:43:33', 4, 'insert', 'Inserto proveedor Insumos Miranda'),
-(16, '2023-05-03 14:44:01', 4, 'update', 'Actualizó proveedor Insumos médicos S.A'),
-(17, '2023-05-03 14:44:09', 4, 'update', 'Actualizó proveedor Insumos médicos C.A'),
-(18, '2023-05-03 14:44:21', 4, 'delete', 'Eliminó proveedor Insumos Miranda'),
-(19, '2023-05-03 14:44:33', 4, 'insert', 'Inserto proveedor Insumos Caracas'),
-(20, '2023-05-03 14:49:58', 4, 'insert', 'Inserto insumo inyecciones'),
-(21, '2023-05-03 14:51:31', 4, 'insert', 'Inserto proveedor Proveedores Magic'),
-(22, '2023-05-03 14:52:51', 4, 'insert', 'Inserto insumo Gazas'),
-(23, '2023-05-03 14:55:08', 4, 'insert', 'Inserto insumo Paletas'),
-(24, '2023-05-03 14:56:01', 4, 'insert', 'Inserto insumo Unidad de Diclofenaco'),
-(25, '2023-05-03 14:56:52', 4, 'insert', 'Inserto insumo Unidad de ibuprofeno'),
-(26, '2023-05-03 14:56:55', 4, 'delete', 'Eliminó insumo Unidad de ibuprofeno'),
-(27, '2023-05-03 15:00:53', 4, 'insert', 'Inserto seguro Seguros Miranda'),
-(28, '2023-05-03 15:02:45', 4, 'insert', 'Inserto seguro Seguros Venezolanos'),
-(29, '2023-05-03 15:03:56', 4, 'insert', 'Inserto seguro Seguros Qualitas'),
-(30, '2023-05-03 15:04:41', 4, 'insert', 'Inserto seguro Seguros Pirámides'),
-(31, '2023-05-03 15:05:25', 4, 'update', 'Actualizó seguro Seguros Venezolanos C.A'),
-(32, '2023-05-03 15:06:58', 4, 'insert', 'Inserto empresa Vasos Venezolanos C.A'),
-(33, '2023-05-03 15:07:17', 4, 'insert', 'Inserto empresa Selva C.A'),
-(34, '2023-05-03 15:07:48', 4, 'insert', 'Inserto empresa Envasados Samír'),
-(35, '2023-05-03 15:32:26', 4, 'update', 'Actualizó empresa Vasos Venezolanos'),
-(36, '2023-05-03 16:31:47', 4, 'insert', 'Inserto examen Perfil 20'),
-(37, '2023-05-03 16:33:08', 4, 'insert', 'Inserto examen Hemoglobina'),
-(38, '2023-05-03 16:33:22', 4, 'insert', 'Inserto examen Colesterol'),
-(39, '2023-05-03 16:33:42', 4, 'insert', 'Inserto examen Ecosonograma Pelvico'),
-(40, '2023-05-03 16:35:42', 4, 'update', 'Actualizó examen Ecosonograma Tiroideo'),
-(41, '2023-05-03 16:35:53', 4, 'insert', 'Inserto examen Preuab'),
-(42, '2023-05-03 16:35:56', 4, 'delete', 'Eliminó examen Preuab'),
-(43, '2023-05-03 17:18:55', 4, 'insert', 'Inserto factura compra '),
-(44, '2023-05-03 17:18:55', 4, 'insert', 'Inserto compra insumo '),
-(45, '2023-05-03 17:18:55', 4, 'update', 'Actualizó insumo Gazas'),
-(46, '2023-05-03 17:18:55', 4, 'insert', 'Inserto compra insumo '),
-(47, '2023-05-03 17:18:55', 4, 'update', 'Actualizó insumo Paletas'),
-(48, '2023-05-03 17:18:55', 4, 'insert', 'Inserto compra insumo '),
-(49, '2023-05-03 17:18:55', 4, 'update', 'Actualizó insumo Unidad de Diclofenaco'),
-(50, '2023-05-03 17:21:29', 4, 'insert', 'Inserto factura compra '),
-(51, '2023-05-03 17:21:29', 4, 'insert', 'Inserto compra insumo '),
-(52, '2023-05-03 17:21:29', 4, 'update', 'Actualizó insumo Gazas'),
-(53, '2023-05-03 17:54:31', 4, 'insert', 'Inserto cita '),
-(54, '2023-05-03 18:03:39', 4, 'insert', 'Inserto consulta '),
-(55, '2023-05-03 18:03:39', 4, 'update', 'Actualizó cita '),
-(56, '2023-05-03 18:08:22', 4, 'insert', 'Inserto factura consulta '),
-(57, '2023-05-03 18:08:37', 4, 'insert', 'Inserto factura medico '),
-(58, '2023-05-20 13:01:01', 5, 'insert', 'Inserto factura compra '),
-(59, '2023-05-20 13:01:01', 5, 'insert', 'Inserto compra insumo '),
-(60, '2023-05-20 13:01:01', 5, 'update', 'Actualizó insumo Gazas'),
-(61, '2023-05-20 13:18:56', 5, 'delete', 'Eliminó insumo '),
-(62, '2023-05-20 13:22:44', 5, 'delete', 'Eliminó insumo '),
-(63, '2023-05-20 13:22:54', 5, 'delete', 'Eliminó insumo '),
-(64, '2023-05-20 13:22:56', 5, 'delete', 'Eliminó insumo '),
-(65, '2023-05-20 13:22:58', 5, 'delete', 'Eliminó insumo '),
-(66, '2023-05-20 13:29:51', 5, 'update', 'Actualizó factura compra '),
-(67, '2023-05-20 13:48:36', 5, 'update', 'Actualizó factura compra '),
-(68, '2023-05-20 13:55:39', 5, 'update', 'Actualizó factura compra '),
-(69, '2023-05-20 13:56:39', 5, 'update', 'Actualizó factura compra '),
-(70, '2023-05-20 13:57:10', 5, 'update', 'Actualizó factura compra '),
-(71, '2023-05-20 13:57:18', 5, 'update', 'Actualizó factura compra '),
-(72, '2023-05-20 13:57:41', 5, 'update', 'Actualizó factura compra '),
-(73, '2023-05-20 14:04:19', 5, 'update', 'Actualizó factura compra '),
-(74, '2023-05-20 14:04:50', 5, 'update', 'Actualizó factura compra '),
-(75, '2023-05-20 14:05:30', 5, 'insert', 'Inserto factura medico '),
-(76, '2023-05-20 14:16:54', 5, 'update', 'Actualizó factura medico '),
-(77, '2023-05-20 14:17:49', 5, 'update', 'Actualizó factura medico '),
-(78, '2023-05-20 14:18:18', 5, 'delete', 'Eliminó factura medico '),
-(79, '2023-05-20 15:19:23', 5, 'delete', 'Eliminó factura consulta '),
-(80, '2023-05-20 15:19:34', 5, 'insert', 'Inserto factura consulta '),
-(81, '2023-05-20 16:52:34', 5, 'insert', 'Inserto factura medico '),
-(82, '2023-05-21 14:54:20', 5, 'insert', 'Inserto factura medico '),
-(83, '2023-05-21 15:22:29', 5, 'insert', 'Inserto factura medico '),
-(84, '2023-05-21 15:22:29', 5, 'insert', 'Inserto factura medico '),
-(85, '2023-05-21 15:22:29', 5, 'insert', 'Inserto factura medico '),
-(86, '2023-05-21 15:22:29', 5, 'insert', 'Inserto factura medico '),
-(87, '2023-05-21 16:00:22', 5, 'insert', 'Inserto cita '),
-(88, '2023-05-21 16:13:27', 5, 'insert', 'Inserto consulta '),
-(89, '2023-05-21 16:13:27', 5, 'update', 'Actualizó cita '),
-(90, '2023-05-21 16:15:01', 5, 'insert', 'Inserto consulta '),
-(91, '2023-05-21 16:15:01', 5, 'update', 'Actualizó cita '),
-(92, '2023-05-21 17:06:09', 5, 'insert', 'Inserto cita '),
-(93, '2023-05-21 17:09:05', 5, 'insert', 'Inserto consulta '),
-(94, '2023-05-21 17:09:05', 5, 'update', 'Actualizó cita '),
-(95, '2023-05-21 17:14:17', 5, 'insert', 'Inserto consulta '),
-(96, '2023-05-21 17:14:17', 5, 'update', 'Actualizó cita '),
-(97, '2023-05-21 17:22:21', 5, 'insert', 'Inserto consulta '),
-(98, '2023-05-21 18:18:44', 5, 'insert', 'Inserto factura seguro '),
-(99, '2023-05-26 00:47:46', 5, 'insert', 'Inserto consulta seguro '),
-(100, '2023-05-26 02:25:32', 5, 'insert', 'Inserto factura seguro '),
-(101, '2023-05-26 02:28:45', 5, 'insert', 'Inserto factura seguro '),
-(102, '2023-05-26 02:34:40', 5, 'insert', 'Inserto factura seguro '),
-(103, '2023-05-26 02:34:40', 5, 'insert', 'Inserto factura seguro '),
-(104, '2023-05-26 02:34:40', 5, 'insert', 'Inserto factura seguro '),
-(105, '2023-05-26 02:34:40', 5, 'insert', 'Inserto factura seguro '),
-(106, '2023-05-26 02:34:40', 5, 'insert', 'Inserto factura seguro '),
-(107, '2023-05-26 02:37:30', 5, 'insert', 'Inserto consulta seguro '),
-(108, '2023-05-26 02:40:57', 5, 'insert', 'Inserto consulta seguro '),
-(109, '2023-05-27 20:43:19', 5, 'insert', 'Inserto consulta seguro '),
-(110, '2023-05-27 20:54:49', 5, 'insert', 'Inserto consulta seguro '),
-(111, '2023-05-27 20:54:59', 5, 'insert', 'Inserto consulta seguro '),
-(112, '2023-05-27 21:04:13', 5, 'insert', 'Inserto consulta seguro '),
-(113, '2023-05-28 18:59:52', 5, 'insert', 'Inserto consulta seguro '),
-(114, '2023-05-28 20:00:38', 5, 'insert', 'Inserto factura compra '),
-(115, '2023-05-28 20:00:38', 5, 'insert', 'Inserto compra insumo '),
-(116, '2023-05-28 20:00:38', 5, 'update', 'Actualizó insumo inyecciones'),
-(117, '2023-05-28 22:54:41', 5, 'insert', 'Inserto antecedentes medicos '),
-(118, '2023-05-28 22:55:36', 5, 'insert', 'Inserto antecedentes medicos '),
-(119, '2023-05-28 23:00:09', 5, 'insert', 'Inserto antecedentes medicos '),
-(120, '2023-05-28 23:06:39', 5, 'update', 'Actualizó antecedentes medicos '),
-(121, '2023-05-28 23:06:50', 5, 'insert', 'Inserto antecedentes medicos '),
-(122, '2023-05-28 23:20:31', 5, 'insert', 'Inserto antecedentes medicos '),
-(123, '2023-05-28 23:21:29', 5, 'insert', 'Inserto antecedentes medicos '),
-(124, '2023-05-29 00:06:06', 5, 'update', 'Actualizó antecedentes medicos '),
-(125, '2023-05-29 00:13:59', 5, 'insert', 'Inserto antecedentes medicos '),
-(126, '2023-05-29 00:14:29', 5, 'insert', 'Inserto antecedentes medicos '),
-(127, '2023-05-30 01:15:45', 5, 'insert', 'Inserto cita '),
-(128, '2023-05-30 01:16:58', 5, 'insert', 'Inserto consulta '),
-(129, '2023-05-30 01:17:05', 5, 'insert', 'Inserto consulta '),
-(130, '2023-05-30 01:20:09', 5, 'update', 'Actualizó antecedentes medicos '),
-(131, '2023-05-30 01:20:28', 5, 'update', 'Actualizó antecedentes medicos '),
-(132, '2023-05-30 01:20:49', 5, 'update', 'Actualizó antecedentes medicos '),
-(133, '2023-05-30 01:23:00', 5, 'update', 'Actualizó antecedentes medicos '),
-(134, '2023-06-01 00:20:31', 5, 'insert', 'Inserto examen Cerebrologia'),
-(135, '2023-06-01 00:21:25', 5, 'insert', 'Inserto examen Otorrinolaringología'),
-(136, '2023-06-01 00:23:26', 5, 'insert', 'Inserto examen Dermatología'),
-(137, '2023-06-01 00:27:09', 5, 'insert', 'Inserto examen Dermatologí'),
-(138, '2023-06-01 00:27:09', 5, 'insert', 'Inserto examen Dermatologí'),
-(139, '2023-06-01 00:39:19', 5, 'insert', 'Inserto examen Dermatología'),
-(140, '2023-06-01 00:43:10', 5, 'insert', 'Inserto examen Dermatología'),
-(141, '2023-06-02 20:24:25', 5, 'insert', 'Inserto medicamento '),
-(142, '2023-06-02 20:37:35', 5, 'update', 'Actualizó medicamento '),
-(143, '2023-06-02 20:38:08', 5, 'update', 'Actualizó medicamento '),
-(144, '2023-06-02 20:39:12', 5, 'update', 'Actualizó medicamento '),
-(145, '2023-06-02 20:48:27', 5, 'delete', 'Eliminó medicamento '),
-(146, '2023-06-02 20:48:40', 5, 'delete', 'Eliminó medicamento '),
-(147, '2023-06-02 20:48:44', 5, 'delete', 'Eliminó medicamento '),
-(148, '2023-06-02 23:42:25', 5, 'insert', 'Inserto consulta '),
-(149, '2023-06-02 23:45:32', 5, 'insert', 'Inserto consulta '),
-(150, '2023-06-02 23:46:57', 5, 'insert', 'Inserto consulta '),
-(151, '2023-06-02 23:47:08', 5, 'insert', 'Inserto consulta '),
-(152, '2023-06-02 23:48:35', 5, 'insert', 'Inserto consulta '),
-(153, '2023-06-02 23:49:17', 5, 'insert', 'Inserto consulta '),
-(154, '2023-06-02 23:49:39', 5, 'insert', 'Inserto consulta '),
-(155, '2023-06-02 23:49:59', 5, 'insert', 'Inserto consulta '),
-(156, '2023-06-02 23:50:31', 5, 'insert', 'Inserto consulta '),
-(157, '2023-06-02 23:50:58', 5, 'insert', 'Inserto consulta '),
-(158, '2023-06-02 23:51:12', 5, 'insert', 'Inserto consulta '),
-(159, '2023-06-02 23:51:44', 5, 'insert', 'Inserto consulta '),
-(160, '2023-06-02 23:52:37', 5, 'insert', 'Inserto consulta '),
-(161, '2023-06-02 23:53:06', 5, 'insert', 'Inserto consulta '),
-(162, '2023-06-02 23:53:06', 5, 'insert', 'Inserto consulta '),
-(163, '2023-06-02 23:53:17', 5, 'insert', 'Inserto consulta '),
-(164, '2023-06-02 23:53:17', 5, 'insert', 'Inserto consulta '),
-(165, '2023-06-02 23:53:31', 5, 'insert', 'Inserto consulta '),
-(166, '2023-06-08 01:15:38', 5, 'insert', 'Inserto cita '),
-(167, '2023-06-08 01:36:24', 5, 'insert', 'Inserto cita '),
-(168, '2023-06-08 01:44:43', 5, 'insert', 'Inserto cita '),
-(169, '2023-06-08 01:46:36', 5, 'insert', 'Inserto cita '),
-(170, '2023-06-08 23:09:21', 5, 'insert', 'Inserto cita '),
-(171, '2023-06-08 23:09:29', 5, 'insert', 'Inserto cita '),
-(172, '2023-06-10 22:19:13', 5, 'insert', 'Inserto medico '),
-(173, '2023-06-10 22:49:16', 5, 'insert', 'Inserto medico '),
-(174, '2023-06-10 23:01:22', 5, 'insert', 'Inserto medico '),
-(175, '2023-06-10 23:01:51', 5, 'insert', 'Inserto medico Alberto'),
-(176, '2023-06-10 23:02:43', 5, 'insert', 'Inserto medico Alberto'),
-(177, '2023-06-10 23:03:23', 5, 'insert', 'Inserto medico Alberto'),
-(178, '2023-06-11 23:49:37', 5, 'insert', 'Inserto cita '),
-(179, '2023-06-12 00:39:36', 5, 'insert', 'Inserto cita '),
-(180, '2023-06-21 00:19:44', 5, 'insert', 'Inserto cita '),
-(181, '2023-06-21 00:24:59', 5, 'insert', 'Inserto cita '),
-(182, '2023-06-21 00:26:24', 5, 'update', 'Actualizó cita seguro '),
-(183, '2023-06-21 00:49:34', 5, 'insert', 'Inserto cita '),
-(184, '2023-06-22 01:54:04', 5, 'insert', 'Inserto factura medico '),
-(185, '2023-06-22 23:42:49', 4, 'insert', 'Inserto especialidad Pediatra'),
-(186, '2023-06-22 23:43:01', 4, 'update', 'Actualizó especialidad Medicina General'),
-(187, '2023-06-22 23:43:25', 4, 'insert', 'Inserto medico Juan'),
-(188, '2023-06-22 23:52:24', 4, 'insert', 'Inserto empresa probando'),
-(189, '2023-07-01 20:44:11', 5, 'insert', 'Inserto consulta '),
-(190, '2023-07-01 20:45:11', 5, 'insert', 'Inserto consulta '),
-(191, '2023-07-01 20:46:28', 5, 'insert', 'Inserto consulta '),
-(192, '2023-07-01 20:47:14', 5, 'insert', 'Inserto consulta '),
-(193, '2023-07-01 20:49:10', 5, 'insert', 'Inserto consulta '),
-(194, '2023-07-01 20:50:59', 5, 'insert', 'Inserto consulta '),
-(195, '2023-07-01 20:52:44', 5, 'insert', 'Inserto consulta '),
-(196, '2023-07-01 20:55:11', 5, 'insert', 'Inserto consulta '),
-(197, '2023-07-01 20:58:41', 5, 'insert', 'Inserto consulta '),
-(198, '2023-07-01 21:00:08', 5, 'insert', 'Inserto consulta '),
-(199, '2023-07-01 21:02:53', 5, 'insert', 'Inserto consulta '),
-(200, '2023-07-01 21:04:20', 5, 'insert', 'Inserto consulta '),
-(201, '2023-07-01 21:06:24', 5, 'insert', 'Inserto consulta '),
-(202, '2023-07-01 21:06:50', 5, 'insert', 'Inserto consulta '),
-(203, '2023-07-01 21:08:26', 5, 'insert', 'Inserto consulta '),
-(204, '2023-07-01 21:09:48', 5, 'insert', 'Inserto consulta ');
-
 -- --------------------------------------------------------
 
 --
@@ -296,7 +86,8 @@ CREATE TABLE `cita` (
 
 INSERT INTO `cita` (`cita_id`, `paciente_id`, `medico_id`, `especialidad_id`, `fecha_cita`, `hora_salida`, `hora_entrada`, `motivo_cita`, `cedula_titular`, `tipo_cita`, `estatus_cit`) VALUES
 (27, 11, 9, 9, '2023-06-22', '09:50:00', '08:50:00', 'dolor de cabeza', 18956458, '2', '3'),
-(28, 7, 9, 9, '2023-06-22', '10:00:00', '09:51:00', 'dolor de cabeza', 18954458, '1', '4');
+(28, 7, 9, 9, '2023-06-22', '10:00:00', '09:51:00', 'dolor de cabeza', 18954458, '1', '1'),
+(29, 14, 11, 11, '2023-07-17', '10:00:00', '09:51:00', 'dolor de webo', 25369123, '2', '4');
 
 -- --------------------------------------------------------
 
@@ -316,7 +107,8 @@ CREATE TABLE `cita_seguro` (
 --
 
 INSERT INTO `cita_seguro` (`cita_seguro_id`, `cita_id`, `seguro_id`, `clave`) VALUES
-(5, 27, 5, 'clave');
+(5, 27, 5, 'clave'),
+(6, 29, 5, 'sdawa3');
 
 -- --------------------------------------------------------
 
@@ -338,8 +130,17 @@ CREATE TABLE `compra_insumo` (
 --
 
 INSERT INTO `compra_insumo` (`compra_insumo_id`, `insumo_id`, `factura_compra_id`, `unidades`, `precio_unit`, `precio_total`) VALUES
-(000000012, 0, 1, 0, 0, 0),
-(000000013, 3, 9, 8, 1, 0);
+(000000013, 3, 9, 8, 1, 0),
+(000000014, 4, 10, 2, 4, 0),
+(000000015, 3, 10, 4, 2.5, 0),
+(000000016, 5, 10, 1, 10, 0),
+(000000017, 4, 11, 2, 4, 0),
+(000000018, 3, 11, 4, 2.5, 0),
+(000000019, 5, 11, 1, 10, 0),
+(000000020, 4, 12, 2, 4, 0),
+(000000021, 3, 12, 4, 2.5, 0),
+(000000022, 5, 12, 1, 10, 0),
+(000000023, 4, 14, 1, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -362,23 +163,14 @@ CREATE TABLE `consulta` (
 --
 
 INSERT INTO `consulta` (`consulta_id`, `peso`, `altura`, `observaciones`, `fecha_consulta`, `es_emergencia`, `estatus_con`) VALUES
-(53, 11, 11, NULL, '2023-06-25', 0, '1'),
-(54, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
-(55, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
-(56, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
-(57, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
-(58, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
-(59, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
 (60, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
 (61, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
-(62, 12.4, 12.6, NULL, '2023-08-23', 0, '1'),
-(63, 12.4, 12.6, NULL, '2023-08-23', 0, '1'),
-(64, 12.4, 12.6, NULL, '2023-08-23', 0, '1'),
 (65, 12.4, 12.6, NULL, '2023-08-23', 0, '1'),
-(66, 12.4, 12.6, NULL, '2023-08-23', 0, '1'),
-(67, 12.4, 12.6, NULL, '2023-08-23', 0, '1'),
-(68, 12.4, 12.6, NULL, '2023-08-23', 0, '1'),
-(69, 12.4, 12.6, NULL, '2023-08-23', 0, '1');
+(71, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
+(77, 72.4, 12.6, NULL, '2023-07-25', 0, '1'),
+(80, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
+(81, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1'),
+(90, 12.4, 12.6, 'dolor de cabeza', '2023-08-23', 0, '1');
 
 -- --------------------------------------------------------
 
@@ -398,7 +190,25 @@ CREATE TABLE `consulta_cita` (
 --
 
 INSERT INTO `consulta_cita` (`consulta_cita_id`, `cita_id`, `consulta_id`, `estatus_con`) VALUES
-(4, 28, 65, '1');
+(4, 28, 65, '1'),
+(10, 29, 77, '');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `consulta_emergencia`
+--
+
+CREATE TABLE `consulta_emergencia` (
+  `consulta_emergencia_id` int(11) NOT NULL,
+  `paciente_id` int(11) NOT NULL,
+  `seguro_id` int(11) NOT NULL,
+  `consultas_medicas` float NOT NULL,
+  `Laboratorios` float DEFAULT NULL,
+  `medicamentos` float DEFAULT NULL,
+  `area_observacion` float DEFAULT NULL,
+  `enfermeria` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -412,6 +222,16 @@ CREATE TABLE `consulta_examen` (
   `examen_id` int(11) NOT NULL,
   `estatus_con` enum('1','2') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `consulta_examen`
+--
+
+INSERT INTO `consulta_examen` (`consulta_examen_id`, `consulta_id`, `examen_id`, `estatus_con`) VALUES
+(7, 71, 4, '1'),
+(8, 77, 4, '1'),
+(9, 80, 4, '1'),
+(10, 81, 4, '1');
 
 -- --------------------------------------------------------
 
@@ -435,7 +255,11 @@ INSERT INTO `consulta_indicaciones` (`consulta_indicaciones_id`, `consulta_id`, 
 (3, 50, 'Usar protector solar de 50 FPS'),
 (4, 50, 'Usar jabón BIOS'),
 (5, 52, 'Usar protector solar de 30 FPS'),
-(6, 52, 'Usar jabón BIOS');
+(6, 52, 'Usar jabón BIOS'),
+(7, 71, 'Usar protector solar de 30 FPS'),
+(8, 77, 'Usar protector solar de 30 FPS'),
+(9, 80, 'Usar protector solar de 30 FPS'),
+(10, 81, 'Usar protector solar de 30 FPS');
 
 -- --------------------------------------------------------
 
@@ -447,8 +271,20 @@ CREATE TABLE `consulta_insumo` (
   `consulta_insumo_id` int(11) NOT NULL,
   `insumo_id` int(11) NOT NULL,
   `consulta_id` int(11) NOT NULL,
+  `cantidad` int(8) NOT NULL,
   `estatus_con` enum('1','2') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `consulta_insumo`
+--
+
+INSERT INTO `consulta_insumo` (`consulta_insumo_id`, `insumo_id`, `consulta_id`, `cantidad`, `estatus_con`) VALUES
+(4, 3, 77, 2, '1'),
+(5, 3, 80, 1, '1'),
+(6, 3, 81, 4, '1'),
+(21, 3, 90, 1, '1'),
+(22, 5, 90, 2, '1');
 
 -- --------------------------------------------------------
 
@@ -462,6 +298,15 @@ CREATE TABLE `consulta_recipe` (
   `medicamento_id` int(11) NOT NULL,
   `uso` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `consulta_recipe`
+--
+
+INSERT INTO `consulta_recipe` (`consulta_recipe_id`, `consulta_id`, `medicamento_id`, `uso`) VALUES
+(2, 71, 5, '1 vez al día por 15 días'),
+(3, 80, 5, '1 vez al día por 15 días'),
+(4, 81, 5, '1 vez al día por 15 días');
 
 -- --------------------------------------------------------
 
@@ -478,6 +323,13 @@ CREATE TABLE `consulta_seguro` (
   `monto` float NOT NULL,
   `estatus_con` enum('1','2') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `consulta_seguro`
+--
+
+INSERT INTO `consulta_seguro` (`consulta_seguro_id`, `consulta_id`, `seguro_id`, `tipo_servicio`, `fecha_ocurrencia`, `monto`, `estatus_con`) VALUES
+(000000025, 77, 5, 'consulta', '2023-07-05 02:40:21', 800, '1');
 
 -- --------------------------------------------------------
 
@@ -500,7 +352,11 @@ CREATE TABLE `consulta_sin_cita` (
 
 INSERT INTO `consulta_sin_cita` (`consulta_sin_cita_id`, `consulta_id`, `especialidad_id`, `medico_id`, `paciente_id`, `estatus_con`) VALUES
 (3, 60, 9, 9, 7, '1'),
-(4, 61, 9, 9, 7, '1');
+(4, 61, 9, 9, 7, '1'),
+(5, 71, 8, 10, 15, '1'),
+(6, 80, 8, 10, 15, '1'),
+(7, 81, 8, 10, 15, '1'),
+(16, 90, 8, 10, 15, '1');
 
 -- --------------------------------------------------------
 
@@ -570,11 +426,11 @@ CREATE TABLE `examen` (
 
 INSERT INTO `examen` (`examen_id`, `nombre`, `tipo`, `hecho_aqui`, `estatus_exa`) VALUES
 (3, 'Perfil 20', '', 0, '1'),
-(4, 'Hemoglobina', '', 0, '1'),
-(5, 'Colesterol', '', 0, '1'),
+(4, 'Hemoglobina', '', 1, '1'),
+(5, 'Colesterol', '', 1, '1'),
 (6, 'Ecosonograma Tiroideo', '', 0, '1'),
 (7, 'Preuab', '', 0, '2'),
-(8, 'Cerebrologia', '', 0, '1'),
+(8, 'Cerebrologia', '', 1, '1'),
 (9, 'Otorrinolaringología', '', 0, '1'),
 (14, 'Dermatología', '', 1, '1');
 
@@ -600,7 +456,11 @@ CREATE TABLE `factura_compra` (
 --
 
 INSERT INTO `factura_compra` (`factura_compra_id`, `proveedor_id`, `fecha_compra`, `total_productos`, `monto_con_iva`, `monto_sin_iva`, `excento`, `estatus_fac`) VALUES
-(000000009, 3, '2022-12-12 00:00:00', 13, 10.54, 7.54, NULL, '1');
+(000000009, 3, '2022-12-12 00:00:00', 13, 10.54, 7.54, NULL, '1'),
+(000000010, 3, '2023-07-12 00:00:00', 13, 10.54, 7.54, NULL, '1'),
+(000000011, 3, '2023-07-25 00:00:00', 13, 10.54, 7.54, NULL, '1'),
+(000000012, 3, '2023-08-11 00:00:00', 13, 10.54, 7.54, NULL, '1'),
+(000000014, 3, '2023-07-11 00:00:00', 13, 10.54, 7.54, NULL, '1');
 
 -- --------------------------------------------------------
 
@@ -613,9 +473,17 @@ CREATE TABLE `factura_consulta` (
   `consulta_id` int(11) NOT NULL,
   `paciente_id` int(11) NOT NULL,
   `metodo_pago` varchar(20) NOT NULL,
-  `monto_sin_iva` float NOT NULL,
+  `monto_consulta` float NOT NULL,
   `estatus_fac` enum('1','2') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `factura_consulta`
+--
+
+INSERT INTO `factura_consulta` (`factura_consulta_id`, `consulta_id`, `paciente_id`, `metodo_pago`, `monto_consulta`, `estatus_fac`) VALUES
+(00000004, 90, 15, 'debito', 400, '1'),
+(00000005, 65, 7, 'debito', 200, '1');
 
 -- --------------------------------------------------------
 
@@ -690,12 +558,12 @@ CREATE TABLE `horario` (
 
 INSERT INTO `horario` (`horario_id`, `medico_id`, `dias_semana`, `hora_salida`, `hora_entrada`, `estatus_hor`) VALUES
 (33, 9, 'lunes', '12:00:00', '08:00:00', '1'),
-(34, 9, 'martes', '00:00:00', '00:00:00', '1'),
+(34, 9, 'martes', '09:00:00', '18:00:00', '1'),
 (35, 9, 'jueves', '10:00:00', '07:00:00', '1'),
 (36, 9, 'viernes', '00:00:00', '00:00:00', '1'),
 (37, 10, 'lunes', '00:00:00', '00:00:00', '1'),
 (38, 10, 'viernes', '00:00:00', '00:00:00', '1'),
-(39, 11, 'lunes', '00:00:00', '00:00:00', '1'),
+(39, 11, 'lunes', '13:00:00', '06:00:00', '1'),
 (40, 11, 'jueves', '00:00:00', '00:00:00', '1'),
 (41, 11, 'sabado', '00:00:00', '00:00:00', '1'),
 (42, 12, 'martes', '00:00:00', '00:00:00', '1'),
@@ -725,9 +593,9 @@ CREATE TABLE `insumo` (
 --
 
 INSERT INTO `insumo` (`insumo_id`, `nombre`, `cantidad`, `stock`, `cantidad_min`, `precio`, `estatus_ins`) VALUES
-(3, 'inyecciones', 28, 0, 5, 20, '1'),
-(4, 'Gazas', 106, 0, 10, 50, '1'),
-(5, 'Paletas', 130, 0, 15, 1, '1'),
+(3, 'inyecciones', 13, 0, 5, 20, '1'),
+(4, 'Gazas', 113, 0, 10, 50, '1'),
+(5, 'Paletas', 129, 0, 15, 1, '1'),
 (6, 'Unidad de Diclofenaco', 300, 0, 15, 3, '1'),
 (7, 'Unidad de ibuprofeno', 200, 0, 10, 3, '2');
 
@@ -750,7 +618,8 @@ CREATE TABLE `medicamento` (
 --
 
 INSERT INTO `medicamento` (`medicamento_id`, `especialidad_id`, `nombre_medicamento`, `tipo_medicamento`, `estatus_med`) VALUES
-(5, 7, 'Diclofenac de 500 mg', '1', '1');
+(5, 7, 'Diclofenac de 500 mg', '1', '1'),
+(6, 7, 'diclofenaco de 500mg', '1', '1');
 
 -- --------------------------------------------------------
 
@@ -790,6 +659,7 @@ CREATE TABLE `medico_especialidad` (
   `medico_especialidad_id` int(11) NOT NULL,
   `medico_id` int(11) NOT NULL,
   `especialidad_id` int(11) NOT NULL,
+  `costo_especialidad` int(11) NOT NULL,
   `estatus_med` enum('1','2') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -797,19 +667,19 @@ CREATE TABLE `medico_especialidad` (
 -- Volcado de datos para la tabla `medico_especialidad`
 --
 
-INSERT INTO `medico_especialidad` (`medico_especialidad_id`, `medico_id`, `especialidad_id`, `estatus_med`) VALUES
-(13, 9, 8, '1'),
-(14, 9, 9, '1'),
-(15, 10, 8, '1'),
-(16, 10, 9, '1'),
-(17, 11, 11, '1'),
-(18, 12, 9, '1'),
-(19, 17, 7, '1'),
-(20, 17, 8, '1'),
-(21, 18, 7, '1'),
-(22, 18, 8, '1'),
-(23, 19, 8, '1'),
-(24, 19, 9, '1');
+INSERT INTO `medico_especialidad` (`medico_especialidad_id`, `medico_id`, `especialidad_id`, `costo_especialidad`, `estatus_med`) VALUES
+(13, 9, 8, 0, '1'),
+(14, 9, 9, 0, '1'),
+(15, 10, 8, 0, '1'),
+(16, 10, 9, 0, '1'),
+(17, 11, 11, 0, '1'),
+(18, 12, 9, 0, '1'),
+(19, 17, 7, 0, '1'),
+(20, 17, 8, 0, '1'),
+(21, 18, 7, 0, '1'),
+(22, 18, 8, 0, '1'),
+(23, 19, 8, 0, '1'),
+(24, 19, 9, 0, '1');
 
 -- --------------------------------------------------------
 
@@ -891,7 +761,7 @@ CREATE TABLE `paciente_seguro` (
 --
 
 INSERT INTO `paciente_seguro` (`paciente_seguro_id`, `paciente_id`, `seguro_id`, `empresa_id`, `tipo_seguro`, `cobertura_general`, `fecha_contra`, `saldo_disponible`, `estatus_pac`) VALUES
-(3, 12, 5, 3, '1', 2000, '2002-07-22', 2000, '1'),
+(3, 12, 5, 3, '1', 2000, '2002-07-22', 400, '1'),
 (4, 12, 6, 4, '1', 2000, '2002-07-22', 4000, '1'),
 (5, 13, 6, 4, '1', 2000, '2002-07-22', 4000, '1'),
 (6, 21, 5, 3, '1', 2000, '2012-10-10', 2000, '1');
@@ -962,7 +832,8 @@ CREATE TABLE `seguro` (
   `rif` varchar(45) NOT NULL,
   `direccion` varchar(45) NOT NULL,
   `telefono` varchar(13) NOT NULL,
-  `tipo_seguro` enum('1','2') NOT NULL,
+  `porcentaje` int(11) NOT NULL,
+  `costo_consulta` int(11) NOT NULL,
   `estatus_seg` enum('1','2') NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -970,29 +841,16 @@ CREATE TABLE `seguro` (
 -- Volcado de datos para la tabla `seguro`
 --
 
-INSERT INTO `seguro` (`seguro_id`, `nombre`, `rif`, `direccion`, `telefono`, `tipo_seguro`, `estatus_seg`) VALUES
-(0, 'ninguno', '0', '0', '0', '1', '1'),
-(5, 'Seguros Miranda C.A', 'J-455848484', 'Miranda', '04124564545', '1', '1'),
-(6, 'Seguros Venezolanos C.A', 'J-458498451', 'Maracay', '04244589656', '2', '1'),
-(7, 'Seguros Qualitas', 'J-156148916', 'Distrito Federal', '04164548798', '2', '1'),
-(8, 'Seguros Pirámides', 'J-213412341', 'San Joaquín', '04121561848', '2', '1');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `seguro_examen`
---
-
--- CREATE TABLE IF NOT EXISTS `seguro_examen` (
---   `seguro_examen_id` int(11) NOT NULL AUTO_INCREMENT,
---   `seguro_id` int(11) NOT NULL,
---   `examenes` TEXT NOT NULL,
---   `costos` TEXT NOT NULL,
---   `estatus_seg` enum('1','2') NOT NULL DEFAULT '1',
---   PRIMARY KEY (`seguro_examen_id`),
---   KEY `fk_seguro_examen_id_seguro` (`seguro_id`),
---   CONSTRAINT `fk_seguro_examen_id_seguro` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
--- ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+INSERT INTO `seguro` (`seguro_id`, `nombre`, `rif`, `direccion`, `telefono`, `porcentaje`, `costo_consulta`, `estatus_seg`) VALUES
+(0, 'ninguno', '0', '0', '0', 0, 0, '1'),
+(5, 'Seguros Miranda C.A', 'J-455848484', 'Miranda', '04124564545', 0, 0, '1'),
+(6, 'Seguros Venezolanos C.A', 'J-458498451', 'Maracay', '04244589656', 0, 0, '1'),
+(7, 'Seguros Qualitas', 'J-156148916', 'Distrito Federal', '04164548798', 0, 0, '1'),
+(8, 'Seguros Pirámides', 'J-213412341', 'San Joaquín', '04121561848', 0, 0, '1'),
+(12, 'verdecito', 'J-5628931', 'Aragua', '04145053781', 20, 0, '1'),
+(13, 'moraito', 'J-5628431', 'Aragua', '04145053781', 20, 0, '1'),
+(23, 'naranja', 'J-5621431', 'Aragua', '04145053781', 20, 0, '1'),
+(25, 'purpura', 'J-5621422', 'Aragua', '04145053781', 20, 20, '1');
 
 -- --------------------------------------------------------
 
@@ -1015,6 +873,30 @@ INSERT INTO `seguro_empresa` (`seguro_empresa_id`, `empresa_id`, `seguro_id`, `e
 (5, 3, 5, '1'),
 (6, 4, 6, '1'),
 (7, 5, 5, '1');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `seguro_examen`
+--
+
+CREATE TABLE `seguro_examen` (
+  `seguro_examen_id` int(11) NOT NULL,
+  `seguro_id` int(11) NOT NULL,
+  `examenes` text NOT NULL,
+  `costos` text NOT NULL,
+  `estatus_seg` enum('1','2') NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `seguro_examen`
+--
+
+INSERT INTO `seguro_examen` (`seguro_examen_id`, `seguro_id`, `examenes`, `costos`, `estatus_seg`) VALUES
+(5, 12, '4,5,14,8', '20,3,20,15', '1'),
+(6, 13, '4,5,8', '20,13,25', '1'),
+(18, 23, '4,5,11,8', '20,13,12,12', '1'),
+(20, 25, '4,5,8', '20,13,25', '1');
 
 -- --------------------------------------------------------
 
@@ -1153,6 +1035,13 @@ ALTER TABLE `consulta_cita`
   ADD PRIMARY KEY (`consulta_cita_id`),
   ADD KEY `cita_id` (`cita_id`),
   ADD KEY `consulta_id` (`consulta_id`);
+
+--
+-- Indices de la tabla `consulta_emergencia`
+--
+ALTER TABLE `consulta_emergencia`
+  ADD PRIMARY KEY (`consulta_emergencia_id`),
+  ADD KEY `fk_emergencia_seguro` (`seguro_id`);
 
 --
 -- Indices de la tabla `consulta_examen`
@@ -1332,6 +1221,13 @@ ALTER TABLE `seguro_empresa`
   ADD KEY `fk_seguro_empresa_seguro` (`seguro_id`);
 
 --
+-- Indices de la tabla `seguro_examen`
+--
+ALTER TABLE `seguro_examen`
+  ADD PRIMARY KEY (`seguro_examen_id`),
+  ADD KEY `fk_seguro_examen_id_seguro` (`seguro_id`);
+
+--
 -- Indices de la tabla `tipo_antecedente`
 --
 ALTER TABLE `tipo_antecedente`
@@ -1366,73 +1262,79 @@ ALTER TABLE `antecedentes_medicos`
 -- AUTO_INCREMENT de la tabla `auditoria`
 --
 ALTER TABLE `auditoria`
-  MODIFY `auditoria_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `auditoria_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=294;
 
 --
 -- AUTO_INCREMENT de la tabla `cita`
 --
 ALTER TABLE `cita`
-  MODIFY `cita_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `cita_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `cita_seguro`
 --
 ALTER TABLE `cita_seguro`
-  MODIFY `cita_seguro_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `cita_seguro_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `compra_insumo`
 --
 ALTER TABLE `compra_insumo`
-  MODIFY `compra_insumo_id` int(9) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `compra_insumo_id` int(9) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `consulta`
 --
 ALTER TABLE `consulta`
-  MODIFY `consulta_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `consulta_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT de la tabla `consulta_cita`
 --
 ALTER TABLE `consulta_cita`
-  MODIFY `consulta_cita_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `consulta_cita_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `consulta_emergencia`
+--
+ALTER TABLE `consulta_emergencia`
+  MODIFY `consulta_emergencia_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `consulta_examen`
 --
 ALTER TABLE `consulta_examen`
-  MODIFY `consulta_examen_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `consulta_examen_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `consulta_indicaciones`
 --
 ALTER TABLE `consulta_indicaciones`
-  MODIFY `consulta_indicaciones_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `consulta_indicaciones_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `consulta_insumo`
 --
 ALTER TABLE `consulta_insumo`
-  MODIFY `consulta_insumo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `consulta_insumo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `consulta_recipe`
 --
 ALTER TABLE `consulta_recipe`
-  MODIFY `consulta_recipe_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `consulta_recipe_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `consulta_seguro`
 --
 ALTER TABLE `consulta_seguro`
-  MODIFY `consulta_seguro_id` int(9) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `consulta_seguro_id` int(9) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `consulta_sin_cita`
 --
 ALTER TABLE `consulta_sin_cita`
-  MODIFY `consulta_sin_cita_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `consulta_sin_cita_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `empresa`
@@ -1456,13 +1358,13 @@ ALTER TABLE `examen`
 -- AUTO_INCREMENT de la tabla `factura_compra`
 --
 ALTER TABLE `factura_compra`
-  MODIFY `factura_compra_id` int(9) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `factura_compra_id` int(9) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `factura_consulta`
 --
 ALTER TABLE `factura_consulta`
-  MODIFY `factura_consulta_id` int(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `factura_consulta_id` int(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `factura_medico`
@@ -1492,7 +1394,7 @@ ALTER TABLE `insumo`
 -- AUTO_INCREMENT de la tabla `medicamento`
 --
 ALTER TABLE `medicamento`
-  MODIFY `medicamento_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `medicamento_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `medico`
@@ -1540,13 +1442,19 @@ ALTER TABLE `proveedor`
 -- AUTO_INCREMENT de la tabla `seguro`
 --
 ALTER TABLE `seguro`
-  MODIFY `seguro_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `seguro_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `seguro_empresa`
 --
 ALTER TABLE `seguro_empresa`
   MODIFY `seguro_empresa_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT de la tabla `seguro_examen`
+--
+ALTER TABLE `seguro_examen`
+  MODIFY `seguro_examen_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_antecedente`
@@ -1606,6 +1514,16 @@ ALTER TABLE `consulta_cita`
   ADD CONSTRAINT `consulta_cita_ibfk_2` FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `consulta_emergencia`
+--
+ALTER TABLE `consulta_emergencia`
+  ADD CONSTRAINT `fk_emergencia_seguro` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_emergencia_beneficiado` FOREIGN KEY (`paciente_beneficiado_id`) REFERENCES `paciente_beneficiado` (`paciente_beneficiado_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_emergencia_titular` FOREIGN KEY (`paciente_id`) REFERENCES `paciente` (`paciente_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+
+ALTER TABLE `consulta_emergencia` ADD `fecha_emergencia` DATETIME NOT NULL AFTER `enfermeria`, ADD `estatus_con` ENUM('1', '2', '3') NOT NULL AFTER `fecha_emergencia`;
+
+--
 -- Filtros para la tabla `consulta_recipe`
 --
 ALTER TABLE `consulta_recipe`
@@ -1626,11 +1544,18 @@ ALTER TABLE `consulta_sin_cita`
 --
 ALTER TABLE `medicamento`
   ADD CONSTRAINT `medicamento_ibfk_1` FOREIGN KEY (`especialidad_id`) REFERENCES `especialidad` (`especialidad_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `seguro_examen`
+--
+ALTER TABLE `seguro_examen`
+  ADD CONSTRAINT `fk_seguro_examen_id_seguro` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
 
 
 
@@ -1679,3 +1604,38 @@ COMMIT;
 --             REFERENCES paciente (paciente_id)
 --             ON DELETE NO ACTION ON UPDATE NO ACTION
 -- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `seguro_examen`
+--
+
+-- CREATE TABLE IF NOT EXISTS `seguro_examen` (
+--   `seguro_examen_id` int(11) NOT NULL AUTO_INCREMENT,
+--   `seguro_id` int(11) NOT NULL,
+--   `examenes` TEXT NOT NULL,
+--   `costos` TEXT NOT NULL,
+--   `estatus_seg` enum('1','2') NOT NULL DEFAULT '1',
+--   PRIMARY KEY (`seguro_examen_id`),
+--   KEY `fk_seguro_examen_id_seguro` (`seguro_id`),
+--   CONSTRAINT `fk_seguro_examen_id_seguro` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+-- ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+--
+-- Indices de la tabla `consulta_emergencia`
+--
+-- CREATE TABLE IF NOT EXISTS `consulta_emergencia` (
+--   `consulta_emergencia_id` int(11) NOT NULL AUTO_INCREMENT,
+--   `paciente_id` int(11) NOT NULL,
+--   `seguro_id` int(11) NOT NULL,
+--   `consultas_medicas` float NOT NULL,
+--   `Laboratorios` float NULL,
+--   `medicamentos` float NULL,
+--   `area_observacion` float NULL,
+--   `enfermeria` float NULL,
+--   PRIMARY KEY (`consulta_emergencia_id`),
+--   KEY `fk_emergencia_seguro` (`seguro_id`),
+--   CONSTRAINT `fk_emergencia_seguro` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+-- ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
