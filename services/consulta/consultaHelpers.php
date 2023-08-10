@@ -157,6 +157,7 @@ class ConsultaHelper {
                                     ->innerJoin(ConsultaHelper::$selectPacienteBeneficiado, $innersPaciente, "paciente_beneficiado");
 
             $consultas = $consulta;
+            $consultas->paciente_id = $consultaEmergencia->paciente_id;
             $consultas->factura = $consultaEmergencia;
             $consultas->titular = $paciente;
             $consultas->beneficiado = $beneficiado;

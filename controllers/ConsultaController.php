@@ -371,7 +371,7 @@ class ConsultaController extends Controller {
 
         if (count($consultasArray)) {
             foreach ($consultasArray as $consulta) {
-                $consultasCompletas[] = $this->setRelaciones($consulta->consulta_id);
+                $consultasCompletas[] = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
             }
     
             if ( count($consultasCompletas) > 0) {
@@ -396,7 +396,7 @@ class ConsultaController extends Controller {
                                         ->getFirst();
         
         if ( !is_null($consultaList) ) {
-            $consultas = $this->getInformacion($consultaList);
+            $consultas = ConsultaHelper::obtenerInformacionCompleta($consultaList);
         
             $mensaje = (!is_null($consultas));
             $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
@@ -408,30 +408,6 @@ class ConsultaController extends Controller {
             return $respuesta->json(400);
         }
     }
-
-    // public function eliminarConsulta($consulta_id) {
-
-    //     $validarConsulta = new Validate;
-    //     $token = $validarConsulta->validateToken(apache_request_headers());
-    //     if (!$token) {
-    //         $respuesta = new Response('TOKEN_INVALID');
-    //         return $respuesta->json(401);
-    //     }
-
-    //     $_consultaModel = new ConsultaModel();
-    //     $_consultaModel->byUser($token);
-    //     $data = array(
-    //         "estatus_con" => "2"
-    //     );
-
-    //     $eliminado = $_consultaModel->where('consulta_id', '=', $consulta_id)->update($data, 1);
-    //     $mensaje = ($eliminado > 0);
-
-    //     $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');
-    //     $respuesta->setData($eliminado);
-
-    //     return $respuesta->json($mensaje ? 200 : 400);
-    // }
 
     // Códigos de consultas_insumo
     public function validarInsumos($insumos) {
@@ -506,112 +482,7 @@ class ConsultaController extends Controller {
         return false;
     }
 
-    // public function eliminarConsultaInsumo($consulta_insumo_id){
-
-    //     $_consultaInsumoModel = new ConsultaInsumoModel();
-    //     $data = array(
-    //         "estatus_con" => "2"
-    //     );
-
-    //     $eliminado = $_consultaInsumoModel->where('consulta_insumo_id', '=', $consulta_insumo_id)->update($data);
-    //     $mensaje = ($eliminado > 0);
-
-    //     $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'NOT_FOUND');
-    //     $respuesta->setData($eliminado);
-
-    //     return $respuesta->json($mensaje ? 200 : 400);
-    // }
-
     // Funciones extras
-
-    public function setRelaciones($consulta_id) { // Método para unir las relaciones de las consultas en el getAll
-
-        $_consultaModel = new ConsultaModel();
-        $innersExa = $_consultaModel->listInner($this->arrayInnerExa);
-        $consulta_examenes = $_consultaModel->where('consulta_examen.consulta_id', '=', $consulta_id)->where('consulta_examen.estatus_con', '=', 1)->innerJoin($this->arraySelectExa, $innersExa, "consulta_examen");
-        $consultas = new stdClass();
-
-        if ($consulta_examenes) {
-            $consultas->examenes = $consulta_examenes;
-        }
-
-        $_consultaModel = new ConsultaModel();
-        $innersIns = $_consultaModel->listInner($this->arrayInnerIns);
-        $consulta_insumos = $_consultaModel->where('consulta_insumo.consulta_id', '=', $consulta_id)->where('consulta_insumo.estatus_con', '=', 1)->innerJoin($this->arraySelectIns, $innersIns, "consulta_insumo");
-
-        if ($consulta_insumos) {
-            $consultas->insumos = $consulta_insumos;
-        }
-
-        $_consultaIndicacionesModel = new ConsultaIndicacionesModel();
-        $consulta_indicaciones = $_consultaIndicacionesModel->where('consulta_indicaciones.consulta_id', '=', $consulta_id)->getAll();
-
-        if($consulta_indicaciones){
-            $consultas->indicaciones = $consulta_indicaciones;
-        }
-
-        $_consultaRecipeModel = new ConsultaRecipeModel();
-        $innersRec = $_consultaRecipeModel->listInner($this->arrayInnerRec);
-        $consulta_recipes = $_consultaRecipeModel->where('consulta_recipe.consulta_id', '=', $consulta_id)->innerJoin($this->arraySelectRec, $innersRec, "consulta_recipe");
-
-        if($consulta_recipes){
-            $consultas->recipes = $consulta_recipes;
-        }
-
-        $_consultaModel = new ConsultaModel();
-        $innersRec = $_consultaModel->listInner($this->arrayInnerRec);
-        $recipesList = $_consultaModel->where('consulta_recipe.consulta_id', '=', $consulta_id)
-                                        ->innerJoin($this->arraySelectRec, $innersRec, "consulta_recipe");
-        
-        if ($recipesList) {
-            $consultas->recipes = $recipesList;
-        }
-
-        $_indicacionesModel = new ConsultaIndicacionesModel();
-        $indicacionesList = $_indicacionesModel->where('consulta_indicaciones.consulta_id', '=', $consulta_id)
-                                                ->getAll();
-
-        if ($indicacionesList) {
-            $consultas->indicaciones = $indicacionesList;
-        }
-        
-        return $consultas;
-    }
-
-    public function getInformacion($consulta) {
-        // Obtenemos el resto de la información de la consulta
-        $_consultaCita = new ConsultaCitaModel();
-        $innersCita = $_consultaCita->listInner($this->innerConsultaCita);
-        $es_citada = $_consultaCita->where('consulta_cita.consulta_id', '=', $consulta->consulta_id)
-                                ->where('consulta.estatus_con','=',1)
-                                ->innerJoin($this->selectConsultaCita, $innersCita, "consulta_cita");
-
-        if (is_null($es_citada) || count($es_citada) == 0 ) { // Si no es por cita, extraemos la información de consulta_sin_cita
-            $_consultaSinCita = new ConsultaSinCitaModel();
-            $innersConsulta = $_consultaSinCita->listInner($this->innerConsultaSinCita);
-            $consultaCompleta = $_consultaSinCita->where('consulta_sin_cita.consulta_id', '=', $consulta->consulta_id)
-                                                ->innerJoin($this->selectConsultaSinCita, $innersConsulta, "consulta_sin_cita");
-
-            $relaciones = $this->setRelaciones($consulta->consulta_id);
-            
-            if (count((array) $relaciones) > 0) {
-                $consultaCompleta[0] = (object) array_merge((array) $consultaCompleta[0], (array) $relaciones);
-            }
-            
-            return $consultas[] = (object) array_merge((array) $consulta, (array) $consultaCompleta[0]);
-            
-        } else { // Si es por cita extraemos la información de consulta_cita
-            $_cita = new CitaModel();
-            $cita = $_cita->where('cita_id', '=', $es_citada[0]->cita_id)->getFirst();
-
-            $relaciones = $this->setRelaciones($consulta->consulta_id);
-            if (count((array) $relaciones) > 0) {
-                $consultaCompleta = (object) array_merge((array) $consulta, (array) $relaciones);
-            }
-            return $consultas[] = (object) array_merge((array) $consulta, (array) $cita);
-            
-        }
-    }
 
     // insertar recipe
     public function insertarRecipe($recipes, $consulta) {

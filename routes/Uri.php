@@ -21,7 +21,6 @@ class Uri{
 
     //Método para validar si una URI existe
     public function match($url){
-        echo 'esta enel match';
         $path = preg_replace('#:([\w]+)#', '([^/]+)',$this->uri);
         $regex = "#^$path$#i";
 
