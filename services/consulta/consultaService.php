@@ -39,9 +39,5 @@ class ConsultaService {
             echo $respuesta->json(400);
             exit();
         }
-        // $respuesta = new Response( ($fueInsertado > 0) ? 'CORRECTO' : 'NOT_FOUND');
-        // $respuesta->setData($formulario);
-        // echo $respuesta->json(($fueInsertado > 0) ? 200 : 400);
-        // exit();
     }
 }

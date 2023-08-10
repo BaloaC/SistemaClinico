@@ -2,6 +2,7 @@
 
 include_once './services/consulta/consultaService.php';
 include_once './services/consulta/consultaValidaciones.php';
+include_once './services/consulta/consultaHelpers.php';
 
 class ConsultaController extends Controller {
     protected $consulta_id = "";
@@ -328,7 +329,7 @@ class ConsultaController extends Controller {
         $consultas = [];
         
         foreach ($consultaList as $consulta) {
-            $consultas[] = $this->getInformacion($consulta);
+            $consultas[] = ConsultaHelper::obtenerInformacionCompleta($consulta);
         }
 
         $mensaje = (count($consultas) > 0);
@@ -385,11 +386,6 @@ class ConsultaController extends Controller {
         $respuesta->setData($resultado);
 
         return $respuesta->json($mensaje ? 200 : 404);
-
-        // $mensaje = (!is_null($consultas));
-        //     $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        //     $respuesta->setData($consultas);
-        //     return $respuesta->json(200);
     }
 
     public function listarConsultaPorId($consulta_id) {
