@@ -8,8 +8,11 @@ class ConsultaEmergenciaModel extends GenericModel {
     protected $paciente_id;
     protected $cedula_beneficiado;
     protected $seguro_id;
+    protected $cantidad_consultas_medicas;
     protected $consultas_medicas;
+    protected $cantidad_laboratorios;
     protected $laboratorios;
+    protected $cantidad_medicamentos;
     protected $medicamentos;
     protected $area_observacion;
     protected $enfermeria;
@@ -26,8 +29,11 @@ class ConsultaEmergenciaModel extends GenericModel {
     public function getPacienteId(){return $this->paciente_id;}
     public function getCedulaBeneficiado(){return $this->cedula_beneficiado;}
     public function getSeguroId(){return $this->seguro_id;}
+    public function getCantidadConsultasMedicas(){return $this->cantidad_consultas_medicas;}
     public function getConsultasMedicas(){return $this->consultas_medicas;}
+    public function getCantidadLaboratorios(){return $this->cantidad_laboratorios;}
     public function getLaboratorios(){return $this->laboratorios;}
+    public function getCantidadMedicamentos(){return $this->cantidad_medicamentos;}
     public function getMedicamentos(){return $this->medicamentos;}
     public function getAreaObservacion(){return $this->area_observacion;}
     public function getEnfermeria(){return $this->enfermeria;}
@@ -40,8 +46,11 @@ class ConsultaEmergenciaModel extends GenericModel {
     public function setPacienteId($paciente_id){return $this->paciente_id =$paciente_id;}
     public function setCedulaBeneficiado($cedula_beneficiado){return $this->cedula_beneficiado =$cedula_beneficiado;}
     public function setSeguroId($seguro_id){return $this->seguro_id =$seguro_id;}
+    public function setCantidadConsultasMedicas($cantidad_consultas_medicas){return $this->$cantidad_consultas_medicas =$cantidad_consultas_medicas;}
     public function setConsultasMedicas($consultas_medicas){return $this->consultas_medicas =$consultas_medicas;}
+    public function setCantidadLaboratorios($cantidad_laboratorios){return $this->cantidad_laboratorios =$cantidad_laboratorios;}
     public function setLaboratorios($laboratorios){return $this->laboratorios =$laboratorios;}
+    public function setCantidadMedicamentos($cantidad_medicamentos){return $this->cantidad_medicamentos =$cantidad_medicamentos;}
     public function setMedicamentos($medicamentos){return $this->medicamentos =$medicamentos;}
     public function setAreaObservacion($area_observacion){return $this->area_observacion =$area_observacion;}
     public function setEnfermeria($enfermeria){return $this->enfermeria =$enfermeria;}

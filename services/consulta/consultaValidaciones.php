@@ -8,7 +8,7 @@ class ConsultaValidaciones {
     public static function validarConsultaEmergencia($formulario) {
         
         $camposId = array("consulta_id", "paciente_id", "seguro_id");
-        $camposNumericos= array("consultas_medicas",	"laboratorios",	"medicamentos",	"area_observacion",	"enfermeria");
+        $camposNumericos= array("cantidad_consultas_medicas", "consultas_medicas", "cantidad_laboratorios", "laboratorios", "cantidad_medicamentos", "medicamentos",	"area_observacion",	"enfermeria");
         $validarConsulta = new Validate();
         
         if ( !$validarConsulta->existsInDB($formulario, $camposId) ) {
@@ -44,12 +44,10 @@ class ConsultaValidaciones {
                 echo $respuesta->json(400);
                 exit();
             }
-            // echo '<pre>';
-            // var_dump($beneficiado);
+            
             $_titularBeneficiado = new TitularBeneficiadoModel();
             $titular_beneficiado = $_titularBeneficiado->where('paciente_beneficiado_id', '=', $beneficiado->paciente_beneficiado_id)->getFirst();
-            // echo '<pre>';
-            // var_dump($titular_beneficiado);
+            
             if (is_null($titular_beneficiado)) {
                 $respuesta = new Response(false, 'El paciente beneficiado indicado no existe');
                 echo $respuesta->json(400);
