@@ -2,8 +2,6 @@
 
 class ConsultaHelper {
 
-    
-
     // variables para el inner join de seguros con cita
     protected static $selectSeguro = array(
         "cita_seguro.cita_id",

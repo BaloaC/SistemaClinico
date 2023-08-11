@@ -110,6 +110,7 @@ class ConsultaService {
                                 ->innerJoin(ConsultaService::$selectConsultaCita, $innersCita, "consulta_cita");
 
         if (is_null($es_citada) || count($es_citada) == 0 ) { // Si no es por cita, extraemos la información de consulta_sin_cita
+
             $_consultaSinCita = new ConsultaSinCitaModel();
             $innersConsulta = $_consultaSinCita->listInner(ConsultaService::$innerConsultaSinCita);
             $consultaCompleta = $_consultaSinCita->where('consulta_sin_cita.consulta_id', '=', $consulta->consulta_id)
@@ -144,12 +145,9 @@ class ConsultaService {
         $_paciente = new PacienteModel();
         $paciente = $_paciente->where('paciente_id','=', $consultaEmergencia->paciente_id)->getFirst();
 
-        $_pacienteBeneficiado = new PacienteBeneficiadoModel();
-        $innersPaciente = $_pacienteBeneficiado->listInner(ConsultaService::$innerPacienteBeneficiado);
-        $beneficiado = $_pacienteBeneficiado->where('paciente_beneficiado.paciente_beneficiado_id', '=', $consultaEmergencia->paciente_beneficiado_id)
-                                ->where('paciente_beneficiado.estatus_pac','=',1)
-                                ->innerJoin(ConsultaService::$selectPacienteBeneficiado, $innersPaciente, "paciente_beneficiado");
-
+        $_pacienteModel = new PacienteModel();
+        $beneficiado = $_pacienteModel->where('cedula', '=', $consultaEmergencia->cedula_beneficiado)->getFirst();
+        
         $consultas = $consulta;
         $consultas->paciente_id = $consultaEmergencia->paciente_id;
         $consultas->factura = $consultaEmergencia;
