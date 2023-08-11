@@ -310,7 +310,12 @@ class ConsultaController extends Controller {
         $consultas = [];
         
         foreach ($consultaList as $consulta) {
-            $consultas[] = ConsultaHelper::obtenerInformacionCompleta($consulta);
+            if ($consulta->es_emergencia) {
+                $consultas[] = ConsultaService::obtenerConsultaEmergencia($consulta);
+            } else {
+                $consultas[] = ConsultaService::obtenerConsultaNormal($consulta);
+            }
+            // $consultas[] = ConsultaHelper::obtenerInformacionCompleta($consulta);
         }
 
         $mensaje = (count($consultas) > 0);
