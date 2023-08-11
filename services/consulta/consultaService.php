@@ -1,5 +1,7 @@
 <?php
 
+include_once "./services/medico/medicoHelpers.php";
+
 class ConsultaService {
 
     public static function insertarConsulta($formulario, $separar) {
@@ -38,6 +40,12 @@ class ConsultaService {
             $respuesta->setData($formulario);
             echo $respuesta->json(400);
             exit();
+        }
+    }
+
+    public static function actualizarAcumuladoMedico($formulario) {
+        foreach ($formulario as $campo) {
+            MedicoHelper::actualizarAcumulado($campo);
         }
     }
 }

@@ -59,8 +59,11 @@ class Validate extends BaseModel{
         $newData = [];
 
         foreach($data as $key => $value){
-
-            $newData[$key] = trim(strip_tags($value),'\ \"\;\.\,\/\-\<\>\(\)\'');
+            if (is_array($value)) {
+                $newData[$key] = $this->dataScape($value); // Llamada recursiva para arrays internos
+            } else {
+                $newData[$key] = trim(strip_tags($value), '\ \"\;\.\,\/\-\<\>\(\)\'');
+            }
         }
 
         return $newData;
