@@ -7,7 +7,7 @@ class ConsultaValidaciones {
      */
     public static function validarConsultaEmergencia($formulario) {
         
-        $camposId = array("consulta_id", "paciente_id",	"paciente_beneficiado_id", "seguro_id");
+        $camposId = array("consulta_id", "paciente_id", "seguro_id");
         $camposNumericos= array("consultas_medicas",	"laboratorios",	"medicamentos",	"area_observacion",	"enfermeria");
         $validarConsulta = new Validate();
         
@@ -22,18 +22,44 @@ class ConsultaValidaciones {
             exit();
         }
         
-        $_titularBeneficiado = new TitularBeneficiadoModel();
-        $titular_beneficiado = $_titularBeneficiado->where('paciente_beneficiado_id', '=', $formulario['paciente_beneficiado_id'])->getFirst();
+        // Buscamos al paciente beneficiado para validar si tiene relación con el titular
+        $_pacienteModel = new PacienteModel();
+        $pacienteBeneficiado = $_pacienteModel->where('cedula', '=', $formulario['cedula_beneficiado'])->getFirst();
         
-        if (is_null($titular_beneficiado)) {
+        // if ($pacienteBeneficiado == 0) {
+        if (is_null($pacienteBeneficiado)) {
             $respuesta = new Response(false, 'El paciente beneficiado indicado no existe');
             echo $respuesta->json(400);
             exit();
-        
-        } else if ( $titular_beneficiado->paciente_id != $formulario['paciente_id'] ) {
-            $respuesta = new Response(false, 'El paciente titular indicado no tiene relación con el beneficiado');
-            echo $respuesta->json(400);
-            exit();
+        }
+
+        // Si la cedula es la del titular no validamos
+        if ($pacienteBeneficiado->paciente_id != $formulario['paciente_id']) {
+            
+            $_pacienteBeneficiadoModel = new PacienteBeneficiadoModel();
+            $beneficiado = $_pacienteBeneficiadoModel->where('paciente_id', '=', $pacienteBeneficiado->paciente_id)->getFirst();
+
+            if (is_null($beneficiado)) {
+                $respuesta = new Response(false, 'El paciente beneficiado indicado no tiene relación con el paciente titular');
+                echo $respuesta->json(400);
+                exit();
+            }
+            // echo '<pre>';
+            // var_dump($beneficiado);
+            $_titularBeneficiado = new TitularBeneficiadoModel();
+            $titular_beneficiado = $_titularBeneficiado->where('paciente_beneficiado_id', '=', $beneficiado->paciente_beneficiado_id)->getFirst();
+            // echo '<pre>';
+            // var_dump($titular_beneficiado);
+            if (is_null($titular_beneficiado)) {
+                $respuesta = new Response(false, 'El paciente beneficiado indicado no existe');
+                echo $respuesta->json(400);
+                exit();
+            
+            } else if ( $titular_beneficiado->paciente_id != $formulario['paciente_id'] ) {
+                $respuesta = new Response(false, 'El paciente titular indicado no tiene relación con el beneficiado');
+                echo $respuesta->json(400);
+                exit();
+            }
         }
 
         $total_medico = 0;
@@ -47,7 +73,7 @@ class ConsultaValidaciones {
             $total_medico += $medico['monto'];
         }
 
-        $total_consulta = $formulario['consultas_medicas'] + $formulario['laboratorios'] + $formulario['medicamentos'] + $formulario['area_observacion'] + $formulario['enfermeria'];
+        $total_consulta = $formulario['consultas_medicas'] + $formulario['laboratorios'] + $formulario['medicamentos'] + $formulario['area_observacion'] + $formulario['enfermeria'] + $formulario['total_insumos'] + $formulario['total_examenes']; 
         
         if ( $total_medico > $total_consulta ) {
             $respuesta = new Response(false, 'El monto de los médicos no puede superar el de la consulta');

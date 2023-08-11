@@ -88,8 +88,6 @@ class ConsultaHelper {
         "consulta_recipe.uso"
     );
 
-
-
     public static function obtenerRelaciones($consulta_id) {
         $_consultaModel = new ConsultaModel();
         $innersExa = $_consultaModel->listInner(ConsultaHelper::$arrayInnerExa);

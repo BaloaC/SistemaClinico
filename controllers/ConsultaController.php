@@ -315,7 +315,6 @@ class ConsultaController extends Controller {
             } else {
                 $consultas[] = ConsultaService::obtenerConsultaNormal($consulta);
             }
-            // $consultas[] = ConsultaHelper::obtenerInformacionCompleta($consulta);
         }
 
         $mensaje = (count($consultas) > 0);

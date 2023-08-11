@@ -83,7 +83,7 @@ class ConsultaService {
     public static function insertarConsultaEmergencia($formulario) {
         $_consultaEmergencia = new ConsultaEmergenciaModel();
 
-        $total_consulta = $formulario['consultas_medicas'] + $formulario['laboratorios'] + $formulario['medicamentos'] + $formulario['area_observacion'] + $formulario['enfermeria'];
+        $total_consulta = $formulario['consultas_medicas'] + $formulario['laboratorios'] + $formulario['medicamentos'] + $formulario['area_observacion'] + $formulario['enfermeria']; + $formulario['total_insumos'] + $formulario['total_examenes'];
         $formulario['total_consulta'] = $total_consulta;
 
         $fueInsertado = $_consultaEmergencia->insert($formulario); 
