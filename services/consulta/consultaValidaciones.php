@@ -22,11 +22,23 @@ class ConsultaValidaciones {
             exit();
         }
         
+        // Validamos que el seguro esté asociado al titular
+        $_pacienteSeguroModel = new PacienteSeguroModel();
+        $pacienteSeguro = $_pacienteSeguroModel->where('paciente_id', '=', $formulario['paciente_id'])
+                                                ->where('seguro_id', '=', $formulario['seguro_id'])
+                                                ->getFirst();
+
+        if (is_null($pacienteSeguro)) {
+            $respuesta = new Response(false, 'El paciente titular indicado no está asociado a ese seguro');
+            echo $respuesta->json(400);
+            exit();
+        }
+
+
         // Buscamos al paciente beneficiado para validar si tiene relación con el titular
         $_pacienteModel = new PacienteModel();
         $pacienteBeneficiado = $_pacienteModel->where('cedula', '=', $formulario['cedula_beneficiado'])->getFirst();
         
-        // if ($pacienteBeneficiado == 0) {
         if (is_null($pacienteBeneficiado)) {
             $respuesta = new Response(false, 'El paciente beneficiado indicado no existe');
             echo $respuesta->json(400);

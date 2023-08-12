@@ -1,5 +1,10 @@
 <?php
 
+use PSpell\Config;
+
+include_once "./services/facturas/consulta seguro/ConsultaSeguroValidaciones.php";
+include_once "./services/facturas/consulta seguro/ConsultaSeguroService.php";
+
 class ConsultaSeguroController extends Controller{
 
     protected $selectConsultas = array(
@@ -90,58 +95,72 @@ class ConsultaSeguroController extends Controller{
                 $_consultaCita = new ConsultaCitaModel();
                 $consulta = $_consultaCita->where('consulta_id', '=', $data['consulta_id'])->getFirst();
                 
-                $_cita = new CitaModel();
-                $cita = $_cita->where('cita_id', '=', $consulta->cita_id)->getFirst();
-                $_paciente = new PacienteModel();
-                $paciente = $_paciente->where('cedula', '=', $cita->cedula_titular)->getFirst();
-                
-                $_citaSeguro = new CitaSeguroModel();
-                $citaSeguro = $_citaSeguro->where('cita_id', '=', $consulta->cita_id)->getFirst();
-                $data['seguro_id'] = $citaSeguro->seguro_id;
+                if ( is_null($consulta) ){
 
-                $_pacienteSeguro = new PacienteSeguroModel();
-                $pacienteSeguro = $_pacienteSeguro->where('paciente_id', '=', $paciente->paciente_id)->where('seguro_id', '=', $citaSeguro->seguro_id)->getFirst();
-
-                if ($data['monto'] > $pacienteSeguro->saldo_disponible) {
-                    $respuesta = new Response(false, 'Saldo insuficiente para cubrir la consulta');
-                    $respuesta->setData("Error al procesar al paciente id $pacienteSeguro->paciente_id con saldo $pacienteSeguro->saldo_disponible");
-                    return $respuesta->json(400);
-                }
-
-                $id = $_consultaSeguroModel->insert($data);
-                $mensaje = ($id > 0);
-
-                // ya insertada la factura, modificamos el estatus de la consulta a pagada
-                $_consulta = new ConsultaModel();
-                $update = $_consulta->where('consulta_id','=',$data['consulta_id']  )->update(['estatus_con' => 3]);
-                $isUpdate = ($update > 0);
-
-                if (!$isUpdate) {
-                    // Si hubo un error cambiando el estatus de la consulta, borramos la factura relacionada a ella
-                    $_consultaSeguroModel = new ConsultaSeguroModel();
-                    $_consultaSeguroModel->where('consulta_seguro_id', '=', $id)->delete();
-
-                    $respuesta = new Response(false, 'Hubo un error actualizando el estatus de la consulta');
-                    $respuesta->setData('Error al colocar la consulta id '.$data['consulta_id'].' como cancelada');
-                    return $respuesta->json(400);
-                }
-                
-                if ($mensaje) {
+                    ConsultaSeguroValidaciones::validarConsultaEmergencia($data);
+                    ConsultaSeguroService::insertarConsultaEmergencia($data);
+                    ConsultaSeguroService::actualizarEstatusConsulta($data['consulta_id']);
                     
-                    $montoActualizado = $pacienteSeguro->saldo_disponible - $data['monto'];
-                    $respuesta = $_pacienteSeguro->update([ 'saldo_disponible' => $montoActualizado ]);
-                    if (!$respuesta) {
-                        $respuesta = new Response(false, 'Hubo un error manipulando el saldo del paciente');
-                        $respuesta->setData('Error al procesar al paciente id ' + $paciente->paciente_id + 'con saldo ' + $paciente->saldo_disponible);
-                        return $respuesta->json(400);
-                    }
-
                     $respuesta = new Response('INSERCION_EXITOSA');
                     return $respuesta->json(201);
 
-                } else {
-                    $respuesta = new Response('INSERCION_FALLIDA');
-                    return $respuesta->json(400);
+                } else if ( count($consulta) > 0 ) {
+
+                    $_cita = new CitaModel();
+                    $cita = $_cita->where('cita_id', '=', $consulta->cita_id)->getFirst();
+                    $_paciente = new PacienteModel();
+                    $paciente = $_paciente->where('cedula', '=', $cita->cedula_titular)->getFirst();
+                    
+                    $_citaSeguro = new CitaSeguroModel();
+                    $citaSeguro = $_citaSeguro->where('cita_id', '=', $consulta->cita_id)->getFirst();
+                    $data['seguro_id'] = $citaSeguro->seguro_id;
+
+                    $_pacienteSeguro = new PacienteSeguroModel();
+                    $pacienteSeguro = $_pacienteSeguro->where('paciente_id', '=', $paciente->paciente_id)->where('seguro_id', '=', $citaSeguro->seguro_id)->getFirst();
+
+                    if ($data['monto'] > $pacienteSeguro->saldo_disponible) {
+                        $respuesta = new Response(false, 'Saldo insuficiente para cubrir la consulta');
+                        $respuesta->setData("Error al procesar al paciente id $pacienteSeguro->paciente_id con saldo $pacienteSeguro->saldo_disponible");
+                        return $respuesta->json(400);
+                    }
+
+                    $id = $_consultaSeguroModel->insert($data);
+                    $mensaje = ($id > 0);
+
+                    // ya insertada la factura, modificamos el estatus de la consulta a pagada
+                    ConsultaSeguroService::actualizarEstatusConsulta($data['consulta_id']);
+                    // $_consulta = new ConsultaModel();
+                    // $update = $_consulta->where('consulta_id','=',$data['consulta_id']  )->update(['estatus_con' => 3]);
+                    // $isUpdate = ($update > 0);
+
+                    // if (!$isUpdate) {
+                    //     // Si hubo un error cambiando el estatus de la consulta, borramos la factura relacionada a ella
+                    //     $_consultaSeguroModel = new ConsultaSeguroModel();
+                    //     $_consultaSeguroModel->where('consulta_seguro_id', '=', $id)->delete();
+
+                    //     $respuesta = new Response(false, 'Hubo un error actualizando el estatus de la consulta');
+                    //     $respuesta->setData('Error al colocar la consulta id '.$data['consulta_id'].' como cancelada');
+                    //     return $respuesta->json(400);
+                    // }
+                    
+                    if ($mensaje) {
+                        
+                        $montoActualizado = $pacienteSeguro->saldo_disponible - $data['monto'];
+                        $respuesta = $_pacienteSeguro->update([ 'saldo_disponible' => $montoActualizado ]);
+                        if (!$respuesta) {
+                            $respuesta = new Response(false, 'Hubo un error manipulando el saldo del paciente');
+                            $respuesta->setData('Error al procesar al paciente id ' + $paciente->paciente_id + 'con saldo ' + $paciente->saldo_disponible);
+                            return $respuesta->json(400);
+                        }
+
+                        $respuesta = new Response('INSERCION_EXITOSA');
+                        return $respuesta->json(201);
+
+                    } else {
+                        $respuesta = new Response('INSERCION_FALLIDA');
+                        return $respuesta->json(400);
+                    }
+
                 }
                 
                 // Restando el monto de la factura al saldo disponible del paciente
