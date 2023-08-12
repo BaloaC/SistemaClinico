@@ -126,26 +126,13 @@ class ConsultaSeguroController extends Controller{
 
     public function listarConsultaSeguro(){
 
-        $_consultaSeguroModel = new ConsultaSeguroModel();
-
-        // Hacemos el inner de la información general
-        $innersConsulta = $_consultaSeguroModel->listInner($this->innerConsulta);
-        $ConsultasSeguros = $_consultaSeguroModel->innerJoin($this->selectConsultas, $innersConsulta, "consulta_seguro");
-
-        if (count($ConsultasSeguros)) {
-            foreach ($ConsultasSeguros as $consulta) {
-                $consulta = $this->obtenerInformacion($consulta);
-            }
-
-        } else {
-            $respuesta = new Response(false, 'No hay consultas por seguros registradas por los momentos');
-            return $respuesta->json(200);
-        }
+        $consultasSeguros = ConsultaSeguroService::listarconsultasSeguros();
 
         // Comprobamos que haya una lista
-        $isExist = count($ConsultasSeguros) > 0;
-        $respuesta = new Response($isExist ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($ConsultasSeguros);
+        $hayResultados = count($consultasSeguros) > 0;
+
+        $respuesta = new Response($hayResultados ? 'CORRECTO' : 'ERROR');
+        $respuesta->setData($consultasSeguros);
         return $respuesta->json(200);
     }
 
@@ -154,8 +141,8 @@ class ConsultaSeguroController extends Controller{
         $consultasSeguro = json_decode($this->listarConsultaSeguro());
         $factura = array_filter($consultasSeguro->data, fn($consulta) => $consulta->consulta_seguro_id == $consulta_seguro_id);
 
-        $isExist = count($factura) > 0;
-        $respuesta = new Response($factura ? 'CORRECTO' : 'ERROR');
+        $siExiste = count($factura) > 0;
+        $respuesta = new Response($siExiste ? 'CORRECTO' : 'ERROR');
         $respuesta->setData($factura);
         return $respuesta->json(200);
     }
@@ -176,48 +163,5 @@ class ConsultaSeguroController extends Controller{
         $respuesta->setData($eliminado);
 
         return $respuesta->json($mensaje ? 200 : 400);
-    }
-
-    // Obtenemos la información de las citas
-    public function obtenerInformacion($consulta, $id = null) {
-        // Extraemos la información con la relación de citas
-        $_consultaCita = new ConsultaCitaModel();
-        $innersCita = $_consultaCita->listInner($this->innerCita);
-        $consultaCita = $_consultaCita->where('consulta_id', '=', $consulta->consulta_id)
-                                    ->innerJoin($this->selectCitas, $innersCita, "consulta_cita");
-        $consulta->cita = $consultaCita[0];
-
-        // Obtenemos la información del paciente titular
-        $_paciente = new PacienteModel();
-        $pacienteTitular = $_paciente->where('cedula', '=', $consulta->cita->cedula_titular)->getFirst();
-        $consulta->titular = $pacienteTitular;
-
-        $_consultaInsumos = new ConsultaInsumoModel();
-        $consultaInsumos = $_consultaInsumos->where('consulta_id', '=', $consulta->consulta_id)->getAll();
-
-        $monto_consulta = 0;
-        if ( count($consultaInsumos) > 0) {
-            foreach ($consultaInsumos as $insumo) {
-                $monto_insumos = 0;
-                $_insumo = new InsumoModel();
-                $insumos = $_insumo->where('insumo_id', '=', $insumo->insumo_id)->getFirst();
-                $insumo->monto_total = $insumo->cantidad * $insumos->precio;
-                $insumo->precio = $insumos->precio;
-                $monto_insumos += $insumo->monto_total;
-                $monto_consulta += $monto_insumos;
-            }
-
-            $consulta->insumos = $consultaInsumos;
-        }
-
-        $consulta->monto_total = $consulta->monto + $monto_consulta;
-        return $consulta;
-    }
-
-    // Funciones
-    public function retornarMensaje($mensaje, $data) {
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($mensaje);
-        return $respuesta->json(200);
     }
 }
