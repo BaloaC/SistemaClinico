@@ -5,10 +5,6 @@ include_once "./services/facturas/consulta/FacturaConsultaService.php";
 
 class FacturaConsultaController extends Controller {
 
-    
-    
-
-
     //Método index (vista principal)
     public function index() {
         return $this->view('facturas/consulta/index');
@@ -77,13 +73,5 @@ class FacturaConsultaController extends Controller {
         $consultaList = FacturaConsultaService::listarFacturaPorId($factura_consulta_id);
         $mensaje = ( count($consultaList) > 0);
         FacturaConsultaHelpers::RetornarMensaje($mensaje, $consultaList);
-    }
-
-
-    // Funciones
-    public function RetornarMensaje($mensaje, $data) {
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($data);
-        return $respuesta->json(200);
     }
 }

@@ -1639,3 +1639,16 @@ COMMIT;
 --   KEY `fk_emergencia_seguro` (`seguro_id`),
 --   CONSTRAINT `fk_emergencia_seguro` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 -- ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+--
+-- Indices de la tabla `global`
+--
+-- CREATE TABLE IF NOT EXISTS `global` (
+--   `global_id` int(11) NOT NULL AUTO_INCREMENT,
+--   `key` text NOT NULL,
+--   `value` text NOT NULL,
+--   PRIMARY KEY (`global_id`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+-- INSERT INTO `global` (`global_id`, `key`, `value`) VALUES (NULL, 'porcentaje_medicos', '60');

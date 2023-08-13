@@ -310,3 +310,6 @@ Router::post('/facturas/all', FacturaMedicoController::class . '@solicitarFactur
 Router::post('/factura/medico', FacturaMedicoController::class . '@solicitarFacturaMedicoPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::put('/factura/medico/:id', FacturaMedicoController::class . '@actualizarFacturaMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::delete('/factura/medico/:id', FacturaMedicoController::class . '@eliminarFacturaMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+
+// //Global
+Router::post('/porcentajeMedico', GlobalController::class . '@actualizarPorcentaje', [$AuthenticationMiddleware]);
