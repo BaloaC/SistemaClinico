@@ -4,46 +4,6 @@ include_once "./services/facturas/consulta seguro/ConsultaSeguroHelpers.php";
 
 class ConsultaSeguroService {
 
-    protected $selectConsultas = array(
-        "consulta_seguro.consulta_seguro_id",
-        "consulta_seguro.consulta_id",
-        "consulta_seguro.tipo_servicio",
-        "consulta_seguro.fecha_ocurrencia AS fecha_factura",
-        "consulta_seguro.monto",
-        "consulta_seguro.estatus_con",
-        "consulta.observaciones",
-        "consulta.fecha_consulta",
-        "consulta.es_emergencia"
-    );
-
-    protected $innerConsulta = array(
-        "consulta" => "consulta_seguro",
-    );
-
-    protected $selectCitas = array(
-        "consulta_cita.consulta_cita_id",
-        "consulta_cita.cita_id",
-        "cita.paciente_id",
-        "cita.medico_id",
-        "cita.especialidad_id",
-        "cita.cedula_titular",
-        "cita.tipo_cita",
-        "paciente.nombre AS nombre_beneficiado",
-        "paciente.cedula AS cedula_beneficiado",
-        "paciente.telefono AS telefono_beneficiado",
-        "paciente.direccion AS direccion_beneficiado",
-        "paciente.fecha_nacimiento AS nacimiento_beneficiado",
-        "medico.nombre AS nombre_medico",
-        "especialidad.nombre nombre_especialidad"
-    );
-
-    protected $innerCita = array(
-        "cita" => "consulta_cita",
-        "paciente" => "cita",
-        "medico" => "cita",
-        "especialidad" => "cita"
-    );
-
     /**
      * Función para colocar como pagada una consulta
      */
