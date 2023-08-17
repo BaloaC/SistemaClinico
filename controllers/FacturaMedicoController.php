@@ -136,16 +136,20 @@ class FacturaMedicoController extends Controller{
         );
         
         $actualizado = $_facturaMedico->where('factura_medico_id', '=', $factura_medico_id)->update($data);
-        return $this->mensajeActualizaciónExitosa($actualizado);
+        
+        $isTrue = ($actualizado > 0);
+        $respuesta = new Response($isTrue ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+        return $respuesta->json($isTrue ? 200 : 400);
     }
+
+    // Los listar traen los get de facturas registradas en base de datos
 
     public function listarFacturaMedico(){
 
         $_facturaMedicoModel = new FacturaMedicoModel();
         $inners = $_facturaMedicoModel->listInner($this->arrayInner);
         $id = $_facturaMedicoModel->innerJoin($this->arraySelect, $inners, "factura_medico");
-        
-        return $this->retornarMensaje($id);
+        FacturaMedicoHelpers::retornarMensaje($id);
     }
 
     public function listarFacturaMedicoPorId($factura_medico_id){
@@ -153,8 +157,7 @@ class FacturaMedicoController extends Controller{
         $_facturaMedicoModel = new FacturaMedicoModel();
         $inners = $_facturaMedicoModel->listInner($this->arrayInner);
         $id = $_facturaMedicoModel->where('factura_medico_id','=',$factura_medico_id)->innerJoin($this->arraySelect, $inners, "factura_medico");
-        
-        return $this->retornarMensaje($id);
+        FacturaMedicoHelpers::retornarMensaje($id);
     }
 
     public function listarFacturaPorMedico($medico_id){
@@ -163,7 +166,7 @@ class FacturaMedicoController extends Controller{
         $inners = $_facturaMedicoModel->listInner($this->arrayInner);
         $id = $_facturaMedicoModel->where('medico.medico_id','=',$medico_id)->innerJoin($this->arraySelect, $inners, "factura_medico");
         
-        return $this->retornarMensaje($id);
+        FacturaMedicoHelpers::retornarMensaje($id);
     }
 
     public function listarFacturaPorFecha(){
@@ -181,9 +184,11 @@ class FacturaMedicoController extends Controller{
             $inners = $_facturaMedicoModel->listInner($this->arrayInner);
             $id = $_facturaMedicoModel->whereDate('factura_medico.fecha_pago',$_POST['fecha_inicio'],$_POST['fecha_fin'])->innerJoin($this->arraySelect, $inners, "factura_medico");
             
-            return $this->retornarMensaje($id);
+            FacturaMedicoHelpers::retornarMensaje($id);
         }        
     }
+
+    // Los listar traen los get de facturas registradas en base de datos
 
     public function calcularFacturaMedicoId() {
         
@@ -303,21 +308,5 @@ class FacturaMedicoController extends Controller{
         );
 
         return $arrayInsert;
-    }
-
-    public function retornarMensaje($mensaje) {
-
-        $bool = ($mensaje > 0);
-
-        $respuesta = new Response($bool ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($mensaje);
-        return $respuesta->json(200);
-        
-    }
-
-    public function mensajeActualizaciónExitosa($update) {
-        $isTrue = ($update > 0);
-        $respuesta = new Response($isTrue ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        return $respuesta->json($isTrue ? 200 : 400);
     }
 }

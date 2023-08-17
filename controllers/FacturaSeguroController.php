@@ -63,9 +63,6 @@ class FacturaSeguroController extends Controller{
             $_seguroModel = new SeguroModel();
             $seguroList = $_seguroModel->where('estatus_seg', '=', '1')->getAll();
             
-            // $header = apache_request_headers();
-            // $token = substr($header['Authorization'], 7) ;
-            // echo '<pre>';
             // Por cada seguro buscamos las facturas que tengan de las consultas
             foreach ($seguroList as $seguro) {
                 $facturaList = [];

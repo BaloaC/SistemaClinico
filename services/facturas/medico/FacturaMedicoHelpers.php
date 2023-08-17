@@ -88,4 +88,13 @@ class FacturaMedicoHelpers {
         
         return $calculos;
     }
+
+    public static function retornarMensaje($booleano) {
+        $esTrue = ($booleano > 0);
+
+        $respuesta = new Response($esTrue ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($booleano);
+        echo $respuesta->json(200);
+        exit();
+    }
 }
