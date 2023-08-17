@@ -108,7 +108,7 @@ class ConsultaService {
         $es_citada = $_consultaCita->where('consulta_cita.consulta_id', '=', $consulta->consulta_id)
                                 ->where('consulta.estatus_con','=',1)
                                 ->innerJoin(ConsultaService::$selectConsultaCita, $innersCita, "consulta_cita");
-
+        
         if (is_null($es_citada) || count($es_citada) == 0 ) { // Si no es por cita, extraemos la información de consulta_sin_cita
 
             $_consultaSinCita = new ConsultaSinCitaModel();

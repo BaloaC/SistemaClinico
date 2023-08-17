@@ -1,5 +1,9 @@
 <?php
 
+include_once "./services/facturas/medico/FacturaMedicoHelpers.php";
+include_once "./services/facturas/medico/FacturaMedicoService.php";
+include_once "./services/facturas/medico/FacturaMedicoValidate.php";
+
 class FacturaMedicoController extends Controller{
     
     protected $arrayInner = array (
@@ -65,7 +69,7 @@ class FacturaMedicoController extends Controller{
                     
                     $factura = $this->contabilizarFactura([
                         "fecha_actual" => $data['fecha_actual'],
-	                    "medico_id" => $medico->medico_id
+                        "medico_id" => $medico->medico_id
                     ]);
 
                     $isInserted = $_facturaMedicoModel->insert($factura);
@@ -104,6 +108,7 @@ class FacturaMedicoController extends Controller{
             default:
                 
                 $data = $validarFactura->dataScape($_POST);
+                $factura = FacturaMedicoHelpers::contabilizarFactura($data);
                 $insert = $this->contabilizarFactura($data);
                 
                 $_facturaMedicoModel = new FacturaMedicoModel();
@@ -178,6 +183,23 @@ class FacturaMedicoController extends Controller{
             
             return $this->retornarMensaje($id);
         }        
+    }
+
+    public function calcularFacturaMedicoId() {
+        
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        FacturaMedicoValidate::validateGeneral($_GET); // Validaciones
+            
+        $formulario = [
+            "fecha_actual" => $_GET['fecha'],
+            "medico_id" => $_GET['medico'],
+        ];
+        
+        $factura = FacturaMedicoService::contabilizarFactura($formulario);
+        
+        $respuesta = new Response( ( count($factura) > 0) ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($factura);
+        return $respuesta->json( ( count($factura) > 0) ? 201 : 400);
     }
 
     // public function eliminarFacturaMedico($factura_medico_id){

@@ -306,6 +306,9 @@ Router::get('/factura/medico/consulta', FacturaMedicoController::class . '@lista
 Router::get('/factura/medico/:id', FacturaMedicoController::class . '@listarFacturaMedicoPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::get('/factura/medico/medico/:id', FacturaMedicoController::class . '@listarFacturaPorMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::get('/factura/fecha/', FacturaMedicoController::class . '@listarFacturaPorFecha', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+
+Router::get('/facturaMedico/medico/:id', FacturaMedicoController::class . '@calcularFacturaMedicoId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+
 Router::post('/facturas/all', FacturaMedicoController::class . '@solicitarFacturasMedicos', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::post('/factura/medico', FacturaMedicoController::class . '@solicitarFacturaMedicoPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::put('/factura/medico/:id', FacturaMedicoController::class . '@actualizarFacturaMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);

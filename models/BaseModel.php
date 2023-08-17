@@ -140,7 +140,7 @@ class BaseModel{
         $inner = array();
 
         if (isset($objManual)) {
-            $inner[] = "INNER JOIN $objManual[0] ON $objManual[0].$objManual[1]"."_id = $objManual[1]".".$objManual[2]"."_id";
+            $inner[] = "INNER JOIN $objManual[0] ON $objManual[0].$objManual[1]"."_id = $objManual[2]".".$objManual[1]"."_id";
         }
 
         foreach ($obj as $key => $ref) {
