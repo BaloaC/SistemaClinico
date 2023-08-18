@@ -67,17 +67,25 @@ class FacturaMedicoController extends Controller{
 
                 foreach ($medicoList as $medico) {
                     
-                    $factura = $this->contabilizarFactura([
+                    $factura = array(
                         "fecha_actual" => $data['fecha_actual'],
                         "medico_id" => $medico->medico_id
-                    ]);
+                    );
 
-                    $isInserted = $_facturaMedicoModel->insert($factura);
+                    $estaDuplicado = FacturaMedicoValidate::validarFacturaMes($factura);
 
-                    if ( !($isInserted  > 0) ) {
-                        $respuesta = new Response('INSERCION_FALLIDA');
-                        $respuesta->setData('Error generando la factura del medico_id' + $medico->medico_id);
-                        return $respuesta->json(400);
+                    if (!$estaDuplicado) {
+                            
+                        $facturaMedico = FacturaMedicoService::contabilizarFactura($factura);
+                        $isInserted = $_facturaMedicoModel->insert($facturaMedico);
+
+                        if ( !($isInserted  > 0) ) {
+                            $respuesta = new Response('INSERCION_FALLIDA');
+                            $respuesta->setData('Error generando la factura del medico_id' + $medico->medico_id);
+                            return $respuesta->json(400);
+                        }
+
+                        FacturaMedicoHelpers::reiniciarAcumuladoMedico($medico->medico_id);
                     }
                 }
 
@@ -86,38 +94,24 @@ class FacturaMedicoController extends Controller{
         }
     }
 
-    public function solicitarFacturaMedicoPorId(/*Request $request*/){
+    public function insertarFacturaMedicoPorId(/*Request $request*/){
         
         $_POST = json_decode(file_get_contents('php://input'), true);
+        FacturaMedicoValidate::validateInsertMedico($_POST);
+
         $validarFactura = new Validate;
-        $camposId = array('medico_id');
+        $data = $validarFactura->dataScape($_POST);
         
-        switch ($validarFactura) {
-            case ($validarFactura->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
+        $_facturaMedicoModel = new FacturaMedicoModel();
+        $id = $_facturaMedicoModel->insert($data);
+        $mensaje = ($id > 0);
 
-            case !($validarFactura->existsInDB($_POST, $camposId)):
-                $respuesta = new Response('MD_NOT_FOUND');
-                return $respuesta->json(200);
-
-            case $validarFactura->isDate($_POST['fecha_actual']):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(200);
-            
-            default:
-                
-                $data = $validarFactura->dataScape($_POST);
-                $factura = FacturaMedicoHelpers::contabilizarFactura($data);
-                $insert = $this->contabilizarFactura($data);
-                
-                $_facturaMedicoModel = new FacturaMedicoModel();
-                $id = $_facturaMedicoModel->insert($insert);
-                $mensaje = ($id > 0);
-
-                $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-                return $respuesta->json($mensaje ? 201 : 400);
+        if ($mensaje) {
+            FacturaMedicoHelpers::reiniciarAcumuladoMedico($_POST['medico_id']);
         }
+
+        $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+        return $respuesta->json($mensaje ? 201 : 400);
     }
 
     public function actualizarFacturaMedico($factura_medico_id){

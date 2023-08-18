@@ -89,6 +89,11 @@ class FacturaMedicoHelpers {
         return $calculos;
     }
 
+    public static function reiniciarAcumuladoMedico($medico_id) {
+        $_medicoModel = new MedicoModel();
+        $medico = $_medicoModel->where('medico_id', '=', $medico_id)->update(array("acumulado" => 0));
+    }
+
     public static function retornarMensaje($booleano) {
         $esTrue = ($booleano > 0);
 
