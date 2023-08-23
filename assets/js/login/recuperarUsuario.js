@@ -1,6 +1,6 @@
 import getAll from "../global/getAll.js";
 import questions from "../global/questions.js";
-
+import validateInputs from "../global/validateInputs.js";
 function template(infoUser) {
     console.log(infoUser);
     // Template para la opción 2
@@ -13,7 +13,11 @@ function template(infoUser) {
             <label for="respuesta2" class="mt-3">${questions(infoUser[2].pregunta)}</label>
             <input class="form-control" type="text" name="respuesta3" placeholder="Introduce la respuesta a la pregunta de seguridad" required>
             <label for="nueva_clave" class="mt-3">Nueva clave</label>
-            <input class="form-control" type="passowrd" name="nueva_clave" placeholder="Introduzca su nueva clave" required>
+            <input class="form-control" type="password" name="clave" placeholder="Introduzca su nueva clave" data-validate="true" data-type="password" data-max-length="20" required>
+            <small class="form-text">La contraseña debe contener al menos 8 caracteres y un número <br> y los caracteres permitdos son: "@" y "-"</small>
+            <label for="confirmar_nueva_clave" class="mt-3">Confirmar nueva clave</label>
+            <input class="form-control" type="password" name="confirmarClave" placeholder="Confirme su nueva clave" data-max-length="20" required>
+            <small class="form-text">Las contraseñas no coinciden</small>
             <input type="hidden" name="pregunta1" value="${infoUser[0].pregunta}">
             <input type="hidden" name="pregunta2" value="${infoUser[1].pregunta}">
             <input type="hidden" name="pregunta3" value="${infoUser[2].pregunta}">
@@ -28,7 +32,11 @@ function template(infoUser) {
             <label for="pin" class="mt-3">Pin de Seguridad</label>
             <input class="form-control" type="text" name="pin" placeholder="Introduzca el pin de seguridad de seguridad de 6 dígitos" required>
             <label for="nueva_clave" class="mt-3">Nueva clave</label>
-            <input class="form-control" type="password" name="nueva_clave" placeholder="Nueva clave" required>
+            <input class="form-control" type="password" name="clave" placeholder="Introduzca su nueva clave" data-validate="true" data-type="password" data-max-length="20" required>
+            <small class="form-text">La contraseña debe contener al menos 8 caracteres y un número <br> y los caracteres permitdos son: "@" y "-"</small>
+            <label for="confirmar_nueva_clave" class="mt-3">Confirmar nueva clave</label>
+            <input class="form-control" type="password" name="confirmarClave" placeholder="Confirme su nueva clave" required>
+            <small class="form-text">Las contraseñas no coinciden</small>
             <div class="text-center mt-3"><button type="submit" id="btnEnviar" class="btn btn-primary w-50" value="${infoUser[0].usuario_id}">Enviar</button></div>
         </div>
     `
@@ -57,6 +65,8 @@ function template(infoUser) {
 
             }
         }
+
+        validateInputs();
     })
 }
 
@@ -97,10 +107,10 @@ document.getElementById("siguiente").addEventListener("click", async (event) => 
 
 const input = document.getElementById('usuario');
 
-input.addEventListener('keydown', function(event) {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-  }
+input.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+    }
 });
 
 document.getElementById("login-form").addEventListener("submit", async (event) => {
@@ -119,7 +129,10 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
 
         formData.forEach((value, key) => (data[key] = value));
 
-        console.log(data);
+        if (!event.target.checkValidity()) { event.target.reportValidity(); return; }
+        if (data.clave !== data.confirmarClave) throw { message: "Las contraseñas no coinciden" };
+        if (!((/^(?=.*\d)[\d\w@-]{8,20}$/i).test(data.clave))) throw { message: "Contraseña inválida" };
+        if (!((/^(?=.*\d)[\d\w@-]{8,20}$/i).test(data.confirmarClave))) throw { message: "Contraseña inválida" };
 
         const options = {
 
@@ -135,7 +148,7 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
             options.body = JSON.stringify({
                 tipo_auth: data.metodo,
                 auth: data.pin,
-                nueva_clave: data.nueva_clave
+                nueva_clave: data.clave
             })
 
             const response = await fetch(`/${path[1]}/login/${$btnEnviar.value}`, options);
@@ -159,7 +172,7 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
             options.body = JSON.stringify({
                 nombre: data.usuario,
                 usuario_id: data.usuario_id,
-                nueva_clave: data.nueva_clave,
+                nueva_clave: data.clave,
                 preguntas: preguntas
             })
 

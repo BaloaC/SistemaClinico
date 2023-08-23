@@ -41,7 +41,6 @@
                                             <th>Detalles</th>
                                             <th>Cédula Paciente</th>
                                             <th>Nombre Paciente</th>
-                                            <th>Cédula Médico</th>
                                             <th>Nombre Médico</th>
                                             <th>Especialidad</th>
                                             <th>Cédula Titular</th>
@@ -72,7 +71,30 @@
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-consulta" class="p-3 px-4">
                             <div class="row">
-                                <div class="row">
+                                <div class="row ">
+                                    <h5>Información de la cita</h5>
+                                    <div class="col-12 col-md-6">
+                                        <label for="input-radios-container" class="">¿La consulta es por emergencia?</label>
+                                        <div class="input-radios-container">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="consultaPorEmergencia" id="consultaEmergenciaSi" onchange="consultaEmergencia(this)" value="1" required>
+                                                <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="consultaPorEmergencia" id="consultaEmergenciaNo" onchange="consultaEmergencia(this)" value="0" checked required>
+                                                <label class="form-check-label" for="inlineRadio2">No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 info-cita">
+                                        <label for="cita">Cita</label>
+                                        <select name="cita_id" id="s-cita" class="form-control" data-active="0" required>
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4 info-paciente" style="display: none;">
                                     <h5>Información del Paciente</h5>
                                     <div class="col-12 col-md-6">
                                         <label for="nombres">Paciente</label>
@@ -80,12 +102,22 @@
                                             <option></option>
                                         </select>
                                     </div>
-                                    <div class="col-12 col-md-6">
-                                        <label for="cita">Cita</label>
-                                        <select name="cita_id" id="s-cita" class="form-control" data-active="0" required>
-                                            <option></option>
-                                        </select>
-                                    </div>
+                                </div>
+
+                                <div class="row mt-4 info-medico" style="display: none;">
+                                    <h5>Información del médico</h2>
+                                        <div class="col-12 col-md-6">
+                                            <label for="medico_id">Médico</label>
+                                            <select name="medico_id" id="s-medico" class="form-control" data-active="0">
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="especialidad_id">Especialidad</label>
+                                            <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
+                                                <option></option>
+                                            </select>
+                                        </div>
                                 </div>
 
                                 <div class="row mt-4">
@@ -376,7 +408,7 @@
                                     <label for="monto_sin_iva">Monto</label>
                                     <input type="number" name="monto_sin_iva" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
                                     <!-- <input type="number" name="monto_sin_iva" oninput="calcularIva(this)" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8"> -->
-                                    
+
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <label for="consulta_id">Consulta</label>
@@ -442,6 +474,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/consultas/deleteInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/registrarFConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas-seguro/registrarConsultaSeguro.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/consultaEmergencia.js'); ?>"></script>
 </body>
 
 </html>

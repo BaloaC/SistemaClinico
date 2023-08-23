@@ -8,6 +8,7 @@ class TitularBeneficiadoModel extends GenericModel {
     protected $paciente_beneficiado_id;
     protected $paciente_id;
     protected $tipo_relacion;
+    protected $tipo_familiar;
     protected $estatus_tit;
 
     public function __construct($propiedades = null) {
@@ -19,6 +20,7 @@ class TitularBeneficiadoModel extends GenericModel {
     public function getPacienteBeneficiadoId(){return $this->paciente_beneficiado_id;}
     public function getPacienteId(){return $this->paciente_id;}
     public function getTipoRelacion(){return $this->tipo_relacion;}
+    public function getTipoFamiliar(){return $this->tipo_famiiar;}
     public function getEstatusPaciente(){return $this->estatus_tit;}
 
     /* Setters */
@@ -26,6 +28,7 @@ class TitularBeneficiadoModel extends GenericModel {
     public function setPacienteBeneficiadoId($paciente_beneficiado_id){return $this->paciente_beneficiado_id = $paciente_beneficiado_id;}
     public function setPacienteId($paciente_id){return $this->paciente_id = $paciente_id;}
     public function setTipoRelacion($tipo_relacion){return $this->tipo_relacion = $tipo_relacion;}
+    public function setTipoFamiliar($tipo_familiar){return $this->tipo_familiar = $tipo_familiar;}
     public function setEstatusPaciente($estatus_tit){return $this->estatus_tit = $estatus_tit;}
 }
 

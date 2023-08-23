@@ -190,7 +190,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             $(especialidadSelect).empty().select2();
 
             dinamicSelect2({
-                obj: infoMedico[0].especialidad ?? [],
+                obj: infoMedico.especialidad ?? [],
                 selectSelector: especialidadSelect,
                 selectValue: "especialidad_id",
                 selectNames: ["nombre_especialidad"],
@@ -228,9 +228,10 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
 
         const fecha = luxon.DateTime.fromISO(info.dateStr);
-        const fechaFormateada = `${fecha.toISODate()}T${fecha.toFormat("HH:mm")}`;
+        const fechaActual = luxon.DateTime.now().toISODate();
 
-        document.getElementById("fecha_cita").value = fechaFormateada; //`${info.dateStr}T${fecha_cita.hour.toString().padStart(2, '0')}:${fecha_cita.minute.toString().padStart(2, '0')}`;
+        document.getElementById("fecha_cita").setAttribute("min",fechaActual);
+        document.getElementById("fecha_cita").value = fecha.toISODate(); //`${info.dateStr}T${fecha_cita.hour.toString().padStart(2, '0')}:${fecha_cita.minute.toString().padStart(2, '0')}`;
         modalReg.show();
     },
     navLinks: true, // can click day/week names to navigate views
@@ -242,7 +243,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
         let estatusCita;
 
-        switch (cita[0].estatus_cit) {
+        switch (cita.estatus_cit) {
             case "1": estatusCita = "Asignada"; break;
             case "2": estatusCita = "Eliminada"; break;
             case "3": estatusCita = "Pendiente"; break;
@@ -250,27 +251,27 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             case "5": estatusCita = "Reasignada"; break;
         }
 
-        if(cita[0].estatus_cit == 5) estatusCita = "Reasignada";
+        if(cita.estatus_cit == 5) estatusCita = "Reasignada";
         
 
-        document.getElementById("paciente").textContent = `${cita[0].nombre_paciente} ${cita[0].apellido_paciente}`;
-        document.getElementById("cedula-titular").textContent = `C.I: ${cita[0].cedula_titular}`;
-        document.getElementById("nombreMedico").textContent = `${cita[0].nombre_medico} ${cita[0].apellido_medico}`;
-        document.getElementById("nombreEspecialidad").textContent = cita[0].nombre_especialidad;
-        document.getElementById("tipoCita").textContent = (cita[0].tipo_cita == 1) ? "Normal" : "Asegurada";
+        document.getElementById("paciente").textContent = `${cita.nombre_paciente} ${cita.apellido_paciente}`;
+        document.getElementById("cedula-titular").textContent = `C.I: ${cita.cedula_titular}`;
+        document.getElementById("nombreMedico").textContent = `${cita.nombre_medico} ${cita.apellido_medico}`;
+        document.getElementById("nombreEspecialidad").textContent = cita.nombre_especialidad;
+        document.getElementById("tipoCita").textContent = (cita.tipo_cita == 1) ? "Normal" : "Asegurada";
         document.getElementById("estatusCita").textContent = estatusCita;
-        (cita[0].estatus_cit == 1 || cita[0].estatus_cit == 3) ? document.getElementById("btn-reprogramar").setAttribute("onclick", `reprogramationCita(${cita[0].cita_id})`) : null;
-        document.getElementById("fechaCita").value = cita[0].fecha_cita;
-        document.getElementById("horaEntradaCita").value = cita[0].hora_entrada;
-        document.getElementById("horaSalidaCita").value = cita[0].hora_salida;
-        document.getElementById("fechaCita").value = cita[0].fecha_cita;
-        document.getElementById("motivoCita").textContent = cita[0].motivo_cita;
-        document.getElementById("claveCita").textContent = (cita[0].tipo_cita == 1) ? "No aplica" : cita[0].clave;
-        document.getElementById("btn-actualizar").disabled = (cita[0].estatus_cit == 1) ? true : false;
-        document.getElementById("btn-reprogramar").disabled = (cita[0].estatus_cit == 1 || cita[0].estatus_cit == 3) ? false : true;
-        document.getElementById("export-cita").setAttribute("onclick", `openPopup('pdf/cita/${cita[0].cita_id}')`);
-        (cita[0].estatus_cit == 1) ? null : document.getElementById("btn-actualizar").setAttribute("onclick", `updateCita(${cita[0].cita_id})`);
-        document.getElementById("btn-actualizar").value = cita[0].cita_id;
+        (cita.estatus_cit == 1 || cita.estatus_cit == 3) ? document.getElementById("btn-reprogramar").setAttribute("onclick", `reprogramationCita(${cita.cita_id})`) : null;
+        document.getElementById("fechaCita").value = cita.fecha_cita;
+        document.getElementById("horaEntradaCita").value = cita.hora_entrada;
+        document.getElementById("horaSalidaCita").value = cita.hora_salida;
+        document.getElementById("fechaCita").value = cita.fecha_cita;
+        document.getElementById("motivoCita").textContent = cita.motivo_cita;
+        document.getElementById("claveCita").textContent = (cita.tipo_cita == 1) ? "No aplica" : cita.clave;
+        document.getElementById("btn-actualizar").disabled = (cita.estatus_cit == 1) ? true : false;
+        document.getElementById("btn-reprogramar").disabled = (cita.estatus_cit == 1 || cita.estatus_cit == 3) ? false : true;
+        document.getElementById("export-cita").setAttribute("onclick", `openPopup('pdf/cita/${cita.cita_id}')`);
+        (cita.estatus_cit == 1) ? null : document.getElementById("btn-actualizar").setAttribute("onclick", `updateCita(${cita.cita_id})`);
+        document.getElementById("btn-actualizar").value = cita.cita_id;
 
         modalInfo.show();
     },

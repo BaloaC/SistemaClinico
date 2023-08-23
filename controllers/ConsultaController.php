@@ -5,6 +5,10 @@ class ConsultaController extends Controller {
     protected $selectConsultaSinCita = array(
         "paciente.paciente_id",
         "paciente.nombre AS nombre_paciente",
+        "paciente.cedula AS cedula_paciente",
+        "paciente.tipo_paciente",
+        "paciente.edad",
+        "medico.cedula AS cedula_medico",
         "medico.medico_id",
         "medico.nombre AS nombre_medico",
         "especialidad.especialidad_id",
@@ -21,9 +25,12 @@ class ConsultaController extends Controller {
     protected $selectConsultaCita = array(
         "paciente.paciente_id",
         "paciente.nombre AS nombre_paciente",
-        "paciente.cedula",
+        "paciente.cedula AS cedula_paciente",
         "medico.medico_id",
+        "paciente.tipo_paciente",
+        "paciente.edad",
         "medico.nombre AS nombre_medico",
+        "medico.cedula AS cedula_medico",
         "especialidad.especialidad_id",
         "especialidad.nombre AS nombre_especialidad",
         "consulta_cita.consulta_id",
@@ -572,12 +579,15 @@ class ConsultaController extends Controller {
                                 ->where('consulta.estatus_con','=',1)
                                 ->innerJoin($this->selectConsultaCita, $innersCita, "consulta_cita");
 
+                                // var_dump($es_citada);
+
         if (is_null($es_citada) || count($es_citada) == 0 ) { // Si no es por cita, extraemos la información de consulta_sin_cita
             $_consultaSinCita = new ConsultaSinCitaModel();
             $innersConsulta = $_consultaSinCita->listInner($this->innerConsultaSinCita);
             $consultaCompleta = $_consultaSinCita->where('consulta_sin_cita.consulta_id', '=', $consulta->consulta_id)
                                                 ->innerJoin($this->selectConsultaSinCita, $innersConsulta, "consulta_sin_cita");
 
+                                                // var_dump($consultaCompleta);
             $relaciones = $this->setRelaciones($consulta->consulta_id);
             
             if (count((array) $relaciones) > 0) {
@@ -590,12 +600,16 @@ class ConsultaController extends Controller {
             $_cita = new CitaModel();
             $cita = $_cita->where('cita_id', '=', $es_citada[0]->cita_id)->getFirst();
 
+            $consultaCompleta = (object) array_merge((array) $es_citada[0], (array) $consulta);
+            $consultaCompleta = (object) array_merge((array) $consultaCompleta, (array) $cita);
+
             $relaciones = $this->setRelaciones($consulta->consulta_id);
             if (count((array) $relaciones) > 0) {
-                $consultaCompleta = (object) array_merge((array) $consulta, (array) $relaciones);
+                $consultaCompleta = (object) array_merge((array) $consultaCompleta, (array) $relaciones);
             }
-            return $consultas[] = (object) array_merge((array) $consulta, (array) $cita);
+            // var_dump($es_citada[0]);
             
+            return $consultas[] = (object) array_merge((array) $consultaCompleta, (array) $relaciones);
         }
     }
 

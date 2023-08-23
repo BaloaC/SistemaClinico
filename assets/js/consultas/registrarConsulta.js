@@ -17,10 +17,16 @@ async function addConsulta() {
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
 
-        const infoCita = await getById("citas", data.cita_id);
-        data.cedula_titular = infoCita[0].cedula_titular;
-        data.especialidad_id = infoCita[0].especialidad_id;
-        data.medico_id = infoCita[0].medico_id;
+        if (data.consultaPorEmergencia === "0") {
+            const infoCita = await getById("citas", data.cita_id);
+            data.cedula_titular = infoCita.cedula_titular;
+            data.especialidad_id = infoCita.especialidad_id;
+            data.medico_id = infoCita.medico_id;
+            data.paciente_id = infoCita.paciente_id;
+
+            // Eliminamos la propiedad para que evitar la validación de datos vacíos en back
+            delete data.consultaPorEmergencia;
+        }
 
         let examen = formData.getAll("examenes[]");
         examen.forEach(e => {
@@ -63,7 +69,7 @@ async function addConsulta() {
         const indicacionesList = document.querySelectorAll(".indicaciones"),
             indicaciones = [];
 
-            indicacionesList.forEach((value, key) => {
+        indicacionesList.forEach((value, key) => {
             const indicacion = {
                 descripcion: value.value
             }

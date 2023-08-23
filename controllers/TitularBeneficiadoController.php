@@ -7,7 +7,7 @@ class TitularBeneficiadoController extends Controller
     {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        $camposNumericos = array("tipo_relacion");
+        $camposNumericos = array("tipo_relacion", "tipo_familiar");
         $camposKey = array("paciente_id");
 
         $validarPaciente = new Validate;
@@ -25,6 +25,10 @@ class TitularBeneficiadoController extends Controller
 
                 case $forms['tipo_relacion'] > 3:
                     $respuesta = new Response(false, 'El tipo de relación indicado no es válido');
+                    return $respuesta->json(400);
+
+                case $forms['tipo_familiar'] > 7:
+                    $respuesta = new Response(false, 'El tipo de familiar indicado no es válido');
                     return $respuesta->json(400);
 
                 case !$validarPaciente->existsInDB($forms, $camposKey):
@@ -109,7 +113,11 @@ class TitularBeneficiadoController extends Controller
             "paciente.nombre",
             "paciente.apellidos",
             "paciente.cedula",
-            "paciente.tipo_paciente"
+            "paciente.tipo_paciente",
+            "titular_beneficiado.tipo_familiar",
+            "titular_beneficiado.tipo_relacion",
+            "titular_beneficiado.titular_beneficiado_id",
+            "titular_beneficiado.paciente_beneficiado_id"
         );
 
         $_titularBeneficiadoModel = new TitularBeneficiadoModel();
@@ -124,7 +132,7 @@ class TitularBeneficiadoController extends Controller
     public function eliminarTitularBeneficiado($titular_beneficiado_id)
     {
 
-        $_titularBeneficiadoModel = new titularBeneficiadoModel();
+        $_titularBeneficiadoModel = new TitularBeneficiadoModel();
         $data = array(
             "estatus_tit" => "2"
         );

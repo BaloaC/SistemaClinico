@@ -11,7 +11,8 @@ class PacienteController extends Controller{
         "empresa.nombre AS nombre_empresa",
         "seguro.nombre AS nombre_seguro",
         "seguro.seguro_id",
-        "empresa.empresa_id"
+        "empresa.empresa_id",
+        "paciente_seguro.paciente_seguro_id"
     );
 
     //Método index (vista principal)

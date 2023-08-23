@@ -7,11 +7,14 @@
     color: black;
 }
 
-.paciente-consulta, .paciente-info {
+.paciente-consulta, .paciente-info, .buttons-submenus-add {
     display: flex;
     flex-direction: column;
 }
 
+.buttons-submenus-add{
+    white-space: nowrap;
+}
 
 .paciente-info {
     align-self: baseline;

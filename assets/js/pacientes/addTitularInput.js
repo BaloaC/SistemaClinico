@@ -1,17 +1,5 @@
 import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
-import getAll from "../global/getAll.js";
-
-async function getTitulares() {
-    try {
-        const pacientes = await getAll("pacientes/consulta"),
-            titulares = [];
-        pacientes.filter(paciente => (paciente.tipo_paciente == 2 || paciente.tipo_paciente == 3) ? titulares.push(paciente) : null);
-
-        return titulares;
-    } catch (error) {
-        console.log(error);
-    }
-};
+import getTitulares from "./getTitulares.js";
 
 let clicks = 0;
 async function addTitularInput() {
@@ -32,17 +20,29 @@ async function addTitularInput() {
             </div>
             <div class="col-12 col-md-5">
                 <label for="titular">Titular</label>
-                <select name="titular_id" id="s-titular_id${clicks}" class="form-control mb-3 titular" data-active="0">
-                    <option value="">Seleccione un titular</option>
+                <select name="titular_id" id="s-titular_id${clicks}" class="form-control mb-3 titular" data-active="0" required>
+                    <option value="" selected>Seleccione un titular</option>
                 </select>
             </div>
             <div class="col-12 col-md-5">
                 <label for="tipo_relacion">Tipo de relación</label>
-                <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3 relacion">
-                    <option value="" disabled>Seleccione el tipo de relación</option>
+                <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3 relacion" required>
+                    <option value="" disabled selected>Seleccione el tipo de relación</option>
                     <option value="1">Seguro</option>
-                    <option value="2">Padre/Madre</option>
-                    <option value="3">Representante</option>
+                    <option value="2">Natural</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-5">
+                <label for="tipo_familiar">Tipo de familiar</label>
+                <select name="tipo_familiar" id="tipo_familiar" class="form-control mb-3 tipo_familiar" required>
+                    <option value="" disabled selected>Seleccione el tipo de familiar</option>
+                    <option value="1">Padre/Madre</option>
+                    <option value="2">Representante</option>
+                    <option value="3">Primo/a</option>
+                    <option value="4">Hermano/a</option>
+                    <option value="5">Esposo/a</option>
+                    <option value="6">Tío/a</option>
+                    <option value="7">Sobrino/a</option>
                 </select>
             </div>
         </div>
@@ -64,7 +64,7 @@ async function addTitularInput() {
 
 const titulares = await getTitulares();
 
-$("#s-titular_id").empty().select2();
+// $("#s-titular_id").empty().select2();
 dinamicSelect2({
     obj: titulares,
     selectSelector: "#s-titular_id",

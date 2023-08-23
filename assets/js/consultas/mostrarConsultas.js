@@ -13,62 +13,50 @@ select2OnClick({
     selectNames: ["cedula", "nombre-apellidos"],
     module: "pacientes/consulta",
     parentModal: "#modalReg",
-    placeholder: "Seleccione un paciente"
+    placeholder: "Seleccione un paciente",
 });
 
+document.getElementById("s-paciente").disabled = true;
+
 // TODO: Colocar en la vista los horarios disponible de este medico
-// select2OnClick({
-//     selectSelector: "#s-medico",
-//     selectValue: "medico_id",
-//     selectNames: ["cedula", "nombre-apellidos"],
-//     module: "medicos/consulta",
-//     parentModal: "#modalReg",
-//     placeholder: "Seleccione un médico"
-// });
+select2OnClick({
+    selectSelector: "#s-medico",
+    selectValue: "medico_id",
+    selectNames: ["cedula", "nombre-apellidos"],
+    module: "medicos/consulta",
+    parentModal: "#modalReg",
+    placeholder: "Seleccione un médico"
+});
 
-
-const citasSelect = document.getElementById("s-cita");
+document.getElementById("s-medico").disabled = true;
 
 emptySelect2({
-    selectSelector: citasSelect,
-    placeholder: "Debe seleccionar un paciente",
+    selectSelector: especialidadSelect,
+    placeholder: "Debe seleccionar un médico",
     parentModal: "#modalReg"
 })
 
-citasSelect.disabled = true;
+especialidadSelect.disabled = true;
 
-$("#s-paciente").on("change", async function (e) {
+$("#s-medico").on("change", async function (e) {
 
-    let paciente_id = this.value;
 
-    if (!paciente_id) return;
+    let medico_id = this.value;
+    const infoMedico = await getById("medicos", medico_id);
 
-    let infoCitas = await getById("citas/paciente", paciente_id);
-
-    $(citasSelect).empty().select2();
-
-    if ('result' in infoCitas && infoCitas.result.code === false) infoCitas = [];
+    $(especialidadSelect).empty().select2();
 
     dinamicSelect2({
-        obj: infoCitas,
-        selectSelector: citasSelect ?? [],
-        selectValue: "cita_id",
-        selectNames: ["cita_id", "motivo_cita"],
+        obj: infoMedico[0].especialidad ?? [],
+        selectSelector: especialidadSelect,
+        selectValue: "especialidad_id",
+        selectNames: ["nombre_especialidad"],
         parentModal: "#modalReg",
-        placeholder: "Seleccione un paciente"
+        placeholder: "Seleccione una especialidad"
     });
 
-    citasSelect.disabled = false;
+    especialidadSelect.disabled = false;
 })
-
-// select2OnClick({
-//     selectSelector: "#s-cita",
-//     selectValue: "cita_id",
-//     selectNames: ["cita_id", "motivo_cita"],
-//     module: "citas/consulta",
-//     parentModal: "#modalReg",
-//     placeholder: "Seleccione una cita"
-// });
 
 select2OnClick({
     selectSelector: "#s-examen",
@@ -79,16 +67,6 @@ select2OnClick({
     placeholder: "Seleccione los exámenes",
     multiple: true
 });
-
-// select2OnClick({
-//     selectSelector: "#s-examen",
-//     selectValue: "examen_id",
-//     selectNames: ["nombre"],
-//     module: "examenes/consulta",
-//     parentModal: "#modalReg",
-//     placeholder: "Seleccione los exámenes",
-//     multiple: true
-// });
 
 select2OnClick({
     selectSelector: "#s-insumo",
@@ -107,6 +85,7 @@ select2OnClick({
     parentModal: "#modalReg",
     placeholder: "Seleccione el medicamento"
 });
+
 // especialidadSelect.disabled = true;
 // TODO: Al seleccionar/cambiar el valor del medico, cargar unicamente sus especialidades, crear el input vacio afuera
 // $("#s-medico").on("change", async function (e) {
@@ -127,9 +106,32 @@ select2OnClick({
 // })
 
 
-addEventListener("DOMContentLoaded", e => {
+addEventListener("DOMContentLoaded", async e => {
+
     removeAddAccountant();
     removeAddAnalist();
+
+    let infoCitas = await getAll("citas/consulta");
+    let listCitas;
+
+    if ('result' in infoCitas && infoCitas.result.code === false) listCitas = [];
+
+
+    if (infoCitas.length > 0) {
+        listCitas = infoCitas.filter(cita => cita.estatus_cit === "1");
+    }
+
+    console.log(listCitas);
+
+    dinamicSelect2({
+        obj: listCitas ?? [],
+        selectSelector: "#s-cita",
+        selectValue: "cita_id",
+        selectNames: ["cita_id", "cedula_paciente", "nombre_paciente-apellido_paciente", "motivo_cita"],
+        parentModal: "#modalReg",
+        placeholder: "Seleccione una cita"
+    });
+
     let consultas = $('#consultas').DataTable({
 
         bAutoWidth: false,
@@ -146,10 +148,14 @@ addEventListener("DOMContentLoaded", e => {
             },
             { data: "cedula_paciente" },
             { data: "nombre_paciente" },
-            { data: "cedula_medico" },
             { data: "nombre_medico" },
             { data: "nombre_especialidad" },
-            { data: "cedula_titular" },
+            {
+                data: "cedula_titular",
+                render: function (data, type, row) {
+                    return data ?? row.cedula_paciente
+                }
+            },
             { data: "fecha_consulta" },
             {
                 data: "consulta_id",
@@ -241,7 +247,7 @@ addEventListener("DOMContentLoaded", e => {
     function format(data) {
 
         if (data.clave == null) data.clave = "No aplica";
-        let tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal"; 
+        let tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
 
         let examenes = data.examenes !== undefined ? concatItems(data.examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen",
             insumos = data.insumos !== undefined ? concatItems(data.insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo",
@@ -291,8 +297,8 @@ addEventListener("DOMContentLoaded", e => {
                 <tr>
                     <td>Peso: <br><b>${data.peso}</b></td>
                     <td>Altura: <br><b>${data.altura}</b></td>
-                    <td>Fecha Cita: <br><b>${data.fecha_cita}</b></td>
-                    <td>Motivo cita: <br><b>${data.motivo_cita}</b></td>
+                    <td>Fecha Cita: <br><b>${data.fecha_cita ?? "No aplica"}</b></td>
+                    <td>Motivo cita: <br><b>${data.motivo_cita ?? "No aplica"}</b></td>
                 </tr>
                 <tr class="blue-td">
                     <td>Clave: <br><b>${data.clave}</b></td>

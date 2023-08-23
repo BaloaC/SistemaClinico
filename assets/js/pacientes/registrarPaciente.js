@@ -41,22 +41,28 @@ async function addPaciente() {
         } else if (data.tipo_paciente == 4) {
 
             if(data.edad < 18){
-
-                if(data.cedula_beneficiario == 0) data.cedula = infoTitular.cedula;
                 let titular_id = document.getElementById("s-titular_id").value;
                 const infoTitular =  await getById("pacientes",titular_id);
+                
+                if(data.cedula_beneficiario == 0) {
+                    data.cedula = infoTitular.cedula; 
+                    delete data.cedula_beneficiario;
+                }
+
                 data.telefono = infoTitular.telefono;
             }
 
             const titulares = document.querySelectorAll(".titular"),
-                relacion = document.querySelectorAll(".relacion");
+                relacion = document.querySelectorAll(".relacion"),
+                tipo_familiar = document.querySelectorAll(".tipo_familiar");
 
             titulares.forEach((value, key) => {
                 // TODO: Validar que ambos valores se envien
                 console.log(relacion[key].value);
                 const titular_id = {
                     paciente_id: value.value,
-                    tipo_relacion: relacion[key].value
+                    tipo_relacion: relacion[key].value,
+                    tipo_familiar: tipo_familiar[key].value
                 }
                 titular.push(titular_id);
             })

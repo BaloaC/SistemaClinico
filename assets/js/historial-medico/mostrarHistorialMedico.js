@@ -33,10 +33,10 @@ export default async function mostrarHistorialMedico(id) {
 
         const infoPaciente = await getById("pacientes", id);
         const infoConsultas = await getById("consultas/paciente", id);
-        const infoCitas = await getById("citas/paciente",id);
+        const infoCita = await getById("citas/paciente",id);
 
-        // Obtenemos las citas asigandas y las que están en espera
-        const listCitas = infoCitas.filter(cita => cita.estatus_cit === "1" || cita.estatus_cit === "3").sort((a,b) => b.cita_id - a.cita_id);
+        // ! Obtenemos las citas asigandas y las que están en espera. En caso de que se necesite mostrar más citas
+        // const listCitas = infoCitas.filter(cita => cita.estatus_cit === "1" || cita.estatus_cit === "3").sort((a,b) => b.cita_id - a.cita_id);
 
         // Obtenemos las consultas por id de manera descendente
         const listConsultas = infoConsultas.consultas.sort((a, b) => b.consulta_id - a.consulta_id);
@@ -123,12 +123,13 @@ export default async function mostrarHistorialMedico(id) {
         }
 
         // ** Validamos en caso de que el paciente tenga citas pendientes
-        if (listCitas.length > 0) {
+        if (listCita.length > 0) {
 
             const citasLabel = document.getElementById("citasLabel");
             citasLabel.classList.remove("d-none");
 
-            listCitas.forEach((el, i) => {
+            // !! En caso de que se necesite mostrar más citas
+            // listCitas.forEach((el, i) => {
 
                 let dropdownLink = templateCita.querySelector(".btn-link");
                 let citaContainer = templateCita.querySelector(".collapse");
@@ -142,31 +143,32 @@ export default async function mostrarHistorialMedico(id) {
                 let tipo_cita = templateCita.getElementById("tipo_cita");
                 let estatus_cit = templateCita.getElementById("estatus_cit");
 
-                if (i === 0) {
+                // ! En caso de que se necesite mostrar más citas
+                // if (i === 0) {
                     citaContainer.classList.add("show");
-                } else {
-                    citaContainer.classList.remove("show");
-                }
+                // } else {
+                //     citaContainer.classList.remove("show");
+                // }
 
-                cita_id.textContent = el.cita_id;
-                nombre_medico.textContent = `${el.nombre_medico} ${el.apellido_medico}`;
-                especialidad.textContent = el.nombre_especialidad;
-                fecha_cita.textContent = el.fecha_cita;
-                motivo_cita.textContent = el.motivo_cita;
-                hora_entrada.textContent = el.hora_entrada;
-                hora_salida.textContent = el.hora_salida;
-                tipo_cita.textContent = el.tipo_cita === "2" ? "Asegurada" : "Natural";
-                estatus_cit.textContent = el.estatus_cit === "3" ? "Pendiente" : "Asignada";
+                cita_id.textContent = listCita.cita_id;
+                nombre_medico.textContent = `${listCita.nombre_medico} ${listCita.apellido_medico}`;
+                especialidad.textContent = listCita.nombre_especialidad;
+                fecha_cita.textContent = listCita.fecha_cita;
+                motivo_cita.textContent = listCita.motivo_cita;
+                hora_entrada.textContent = listCita.hora_entrada;
+                hora_salida.textContent = listCita.hora_salida;
+                tipo_cita.textContent = listCita.tipo_cita === "2" ? "Asegurada" : "Natural";
+                estatus_cit.textContent = listCita.estatus_cit === "3" ? "Pendiente" : "Asignada";
                 
 
                 dropdownLink.innerHTML = `<b>ID:</b> ${cita_id.textContent} - <b>Nombre médico:</b> ${nombre_medico.textContent} - <b>Especialidad:</b> ${especialidad.textContent} - <b>Fecha:</b> ${fecha_cita.textContent}`;
-                dropdownLink.setAttribute("data-bs-target", `#cita-${el.cita_id}`);
-                dropdownLink.setAttribute("aria-controls", `#cita-${el.cita_id}`);
-                citaContainer.setAttribute("id", `cita-${el.cita_id}`);
+                dropdownLink.setAttribute("data-bs-target", `#cita-${listCita.cita_id}`);
+                dropdownLink.setAttribute("aria-controls", `#cita-${listCita.cita_id}`);
+                citaContainer.setAttribute("id", `cita-${listCita.cita_id}`);
 
                 let clone = document.importNode(templateCita, true);
                 citaFragment.appendChild(clone);
-            });
+            // });
 
             // Actualizamos el contenedor e insertamos los datos
             citaContainer.replaceChildren();
