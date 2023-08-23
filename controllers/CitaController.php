@@ -221,11 +221,7 @@ class CitaController extends Controller {
                     $data['estatus_cit'] = 1;
                 }
 
-                $header = apache_request_headers();
-                $token = substr($header['Authorization'], 7) ;
-
                 $_citaModel = new CitaModel();
-                $_citaModel->byUser($token);
                 $id = $_citaModel->insert($data);
                 $mensaje = ($id > 0);
 
@@ -348,11 +344,7 @@ class CitaController extends Controller {
                 $newStatus['estatus_cit'] = 1;
                 $newArray['clave'] = $data['clave'];
 
-                $header = apache_request_headers();
-                $token = substr($header['Authorization'], 7);
-
                 $_citaSeguroModel = new CitaSeguroModel();
-                $_citaSeguroModel->byUser($token);
                 $actualizado = $_citaSeguroModel->where('cita_id', '=', $cita_id)->update($newArray);
                 $esActualizado = "";
                 
@@ -432,11 +424,7 @@ class CitaController extends Controller {
 
     public function eliminarCita($cita_id) {
 
-        $header = apache_request_headers();
-        $token = substr($header['Authorization'], 7) ;
-
         $_citaModel = new CitaModel();
-        $_citaModel->byUser($token);
         $data = array(
             "estatus_cita" => "2"
         );

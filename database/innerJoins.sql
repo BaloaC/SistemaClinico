@@ -149,3 +149,23 @@ INNER JOIN especialidad ON especialidad.especialidad_id = consulta.especialidad_
 INNER JOIN cita ON cita.cita_id = consulta.cita_id
 
 
+-- factura consulta
+SELECT 
+    factura_consulta.factura_consulta_id,
+    factura_consulta.consulta_id,
+    factura_consulta.monto_consulta,
+    consulta_sin_cita.medico_id
+from factura_consulta
+INNER JOIN consulta ON consulta.consulta_id = factura_consulta.consulta_id
+INNER JOIN consulta_sin_cita ON consulta_sin_cita.consulta_id = factura_consulta.consulta_id
+
+-- -- factura consulta (pero el seguro)
+SELECT 
+	consulta_seguro.consulta_id,
+    consulta_seguro.monto,
+    consulta_cita.cita_id,
+    cita.medico_id
+from consulta_seguro
+INNER JOIN consulta_cita ON consulta_cita.consulta_id = consulta_seguro.consulta_id
+INNER JOIN cita ON cita.cita_id = consulta_cita.cita_id
+

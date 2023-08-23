@@ -15,7 +15,6 @@ class Request{
 
     //Método para extraer los datos que se envíen 
     public function extractData(){
-
         $this->data = array();
 
         foreach($this->request as $key => $value){
@@ -58,7 +57,6 @@ class Request{
 
     //Método para obtener toda los datos;
     public function all(){
-        
         return $this->data;
     }
 }

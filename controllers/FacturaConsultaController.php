@@ -1,5 +1,8 @@
 <?php
 
+include_once "./services/facturas/consulta/FacturaConsultaHelpers.php";
+include_once "./services/facturas/consulta/FacturaConsultaService.php";
+
 class FacturaConsultaController extends Controller {
 
     //Método index (vista principal)
@@ -19,14 +22,8 @@ class FacturaConsultaController extends Controller {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
-        $camposNumericos = array('monto_sin_iva');
+        $camposNumericos = array('monto_consulta');
         $camposId = array('consulta_id', 'paciente_id');
-
-        $token = $validarFactura->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
 
         switch ($validarFactura) {
             case ($validarFactura->isEmpty($_POST)):
@@ -56,9 +53,7 @@ class FacturaConsultaController extends Controller {
             default:
 
                 $data = $validarFactura->dataScape($_POST);
-
                 $_facturaConsultaModel = new FacturaConsultaModel();
-                $_facturaConsultaModel->byUser($token);
                 $id = $_facturaConsultaModel->insert($data);
                 $mensaje = ($id > 0);
 
@@ -68,48 +63,15 @@ class FacturaConsultaController extends Controller {
     }
 
     public function listarFacturaConsulta() {
-        // hacer inner para mostrar las fechas, el nombre del paciente, el nombre del medico
-        $_facturaConsultaModel = new FacturaConsultaModel();
-        $id = $_facturaConsultaModel->getAll();
-        $mensaje = ($id > 0);
-        return $this->RetornarMensaje($mensaje, $id);
+        $consultaList = FacturaConsultaService::listarFacturas();
+        $mensaje = ( count($consultaList) > 0);
+        FacturaConsultaHelpers::RetornarMensaje($mensaje, $consultaList);
     }
 
     public function listarFacturaConsultaPorId($factura_consulta_id) {
-        // hacer inner para mostrar las fechas, el nombre del paciente, el nombre del medico
-        $_facturaConsultaModel = new FacturaConsultaModel();
-        $id = $_facturaConsultaModel->where('factura_consulta_id', '=', $factura_consulta_id)->getFirst();
-        return $this->RetornarMensaje($id, $id);
-    }
 
-    // public function eliminarFacturaConsulta($factura_consulta_id) {
-
-    //     $validarFactura = new Validate;
-    //     $token = $validarFactura->validateToken(apache_request_headers());
-    //     if (!$token) {
-    //         $respuesta = new Response('TOKEN_INVALID');
-    //         return $respuesta->json(401);
-    //     }
-
-    //     $_facturaModel = new FacturaConsultaModel();
-    //     $_facturaModel->byUser($token);
-    //     $data = array(
-    //         'estatus_fac' => '3'
-    //     );
-
-    //     $eliminado = $_facturaModel->where('factura_consulta_id', '=', $factura_consulta_id)->update($data, 1);
-    //     $mensaje = ($eliminado > 0);
-
-    //     $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-    //     $respuesta->setData($eliminado);
-
-    //     return $respuesta->json($mensaje ? 200 : 400);
-    // }
-
-    // Funciones
-    public function RetornarMensaje($mensaje, $data) {
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($data);
-        return $respuesta->json(200);
+        $consultaList = FacturaConsultaService::listarFacturaPorId($factura_consulta_id);
+        $mensaje = ( count($consultaList) > 0);
+        FacturaConsultaHelpers::RetornarMensaje($mensaje, $consultaList);
     }
 }

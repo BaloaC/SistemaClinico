@@ -1,6 +1,11 @@
 <?php
 
+include_once './services/consulta/consultaService.php';
+include_once './services/consulta/consultaValidaciones.php';
+include_once './services/consulta/consultaHelpers.php';
+
 class ConsultaController extends Controller {
+    protected $consulta_id = "";
     // variables para el inner join de consultas_sin cita
     protected $selectConsultaSinCita = array(
         "paciente.paciente_id",
@@ -148,171 +153,160 @@ class ConsultaController extends Controller {
 
     public function insertarConsulta(/*Request $request*/) {
         $_POST = json_decode(file_get_contents('php://input'), true);
-        $exclude = array("peso","altura","es_emergencia","observaciones");
-        $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id");
+
         $validarConsulta = new Validate;
+        $es_emergencia = isset($_POST['es_emergencia']);
 
-        // $token = $validarConsulta->validateToken(apache_request_headers());
-        // if (!$token) {
-        //     $respuesta = new Response('TOKEN_INVALID');
-        //     return $respuesta->json(401);
-        // }
+        if (!$es_emergencia) {
+            ConsultaValidaciones::validarConsulta($_POST);
+            
+        } 
+        
+        // Validamos relaciones externas
+        $examenes = isset($_POST['examenes']) ? $_POST['examenes'] : false;
+        $insumos = isset($_POST['insumos']) ? $_POST['insumos'] : false;
+        $recipe = isset($_POST['recipes']) ? $_POST['recipes'] : false;
+        $indicaciones = isset($_POST['indicaciones']) ? $_POST['indicaciones'] : false;
+        
+        // Eliminamos las keys que puedan ocasionar errores en el insert
+        if ($examenes) { unset($_POST['examenes']); }
 
-        switch ($validarConsulta) {
-            case !$validarConsulta->existsInDB($_POST, $campoId):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
+        if ($insumos) { 
+            unset($_POST['insumos']);
+            $isValido = $this->validarInsumos($insumos);
 
-            case ($validarConsulta->isEmpty($_POST, $exclude)):
-                $respuesta = new Response('DATOS_VACIOS');
+            if ($isValido) {
+                return $isValido;
+            }
+        }
+
+        if ($recipe) { unset($_POST['recipes']); }
+        if ($indicaciones) { unset($_POST['indicaciones']); }
+
+        $es_emergencia = isset($_POST['es_emergencia']); // Validamos que el atributo emergencia sea booleano
+
+        if ( $es_emergencia ) {
+            if ( $_POST['es_emergencia'] != 0 && $_POST['es_emergencia'] != 1 ) {
+                $respuesta = new Response(false, 'El atributo es_emergencia tiene que ser un booleano');
                 return $respuesta->json(400);
+            }
+            
+            // Ejecutamos la lógica de consulta por emergencia
+            ConsultaValidaciones::validarConsultaEmergencia($_POST);
+            
+            $consultaEmergencia = $validarConsulta->dataScape($_POST);
+            $this->consulta_id = ConsultaService::insertarConsulta($consultaEmergencia, 'emergencia');
 
-            case $validarConsulta->isDate($_POST['fecha_consulta']):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(400);
+            $consultaEmergencia['consulta_id'] = $this->consulta_id;
+            ConsultaService::insertarConsultaEmergencia($consultaEmergencia);
+            ConsultaService::actualizarAcumuladoMedico($consultaEmergencia['pagos']);
 
-            case $validarConsulta->isToday($_POST['fecha_consulta'], true):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(400);
-
-            default:
-                // Separando los datos
-                $examenes = isset($_POST['examenes']) ? $_POST['examenes'] : false;
-                $insumos = isset($_POST['insumos']) ? $_POST['insumos'] : false;
-                $recipe = isset($_POST['recipes']) ? $_POST['recipes'] : false;
-                $indicaciones = isset($_POST['indicaciones']) ? $_POST['indicaciones'] : false;
-                
-                // Eliminamos las keys que puedan ocasionar errores en el insert
-                if ($examenes) { unset($_POST['examenes']); }
-
-                if ($insumos) { 
-                    unset($_POST['insumos']);
-                    $isValido = $this->validarInsumos($insumos);
-
-                    if ($isValido) {
-                        return $isValido;
-                    }
-                }
-
-                if ($recipe) { unset($_POST['recipes']); }
-                if ($indicaciones) { unset($_POST['indicaciones']); }
-
-                $es_emergencia = isset($_POST['es_emergencia']); // Validamos que el atributo emergencia sea booleano
-                if ( $es_emergencia ) {
-                    if ( $_POST['es_emergencia'] != 0 && $_POST['es_emergencia'] != 1 ) {
-                        $respuesta = new Response(false, 'El atributo es_emergencia tiene que ser un booleano');
-                        return $respuesta->json(400);
-                    }
-                }
-                
-                $data = $validarConsulta->dataScape($_POST);
-                $por_cita = isset($data['cita_id']);
-                $consulta_separada = $this->separarInformación($data, $por_cita);
-                
-                // Validaciones generales si es por cita o si es sin cita
-                if ($por_cita) {
-                    if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita') ) {
-                        $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
-                        return $respuesta->json(400);
-                    } else if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 3, 'cita') ) {
-                        $respuesta = new Response(false, 'Para realizar la consulta la cita debe tener su clave correspondiente');
-                        return $respuesta->json(400);
-                    }
-
-                } else if ( !$es_emergencia ) {
-                    if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad')) {
-                        $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
-                        return $respuesta->json(400);
-                    }
-                }
-
-                $header = apache_request_headers();
-                $token = substr($header['Authorization'], 7);
-
-                $_consultaModel = new ConsultaModel();
-                $_consultaModel->byUser($token);
-                $id = $_consultaModel->insert($consulta_separada[1]);
-                $mensaje = ($id > 0);
-                
-                if ($por_cita && $mensaje) {
-
-                    $consulta_separada[0]['consulta_id'] = $id;
-                    $_consultaConCita = new ConsultaCitaModel();
-                    $consulta_cita_id = $_consultaConCita->insert($consulta_separada[0]);
-                    
-                    if ($consulta_cita_id == 0) {
-                        $_consultaModel = new ConsultaModel();
-                        $_consultaModel->where('consulta_id', '=',$id)->delete();
-
-                        $respuesta = new Response(false, 'Ocurrió un error insertando la relación consulta_cita');
-                        return $respuesta->json(400);
-                    }
-
-                } else if (!$por_cita && $mensaje) {
-
-                    $consulta_separada[0]['consulta_id'] = $id;
-                    $_consultaSinCita = new ConsultaSinCitaModel();
-                    $consulta_sin_cita = $_consultaSinCita->insert($consulta_separada[0]);
-                    
-                    if ($consulta_sin_cita == 0) {
-                        $_consultaModel = new ConsultaModel();
-                        $_consultaModel->where('consulta_id', '=',$id)->delete();
-                        
-                        $respuesta = new Response(false, 'Ocurrió un error insertando la relación consulta_sin_cita');
-                        return $respuesta->json(400);
-                    }
-                }
-
-                if ($mensaje) {
-
-                    if ($examenes) {
-
-                        $respuestaExamen = $this->insertarExamen($examenes, $id);
-                        if ($respuestaExamen) {
-                            return $respuestaExamen;
-                        }
-                    }
-
-                    if ($insumos) {
-
-                        $respuestaInsumo = $this->insertarInsumo($insumos, $id);
-                        if ($respuestaInsumo) {
-                            return $respuestaInsumo;
-                        }
-                    }
-
-                    if ($recipe) {
-
-                        $respuestaRecipe = $this->insertarRecipe($recipe, $id);
-                        if ( $respuestaRecipe) { return $respuestaRecipe; }
-                    }
-
-                    if ($indicaciones) {
-                        
-                        $respuestaIndicaciones = $this->insertarIndicaciones($indicaciones, $id);
-                        if ($respuestaIndicaciones) {
-                            return $respuestaIndicaciones;
-                        }
-                    }
-
-                    $respuesta = new Response('INSERCION_EXITOSA');
-
-                    if ($por_cita) {
-                    
-                        $cambioEstatus = array('estatus_cit' => '4');
-                        $_citaModel = new CitaModel;
-                        $res = $_citaModel->where('cita_id', '=', $data['cita_id'])->update($cambioEstatus);
-                        
-                        if ($res <= 0) {
-                            $respuesta->setData('La consulta fue insertada, pero la cita no fue actualizada correctamente, por favor actualicela manualmente para evitar errores');
-                        }
-                    }
-
-                    return $respuesta->json(201);
-                } else {
-                    $respuesta = new Response('INSERCION_FALLIDA');
+        } else {
+        
+            $data = $validarConsulta->dataScape($_POST);
+            $por_cita = isset($data['cita_id']);
+            $consulta_separada = $this->separarInformación($data, $por_cita);
+            
+            // Validaciones generales si es por cita o si es sin cita
+            if ($por_cita) {
+                if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita') ) {
+                    $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
+                    return $respuesta->json(400);
+                } else if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 3, 'cita') ) {
+                    $respuesta = new Response(false, 'Para realizar la consulta la cita debe tener su clave correspondiente');
                     return $respuesta->json(400);
                 }
+
+            }
+            
+            if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad')) {
+                $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
+                return $respuesta->json(400);
+            }
+
+            $_consultaModel = new ConsultaModel();
+            $this->consulta_id = $_consultaModel->insert($consulta_separada[1]);
+            $mensaje = ($this->consulta_id > 0);
+            
+            if ($por_cita && $mensaje) {
+
+                $consulta_separada[0]['consulta_id'] = $this->consulta_id;
+                $_consultaConCita = new ConsultaCitaModel();
+                $consulta_cita_id = $_consultaConCita->insert($consulta_separada[0]);
+                
+                if ($consulta_cita_id == 0) {
+                    $_consultaModel = new ConsultaModel();
+                    $_consultaModel->where('consulta_id', '=',$this->consulta_id)->delete();
+
+                    $respuesta = new Response(false, 'Ocurrió un error insertando la relación consulta_cita');
+                    return $respuesta->json(400);
+                }
+
+            } else if (!$por_cita && $mensaje) {
+
+                $consulta_separada[0]['consulta_id'] = $this->consulta_id;
+                $_consultaSinCita = new ConsultaSinCitaModel();
+                $consulta_sin_cita = $_consultaSinCita->insert($consulta_separada[0]);
+                
+                if ($consulta_sin_cita == 0) {
+                    $_consultaModel = new ConsultaModel();
+                    $_consultaModel->where('consulta_id', '=',$this->consulta_id)->delete();
+                    
+                    $respuesta = new Response(false, 'Ocurrió un error insertando la relación consulta_sin_cita');
+                    return $respuesta->json(400);
+                }
+            }
+        }
+
+        if ( $this->consulta_id > 0) {
+
+            if ($examenes) {
+
+                $respuestaExamen = $this->insertarExamen($examenes, $this->consulta_id);
+                if ($respuestaExamen) {
+                    return $respuestaExamen;
+                }
+            }
+
+            if ($insumos) {
+
+                $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id);
+                if ($respuestaInsumo) {
+                    return $respuestaInsumo;
+                }
+            }
+
+            if ($recipe) {
+
+                $respuestaRecipe = $this->insertarRecipe($recipe, $this->consulta_id);
+                if ( $respuestaRecipe) { return $respuestaRecipe; }
+            }
+
+            if ($indicaciones) {
+                
+                $respuestaIndicaciones = $this->insertarIndicaciones($indicaciones, $this->consulta_id);
+                if ($respuestaIndicaciones) {
+                    return $respuestaIndicaciones;
+                }
+            }
+
+            $respuesta = new Response('INSERCION_EXITOSA');
+
+            if ( isset($data['cita_id']) ) {
+            
+                $cambioEstatus = array('estatus_cit' => '4');
+                $_citaModel = new CitaModel;
+                $res = $_citaModel->where('cita_id', '=', $data['cita_id'])->update($cambioEstatus);
+                
+                if ($res <= 0) {
+                    $respuesta->setData('La consulta fue insertada, pero la cita no fue actualizada correctamente, por favor actualicela manualmente para evitar errores');
+                }
+            }
+
+            return $respuesta->json(201);
+        } else {
+            $respuesta = new Response('INSERCION_FALLIDA');
+            return $respuesta->json(400);
         }
     }
 
@@ -322,7 +316,11 @@ class ConsultaController extends Controller {
         $consultas = [];
         
         foreach ($consultaList as $consulta) {
-            $consultas[] = $this->getInformacion($consulta);
+            if ($consulta->es_emergencia) {
+                $consultas[] = ConsultaService::obtenerConsultaEmergencia($consulta);
+            } else {
+                $consultas[] = ConsultaService::obtenerConsultaNormal($consulta);
+            }
         }
 
         $mensaje = (count($consultas) > 0);
@@ -338,6 +336,11 @@ class ConsultaController extends Controller {
         
         $consultasPaciente = array_filter($consultas, fn($consulta) => $consulta->paciente_id == $paciente_id);
         
+        $pruebas = [];
+        foreach ($consultasPaciente as $consulta) {
+            $consultasArray[] = $consulta;
+        }
+
         $_antecedenteModel = new AntecedenteMedicoModel();
         $selectAntecedentes = [
             "antecedentes_medicos.descripcion",
@@ -357,9 +360,9 @@ class ConsultaController extends Controller {
         $resultado['antecedentes_medicos'] = $antecedentList;
         $consultasCompletas = [];
 
-        if (count($consultasPaciente)) {
-            foreach ($consultasPaciente as $consulta) {
-                $consultasCompletas[] = $this->setRelaciones($consulta->consulta_id);
+        if (count($consultasArray)) {
+            foreach ($consultasArray as $consulta) {
+                $consultasCompletas[] = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
             }
     
             if ( count($consultasCompletas) > 0) {
@@ -367,18 +370,13 @@ class ConsultaController extends Controller {
             }
         }
         
-        $resultado['consultas'] = $consultasPaciente;
+        $resultado['consultas'] = $consultasArray;
 
         $mensaje = (count($resultado) > 0);
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($resultado);
 
         return $respuesta->json($mensaje ? 200 : 404);
-
-        // $mensaje = (!is_null($consultas));
-        //     $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        //     $respuesta->setData($consultas);
-        //     return $respuesta->json(200);
     }
 
     public function listarConsultaPorId($consulta_id) {
@@ -389,7 +387,7 @@ class ConsultaController extends Controller {
                                         ->getFirst();
         
         if ( !is_null($consultaList) ) {
-            $consultas = $this->getInformacion($consultaList);
+            $consultas = ConsultaHelper::obtenerInformacionCompleta($consultaList);
         
             $mensaje = (!is_null($consultas));
             $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
@@ -401,30 +399,6 @@ class ConsultaController extends Controller {
             return $respuesta->json(400);
         }
     }
-
-    // public function eliminarConsulta($consulta_id) {
-
-    //     $validarConsulta = new Validate;
-    //     $token = $validarConsulta->validateToken(apache_request_headers());
-    //     if (!$token) {
-    //         $respuesta = new Response('TOKEN_INVALID');
-    //         return $respuesta->json(401);
-    //     }
-
-    //     $_consultaModel = new ConsultaModel();
-    //     $_consultaModel->byUser($token);
-    //     $data = array(
-    //         "estatus_con" => "2"
-    //     );
-
-    //     $eliminado = $_consultaModel->where('consulta_id', '=', $consulta_id)->update($data, 1);
-    //     $mensaje = ($eliminado > 0);
-
-    //     $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');
-    //     $respuesta->setData($eliminado);
-
-    //     return $respuesta->json($mensaje ? 200 : 400);
-    // }
 
     // Códigos de consultas_insumo
     public function validarInsumos($insumos) {
@@ -499,119 +473,7 @@ class ConsultaController extends Controller {
         return false;
     }
 
-    // public function eliminarConsultaInsumo($consulta_insumo_id){
-
-    //     $_consultaInsumoModel = new ConsultaInsumoModel();
-    //     $data = array(
-    //         "estatus_con" => "2"
-    //     );
-
-    //     $eliminado = $_consultaInsumoModel->where('consulta_insumo_id', '=', $consulta_insumo_id)->update($data);
-    //     $mensaje = ($eliminado > 0);
-
-    //     $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'NOT_FOUND');
-    //     $respuesta->setData($eliminado);
-
-    //     return $respuesta->json($mensaje ? 200 : 400);
-    // }
-
     // Funciones extras
-
-    public function setRelaciones($consulta_id) { // Método para unir las relaciones de las consultas en el getAll
-
-        $_consultaModel = new ConsultaModel();
-        $innersExa = $_consultaModel->listInner($this->arrayInnerExa);
-        $consulta_examenes = $_consultaModel->where('consulta_examen.consulta_id', '=', $consulta_id)->where('consulta_examen.estatus_con', '=', 1)->innerJoin($this->arraySelectExa, $innersExa, "consulta_examen");
-        $consultas = new stdClass();
-
-        if ($consulta_examenes) {
-            $consultas->examenes = $consulta_examenes;
-        }
-
-        $_consultaModel = new ConsultaModel();
-        $innersIns = $_consultaModel->listInner($this->arrayInnerIns);
-        $consulta_insumos = $_consultaModel->where('consulta_insumo.consulta_id', '=', $consulta_id)->where('consulta_insumo.estatus_con', '=', 1)->innerJoin($this->arraySelectIns, $innersIns, "consulta_insumo");
-
-        if ($consulta_insumos) {
-            $consultas->insumos = $consulta_insumos;
-        }
-
-        $_consultaIndicacionesModel = new ConsultaIndicacionesModel();
-        $consulta_indicaciones = $_consultaIndicacionesModel->where('consulta_indicaciones.consulta_id', '=', $consulta_id)->getAll();
-
-        if($consulta_indicaciones){
-            $consultas->indicaciones = $consulta_indicaciones;
-        }
-
-        $_consultaRecipeModel = new ConsultaRecipeModel();
-        $innersRec = $_consultaRecipeModel->listInner($this->arrayInnerRec);
-        $consulta_recipes = $_consultaRecipeModel->where('consulta_recipe.consulta_id', '=', $consulta_id)->innerJoin($this->arraySelectRec, $innersRec, "consulta_recipe");
-
-        if($consulta_recipes){
-            $consultas->recipes = $consulta_recipes;
-        }
-
-        $_consultaModel = new ConsultaModel();
-        $innersRec = $_consultaModel->listInner($this->arrayInnerRec);
-        $recipesList = $_consultaModel->where('consulta_recipe.consulta_id', '=', $consulta_id)
-                                        ->innerJoin($this->arraySelectRec, $innersRec, "consulta_recipe");
-        
-        if ($recipesList) {
-            $consultas->recipes = $recipesList;
-        }
-
-        $_indicacionesModel = new ConsultaIndicacionesModel();
-        $indicacionesList = $_indicacionesModel->where('consulta_indicaciones.consulta_id', '=', $consulta_id)
-                                                ->getAll();
-
-        if ($indicacionesList) {
-            $consultas->indicaciones = $indicacionesList;
-        }
-        
-        return $consultas;
-    }
-
-    public function getInformacion($consulta) {
-        // Obtenemos el resto de la información de la consulta
-        $_consultaCita = new ConsultaCitaModel();
-        $innersCita = $_consultaCita->listInner($this->innerConsultaCita);
-        $es_citada = $_consultaCita->where('consulta_cita.consulta_id', '=', $consulta->consulta_id)
-                                ->where('consulta.estatus_con','=',1)
-                                ->innerJoin($this->selectConsultaCita, $innersCita, "consulta_cita");
-
-                                // var_dump($es_citada);
-
-        if (is_null($es_citada) || count($es_citada) == 0 ) { // Si no es por cita, extraemos la información de consulta_sin_cita
-            $_consultaSinCita = new ConsultaSinCitaModel();
-            $innersConsulta = $_consultaSinCita->listInner($this->innerConsultaSinCita);
-            $consultaCompleta = $_consultaSinCita->where('consulta_sin_cita.consulta_id', '=', $consulta->consulta_id)
-                                                ->innerJoin($this->selectConsultaSinCita, $innersConsulta, "consulta_sin_cita");
-
-                                                // var_dump($consultaCompleta);
-            $relaciones = $this->setRelaciones($consulta->consulta_id);
-            
-            if (count((array) $relaciones) > 0) {
-                $consultaCompleta[0] = (object) array_merge((array) $consultaCompleta[0], (array) $relaciones);
-            }
-            
-            return $consultas[] = (object) array_merge((array) $consulta, (array) $consultaCompleta[0]);
-            
-        } else { // Si es por cita extraemos la información de consulta_cita
-            $_cita = new CitaModel();
-            $cita = $_cita->where('cita_id', '=', $es_citada[0]->cita_id)->getFirst();
-
-            $consultaCompleta = (object) array_merge((array) $es_citada[0], (array) $consulta);
-            $consultaCompleta = (object) array_merge((array) $consultaCompleta, (array) $cita);
-
-            $relaciones = $this->setRelaciones($consulta->consulta_id);
-            if (count((array) $relaciones) > 0) {
-                $consultaCompleta = (object) array_merge((array) $consultaCompleta, (array) $relaciones);
-            }
-            // var_dump($es_citada[0]);
-            
-            return $consultas[] = (object) array_merge((array) $consultaCompleta, (array) $relaciones);
-        }
-    }
 
     // insertar recipe
     public function insertarRecipe($recipes, $consulta) {

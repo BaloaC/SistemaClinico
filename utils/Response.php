@@ -42,6 +42,10 @@ class Response{
             return json_encode($obj);
         }
 
+        // Ejecutando el middleware
+        // $auditMiddleware = new AuditMiddleware();
+        // $auditMiddleware->handleResponse();
+
         return json_encode($this);
     }
 

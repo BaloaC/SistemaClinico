@@ -33,11 +33,6 @@ class EmpresaController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         
         $validarEmpresa = new Validate;
-        $token = $validarEmpresa->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
 
         switch($_POST) {
             case ($validarEmpresa->isEmpty($_POST)):
@@ -59,7 +54,6 @@ class EmpresaController extends Controller{
                 $data = $validarEmpresa->dataScape($_POST);
                 
                 $_empresaModel = new EmpresaModel();
-                $_empresaModel->byUser($token);
                 $id = $_empresaModel->insert($data);
  
                  if ($id > 0) {
@@ -81,13 +75,8 @@ class EmpresaController extends Controller{
         
         $camposKey = array($empresa_id);
         $validarEmpresa = new Validate;
-        $token = $validarEmpresa->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
         
-         switch($_POST) {
+        switch($_POST) {
             case $validarEmpresa->isEmpty($_POST):
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
@@ -132,7 +121,6 @@ class EmpresaController extends Controller{
 
                     //Si hay más data por enviar, se hace el update de la empresa    
                     $_empresaModel = new EmpresaModel();
-                    $_empresaModel->byUser($token);
                     $actualizado = $_empresaModel->where('empresa_id','=',$empresa_id)->update($data);
                     $mensaje = ($actualizado > 0);
 
@@ -207,19 +195,13 @@ class EmpresaController extends Controller{
     public function eliminarEmpresa($empresa_id){
 
         $validarEmpresa = new Validate;
-        $token = $validarEmpresa->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
 
         $_EmpresaModel = new EmpresaModel();
-        $_EmpresaModel->byUser($token);
         $data = array(
             "estatus_emp" => "2"
         );
         
-        $eliminado = $_EmpresaModel->where('empresa_id','=',$empresa_id)->update($data, 1);
+        $eliminado = $_EmpresaModel->where('empresa_id','=',$empresa_id)->update($data);
         $mensaje = ($eliminado > 0);
         
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

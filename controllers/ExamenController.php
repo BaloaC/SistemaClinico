@@ -1,5 +1,7 @@
 <?php
 
+include_once "./services/examen/ExamenValidaciones.php";
+
 class ExamenController extends Controller{
 
     //Método index (vista principal)
@@ -21,36 +23,18 @@ class ExamenController extends Controller{
     public function insertarExamen(/*Request $request*/){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        $exclude = array('hecho_aqui');
+        
         $validarExamen = new Validate;
+        ExamenValidaciones::validarExamen($_POST);
 
-        switch ($validarExamen) {
-            case $validarExamen->isEmpty($_POST, $exclude):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
-            
-            case ($validarExamen->isDuplicated('examen', 'nombre', $_POST['nombre'])):
-                $respuesta = new Response('DATOS_DUPLICADOS');
-                return $respuesta->json(400);
+        $data = $validarExamen->dataScape($_POST);    
 
-            case $_POST['hecho_aqui'] != 1 && $_POST['hecho_aqui'] != 0:
-                $respuesta = new Response(false, 'El campo hecho aqui solo permite valores booleanos');
-                return $respuesta->json(400);
+        $_examenModel = new ExamenModel();
+        $id = $_examenModel->insert($data);
+        $mensaje = ($id > 0);
 
-            default:
-                $data = $validarExamen->dataScape($_POST);    
-
-                $_examenModel = new ExamenModel();
-                $header = apache_request_headers();
-                $token = substr($header['Authorization'], 7);
-                $_examenModel->byUser($token);
-                $id = $_examenModel->insert($data);
-                $mensaje = ($id > 0);
-        
-                $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-        
-                return $respuesta->json($mensaje ? 201 : 400);
-        }
+        $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+        return $respuesta->json($mensaje ? 201 : 400);
     }
 
     public function listarExamen(){
@@ -105,9 +89,6 @@ class ExamenController extends Controller{
                 }
 
                 $_examenModel = new ExamenModel();
-                $header = apache_request_headers();
-                $token = substr($header['Authorization'], 7);
-                $_examenModel->byUser($token);
                 $id = $_examenModel->where('examen_id', '=', $examen_id)->update($data);
                 $mensaje = ($id > 0);
         
@@ -120,19 +101,13 @@ class ExamenController extends Controller{
     public function eliminarExamen($examen_id){
 
         $validarExamen = new Validate;
-        $token = $validarExamen->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
 
         $_examenModel = new ExamenModel();
-        $_examenModel->byUser($token);
         $data = array (
             "estatus_exa" => "2"
         );
 
-        $eliminado = $_examenModel->where('examen_id','=',$examen_id)->update($data, 1);
+        $eliminado = $_examenModel->where('examen_id','=',$examen_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

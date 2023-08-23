@@ -9,7 +9,8 @@ return [
     PATH_DATABASE,
     PATH_UTILS,
     PATH_AUTOLOADER,
-    PATH_ROUTES
+    PATH_ROUTES,
+    PATH_MIDDLEWARES
 ];
 
 

@@ -37,12 +37,6 @@ class EspecialidadController extends Controller{
         $camposString = array("nombre");
         $validarEspecialidad = new Validate;
 
-        $token = $validarEspecialidad->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
-
         switch($_POST) {
             case $validarEspecialidad->isEmpty($_POST):
                 $respuesta = new Response('DATOS_VACIOS');
@@ -57,7 +51,6 @@ class EspecialidadController extends Controller{
                 $data = $validarEspecialidad->dataScape($_POST);
 
                 $_especialidadModel = new EspecialidadModel();
-                $_especialidadModel->byUser($token);
                 $id = $_especialidadModel->insert($data);
 
                 $mensaje = ($id > 0);
@@ -67,7 +60,6 @@ class EspecialidadController extends Controller{
     }
 
     public function listarEspecialidades(){
-
         $_especialidadModel = new EspecialidadModel();
         $especialidad = $_especialidadModel->where('estatus_esp', '=', '1')->getAll();
         $resultado = array();
@@ -126,12 +118,6 @@ class EspecialidadController extends Controller{
         $camposString = array("nombres");
         $validarEspecialidad = new Validate;
 
-        $token = $validarEspecialidad->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
-
         switch($_POST) {
             case ($validarEspecialidad->isEmpty($_POST)):
                 $respuesta = new Response('DATOS_VACIOS');
@@ -154,7 +140,6 @@ class EspecialidadController extends Controller{
             $data = $validarEspecialidad->dataScape($_POST);
 
             $_especialidadModel = new EspecialidadModel();
-            $_especialidadModel->byUser($token);
             $actualizado = $_especialidadModel->where('especialidad_id','=',$especialidad_id)->update($data);
 
             $mensaje = ($actualizado > 0);
@@ -171,18 +156,11 @@ class EspecialidadController extends Controller{
         $_especialidadModel = new EspecialidadModel();
         $validarEspecialidad = new Validate;
 
-        $token = $validarEspecialidad->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
-
-        $_especialidadModel->byUser($token);
         $data = array(
             "estatus_esp" => "2"
         );
 
-        $eliminado = $_especialidadModel->where('especialidad_id','=',$especialidad_id)->update($data, 1);
+        $eliminado = $_especialidadModel->where('especialidad_id','=',$especialidad_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

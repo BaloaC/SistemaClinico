@@ -25,17 +25,11 @@ class InsumoController extends Controller{
         $camposNumericos = array("precio");
         $validarInsumo = new Validate;
         
-        $token = $validarInsumo->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
-
         switch($validarInsumo) {
             case ($validarInsumo->isEmpty($_POST)):
-               $respuesta = new Response('DATOS_VACIOS');
-               return $respuesta->json(400);
-       
+                $respuesta = new Response('DATOS_VACIOS');
+                return $respuesta->json(400);
+
             case $validarInsumo->isDuplicated('insumo', 'nombre', $_POST["nombre"]):
                 $respuesta = new Response('DATOS_DUPLICADOS');
                 return $respuesta->json(400);
@@ -48,7 +42,6 @@ class InsumoController extends Controller{
                 
                 $data = $validarInsumo->dataScape($_POST);
                 $_insumoModel = new InsumoModel();
-                $_insumoModel->byUser($token);
                 $id = $_insumoModel->insert($data);
                 $mensaje = ($id > 0);
 
@@ -75,20 +68,12 @@ class InsumoController extends Controller{
 
     public function eliminarInsumo($insumo_id){
         
-        $validarInsumo = new Validate;
-        $token = $validarInsumo->validateToken(apache_request_headers());
-        if (!$token) {
-            $respuesta = new Response('TOKEN_INVALID');
-            return $respuesta->json(401);
-        }
-        
         $_insumoModel = new InsumoModel();
-        $_insumoModel->byUser($token);
         $data = array(
             "estatus_ins" => "2"
         );
 
-        $eliminado = $_insumoModel->where('insumo_id','=',$insumo_id)->update($data, 1);
+        $eliminado = $_insumoModel->where('insumo_id','=',$insumo_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');
