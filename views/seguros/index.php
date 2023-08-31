@@ -221,8 +221,6 @@
     <?php include constant('PATH_VIEWS') . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/login/validarSesion.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/seguros/registrarSeguro.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/seguros/actualizarSeguro.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/seguros/eliminarSeguro.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/seguros/filtrarSeguros.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/seguros/deleteExamenSeguroInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/seguros/addExamenSeguroInput.js'); ?>"></script>

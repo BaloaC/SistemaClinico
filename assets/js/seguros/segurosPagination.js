@@ -14,11 +14,11 @@ export async function segurosPagination(registros) {
 
     function crearTarjeta(registro, plantilla, separadores = {}) {
         // Crear el elemento de la tarjeta
-        const tarjeta = document.createElement('div');
+        const tarjeta = document.createElement('a');
         tarjeta.classList.add('card-container', 'col-xl-4', 'col-lg-4', 'col-md-6', 'col-sm-12');
-        tarjeta.setAttribute("onclick", `getSeguro(${registro.seguro_id})`);
-        tarjeta.setAttribute("data-bs-toggle", "modal");
-        tarjeta.setAttribute("data-bs-target", "#modalInfo");
+        tarjeta.setAttribute("href", `factura/consultaSeguro?seguro=${registro.seguro_id}`);
+        // tarjeta.setAttribute("data-bs-toggle", "modal");
+        // tarjeta.setAttribute("data-bs-target", "#modalInfo");
 
         // Agregar el contenido a la tarjeta
         tarjeta.innerHTML = plantilla.replace(/\${(.*?)}/g, (match, p1) => {
