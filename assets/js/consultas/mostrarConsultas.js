@@ -3,6 +3,7 @@ import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicS
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
 const path = location.pathname.split('/');
 const especialidadSelect = document.getElementById("s-especialidad");
@@ -138,7 +139,12 @@ addEventListener("DOMContentLoaded", async e => {
         language: {
             url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
         },
-        ajax: `/${path[1]}/consultas/consulta/`,
+        ajax: {
+            url: `/${path[1]}/consultas/consulta/`,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
+            }
+        },
         columns: [
             {
                 "className": 'dt-control',

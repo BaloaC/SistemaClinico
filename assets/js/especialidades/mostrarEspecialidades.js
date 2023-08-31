@@ -1,4 +1,5 @@
 const path = location.pathname.split('/');
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import { removeAddAnalist,removeAddMD } from "../global/validateRol.js";
 
 
@@ -10,7 +11,12 @@ addEventListener("DOMContentLoaded", e => {
         language: {
             url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
         },
-        ajax: `/${path[1]}/especialidades/consulta/`,
+        ajax: {
+            url :`/${path[1]}/especialidades/consulta/`,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
+            }
+        },
         columns: [
 
             { data: "especialidad_id" },

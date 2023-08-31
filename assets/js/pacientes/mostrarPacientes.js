@@ -44,7 +44,12 @@ addEventListener("DOMContentLoaded", e => {
         language: {
             url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
         },
-        ajax: `/${path[1]}/pacientes/consulta/`,
+        ajax: {
+            url: `/${path[1]}/pacientes/consulta/`,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
+            }
+        },
         columns: [
             {
                 "className": 'dt-control',

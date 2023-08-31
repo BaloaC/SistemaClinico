@@ -7,7 +7,6 @@ export default async function getById(module,id) {
         const options = {
             method: "GET",
             headers: {
-                
                 "Authorization": "Bearer " + Cookies.get("tokken")
             }
         };

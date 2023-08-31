@@ -4,7 +4,8 @@ import Cookies from "../../libs/jscookie/js.cookie.min.js";
 export default async function addModule(module, form, data, successMessage, modal = "#modalReg", alert =".alert") {
 
     const $form = document.getElementById(form),
-        $alert = document.querySelector(alert);
+        $alert = document.querySelector(alert),
+        modalActContent = document.querySelector(modal);
 
     try {
 
@@ -22,7 +23,7 @@ export default async function addModule(module, form, data, successMessage, moda
         const response = await fetch(`/${path[1]}/${module}`, options),
             json = await response.json();
 
-        if (response.status != 201) throw { result: json }
+        if (response.status != 201 && response.status != 200) throw { result: json }
 
         $alert.classList.remove("alert-danger");
         $alert.classList.add("alert-success");

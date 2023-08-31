@@ -59,23 +59,23 @@
                         <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Seguro</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalRegContent">
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-seguro" class="p-3 px-4">
                             <label for="rif">Rif</label>
                             <div class="input-group mb-3">
-                                <select name="cod_rif" id="cod-rif" class="me-2" required>
+                                <select name="cod_rif" id="cod-rif" class="me-2" >
                                     <option value="J">J</option>
                                     <option value="E">E</option>
                                 </select>
-                                <input type="number" name="rif" class="form-control" data-validate="true" data-type="rif" data-max-length="9" required>
+                                <input type="number" name="rif" class="form-control" data-validate="true" data-type="rif" data-max-length="9" >
                                 <small class="form-text col-12">El rif debe contener 9 digitos</small>
                             </div>
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" >
                             <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="direccion">Dirección</label>
-                            <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                            <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" >
                             <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                             <label for="telefono">Teléfono</label>
                             <div class="input-group mb-3">
@@ -86,15 +86,37 @@
                                     <option value="0416">0416</option>
                                     <option value="0426">0426</option>
                                 </select>
-                                <input type="number" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
+                                <input type="number" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" >
                                 <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
                             </div>
-                            <label for="tipo-seguro">Tipo de Seguro</label>
-                            <select name="tipo_seguro" class="form-control" required>
-                                <option value="">Seleccione el tipo de seguro</option>
-                                <option value="1">Acumulativo</option>
-                                <option value="2">Normal</option>
-                            </select>
+                            <label for="porcentaje">Porcentaje</label>
+                            <div class="input-group">
+                                <span class="input-group-text label-input-char" id="addon">%</span>
+                                <input type="number" name="porcentaje" class="form-control" data-validate="true" data-type="number" data-max-length="3" >
+                                <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
+                            </div>
+                            <label for="costo_consulta">Costo consulta</label>
+                            <input type="number" step="any" name="costo_consulta" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" >
+                            <small class="form-text">El precio de ser mayor o igual a 0</small>
+                            <h5 class="mt-4 mb-3" id="submenu-examenes-title">Precios exámenes</h5>
+                            <div class="row align-items-center">
+                                <div class="col-2">
+                                    <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>
+                                </div>
+                                <div class="col-10">
+                                    <div class="col-11">
+                                        <label for="examen">Exámen</label>
+                                        <select name="examen_id" id="s-examen_id" class="form-control mb-3 examen" data-active="0" >
+                                            <option value="" selected>Seleccione un exámen</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-11">
+                                        <label for="costo">Costo</label>
+                                        <input type="number" name="costo" class="form-control costos" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary mt-3" id="addExamen" onclick="addExamenSeguroInput()">Añadir otro exámen</button>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -118,7 +140,6 @@
                             <p>RIF: <span id="rifSeguro"></span></p>
                             <p>Dirección: <span id="direcSeguro"></span></p>
                             <p>Telefono: <span id="telSeguro"></span></p>
-                            <p>Tipo de Seguro: <span id="tipoSeguro"></span></p>
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
@@ -146,14 +167,14 @@
                                     <option value="J">J</option>
                                     <option value="E">E</option>
                                 </select>
-                                <input type="text" name="rif" class="form-control" data-validate="true" data-type="rif" data-max-length="9" required>
+                                <input type="text" name="rif" class="form-control" data-validate="true" data-type="rif" data-max-length="9" >
                                 <small class="form-text col-12">El rif debe contener 9 digitos</small>
                             </div>
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" >
                             <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="direccion">Dirección</label>
-                            <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                            <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" >
                             <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                             <label for="telefono">Teléfono</label>
                             <div class="input-group mb-3">
@@ -164,14 +185,9 @@
                                     <option value="0416">0416</option>
                                     <option value="0426">0426</option>
                                 </select>
-                                <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
+                                <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" >
                                 <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
                             </div>
-                            <label for="tipo-seguro">Tipo de Seguro</label>
-                            <select name="tipo_seguro" class="form-control mb-3" required>
-                                <option value="1">Acumulativo</option>
-                                <option value="2">Normal</option>
-                            </select>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -208,6 +224,8 @@
     <script type="module" src="<?php echo Url::to('assets/js/seguros/actualizarSeguro.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/seguros/eliminarSeguro.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/seguros/filtrarSeguros.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/seguros/deleteExamenSeguroInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/seguros/addExamenSeguroInput.js'); ?>"></script>
 
 </body>
 

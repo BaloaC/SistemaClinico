@@ -32,15 +32,15 @@ Router::get('/login', LoginController::class . '@index');
 Router::get('/login/recuperarusuario', LoginController::class . '@recuperarUsuarioView');
 
 // //Login - API
-Router::post('/login', LoginController::class . '@entrar', [$AuthenticationMiddleware]);
-Router::post('/login/:id', LoginController::class . '@recuperarUsuario', [$AuthenticationMiddleware]);
+Router::post('/login', LoginController::class . '@entrar');
+Router::post('/login/:id', LoginController::class . '@recuperarUsuario');
 
 // //Preguntas - API
 Router::get('/preguntas/consulta', PreguntaSeguridadController::class . '@listarPreguntas', [$AuthenticationMiddleware]);
 Router::get('/preguntas/:id', PreguntaSeguridadController::class . '@listarPreguntasPorId', [$AuthenticationMiddleware]);
 Router::get('/preguntas/usuario', PreguntaSeguridadController::class . '@listarPreguntasPorUsuarioId');
 Router::post('/pregunta/:id', PreguntaSeguridadController::class . '@insertarPregunta', [$AuthenticationMiddleware]);
-Router::post('/respuesta/:id', PreguntaSeguridadController::class . '@comprobarPregunta', [$AuthenticationMiddleware]);
+Router::post('/respuesta/:id', PreguntaSeguridadController::class . '@comprobarPregunta',);
 
 // //Ruta principal
 Router::get('/', LoginController::class . '@index');
@@ -55,8 +55,8 @@ Router::get('/usuarios/actualizar/:id', UsuarioController::class . '@formActuali
 
 // //Usuario - API
 Router::get('/usuarios/consulta', UsuarioController::class . '@listarUsuarios');
-Router::get('/usuarios/:id', UsuarioController::class . '@listarUsuarioPorId',);
-Router::post('/usuarios', UsuarioController::class . '@insertarUsuario', [$AuthenticationMiddleware]);
+Router::get('/usuarios/:id', UsuarioController::class . '@listarUsuarioPorId');
+Router::post('/usuarios', UsuarioController::class . '@insertarUsuario');
 Router::put('/usuarios/:id', UsuarioController::class . '@actualizarUsuario', [$AuthenticationMiddleware]);
 Router::delete('/usuarios/:id', UsuarioController::class . '@eliminarUsuario',);
 
@@ -274,11 +274,14 @@ Router::delete('/factura/consultaSeguro/:id', ConsultaSeguroController::class . 
 
 // //Factura_Seguro - Vistas
 Router::get('/factura/seguro', FacturaSeguroController::class . '@index');
+Router::get('/factura/seguros/:id', FacturaSeguroController::class . '@index');
+Router::get('/factura/seguroAge', FacturaSeguroController::class . '@segurosAge');
 Router::get('/factura/seguro/registrar', FacturaSeguroController::class . '@formRegistrarFacturaSeguro');
 Router::get('/factura/seguro/actualizar/:id', FacturaSeguroController::class . '@formActualizarFacturaSeguro');
 
 // //Factura_Seguro - API
 Router::get('/factura/seguro/consulta', FacturaSeguroController::class . '@listarFacturaSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+Router::get('/factura/seguro/consultaseguro', FacturaSeguroController::class . '@listarFacturaSeguroPorFecha', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::get('/factura/seguro/:id', FacturaSeguroController::class . '@listarFacturaSeguroPorSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::get('/factura/facturaSeguro/:id', FacturaSeguroController::class . '@listarFacturaPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::put('/factura/seguro/:id', FacturaSeguroController::class . '@actualizarFacturaSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);

@@ -2,20 +2,21 @@
 @import url('base.css');
 @import url('nav.css');
 
-.list-seg {
+.fa-eye {
+    color: #fff;
+}
+
+.list-seg, .seguro-dropdown-link, .list-group-item, .list-seg > li > article,  .list-seg > li {
     display: flex;
+} 
+
+.list-seg {
     justify-content: space-around;
     flex-wrap: wrap;
     padding: 3rem 0;
 }
 
-form,
-.modal-dialog-scrollable .modal-body {
-    /* overflow: hidden; */
-}
-
 .seguro-dropdown-link, .list-seg > li > article,  .list-seg > li{
-    display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -63,7 +64,6 @@ form,
 }
 
 .list-group-item {
-    display: flex;
     justify-content: space-between;
 }
 

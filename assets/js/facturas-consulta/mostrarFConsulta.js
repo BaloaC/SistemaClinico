@@ -1,4 +1,5 @@
 import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
 const path = location.pathname.split('/');
 
@@ -11,7 +12,12 @@ addEventListener("DOMContentLoaded", e => {
         language: {
             url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
         },
-        ajax: `/${path[1]}/factura/consulta/consulta/`,
+        ajax: {
+            url: `/${path[1]}/factura/consulta/consulta/`,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
+            }
+        },
         columns: [
             {
                 "className": 'dt-control',

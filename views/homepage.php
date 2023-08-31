@@ -269,8 +269,8 @@
 
     <?php include constant('PATH_VIEWS') . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/login/validarSesion.js'); ?>"></script>
-    <script src="<?php echo Url::to('assets/js/homepage/pocosInsumos.js'); ?>"></script>
-    <script src="https://cdn.amcharts.com/lib/5/core.js"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/homepage/pocosInsumos.js'); ?>"></script>
+    <!-- <script src="https://cdn.amcharts.com/lib/5/core.js"></script> -->
     <script type="module" src="<?php echo Url::to('assets/libs/amcharts5/index.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/libs/amcharts5/xy.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/libs/amcharts5/Animated.js'); ?>"></script>

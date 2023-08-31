@@ -1,5 +1,7 @@
 <?php
 
+include_once "./services/facturas/consulta seguro/ConsultaSeguroService.php";
+
 class FacturaSeguroController extends Controller{
 
     protected $arrayInner = array (
@@ -124,6 +126,37 @@ class FacturaSeguroController extends Controller{
         $id = $_facturaSeguroModel->where('factura_seguro.seguro_id', '=', $seguro_id)->innerJoin($this->arraySelect, $inners, "factura_seguro");
         
         return $this->retornarMensaje($id);
+    }
+
+    public function listarFacturaSeguroPorFecha($fecha){
+        
+        $seguro_id = $_GET["seguro"];
+        $mes = $_GET["mes"];
+        $anio = $_GET["anio"];
+
+        $_facturaSeguroModel = new FacturaSeguroModel();
+        $inners = $_facturaSeguroModel->listInner($this->arrayInner);
+        $facturas["factura"] = $_facturaSeguroModel->where('factura_seguro.seguro_id', '=', $seguro_id)->where('YEAR(factura_seguro.fecha_ocurrencia)',"=",$anio)->where('MONTH(factura_seguro.fecha_ocurrencia)', '=', $mes)->innerJoin($this->arraySelect, $inners, "factura_seguro");
+
+        // Si no hay factura en ese año/mes retornar error
+        if(empty($facturas["factura"])) {
+            $respuesta = new Response(false, 'No se encontró factura en la fecha solicitada');
+            return $respuesta->json(400);
+        }
+        
+        $consultasSeguros = ConsultaSeguroService::listarconsultasSeguros();
+        $consultasPorMes = [];
+
+        foreach($consultasSeguros as $consulta){
+
+            if($consulta->seguro_id ==  $seguro_id && date("Y",strtotime($consulta->fecha_ocurrencia)) == $anio && date("m",strtotime($consulta->fecha_ocurrencia)) == $mes){
+                array_push($consultasPorMes,$consulta);
+            }
+        }
+        
+        $facturas["consultas"] = $consultasPorMes; 
+
+        return $this->retornarMensaje($facturas);
     }
 
     public function listarFacturaPorId($factura_seguro_id){

@@ -38,18 +38,16 @@ class Router {
         return;
     }
 
-    public static function any($uri, $function = null)
-    {
+    public static function any($uri, $function = null){
 
         return Router::add('ANY', $uri, $function);
     }
 
     //Método para parsear la uri
-    public static function parseUri($uri)
-    {
+    public static function parseUri($uri){
 
         $uri = trim($uri, '/');
-        $uri = (strlen($uri) > 0) ? $uri : '/';
+        $uri = (strlen($uri) > 0) ? $uri : '';
         return $uri;
     }
 

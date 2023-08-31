@@ -6,9 +6,12 @@ import { segurosPagination } from "./segurosPagination.js";
 async function addSeguro() {
     const $form = document.getElementById("info-seguro"),
         $alert = document.querySelector(".alert");
+    const modalRegContent = document.getElementById("modalRegContent");
 
     try {
         const formData = new FormData($form),
+            examenes = [],
+            costos = [],
             data = {};
 
         formData.forEach((value, key) => (data[key] = value));
@@ -24,7 +27,28 @@ async function addSeguro() {
         data.telefono = data.cod_tel + data.telefono;
         data.rif = data.cod_rif + "-" + data.rif;
 
-        await addModule("seguros", "info-seguro", data, "Seguro registrado exitosamente!")
+        const inputExamenes = document.querySelectorAll(".examen");
+        const inputCostos = document.querySelectorAll(".costos");
+        
+        inputExamenes.forEach((input, key) => {
+            examenes.push(input.value);
+            costos.push(inputCostos[key].value);
+        })
+
+        if (examenes.length === 0 || examenes.length === 0 ) throw { message: "No se ha seleccionado ningún exámen" };
+
+        data.examenes = examenes;
+        data.costos = costos;
+
+        await addModule("seguros", "info-seguro", data, "Seguro registrado exitosamente!");
+
+        // Subir el scroll hasta inicio para visualizar mejor el mensaje de exito
+        modalRegContent.scrollTo({
+            top: 0,
+            bottom: modalRegContent.scrollHeight,
+            behavior: 'smooth'
+        });
+
         Array.from(document.getElementById("info-seguro").elements).forEach(element => {
             element.classList.remove('valid');
         })

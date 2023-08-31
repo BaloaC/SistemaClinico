@@ -11,7 +11,6 @@ async function getSeguro(id) {
             $direcSeguro = document.getElementById("direcSeguro"),
             $telSeguro = document.getElementById("telSeguro"),
             $porcSeguro = document.getElementById("porcSeguro"),
-            $tipoSeguro = document.getElementById("tipoSeguro"),
             $btnActualizar = document.getElementById("btn-actualizar"),
             $btnEliminar = document.getElementById("btn-confirmDelete");
 
@@ -22,7 +21,6 @@ async function getSeguro(id) {
         $rifSeguro.innerText = `${json.rif}`;
         $direcSeguro.innerText = `${json.direccion}`;
         $telSeguro.innerText = `${json.telefono}`;
-        $tipoSeguro.innerText = `${tipoSeguroNombre[json.tipo_seguro - 1]}`;
         $btnActualizar.setAttribute("onclick", `updateSeguro(${id})`);
         $btnEliminar.setAttribute("onclick", `deleteSeguro(${id})`);
 

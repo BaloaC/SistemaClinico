@@ -1,6 +1,15 @@
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
+
+const path = location.pathname.split('/');
+
 $(document).ready(function() {
     let tabla = $('#pocosInsumos').DataTable({
-        ajax: "http://127.0.0.1/proyectoFEO/insumos/consulta/",
+        ajax: {
+            url: `/${path[1]}/insumos/consulta/`,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
+            }
+        },
         columns: [
             {
                 data: "insumo_id"

@@ -1,5 +1,6 @@
 import { select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
 const path = location.pathname.split('/');
 
@@ -107,7 +108,12 @@ addEventListener("DOMContentLoaded", e => {
         language: {
             url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
         },
-        ajax: `/${path[1]}/auditoria/consulta/`,
+        ajax: {
+            url: `/${path[1]}/auditoria/consulta/`,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
+            }
+        },
         columns: [
 
             { data: "auditoria_id" },

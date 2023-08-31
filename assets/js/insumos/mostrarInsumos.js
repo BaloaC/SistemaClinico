@@ -1,3 +1,5 @@
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
+
 const path = location.pathname.split('/');
 
 addEventListener("DOMContentLoaded", e => {
@@ -8,7 +10,12 @@ addEventListener("DOMContentLoaded", e => {
         language: {
             url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
         },
-        ajax: `/${path[1]}/insumos/consulta/`,
+        ajax: {
+            url: `/${path[1]}/insumos/consulta/`,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
+            }
+        },
         columns: [
 
             { data: "insumo_id" },

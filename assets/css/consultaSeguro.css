@@ -1,0 +1,39 @@
+@import url('seguro.css');
+
+#mes-factura{
+    text-transform: capitalize;
+}
+
+.total-amount, .date-filter{
+    display: flex;
+}
+
+.total-amount {
+    justify-content: flex-end;
+    text-align: end;
+}
+
+.total-amount > h5 {
+    padding: 0.5rem
+}
+
+.card {
+    margin: 0;
+    border: 0;
+}
+
+.total-amount-price {
+    box-shadow: 0px 3px 2px #cdcdcd,
+        0px 0px 2px #cdcdcd,
+        3px 0px 2px #cdcdcd,
+        -3px 0px 2px #cdcdcd;
+    margin-bottom: 2rem;
+    display: inline;
+}
+
+/* Datatables custom */
+
+.dataTables_scrollBody {
+    height: 100% !important;
+    max-height: 350px !important;
+}

@@ -1,5 +1,7 @@
 import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import getById from "../global/getById.js";
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
+
 
 const path = location.pathname.split('/');
 
@@ -71,7 +73,6 @@ addEventListener("DOMContentLoaded", async e => {
 
                     return diasRestantes < 0 ? `<span class="badge light badge-danger">Vencida</span>` : diasRestantes;
                 }
-
             },
             {
                 data: "fecha_vencimiento",
@@ -90,7 +91,6 @@ addEventListener("DOMContentLoaded", async e => {
 
                     return diasRestantes < 0 ? Math.abs(diasRestantes) : `<span class="badge light badge-success">Vigente</span>`;
                 }
-
             },
             {
                 data: "estatus_fac",

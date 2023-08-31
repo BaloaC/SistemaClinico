@@ -77,7 +77,7 @@ document.getElementById("siguiente").addEventListener("click", async (event) => 
     try {
 
         const nombreUsuario = document.getElementById("usuario"),
-            usuarioResponse = await getAll(`preguntas/usuario/${nombreUsuario.value}`);
+            usuarioResponse = await getAll(`preguntas/usuario?usuario=${nombreUsuario.value}`);
 
         if (usuarioResponse === undefined) throw { message: "El usuario no es valido o no existe" };
 

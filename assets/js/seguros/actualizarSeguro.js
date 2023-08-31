@@ -3,7 +3,7 @@ import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import updateModule from "../global/updateModule.js";
 import { mostrarSeguros } from "./mostrarSeguros.js";
-import { segurosPagination } from "./segurosPagination.js";
+// import { segurosPagination } from "./segurosPagination.js";
 
 async function updateSeguro(id) {
     const $form = document.getElementById("act-seguro");
@@ -31,6 +31,7 @@ async function updateSeguro(id) {
             }
         }
 
+
         $form.nombre.value = json.nombre;
         $form.nombre.dataset.secondValue = json.nombre;
         $form.rif.value = $rif[1];
@@ -41,9 +42,11 @@ async function updateSeguro(id) {
         $form.telefono.value = $tel[1];
         $form.telefono.dataset.secondValue = $tel[1];
         $form.cod_tel.dataset.secondValue = $telCod;
-        $form.tipo_seguro.value = json.tipo_seguro;
-        $form.tipo_seguro.dataset.secondValue = json.tipo_seguro;
-
+        $form.porcentaje.value = json.porcentaje;
+        $form.porcentaje.dataset.secondValue = json.porcentaje;
+        $form.costo_consulta.value = json.costo_consulta;
+        $form.costo_consulta.secondValue = json.costo_consulta;
+        
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
         $inputId.value = id;
@@ -51,7 +54,7 @@ async function updateSeguro(id) {
         $form.appendChild($inputId);
 
     } catch (error) {
-
+        console.log(error);
         alert(error);
     }
 }
@@ -93,7 +96,7 @@ async function confirmUpdate() {
             element.classList.remove('valid');
         })
         const listadoSeguros = await getAll("seguros/consulta");
-        segurosPagination(listadoSeguros);
+        // segurosPagination(listadoSeguros);
 
     } catch (error) {
         console.log(error);
