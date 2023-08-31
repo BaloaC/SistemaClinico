@@ -106,6 +106,7 @@ Router::delete('/pacienteBeneficiado/:id', PacienteBeneficiadoController::class 
 Router::get('/medicos', MedicoController::class . '@index');
 Router::get('/medicos/registrar', MedicoController::class . '@formRegistrarMedico');
 Router::get('/medicos/actualizar/:id', MedicoController::class . '@formActualizarMedico');
+Router::get('/medicos/perfilmedico', MedicoController::class . '@perfilMedico');
 
 // //Medicos - API
 Router::get('/medicos/consulta', MedicoController::class . '@listarmedicos', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4") )]);

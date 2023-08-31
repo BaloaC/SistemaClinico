@@ -5,7 +5,7 @@ import getById from "../global/getById.js";
 
 const path = location.pathname.split('/');
 
-async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" } = {}) {
+export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" } = {}) {
 
 
     const nombreSeguro = document.getElementById("nombreSeguro");

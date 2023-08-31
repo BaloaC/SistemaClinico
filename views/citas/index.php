@@ -131,6 +131,24 @@
                                                 <option></option>
                                             </select>
                                         </div>
+                                        <div class="col-12">
+                                            <table id="horarios-table" class="table table-borderless" style="display: none;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Día</th>
+                                                        <th>Hora Entrada</th>
+                                                        <th>Hora Salida</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Día</td>
+                                                        <td>Hora Entrada</td>
+                                                        <td>Hora Salida</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                 </div>
                             </div>
                         </form>

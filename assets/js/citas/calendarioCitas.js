@@ -183,14 +183,19 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
         $("#s-medico").on("change", async function (e) {
 
+            $("#horarios-table").fadeOut("slow");
 
             let medico_id = this.value;
             const infoMedico = await getById("medicos", medico_id);
+            const modalReg = document.querySelector("#modalReg .modal-body");
+            const horariosTable = document.querySelector("#horarios-table tbody");
 
             $(especialidadSelect).empty().select2();
 
+            console.log(infoMedico);
+
             dinamicSelect2({
-                obj: infoMedico.especialidad ?? [],
+                obj: infoMedico[0].especialidad ?? [],
                 selectSelector: especialidadSelect,
                 selectValue: "especialidad_id",
                 selectNames: ["nombre_especialidad"],
@@ -199,6 +204,29 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             });
 
             especialidadSelect.disabled = false;
+
+            let listHorarios = "";
+            infoMedico[0].horario.forEach(horario => {
+                
+                listHorarios += `
+                    <tr>
+                        <td>${horario.dias_semana}</td>
+                        <td>${horario.hora_entrada}</td>
+                        <td>${horario.hora_salida}</td>
+                    </tr>
+                `;
+            })
+
+            horariosTable.innerHTML = listHorarios;
+
+            $("#horarios-table").fadeIn("slow");
+
+            // Subir el scroll hasta inicio para visualizar mejor el mensaje de error
+            modalReg.scrollTo({
+                top: modalReg.scrollHeight,
+                bottom: 0,
+                behavior: 'smooth'
+            });
         })
 
         // dinamicSelect2({
@@ -230,7 +258,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         const fecha = luxon.DateTime.fromISO(info.dateStr);
         const fechaActual = luxon.DateTime.now().toISODate();
 
-        document.getElementById("fecha_cita").setAttribute("min",fechaActual);
+        document.getElementById("fecha_cita").setAttribute("min", fechaActual);
         document.getElementById("fecha_cita").value = fecha.toISODate(); //`${info.dateStr}T${fecha_cita.hour.toString().padStart(2, '0')}:${fecha_cita.minute.toString().padStart(2, '0')}`;
         modalReg.show();
     },
@@ -251,8 +279,8 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             case "5": estatusCita = "Reasignada"; break;
         }
 
-        if(cita.estatus_cit == 5) estatusCita = "Reasignada";
-        
+        if (cita.estatus_cit == 5) estatusCita = "Reasignada";
+
 
         document.getElementById("paciente").textContent = `${cita.nombre_paciente} ${cita.apellido_paciente}`;
         document.getElementById("cedula-titular").textContent = `C.I: ${cita.cedula_titular}`;

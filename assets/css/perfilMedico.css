@@ -1,0 +1,29 @@
+@import url('paciente.css');
+
+.medico-consulta, .medico-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.medico-info {
+    align-self: baseline;
+    background-color: #70c1f0;
+    border-radius: 5px;
+    padding: 2.5rem;
+    margin-top: 0.25rem;
+}
+
+.medico-info > img {
+    margin: auto;
+    margin-bottom: 0.75rem;
+    width: 50%;
+}
+
+.medico-consulta > ul > li {
+    border-bottom: 1px solid #d1d1d1;
+    margin-top: 0.75rem;
+}
+
+.medico-info p {
+    margin-bottom: 0.5rem !important;
+}

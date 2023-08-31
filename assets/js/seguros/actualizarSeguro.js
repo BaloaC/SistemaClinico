@@ -1,3 +1,4 @@
+import { getConsultasSegurosMes } from "../consultas-seguro/mostrarConsultaSeguro.js";
 import deleteSecondValue from "../global/deleteSecondValue.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
@@ -95,7 +96,9 @@ async function confirmUpdate() {
         Array.from(document.getElementById("act-seguro").elements).forEach(element => {
             element.classList.remove('valid');
         })
-        const listadoSeguros = await getAll("seguros/consulta");
+
+        getConsultasSegurosMes({seguro: parseData.seguro_id});
+        // const listadoSeguros = await getAll("seguros/consulta");
         // segurosPagination(listadoSeguros);
 
     } catch (error) {

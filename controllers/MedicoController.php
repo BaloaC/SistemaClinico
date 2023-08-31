@@ -40,6 +40,10 @@ class MedicoController extends Controller {
         return $this->view('medicos/actualizarMedicos', ['medico_id' => $medico_id]);
     }
 
+    public function perfilMedico() {
+        return $this->view('medicos/perfilMedico');
+    }
+
     public function insertarMedico(/*Request $request*/) {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
