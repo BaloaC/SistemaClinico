@@ -53,20 +53,19 @@ class ConsultaSeguroService {
         $consultasSeguros = $_consultaSeguroModel->where('estatus_con', '!=', 2)->getAll();
         $listaConsultas = [];
 
-        if (count($consultasSeguros) > 0) {
-            foreach ($consultasSeguros as $consulta) {
-            
-                $_consultaCita = new ConsultaCitaModel();
-                $consulta_cita = $_consultaCita->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
-    
-                if (is_null($consulta_cita)) {
-                    $listaConsultas[] = ConsultaSeguroHelpers::obtenerInformacionEmergencia($consulta);
-                } else {
-                    $listaConsultas[] = ConsultaSeguroHelpers::obtenerInformacionCita($consulta);
-                }
-            }
-        }
-        return $listaConsultas;
+        return ConsultaSeguroHelpers::obtenerInformacionCompleta($consultasSeguros);
+    }
+
+    public static function listarConsultasPorSeguroYMes($seguro_id, $mes, $anio) {
+
+        $_consultaSeguroModel = new ConsultaSeguroModel();
+        $consultasSeguros = $_consultaSeguroModel->where('estatus_con', '!=', 2)
+                                                ->where('seguro_id', '=', $seguro_id)
+                                                ->where('YEAR(fecha_ocurrencia)',"=",$anio)->where('MONTH(fecha_ocurrencia)', '=', $mes)
+                                                // ->whereDate('fecha_ocurrencia', $primer_dia, $ultimo_dia)
+                                                ->getAll();
+        
+        return ConsultaSeguroHelpers::obtenerInformacionCompleta($consultasSeguros);
     }
 
 }

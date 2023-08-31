@@ -65,4 +65,25 @@ class ConsultaSeguroHelpers {
 
         return $consulta;
     }
+
+    public static function obtenerInformacionCompleta($consultasSeguros) {
+
+        $listaConsultas = [];
+
+        if (count($consultasSeguros) > 0) {
+            foreach ($consultasSeguros as $consulta) {
+            
+                $_consultaCita = new ConsultaCitaModel();
+                $consulta_cita = $_consultaCita->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
+    
+                if (is_null($consulta_cita)) {
+                    $listaConsultas[] = ConsultaSeguroHelpers::obtenerInformacionEmergencia($consulta);
+                } else {
+                    $listaConsultas[] = ConsultaSeguroHelpers::obtenerInformacionCita($consulta);
+                }
+            }
+        }
+
+        return $listaConsultas;
+    }
 }

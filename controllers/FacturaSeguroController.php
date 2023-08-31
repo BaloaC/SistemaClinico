@@ -1,6 +1,8 @@
 <?php
 
 include_once "./services/facturas/consulta seguro/ConsultaSeguroService.php";
+include_once "./services/facturas/seguro/FacturaSeguroService.php";
+include_once "./services/facturas/seguro/FacturaSeguroValidaciones.php";
 
 class FacturaSeguroController extends Controller{
 
@@ -56,58 +58,39 @@ class FacturaSeguroController extends Controller{
         return $this->view('facturas/medicos/actualizarFacturas', ['factura_medico_id' => $factura_medico_id]);
     } 
 
-    public function insertarFacturaSeguro(/*Request $request*/) { // método para obtener todas las facturas
+    public function solicitarFacturaSeguro(/*Request $request*/) { // método para obtener todas las facturas
         
-        if ( date("d") == "01") {
-            // Obteniendo primer y último día
-            $fecha_mes = new DateTime();
-            $fecha_mes->modify('first day of this month');
-            $primer_dia = $fecha_mes->format("Y-m-d");
+        // if ( date("d") != "01") {
             
-            $fecha_mes->modify('last day of this month');
-            $ultimo_dia = $fecha_mes->format("Y-m-d");
+            date_default_timezone_set('America/Caracas');
+            $fecha_actual = new DateTime();
+            $fecha_actual = $fecha_actual->format("Y-m-d");
             
+            $mes = date("m", strtotime($fecha_actual));
+            $anio = date("Y", strtotime($fecha_actual));
+
             $_seguroModel = new SeguroModel();
             $seguroList = $_seguroModel->where('estatus_seg', '=', '1')->getAll();
-            
+
             // Por cada seguro buscamos las facturas que tengan de las consultas
             foreach ($seguroList as $seguro) {
-                $facturaList = [];
-                $_consultaSeguro = new ConsultaSeguroModel();
-                // $consultaList = $_consultaSeguro->where('seguro_id', '=',$seguro->seguro_id)->whereDate('fecha_ocurrencia', $primer_dia, $ultimo_dia)->getAll();
-                $inners = $_consultaSeguro->listInner($this->consultaInner);
-                $consultaList = $_consultaSeguro->where('consulta_seguro.estatus_con', '=', '1')->where('consulta.estatus_con', '=', '1')
-                                                ->whereDate('consulta.fecha_consulta', $primer_dia, $ultimo_dia)
-                                                ->innerJoin($this->consultaSelect, $inners, "consulta_seguro");
-                // Por cada factura en consulta, sumamos el monto para obtener el total
-                $montoConsulta = 0;
-
-                if (count($consultaList) > 0) {
-                    foreach ($consultaList as $consulta) {
-                        $montoConsulta += $consulta->monto;
-                    }
-                }
-
-                // Le sumamos 1 mes a la fecha de hoy
-                $fecha_actual = date("Y-m-d"); 
-                $fecha_vencimiento = strtotime('+1 month', strtotime($fecha_actual));
-                $fecha_vencimiento = date('Y-m-d', $fecha_vencimiento);
                 
-                // date_default_timezone_set("America/Caracas");
-                setlocale(LC_TIME, 'es_VE.UTF-8','esp');
-
-                $facturaList = [
-                    "seguro_id" => $seguro->seguro_id,
-                    "fecha_vencimiento" => "$fecha_vencimiento",
-                    "monto" => $montoConsulta,
-                    "mes" => strftime("%B")
-                ];
-
+                $factura = FacturaSeguroService::calcularFactura($seguro->seguro_id, $mes, $anio);
+                $facturaExiste = FacturaSeguroHelpers::comprobarExistenciaFactura($seguro->seguro_id, $mes, $anio);
                 $_facturaSeguroModel = new FacturaSeguroModel();
-                // $_facturaSeguroModel->byUser($token);
-                $id = $_facturaSeguroModel->insert($facturaList);
+
+                if ($facturaExiste) {
+                    
+                    $_facturaSeguroModel->where('seguro_id', '=', $seguro->seguro_id)
+                                        ->where('YEAR(factura_seguro.fecha_ocurrencia)', '=', $anio)
+                                        ->where('MONTH(factura_seguro.fecha_ocurrencia)', '=', $mes)
+                                        ->update($factura);
+
+                } else {
+                    $_facturaSeguroModel->insert($factura);
+                }
             }
-        }
+        // }
     }
 
     public function listarFacturaSeguro(){
@@ -136,72 +119,30 @@ class FacturaSeguroController extends Controller{
 
         $_facturaSeguroModel = new FacturaSeguroModel();
         $inners = $_facturaSeguroModel->listInner($this->arrayInner);
-        $facturas["factura"] = $_facturaSeguroModel->where('factura_seguro.seguro_id', '=', $seguro_id)->where('YEAR(factura_seguro.fecha_ocurrencia)',"=",$anio)->where('MONTH(factura_seguro.fecha_ocurrencia)', '=', $mes)->innerJoin($this->arraySelect, $inners, "factura_seguro");
+        $facturas["factura"] = $_facturaSeguroModel->where('factura_seguro.seguro_id', '=', $seguro_id)
+                                                    ->where('YEAR(factura_seguro.fecha_ocurrencia)',"=",$anio)
+                                                    ->where('MONTH(factura_seguro.fecha_ocurrencia)', '=', $mes)
+                                                    ->innerJoin($this->arraySelect, $inners, "factura_seguro");
 
         // Si no hay factura en ese año/mes retornar error
-        if(empty($facturas["factura"])) {
-            $respuesta = new Response(false, 'No se encontró factura en la fecha solicitada');
-            return $respuesta->json(400);
-        }
+        FacturaSeguroValidaciones::validarLengthFactura($facturas);
         
-        $consultasSeguros = ConsultaSeguroService::listarconsultasSeguros();
-        $consultasPorMes = [];
+        $consultasSeguro = ConsultaSeguroService::listarConsultasPorSeguroYMes($seguro_id, $mes, $anio);
 
-        foreach($consultasSeguros as $consulta){
-
-            if($consulta->seguro_id ==  $seguro_id && date("Y",strtotime($consulta->fecha_ocurrencia)) == $anio && date("m",strtotime($consulta->fecha_ocurrencia)) == $mes){
-                array_push($consultasPorMes,$consulta);
-            }
-        }
-        
-        $facturas["consultas"] = $consultasPorMes; 
-
+        $facturas["consultas"] = $consultasSeguro; 
         return $this->retornarMensaje($facturas);
     }
 
     public function listarFacturaPorId($factura_seguro_id){
         
         $_POST = json_decode(file_get_contents('php://input'), true);
-        $validarFactura = new Validate;
+        FacturaSeguroValidaciones::validarFacturaId($factura_seguro_id);
+        return FacturaSeguroService::listarFacturaId($factura_seguro_id);
+    }
 
-        if ( !$validarFactura->isDuplicated('factura_seguro', 'factura_seguro_id', $factura_seguro_id) ) {
-            $respuesta = new Response(false, 'No se encontró la factura indicada en la base de datos');
-            $respuesta->setData("Error en factura seguros con el id $factura_seguro_id");
-            return $respuesta->json(400);
-        }
-
-        // Obtenemos el seguro para saber por cuáles fechas filtrar
-        $_facturaSeguroModel = new FacturaSeguroModel();
-        $factura = $_facturaSeguroModel->where('factura_seguro.factura_seguro_id', '=', $factura_seguro_id)->getFirst();
-        
-        // Obtenemos las fechas
-        $fechaVencimiento = $factura->fecha_vencimiento;
-        $fechaOcurrencia = strtotime('-1 month', strtotime($fechaVencimiento));
-        $fechaOcurrencia = date('Y-m-d', $fechaOcurrencia);
-
-        $fechaMes = new DateTime($fechaOcurrencia);
-        $fechaMes->modify('first day of this month');
-        $primer_dia = $fechaMes->format("Y-m-d");
-        
-        $fechaMes->modify('last day of this month');
-        $ultimo_dia = $fechaMes->format("Y-m-d");
-
-        // Pedimos las consultas relacionadas a ese seguro en el mes de esa factura
-        $_consultaSeguro = new ConsultaSeguroModel();
-        $inners = $_consultaSeguro->listInner($this->consultaInner);
-        $consultaList = $_consultaSeguro->where('consulta_seguro.estatus_con', '=', '1')->where('consulta.estatus_con', '=', '1')
-                                        ->where('seguro_id', '=', $factura->seguro_id)
-                                        ->whereDate('consulta.fecha_consulta', $primer_dia, $ultimo_dia)
-                                        ->innerJoin($this->consultaSelect, $inners, "consulta_seguro");
-
-        if ( count($consultaList) > 0 ) {
-            return $this->retornarMensaje($consultaList);
-        } else {
-            $respuesta = new Response(false, "No hay consultas en el mes de $factura->mes para la factura indicada");
-            $respuesta->setData("Error con la factura id $factura->factura_seguro_id");
-            return $respuesta->json(200);
-        }
-
+    public function actualizarFacturaSeguro($factura_seguro_id) {
+        $respuesta = FacturaSeguroService::actualizarEstatus($factura_seguro_id);
+        return $respuesta;
     }
 
     public function retornarMensaje($resultadoSentencia) {
