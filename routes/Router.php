@@ -49,47 +49,59 @@ class Router {
         $uri = isset($_GET['uri']) ? $_GET['uri'] : '';
         $uri = self::parseUri($uri);
         
-        // try {
+        try {
             
             // verificando si es una ruta '/:id'
             if (is_numeric(substr($uri, -1))) { 
                 
                 // Verificando que la ruta esté registrada
                 $uri2 = preg_replace('/[^a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\/\s]+/u', '', $uri);
-                $ruta = Router::$routes[$method]["/" . $uri2 . ":id"];
 
-                if ( $ruta->middlewares ) { // Ejecutando middleware
-                    foreach ($ruta->middlewares as $middleware) {
-                        $middleware->handleRequest( $ruta );
-                    }   
-                }
-                
-                if ($ruta->match($uri)) {
-                    return $ruta->call();
+                if (isset(Router::$routes[$method]["/" . $uri2 . ":id"])) {
+                    $ruta = Router::$routes[$method]["/" . $uri2 . ":id"];
+
+                    if ( $ruta->middlewares ) { // Ejecutando middleware
+                        foreach ($ruta->middlewares as $middleware) {
+                            $middleware->handleRequest( $ruta );
+                        }   
+                    }
+                    
+                    if ($ruta->match($uri)) {
+                        return $ruta->call();
+                    }
+
+                } else {
+                    throw new Exception();
                 }
 
             } else {
                 
-                // Verificando que la ruta esté registrada
-                // echo '<pre>';
-                $uris = Router::$routes[$method]["/" . $uri]; 
-                
-                if ( !is_null(Router::$routes[$method]["/" . $uri]->middlewares) ) { // Ejecutando middleware
-                    foreach (Router::$routes[$method]["/" . $uri]->middlewares as $middleware) {
-                        $middleware->handleRequest( Router::$routes[$method]["/" . $uri] );
+                if (isset(Router::$routes[$method]["/" . $uri])) {
+
+                    // Verificando que la ruta esté registrada
+                    $uris = Router::$routes[$method]["/" . $uri]; 
+                    
+                    if ( !is_null(Router::$routes[$method]["/" . $uri]->middlewares) ) { // Ejecutando middleware
+                        foreach (Router::$routes[$method]["/" . $uri]->middlewares as $middleware) {
+                            $middleware->handleRequest( Router::$routes[$method]["/" . $uri] );
+                        }
                     }
-                }
+                    
+                    if ($uris->uri === $uri) { // Llamando a la ruta
+                        return Router::$routes[$method]["/" . $uri]->call();
+                    }
                 
-                if ($uris->uri === $uri) { // Llamando a la ruta
-                    return Router::$routes[$method]["/" . $uri]->call();
+                } else {
+                    throw new Exception();
                 }
             }
 
-        // } catch (\Throwable $th) {
-            // var_dump($th);
+        } catch (\Throwable $th) {
+            
             // Muestra el mensaje de error 404
             header('Content-Type: text/html; charset=utf-8');
             echo 'La uri (<a href="' . $uri . '"> ' . $uri . '</a>)no se encuentra registrada en el metodo: ' . $method;
+        }
     }
 
 }
