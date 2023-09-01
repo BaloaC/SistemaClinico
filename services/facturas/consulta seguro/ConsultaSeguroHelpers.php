@@ -1,5 +1,7 @@
 <?php
 
+include_once "./services/facturas/consulta/FacturaConsultaHelpers.php";
+
 class ConsultaSeguroHelpers {
 
     /**
@@ -75,15 +77,33 @@ class ConsultaSeguroHelpers {
             
                 $_consultaCita = new ConsultaCitaModel();
                 $consulta_cita = $_consultaCita->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
-    
+                $consulta;
+
                 if (is_null($consulta_cita)) {
-                    $listaConsultas[] = ConsultaSeguroHelpers::obtenerInformacionEmergencia($consulta);
+                    $consulta = ConsultaSeguroHelpers::obtenerInformacionEmergencia($consulta);
                 } else {
-                    $listaConsultas[] = ConsultaSeguroHelpers::obtenerInformacionCita($consulta);
+                    $consulta = ConsultaSeguroHelpers::obtenerInformacionCita($consulta);
                 }
+
+                $consultaInsumos = FacturaConsultaHelpers::obtenerInsumos($consulta);
+                $consultaExamenes = FacturaConsultaHelpers::obtenerExamenes($consulta);
+                $listaConsultas[] = array_merge((Array) $consulta, (Array) $consultaInsumos, (Array) $consultaExamenes);
             }
         }
 
         return $listaConsultas;
+    }
+
+    public static function calcularConsultaEmergencia($consulta) {
+        $consultaTotal = $consulta["consulta_emergencia"]->consultas_medicas 
+            + $consulta["consulta_emergencia"]->laboratorios 
+            + $consulta["consulta_emergencia"]->medicamentos 
+            + $consulta["consulta_emergencia"]->enfermeria
+            + $consulta["consulta_emergencia"]->total_insumos 
+            + $consulta["consulta_emergencia"]->total_examenes 
+            + $consulta["consulta_emergencia"]->total_consulta;
+
+        $consulta["monto_consulta"] = $consultaTotal;
+        return $consulta;
     }
 }

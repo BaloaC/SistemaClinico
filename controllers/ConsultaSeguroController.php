@@ -62,7 +62,7 @@ class ConsultaSeguroController extends Controller{
             $_pacienteSeguro = new PacienteSeguroModel();
             $pacienteSeguro = $_pacienteSeguro->where('paciente_id', '=', $paciente->paciente_id)->where('seguro_id', '=', $citaSeguro->seguro_id)->getFirst();
 
-            if ($data['monto'] > $pacienteSeguro->saldo_disponible) {
+            if ($data['monto_consulta'] > $pacienteSeguro->saldo_disponible) {
                 $respuesta = new Response(false, 'Saldo insuficiente para cubrir la consulta');
                 $respuesta->setData("Error al procesar al paciente id $pacienteSeguro->paciente_id con saldo $pacienteSeguro->saldo_disponible");
                 return $respuesta->json(400);
@@ -79,7 +79,7 @@ class ConsultaSeguroController extends Controller{
             // ya insertada la factura, modificamos el estatus de la consulta a pagada
             ConsultaSeguroService::actualizarEstatusConsulta($data['consulta_id']);
 
-            $montoActualizado = $pacienteSeguro->saldo_disponible - $data['monto'];
+            $montoActualizado = $pacienteSeguro->saldo_disponible - $data['monto_consulta'];
             PacienteSeguroService::actualizarSaldoPaciente($montoActualizado, $_pacienteSeguro);
         }
     }

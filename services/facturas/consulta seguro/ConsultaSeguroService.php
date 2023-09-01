@@ -1,6 +1,7 @@
 <?php
 
 include_once "./services/facturas/consulta seguro/ConsultaSeguroHelpers.php";
+include_once "./services/facturas/consulta/FacturaConsultaHelpers.php";
 
 class ConsultaSeguroService {
 
@@ -34,7 +35,7 @@ class ConsultaSeguroService {
         $consultaEmergencia = $_consultaEmergenciaModel->where('consulta_id', '=', $formulario['consulta_id'])->getFirst();
 
         $formulario['seguro_id'] = $consultaEmergencia->seguro_id;
-        $formulario['monto'] = $consultaEmergencia->total_consulta;
+        $formulario['monto_consulta'] = $consultaEmergencia->total_consulta;
 
         $_consultaSeguroModel = new ConsultaSeguroModel();
         $fueInsertado = $_consultaSeguroModel->insert($formulario);
@@ -51,9 +52,21 @@ class ConsultaSeguroService {
 
         $_consultaSeguroModel = new ConsultaSeguroModel();
         $consultasSeguros = $_consultaSeguroModel->where('estatus_con', '!=', 2)->getAll();
-        $listaConsultas = [];
+        $listaConsultas = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultasSeguros);
+        $consultas = [];
 
-        return ConsultaSeguroHelpers::obtenerInformacionCompleta($consultasSeguros);
+        foreach ($listaConsultas as $consulta) {
+            
+            if ( isset( $consulta['consulta_emergencia'] ) ) { // Si es por emergencia
+                $consultas[] = ConsultaSeguroHelpers::calcularConsultaEmergencia($consulta);
+
+            } else { // Si no es consulta por emergencia
+                $consultas[] = FacturaConsultaHelpers::obtenerMontoTotal($consulta);
+            }
+            
+        }
+        
+        return $consultas;
     }
 
     public static function listarConsultasPorSeguroYMes($seguro_id, $mes, $anio) {

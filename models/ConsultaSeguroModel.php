@@ -8,7 +8,7 @@ class ConsultaSeguroModel extends GenericModel {
     protected $seguro_id;
     protected $fecha_ocurrencia;
     // protected $fecha_pago_limite;
-    protected $monto;
+    protected $monto_consulta;
     protected $tipo_servicio;
     protected $estatus_con;
     protected $nombre_especialidad;
@@ -25,7 +25,7 @@ class ConsultaSeguroModel extends GenericModel {
     public function getSeguroId(){return $this->seguro_id;}
     public function getFechaOcurrencia(){return $this->fecha_ocurrencia;}
     // public function getFechaPagoLimite(){return $this->fecha_pago_limite;}
-    public function getMonto(){return $this->monto;}
+    public function getmontoConsulta(){return $this->monto_consulta;}
     public function getTipoServicio(){return $this->tipo_servicio;}
     public function getEstatusCon(){return $this->estatus_con;}
     public function getClave(){return $this->clave;}
@@ -38,7 +38,7 @@ class ConsultaSeguroModel extends GenericModel {
     public function setSeguroId($seguro_id){return $this->seguro_id = $seguro_id;}
     public function setFechaOcurrencia($fecha_ocurrencia){return $this->fecha_ocurrencia = $fecha_ocurrencia;}
     // public function setFechaPagoLimite($fecha_pago_limite){return $this->fecha_pago_limite = $fecha_pago_limite;}
-    public function setMonto($monto){return $this->monto = $monto;}
+    public function setmontoConsulta($monto_consulta){return $this->monto_consulta = $monto_consulta;}
     public function setTipoServicioa($tipo_servicio){return $this->tipo_servicio = $tipo_servicio;}
     public function setEstatusCon($estatus_con){return $this->estatus_con = $estatus_con;}
     public function setClave($clave){return $this->clave = $clave;}

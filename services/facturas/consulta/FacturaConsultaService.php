@@ -67,7 +67,12 @@ class FacturaConsultaService {
             return $consultaList;
         }
 
-        return FacturaConsultaHelpers::obtenerMontoTotal($consultaList);    
+        $facturas = [];
+        foreach ($consultaList as $consulta) {
+            $facturas[] = FacturaConsultaHelpers::obtenerMontoTotal($consulta);
+        }
+
+        return $facturas;
     }
 
     public static function listarFacturaPorId($factura_id) {
@@ -103,6 +108,8 @@ class FacturaConsultaService {
         $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
 
         $factura_consulta = array_merge($consulta_info, $insumos_consulta, $examenes_consulta);
-        return FacturaConsultaHelpers::obtenerMontoTotal( array ($factura_consulta));
+        return FacturaConsultaHelpers::obtenerMontoTotal($factura_consulta);
+
+        // return FacturaConsultaHelpers::obtenerMontoTotal( array ($factura_consulta));
     }
 }

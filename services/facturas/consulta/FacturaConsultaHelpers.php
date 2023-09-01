@@ -71,7 +71,7 @@ class FacturaConsultaHelpers {
 
         // Revisamos si tienes insumos asociados
         if ( count($consultaInsumos) > 0 ) {
-            $monto = $factura->monto_consulta;
+            // $monto = $factura->monto_consulta;
 
             foreach ($consultaInsumos as $consulta_insumo) {
                 
@@ -98,7 +98,7 @@ class FacturaConsultaHelpers {
 
         // Revisamos si tienes insumos asociados
         if ( count($consultaExamenes) > 0 ) {
-            $monto = $factura->monto_consulta;
+            // $monto = $factura->monto_consulta;
 
             foreach ($consultaExamenes as $consulta_examen) {
                 
@@ -114,10 +114,10 @@ class FacturaConsultaHelpers {
         return $consultaList[0];
     }
 
-    public static function obtenerMontoTotal($facturaList) {
-        $facturas = [];
+    public static function obtenerMontoTotal($consulta) {
+        // $facturas = [];
         
-        foreach ($facturaList as $consulta) {
+        // foreach ($facturaList as $consulta) {
             $monto = 0;
 
             if (isset($consulta['insumos'])) {
@@ -134,7 +134,7 @@ class FacturaConsultaHelpers {
 
             $consulta['monto_total'] = $monto + $consulta['monto_consulta'];
             $facturas[] = $consulta;
-        }
+        // }
         
         return $facturas;
     }
