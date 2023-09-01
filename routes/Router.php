@@ -2,14 +2,9 @@
 
 class Router {
     private static $routes = array();
-    private static $get = array();
-    private static $post = array();
-    private static $put = array();
-    private static $delete = array();
 
     //Método para agregar el método HTTP
     public static function add($method, $uri, $function = null) {
-
         // Router::$uris[$uri] = new Uri(self::parseUri($uri),$method,$function);
         // return;
     }
@@ -21,20 +16,16 @@ class Router {
 
     public static function post($uri, $function = null, $middlewares = null) {
         Router::$routes['POST'][$uri] = new Uri(self::parseUri($uri), 'POST', $function, $middlewares);
-        // Router::$post[$uri] = new Uri(self::parseUri($uri), 'POST', $function, $middlewares);
         return;
-        // return Router::add('POST', $uri, $function);
     }
 
     public static function put($uri, $function = null, $middlewares = null) {
         Router::$routes['PUT'][$uri] = new Uri(self::parseUri($uri), 'PUT', $function, $middlewares);
-        // Router::$put[$uri] = new Uri(self::parseUri($uri), 'PUT', $function, $middlewares);
         return;
     }
 
     public static function delete($uri, $function = null, $middlewares = null) {
-        Router::$routes['DELETE'] = new Uri(self::parseUri($uri), 'DELETE', $function, $middlewares);
-        // Router::$delete[$uri] = new Uri(self::parseUri($uri), 'DELETE', $function, $middlewares);
+        Router::$routes['DELETE'][$uri] = new Uri(self::parseUri($uri), 'DELETE', $function, $middlewares);
         return;
     }
 
