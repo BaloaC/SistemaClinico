@@ -2,6 +2,7 @@
 
 include_once "./services/facturas/consulta seguro/ConsultaSeguroHelpers.php";
 include_once "./services/facturas/consulta/FacturaConsultaHelpers.php";
+include_once "./services/globals/GlobalsHelpers.php";
 
 class ConsultaSeguroService {
 
@@ -35,7 +36,10 @@ class ConsultaSeguroService {
         $consultaEmergencia = $_consultaEmergenciaModel->where('consulta_id', '=', $formulario['consulta_id'])->getFirst();
 
         $formulario['seguro_id'] = $consultaEmergencia->seguro_id;
-        $formulario['monto_consulta'] = $consultaEmergencia->total_consulta;
+        $formulario['monto_consulta_usd'] = $consultaEmergencia->total_consulta;
+
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+        $formulario['monto_consulta_bs'] = $consultaEmergencia->total_consulta * $valorDivisa;
 
         $_consultaSeguroModel = new ConsultaSeguroModel();
         $fueInsertado = $_consultaSeguroModel->insert($formulario);

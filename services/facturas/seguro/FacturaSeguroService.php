@@ -30,11 +30,13 @@ class FacturaSeguroService {
         $consultaList = FacturaSeguroHelpers::innerFacturaSeguro($seguro_id, $mes, $anio);
         
         // Por cada factura en consulta, sumamos el monto para obtener el total
-        $montoConsulta = 0;
+        $montoConsultaBs = 0;
+        $montoConsultaUsd = 0;
 
         if (count($consultaList) > 0) {
             foreach ($consultaList as $consulta) {
-                $montoConsulta += $consulta->monto;
+                $montoConsultaBs += $consulta->monto_consulta_usd;
+                $montoConsultaUsd += $consulta->monto_consulta_bs;
             }
         }
         
@@ -49,7 +51,8 @@ class FacturaSeguroService {
         $facturaList = [
             "seguro_id" => $seguro_id,
             "fecha_vencimiento" => "$fecha_vencimiento",
-            "monto" => $montoConsulta,
+            "monto_bs" => $montoConsultaBs,
+            "monto_usd" => $montoConsultaUsd,
             "mes" => strftime("%B")
         ];
 

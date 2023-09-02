@@ -152,6 +152,7 @@ class ConsultaController extends Controller {
     }
 
     public function insertarConsulta(/*Request $request*/) {
+        
         $_POST = json_decode(file_get_contents('php://input'), true);
 
         $validarConsulta = new Validate;
@@ -159,7 +160,6 @@ class ConsultaController extends Controller {
 
         if (!$es_emergencia) {
             ConsultaValidaciones::validarConsulta($_POST);
-            
         } 
         
         // Validamos relaciones externas
@@ -387,7 +387,7 @@ class ConsultaController extends Controller {
                                         ->getFirst();
         
         if ( !is_null($consultaList) ) {
-            $consultas = ConsultaHelper::obtenerInformacionCompleta($consultaList);
+            $consultas = ConsultaHelper::obtenerRelaciones($consulta_id);
         
             $mensaje = (!is_null($consultas));
             $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
@@ -442,6 +442,15 @@ class ConsultaController extends Controller {
 
             $validarConsultaInsumo = new Validate;
             $data = $validarConsultaInsumo->dataScape($insumo);
+
+            $_insumoModel = new InsumoModel();
+            $insumoUtilizado = $_insumoModel->where('insumo_id', '=', $data['insumo_id'])->getFirst();
+            $data['precio_insumo_usd'] = $insumoUtilizado->precio;
+
+            $_globalModel = new GlobalModel();
+            $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
+            
+            $data['precio_insumo_bs'] = $insumoUtilizado->precio * (float) $valorDivisa->value;
 
             $_consultaInsumoModel = new ConsultaInsumoModel();
             $idInsumo = $_consultaInsumoModel->insert($data);

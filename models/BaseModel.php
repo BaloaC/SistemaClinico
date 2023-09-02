@@ -36,7 +36,7 @@ class BaseModel{
     public function getFirst(){
 
         $list = $this->getAll();
-        
+        // echo '<pre>'; var_dump($list);
         if(count($list) > 0){
 
             return $list[0];
@@ -122,6 +122,15 @@ class BaseModel{
 
         $this->wheres .= (strpos($this->wheres, "WHERE")) ? " AND " : " WHERE ";
         $this->wheres .= "$key $condition " . ((is_string($value)) ? "\"$value\"" : $value) . " ";
+        
+        return $this;
+    }
+
+    //Método para filtrar con AND con claves no primarias
+    public function whereSentence($key,$condition, $value){
+
+        $this->wheres .= (strpos($this->wheres, "WHERE")) ? " AND " : " WHERE ";
+        $this->wheres .= "`$key` $condition " . ((is_string($value)) ? "\"$value\"" : $value) . " ";
         
         return $this;
     }

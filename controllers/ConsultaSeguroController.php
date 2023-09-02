@@ -4,8 +4,8 @@ use PSpell\Config;
 
 include_once "./services/facturas/consulta seguro/ConsultaSeguroValidaciones.php";
 include_once "./services/facturas/consulta seguro/ConsultaSeguroService.php";
-
 include_once "./services/pacientes/paciente seguro/PacienteSeguroService.php";
+include_once "./services/globals/GlobalsHelpers.php";
 
 class ConsultaSeguroController extends Controller{
 
@@ -62,12 +62,14 @@ class ConsultaSeguroController extends Controller{
             $_pacienteSeguro = new PacienteSeguroModel();
             $pacienteSeguro = $_pacienteSeguro->where('paciente_id', '=', $paciente->paciente_id)->where('seguro_id', '=', $citaSeguro->seguro_id)->getFirst();
 
-            if ($data['monto_consulta'] > $pacienteSeguro->saldo_disponible) {
+            if ($data['monto_consulta_usd'] > $pacienteSeguro->saldo_disponible) {
                 $respuesta = new Response(false, 'Saldo insuficiente para cubrir la consulta');
                 $respuesta->setData("Error al procesar al paciente id $pacienteSeguro->paciente_id con saldo $pacienteSeguro->saldo_disponible");
                 return $respuesta->json(400);
             }
 
+            $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+            $data['monto_consulta_bs'] = $data['monto_consulta_usd'] * $valorDivisa;
             $id = $_consultaSeguroModel->insert($data);
             $mensaje = ($id > 0);
 
@@ -79,7 +81,7 @@ class ConsultaSeguroController extends Controller{
             // ya insertada la factura, modificamos el estatus de la consulta a pagada
             ConsultaSeguroService::actualizarEstatusConsulta($data['consulta_id']);
 
-            $montoActualizado = $pacienteSeguro->saldo_disponible - $data['monto_consulta'];
+            $montoActualizado = $pacienteSeguro->saldo_disponible - $data['monto_consulta_usd'];
             PacienteSeguroService::actualizarSaldoPaciente($montoActualizado, $_pacienteSeguro);
         }
     }

@@ -49,7 +49,7 @@ class Router {
         $uri = isset($_GET['uri']) ? $_GET['uri'] : '';
         $uri = self::parseUri($uri);
         
-        try {
+        // try {
             
             // verificando si es una ruta '/:id'
             if (is_numeric(substr($uri, -1))) { 
@@ -96,12 +96,12 @@ class Router {
                 }
             }
 
-        } catch (\Throwable $th) {
+        // } catch (\Throwable $th) {
             
-            // Muestra el mensaje de error 404
-            header('Content-Type: text/html; charset=utf-8');
-            echo 'La uri (<a href="' . $uri . '"> ' . $uri . '</a>)no se encuentra registrada en el metodo: ' . $method;
-        }
+        //     // Muestra el mensaje de error 404
+        //     header('Content-Type: text/html; charset=utf-8');
+        //     echo 'La uri (<a href="' . $uri . '"> ' . $uri . '</a>)no se encuentra registrada en el metodo: ' . $method;
+        // }
     }
 
 }

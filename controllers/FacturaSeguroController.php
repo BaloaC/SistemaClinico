@@ -16,7 +16,8 @@ class FacturaSeguroController extends Controller{
         "factura_seguro.mes",
         "factura_seguro.fecha_ocurrencia",
         "factura_seguro.fecha_vencimiento",
-        "factura_seguro.monto",
+        "factura_seguro.monto_bs",
+        "factura_seguro.monto_usd",
         "factura_seguro.estatus_fac",
         "seguro.nombre",
         "seguro.rif"
@@ -33,7 +34,8 @@ class FacturaSeguroController extends Controller{
         "consulta_seguro.seguro_id",
         "consulta_seguro.tipo_servicio",
         "consulta_seguro.fecha_ocurrencia",
-        "consulta_seguro.monto",
+        "consulta_seguro.monto_consulta_usd",
+        "consulta_seguro.monto_consulta_bs",
         "consulta_seguro.estatus_con"
     );
     
