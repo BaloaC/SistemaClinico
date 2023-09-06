@@ -9,6 +9,8 @@ import { mostrarMedicos } from "./mostrarMedicos.js";
 async function updateMedico(id) {
 
     const $form = document.getElementById("act-medico");
+    const horariosTemplate = document.getElementById("horarioInitialInputs").content.cloneNode(true);
+    const horariosContainer = document.querySelector(".act-horarios");
 
     try {
 
@@ -36,6 +38,40 @@ async function updateMedico(id) {
             });
         })
 
+        // Restablecemos los horarios por default
+        horariosContainer.replaceChildren(horariosTemplate);
+
+
+        const horarioInput = document.querySelectorAll(".horarioInput");
+        const horaEntradaInput = document.querySelectorAll(".horarioEntryInput");
+        const horaSalidaInput = document.querySelectorAll(".horarioExitInput");
+
+        horarioInput.forEach((checkbox, index) => {
+
+            // Validamos que los checkbox concuerden con los que ya existan
+            json[0].horario.some(horario => {
+                if (horario.dias_semana == checkbox.value) {
+                    checkbox.checked = true;
+                    checkbox.disabled = true;
+                    horaEntradaInput[index].disabled = true;
+                    horaEntradaInput[index].value = horario.hora_entrada;
+                    horaSalidaInput[index].disabled = true;
+                    horaSalidaInput[index].value = horario.hora_salida;
+                }
+            });
+        });
+
+
+        // json[0].horario.forEach((horario, index) => {
+
+        //     let algunValorCoincide = horarioInput.some(function (objeto) {
+        //         return horario.dias_semana === objeto.value;
+        //     });
+
+        //     if (algunValorCoincide) {
+        //         checkbox.checked = true;
+        //     }
+        // })
 
         //Establecer el option con los datos del usuario
         // $form.especialidad_id.dataset.secondValue = especialidad.especialidad_id;
@@ -88,11 +124,39 @@ async function confirmUpdate() {
         // ! Para evitar error del endpoint
         let medico_id = data.medico_id;
         let $tel = data.cod_tel + data.telefono;
+        delete data["especialidad[]"];
 
         const parseData = deleteSecondValue("#act-medico input, #act-medico select", data);
         parseData.medico_id = medico_id;
         // ** Si no existe tel o cod_tel en la data, añadirle el tel completo
         if ('telefono' in parseData || 'cod_tel' in parseData) { parseData.telefono = $tel }
+
+
+        let checkboxes = document.querySelectorAll(".horarioInput");
+        let horario = [];
+
+        checkboxes.forEach(e => {
+
+            if (e.checked && e.disabled == false) {
+
+                // [0] = Hora entrada | [1] = Hora salida
+                const inputsTime = e.parentElement.parentElement.parentElement.querySelectorAll("input[type='time']");
+
+                console.log(inputsTime);
+                if (inputsTime[0].value >= inputsTime[1].value && (inputsTime[0].disabled == false || inputsTime[1].disabled == false)) {
+                    throw { message: `La hora de salida es menor igual a la fecha de entrada en el día ${e.value}` }
+                }
+
+                const dias_semana = {
+                    dias_semana: e.value,
+                    hora_entrada: inputsTime[0].value,
+                    hora_salida: inputsTime[1].value
+                }
+                horario.push(dias_semana);
+            }
+        })
+
+        if (horario && horario.length > 0) { parseData.horario = horario; }
 
         // ! Para evitar error del endpoint
         if (!Object.entries(parseData).length == 0) {

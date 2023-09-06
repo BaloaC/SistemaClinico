@@ -336,7 +336,7 @@ class ConsultaController extends Controller {
         
         $consultasPaciente = array_filter($consultas, fn($consulta) => $consulta->paciente_id == $paciente_id);
         
-        $pruebas = [];
+        $consultasArray = [];
         foreach ($consultasPaciente as $consulta) {
             $consultasArray[] = $consulta;
         }

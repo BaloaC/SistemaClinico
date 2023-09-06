@@ -64,7 +64,7 @@ Router::delete('/usuarios/:id', UsuarioController::class . '@eliminarUsuario',);
 Router::get('/pacientes', PacienteController::class . '@index');
 Router::get('/pacientes/registrar', PacienteController::class . '@formRegistrarPaciente');
 Router::get('/pacientes/actualizar/:id', PacienteController::class . '@formActualizarPaciente');
-Router::get('/pacientes/historialmedico/:id', PacienteController::class . '@historialMedico', [$AuthenticationMiddleware]);
+Router::get('/pacientes/historialmedico/:id', PacienteController::class . '@historialMedico');
 
 // //Pacientes - API
 Router::get('/pacientes/consulta', PacienteController::class . '@listarPacientes', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
@@ -311,7 +311,7 @@ Router::get('/factura/medico/:id', FacturaMedicoController::class . '@listarFact
 Router::get('/factura/medico/medico/:id', FacturaMedicoController::class . '@listarFacturaPorMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::get('/factura/fecha/', FacturaMedicoController::class . '@listarFacturaPorFecha', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 
-Router::get('/facturaMedico/medico/:id', FacturaMedicoController::class . '@calcularFacturaMedicoId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+Router::get('/facturaMedico/medico', FacturaMedicoController::class . '@calcularFacturaMedicoId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 
 Router::post('/facturas/all', FacturaMedicoController::class . '@solicitarFacturasMedicos', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::post('/factura/medico', FacturaMedicoController::class . '@insertarFacturaMedicoPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);

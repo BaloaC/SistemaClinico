@@ -19,7 +19,6 @@ select2OnClick({
 
 document.getElementById("s-paciente").disabled = true;
 
-// TODO: Colocar en la vista los horarios disponible de este medico
 select2OnClick({
     selectSelector: "#s-medico",
     selectValue: "medico_id",
@@ -27,6 +26,24 @@ select2OnClick({
     module: "medicos/consulta",
     parentModal: "#modalReg",
     placeholder: "Seleccione un médico"
+});
+
+select2OnClick({
+    selectSelector: `#s-medico-pago`,
+    selectValue: "medico_id",
+    selectNames: ["cedula", "nombre-apellidos"],
+    module: "medicos/consulta",
+    parentModal: "#modalReg",
+    placeholder: "Seleccione un médico"
+});
+
+select2OnClick({
+    selectSelector: "#s-seguro-emergencia",
+    selectValue: "seguro_id",
+    selectNames: ["rif", "nombre"],
+    module: "seguros/consulta",
+    parentModal: "#modalReg",
+    placeholder: "Seleccione un seguro"
 });
 
 document.getElementById("s-medico").disabled = true;
@@ -141,7 +158,7 @@ addEventListener("DOMContentLoaded", async e => {
         },
         ajax: {
             url: `/${path[1]}/consultas/consulta/`,
-            beforeSend: function(xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
             }
         },
@@ -152,14 +169,48 @@ addEventListener("DOMContentLoaded", async e => {
                 "data": null,
                 "defaultContent": ''
             },
-            { data: "cedula_paciente" },
-            { data: "nombre_paciente" },
-            { data: "nombre_medico" },
-            { data: "nombre_especialidad" },
             {
-                data: "cedula_titular",
+                data: null,
                 render: function (data, type, row) {
-                    return data ?? row.cedula_paciente
+                    if ("cedula_paciente" in data) return data.cedula_paciente;
+                    if ("beneficiado" in data) return data.beneficiado.cedula;
+                }
+
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if("nombre_paciente" in data) return data.nombre_paciente;
+                    if("beneficiado" in data) return data.beneficiado.nombre;
+                }
+            },
+            { 
+                data: null,
+                render: function (data, type, row){
+                    if("nombre_medico" in data){
+                        console.log(data);
+                        return data.nombre_medico;  
+                    } else {
+                        return "Consulta por emergencia"
+                    }
+                }
+            },
+            { 
+                data: null, 
+                render: function (data, type, row){
+                    if("nombre_especialidad" in data){
+                        return data.nombre_especialidad;  
+                    } else {
+                        return "Consulta por emergencia"
+                    }
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if ("cedula_paciente" in data) return data.cedula_paciente;
+                    if ("titular" in data) return data.titular.cedula;
+                    if ("cedula_titular" in data) return data.cedula_titular;
                 }
             },
             { data: "fecha_consulta" },
@@ -264,6 +315,7 @@ addEventListener("DOMContentLoaded", async e => {
             <td colspan="4">Recipes:</td>
         </tr>
         `;
+        let factura;
 
         if (data.recipes) {
 
@@ -297,6 +349,39 @@ addEventListener("DOMContentLoaded", async e => {
             `;
         }
 
+        // <td>Nombre del medicamento: <br><b>${el.nombre_medicamento}</b></td>
+        //         <td>Tipo de medicamento: <br><b>${tipo_medicamento}</b></td>
+        //         <td colspan"2">Uso: <br><b>${el.uso}</b></td>
+
+        if(data.factura){
+
+            factura = `
+            <tr>
+                <td colspan="4"><b>Factura consulta emergencia:</b></td>
+            </tr>
+            `;
+
+            factura += `
+            <tr>
+                <td>Cantidad de consultas médicas: <br><b>${data.factura.cantidad_consultas_medicas}</b></td>
+                <td>Consultas médicas: <br><b>${data.factura.consultas_medicas}</b></td>
+                <td>Cantidad laboratorio: <br><b>${data.factura.cantidad_laboratorios}</b></td>
+                <td>Laboratorios: <br><b>${data.factura.laboratorios}</b></td>
+            </tr>
+            <tr>
+                <td>Cantidad de medicamentos: <br><b>${data.factura.cantidad_medicamentos}</b></td>
+                <td>Medicamentos: <br><b>${data.factura.medicamentos}</b></td>
+                <td>Area de observación: <br><b>${data.factura.area_observacion}</b></td>
+                <td>Enfermería: <br><b>${data.factura.enfermeria}</b></td>
+            </tr>
+            <tr>
+                <td>Total insumos: <br><b>${data.factura.total_insumos}</b></td>
+                <td>Total exámenes: <br><b>${data.factura.total_examenes}</b></td>
+                <td>Total consulta: <br><b>${data.factura.total_consulta}</b></td>
+            </tr>
+        `;
+        }
+
 
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
@@ -317,6 +402,9 @@ addEventListener("DOMContentLoaded", async e => {
                 </tr>
                 <tr><td><br></td></tr>
                 ${recipes}
+                <tr><td><br></td></tr>
+                <tr><td><br></td></tr>
+                ${factura}
                 <tr><td><br></td></tr>
                 <tr>
                     <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/consulta/${data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg${tipo_cita}"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button></td>
