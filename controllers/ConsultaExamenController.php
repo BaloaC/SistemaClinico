@@ -3,13 +3,7 @@
 class ConsultaExamenController extends Controller{
 
     public function insertarConsultaExamen($form, $id){
-        // echo $form;
-        // echo '<pre>';
         
-        // if (!is_array($form)) {
-        //     $form = explode(' ', $form);
-        // }
-        // echo $form;
         $consulta_id = $id;
 
         foreach ($form as $forms) {
@@ -42,6 +36,15 @@ class ConsultaExamenController extends Controller{
 
                 default: 
                     
+                    $_examenModel = new ExamenModel();
+                    $examen = $_examenModel->where('examen_id', '=', $newForm['examen_id'])->getFirst();
+                    $newForm['precio_examen_usd'] = $examen->precio_examen;
+
+                    $_globalModel = new GlobalModel();
+                    $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
+
+                    $newForm['precio_examen_bs'] = $examen->precio_examen * $valorDivisa->value;
+
                     $data = $validarConsultaExamen->dataScape($newForm);
                     $_consultaExamenModel = new ConsultaExamenModel();
                     $idExamen = $_consultaExamenModel->insert($data);

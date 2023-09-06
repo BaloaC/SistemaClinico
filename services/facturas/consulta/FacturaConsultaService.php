@@ -8,7 +8,8 @@ class FacturaConsultaService {
             "factura_consulta.factura_consulta_id",
             "factura_consulta.consulta_id",
             "factura_consulta.metodo_pago",
-            "factura_consulta.monto_consulta",
+            "factura_consulta.monto_consulta_bs",
+            "factura_consulta.monto_consulta_usd",
             "factura_consulta.estatus_fac",
             "consulta.fecha_consulta",
             "consulta.es_emergencia"
@@ -23,13 +24,11 @@ class FacturaConsultaService {
         if ( array_key_exists('date', $_GET) ) {
             
             $fecha_mes = DateTime::createFromFormat('Y-m-d', $_GET['date']);
-            $fecha_mes->modify('first day of this month');
-            $fecha_inicio = $fecha_mes->format("Y-m-d");
+            $mes = $fecha_mes->format("m");
+            $anio = $fecha_mes->format("Y");
             
-            $fecha_mes->modify('last day of this month');
-            $fecha_fin = $fecha_mes->format("Y-m-d");
-            
-            $facturasList = $_facturaConsulta->whereDate('fecha_consulta', $fecha_inicio, $fecha_fin)
+            $facturasList = $_facturaConsulta->where('YEAR(fecha_consulta)',"=",$anio)
+                                                ->where('MONTH(fecha_consulta)', '=', $mes)
                                                 ->innerJoin($selectConsulta, $innersConsulta, "factura_consulta");
 
         } else {
@@ -38,8 +37,9 @@ class FacturaConsultaService {
         
         // Hacemos inner para obtener los datos de las consultas
         $consultaList = [];
-        $monto_total_consultas = 0;
-
+        $monto_total_consultas_bs = 0;
+        $monto_total_consultas_usd = 0;
+        
         foreach ($facturasList as $factura) {
             
             if ( array_key_exists('date', $_GET) ) {
@@ -51,7 +51,8 @@ class FacturaConsultaService {
                 $factura_consulta = array_merge($informacion_consulta, $insumos_consulta);
 
                 $consultaList['facturas'][] = $factura_consulta;
-                $monto_total_consultas += $factura_consulta['monto_consulta'];
+                $monto_total_consultas_bs += $factura_consulta['monto_consulta_bs'];
+                $monto_total_consultas_usd += $factura_consulta['monto_consulta_usd'];
 
             } else {
                 $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura);
@@ -63,11 +64,17 @@ class FacturaConsultaService {
         }
         
         if ( array_key_exists('date', $_GET) ) {
-            $consultaList['monto_total'] =  round($monto_total_consultas, 2);
+            $consultaList['monto_total_bs'] =  round($monto_total_consultas_bs, 2);
+            $consultaList['monto_total_usd'] =  round($monto_total_consultas_usd, 2);
             return $consultaList;
         }
 
-        return FacturaConsultaHelpers::obtenerMontoTotal($consultaList);    
+        $facturas = [];
+        foreach ($consultaList as $consulta) {
+            $facturas[] = FacturaConsultaHelpers::obtenerMontoTotal($consulta);
+        }
+
+        return $facturas;
     }
 
     public static function listarFacturaPorId($factura_id) {
@@ -77,7 +84,8 @@ class FacturaConsultaService {
             "factura_consulta.factura_consulta_id",
             "factura_consulta.consulta_id",
             "factura_consulta.metodo_pago",
-            "factura_consulta.monto_consulta",
+            "factura_consulta.monto_consulta_bs",
+            "factura_consulta.monto_consulta_usd",
             "factura_consulta.estatus_fac",
             "consulta.fecha_consulta",
             "consulta.es_emergencia"
@@ -103,6 +111,8 @@ class FacturaConsultaService {
         $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
 
         $factura_consulta = array_merge($consulta_info, $insumos_consulta, $examenes_consulta);
-        return FacturaConsultaHelpers::obtenerMontoTotal( array ($factura_consulta));
+        return FacturaConsultaHelpers::obtenerMontoTotal($factura_consulta);
+
+        // return FacturaConsultaHelpers::obtenerMontoTotal( array ($factura_consulta));
     }
 }

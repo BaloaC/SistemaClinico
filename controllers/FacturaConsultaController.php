@@ -22,7 +22,7 @@ class FacturaConsultaController extends Controller {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
-        $camposNumericos = array('monto_consulta');
+        $camposNumericos = array('monto_consulta_usd');
         $camposId = array('consulta_id', 'paciente_id');
 
         switch ($validarFactura) {
@@ -51,6 +51,10 @@ class FacturaConsultaController extends Controller {
                 return $respuesta->json(400);
 
             default:
+
+                $_globalModel = new GlobalModel();
+                $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
+                $_POST['monto_consulta_bs'] = $_POST['monto_consulta_usd'] * (float) $valorDivisa->value;
 
                 $data = $validarFactura->dataScape($_POST);
                 $_facturaConsultaModel = new FacturaConsultaModel();

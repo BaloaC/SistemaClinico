@@ -1,12 +1,14 @@
 <?php
 
+include_once './services/globals/GlobalsHelpers.php';
+
 class CompraInsumoController extends Controller {
 
     public function insertarCompraInsumo($POST, $facturaId){
 
         $id = $facturaId;
         $validarFactura = new Validate;
-        $camposNumericos = array('unidades','precio_unit','precio_total');
+        $camposNumericos = array('unidades','precio_unit_bs','precio_total_bs');
         $camposKey = array('insumo_id');
         
         foreach ($POST as $POSTS) {
@@ -34,6 +36,11 @@ class CompraInsumoController extends Controller {
                     $data = $validarFactura->dataScape($POSTS);
 
                     $_compraInsumoModel = new CompraInsumoModel();
+
+                    $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+                    $data['precio_unit_usd'] = $data['precio_unit_bs'] / $valorDivisa;
+                    $data['precio_total_usd'] = $data['precio_total_bs'] / $valorDivisa;
+
                     $respuesta = $_compraInsumoModel->insert($data);
 
                     $mensaje = ($respuesta > 0);
@@ -70,8 +77,10 @@ class CompraInsumoController extends Controller {
         $arraySelect = array(
             "insumo.nombre AS insumo_nombre", 
             "compra_insumo.unidades", 
-            "compra_insumo.precio_unit", 
-            "compra_insumo.precio_total" 
+            "compra_insumo.precio_unit_bs", 
+            "compra_insumo.precio_total_bs",
+            "compra_insumo.precio_unit_usd", 
+            "compra_insumo.precio_total_usd" 
         );
 
         $_compraInsumoModel = new CompraInsumoModel();

@@ -71,14 +71,15 @@ class FacturaConsultaHelpers {
 
         // Revisamos si tienes insumos asociados
         if ( count($consultaInsumos) > 0 ) {
-            $monto = $factura->monto_consulta;
+            // $monto = $factura->monto_consulta;
 
             foreach ($consultaInsumos as $consulta_insumo) {
                 
                 $_insumoModel = new InsumoModel();
                 $insumo = $_insumoModel->where('insumo_id', '=', $consulta_insumo->insumo_id)->getFirst();
                 $consulta_insumo->precio_insumo = $insumo->precio;
-                $consulta_insumo->monto_total = $consulta_insumo->cantidad * $insumo->precio;
+                $consulta_insumo->monto_total_bs = $consulta_insumo->cantidad * $consulta_insumo->precio_insumo_bs;
+                $consulta_insumo->monto_total_usd = $consulta_insumo->cantidad * $consulta_insumo->precio_insumo_usd;
             }
             
             $consulta['insumos'] = $consultaInsumos;
@@ -98,13 +99,12 @@ class FacturaConsultaHelpers {
 
         // Revisamos si tienes insumos asociados
         if ( count($consultaExamenes) > 0 ) {
-            $monto = $factura->monto_consulta;
+            // $monto = $factura->monto_consulta;
 
             foreach ($consultaExamenes as $consulta_examen) {
                 
-                $_examenModel = new ExamenModel();
-                $examen = $_examenModel->where('examen_id', '=', $consulta_examen->examen_id)->getFirst();
-                $consulta_examen->precio_examen = $examen->precio_examen;
+                $consulta_examen->precio_examen_bs = $consulta_examen->precio_examen_bs;
+                $consulta_examen->precio_examen_usd = $consulta_examen->precio_examen_usd;
             }
             
             $consulta['examenes'] = $consultaExamenes;
@@ -114,27 +114,32 @@ class FacturaConsultaHelpers {
         return $consultaList[0];
     }
 
-    public static function obtenerMontoTotal($facturaList) {
-        $facturas = [];
+    public static function obtenerMontoTotal($consulta) {
+        // $facturas = [];
         
-        foreach ($facturaList as $consulta) {
-            $monto = 0;
+        // foreach ($facturaList as $consulta) {
+            $montoBs = 0;
+            $montoUsd = 0;
 
             if (isset($consulta['insumos'])) {
                 foreach ($consulta['insumos'] as $insumos) {
-                    $monto += $insumos->monto_total;
+                    $montoBs += $insumos->monto_total_bs;
+                    $montoUsd += $insumos->monto_total_usd;
                 }
             }
             
             if (isset($consulta['examenes'])) {
                 foreach ($consulta['examenes'] as $examenes) {
-                    $monto += $examenes->precio_examen;
+                    $montoBs += $examenes->precio_examen_bs;
+                    $montoUsd += $examenes->precio_examen_usd;
                 }
             }
 
-            $consulta['monto_total'] = $monto + $consulta['monto_consulta'];
+            $consulta['monto_total_usd'] = $montoUsd + $consulta['monto_consulta_usd'];
+            $consulta['monto_total_bs'] = $montoBs + $consulta['monto_consulta_bs'];
+
             $facturas[] = $consulta;
-        }
+        // }
         
         return $facturas;
     }

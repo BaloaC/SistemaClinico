@@ -12,6 +12,7 @@ class FacturaCompraController extends Controller
         "factura_compra.fecha_compra",
         "factura_compra.monto_con_iva",
         "factura_compra.monto_sin_iva",
+        "factura_compra.monto_usd",
         "factura_compra.excento",
         "factura_compra.estatus_fac",
         "proveedor.nombre AS proveedor_nombre"
@@ -115,13 +116,11 @@ class FacturaCompraController extends Controller
         if ( array_key_exists('date', $_GET) ) {
             
             $fecha_mes = DateTime::createFromFormat('Y-m-d', $_GET['date']);
-            $fecha_mes->modify('first day of this month');
-            $fecha_inicio = $fecha_mes->format("Y-m-d");
+            $mes = $fecha_mes->format('m');
+            $anio = $fecha_mes->format('Y');
             
-            $fecha_mes->modify('last day of this month');
-            $fecha_fin = $fecha_mes->format("Y-m-d");
-            
-            $factura_compra = $_compraInsumoModel->whereDate('fecha_compra', $fecha_inicio, $fecha_fin)
+            $factura_compra = $_compraInsumoModel->where('YEAR(fecha_compra)',"=",$anio)
+                                                ->where('MONTH(fecha_compra)', '=', $mes)
                                                 ->innerJoin($this->arraySelect, $inners, "factura_compra");
 
         } else {
@@ -134,11 +133,13 @@ class FacturaCompraController extends Controller
 
             $total_factura_iva = 0;
             $total_factura = 0;
+            $total_usd = 0;
             foreach ($factura_compra as $facturas) {
 
                 if ( array_key_exists('date', $_GET) ) { // Si es el reporte por mes añadimos el total
                     $total_factura_iva += $facturas->monto_con_iva;
                     $total_factura += $facturas->monto_sin_iva;
+                    $total_usd += $facturas->monto_usd;
                 }
 
                 // Codigo para recibir los insumos que fueron comprados con esa factura
@@ -158,6 +159,7 @@ class FacturaCompraController extends Controller
             if ( array_key_exists('date', $_GET) ) { // Si es el reporte por mes añadimos el total
                 $resultadoFactura['monto_total'] = round($total_factura, 2);
                 $resultadoFactura['monto_total_iva'] = round($total_factura_iva, 2);
+                $resultadoFactura['monto_total_usd'] = round($total_usd, 2);
             }
 
             return $this->retornarMensaje($resultadoFactura);

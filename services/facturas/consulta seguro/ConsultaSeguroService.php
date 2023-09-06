@@ -1,6 +1,8 @@
 <?php
 
 include_once "./services/facturas/consulta seguro/ConsultaSeguroHelpers.php";
+include_once "./services/facturas/consulta/FacturaConsultaHelpers.php";
+include_once "./services/globals/GlobalsHelpers.php";
 
 class ConsultaSeguroService {
 
@@ -34,7 +36,10 @@ class ConsultaSeguroService {
         $consultaEmergencia = $_consultaEmergenciaModel->where('consulta_id', '=', $formulario['consulta_id'])->getFirst();
 
         $formulario['seguro_id'] = $consultaEmergencia->seguro_id;
-        $formulario['monto'] = $consultaEmergencia->total_consulta;
+        $formulario['monto_consulta_usd'] = $consultaEmergencia->total_consulta;
+
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+        $formulario['monto_consulta_bs'] = $consultaEmergencia->total_consulta * $valorDivisa;
 
         $_consultaSeguroModel = new ConsultaSeguroModel();
         $fueInsertado = $_consultaSeguroModel->insert($formulario);
@@ -51,22 +56,33 @@ class ConsultaSeguroService {
 
         $_consultaSeguroModel = new ConsultaSeguroModel();
         $consultasSeguros = $_consultaSeguroModel->where('estatus_con', '!=', 2)->getAll();
-        $listaConsultas = [];
+        $listaConsultas = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultasSeguros);
+        $consultas = [];
 
-        if (count($consultasSeguros) > 0) {
-            foreach ($consultasSeguros as $consulta) {
+        foreach ($listaConsultas as $consulta) {
             
-                $_consultaCita = new ConsultaCitaModel();
-                $consulta_cita = $_consultaCita->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
-    
-                if (is_null($consulta_cita)) {
-                    $listaConsultas[] = ConsultaSeguroHelpers::obtenerInformacionEmergencia($consulta);
-                } else {
-                    $listaConsultas[] = ConsultaSeguroHelpers::obtenerInformacionCita($consulta);
-                }
+            if ( isset( $consulta['consulta_emergencia'] ) ) { // Si es por emergencia
+                $consultas[] = ConsultaSeguroHelpers::calcularConsultaEmergencia($consulta);
+
+            } else { // Si no es consulta por emergencia
+                $consultas[] = FacturaConsultaHelpers::obtenerMontoTotal($consulta);
             }
+            
         }
-        return $listaConsultas;
+        
+        return $consultas;
+    }
+
+    public static function listarConsultasPorSeguroYMes($seguro_id, $mes, $anio) {
+
+        $_consultaSeguroModel = new ConsultaSeguroModel();
+        $consultasSeguros = $_consultaSeguroModel->where('estatus_con', '!=', 2)
+                                                ->where('seguro_id', '=', $seguro_id)
+                                                ->where('YEAR(fecha_ocurrencia)',"=",$anio)->where('MONTH(fecha_ocurrencia)', '=', $mes)
+                                                // ->whereDate('fecha_ocurrencia', $primer_dia, $ultimo_dia)
+                                                ->getAll();
+        
+        return ConsultaSeguroHelpers::obtenerInformacionCompleta($consultasSeguros);
     }
 
 }
