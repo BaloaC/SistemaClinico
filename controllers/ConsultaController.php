@@ -158,9 +158,9 @@ class ConsultaController extends Controller {
         $validarConsulta = new Validate;
         $es_emergencia = isset($_POST['es_emergencia']);
 
-        if (!$es_emergencia) {
-            ConsultaValidaciones::validarConsulta($_POST);
-        } 
+        // if (!$es_emergencia) {
+        //     ConsultaValidaciones::validarConsulta($_POST);
+        // } 
         
         // Validamos relaciones externas
         $examenes = isset($_POST['examenes']) ? $_POST['examenes'] : false;
@@ -217,11 +217,11 @@ class ConsultaController extends Controller {
                     return $respuesta->json(400);
                 }
 
-            }
-            
-            if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad')) {
-                $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
-                return $respuesta->json(400);
+            } else {
+                if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad')) {
+                    $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
+                    return $respuesta->json(400);
+                }
             }
 
             $_consultaModel = new ConsultaModel();
@@ -260,19 +260,33 @@ class ConsultaController extends Controller {
 
         if ( $this->consulta_id > 0) {
 
-            if ($examenes) {
+            if (!$por_cita) {
+                if ($examenes) {
 
-                $respuestaExamen = $this->insertarExamen($examenes, $this->consulta_id);
-                if ($respuestaExamen) {
-                    return $respuestaExamen;
+                    $respuestaExamen = $this->insertarExamen($examenes, $this->consulta_id);
+                    if ($respuestaExamen) {
+                        return $respuestaExamen;
+                    }
                 }
-            }
+    
+                if ($insumos) {
+    
+                    $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id);
+                    if ($respuestaInsumo) {
+                        return $respuestaInsumo;
+                    }
+                }
 
-            if ($insumos) {
+            } else {
+                if ($examenes) {
+                    ConsultaHelper::insertarExamenesSeguro($examenes, $this->consulta_id);
+                }
 
-                $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id);
-                if ($respuestaInsumo) {
-                    return $respuestaInsumo;
+                if ($insumos) {
+                    $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id);
+                    if ($respuestaInsumo) {
+                        return $respuestaInsumo;
+                    }
                 }
             }
 

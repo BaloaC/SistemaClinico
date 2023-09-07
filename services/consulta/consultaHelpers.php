@@ -1,5 +1,7 @@
 <?php
 
+include_once './services/globals/GlobalsHelpers.php';
+
 class ConsultaHelper {
 
     // variables para el inner join de seguros con cita
@@ -137,5 +139,67 @@ class ConsultaHelper {
         }
         
         return $consultas;
+    }
+
+    public static function insertarExamenesSeguro($examenes, $consulta_id) {
+
+        $_consultaCitaModel = new ConsultaCitaModel();
+        $consulta_cita = $_consultaCitaModel->where('consulta_id', '=', $consulta_id)->getFirst();
+
+        $_citaSeguroModel = new CitaSeguroModel();
+        $cita_seguro = $_citaSeguroModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
+        
+        $_seguroExamen = new SeguroExamenModel();
+        $seguro_examen = $_seguroExamen->where('seguro_id', '=', $cita_seguro->seguro_id)->getFirst();
+        
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+        $consulta_examen = [];
+
+        foreach ($examenes as $examen) {
+
+            if (is_null($seguro_examen)) {
+                $consulta_examen[] = ConsultaHelper::obtenerPrecioExamenNormal($examen, $consulta_id);
+            } else {
+
+                $indice = array_search( $examen['examen_id'], explode(',', $seguro_examen->examenes));
+
+                if (!$indice) {
+                    $consulta_examen[] = ConsultaHelper::obtenerPrecioExamenNormal($examen, $consulta_id);
+
+                } else {
+
+                    $costos = explode(',', $seguro_examen->costos);
+                    $consulta_examen[] = [
+                        'consulta_id' => $consulta_id,
+                        'examen_id' => $examen['examen_id'],
+                        'precio_examen_usd' => $costos[$indice],
+                        'precio_examen_bs' => round($costos[$indice] * $valorDivisa, 2),
+                    ];
+                }
+            }
+        }
+
+        foreach ($consulta_examen as $consulta) {
+            $_consultaExamenModel = new ConsultaExamenModel();
+            $_consultaExamenModel->insert($consulta);
+        }
+        
+    }
+
+    public static function obtenerPrecioExamenNormal($examen, $consulta_id) {
+        
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+
+        $_examenModel = new ExamenModel();
+        $examenSeguro = $_examenModel->where('examen_id', '=', $examen['examen_id'])->getFirst();
+        
+        $consulta_examen = [
+            'consulta_id' => $consulta_id,
+            'examen_id' => $examen['examen_id'],
+            'precio_examen_usd' => $examenSeguro->precio_examen,
+            'precio_examen_bs' => round($examenSeguro->precio_examen * $valorDivisa, 2),
+        ];
+
+        return $consulta_examen;
     }
 }
