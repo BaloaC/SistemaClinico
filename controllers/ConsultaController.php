@@ -186,6 +186,8 @@ class ConsultaController extends Controller {
         $es_emergencia = isset($_POST['es_emergencia']); // Validamos que el atributo emergencia sea booleano
 
         if ( $es_emergencia ) {
+            $por_cita = true;
+
             if ( $_POST['es_emergencia'] != 0 && $_POST['es_emergencia'] != 1 ) {
                 $respuesta = new Response(false, 'El atributo es_emergencia tiene que ser un booleano');
                 return $respuesta->json(400);
@@ -195,11 +197,15 @@ class ConsultaController extends Controller {
             ConsultaValidaciones::validarConsultaEmergencia($_POST);
             
             $consultaEmergencia = $validarConsulta->dataScape($_POST);
+            
             $this->consulta_id = ConsultaService::insertarConsulta($consultaEmergencia, 'emergencia');
-
             $consultaEmergencia['consulta_id'] = $this->consulta_id;
+            $consultaEmergencia['examenes'] = $examenes;    
             ConsultaService::insertarConsultaEmergencia($consultaEmergencia);
-            ConsultaService::actualizarAcumuladoMedico($consultaEmergencia['pagos']);
+
+            if( isset($consultaEmergencia['pagos']) ) {
+                ConsultaService::actualizarAcumuladoMedico($consultaEmergencia['pagos']);
+            }
 
         } else {
         
@@ -260,32 +266,34 @@ class ConsultaController extends Controller {
 
         if ( $this->consulta_id > 0) {
 
-            if (!$por_cita) {
-                if ($examenes) {
+            if (!$es_emergencia) {
+                if (!$por_cita) {
+                    if ($examenes) {
 
-                    $respuestaExamen = $this->insertarExamen($examenes, $this->consulta_id);
-                    if ($respuestaExamen) {
-                        return $respuestaExamen;
+                        $respuestaExamen = $this->insertarExamen($examenes, $this->consulta_id);
+                        if ($respuestaExamen) {
+                            return $respuestaExamen;
+                        }
                     }
-                }
-    
-                if ($insumos) {
-    
-                    $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id);
-                    if ($respuestaInsumo) {
-                        return $respuestaInsumo;
+        
+                    if ($insumos) {
+        
+                        $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id);
+                        if ($respuestaInsumo) {
+                            return $respuestaInsumo;
+                        }
                     }
-                }
 
-            } else {
-                if ($examenes) {
-                    ConsultaHelper::insertarExamenesSeguro($examenes, $this->consulta_id);
-                }
+                } else {
+                    if ($examenes) {
+                        ConsultaHelper::insertarExamenesSeguro($examenes, $this->consulta_id);
+                    }
 
-                if ($insumos) {
-                    $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id);
-                    if ($respuestaInsumo) {
-                        return $respuestaInsumo;
+                    if ($insumos) {
+                        $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id);
+                        if ($respuestaInsumo) {
+                            return $respuestaInsumo;
+                        }
                     }
                 }
             }

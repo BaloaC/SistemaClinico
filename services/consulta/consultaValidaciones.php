@@ -34,7 +34,6 @@ class ConsultaValidaciones {
             exit();
         }
 
-
         // Buscamos al paciente beneficiado para validar si tiene relación con el titular
         $_pacienteModel = new PacienteModel();
         $pacienteBeneficiado = $_pacienteModel->where('cedula', '=', $formulario['cedula_beneficiado'])->getFirst();
@@ -73,22 +72,25 @@ class ConsultaValidaciones {
         }
 
         $total_medico = 0;
-        foreach ($formulario['pagos'] as $medico) {
-            if ( !$validarConsulta->isDuplicated('medico', 'medico_id', $medico['medico_id']) ) {
-                $respuesta = new Response(false, 'El médico ingresado no ha sido encontrado');
+
+        if( isset($formulario['pagos']) ) {
+            foreach ($formulario['pagos'] as $medico) {
+                if ( !$validarConsulta->isDuplicated('medico', 'medico_id', $medico['medico_id']) ) {
+                    $respuesta = new Response(false, 'El médico ingresado no ha sido encontrado');
+                    echo $respuesta->json(400);
+                    exit();
+                }
+
+                $total_medico += $medico['monto'];
+            }
+
+            $total_consulta = $formulario['consultas_medicas'] + $formulario['laboratorios'] + $formulario['medicamentos'] + $formulario['area_observacion'] + $formulario['enfermeria'] + $formulario['total_insumos']; 
+            
+            if ( $total_medico > $total_consulta ) {
+                $respuesta = new Response(false, 'El monto de los médicos no puede superar el de la consulta');
                 echo $respuesta->json(400);
                 exit();
             }
-
-            $total_medico += $medico['monto'];
-        }
-
-        $total_consulta = $formulario['consultas_medicas'] + $formulario['laboratorios'] + $formulario['medicamentos'] + $formulario['area_observacion'] + $formulario['enfermeria'] + $formulario['total_insumos'] + $formulario['total_examenes']; 
-        
-        if ( $total_medico > $total_consulta ) {
-            $respuesta = new Response(false, 'El monto de los médicos no puede superar el de la consulta');
-            echo $respuesta->json(400);
-            exit();
         }
     }
 

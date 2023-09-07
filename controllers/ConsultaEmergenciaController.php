@@ -1,5 +1,8 @@
 <?php
 
+include_once './services/consultas/consulta emergencia/ConsultaEmergenciaValidate.php';
+include_once './services/consultas/consulta emergencia/ConsultaEmergenciaService.php';
+
 class ConsultaController extends Controller {
 
     // variables para el inner join de consultas
@@ -28,45 +31,6 @@ class ConsultaController extends Controller {
 
     public function formActualizarConsulta($consulta_id) {
         return $this->view('consultas/actualizarConsultas', ['consulta_id' => $consulta_id]);
-    }
-
-    public function insertarConsulta(/*Request $request*/) {
-        $_POST = json_decode(file_get_contents('php://input'), true);
-
-        $campoId = array("paciente_id", "paciente_beneficiado_id");
-        $camposNumericos = array("consultas_medicas", "laboratorios", "medicamentos", "area_observacion", "enfermeria");
-        $validarConsulta = new Validate;
-
-        switch ($validarConsulta) {
-            case !$validarConsulta->existsInDB($_POST, $campoId):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
-
-            case $validarConsulta->isNumber($_POST, $camposNumericos):
-                $respuesta = new Response('Campos numéricos enviados como string');
-                $respuesta->setData('Los siguientes campos deben ser numéricos: "consultas_medicas", "laboratorios", "medicamentos", "area_observacion", "enfermeria"');
-                return $respuesta->json(400);
-
-            case $validarConsulta->isDate($_POST['fecha_emergencia']):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(400);
-
-            case $validarConsulta->isToday($_POST['fecha_consulta'], true):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(400);
-
-            default:
-                
-                $data = $validarConsulta->dataScape($_POST);
-                $_consultaEmergencia = new ConsultaEmergenciaModel();
-                $id = $_consultaEmergencia->insert($data);
-                
-                $seInserto = ($id > 0);
-                
-                $respuesta = new Response($seInserto ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-                $respuesta->setData($data);
-                return $respuesta->json($seInserto ? 201 : 400);
-        }
     }
 
     public function listarConsultas() {

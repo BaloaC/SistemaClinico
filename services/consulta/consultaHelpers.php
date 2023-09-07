@@ -141,6 +141,52 @@ class ConsultaHelper {
         return $consultas;
     }
 
+    public static function insertarExamenesEmergencia($formulario) {
+
+        $_seguroExamen = new SeguroExamenModel();
+        $seguro_examen = $_seguroExamen->where('seguro_id', '=', $formulario['seguro_id'])->getFirst();
+        
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+        $consulta_examen = [];
+
+        foreach ($formulario['examenes'] as $examen) {
+
+            if (is_null($seguro_examen)) {
+                $consulta_examen[] = ConsultaHelper::obtenerPrecioExamenNormal($examen, $formulario['consulta_id']);
+            } else {
+
+                $indice = array_search( $examen['examen_id'], explode(',', $seguro_examen->examenes));
+
+                if (!$indice) {
+                    $consulta_examen[] = ConsultaHelper::obtenerPrecioExamenNormal($examen, $formulario['consulta_id']);
+
+                } else {
+
+                    $costos = explode(',', $seguro_examen->costos);
+                    $consulta_examen[] = [
+                        'consulta_id' => $formulario['consulta_id'],
+                        'examen_id' => $examen['examen_id'],
+                        'precio_examen_usd' => $costos[$indice],
+                        'precio_examen_bs' => round($costos[$indice] * $valorDivisa, 2),
+                    ];
+                }
+            }
+        }
+
+        $total_examenes = 0;
+
+        foreach ($consulta_examen as $consulta) {
+            $total_examenes += $consulta['precio_examen_usd'];
+            $_consultaExamenModel = new ConsultaExamenModel();
+            $_consultaExamenModel->insert($consulta);
+        }
+        
+        $formulario['total_examenes'] = $total_examenes;
+        $formulario['total_examenes_bs'] = $formulario['total_examenes'] * $valorDivisa;
+        
+        return $formulario;
+    }
+
     public static function insertarExamenesSeguro($examenes, $consulta_id) {
 
         $_consultaCitaModel = new ConsultaCitaModel();
