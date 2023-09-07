@@ -61,7 +61,7 @@ class ConsultaSeguroController extends Controller{
 
             $_pacienteSeguro = new PacienteSeguroModel();
             $pacienteSeguro = $_pacienteSeguro->where('paciente_id', '=', $paciente->paciente_id)->where('seguro_id', '=', $citaSeguro->seguro_id)->getFirst();
-
+            
             if ($data['monto_consulta_usd'] > $pacienteSeguro->saldo_disponible) {
                 $respuesta = new Response(false, 'Saldo insuficiente para cubrir la consulta');
                 $respuesta->setData("Error al procesar al paciente id $pacienteSeguro->paciente_id con saldo $pacienteSeguro->saldo_disponible");

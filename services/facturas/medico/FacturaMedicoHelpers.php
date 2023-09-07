@@ -1,5 +1,7 @@
 <?php
 
+include_once './services/globals/GlobalsHelpers.php';
+
 class FacturaMedicoHelpers {
 
     public static function contabilizarFacturasAseguradas($form, $fechas) {
@@ -7,7 +9,7 @@ class FacturaMedicoHelpers {
         // Facturas por consultas aseguradas
         $selectConsultas = array(
             "consulta_seguro.consulta_id",
-            "consulta_seguro.monto",
+            "consulta_seguro.monto_consulta_usd",
             "consulta_seguro.seguro_id",
             "consulta_cita.cita_id",
             "consulta.fecha_consulta",
@@ -30,7 +32,7 @@ class FacturaMedicoHelpers {
 
         $calculos['monto'] = 0; $calculos['pacientes'] = 0;
                 
-        if ( count($consultas_aseguradas) > 0) {
+        if ( !is_null($consultas_aseguradas) && count($consultas_aseguradas) > 0) {
             foreach ($consultas_aseguradas as $consulta) {
 
                 $_seguroModel = new SeguroModel();
@@ -50,7 +52,7 @@ class FacturaMedicoHelpers {
         $selectConsultas = array(
             // "factura_consulta.factura_consulta_id",
             "factura_consulta.consulta_id",
-            "factura_consulta.monto_consulta",
+            "factura_consulta.monto_consulta_usd",
             "consulta_sin_cita.medico_id"
         );
 
@@ -79,9 +81,8 @@ class FacturaMedicoHelpers {
                 $calculos['pacientes'] += 1;
             }
 
-            // $_globalModel = new GlobalModel();
-            // $porcentaje_medico = $_globalModel->where('key', '=', 'porcentaje_medico')->getFirst();
-            // $calculos['monto'] = $calculos['monto'] * $porcentaje_medico->value / 100;
+            $porcentaje_medico = GlobalsHelpers::obtenerPorcentajeMedico();
+            $calculos['monto'] = $calculos['monto'] * $porcentaje_medico->value / 100;
         }
 
         $calculos['monto'] += $medico->acumulado;
