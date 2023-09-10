@@ -3,6 +3,7 @@
 include_once './services/facturas/seguro/FacturaSeguroHelpers.php';
 include_once './services/facturas/seguro/FacturaSeguroService.php';
 include_once './services/facturas/consulta seguro/ConsultaSeguroHelpers.php';
+include_once './services/facturas/consulta/FacturaConsultaHelpers.php';
 
 class FacturaSeguroService {
 
@@ -73,10 +74,21 @@ class FacturaSeguroService {
         $anio = date("Y", strtotime($fechaOcurrencia));
         
         $consultaList = FacturaSeguroHelpers::innerFacturaSeguro($factura->seguro_id, $mes, $anio);
-
+        
         if ( count($consultaList) > 0 ) {
             $consultas = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultaList);
-            return FacturaSeguroHelpers::retornarMensaje($consultas);
+            $facturas = [];
+
+            foreach ($consultas as $consulta) {
+                if ( isset( $consulta['consulta_emergencia'] ) ) { // Si es por emergencia
+                    $facturas[] = $consulta;
+    
+                } else { // Si no es consulta por emergencia
+                    $facturas[] = FacturaConsultaHelpers::obtenerMontoTotal($consulta);
+                }
+            }
+
+            return FacturaSeguroHelpers::retornarMensaje($facturas);
 
         } else {
             $respuesta = new Response(false, "No hay consultas en el mes de $factura->mes para la factura indicada");

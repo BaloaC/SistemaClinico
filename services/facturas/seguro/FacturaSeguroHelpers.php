@@ -49,8 +49,8 @@ class FacturaSeguroHelpers {
     }
 
     public static function retornarMensaje($resultadoSentencia) {
-
-        $bool = ($resultadoSentencia > 0);
+        
+        $bool = (count($resultadoSentencia) > 0);
 
         $respuesta = new Response($bool ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($resultadoSentencia);

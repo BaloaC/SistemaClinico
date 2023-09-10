@@ -101,7 +101,7 @@ class FacturaSeguroController extends Controller{
         $inners = $_facturaSeguroModel->listInner($this->arrayInner);
         $id = $_facturaSeguroModel->innerJoin($this->arraySelect, $inners, "factura_seguro");
         
-        return $this->retornarMensaje($id);
+        return FacturaSeguroHelpers::retornarMensaje($id);
     }
 
     public function listarFacturaSeguroPorSeguro($seguro_id){
@@ -110,7 +110,7 @@ class FacturaSeguroController extends Controller{
         $inners = $_facturaSeguroModel->listInner($this->arrayInner);
         $id = $_facturaSeguroModel->where('factura_seguro.seguro_id', '=', $seguro_id)->innerJoin($this->arraySelect, $inners, "factura_seguro");
         
-        return $this->retornarMensaje($id);
+        return FacturaSeguroHelpers::retornarMensaje($id);
     }
 
     public function listarFacturaSeguroPorFecha($fecha){
@@ -132,7 +132,7 @@ class FacturaSeguroController extends Controller{
         $consultasSeguro = ConsultaSeguroService::listarConsultasPorSeguroYMes($seguro_id, $mes, $anio);
 
         $facturas["consultas"] = $consultasSeguro; 
-        return $this->retornarMensaje($facturas);
+        return FacturaSeguroHelpers::retornarMensaje($facturas);
     }
 
     public function listarFacturaPorId($factura_seguro_id){
@@ -145,15 +145,5 @@ class FacturaSeguroController extends Controller{
     public function actualizarFacturaSeguro($factura_seguro_id) {
         $respuesta = FacturaSeguroService::actualizarEstatus($factura_seguro_id);
         return $respuesta;
-    }
-
-    public function retornarMensaje($resultadoSentencia) {
-
-        $bool = ($resultadoSentencia > 0);
-
-        $respuesta = new Response($bool ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($resultadoSentencia);
-        return $respuesta->json(200);
-        
     }
 }
