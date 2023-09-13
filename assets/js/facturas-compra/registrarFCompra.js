@@ -36,8 +36,8 @@ async function addFCompra() {
             const insumo = {
                 insumo_id: value.value,
                 unidades: $insumosUnid[key].value,
-                precio_unit: $insumosUPrecio[key].value,
-                precio_total: $insumosTPrecio[key].textContent.slice(1)
+                precio_unit_bs: $insumosUPrecio[key].value,
+                precio_total_bs: $insumosTPrecio[key].textContent.slice(1)
             }
             insumos.push(insumo);
 

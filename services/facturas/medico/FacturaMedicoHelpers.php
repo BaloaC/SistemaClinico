@@ -7,7 +7,7 @@ class FacturaMedicoHelpers {
         // Facturas por consultas aseguradas
         $selectConsultas = array(
             "consulta_seguro.consulta_id",
-            "consulta_seguro.monto",
+            "consulta_seguro.monto_consulta_usd",
             "consulta_seguro.seguro_id",
             "consulta_cita.cita_id",
             "consulta.fecha_consulta",
@@ -29,8 +29,8 @@ class FacturaMedicoHelpers {
                                                     ->innerJoin($selectConsultas, $innersConsulta, "consulta_seguro");
 
         $calculos['monto'] = 0; $calculos['pacientes'] = 0;
-                
-        if ( count($consultas_aseguradas) > 0) {
+        
+        if ( !is_null($consultas_aseguradas) && count($consultas_aseguradas) > 0) {
             foreach ($consultas_aseguradas as $consulta) {
 
                 $_seguroModel = new SeguroModel();

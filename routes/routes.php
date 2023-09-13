@@ -17,15 +17,15 @@ Router::get('/auditoria/:id', AuditoriaController::class . '@listarAuditoriaPorU
 // Router::get("/auditoria", AuditoriaController::class . '@index');
 
 // // PDF - Vista
-Router::get("/pdf/seguros", PdfController::class . '@pdf_seguro', [$AuthenticationMiddleware]);
-Router::get("/pdf/facturacompra/:id", PdfController::class . '@pdf_facturaCompra', [$AuthenticationMiddleware]);
-Router::get("/pdf/facturaconsulta/:id", PdfController::class . '@pdf_facturaConsulta', [$AuthenticationMiddleware]);
-Router::get("/pdf/facturaseguro/:id", PdfController::class . '@pdf_facturaSeguro', [$AuthenticationMiddleware]);
-Router::get("/pdf/facturamedico/:id", PdfController::class . '@pdf_facturaMedico', [$AuthenticationMiddleware]);
-Router::get("/pdf/consulta/:id", PdfController::class . '@pdf_consulta', [$AuthenticationMiddleware]);
-Router::get("/pdf/insumosfaltantes", PdfController::class . '@pdf_InsumosFaltantes', [$AuthenticationMiddleware]);
-Router::get("/pdf/historialmedico/:id", PdfController::class . '@pdf_historialMedico', [$AuthenticationMiddleware]);
-Router::get("/pdf/cita/:id", PdfController::class . '@pdf_citas', [$AuthenticationMiddleware]);
+Router::get("/pdf/seguros", PdfController::class . '@pdf_seguro');
+Router::get("/pdf/facturacompra/:id", PdfController::class . '@pdf_facturaCompra');
+Router::get("/pdf/facturaconsulta/:id", PdfController::class . '@pdf_facturaConsulta');
+Router::get("/pdf/facturaseguro/:id", PdfController::class . '@pdf_facturaSeguro');
+Router::get("/pdf/facturamedico/:id", PdfController::class . '@pdf_facturaMedico');
+Router::get("/pdf/consulta/:id", PdfController::class . '@pdf_consulta');
+Router::get("/pdf/insumosfaltantes", PdfController::class . '@pdf_InsumosFaltantes');
+Router::get("/pdf/historialmedico/:id", PdfController::class . '@pdf_historialMedico');
+Router::get("/pdf/cita/:id", PdfController::class . '@pdf_citas');
 
 // //Login - vista
 Router::get('/login', LoginController::class . '@index');

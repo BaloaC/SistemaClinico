@@ -41,10 +41,11 @@
                                             <th>Detalles</th>
                                             <th>Nombre paciente</th>
                                             <th>Método pago</th>
-                                            <th>Monto sin IVA</th>
-                                            <!-- <th>Monto con IVA</th> -->
+                                            <th>Monto total BS</th>
+                                            <th>Monto total USD</th>
+                                            <th>Fecha Consulta</th>
                                             <th>Estatus</th>
-                                            <th>Acciones</th>
+                                            <!-- <th>Acciones</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -67,7 +68,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="alert d-none" role="alert"></div>
+                        <div class="alertConsulta alert d-none" role="alert"></div>
                         <form action="" id="info-fconsulta" class="p-3 px-4">
                             <div class="row">
                                 <div class="col-12 col-md-6">
@@ -76,7 +77,7 @@
                                         <option></option>
                                     </select>
                                     <label for="monto_sin_iva">Monto</label>
-                                    <input type="number" step="any" name="monto_sin_iva" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
+                                    <input type="number" step="any" name="monto_consulta_usd" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
                                     <!-- <input type="number" name="monto_sin_iva" oninput="calcularIva(this)" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8"> -->
                                     
                                 </div>

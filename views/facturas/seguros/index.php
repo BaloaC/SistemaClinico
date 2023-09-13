@@ -18,9 +18,11 @@
         <div class="container">
             <!-- Cabezera -->
             <div class="row">
-                <div class="col-6"><h4 class="pt-5 pb-2 text-grey">Facturas Seguro</h4></div>
+                <div class="col-6">
+                    <h4 class="pt-5 pb-2 text-grey">Facturas Seguro</h4>
+                </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
-                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Factura</button>
+                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalAct"><i class="fa-sm fas fa-reply-all"></i> Actualizar Facturas</button>
                 </div>
                 <hr class="border-white">
             </div>
@@ -42,10 +44,11 @@
                                             <th>Mes</th>
                                             <th>Fecha ocurrencia</th>
                                             <th>Fecha vencimiento</th>
-                                            <th>Monto</th>
+                                            <th>Monto en USD</th>
+                                            <th>Monto en BS</th>
                                             <th>Días para caducarse</th>
                                             <th>Días caducada</th>
-                                            <th>Estatus</th> 
+                                            <th>Estatus</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -60,33 +63,22 @@
             </div>
         </div>
 
-        <!-- Modal Registro-->
-        <div class="modal fade" id="modalReg" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegLabel" aria-hidden="true">
+        <!-- Modal Actaulizar-->
+        <div class="modal fade" id="modalAct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalRegLabel">Registrar factura seguro</h1>
+                        <h1 class="modal-title fs-3" id="modalActLabel">Actaulizar factura seguro</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="alert d-none" role="alert"></div>
-                        <form action="" id="info-fseguro" class="p-3 px-4">
-
-                            <label for="consulta_id">Consulta</label>
-                            <select name="consulta_id" id="s-consulta" class="form-control mb-3" data-active="0" required>
-                                <option></option>
-                            </select>
-                            <label for="tipo_servico">Tipo de servicio</label>
-                            <select name="tipo_servicio" id="s-tipo-servicio" class="form-control mb-3" data-active="0" required>
-                                <option></option>
-                            </select>
-                            <label for="monto">Monto</label>
-                            <input type="number" step="any" name="monto" id="monto" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
-                            <small class="form-text">El precio de ser mayor o igual a 0</small>
-                        </form>
+                        <div id="actAlert" class="alert alert-success d-none" role="alert">
+                            Factruras seguros actualizada exitosamente!
+                        </div>
+                            ¿Está seguro que desea actualizar las facturas?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addFSeguro()">Registrar</button>
+                        <button type="button" id="btn-actualizar" class="btn btn-primary" onclick="actualizarFSeguro()">Actualizar</button>
                     </div>
                 </div>
             </div>
@@ -115,6 +107,7 @@
 
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-seguros/mostrarFSeguros.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/facturas-seguros/actualizarFSeguro.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-seguros/registrarFSeguro.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-seguros/eliminarFSeguro.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>

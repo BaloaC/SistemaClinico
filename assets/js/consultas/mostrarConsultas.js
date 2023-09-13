@@ -315,7 +315,7 @@ addEventListener("DOMContentLoaded", async e => {
             <td colspan="4">Recipes:</td>
         </tr>
         `;
-        let factura;
+        let factura = "";
 
         if (data.recipes) {
 

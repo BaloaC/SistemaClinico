@@ -29,6 +29,10 @@ const path = location.pathname.split('/');
 addEventListener("DOMContentLoaded", async e => {
 
     const id = location.pathname.split("/")[4].split("-");
+
+    // Pasamos la info del seguro para poder actualizar
+    document.getElementById("btn-actualizar").setAttribute("onclick", `actualizarFSeguro('${location.pathname.split("/")[4]}')`);
+
     let listadoFacturas = await getById("factura/seguro", id[0]);
 
     // Filtramos las facturas por el año que se consulta
@@ -55,7 +59,8 @@ addEventListener("DOMContentLoaded", async e => {
             { data: "mes" },
             { data: "fecha_ocurrencia" },
             { data: "fecha_vencimiento" },
-            { data: "monto" },
+            { data: "monto_usd" },
+            { data: "monto_bs" },
             {
                 data: "fecha_vencimiento",
                 render: function (data, type, row) {
@@ -127,7 +132,7 @@ addEventListener("DOMContentLoaded", async e => {
             searchPanes: {
                 show: false,
             },
-            targets: [0, 1, 2, 3, 4, 5, 6, 7],
+            targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
         }],
         // ! rowData (Devuelve toda la fila)
         searchPanes: {
