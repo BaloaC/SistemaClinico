@@ -8,6 +8,7 @@ class ConsultaEmergenciaModel extends GenericModel {
     protected $paciente_id;
     protected $cedula_beneficiado;
     protected $seguro_id;
+    protected $clave_seguro;
     protected $cantidad_consultas_medicas;
     protected $consultas_medicas;
     protected $cantidad_laboratorios;
@@ -37,6 +38,7 @@ class ConsultaEmergenciaModel extends GenericModel {
     public function getPacienteId(){return $this->paciente_id;}
     public function getCedulaBeneficiado(){return $this->cedula_beneficiado;}
     public function getSeguroId(){return $this->seguro_id;}
+    public function getClaveSeguro(){return $this->clave_seguro;}
     public function getCantidadConsultasMedicas(){return $this->cantidad_consultas_medicas;}
     public function getConsultasMedicas(){return $this->consultas_medicas;}
     public function getCantidadLaboratorios(){return $this->cantidad_laboratorios;}
@@ -62,6 +64,7 @@ class ConsultaEmergenciaModel extends GenericModel {
     public function setPacienteId($paciente_id){return $this->paciente_id =$paciente_id;}
     public function setCedulaBeneficiado($cedula_beneficiado){return $this->cedula_beneficiado =$cedula_beneficiado;}
     public function setSeguroId($seguro_id){return $this->seguro_id =$seguro_id;}
+    public function setClaveSeguro($clave_seguro){return $this->clave_seguro =$clave_seguro;}
     public function setCantidadConsultasMedicas($cantidad_consultas_medicas){return $this->$cantidad_consultas_medicas =$cantidad_consultas_medicas;}
     public function setConsultasMedicas($consultas_medicas){return $this->consultas_medicas =$consultas_medicas;}
     public function setCantidadLaboratorios($cantidad_laboratorios){return $this->cantidad_laboratorios =$cantidad_laboratorios;}
