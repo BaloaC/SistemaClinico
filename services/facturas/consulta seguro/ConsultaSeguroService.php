@@ -74,6 +74,23 @@ class ConsultaSeguroService {
         return $consultas;
     }
 
+    public static function listarConsultasSeguroId($consulta_id) {
+
+        $_consultaSeguroModel = new ConsultaSeguroModel();
+        $consultaSeguro[] = $_consultaSeguroModel->where('consulta_seguro_id', '=', $consulta_id)->getFirst();
+        $consulta = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultaSeguro);
+            
+        if ( isset( $consulta['consulta_emergencia'] ) ) { // Si es por emergencia
+            $consulta[0] = $consulta[0];
+            // $consultas[] = ConsultaSeguroHelpers::calcularConsultaEmergencia($consulta);
+
+        } else { // Si no es consulta por emergencia
+            $consulta[0] = array_merge($consulta[0], FacturaConsultaHelpers::obtenerMontoTotal($consulta[0]));
+        }
+        
+        return $consulta;
+    }
+
     public static function listarConsultasPorSeguroYMes($seguro_id, $mes, $anio) {
 
         $_consultaSeguroModel = new ConsultaSeguroModel();

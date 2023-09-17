@@ -158,9 +158,9 @@ class ConsultaController extends Controller {
         $validarConsulta = new Validate;
         $es_emergencia = isset($_POST['es_emergencia']);
 
-        // if (!$es_emergencia) {
-        //     ConsultaValidaciones::validarConsulta($_POST);
-        // } 
+        if (!$es_emergencia) {
+            ConsultaValidaciones::validarConsulta($_POST);
+        } 
         
         // Validamos relaciones externas
         $examenes = isset($_POST['examenes']) ? $_POST['examenes'] : false;

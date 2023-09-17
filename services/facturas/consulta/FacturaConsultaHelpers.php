@@ -138,10 +138,10 @@ class FacturaConsultaHelpers {
             $consulta['monto_total_usd'] = $montoUsd + $consulta['monto_consulta_usd'];
             $consulta['monto_total_bs'] = $montoBs + $consulta['monto_consulta_bs'];
 
-            $facturas[] = $consulta;
+            // $facturas[] = $consulta;
         // }
         
-        return $facturas;
+        return $consulta;
     }
 
     public static function RetornarMensaje($mensaje, $data) {

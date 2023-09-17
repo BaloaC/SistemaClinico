@@ -100,9 +100,9 @@ class ConsultaSeguroController extends Controller{
 
     public function listarConsultaSeguroPorId($consulta_seguro_id){
 
-        $consultasSeguro = json_decode($this->listarConsultaSeguro());
-        $factura = array_filter($consultasSeguro->data, fn($consulta) => $consulta->consulta_seguro_id == $consulta_seguro_id);
-
+        // $consultasSeguro = json_decode($this->listarConsultaSeguro());
+        // $factura = array_filter($consultasSeguro->data, fn($consulta) => $consulta->consulta_seguro_id == $consulta_seguro_id);
+        $factura = ConsultaSeguroService::listarConsultasSeguroId($consulta_seguro_id);
         $siExiste = count($factura) > 0;
         $respuesta = new Response($siExiste ? 'CORRECTO' : 'ERROR');
         $respuesta->setData($factura);
