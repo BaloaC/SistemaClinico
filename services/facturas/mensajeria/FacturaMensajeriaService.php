@@ -31,4 +31,22 @@ class FacturaMensajeriaService {
             }
         }
     }
+
+    public static function listarFacturas($facturas) {
+
+        $_facturaMensajeriaConsultas = new FacturaMensajeriaConsultasModel();
+
+        foreach ($facturas as $factura) {
+            $facturas_consultas = $_facturaMensajeriaConsultas->where('factura_mensajeria_id', '=', $factura->factura_mensajeria_id)->getAll();
+
+            if (count($facturas) <= 0) {
+                $respuesta = new Response('NOT_FOUND');
+                echo $respuesta->json(400);
+                exit();
+            }
+
+            var_dump($facturas_consultas);
+        }
+
+    }
 }

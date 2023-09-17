@@ -36,8 +36,16 @@ class FacturaMensajeriaController extends Controller{
 
     public function actualizarFacturaMedico($factura_medico_id){}
 
-    public function listarFacturaMedico(){
+    public function listarFacturaMensajeria(){
+        $_facturaMensajeriaModel = new FacturaMensajeriaModel();
+        $facturas = $_facturaMensajeriaModel->getAll();
         
+        FacturaMensajeriaService::listarFacturas($facturas);
+
+        $mensaje = (count($facturas) > 0);
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($facturas);
+        return $respuesta->json(200);
     }
 
     public function listarFacturaMedicoPorId($factura_medico_id){
