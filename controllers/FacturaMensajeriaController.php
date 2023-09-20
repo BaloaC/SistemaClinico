@@ -48,9 +48,22 @@ class FacturaMensajeriaController extends Controller{
         return $respuesta->json(200);
     }
 
-    public function listarFacturaMedicoPorId($factura_medico_id){
+    public function listarFacturaMensajeriaPorId($factura_mensajeria_id){
+
+        $_facturaMensajeriaModel = new FacturaMensajeriaModel();
+        $facturas = $_facturaMensajeriaModel->where('factura_mensajeria_id', '=', $factura_mensajeria_id)->getFirst();
         
-      
+        if ( is_null($facturas) ) {
+            $respuesta = new Response('NOT_FOUND');
+            return $respuesta->json(200);
+        }
+
+        $facturaLista = FacturaMensajeriaService::listarFacturaMensajeriaId($facturas);
+        
+        $mensaje = (count( (Array) $facturaLista) > 0);
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($facturaLista);
+        return $respuesta->json(200);
     }
 
     public function listarFacturaPorMedico($medico_id){

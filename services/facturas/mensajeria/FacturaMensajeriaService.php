@@ -54,24 +54,18 @@ class FacturaMensajeriaService {
 
     public static function listarFacturas($facturas) {
 
-        $_facturaMensajeriaConsultas = new FacturaMensajeriaConsultasModel();
+        $facturaLista = [];
 
         foreach ($facturas as $factura) {
-
-            $inners = $_facturaMensajeriaConsultas->listInner(FacturaMensajeriaService::$arrayInner);
-            $factura->consultas = $_facturaMensajeriaConsultas->where('factura_mensajeria_consultas.factura_mensajeria_id', '=', $factura->factura_mensajeria_id)
-                                                            ->innerJoin(FacturaMensajeriaService::$arraySelect, $inners, 'factura_mensajeria_consultas');
-            
-            $consultas_seguro = [];
-            foreach ($factura->consultas as $consultas) {
-
-                $informacionConsulta = ConsultaSeguroService::listarConsultasSeguroId($consultas->consulta_seguro_id);
-                $consultas_seguro[] = array_merge( (array) $consultas, (array) $informacionConsulta[0] );
-            }
-
-            $factura->consultas = $consultas_seguro;
+            $facturaLista[] = FacturaMensajeriaHelpers::obtenerDetallesConsulta($factura);
         }
         
+        return $facturaLista;
+    }
+
+    public static function listarFacturaMensajeriaId($factura) {
+
+        $factura = FacturaMensajeriaHelpers::obtenerDetallesConsulta($factura);        
         return $factura;
     }
 }
