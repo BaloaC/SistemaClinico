@@ -40,11 +40,11 @@ class FacturaMensajeriaController extends Controller{
         $_facturaMensajeriaModel = new FacturaMensajeriaModel();
         $facturas = $_facturaMensajeriaModel->getAll();
         
-        FacturaMensajeriaService::listarFacturas($facturas);
-
-        $mensaje = (count($facturas) > 0);
+        $facturaLista = FacturaMensajeriaService::listarFacturas($facturas);
+        
+        $mensaje = (count( (Array) $facturaLista) > 0);
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($facturas);
+        $respuesta->setData($facturaLista);
         return $respuesta->json(200);
     }
 

@@ -1,8 +1,28 @@
 <?php
 
 include_once './services/facturas/mensajeria/FacturaMensajeriaHelpers.php';
+include_once './services/facturas/consulta seguro/ConsultaSeguroService.php';
 
 class FacturaMensajeriaService {
+
+    public static $arraySelect = array(
+        // "factura_mensajeria.factura_mensajeria_id",
+        // "factura_mensajeria.fecha_mensajeria",
+        // "factura_mensajeria.total_mensajeria_bs",
+        // "factura_mensajeria.total_mensajeria_usd",
+        // "factura_mensajeria.seguro_id",
+        "seguro.nombre AS nombre_seguro",
+        "factura_mensajeria_consultas.factura_mensajeria_id",
+        "factura_mensajeria_consultas.factura_mensajeria_consultas_id",
+        "factura_mensajeria_consultas.consulta_seguro_id",
+        "consulta_seguro.consulta_id"
+    );
+
+    public static $arrayInner = array(
+        "factura_mensajeria" => "factura_mensajeria_consultas",
+        "seguro" => "factura_mensajeria",
+        "consulta_seguro" => "factura_mensajeria_consultas"
+    );
 
     public static function insertarFactura($formulario) {
 
@@ -37,16 +57,21 @@ class FacturaMensajeriaService {
         $_facturaMensajeriaConsultas = new FacturaMensajeriaConsultasModel();
 
         foreach ($facturas as $factura) {
-            $facturas_consultas = $_facturaMensajeriaConsultas->where('factura_mensajeria_id', '=', $factura->factura_mensajeria_id)->getAll();
 
-            if (count($facturas) <= 0) {
-                $respuesta = new Response('NOT_FOUND');
-                echo $respuesta->json(400);
-                exit();
+            $inners = $_facturaMensajeriaConsultas->listInner(FacturaMensajeriaService::$arrayInner);
+            $factura->consultas = $_facturaMensajeriaConsultas->where('factura_mensajeria_consultas.factura_mensajeria_id', '=', $factura->factura_mensajeria_id)
+                                                            ->innerJoin(FacturaMensajeriaService::$arraySelect, $inners, 'factura_mensajeria_consultas');
+            
+            $consultas_seguro = [];
+            foreach ($factura->consultas as $consultas) {
+
+                $informacionConsulta = ConsultaSeguroService::listarConsultasSeguroId($consultas->consulta_seguro_id);
+                $consultas_seguro[] = array_merge( (array) $consultas, (array) $informacionConsulta[0] );
             }
 
-            var_dump($facturas_consultas);
+            $factura->consultas = $consultas_seguro;
         }
-
+        
+        return $factura;
     }
 }
