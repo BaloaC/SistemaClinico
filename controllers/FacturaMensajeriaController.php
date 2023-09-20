@@ -66,10 +66,7 @@ class FacturaMensajeriaController extends Controller{
         return $respuesta->json(200);
     }
 
-    public function listarFacturaPorMedico($medico_id){
+    public function listarFacturaPorSeguro($seguro_id){
       
-    }
-
-    public function listarFacturaPorFecha(){
     }
 }
