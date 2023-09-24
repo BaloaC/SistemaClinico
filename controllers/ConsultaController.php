@@ -158,9 +158,9 @@ class ConsultaController extends Controller {
         $validarConsulta = new Validate;
         $es_emergencia = isset($_POST['es_emergencia']);
 
-        if (!$es_emergencia) {
-            ConsultaValidaciones::validarConsulta($_POST);
-        } 
+        // if (!$es_emergencia) {
+        //     ConsultaValidaciones::validarConsulta($_POST);
+        // } 
         
         // Validamos relaciones externas
         $examenes = isset($_POST['examenes']) ? $_POST['examenes'] : false;
@@ -186,6 +186,8 @@ class ConsultaController extends Controller {
         $es_emergencia = isset($_POST['es_emergencia']); // Validamos que el atributo emergencia sea booleano
 
         if ( $es_emergencia ) {
+            $por_cita = true;
+
             if ( $_POST['es_emergencia'] != 0 && $_POST['es_emergencia'] != 1 ) {
                 $respuesta = new Response(false, 'El atributo es_emergencia tiene que ser un booleano');
                 return $respuesta->json(400);
@@ -195,11 +197,15 @@ class ConsultaController extends Controller {
             ConsultaValidaciones::validarConsultaEmergencia($_POST);
             
             $consultaEmergencia = $validarConsulta->dataScape($_POST);
+            
             $this->consulta_id = ConsultaService::insertarConsulta($consultaEmergencia, 'emergencia');
-
             $consultaEmergencia['consulta_id'] = $this->consulta_id;
+            $consultaEmergencia['examenes'] = $examenes;    
             ConsultaService::insertarConsultaEmergencia($consultaEmergencia);
-            ConsultaService::actualizarAcumuladoMedico($consultaEmergencia['pagos']);
+
+            if( isset($consultaEmergencia['pagos']) ) {
+                ConsultaService::actualizarAcumuladoMedico($consultaEmergencia['pagos']);
+            }
 
         } else {
         
@@ -217,11 +223,11 @@ class ConsultaController extends Controller {
                     return $respuesta->json(400);
                 }
 
-            }
-            
-            if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad')) {
-                $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
-                return $respuesta->json(400);
+            } else {
+                if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad')) {
+                    $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
+                    return $respuesta->json(400);
+                }
             }
 
             $_consultaModel = new ConsultaModel();
@@ -260,19 +266,35 @@ class ConsultaController extends Controller {
 
         if ( $this->consulta_id > 0) {
 
-            if ($examenes) {
+            if (!$es_emergencia) {
+                if (!$por_cita) {
+                    if ($examenes) {
 
-                $respuestaExamen = $this->insertarExamen($examenes, $this->consulta_id);
-                if ($respuestaExamen) {
-                    return $respuestaExamen;
-                }
-            }
+                        $respuestaExamen = $this->insertarExamen($examenes, $this->consulta_id);
+                        if ($respuestaExamen) {
+                            return $respuestaExamen;
+                        }
+                    }
+        
+                    if ($insumos) {
+        
+                        $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id);
+                        if ($respuestaInsumo) {
+                            return $respuestaInsumo;
+                        }
+                    }
 
-            if ($insumos) {
+                } else {
+                    if ($examenes) {
+                        ConsultaHelper::insertarExamenesSeguro($examenes, $this->consulta_id);
+                    }
 
-                $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id);
-                if ($respuestaInsumo) {
-                    return $respuestaInsumo;
+                    if ($insumos) {
+                        $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id);
+                        if ($respuestaInsumo) {
+                            return $respuestaInsumo;
+                        }
+                    }
                 }
             }
 
@@ -385,19 +407,15 @@ class ConsultaController extends Controller {
         $consultaList = $_consultaModel->where('estatus_con', '=', 1)
                                         ->where('consulta_id', '=', $consulta_id)
                                         ->getFirst();
-        
-        if ( !is_null($consultaList) ) {
-            $consultas = ConsultaHelper::obtenerRelaciones($consulta_id);
-        
-            $mensaje = (!is_null($consultas));
-            $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-            $respuesta->setData($consultas);
-            return $respuesta->json(200);
+       $consultas = [];
 
-        } else {
-            $respuesta = new Response('false', 'La consulta indicada no existe');
-            return $respuesta->json(400);
-        }
+        ($consultaList->es_emergencia) ?  $consultas[] = ConsultaService::obtenerConsultaEmergencia($consultaList) : $consultas[] = ConsultaService::obtenerConsultaNormal($consultaList);
+
+
+        $mensaje = (count($consultas) > 0);
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($consultas[0]);
+        return $respuesta->json(200);
     }
 
     // Códigos de consultas_insumo

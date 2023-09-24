@@ -80,6 +80,7 @@
                                     <h5>Mes: <span id="mes-factura"></span></h5>
                                     <h5>Fecha ocurrencia: <span id="fecha-ocurrencia"></span></h5>
                                     <h5>Fecha vencimiento: <span id="fecha-vencimiento"></span></h5>
+                                    <a id="btn-cintillo-pdf" class="btn btn-sm btn-add"  style="display: none;" href="#"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> 
                                 </div>
 
                                 <div class="col-lg-6 text-lg-end">

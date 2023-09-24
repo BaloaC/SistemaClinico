@@ -15,6 +15,7 @@
 
         header img {
             text-align: start;
+            position: absolute;
         }
 
 
@@ -55,7 +56,7 @@
         }
 
         .tabla {
-            width: 950px;
+            /* width: 950px; */
             padding: 2rem;
         }
 
@@ -84,7 +85,7 @@
 
         .firma {
             /* margin-top: 50px; */
-            margin-top: 300px;
+            margin-top: 150px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -103,7 +104,7 @@
         <table class="tabla">
             <thead>
                 <tr>
-                    <th colspan="2" id="title">Factura de pago al personal médico</th>
+                    <th colspan="2" id="title">Recibo de pago al personal médico</th>
                 </tr>
                 <tr>
                     <th colspan="2" id="sub-title">Recibo de pago correspondiente a la fecha: <span id="fecha">2023-02-18</span></th>

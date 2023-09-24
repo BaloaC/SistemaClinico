@@ -47,4 +47,13 @@ class PdfController extends Controller
     {
         return $this->view("pdf/pdf_cita");
     }
+
+    public function pdf_consultasEmergencia()
+    {
+        return $this->view("pdf/pdf_consultasEmergencia");
+    }
+
+    public function pdf_cintillo(){
+        return $this->view("pdf/pdf_cintillo");
+    }
 }

@@ -15,8 +15,8 @@ data.insumos.forEach(e => {
         <tr class="insumo">
             <td>${e.insumo_nombre}</td>
             <td>${e.unidades}</td>
-            <td>$${e.precio_unit}</td>
-            <td>$${e.precio_total}</td>
+            <td>$${e.precio_unit_usd}</td>
+            <td>$${e.precio_total_usd}</td>
         </tr>
     `
 })

@@ -379,6 +379,24 @@ addEventListener("DOMContentLoaded", async e => {
                 <td>Total exámenes: <br><b>${data.factura.total_examenes}</b></td>
                 <td>Total consulta: <br><b>${data.factura.total_consulta}</b></td>
             </tr>
+            <tr><td><br></td></tr>
+            <tr>
+                <td colspan="4"><b>Monto en bs:</b></td>
+            </tr>
+             <tr>
+                <td>Consultas médicas: <br><b>${data.factura.consultas_medicas_bs} Bs</b></td>
+                <td>Laboratorios: <br><b>${data.factura.laboratorios_bs} Bs</b></td>
+            </tr>
+            <tr>
+                <td>Medicamentos: <br><b>${data.factura.medicamentos_bs} Bs</b></td>
+                <td>Area de observación: <br><b>${data.factura.area_observacion_bs} Bs</b></td>
+                <td>Enfermería: <br><b>${data.factura.enfermeria_bs} Bs</b></td>
+            </tr>
+            <tr>
+                <td>Total insumos: <br><b>${data.factura.total_insumos_bs} Bs</b></td>
+                <td>Total exámenes: <br><b>${data.factura.total_examenes_bs} Bs</b></td>
+                <td>Total consulta: <br><b>${data.factura.total_consulta_bs} Bs</b></td>
+            </tr>
         `;
         }
 

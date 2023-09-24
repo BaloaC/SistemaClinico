@@ -62,7 +62,8 @@ class ConsultaSeguroService {
         foreach ($listaConsultas as $consulta) {
             
             if ( isset( $consulta['consulta_emergencia'] ) ) { // Si es por emergencia
-                $consultas[] = ConsultaSeguroHelpers::calcularConsultaEmergencia($consulta);
+                $consultas[] = $consulta;
+                // $consultas[] = ConsultaSeguroHelpers::calcularConsultaEmergencia($consulta);
 
             } else { // Si no es consulta por emergencia
                 $consultas[] = FacturaConsultaHelpers::obtenerMontoTotal($consulta);

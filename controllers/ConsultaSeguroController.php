@@ -61,7 +61,7 @@ class ConsultaSeguroController extends Controller{
 
             $_pacienteSeguro = new PacienteSeguroModel();
             $pacienteSeguro = $_pacienteSeguro->where('paciente_id', '=', $paciente->paciente_id)->where('seguro_id', '=', $citaSeguro->seguro_id)->getFirst();
-
+            
             if ($data['monto_consulta_usd'] > $pacienteSeguro->saldo_disponible) {
                 $respuesta = new Response(false, 'Saldo insuficiente para cubrir la consulta');
                 $respuesta->setData("Error al procesar al paciente id $pacienteSeguro->paciente_id con saldo $pacienteSeguro->saldo_disponible");
@@ -101,11 +101,11 @@ class ConsultaSeguroController extends Controller{
     public function listarConsultaSeguroPorId($consulta_seguro_id){
 
         $consultasSeguro = json_decode($this->listarConsultaSeguro());
-        $factura = array_filter($consultasSeguro->data, fn($consulta) => $consulta->consulta_seguro_id == $consulta_seguro_id);
+        $factura = array_values(array_filter($consultasSeguro->data, fn($consulta) => isset($consulta->consulta_seguro_id) && $consulta->consulta_seguro_id == $consulta_seguro_id));
 
         $siExiste = count($factura) > 0;
         $respuesta = new Response($siExiste ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($factura);
+        $respuesta->setData($factura[0]);
         return $respuesta->json(200);
     }
 

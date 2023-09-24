@@ -1,5 +1,7 @@
 <?php
 
+include_once './services/globals/GlobalsHelpers.php';
+
 class FacturaCompraController extends Controller
 {
 
@@ -63,6 +65,9 @@ class FacturaCompraController extends Controller
 
                 unset($_POST['insumos']);
                 $data = $validarFactura->dataScape($_POST);
+
+                $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+                $data['monto_usd'] = round( $data['monto_con_iva'] / $valorDivisa, 2);
 
                 $_facturaCompraModel = new FacturaCompraModel();
                 $id = $_facturaCompraModel->insert($data);

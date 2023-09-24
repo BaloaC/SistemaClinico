@@ -36,10 +36,10 @@ class CompraInsumoController extends Controller {
                     $data = $validarFactura->dataScape($POSTS);
 
                     $_compraInsumoModel = new CompraInsumoModel();
-
+                    
                     $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-                    $data['precio_unit_usd'] = $data['precio_unit_bs'] / $valorDivisa;
-                    $data['precio_total_usd'] = $data['precio_total_bs'] / $valorDivisa;
+                    $data['precio_unit_usd'] = round( $data['precio_unit_bs'] / $valorDivisa, 2);
+                    $data['precio_total_usd'] = round( $data['precio_total_bs'] / $valorDivisa, 2);
 
                     $respuesta = $_compraInsumoModel->insert($data);
 

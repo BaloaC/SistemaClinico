@@ -58,7 +58,7 @@
             text-align: start;
         }
 
-        .tabla th,
+        .tabla th, .tabla td,
         .contacto {
             outline: 1px solid black;
             padding: 0.5rem;
@@ -82,6 +82,13 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* Imprimir en horizontal */
+        @media print {
+            @page {
+                size: landscape;
+            }
+        }
     </style>
 </head>
 
@@ -91,48 +98,26 @@
         <p><b>CENTRO MEDICO HIPERBARICO Y DE REHABILITACION <br> SHENQUE C.A <br> CALLE PRONLONGACION MIRANDA 3-05
                 SEC.PUNTO FRESCO <br> CAGUA EDO ARAGUA</b></p>
     </header>
+    <h3>Cintillo / <span id="seguro"></span> <span id="rif"></span></h3>
     <div class="paper">
-        <div class="col">
-            <div class="info_cita">
-                <p>Paciente: <span id="paciente"></span></p>
-                <p>Cédula paciente: <span id="cedula_paciente"></span></p>
-                <p>Cédula titular: <span id="cedula_titular"></span></p>
-                <p>Tipo de cita: <span id="tipo_cita"></span></p>
-            </div>
-            <div class="contacto">
-                <p>Número de comunicación</p>
-                <br>
-                <p>0412-4301761</p>
-                <p>0412-4301761</p>
-            </div>
-        </div>
-        <div class="col">
-            <table class="tabla">
+        <table class="tabla">
+            <thead>
                 <tr>
-                    <th>Número de cita: <span id="cita_id"></span></th>
+                    <th>ID</th>
+                    <th>Fecha ocurrencia</th>
+                    <th>Especialidad</th>
+                    <th>Nombre paciente</th>
+                    <th>Cédula paciente</th>
+                    <th>Tipo de servicio</th>
+                    <th>Monto</th>
                 </tr>
-                <tr>
-                    <th>Día de la Consulta <span id="fecha_cita"></span></th>
-                </tr>
-                <tr>
-                    <th>Nombre del especialista: <span id="medico"></span></th>
-                </tr>
-                <tr>
-                    <th>Especialidad: <span id="especialidad"></span></th>
-                </tr>
-            </table>
-            <div class="firma">
-                <p>_____________________________________</p>
-                <p>Firma del titular</p>
-            </div>
-            <div class="firma">
-                <p>_____________________________________</p>
-                <p>Firma y sello del Centro Médico</p>
-            </div>
-        </div>
+            </thead>
+            <tbody id="consultas-seguros">
+            </tbody>
+        </table>
     </div>
 
-    <script type="module" src="<?php echo Url::to('assets/js/pdf/pdfCitas.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/pdf/pdfCintillo.js'); ?>"></script>
     <script>
         window.onafterprint = function() {
             window.close();

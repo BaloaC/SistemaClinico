@@ -26,6 +26,8 @@ Router::get("/pdf/consulta/:id", PdfController::class . '@pdf_consulta');
 Router::get("/pdf/insumosfaltantes", PdfController::class . '@pdf_InsumosFaltantes');
 Router::get("/pdf/historialmedico/:id", PdfController::class . '@pdf_historialMedico');
 Router::get("/pdf/cita/:id", PdfController::class . '@pdf_citas');
+Router::get("/pdf/consultaemergencia/:id", PdfController::class . '@pdf_consultasEmergencia');
+Router::get("/pdf/cintillo/:id", PdfController::class . '@pdf_cintillo');
 
 // //Login - vista
 Router::get('/login', LoginController::class . '@index');

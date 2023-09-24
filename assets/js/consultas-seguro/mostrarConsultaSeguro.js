@@ -38,6 +38,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     const fechaOcurrencia = document.getElementById("fecha-ocurrencia");
     const fechaVencimiento = document.getElementById("fecha-vencimiento");
     const estatusFactura = document.getElementById("factura-estatus");
+    const btnCintillo  = document.getElementById("btn-cintillo-pdf");
 
 
     if (listConsultas) {
@@ -47,6 +48,14 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
         fechaOcurrencia.textContent = listConsultas.factura[0].fecha_ocurrencia.split(" ")[0];
         fechaVencimiento.textContent = listConsultas.factura[0].fecha_vencimiento;
         montoTotal.textContent = listConsultas.factura[0].monto_usd;
+
+        // Si hay consultas disponibles mostrar el boton del pdf
+        if(listConsultas.consultas?.length > 0){
+            btnCintillo.setAttribute("onclick",`openPopup('pdf/cintillo/${seguro}-${anio}-${mes}')`)
+            $("#btn-cintillo-pdf").fadeIn("slow");
+        } else {
+            $("#btn-cintillo-pdf").fadeOut("slow");
+        }
 
         // Si la factura está pagada o pendiente rellenar este campo de fecha con dicho estatus
         if (listConsultas.factura[0].estatus_fac == 1) {
@@ -239,7 +248,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                     <td colspan="4"><b>Factura consulta emergencia:</b></td>
                 </tr>
                 `;
-
+                console.log(data);
                 info.factura += `
                 <tr>
                     <td>Cantidad de consultas médicas: <br><b>${data.consulta_emergencia.cantidad_consultas_medicas}</b></td>
@@ -257,6 +266,24 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                     <td>Total insumos: <br><b>${data.consulta_emergencia.total_insumos}</b></td>
                     <td>Total exámenes: <br><b>${data.consulta_emergencia.total_examenes}</b></td>
                     <td>Total consulta: <br><b>${data.consulta_emergencia.total_consulta}</b></td>
+                </tr>
+                <tr><td><br></td></tr>
+                <tr>
+                    <td colspan="4"><b>Monto en bs:</b></td>
+                </tr>
+                <tr>
+                    <td>Consultas médicas: <br><b>${data.consulta_emergencia.consultas_medicas_bs} Bs</b></td>
+                    <td>Laboratorios: <br><b>${data.consulta_emergencia.laboratorios_bs} Bs</b></td>
+                </tr>
+                <tr>
+                    <td>Medicamentos: <br><b>${data.consulta_emergencia.medicamentos_bs} Bs</b></td>
+                    <td>Area de observación: <br><b>${data.consulta_emergencia.area_observacion_bs} Bs</b></td>
+                    <td>Enfermería: <br><b>${data.consulta_emergencia.enfermeria_bs} Bs</b></td>
+                </tr>
+                <tr>
+                    <td>Total insumos: <br><b>${data.consulta_emergencia.total_insumos_bs} Bs</b></td>
+                    <td>Total exámenes: <br><b>${data.consulta_emergencia.total_examenes_bs} Bs</b></td>
+                    <td>Total consulta: <br><b>${data.consulta_emergencia.total_consulta_bs} Bs</b></td>
                 </tr>
             `;
             }
@@ -339,7 +366,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             ${info.factura}
             <tr><td><br></td></tr>
             <tr>
-                <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/consulta/${info.data?.consulta.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
+                <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/consultaemergencia/${info.data?.consulta_seguro_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
             </tr>
         </table>
     `
