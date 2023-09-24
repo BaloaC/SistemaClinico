@@ -323,3 +323,13 @@ Router::delete('/factura/medico/:id', FacturaMedicoController::class . '@elimina
 
 // //Global
 Router::post('/porcentajeMedico', GlobalController::class . '@actualizarPorcentaje', [$AuthenticationMiddleware]);
+
+// //Factura_Medico - Vistas
+Router::get('/factura/mensajeria', FacturaMensajeriaController::class . '@index');
+Router::get('/factura/mensajeria/registrar', FacturaMensajeriaController::class . '@formRegistrarFacturaMensajeria');
+Router::get('/factura/mensajeria/actualizar/:id', FacturaMensajeriaController::class . '@formActualizarFacturaConsulta');
+
+// //Factura_Medico - API
+Router::get('/factura/mensajeria/consulta', FacturaMensajeriaController::class . '@listarFacturaMensajeria', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+Router::get('/factura/mensajeria/:id', FacturaMensajeriaController::class . '@listarFacturaMensajeriaPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+Router::post('/factura/mensajeria', FacturaMensajeriaController::class . '@insertarFacturaMensajeria', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
