@@ -68,6 +68,9 @@ class ConsultaSeguroHelpers {
         return $consulta;
     }
 
+    /**
+     * Helper para obtener la información completa, esto incluye citas, consultas, exámenes e insumos
+     */
     public static function obtenerInformacionCompleta($consultasSeguros) {
 
         $listaConsultas = [];
@@ -94,6 +97,9 @@ class ConsultaSeguroHelpers {
         return $listaConsultas;
     }
 
+    /**
+     * Helper para calcular la sumatoría de los costos de la consulta_emergencia
+     */
     public static function calcularConsultaEmergencia($consulta) {
         $consultaTotal = $consulta["consulta_emergencia"]->consultas_medicas 
             + $consulta["consulta_emergencia"]->laboratorios 
@@ -105,5 +111,26 @@ class ConsultaSeguroHelpers {
 
         $consulta["monto_consulta"] = $consultaTotal;
         return $consulta;
+    }
+
+    /**
+     * Helper para actualizar los precios de bs de las consultas por seguro
+     */
+    public static function actualizarConsultaSeguro($consulta) {
+
+        $consultaSeguroModel = new ConsultaSeguroModel();
+        $consulta_seguro = $consultaSeguroModel->where('consulta_seguro_id', '=', $consulta["consulta_seguro_id"])->getFirst();
+
+        /* NO USES HELPERS, SACA EL CÁLCULO MANUAL A DIVISAS E INSERTALO */
+
+        // if (is_null($consulta_seguro)) {
+        //     $consulta = ConsultaSeguroHelpers::obtenerInformacionEmergencia($consulta);
+        // } else {
+        //     $consulta = ConsultaSeguroHelpers::obtenerInformacionCita($consulta);
+        // }
+
+        // $consultaInsumos = FacturaConsultaHelpers::obtenerInsumos($consulta);
+        // $consultaExamenes = FacturaConsultaHelpers::obtenerExamenes($consulta);
+        // $listaConsultas[] = array_merge((Array) $consulta, (Array) $consultaInsumos, (Array) $consultaExamenes);
     }
 }

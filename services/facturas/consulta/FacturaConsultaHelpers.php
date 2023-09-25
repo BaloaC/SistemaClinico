@@ -1,5 +1,7 @@
 <?php 
 
+include_once './services/globals/GlobalsHelpers.php';
+
 class FacturaConsultaHelpers {
 
     public static function obtenerInformacion($factura) {
@@ -78,7 +80,17 @@ class FacturaConsultaHelpers {
                 $_insumoModel = new InsumoModel();
                 $insumo = $_insumoModel->where('insumo_id', '=', $consulta_insumo->insumo_id)->getFirst();
                 $consulta_insumo->precio_insumo = $insumo->precio;
-                $consulta_insumo->monto_total_bs = $consulta_insumo->cantidad * $consulta_insumo->precio_insumo_bs;
+
+                $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+
+                if ( isset($factura->consulta_seguro_id) && $consulta_insumo->precio_insumo_bs == 0 ) {
+                    $consulta_insumo->precio_insumo_bs = round( $consulta_insumo->precio_insumo_usd * $valorDivisa, 2);
+                    $consulta_insumo->monto_total_bs = $consulta_insumo->cantidad * $consulta_insumo->precio_insumo_bs;
+
+                } else {
+                    $consulta_insumo->monto_total_bs = $consulta_insumo->cantidad * $consulta_insumo->precio_insumo_bs;
+                }
+
                 $consulta_insumo->monto_total_usd = $consulta_insumo->cantidad * $consulta_insumo->precio_insumo_usd;
             }
             
@@ -90,6 +102,7 @@ class FacturaConsultaHelpers {
     }
 
     public static function obtenerExamenes($factura) { 
+        // echo '<pre>'; var_dump($factura);
         $_consultaExamenModel = new ConsultaExamenModel();
         $consultaExamenes = $_consultaExamenModel->where('consulta_id', '=', $factura->consulta_id)
                                     ->where('estatus_con', '!=', '2')
@@ -103,8 +116,18 @@ class FacturaConsultaHelpers {
 
             foreach ($consultaExamenes as $consulta_examen) {
                 
-                $consulta_examen->precio_examen_bs = $consulta_examen->precio_examen_bs;
                 $consulta_examen->precio_examen_usd = $consulta_examen->precio_examen_usd;
+
+                if (isset($factura->consulta_seguro_id) && $consulta_examen->precio_examen_bs == 0) {
+
+                    $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+                    $precio_examen_bs = $consulta_examen->precio_examen_usd * $valorDivisa;
+                    $consulta_examen->precio_examen_bs = round($precio_examen_bs, 2);
+
+                } else {
+                    $consulta_examen->precio_examen_bs = $consulta_examen->precio_examen_bs;
+                }
+                
             }
             
             $consulta['examenes'] = $consultaExamenes;
@@ -118,20 +141,34 @@ class FacturaConsultaHelpers {
         // $facturas = [];
         
         // foreach ($facturaList as $consulta) {
-            $montoBs = 0;
-            $montoUsd = 0;
+            $montoBs = 0; $montoUsd = 0;
+            $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
 
             if (isset($consulta['insumos'])) {
                 foreach ($consulta['insumos'] as $insumos) {
-                    $montoBs += $insumos->monto_total_bs;
+
                     $montoUsd += $insumos->monto_total_usd;
+
+                    if ( $insumos->monto_total_bs == 0 ) {
+                        $montoBs += round( $insumos->monto_total_usd * $valorDivisa, 2);
+
+                    } else {
+                        $montoBs += $insumos->monto_total_bs;
+                    }
                 }
             }
             
             if (isset($consulta['examenes'])) {
                 foreach ($consulta['examenes'] as $examenes) {
-                    $montoBs += $examenes->precio_examen_bs;
+
                     $montoUsd += $examenes->precio_examen_usd;
+
+                    if ( $insumos->monto_total_bs == 0 ) {
+                        $montoBs += round( $examenes->precio_examen_usd * $valorDivisa, 2);
+
+                    } else {
+                        $montoBs += $examenes->precio_examen_bs;
+                    }
                 }
             }
 
