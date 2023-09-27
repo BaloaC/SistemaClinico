@@ -146,7 +146,7 @@ class FacturaConsultaHelpers {
 
             if (isset($consulta['insumos'])) {
                 foreach ($consulta['insumos'] as $insumos) {
-
+                    
                     $montoUsd += $insumos->monto_total_usd;
 
                     if ( $insumos->monto_total_bs == 0 ) {
@@ -162,8 +162,8 @@ class FacturaConsultaHelpers {
                 foreach ($consulta['examenes'] as $examenes) {
 
                     $montoUsd += $examenes->precio_examen_usd;
-
-                    if ( $insumos->monto_total_bs == 0 ) {
+                    
+                    if ( $examenes->precio_examen_bs == 0 ) {
                         $montoBs += round( $examenes->precio_examen_usd * $valorDivisa, 2);
 
                     } else {

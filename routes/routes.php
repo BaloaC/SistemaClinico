@@ -272,6 +272,7 @@ Router::get('/factura/consultaSeguro/:id', ConsultaSeguroController::class . '@l
 Router::post('/factura/consultaSeguro', ConsultaSeguroController::class . '@insertarConsultaSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::put('/factura/consultaSeguro/:id', ConsultaSeguroController::class . '@actualizarConsultaSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::delete('/factura/consultaSeguro/:id', ConsultaSeguroController::class . '@eliminarConsultaSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+// Router::put('/prueba', ConsultaSeguroController::class . '@probandoalgo');
 
 // //Factura_Seguro - Vistas
 Router::get('/factura/seguro', FacturaSeguroController::class . '@index');

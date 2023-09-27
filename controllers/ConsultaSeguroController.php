@@ -87,6 +87,13 @@ class ConsultaSeguroController extends Controller{
         }
     }
 
+    // public function probandoalgo() {
+    //     $clta = [
+    //         "consulta_seguro_id" => '00000025'
+    //     ];
+    //     ConsultaSeguroHelpers::actualizarConsultaSeguro($clta);
+    // }
+
     public function listarConsultaSeguro(){
 
         $consultasSeguros = ConsultaSeguroService::listarconsultasSeguros();
