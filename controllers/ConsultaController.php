@@ -339,7 +339,7 @@ class ConsultaController extends Controller {
         
         foreach ($consultaList as $consulta) {
             if ($consulta->es_emergencia) {
-                echo '<pre>'; var_dump($consulta);
+                
                 $consultas[] = ConsultaService::obtenerConsultaEmergencia($consulta);
             } else {
                 $consultas[] = ConsultaService::obtenerConsultaNormal($consulta);

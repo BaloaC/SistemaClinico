@@ -173,7 +173,7 @@ class ConsultaService {
         
         $_consultaEmergencia = new ConsultaEmergenciaModel();
         $consultaEmergencia = $_consultaEmergencia->where('consulta_id','=', $consulta->consulta_id)->getFirst();
-        echo '<pre>'; var_dump($consultaEmergencia);
+        // echo '<pre>'; var_dump($consultaEmergencia);
         $_paciente = new PacienteModel();
         $paciente = $_paciente->where('paciente_id','=', $consultaEmergencia->paciente_id)->getFirst();
 
@@ -187,7 +187,8 @@ class ConsultaService {
         $consultas->beneficiado = $beneficiado;
 
         $relaciones = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
-        
+        var_dump($consulta->consulta_id);
+        var_dump(property_exists($relaciones, 'examenes'));
         if ( property_exists($relaciones, 'examenes') ) {
             unset($relaciones->examenes);
         }
