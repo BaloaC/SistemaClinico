@@ -167,7 +167,8 @@ class ConsultaHelper {
                         'consulta_id' => $formulario['consulta_id'],
                         'examen_id' => $examen['examen_id'],
                         'precio_examen_usd' => $costos[$indice],
-                        'precio_examen_bs' => round($costos[$indice] * $valorDivisa, 2),
+                        'precio_examen_bs' => 0,
+                        // 'precio_examen_bs' => round($costos[$indice] * $valorDivisa, 2),
                     ];
                 }
             }
@@ -182,7 +183,8 @@ class ConsultaHelper {
         }
         
         $formulario['total_examenes'] = $total_examenes;
-        $formulario['total_examenes_bs'] = $formulario['total_examenes'] * $valorDivisa;
+        $formulario['total_examenes_bs'] = 0;
+        // $formulario['total_examenes_bs'] = $formulario['total_examenes'] * $valorDivisa;
         
         return $formulario;
     }
