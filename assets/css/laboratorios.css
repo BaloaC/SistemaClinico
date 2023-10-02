@@ -1,0 +1,51 @@
+@import url('base.css');
+@import url('nav.css');
+@import url('homepage.css');
+
+a {
+    cursor: pointer;
+}
+
+.initial{
+    font-weight: bold;
+    font-size: 2.5rem;
+}
+
+.main-home * {
+    color: #010101 !important;
+}
+
+.abc-container{
+    width: 75%;
+    margin: auto;
+    text-align: center;
+    margin: 4rem auto;
+}
+
+.abc-container a {
+    color: #010101;
+    font-size: 2rem;
+    text-decoration: none;
+}
+
+.abc-elements{
+    display: inline;
+}
+
+.active-word {
+    font-size: 2.25rem !important;
+    font-weight: bolder;
+}
+
+.ul-examenes {
+    margin-left: 4rem;
+    list-style-type: disc;
+}
+
+.ul-examenes li {
+    font-size: 1.3rem;
+}
+
+.ul-examenes hr {
+    width: 75%;
+}

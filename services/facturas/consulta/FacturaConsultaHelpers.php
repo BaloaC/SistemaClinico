@@ -10,7 +10,8 @@ class FacturaConsultaHelpers {
             "paciente.cedula",
             "paciente.direccion",
             "especialidad.nombre AS nombre_especialidad",
-            "medico.nombre AS nombre_medico"
+            "medico.nombre AS nombre_medico",
+            "medico.apellidos AS apellidos_medico"
         );
     
         $selectConsultaSinCita = array(

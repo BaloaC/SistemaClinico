@@ -20,8 +20,15 @@ async function updateExamen(id) {
         $form.tipo.value = json.tipo;
         $form.tipo.dataset.secondValue = json.tipo;
         $form.hecho_aqui_value.value = json.hecho_aqui;
+        $form.precio_examen.dataset.secondValue = json.precio_examen;
+        $form.precio_examen.value = json.precio_examen;
 
-        json.hecho_aqui === 1 ? document.getElementById("hecho_aqui_si").checked = true :  document.getElementById("hecho_aqui_no").checked = true;
+        if (json.hecho_aqui === 1) {
+            document.getElementById("hecho_aqui_si").checked = true;
+        } else {
+            document.getElementById("hecho_aqui_no").checked = true;
+        };
+
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
@@ -53,9 +60,9 @@ async function confirmUpdate() {
 
 
         const parseData = deleteSecondValue("#act-examen input, #act-examen select", data);
-    
+
         // Verificamos que el valor en la actualización sea distinto, de ser iguales no lo mandamos en la pteición
-        if($form.hecho_aqui_value.value == data.hecho_aqui){
+        if ($form.hecho_aqui_value.value == data.hecho_aqui) {
             delete data.hecho_aqui;
         }
 

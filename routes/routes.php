@@ -220,6 +220,7 @@ Router::get('/examenes/actualizar/:id', ExamenController::class . '@formActualiz
 // //Exámenes - API
 Router::get('/examenes/consulta', ExamenController::class . '@listarExamen',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::get('/examenes/:id', ExamenController::class . '@listarExamenPorId',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
+Router::get('/examenes/laboratorios', ExamenController::class . '@listarExamenDeLaboratorios',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::post('/examenes', ExamenController::class . '@insertarExamen',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::put('/examenes/:id', ExamenController::class . '@actualizarExamen',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::delete('/examenes/:id', ExamenController::class . '@eliminarExamen',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
@@ -333,3 +334,14 @@ Router::get('/factura/mensajeria/actualizar/:id', FacturaMensajeriaController::c
 Router::get('/factura/mensajeria/consulta', FacturaMensajeriaController::class . '@listarFacturaMensajeria', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::get('/factura/mensajeria/:id', FacturaMensajeriaController::class . '@listarFacturaMensajeriaPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::post('/factura/mensajeria', FacturaMensajeriaController::class . '@insertarFacturaMensajeria', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+
+// Estadísticas - Vistas
+Router::get("/estadisticas", EstadisticasController::class . '@index');
+
+// Estadísticas - API
+Router::get("/allConsultas", EstadisticasController::class . '@allConsultas');
+Router::get("/allConsultasMedicos", EstadisticasController::class . '@allConsultasMedicos');
+Router::get("/allConsultasEspecialidades", EstadisticasController::class . '@allConsultasEspecialidades');
+
+// Laboratorios - Vistas
+Router::get("/laboratorios", LaboratoriosController::class . '@index');

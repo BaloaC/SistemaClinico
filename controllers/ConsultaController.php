@@ -10,6 +10,7 @@ class ConsultaController extends Controller {
     protected $selectConsultaSinCita = array(
         "paciente.paciente_id",
         "paciente.nombre AS nombre_paciente",
+        "paciente.apellidos AS apellidos_paciente",
         "paciente.cedula AS cedula_paciente",
         "paciente.tipo_paciente",
         "paciente.edad",
@@ -30,11 +31,13 @@ class ConsultaController extends Controller {
     protected $selectConsultaCita = array(
         "paciente.paciente_id",
         "paciente.nombre AS nombre_paciente",
+        "paciente.apellidos AS apellidos_paciente",
         "paciente.cedula AS cedula_paciente",
         "medico.medico_id",
         "paciente.tipo_paciente",
         "paciente.edad",
         "medico.nombre AS nombre_medico",
+        "medico.apellidos AS apellido_medico",
         "medico.cedula AS cedula_medico",
         "especialidad.especialidad_id",
         "especialidad.nombre AS nombre_especialidad",

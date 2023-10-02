@@ -55,6 +55,7 @@ class ConsultaService {
     protected static $selectPacienteBeneficiado = array(
         "paciente.paciente_id",
         "paciente.nombre AS nombre_paciente",
+        "paciente.apellidos AS apellidos_paciente",
         "paciente.cedula",
         "paciente_beneficiado.paciente_beneficiado_id"
     );

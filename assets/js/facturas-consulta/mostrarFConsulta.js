@@ -27,34 +27,34 @@ addEventListener("DOMContentLoaded", e => {
             },
             {
                 data: function (row) {
-                    return row[0].nombre_paciente ?? "Consulta por emergencia";
+                    return `${row.nombre_paciente} ${row.apellidos}` ?? `Consulta por emergercia`;
                 }
             },
             {
                 data: function (row) {
-                    return row[0].metodo_pago;
+                    return row.metodo_pago;
                 }
             },
             {
                 data: function (row) {
-                    return row[0].monto_total_usd;
+                    return row.monto_total_usd;
                 }
             },
             {
                 data: function (row) {
-                    return row[0].monto_total_bs;
+                    return row.monto_total_bs;
                 }
             },
             {
                 data: function (row) {
-                    return row[0].fecha_consulta;
+                    return row.fecha_consulta;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
-                    // console.log(row[0]);
-                    if (row[0].estatus_fac == 1) {
+                    // console.log(row);
+                    if (row.estatus_fac == 1) {
                         return `<span class="badge light badge-success">Pagada</span>`;
                     } else {
                         return `<span class="badge light badge-danger">Anulada</span>`;
@@ -65,9 +65,9 @@ addEventListener("DOMContentLoaded", e => {
             //     data: null,
             //     render: function (data, type, row) {
             //         // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-            //         if (row[0].estatus_fac == 1) {
+            //         if (row.estatus_fac == 1) {
             //             return `
-            //                 <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFConsulta(${row[0].estatus_fac})"><i class="fas fa-trash del-consulta"></i></a>
+            //                 <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFConsulta(${row.estatus_fac})"><i class="fas fa-trash del-consulta"></i></a>
             //             `
             //         } else {
             //             return `-`;
@@ -155,14 +155,14 @@ addEventListener("DOMContentLoaded", e => {
                     <td colspan="4"><b>Información consulta:</b></td>
                 </tr>
                 <tr>
-                    <td>Nombre médico: <br><b>${data[0]?.nombre_medico ?? "Desconocido"}</b></td>
-                    <td>Especialidad: <br><b>${data[0]?.nombre_especialidad ?? "Desconocido"}</b></td>
-                    <td>Monto consulta BS: <br><b>${data[0]?.monto_consulta_bs ?? "Desconocido"}</b></td>
-                    <td>Monto consulta USD: <br><b>${data[0]?.monto_consulta_usd ?? "Desconocido"}</b></td>
+                    <td>Nombre médico: <br><b>${data?.nombre_medico ? data?.nombre_medico + " " + data?.apellidos_medico : "Desconocido"}</b></td>
+                    <td>Especialidad: <br><b>${data?.nombre_especialidad ?? "Desconocido"}</b></td>
+                    <td>Monto consulta BS: <br><b>${data?.monto_consulta_bs ?? "Desconocido"}</b></td>
+                    <td>Monto consulta USD: <br><b>${data?.monto_consulta_usd ?? "Desconocido"}</b></td>
                 </tr>
                 <tr><td><br></td></tr>
                 <tr>
-                    <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/facturaconsulta/${data[0].factura_consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
+                    <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/facturaconsulta/${data.factura_consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
                 </tr>
             </table>
         `;

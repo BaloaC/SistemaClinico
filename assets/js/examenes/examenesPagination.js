@@ -44,6 +44,8 @@ export function examenesPagination(registros) {
                         case "3": return "Ultrasonido";
                         default: return "Desconocido";
                     }
+                } else if(p1 === "precio_examen"){
+                    return registro[p1] !== null ? registro[p1] : "No se ha agreagado el precio";
                 }
                 return registro[p1];
             }
@@ -61,6 +63,7 @@ export function examenesPagination(registros) {
           <ul class="list-group list-group-flush">
             <li class="list-group-item"><span class="mb-0">Tipo</span> <b class="text-muted">\${tipo}</b></li>
             <li class="list-group-item"><span class="mb-0">¿Se realiza aquí?</span> <b class="text-muted">\${hecho_aqui}</b></li>
+            <li class="list-group-item"><span class="mb-0">Precio del exámen</span> <b class="text-muted">\${precio_examen}</b></li>
             <li class="list-group-item"><span class="mb-0"><button type="button" id="btn-actualizar" class="btn btn-primary" onclick="updateExamen(\${examen_id})" data-bs-toggle="modal" data-bs-target="#modalAct">Actualizar</button></span><button id="btn-eliminar" class="btn btn-danger" onclick="deleteExamen(\${examen_id})"  data-bs-toggle="modal" data-bs-target="#modalDelete">Eliminar</button></li>
           </ul>
         </div>
