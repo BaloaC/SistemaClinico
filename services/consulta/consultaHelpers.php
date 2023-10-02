@@ -251,4 +251,19 @@ class ConsultaHelper {
 
         return $consulta_examen;
     }
+
+    public static function actualizarPrecioEmergencia($consulta) {
+
+        $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
+        $consulta_seguro = $_consultaEmergenciaModel->where('consulta_seguro_id', '=', $consulta["consulta_seguro_id"])->getFirst();
+
+        $consultas->factura->consultas_medicas_bs = round( $consultas->factura->consultas_medicas * $valorDivisa, 2);
+        $consultas->factura->laboratorios_bs = round( $consultas->factura->laboratorios * $valorDivisa, 2);
+        $consultas->factura->medicamentos_bs = round( $consultas->factura->medicamentos * $valorDivisa, 2);
+        $consultas->factura->area_observacion_bs = round( $consultas->factura->area_observacion * $valorDivisa, 2);
+        $consultas->factura->enfermeria_bs = round( $consultas->factura->enfermeria * $valorDivisa, 2);
+        $consultas->factura->total_insumos_bs = round( $consultas->factura->total_insumos * $valorDivisa, 2);
+        $consultas->factura->total_examenes_bs = round( $consultas->factura->total_examenes * $valorDivisa, 2);
+        $consultas->factura->total_consulta_bs = round( $consultas->factura->total_consulta * $valorDivisa, 2);
+    }
 }
