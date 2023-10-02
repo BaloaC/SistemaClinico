@@ -41,6 +41,8 @@ class FacturaMensajeriaService {
 
         foreach ($formulario['consultas'] as $consulta) {
             
+            ConsultaSeguroHelpers::actualizarConsultaSeguro($consulta);
+
             $consulta['factura_mensajeria_id'] = $factura_mensajeria_id;
             $_facturaMensajeriaConsultasModel = new FacturaMensajeriaConsultasModel();
             $consulta = $_facturaMensajeriaConsultasModel->insert($consulta);

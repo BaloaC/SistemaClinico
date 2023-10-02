@@ -69,7 +69,8 @@ class ConsultaSeguroController extends Controller{
             }
 
             $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-            $data['monto_consulta_bs'] = $data['monto_consulta_usd'] * $valorDivisa;
+            // $data['monto_consulta_bs'] = $data['monto_consulta_usd'] * $valorDivisa;
+            $data['monto_consulta_bs'] = 0;
             $id = $_consultaSeguroModel->insert($data);
             $mensaje = ($id > 0);
 
@@ -85,6 +86,13 @@ class ConsultaSeguroController extends Controller{
             PacienteSeguroService::actualizarSaldoPaciente($montoActualizado, $_pacienteSeguro);
         }
     }
+
+    // public function probandoalgo() {
+    //     $clta = [
+    //         "consulta_seguro_id" => '00000025'
+    //     ];
+    //     ConsultaSeguroHelpers::actualizarConsultaSeguro($clta);
+    // }
 
     public function listarConsultaSeguro(){
 

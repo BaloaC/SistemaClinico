@@ -2,6 +2,7 @@
 
 include_once "./services/medico/medicoHelpers.php";
 include_once './services/globals/GlobalsHelpers.php';
+include_once './services/facturas/consulta/FacturaConsultaHelpers.php';
 
 class ConsultaService {
 
@@ -106,15 +107,24 @@ class ConsultaService {
 
         // Calculamos los montos en bolívares
         $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-        
-        $formulario['consultas_medicas_bs'] = round( $formulario['consultas_medicas'] * $valorDivisa, 2);
-        $formulario['laboratorios_bs'] = round( $formulario['laboratorios'] * $valorDivisa, 2);
-        $formulario['medicamentos_bs'] = round( $formulario['medicamentos'] * $valorDivisa, 2);
-        $formulario['area_observacion_bs'] = round( $formulario['area_observacion'] * $valorDivisa, 2);
-        $formulario['enfermeria_bs'] = round( $formulario['enfermeria'] * $valorDivisa, 2);
-        $formulario['total_insumos_bs'] = round( $formulario['total_insumos'] * $valorDivisa, 2);
-        $formulario['total_examenes_bs'] = round($formulario['total_examenes_bs'], 2);
-        $formulario['total_consulta_bs'] = round( $formulario['total_consulta'] * $valorDivisa, 2);
+
+        $formulario['consultas_medicas_bs'] = 0;
+        $formulario['laboratorios_bs'] = 0;
+        $formulario['medicamentos_bs'] = 0;
+        $formulario['area_observacion_bs'] = 0;
+        $formulario['enfermeria_bs'] = 0;
+        $formulario['total_insumos_bs'] = 0;
+        $formulario['total_examenes_bs'] = 0;
+        $formulario['total_consulta_bs'] = 0;
+
+        // $formulario['consultas_medicas_bs'] = round( $formulario['consultas_medicas'] * $valorDivisa, 2);
+        // $formulario['laboratorios_bs'] = round( $formulario['laboratorios'] * $valorDivisa, 2);
+        // $formulario['medicamentos_bs'] = round( $formulario['medicamentos'] * $valorDivisa, 2);
+        // $formulario['area_observacion_bs'] = round( $formulario['area_observacion'] * $valorDivisa, 2);
+        // $formulario['enfermeria_bs'] = round( $formulario['enfermeria'] * $valorDivisa, 2);
+        // $formulario['total_insumos_bs'] = round( $formulario['total_insumos'] * $valorDivisa, 2);
+        // $formulario['total_examenes_bs'] = round($formulario['total_examenes_bs'], 2);
+        // $formulario['total_consulta_bs'] = round( $formulario['total_consulta'] * $valorDivisa, 2);
         
         $fueInsertado = $_consultaEmergencia->insert($formulario); 
 
@@ -172,7 +182,7 @@ class ConsultaService {
         
         $_consultaEmergencia = new ConsultaEmergenciaModel();
         $consultaEmergencia = $_consultaEmergencia->where('consulta_id','=', $consulta->consulta_id)->getFirst();
-        
+        // echo '<pre>'; var_dump($consultaEmergencia);
         $_paciente = new PacienteModel();
         $paciente = $_paciente->where('paciente_id','=', $consultaEmergencia->paciente_id)->getFirst();
 
@@ -186,6 +196,20 @@ class ConsultaService {
         $consultas->beneficiado = $beneficiado;
 
         $relaciones = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
+        var_dump($consulta->consulta_id);
+        var_dump(property_exists($relaciones, 'examenes'));
+        if ( property_exists($relaciones, 'examenes') ) {
+            unset($relaciones->examenes);
+        }
+        
+        if ( property_exists($relaciones, 'insumos') ) {
+            unset($relaciones->insumos);
+        }
+
+        if ( property_exists($relaciones, 'examenes') || property_exists($relaciones, 'insumos') ) {
+            $consulta_examenes_insumos = FacturaConsultaHelpers::obtenerMontoTotal($consultas);
+            $relaciones = array_merge((array) $relaciones, (array) $consulta_examenes_insumos);
+        }
 
         if (count((array) $relaciones) > 0) {
             return (object) array_merge((array) $consultas, (array) $relaciones);

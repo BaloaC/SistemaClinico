@@ -4,6 +4,7 @@ include_once './services/facturas/seguro/FacturaSeguroHelpers.php';
 include_once './services/facturas/seguro/FacturaSeguroService.php';
 include_once './services/facturas/consulta seguro/ConsultaSeguroHelpers.php';
 include_once './services/facturas/consulta/FacturaConsultaHelpers.php';
+include_once './services/globals/GlobalsHelpers.php';
 
 class FacturaSeguroService {
 
@@ -36,8 +37,16 @@ class FacturaSeguroService {
 
         if (count($consultaList) > 0) {
             foreach ($consultaList as $consulta) {
-                $montoConsultaUsd += $consulta->monto_consulta_usd;
-                $montoConsultaBs += $consulta->monto_consulta_bs;
+
+                $montoConsultaUsd += $consulta->monto_consulta_bs;
+
+                if ($consulta->monto_consulta_bs == 0) {
+                    $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+                    $montoConsultaBs += round( $consulta->monto_consulta_usd * $valorDivisa, 2 );
+
+                } else {
+                    $montoConsultaBs += $consulta->monto_consulta_usd;
+                }
             }
         }
         

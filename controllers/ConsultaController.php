@@ -281,7 +281,7 @@ class ConsultaController extends Controller {
         
                     if ($insumos) {
         
-                        $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id);
+                        $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id, false);
                         if ($respuestaInsumo) {
                             return $respuestaInsumo;
                         }
@@ -293,7 +293,7 @@ class ConsultaController extends Controller {
                     }
 
                     if ($insumos) {
-                        $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id);
+                        $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id, true);
                         if ($respuestaInsumo) {
                             return $respuestaInsumo;
                         }
@@ -342,6 +342,7 @@ class ConsultaController extends Controller {
         
         foreach ($consultaList as $consulta) {
             if ($consulta->es_emergencia) {
+                
                 $consultas[] = ConsultaService::obtenerConsultaEmergencia($consulta);
             } else {
                 $consultas[] = ConsultaService::obtenerConsultaNormal($consulta);
@@ -456,7 +457,7 @@ class ConsultaController extends Controller {
         return false;
     }
 
-    public function insertarInsumo($insumos, $consulta_id) {
+    public function insertarInsumo($insumos, $consulta_id, $es_asegurada) {
         foreach ($insumos as $insumo) {
 
             $insumo['consulta_id'] = $consulta_id;
@@ -471,7 +472,7 @@ class ConsultaController extends Controller {
             $_globalModel = new GlobalModel();
             $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
             
-            $data['precio_insumo_bs'] = $insumoUtilizado->precio * (float) $valorDivisa->value;
+            $data['precio_insumo_bs'] = $es_asegurada ? 0 : $insumoUtilizado->precio * (float) $valorDivisa->value;
 
             $_consultaInsumoModel = new ConsultaInsumoModel();
             $idInsumo = $_consultaInsumoModel->insert($data);
