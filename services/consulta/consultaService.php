@@ -2,6 +2,7 @@
 
 include_once "./services/medico/medicoHelpers.php";
 include_once './services/globals/GlobalsHelpers.php';
+include_once './services/consulta/consultaHelpers.php';
 include_once './services/facturas/consulta/FacturaConsultaHelpers.php';
 
 class ConsultaService {
