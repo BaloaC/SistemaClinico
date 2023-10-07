@@ -1,5 +1,8 @@
 <?php
 
+include_once './services/seguro/SeguroService.php';
+include_once './services/seguro/SeguroHelpers.php';
+
 class SeguroController extends Controller{
 
     protected $seguro = [];
@@ -91,43 +94,17 @@ class SeguroController extends Controller{
     }
 
     public function listarSeguros(){
-                     
+
         $_seguroModel = new SeguroModel();
         $seguro = $_seguroModel->where('estatus_seg', '=', '1')->getAll();
-        $resultado = array();   
+        $seguro_lista = array();   
 
         foreach ($seguro as $seguros) {
-        
-            $id = $seguros->seguro_id;
-            $validarSeguro = new Validate;
-            // Verificamos si hay que aplicarle un inner join a ese seguro en específico
-            $respuesta = $validarSeguro->isDuplicated('seguro_empresa', 'seguro_id', $id);
-            $newArray = get_object_vars($seguros);
-            
-            if($respuesta){
-                
-                $newArray['empresas'] = '';
-                $_seguroModel = new SeguroModel();
-                $inners = $_seguroModel->listInner($this->arrayInner);
-                $EmpresaSeguro = $_seguroModel->where('seguro.seguro_id','=',$id)->where('seguro.estatus_seg', '=', '1')->innerJoin($this->arraySelect, $inners, "seguro_empresa");
-                $arraySeguro = array();
-
-                foreach ($EmpresaSeguro as $empresas) {
-                    // Guardamos cada empresa en un array
-                    $arraySeguro[] = $empresas;
-                }
-                // Agregamos las empresas en el seguro al que pertenecen
-                $newArray['empresas'] = $arraySeguro;
-                $resultado[] = $newArray;
-
-            } else { $resultado[] = $newArray; } // Si no necesita inner join, lo agregamos tal cual como está
+            $seguro_lista[] = SeguroService::ListarTodos($seguros);
         }
 
-        $mensaje = ($resultado != null);
-        return $this->retornarMensaje($mensaje, $resultado);
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        // $respuesta->setData($resultado);
-        // return $respuesta->json($mensaje ? 200 : 404);
+        $mensaje = ($seguro_lista != null);
+        SeguroHelpers::retornarMensaje($mensaje, $seguro_lista);
     }
 
     public function listarSeguroPorId($seguro_id){

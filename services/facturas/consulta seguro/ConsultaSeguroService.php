@@ -79,7 +79,7 @@ class ConsultaSeguroService {
         $_consultaSeguroModel = new ConsultaSeguroModel();
         $consultaSeguro[] = $_consultaSeguroModel->where('consulta_seguro_id', '=', $consulta_id)->getFirst();
         $consulta = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultaSeguro);
-            
+        
         if ( isset( $consulta['consulta_emergencia'] ) ) { // Si es por emergencia
             $consulta[0] = $consulta[0];
             // $consultas[] = ConsultaSeguroHelpers::calcularConsultaEmergencia($consulta);

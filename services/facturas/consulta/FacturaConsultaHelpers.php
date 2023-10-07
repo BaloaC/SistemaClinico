@@ -172,9 +172,12 @@ class FacturaConsultaHelpers {
                     }
                 }
             }
-
-            $consulta['monto_total_usd'] = $montoUsd + $consulta['monto_consulta_usd'];
-            $consulta['monto_total_bs'] = $montoBs + $consulta['monto_consulta_bs'];
+            // echo '<pre>'; var_dump(isset($consulta['consulta_emergencia']));
+            if ( isset($consulta['consulta_emergencia']) ) {
+                $consulta['monto_total_usd'] = $montoUsd + $consulta['monto_consulta_usd'];
+                $consulta['monto_total_bs'] = $montoBs + $consulta['monto_consulta_bs'];
+            }
+            
 
             // $facturas[] = $consulta;
         // }

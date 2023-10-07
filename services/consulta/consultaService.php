@@ -2,6 +2,7 @@
 
 include_once "./services/medico/medicoHelpers.php";
 include_once './services/globals/GlobalsHelpers.php';
+include_once './services/consulta/consultaHelpers.php';
 include_once './services/facturas/consulta/FacturaConsultaHelpers.php';
 
 class ConsultaService {
@@ -182,7 +183,7 @@ class ConsultaService {
         
         $_consultaEmergencia = new ConsultaEmergenciaModel();
         $consultaEmergencia = $_consultaEmergencia->where('consulta_id','=', $consulta->consulta_id)->getFirst();
-        // echo '<pre>'; var_dump($consultaEmergencia);
+        
         $_paciente = new PacienteModel();
         $paciente = $_paciente->where('paciente_id','=', $consultaEmergencia->paciente_id)->getFirst();
 
@@ -198,18 +199,35 @@ class ConsultaService {
         $relaciones = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
         // var_dump($consulta->consulta_id);
         // var_dump(property_exists($relaciones, 'examenes'));
-        if ( property_exists($relaciones, 'examenes') ) {
-            unset($relaciones->examenes);
-        }
-        
-        if ( property_exists($relaciones, 'insumos') ) {
-            unset($relaciones->insumos);
-        }
 
-        if ( property_exists($relaciones, 'examenes') || property_exists($relaciones, 'insumos') ) {
-            $consulta_examenes_insumos = FacturaConsultaHelpers::obtenerMontoTotal($consultas);
-            $relaciones = array_merge((array) $relaciones, (array) $consulta_examenes_insumos);
-        }
+        // if ( property_exists($relaciones, 'examenes') || property_exists($relaciones, 'insumos') ) {
+
+        //     // if ( property_exists($relaciones, 'examenes') ) {
+        //     //     unset($relaciones->examenes);
+        //     // }
+            
+        //     // if ( property_exists($relaciones, 'insumos') ) {
+        //     //     unset($relaciones->insumos);
+        //     // }
+
+        //     $consulta_examenes_insumos = FacturaConsultaHelpers::obtenerMontoTotal((Array) $consultas);
+        //     // No recuerdo muy bien que hacia la línea de arriba
+        //     echo '<pre>'; var_dump($consulta_examenes_insumos);
+        //     $relaciones = array_merge((array) $relaciones, (array) $consulta_examenes_insumos);
+        // }
+        // var_dump($relaciones);
+
+        // echo '<pre>'; var_dump($consultas);
+
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+        $consultas->factura->consultas_medicas_bs = round( $consultas->factura->consultas_medicas * $valorDivisa, 2);
+        $consultas->factura->laboratorios_bs = round( $consultas->factura->laboratorios * $valorDivisa, 2);
+        $consultas->factura->medicamentos_bs = round( $consultas->factura->medicamentos * $valorDivisa, 2);
+        $consultas->factura->area_observacion_bs = round( $consultas->factura->area_observacion * $valorDivisa, 2);
+        $consultas->factura->enfermeria_bs = round( $consultas->factura->enfermeria * $valorDivisa, 2);
+        $consultas->factura->total_insumos_bs = round( $consultas->factura->total_insumos * $valorDivisa, 2);
+        $consultas->factura->total_examenes_bs = round( $consultas->factura->total_examenes * $valorDivisa, 2);
+        $consultas->factura->total_consulta_bs = round( $consultas->factura->total_consulta * $valorDivisa, 2);
 
         if (count((array) $relaciones) > 0) {
             return (object) array_merge((array) $consultas, (array) $relaciones);

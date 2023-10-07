@@ -1,6 +1,7 @@
 <?php
 
 include_once './services/facturas/consulta seguro/ConsultaSeguroService.php';
+include_once './services/globals/GlobalsHelpers.php';
 
 class FacturaMensajeriaHelpers {
 
@@ -34,9 +35,17 @@ class FacturaMensajeriaHelpers {
         foreach ($consultas as $consulta) {
             
             $consulta = ConsultaSeguroService::listarConsultasSeguroId($consulta['consulta_seguro_id']);
+            $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
 
-            $monto['monto_total_usd'] += $consulta[0]['monto_total_usd'];
-            $monto['monto_total_bs'] += $consulta[0]['monto_total_bs'];
+            if ( !isset($consulta[0]['monto_total_usd']) ) {
+                $monto['monto_total_usd'] = $consulta[0]["factura"]->total_consulta;
+                $monto['monto_total_bs'] = round( $consulta[0]["factura"]->total_consulta * $valorDivisa , 2);
+                
+                
+            } else {
+                $monto['monto_total_usd'] += $consulta[0]['monto_total_usd'];
+                $monto['monto_total_bs'] += round( $consulta[0]['monto_total_usd'] * $valorDivisa, 2);
+            }
         }
         
         return $monto;

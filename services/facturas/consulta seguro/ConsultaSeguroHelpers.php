@@ -1,6 +1,7 @@
 <?php
 
 include_once "./services/facturas/consulta/FacturaConsultaHelpers.php";
+include_once "./services/consulta/consultaService.php";
 include_once "./services/globals/GlobalsHelpers.php";
 
 class ConsultaSeguroHelpers {
@@ -45,27 +46,27 @@ class ConsultaSeguroHelpers {
      * Helper para obtener la información de una consulta_seguro por emergencia
      */
     public static function obtenerInformacionEmergencia($consulta) {
-        $_consultaEmergencia = new ConsultaEmergenciaModel();
-        $consulta_emergencia = $_consultaEmergencia->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
+        // $_consultaEmergencia = new ConsultaEmergenciaModel();
+        // $consulta_emergencia = $_consultaEmergencia->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
 
         $_consultaModel = new ConsultaModel();
         $consultaBase = $_consultaModel->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
 
-        $_pacienteModel = new PacienteModel();
-        $paciente = $_pacienteModel->where('cedula', '=', $consulta_emergencia->cedula_beneficiado)->getFirst();
-
-        $_paciente = new PacienteModel();
-        $titular = $_paciente->where('paciente_id', '=', $consulta_emergencia->paciente_id)->getFirst();
+        // $_pacienteModel = new PacienteModel();
+        // $paciente = $_pacienteModel->where('cedula', '=', $consulta_emergencia->cedula_beneficiado)->getFirst();
+        $consulta_emergencia = ConsultaService::obtenerConsultaEmergencia($consulta);
+        // $_paciente = new PacienteModel();
+        // $titular = $_paciente->where('paciente_id', '=', $consulta_emergencia->paciente_id)->getFirst();
 
         $_seguroModel = new SeguroModel();
         $seguro = $_seguroModel->where('seguro_id', '=', $consulta_emergencia->seguro_id)->getFirst();
 
-        $consulta->consulta_emergencia = $consulta_emergencia;
+        // $consulta->consulta_emergencia = $consulta_emergencia;
         $consulta->consulta = $consultaBase;
-        $consulta->paciente_beneficiado = $paciente;
-        $consulta->paciente_titular = $titular;
+        // $consulta->paciente_beneficiado = $paciente;
+        // $consulta->paciente_titular = $titular;
         $consulta->seguro = $seguro;
-
+        
         return $consulta;
     }
 
@@ -85,6 +86,7 @@ class ConsultaSeguroHelpers {
 
                 if (is_null($consulta_cita)) {
                     $consulta = ConsultaSeguroHelpers::obtenerInformacionEmergencia($consulta);
+                    
                 } else {
                     $consulta = ConsultaSeguroHelpers::obtenerInformacionCita($consulta);
                 }
@@ -94,7 +96,7 @@ class ConsultaSeguroHelpers {
                 $listaConsultas[] = array_merge((Array) $consulta, (Array) $consultaInsumos, (Array) $consultaExamenes);
             }
         }
-
+        // echo '<pre>'; var_dump($listaConsultas);
         return $listaConsultas;
     }
 
@@ -121,50 +123,55 @@ class ConsultaSeguroHelpers {
 
         $consultaSeguroModel = new ConsultaSeguroModel();
         $consulta_seguro = $consultaSeguroModel->where('consulta_seguro_id', '=', $consulta["consulta_seguro_id"])->getFirst();
-        // echo '<pre>'; var_dump($consulta_seguro);
-        $consultaExamenModel = new ConsultaExamenModel();
-        $consulta_examenes = $consultaExamenModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
-
-        $consultaInsumoModel = new ConsultaInsumoModel();
-        $consulta_insumos = $consultaInsumoModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
-
-        $costo_examenes_bs = 0; $costo_insumos_bs = 0;
-
-        if( !is_null($consulta_examenes) ) {
-            foreach ($consulta_examenes as $examen) {
-                // echo 'el examen es <pre>'; var_dump($examen);
-                // echo 'el precio usd de este examen'; var_dump($examen->precio_examen_usd);
-                $examen_modificado = Array( 'precio_examen_bs' => 0 );
-
-                $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-                $examen_modificado['precio_examen_bs'] = round( $examen->precio_examen_usd * $valorDivisa ,2 );
-                $costo_examenes_bs += $examen_modificado['precio_examen_bs'];
-                // echo 'el precio bs de este examen'; var_dump( $examen_modificado['precio_examen_bs']);
-                $consultaExamenModel = new ConsultaExamenModel();
-                $isUpdate = $consultaExamenModel->where('consulta_examen_id', '=', $examen->consulta_examen_id)->update($examen_modificado);
-            }
-        }
         
-        if( !is_null($consulta_insumos) ) {
-            foreach ($consulta_insumos as $insumo) {
-                // echo 'el insumo es <pre>'; var_dump($insumo);
-                // echo 'el precio usd de este insumo'; var_dump($insumo->precio_insumo_usd);
-                $insumo_modificado = Array( 'precio_insumo_bs' => 0 );
+        if (is_null($consulta_seguro)) {
+            ConsultaHelper::actualizarPrecioEmergencia($consulta);
 
-                $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-                $precio_bs_actual = round( $insumo->precio_insumo_usd * $valorDivisa ,2 );
-                $insumo_modificado['precio_insumo_bs'] = $precio_bs_actual * $insumo->cantidad;
-                $costo_insumos_bs += $insumo_modificado['precio_insumo_bs'];
-                // echo 'el precio bs de este insumo'; var_dump( $insumo_modificado['precio_insumo_bs']);
-                $consultaInsumoModel = new ConsultaInsumoModel();
-                $isUpdate = $consultaInsumoModel->where('consulta_insumo_id', '=', $insumo->consulta_insumo_id)->update($insumo_modificado);
+        } else {
+
+            $consultaExamenModel = new ConsultaExamenModel();
+            $consulta_examenes = $consultaExamenModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
+
+            $consultaInsumoModel = new ConsultaInsumoModel();
+            $consulta_insumos = $consultaInsumoModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
+
+            $costo_examenes_bs = 0; $costo_insumos_bs = 0;
+
+            if( !is_null($consulta_examenes) ) {
+                foreach ($consulta_examenes as $examen) {
+                    // echo 'el examen es <pre>'; var_dump($examen);
+                    // echo 'el precio usd de este examen'; var_dump($examen->precio_examen_usd);
+                    $examen_modificado = Array( 'precio_examen_bs' => 0 );
+
+                    $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+                    $examen_modificado['precio_examen_bs'] = round( $examen->precio_examen_usd * $valorDivisa ,2 );
+                    $costo_examenes_bs += $examen_modificado['precio_examen_bs'];
+                    // echo 'el precio bs de este examen'; var_dump( $examen_modificado['precio_examen_bs']);
+                    $consultaExamenModel = new ConsultaExamenModel();
+                    $isUpdate = $consultaExamenModel->where('consulta_examen_id', '=', $examen->consulta_examen_id)->update($examen_modificado);
+                }
             }
-        }
+            
+            if( !is_null($consulta_insumos) ) {
+                foreach ($consulta_insumos as $insumo) {
+                    // echo 'el insumo es <pre>'; var_dump($insumo);
+                    // echo 'el precio usd de este insumo'; var_dump($insumo->precio_insumo_usd);
+                    $insumo_modificado = Array( 'precio_insumo_bs' => 0 );
 
-        $monto_total_bs = round($consulta_seguro->monto_consulta_usd * $valorDivisa, 2);
-        $monto_sumatoria_bs = $monto_total_bs + $costo_examenes_bs + $costo_insumos_bs;
-        $consulta_modificada = Array("monto_consulta_bs" => $monto_sumatoria_bs);
-        $consultaUpdate = $consultaSeguroModel->update($consulta_modificada);
-        
+                    $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+                    $precio_bs_actual = round( $insumo->precio_insumo_usd * $valorDivisa ,2 );
+                    $insumo_modificado['precio_insumo_bs'] = $precio_bs_actual * $insumo->cantidad;
+                    $costo_insumos_bs += $insumo_modificado['precio_insumo_bs'];
+                    // echo 'el precio bs de este insumo'; var_dump( $insumo_modificado['precio_insumo_bs']);
+                    $consultaInsumoModel = new ConsultaInsumoModel();
+                    $isUpdate = $consultaInsumoModel->where('consulta_insumo_id', '=', $insumo->consulta_insumo_id)->update($insumo_modificado);
+                }
+            }
+
+            $monto_total_bs = round($consulta_seguro->monto_consulta_usd * $valorDivisa, 2);
+            $monto_sumatoria_bs = $monto_total_bs + $costo_examenes_bs + $costo_insumos_bs;
+            $consulta_modificada = Array("monto_consulta_bs" => $monto_sumatoria_bs);
+            $consultaUpdate = $consultaSeguroModel->update($consulta_modificada);
+        }
     }
 }

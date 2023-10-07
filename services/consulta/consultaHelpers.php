@@ -251,4 +251,28 @@ class ConsultaHelper {
 
         return $consulta_examen;
     }
+
+    public static function actualizarPrecioEmergencia($consulta) {
+
+        $_consultaSeguroModel = new ConsultaSeguroModel();
+        $consulta_seguro = $_consultaSeguroModel->where('consulta_seguro_id', '=', $consulta["consulta_seguro_id"])->getFirst();
+
+        $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
+        $consulta_emergencia = $_consultaEmergenciaModel->where('consulta_id', '=', $consulta_seguro["consulta_id"])->getFirst();
+
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+
+        $consulta_emergencia_nueva = Array(
+            'consultas_medicas_bs' => round( $consulta_emergencia->consultas_medicas * $valorDivisa, 2),
+            'laboratorios_bs' => round( $consulta_emergencia->laboratorios * $valorDivisa, 2),
+            'medicamentos_bs' => round( $consulta_emergencia->medicamentos * $valorDivisa, 2),
+            'area_observacion_bs' => round( $consulta_emergencia->area_observacion * $valorDivisa, 2),
+            'enfermeria_bs' => round( $consulta_emergencia->enfermeria * $valorDivisa, 2),
+            'total_insumos_bs' => round( $consulta_emergencia->total_insumos * $valorDivisa, 2),
+            'total_examenes_bs' => round( $consulta_emergencia->total_examenes * $valorDivisa, 2),
+            'total_consulta_bs' => round( $consulta_emergencia->total_consulta * $valorDivisa, 2),
+        );
+
+        $_consultaEmergenciaModel->update($consulta_emergencia_nueva);
+    }
 }
