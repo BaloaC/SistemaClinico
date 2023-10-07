@@ -17,6 +17,8 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     const costoSeguro = document.getElementById("costoConsultaSeguro");
     const infoSeguro = await getById("seguros", seguro);
 
+    console.log(infoSeguro);
+
     nombreSeguro.textContent = infoSeguro.nombre;
     rifSeguro.textContent = infoSeguro.rif;
     telSeguro.textContent = infoSeguro.telefono;

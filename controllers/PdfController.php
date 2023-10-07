@@ -56,4 +56,8 @@ class PdfController extends Controller
     public function pdf_cintillo(){
         return $this->view("pdf/pdf_cintillo");
     }
+
+    public function pdf_facturaMensajeria(){
+        return $this->view("pdf/pdf_facturaMensajeria");
+    }
 }

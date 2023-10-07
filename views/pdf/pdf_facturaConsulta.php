@@ -54,15 +54,6 @@
             text-align: start;
         }
 
-        .light{
-            background-color: #222fb938 !important;
-        }
-
-        .dark{
-            background-color: #222fb9 !important;
-            color: #f2f2f2;
-        }
-
         .tabla {
             width: 950px;
             padding: 2rem;
@@ -95,7 +86,7 @@
 
         .firma {
             /* margin-top: 50px; */
-            margin-top: 300px;
+            margin-top: 5rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -144,8 +135,12 @@
                     <th id="metodo_pago"></th>
                 </tr>
                 <tr class="insumos-head light">
-                    <th>Pago total</th>
-                    <th id="pago_total"></th>
+                    <th>Pago total en Bs</th>
+                    <th id="pago_total_bs"></th>
+                </tr>
+                <tr class="insumos-head light">
+                    <th>Pago total en Usd</th>
+                    <th id="pago_total_usd"></th>
                 </tr>
             </thead>
         </table>

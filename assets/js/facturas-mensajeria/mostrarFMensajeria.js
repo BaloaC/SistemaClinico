@@ -22,7 +22,12 @@ addEventListener("DOMContentLoaded", e => {
             { data: "factura_mensajeria_id" },
             {
                 data: function (row) {
-                    return row?.consultas[0].nombre_seguro ?? "Desconocido";
+                    return row?.consultas[0]?.rif_seguro ?? "Desconocido";
+                }
+            },
+            {
+                data: function (row) {
+                    return row?.consultas[0]?.nombre_seguro ?? "Desconocido";
                 }
             },
             {
@@ -35,12 +40,9 @@ addEventListener("DOMContentLoaded", e => {
                 data: "total_mensajeria_bs"
             },
             {
-                data: "total_mensajeria_bs"
-            },
-            {
                 data: "factura_mensajeria_id",
                 render: function (data, row, type) {
-                    return `<a href="#" onclick="openPopup('pdf/facturamedico/${data}')"><i class="fas fa-file-export"></i></a>`;
+                    return `<a href="#" onclick="openPopup('pdf/facturamensajeria/${data}')"><i class="fas fa-file-export"></i></a>`;
                 }
             }
             // {

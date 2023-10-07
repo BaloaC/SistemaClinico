@@ -196,8 +196,8 @@ class ConsultaService {
         $consultas->beneficiado = $beneficiado;
 
         $relaciones = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
-        var_dump($consulta->consulta_id);
-        var_dump(property_exists($relaciones, 'examenes'));
+        // var_dump($consulta->consulta_id);
+        // var_dump(property_exists($relaciones, 'examenes'));
         if ( property_exists($relaciones, 'examenes') ) {
             unset($relaciones->examenes);
         }

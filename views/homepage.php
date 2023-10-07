@@ -83,7 +83,7 @@
         </section>
         <footer>
             <div>
-                <h1 class="text-light py-5 mb-3">Navegacion Por El Sitio</h1>
+                <h1 class="text-light py-5 mb-3">Navegación Por El Sitio</h1>
 
                 <div class="container">
                     <div class="row">
@@ -96,7 +96,7 @@
                                             <img src="<?php echo Url::to('assets/img/rueda-dentada.png') ?>" alt="adminAlt">
                                         </div>
                                         <h2 class="text-light">Administrador</h2>
-                                        <p class="text-light text-lightblue">Acceso a la gestion de usuarios del sistema</p>
+                                        <p class="text-light text-lightblue">Acceso a la gestión de usuarios del sistema</p>
                                     </a>
                                 </article>
                                 <article class="offset-lg-2 col-lg-2 col-md-6 col-sm-6 p-2">
@@ -105,8 +105,8 @@
                                         <img src="<?php echo Url::to('assets/img/cirujano.png') ?>" alt="especialidadesAlt">
                                     </div>
                                     <h2 class="text-light">Personal</h2>
-                                    <p class="text-light text-lightblue">Acceso a los modulos de <a href="<?php echo Url::base() . "/especialidades" ?>">especialidades</a> y
-                                        <a href="<?php echo Url::base() . "/medicos" ?>">medicos</a>
+                                    <p class="text-light text-lightblue">Acceso a los módulos de <a href="<?php echo Url::base() . "/especialidades" ?>">especialidades</a> y
+                                        <a href="<?php echo Url::base() . "/medicos" ?>">médicos</a>
                                     </p>
                                     </a>
                                 </article>
@@ -120,8 +120,8 @@
                                     <div class="bg-img mb-4">
                                         <img src="<?php echo Url::to('assets/img/resultado-medico.png') ?>" alt="pacientesAlt">
                                     </div>
-                                    <h2 class="text-light">atención Médica</h2>
-                                    <p class="text-light text-lightblue">Acceso a los modulos de <a href="<?php echo Url::base() . "/consultas" ?>">consultas</a>, <a href="<?php echo Url::base() . "/citas" ?>">citas</a>,
+                                    <h2 class="text-light">Atención Médica</h2>
+                                    <p class="text-light text-lightblue">Acceso a los módulos de <a href="<?php echo Url::base() . "/consultas" ?>">consultas</a>, <a href="<?php echo Url::base() . "/citas" ?>">citas</a>,
                                         <a href="<?php echo Url::base() . "/examenes" ?>">exámenes</a> y <a href="<?php echo Url::base() . "/pacientes" ?>">pacientes</a>
                                     </p>
                                     </a>
@@ -132,7 +132,7 @@
                                         <img src="<?php echo Url::to('assets/img/factura.png') ?>" alt="facturacionAlt">
                                     </div>
                                     <h2 class="text-light">Facturación</h2>
-                                    <p class="text-light text-lightblue">Acceso a los modulos de las facturas de <a href="<?php echo Url::base() . "/factura/compra" ?>">compra</a> ,
+                                    <p class="text-light text-lightblue">Acceso a los módulos de las facturas de <a href="<?php echo Url::base() . "/factura/compra" ?>">compra</a> ,
                                         de <a href="<?php echo Url::base() . "/factura/seguro" ?>">seguro</a>, de <a href="<?php echo Url::base() . "/factura/consulta" ?>">consulta</a>
                                         y de <a href="<?php echo Url::base() . "/factura/medico" ?>">médicos</a></p>
                                     </a>
@@ -143,7 +143,7 @@
                                         <img src="<?php echo Url::to('assets/img/medicamento.png') ?>" alt="inventarioAlt">
                                     </div>
                                     <h2 class="text-light">Inventario</h2>
-                                    <p class="text-light text-lightblue">Acceso a la gestion de <a href="<?php echo Url::base() . "/proveedores" ?>">proveedores</a> e <a href="<?php echo Url::base() . "/insumos" ?>">insumos</a></p>
+                                    <p class="text-light text-lightblue">Acceso a la gestión de <a href="<?php echo Url::base() . "/proveedores" ?>">proveedores</a> e <a href="<?php echo Url::base() . "/insumos" ?>">insumos</a></p>
                                     </a>
                                 </article>
                             </div>
@@ -194,7 +194,7 @@
                             </div>
                             <div class="title-holder">
                                 <img src="<?php echo Url::to('assets/img/bisturi.png') ?>" alt="icon">
-                                <h3 class="service-title"><a>Cirugia</a></h3>
+                                <h3 class="service-title"><a>Cirugía</a></h3>
                                 <div class="inner-text">
                                     <p>Intervenciones quirúrgicas pediátrica y de manos realizadas por especialistas altamente capacitados.</p>
                                 </div>

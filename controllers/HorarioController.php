@@ -56,6 +56,9 @@ class HorarioController extends Controller{
                     if (!$mensaje) {
                         $respuesta = new Response('INSERCION_FALLIDA');
                         return $respuesta->json($mensaje ? 201 : 400);
+                    } else {
+                        $respuesta = new Response('INSERCION_EXITOSA');
+                        return $respuesta->json(201);
                     }
             }
         }

@@ -60,7 +60,7 @@
 
         <!-- Modal Registro-->
         <div class="modal fade" id="modalRegNormal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegNormalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-3" id="modalRegNormalLabel">Registrar factura consulta</h1>
@@ -70,15 +70,18 @@
                         <div class="alertConsulta alert d-none" role="alert"></div>
                         <form action="" id="info-fconsulta" class="p-3 px-4">
                             <div class="row">
-                                <div class="col-12 col-md-6">
-                                    <label for="paciente_id">Paciente</label>
-                                    <select name="paciente_id" id="s-paciente-consulta" class="form-control" data-active="0" required>
-                                        <option></option>
-                                    </select>
+                                <label for="paciente_id">Seguro</label>
+                                <select name="seguro_id" id="s-seguro" class="form-control" data-active="0" required>
+                                    <option></option>
+                                </select>
+                                <label for="paciente_id">Consultas</label>
+                                <select name="consulta_seguro_id[]" id="s-consultas" class="form-control" data-active="0" multiple required>
+                                    <option></option>
+                                </select>
+                                <!-- <div class="col-12 col-md-6">
                                     <label for="monto_sin_iva">Monto</label>
                                     <input type="number" step="any" name="monto_consulta_usd" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
-                                    <!-- <input type="number" name="monto_sin_iva" oninput="calcularIva(this)" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8"> -->
-                                    
+                                    <input type="number" name="monto_sin_iva" oninput="calcularIva(this)" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <label for="consulta_id">Consulta</label>
@@ -89,12 +92,12 @@
                                     <select name="metodo_pago" id="s-metodo-pago" class="form-control" data-active="0" required>
                                         <option></option>
                                     </select>
-                                </div>
+                                </div> -->
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addFConsulta()">Registrar</button>
+                        <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addFMensajeria()">Registrar</button>
                     </div>
                 </div>
             </div>
@@ -123,7 +126,7 @@
 
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-mensajeria/mostrarFMensajeria.js'); ?>"></script>
-    <!-- <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/registrarFConsulta.js'); ?>"></script> -->
+    <script type="module" src="<?php echo Url::to('assets/js/facturas-mensajeria/registrarFMensajeria.js'); ?>"></script>
     <!-- <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/eliminarFConsulta.js'); ?>"></script> -->
 </body>
 
