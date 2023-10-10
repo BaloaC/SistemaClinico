@@ -15,9 +15,10 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     const direcSeguro = document.getElementById("direcSeguro");
     const porcentajeSeguro = document.getElementById("porcentajeSeguro");
     const costoSeguro = document.getElementById("costoConsultaSeguro");
+    const precioExamanes = document.getElementById("precioExamanes");
+    const seguroPrecioInput = document.getElementById("seguro_precio_id");
+    const btnDelete = document.getElementById("btn-confirmDeleteSeguro");
     const infoSeguro = await getById("seguros", seguro);
-
-    console.log(infoSeguro);
 
     nombreSeguro.textContent = infoSeguro.nombre;
     rifSeguro.textContent = infoSeguro.rif;
@@ -25,6 +26,39 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     direcSeguro.textContent = infoSeguro.direccion;
     porcentajeSeguro.textContent = infoSeguro.porcentaje;
     costoSeguro.textContent = infoSeguro.costo_consulta;
+    btnDelete.setAttribute("onclick", `deleteSeguro(${infoSeguro.seguro_id})`);
+    seguroPrecioInput.value = infoSeguro.seguro_id;
+    
+    let examenesList = "";
+
+    infoSeguro?.examenes?.forEach(examen => {
+        examenesList += `
+        <div class="row align-items-center newInput">
+            <div class="col-3 col-md-1">
+                <button type="button" class="btn" value="${examen.examen_id}" data-bs-toggle="modal" data-bs-target="#modalDeletePrecioExamen" onclick="deletePrecioExamen(this, ${infoSeguro.seguro_id})"><i class="fas fa-times m-0"></i></button>
+            </div>
+            <div class="col-12 col-md-5">
+                <label for="titular">Nombre</label>
+                <select class="form-control mb-3" data-active="0" required disabled>
+                    <option value="" selected>${examen.nombre}</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-5">
+                <label for="tipo_relacion">Precio</label>
+                <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3" required disabled>
+                    <option value="" selected>${examen.precio_examen_seguro}$</option>
+                </select>
+            </div>
+        </div>
+        `;
+    });
+
+    // Si el seguro tiene precio de exámenes lo mostramos, de lo contrario mostramos una alerta de que no posee
+    if(examenesList !== ""){
+        precioExamanes.innerHTML = examenesList;
+    } else {
+        precioExamanes.innerHTML = `<div class="alert alert-warning" role="alert">Este seguro no cuenta con ningún exámen registrado</div>`;
+    }
 
     // Ocultar datos de la factura antes de la petición
     $(".factura-header").fadeOut("slow");
@@ -409,10 +443,8 @@ addEventListener("DOMContentLoaded", async e => {
     const seguro_id = urlParams.get('seguro');
 
     const btnActualizar = document.getElementById("btn-actualizar");
-    const btnEliminar = document.getElementById("btn-confirmDelete");
 
     btnActualizar.setAttribute("onclick", `updateSeguro(${seguro_id})`);
-    btnEliminar.setAttribute("onclick", `deleteSeguro(${seguro_id})`);
 
     getConsultasSegurosMes({ seguro: seguro_id });
 });

@@ -35,7 +35,7 @@ async function addSeguro() {
             costos.push(inputCostos[key].value);
         })
 
-        if (examenes.length === 0 || examenes.length === 0 ) throw { message: "No se ha seleccionado ningún exámen" };
+        if (examenes.length === 0 || costos.length === 0 ) throw { message: "No se ha seleccionado ningún exámen" };
 
         data.examenes = examenes;
         data.costos = costos;

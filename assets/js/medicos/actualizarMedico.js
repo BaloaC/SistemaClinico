@@ -49,7 +49,7 @@ async function updateMedico(id) {
         horarioInput.forEach((checkbox, index) => {
 
             // Validamos que los checkbox concuerden con los que ya existan
-            json[0].horario.some(horario => {
+            json[0]?.horario?.some(horario => {
                 if (horario.dias_semana == checkbox.value) {
                     checkbox.checked = true;
                     checkbox.disabled = true;
