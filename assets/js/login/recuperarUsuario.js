@@ -14,7 +14,7 @@ function template(infoUser) {
             <input class="form-control" type="text" name="respuesta3" placeholder="Introduce la respuesta a la pregunta de seguridad" required>
             <label for="nueva_clave" class="mt-3">Nueva clave</label>
             <input class="form-control" type="password" name="clave" placeholder="Introduzca su nueva clave" data-validate="true" data-type="password" data-max-length="20" required>
-            <small class="form-text">La contraseña debe contener al menos 8 caracteres y un número <br> y los caracteres permitdos son: "@" y "-"</small>
+            <small class="form-text">- La contraseña debe contener al menos 8 caracteres y un número <br> - Los caracteres permitdos son: "@" y "-"</small>
             <label for="confirmar_nueva_clave" class="mt-3">Confirmar nueva clave</label>
             <input class="form-control" type="password" name="confirmarClave" placeholder="Confirme su nueva clave" data-max-length="20" required>
             <small class="form-text">Las contraseñas no coinciden</small>

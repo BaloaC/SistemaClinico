@@ -14,7 +14,7 @@
 --
 
 CREATE TABLE IF NOT EXISTS  `usuario` (
-    `usuario_id` int(11) NOT NULL,
+    `usuario_id` int(11) NOT NULL AUTO_INCREMENT,
     `nombre` varchar(16) NOT NULL,
     `clave` varchar(100) NOT NULL,
     `tokken` varchar(10) DEFAULT NULL,
@@ -100,7 +100,7 @@ INSERT INTO `tipo_antecedente` (`tipo_antecedente_id`, `nombre`, `fecha_creacion
 (6, 'Reacción a medicamentos', '2023-05-28 23:51:47', '1'),
 (7, 'Enfermedades Padecidas', '2023-05-28 23:51:47', '1'),
 (8, 'Tratamientos', '2023-05-28 23:51:47', '1'),
-(9, 'Hábitos de salud', '2023-05-28 23:51:47', '1')
+(9, 'Hábitos de salud', '2023-05-28 23:51:47', '1');
 
 -- --------------------------------------------------------
 
@@ -714,7 +714,7 @@ CREATE TABLE  IF NOT EXISTS `factura_seguro` (
     FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--------------------------------------------------------
+-- -------------------------------------------------------
 
 -- Indices de la talba `factura_mensajería`
 
@@ -729,7 +729,7 @@ CREATE TABLE IF NOT EXISTS `factura_mensajeria` (
     CONSTRAINT `fk_mensajeria_seguro` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
--------------------------------------------------------
+-- -------------------------------------------------------
 
 -- Indices de la talba `factura_mensajeria_consultas`
 

@@ -56,12 +56,12 @@ class HorarioController extends Controller{
                     if (!$mensaje) {
                         $respuesta = new Response('INSERCION_FALLIDA');
                         return $respuesta->json($mensaje ? 201 : 400);
-                    } else {
-                        $respuesta = new Response('INSERCION_EXITOSA');
-                        return $respuesta->json(201);
                     }
             }
         }
+
+        $respuesta = new Response('INSERCION_EXITOSA');
+        return $respuesta->json(201);
     }
 
     public function listarHorarios(){
@@ -82,7 +82,7 @@ class HorarioController extends Controller{
         $mensaje = $_horarioModel->where('estatus_hor','=','1')->innerJoin($arraySelect, $inners, "horario");
 
         $resultado = (count($mensaje) > 0);
-     
+
         $respuesta = new Response($resultado ? 'CORRECTO' : 'ERROR');
         $respuesta->setData($mensaje);
 
