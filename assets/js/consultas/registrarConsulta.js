@@ -7,26 +7,35 @@ async function addConsulta() {
 
     const $form = document.getElementById("info-consulta"),
         $alert = document.querySelector(".alert");
+    const modalRegBody = document.getElementById("modalRegBody") ?? null;
 
     try {
         const formData = new FormData($form),
+
             data = {},
             examenes = [];
-
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
 
-        if (data.consultaPorEmergencia === "0") {
+        console.log(data);
+
+        if (data.consultaPorEmergencia === "0" && data.consultaSinCitaPrevia === "0") {
             const infoCita = await getById("citas", data.cita_id);
             data.cedula_titular = infoCita.cedula_titular;
             data.especialidad_id = infoCita.especialidad_id;
             data.medico_id = infoCita.medico_id;
             data.paciente_id = infoCita.paciente_id;
 
-            // Eliminamos la propiedad para que evitar la validación de datos vacíos en back
-            delete data.consultaPorEmergencia;
         }
+
+        if (data.consultaPorEmergencia === "1") {
+            data.es_emergencia = true;
+        }
+
+        // Eliminamos la propiedad para que evitar la validación de datos vacíos en back
+        delete data.consultaPorEmergencia;
+        delete data.consultaSinCitaPrevia;
 
         let examen = formData.getAll("examenes[]");
         examen.forEach(e => {
@@ -37,6 +46,20 @@ async function addConsulta() {
         })
 
         if (examenes.length != 0) { data.examenes = examenes; }
+
+        const medicosPago = document.querySelectorAll(".medico-pago-id"),
+            montoPago = document.querySelectorAll(".monto-pago"),
+            pagos = [];
+
+        medicosPago.forEach((value, key) => {
+            const pago = {
+                medico_id: value.value,
+                monto: montoPago[key].value
+            }
+            pagos.push(pago);
+        })
+
+        if (pagos.length != 0 && pagos[0].medico_id != "" && pagos[0].monto != "") { data.pagos = pagos; }
 
         const $insumos = document.querySelectorAll(".insumo-id"),
             $insumosCant = document.querySelectorAll(".insumo-cant"),
@@ -49,7 +72,6 @@ async function addConsulta() {
             }
             insumos.push(insumo);
         })
-        console.log(insumos);
         if (insumos.length != 0 && insumos[0].insumo_id != "" && insumos[0].cantidad != "") { data.insumos = insumos; }
 
         const medicamentos = document.querySelectorAll(".medicamento-id"),
@@ -78,8 +100,7 @@ async function addConsulta() {
 
         if (indicaciones.length != 0 && indicaciones[0].descripcion != "") { data.indicaciones = indicaciones; }
 
-
-
+        if(data.medicamentos > 0 && !("recipes" in data)) throw { message: "Debe especificar los medicamentos utilizados" }
 
 
         // TODO: Validar los inputs del paciente
@@ -121,6 +142,13 @@ async function addConsulta() {
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
         $alert.textContent = error.message || error.result.message;
+
+        // Subir el scroll hasta inicio para visualizar mejor el mensaje de error
+        modalRegBody.scrollTo({
+            top: 0,
+            bottom: modalRegBody.scrollHeight,
+            behavior: 'smooth'
+        });
     }
 }
 

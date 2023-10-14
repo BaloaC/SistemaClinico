@@ -14,7 +14,7 @@ addEventListener("DOMContentLoaded", e => {
         },
         ajax: {
             url: `/${path[1]}/factura/consulta/consulta/`,
-            beforeSend: function(xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
             }
         },
@@ -25,35 +25,58 @@ addEventListener("DOMContentLoaded", e => {
                 "data": null,
                 "defaultContent": ''
             },
-            { data: "paciente_id" },
-            { data: "metodo_pago" },
-            { data: "monto_sin_iva" },
-            // { data: "monto_con_iva" },
             {
-                data: "estatus_fac",
+                data: function (row) {
+                    return `${row.nombre_paciente} ${row.apellidos}` ?? `Consulta por emergercia`;
+                }
+            },
+            {
+                data: function (row) {
+                    return row.metodo_pago;
+                }
+            },
+            {
+                data: function (row) {
+                    return row.monto_total_usd;
+                }
+            },
+            {
+                data: function (row) {
+                    return row.monto_total_bs;
+                }
+            },
+            {
+                data: function (row) {
+                    return row.fecha_consulta;
+                }
+            },
+            {
+                data: null,
                 render: function (data, type, row) {
-                    if (data == 1) {
+                    // console.log(row);
+                    if (row.estatus_fac == 1) {
                         return `<span class="badge light badge-success">Pagada</span>`;
                     } else {
                         return `<span class="badge light badge-danger">Anulada</span>`;
                     }
                 },
             },
-            {
-                data: "factura_consulta_id",
-                render: function (data, type, row) {
-                    // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-                    if (row.estatus_fac == 1) {
-                        return `
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFConsulta(${data})"><i class="fas fa-trash del-consulta"></i></a>
-                        `
-                    } else {
-                        return `-`;
-                    }
-                }
-            }
+            // {
+            //     data: null,
+            //     render: function (data, type, row) {
+            //         // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
+            //         if (row.estatus_fac == 1) {
+            //             return `
+            //                 <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFConsulta(${row.estatus_fac})"><i class="fas fa-trash del-consulta"></i></a>
+            //             `
+            //         } else {
+            //             return `-`;
+            //         }
+            //     }
+            // }
 
         ],
+        order: [[5, 'desc']],
         // ! Ocultar los paneles por defecto 
         columnDefs: [{
             searchPanes: {
@@ -124,11 +147,20 @@ addEventListener("DOMContentLoaded", e => {
 
     function format(data) {
 
+        console.log(data);
+
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
                 <tr>
-                    <td>Datos consulta: ${data.consulta_id}</td>
+                    <td colspan="4"><b>Información consulta:</b></td>
                 </tr>
+                <tr>
+                    <td>Nombre médico: <br><b>${data?.nombre_medico ? data?.nombre_medico + " " + data?.apellidos_medico : "Desconocido"}</b></td>
+                    <td>Especialidad: <br><b>${data?.nombre_especialidad ?? "Desconocido"}</b></td>
+                    <td>Monto consulta BS: <br><b>${data?.monto_consulta_bs ?? "Desconocido"}</b></td>
+                    <td>Monto consulta USD: <br><b>${data?.monto_consulta_usd ?? "Desconocido"}</b></td>
+                </tr>
+                <tr><td><br></td></tr>
                 <tr>
                     <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/facturaconsulta/${data.factura_consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
                 </tr>

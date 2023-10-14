@@ -40,7 +40,7 @@ class FacturaMedicoValidate {
         foreach ($formulario as $input) {
             if ( !is_numeric($input) || $input < 0 ) {
                 $respuesta = new Response(false, 'Todos los campos deben ser numéricos');
-                echo $respuesta->json(200);
+                echo $respuesta->json(400);
                 exit();
             }
         }

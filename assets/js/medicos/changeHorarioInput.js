@@ -1,17 +1,15 @@
-function changeHorarioInput(input){
+function changeHorarioInput(input) {
 
     let inputChecked = input.checked;
     const inputsTime = input.parentElement.parentElement.parentElement.querySelectorAll("input[type='time']");
 
-    if(inputChecked){
-        inputsTime.forEach(el => {
+    inputsTime.forEach(el => {
+        if (inputChecked) {
             el.disabled = false;
-        });
-    } else{
-        inputsTime.forEach(el => {
+        } else {
             el.disabled = true;
-        });
-    }
+        }
+    });
 }
 
 window.changeHorarioInput = changeHorarioInput;

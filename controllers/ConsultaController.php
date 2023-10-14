@@ -10,6 +10,7 @@ class ConsultaController extends Controller {
     protected $selectConsultaSinCita = array(
         "paciente.paciente_id",
         "paciente.nombre AS nombre_paciente",
+        "paciente.apellidos AS apellidos_paciente",
         "paciente.cedula AS cedula_paciente",
         "paciente.tipo_paciente",
         "paciente.edad",
@@ -30,11 +31,13 @@ class ConsultaController extends Controller {
     protected $selectConsultaCita = array(
         "paciente.paciente_id",
         "paciente.nombre AS nombre_paciente",
+        "paciente.apellidos AS apellidos_paciente",
         "paciente.cedula AS cedula_paciente",
         "medico.medico_id",
         "paciente.tipo_paciente",
         "paciente.edad",
         "medico.nombre AS nombre_medico",
+        "medico.apellidos AS apellido_medico",
         "medico.cedula AS cedula_medico",
         "especialidad.especialidad_id",
         "especialidad.nombre AS nombre_especialidad",
@@ -359,7 +362,7 @@ class ConsultaController extends Controller {
         
         $consultasPaciente = array_filter($consultas, fn($consulta) => $consulta->paciente_id == $paciente_id);
         
-        $pruebas = [];
+        $consultasArray = [];
         foreach ($consultasPaciente as $consulta) {
             $consultasArray[] = $consulta;
         }
@@ -408,19 +411,15 @@ class ConsultaController extends Controller {
         $consultaList = $_consultaModel->where('estatus_con', '=', 1)
                                         ->where('consulta_id', '=', $consulta_id)
                                         ->getFirst();
-        
-        if ( !is_null($consultaList) ) {
-            $consultas = ConsultaHelper::obtenerRelaciones($consulta_id);
-        
-            $mensaje = (!is_null($consultas));
-            $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-            $respuesta->setData($consultas);
-            return $respuesta->json(200);
+       $consultas = [];
 
-        } else {
-            $respuesta = new Response('false', 'La consulta indicada no existe');
-            return $respuesta->json(400);
-        }
+        ($consultaList->es_emergencia) ?  $consultas[] = ConsultaService::obtenerConsultaEmergencia($consultaList) : $consultas[] = ConsultaService::obtenerConsultaNormal($consultaList);
+
+
+        $mensaje = (count($consultas) > 0);
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($consultas[0]);
+        return $respuesta->json(200);
     }
 
     // Códigos de consultas_insumo

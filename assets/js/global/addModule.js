@@ -1,11 +1,12 @@
 const path = location.pathname.split('/');
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
-export default async function addModule(module, form, data, successMessage, modal = "#modalReg", alert =".alert") {
+export default async function addModule(module, form, data, successMessage, modal = "#modalReg", alert = ".alert") {
 
     const $form = document.getElementById(form),
         $alert = document.querySelector(alert),
         modalActContent = document.querySelector(modal);
+    const modalRegBody = document.getElementById("modalRegBody") ?? null;
 
     try {
 
@@ -31,6 +32,16 @@ export default async function addModule(module, form, data, successMessage, moda
         $alert.textContent = successMessage;
         $form.reset();
 
+        // Subir el scroll hasta inicio para visualizar mejor el mensaje de exito
+        if (modalRegBody !== null) {
+            modalRegBody.scrollTo({
+                top: 0,
+                bottom: modalRegBody.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+
         setTimeout(() => {
             $(modal).modal("hide");
             $alert.classList.add("d-none");
@@ -43,6 +54,17 @@ export default async function addModule(module, form, data, successMessage, moda
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
         $alert.textContent = error.message || error.result.message;
+
+
+        // Subir el scroll hasta inicio para visualizar mejor el mensaje de error
+        if (modalRegBody !== null) {
+            modalRegBody.scrollTo({
+                top: 0,
+                bottom: modalRegBody.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
 
         setTimeout(() => {
             $alert.classList.add("d-none");

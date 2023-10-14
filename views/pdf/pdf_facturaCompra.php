@@ -94,11 +94,11 @@
         <table class="tabla">
             <thead>
                 <tr>
-                    <th colspan="4" class="text-center" id="title">Factura Compra</th>
+                    <th colspan="4" class="text-center" id="title">Recibo de Compra</th>
                 </tr>
                 <tr class="insumos-head">
                     <th colspan="2">Nombre del proveedor: <span id="proveedor">EMPRESAS TE QUIERO MUCHO C.A</span></th>
-                    <th colspan="2">Factura ID: <span id="factura_id">13</spani></th>
+                    <th colspan="2">Recibo de Compra ID: <span id="factura_id">13</spani></th>
                 </tr>
                 <tr class="insumos-head">
                     <th colspan="2">Monto total sin iva: <span id="monto_sin_iva">1111.23</span></th>

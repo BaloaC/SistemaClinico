@@ -2,7 +2,7 @@ const path = location.pathname.split('/')
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
 
-export default async function deleteModule(module, id, successMessage, modal = "#modalDelete", alert = "delAlert") {
+export default async function deleteModule(module, id, successMessage, modal = "#modalDelete", alert = "delAlert", body = "") {
 
     const $alert = document.getElementById(alert);
 
@@ -15,6 +15,7 @@ export default async function deleteModule(module, id, successMessage, modal = "
                 "Content-type": "application/json; charset=utf-8",
                 "Authorization": "Bearer " + Cookies.get("tokken")
             },
+            body: JSON.stringify(body)
         };
 
         const response = await fetch(`/${path[1]}/${module}/${id}`, options);

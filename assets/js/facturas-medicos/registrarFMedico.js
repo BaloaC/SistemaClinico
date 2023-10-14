@@ -1,5 +1,6 @@
 import addModule from "../global/addModule.js";
 import getAge from "../global/getAge.js";
+import getAll from "../global/getAll.js";
 
 async function addFMedico() {
 
@@ -21,10 +22,9 @@ async function addFMedico() {
         // Formatear la fecha en el formato deseado
         const fechaFormateada = fechaActual.toFormat('yyyy-MM-dd');
 
-        data.fecha_actual = fechaFormateada;
+        const facturaMedico = await getAll(`facturaMedico/medico?fecha=${fechaFormateada}&medico=${data.medico_id}`);
 
-
-        await addModule("factura/medico", "info-fmedico", data, "Factura medico registrada correctamente!");
+        await addModule("factura/medico", "info-fmedico", facturaMedico, "Factura medico registrada correctamente!");
         $('#fMedicos').DataTable().ajax.reload();
 
     } catch (error) {

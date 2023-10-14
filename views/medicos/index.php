@@ -228,7 +228,18 @@
                             <p>Teléfono: <span id="tlfMedico"></span></p>
                             <p>Dirección: <span id="direcMedico"></span></p>
                             <p>Especialidad: <span id="especialidadMedico"></span></p>
-                            <p>Horario: <span id="horarioMedico"></span></p>
+                            <p>Horario: <span id="horarioMessage">Este médico no posee horarios</span></p>
+                            <table id="horarios-table" class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th>Día</th>
+                                        <th>Hora Entrada</th>
+                                        <th>Hora Salida</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
@@ -282,6 +293,8 @@
                                     <label for="apellidos">Dirección</label>
                                     <input type="text" name="direccion" class="form-control mb-3" data-max-length="255" required>
                                 </div>
+                                <div class="act-horarios">
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -302,7 +315,7 @@
                     </div>
                     <div class="modal-body">
                         <div id="delAlert" class="alert d-none" role="alert"></div>
-                        ¿Estás empresa que deseas eliminar este médico?
+                        ¿Estás seugro que deseas eliminar este médico?
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="btn-confirmDelete" class="btn btn-danger">Eliminar</button>
@@ -330,6 +343,109 @@
             </div>
         </div>
     </div>
+
+    <template id="horarioInitialInputs">
+        <div class="col-12 col-check mt-4">
+            <div class="py-3">Seleccione los horarios del doctor</div>
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <div class="form-check">
+                        <input type="checkbox" name="horario" value="lunes" class="form-check-input horarioInput" onchange="changeHorarioInput(this)">
+                        <label for="lunes" class="form-check-label">Lunes</label>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <label for="hora_entrada">Hora entrada</label>
+                    <input type="time" name="hora_inicio_lunes" class="form-control mb-3 horarioEntryInput" disabled>
+                </div>
+                <div class="col-md-5">
+                    <label for="hora_salida">Hora salida</label>
+                    <input type="time" name="hora_salida_lunes" class="form-control mb-3 horarioExitInput" disabled>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <div class="form-check">
+                        <input type="checkbox" name="horario" value="martes" class="form-check-input horarioInput" onchange="changeHorarioInput(this)">
+                        <label for="martes" class="form-check-label">Martes</label>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <label for="hora_entrada">Hora entrada</label>
+                    <input type="time" name="hora_inicio_martes" class="form-control mb-3 horarioEntryInput" disabled>
+                </div>
+                <div class="col-md-5">
+                    <label for="hora_salida">Hora salida</label>
+                    <input type="time" name="hora_salida_martes" class="form-control mb-3 horarioExitInput" disabled>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <div class="form-check">
+                        <input type="checkbox" name="horario" value="miercoles" class="form-check-input horarioInput" onchange="changeHorarioInput(this)">
+                        <label for="miercoles" class="form-check-label">Miercoles</label>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <label for="hora_entrada">Hora entrada</label>
+                    <input type="time" name="hora_inicio_miercoles" class="form-control mb-3 horarioEntryInput" disabled>
+                </div>
+                <div class="col-md-5">
+                    <label for="hora_salida">Hora salida</label>
+                    <input type="time" name="hora_salida_miercoles" class="form-control mb-3 horarioExitInput" disabled>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <div class="form-check">
+                        <input type="checkbox" name="horario" value="jueves" class="form-check-input horarioInput" onchange="changeHorarioInput(this)">
+                        <label for="jueves" class="form-check-label">Jueves</label>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <label for="hora_entrada">Hora entrada</label>
+                    <input type="time" name="hora_inicio_jueves" class="form-control mb-3 horarioEntryInput" disabled>
+                </div>
+                <div class="col-md-5">
+                    <label for="hora_salida">Hora salida</label>
+                    <input type="time" name="hora_salida_jueves" class="form-control mb-3 horarioExitInput" disabled>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <div class="form-check">
+                        <input type="checkbox" name="horario" value="viernes" class="form-check-input horarioInput" onchange="changeHorarioInput(this)">
+                        <label for="viernes" class="form-check-label">Viernes</label>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <label for="hora_entrada">Hora entrada</label>
+                    <input type="time" name="hora_inicio_viernes" class="form-control mb-3 horarioEntryInput" disabled>
+                </div>
+                <div class="col-md-5">
+                    <label for="hora_salida">Hora salida</label>
+                    <input type="time" name="hora_salida_viernes" class="form-control mb-3 horarioExitInput" disabled>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <div class="form-check">
+                        <input type="checkbox" name="horario" value="sabado" class="form-check-input horarioInput" onchange="changeHorarioInput(this)">
+                        <label for="sabado" class="form-check-label">Sabado</label>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <label for="hora_entrada">Hora entrada</label>
+                    <input type="time" name="hora_inicio_sabado" class="form-control mb-3 horarioEntryInput" disabled>
+                </div>
+                <div class="col-md-5">
+                    <label for="hora_salida">Hora salida</label>
+                    <input type="time" name="hora_salida_sabado" class="form-control mb-3 horarioExitInput" disabled>
+                </div>
+            </div>
+        </div>
+    </template>
+
     <!-- Modal Alerta-->
     <div class="modal fade" id="modalAlert" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">

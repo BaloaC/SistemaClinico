@@ -15,6 +15,7 @@
 
         header img {
             text-align: start;
+            position: absolute;
         }
 
 
@@ -75,7 +76,7 @@
         /* Estilos para la firma y sello */
 
         .firma {
-            margin-top: 85px;
+            margin-top: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -93,10 +94,10 @@
     <div class="paper">
         <div class="col">
             <div class="info_cita">
-                <p>Paciente: __<span id="paciente"></span>__</p>
-                <p>Cédula paciente: __<span id="cedula_paciente"></span>__</p>
-                <p>Cédula titular: __<span id="cedula_titular"></span>__</p>
-                <p>Tipo de cita: __<span id="tipo_cita"></span>__</p>
+                <p>Paciente: <span id="paciente"></span></p>
+                <p>Cédula paciente: <span id="cedula_paciente"></span></p>
+                <p>Cédula titular: <span id="cedula_titular"></span></p>
+                <p>Tipo de cita: <span id="tipo_cita"></span></p>
             </div>
             <div class="contacto">
                 <p>Número de comunicación</p>

@@ -113,7 +113,7 @@ class ConsultaSeguroController extends Controller{
         $factura = ConsultaSeguroService::listarConsultasSeguroId($consulta_seguro_id);
         $siExiste = count($factura) > 0;
         $respuesta = new Response($siExiste ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($factura);
+        $respuesta->setData($factura[0]);
         return $respuesta->json(200);
     }
 

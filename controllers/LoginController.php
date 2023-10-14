@@ -44,7 +44,7 @@ class LoginController extends Controller{
 
                     // Automatización de facturas_seguro
                     $_facturaSeguro = new FacturaSeguroController();
-                    $_facturaSeguro->insertarFacturaSeguro();
+                    // $_facturaSeguro->insertarFacturaSeguro();
 
                     $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
                     $respuesta->setData($tokken);

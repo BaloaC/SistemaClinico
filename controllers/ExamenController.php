@@ -61,6 +61,17 @@ class ExamenController extends Controller{
         return $respuesta->json(200);
     }
 
+    public function listarExamenDeLaboratorios(){
+        $_examenModel = new ExamenModel();
+        $lista = $_examenModel->where('estatus_exa', '=', '1')->where('tipo', '=', '2')->getAll();
+
+        $mensaje = (count($lista) > 0);     
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($lista);
+
+        return $respuesta->json(200);
+    }
+
     public function actualizarExamen($examen_id){
 
         $_POST = json_decode(file_get_contents('php://input'), true);

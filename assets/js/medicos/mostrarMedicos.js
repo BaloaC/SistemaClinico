@@ -14,7 +14,7 @@ async function getMedico(id) {
             $tlfMedico = document.getElementById("tlfMedico"),
             $direcMedico = document.getElementById("direcMedico"),
             $especialidadMedico = document.getElementById("especialidadMedico"),
-            $horarioMedico = document.getElementById("horarioMedico"),
+            $horarioMedico = document.querySelector("#horarios-table tbody"),
             $btnActualizar = document.getElementById("btn-actualizar"),
             $btnEliminar = document.getElementById("btn-confirmDelete");
         let horario = "";
@@ -22,31 +22,56 @@ async function getMedico(id) {
 
         const json = await getById("medicos/", id);
 
-        json[0].horario.forEach(el => {
-            horario += `
-                <button class="btn btn-sm btn-empresa" id="btn-add" value="${el.horario_id}" ${json[0].horario.length > 1
-                    ? `onclick=(deleteHorario(${el.horario_id})) data-bs-toggle="modal" data-bs-target="#modalDeleteRelacion"`
-                    : `data-bs-toggle="modal" data-bs-target="#modalAlert"`}>
-                    ${el.dias_semana}
-                    <i class="fa-sm fas fa-times"></i> 
-                </button>
-            `;
-        });
+        if (json[0].horario?.length >= 1) {
+
+            $("#horarioMessage").fadeOut("slow");
+            $("#horarios-table").fadeIn("slow");
+
+            json[0].horario.forEach(el => {
+                horario += `
+                    <tr>
+                        <td>${el.dias_semana}</td>
+                        <td>${el.hora_entrada}</td>
+                        <td>${el.hora_salida}</td>
+                        <td>
+                            <button class="btn btn-sm btn-empresa" id="btn-add" value="asdas${el.horario_id}" ${json[0].horario.length >= 1
+                        ? `onclick=(deleteHorario(${el.horario_id})) data-bs-toggle="modal" data-bs-target="#modalDeleteRelacion"`
+                        : `data-bs-toggle="modal" data-bs-target="#modalAlert"`}>
+                                <i class="fa-sm fas fa-times"></i> 
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        } else {
+            $("#horarioMessage").fadeIn("slow");
+            $("#horarios-table").fadeOut("slow");
+        }
 
         $horarioMedico.innerHTML = horario;
 
-        json[0].especialidad.forEach(el => {
-            especialidad += `
+
+        if (json[0].especialidad?.length >= 1) {
+
+            json[0].especialidad.forEach(el => {
+                especialidad += `
                 <button class="btn btn-sm btn-empresa" id="btn-add" value="${el.medico_especialidad_id}" ${json[0].especialidad.length > 1
-                    ? `onclick=(deleteEspecialidad(${el.medico_especialidad_id})) data-bs-toggle="modal" data-bs-target="#modalDeleteRelacion"`
-                    : `data-bs-toggle="modal" data-bs-target="#modalAlert"`}>
+                        ? `onclick=(deleteEspecialidad(${el.medico_especialidad_id})) data-bs-toggle="modal" data-bs-target="#modalDeleteRelacion"`
+                        : `data-bs-toggle="modal" data-bs-target="#modalAlert"`}>
                     ${el.nombre_especialidad}
                     <i class="fa-sm fas fa-times"></i> 
                 </button>
             `;
-        });
+            });
 
-        $especialidadMedico.innerHTML = especialidad;
+            $especialidadMedico.innerHTML = especialidad;
+
+        } else {
+
+            $especialidadMedico.innerHTML = "Este médico no posee ninguna especialidad";
+        }
+
+        
 
         $nombreMedico.innerText = `${json[0].nombre.split(" ")[0]} ${json[0].apellidos.split(" ")[0]}`;
         $cedulaMedico.innerText = `C.I: ${json[0].cedula}`;

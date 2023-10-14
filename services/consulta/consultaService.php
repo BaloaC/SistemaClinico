@@ -11,8 +11,11 @@ class ConsultaService {
     protected static $selectConsultaSinCita = array(
         "paciente.paciente_id",
         "paciente.nombre AS nombre_paciente",
+        "paciente.apellidos AS apellido_paciente",
+        "paciente.cedula AS cedula_paciente",
         "medico.medico_id",
         "medico.nombre AS nombre_medico",
+        "medico.apellidos AS apellidos_medico",
         "especialidad.especialidad_id",
         "especialidad.nombre AS nombre_especialidad"
     );
@@ -27,9 +30,11 @@ class ConsultaService {
     protected static $selectConsultaCita = array(
         "paciente.paciente_id",
         "paciente.nombre AS nombre_paciente",
-        "paciente.cedula",
+        "paciente.apellidos AS apellido_paciente",
+        "paciente.cedula AS cedula_paciente",
         "medico.medico_id",
         "medico.nombre AS nombre_medico",
+        "medico.apellidos AS apellidos_medico",
         "especialidad.especialidad_id",
         "especialidad.nombre AS nombre_especialidad",
         "consulta_cita.consulta_id",
@@ -52,6 +57,7 @@ class ConsultaService {
     protected static $selectPacienteBeneficiado = array(
         "paciente.paciente_id",
         "paciente.nombre AS nombre_paciente",
+        "paciente.apellidos AS apellidos_paciente",
         "paciente.cedula",
         "paciente_beneficiado.paciente_beneficiado_id"
     );
@@ -66,6 +72,8 @@ class ConsultaService {
         if ($separar == 'emergencia') {
             $consulta = array(
                 "observaciones" => isset($formulario["observaciones"]) ? $formulario["observaciones"] : null,
+                "peso" => isset($formulario["peso"]) ? $formulario["peso"] : null,
+                "altura" => isset($formulario["altura"]) ? $formulario["altura"] : null,
                 "fecha_consulta" => $formulario["fecha_consulta"],
                 "es_emergencia" => $formulario["es_emergencia"]
             );
@@ -159,7 +167,8 @@ class ConsultaService {
             
         } else { // Si es por cita extraemos la información de consulta_cita
             $_cita = new CitaModel();
-            $cita = $_cita->where('cita_id', '=', $es_citada[0]->cita_id)->getFirst();
+            $innersCita = $_consultaCita->listInner(ConsultaService::$innerConsultaCita);
+            $cita = $_cita->where('cita.cita_id', '=', $es_citada[0]->cita_id)->innerJoin(ConsultaService::$selectConsultaCita, $innersCita, "consulta_cita")[0];
 
             $relaciones = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
             if (count((array) $relaciones) > 0) {

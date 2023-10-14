@@ -2,6 +2,7 @@ import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicS
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
+import concatItems from "../global/concatItems.js";
 
 const path = location.pathname.split('/');
 
@@ -14,6 +15,9 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     const direcSeguro = document.getElementById("direcSeguro");
     const porcentajeSeguro = document.getElementById("porcentajeSeguro");
     const costoSeguro = document.getElementById("costoConsultaSeguro");
+    const precioExamanes = document.getElementById("precioExamanes");
+    const seguroPrecioInput = document.getElementById("seguro_precio_id");
+    const btnDelete = document.getElementById("btn-confirmDeleteSeguro");
     const infoSeguro = await getById("seguros", seguro);
 
     nombreSeguro.textContent = infoSeguro.nombre;
@@ -22,13 +26,46 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     direcSeguro.textContent = infoSeguro.direccion;
     porcentajeSeguro.textContent = infoSeguro.porcentaje;
     costoSeguro.textContent = infoSeguro.costo_consulta;
+    btnDelete.setAttribute("onclick", `deleteSeguro(${infoSeguro.seguro_id})`);
+    seguroPrecioInput.value = infoSeguro.seguro_id;
     
+    let examenesList = "";
+
+    infoSeguro?.examenes?.forEach(examen => {
+        examenesList += `
+        <div class="row align-items-center newInput">
+            <div class="col-3 col-md-1">
+                <button type="button" class="btn" value="${examen.examen_id}" data-bs-toggle="modal" data-bs-target="#modalDeletePrecioExamen" onclick="deletePrecioExamen(this, ${infoSeguro.seguro_id})"><i class="fas fa-times m-0"></i></button>
+            </div>
+            <div class="col-12 col-md-5">
+                <label for="titular">Nombre</label>
+                <select class="form-control mb-3" data-active="0" required disabled>
+                    <option value="" selected>${examen.nombre}</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-5">
+                <label for="tipo_relacion">Precio</label>
+                <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3" required disabled>
+                    <option value="" selected>${examen.precio_examen_seguro}$</option>
+                </select>
+            </div>
+        </div>
+        `;
+    });
+
+    // Si el seguro tiene precio de exámenes lo mostramos, de lo contrario mostramos una alerta de que no posee
+    if(examenesList !== ""){
+        precioExamanes.innerHTML = examenesList;
+    } else {
+        precioExamanes.innerHTML = `<div class="alert alert-warning" role="alert">Este seguro no cuenta con ningún exámen registrado</div>`;
+    }
+
     // Ocultar datos de la factura antes de la petición
     $(".factura-header").fadeOut("slow");
     $(".total-amount").fadeOut("slow");
 
 
-    let listConsultas = await getAll(`factura/seguro/consultaseguro?seguro=${seguro}&anio=${anio}&mes=${mes}`);
+    let listConsultas = await getAll(`factura/seguro/fecha?seguro=${seguro}&anio=${anio}&mes=${mes}`);
 
     // Datos facturas
     const montoTotal = document.getElementById("total-price");
@@ -37,6 +74,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     const fechaOcurrencia = document.getElementById("fecha-ocurrencia");
     const fechaVencimiento = document.getElementById("fecha-vencimiento");
     const estatusFactura = document.getElementById("factura-estatus");
+    const btnCintillo  = document.getElementById("btn-cintillo-pdf");
 
 
     if (listConsultas) {
@@ -45,12 +83,20 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
         mesRecibo.textContent = listConsultas.factura[0].mes;
         fechaOcurrencia.textContent = listConsultas.factura[0].fecha_ocurrencia.split(" ")[0];
         fechaVencimiento.textContent = listConsultas.factura[0].fecha_vencimiento;
-        montoTotal.textContent = listConsultas.factura[0].monto;
-        
+        montoTotal.textContent = listConsultas.factura[0].monto_usd;
+
+        // Si hay consultas disponibles mostrar el boton del pdf
+        if(listConsultas.consultas?.length > 0){
+            btnCintillo.setAttribute("onclick",`openPopup('pdf/cintillo/${seguro}-${anio}-${mes}')`)
+            $("#btn-cintillo-pdf").fadeIn("slow");
+        } else {
+            $("#btn-cintillo-pdf").fadeOut("slow");
+        }
+
         // Si la factura está pagada o pendiente rellenar este campo de fecha con dicho estatus
-        if(listConsultas.factura[0].estatus_fac == 1){
+        if (listConsultas.factura[0].estatus_fac == 1) {
             estatusFactura.innerHTML = '<span class="badge light badge-warning">Pendiente</span>';
-        } else{
+        } else {
             estatusFactura.innerHTML = '<span class="badge light badge-success">Pagada</span>';
         }
 
@@ -100,7 +146,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             },
             { data: "tipo_servicio" },
             { data: "fecha_ocurrencia" },
-            { data: "monto" },
+            { data: "monto_consulta_usd" },
             // {
             //     data: "factura_seguro_id",
             //     render: function (data, type, row) {
@@ -172,14 +218,206 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
     function format(data) {
 
-        return `
-            <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
+        const info = {};
+
+        if (data !== undefined) {
+
+            info.data = data;
+
+            if (data.clave == null) data.clave = "No aplica";
+            info.tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
+
+            info.examenes = data.examenes !== undefined ? concatItems(data.examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen";
+            info.insumos = data.insumos !== undefined ? concatItems(data.insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo";
+            console.log(info.insumos);
+            info.indicaciones = data.indicaciones !== undefined ? concatItems(data.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación";
+
+            info.recipes = `
+            <tr>
+                <td colspan="4">Recipes:</td>
+            </tr>
+            `;
+            info.factura = "";
+
+            if (data.recipes) {
+
+                data.recipes.forEach(el => {
+
+                    let tipo_medicamento = "";
+
+                    if (el.tipo_medicamento == 1) {
+                        tipo_medicamento = "Cápsula";
+                    } else if (el.tipo_medicamento == 2) {
+                        tipo_medicamento = "Jarabe";
+                    } else if (el.tipo_medicamento == 3) {
+                        tipo_medicamento = "Inyección";
+                    } else {
+                        tipo_medicamento = "Desconocido";
+                    }
+
+                    info.recipes += `
+                    <tr>
+                        <td>Nombre del medicamento: <br><b>${el.nombre_medicamento}</b></td>
+                        <td>Tipo de medicamento: <br><b>${tipo_medicamento}</b></td>
+                        <td colspan"2">Uso: <br><b>${el.uso}</b></td>
+                    </tr>
+                `;
+                })
+            } else {
+                info.recipes += `
                 <tr>
-                    <td>Datos consulta: a</td>
+                    <td colspan="4"><b>No hay recipes asigandos</b></td>
                 </tr>
-            </table>
-        `;
+                `;
+            }
+
+            // <td>Nombre del medicamento: <br><b>${el.nombre_medicamento}</b></td>
+            //         <td>Tipo de medicamento: <br><b>${tipo_medicamento}</b></td>
+            //         <td colspan"2">Uso: <br><b>${el.uso}</b></td>
+
+            if (data.consulta_emergencia) {
+
+                info.factura = `
+                <tr><td><br></td></tr>
+                <tr><td><br></td></tr>
+                <tr>
+                    <td colspan="4"><b>Factura consulta emergencia:</b></td>
+                </tr>
+                `;
+                console.log(data);
+                info.factura += `
+                <tr>
+                    <td>Cantidad de consultas médicas: <br><b>${data.consulta_emergencia.cantidad_consultas_medicas}</b></td>
+                    <td>Consultas médicas: <br><b>${data.consulta_emergencia.consultas_medicas}</b></td>
+                    <td>Cantidad laboratorio: <br><b>${data.consulta_emergencia.cantidad_laboratorios}</b></td>
+                    <td>Laboratorios: <br><b>${data.consulta_emergencia.laboratorios}</b></td>
+                </tr>
+                <tr>
+                    <td>Cantidad de medicamentos: <br><b>${data.consulta_emergencia.cantidad_medicamentos}</b></td>
+                    <td>Medicamentos: <br><b>${data.consulta_emergencia.medicamentos}</b></td>
+                    <td>Area de observación: <br><b>${data.consulta_emergencia.area_observacion}</b></td>
+                    <td>Enfermería: <br><b>${data.consulta_emergencia.enfermeria}</b></td>
+                </tr>
+                <tr>
+                    <td>Total insumos: <br><b>${data.consulta_emergencia.total_insumos}</b></td>
+                    <td>Total exámenes: <br><b>${data.consulta_emergencia.total_examenes}</b></td>
+                    <td>Total consulta: <br><b>${data.consulta_emergencia.total_consulta}</b></td>
+                </tr>
+                <tr><td><br></td></tr>
+                <tr>
+                    <td colspan="4"><b>Monto en bs:</b></td>
+                </tr>
+                <tr>
+                    <td>Consultas médicas: <br><b>${data.consulta_emergencia.consultas_medicas_bs} Bs</b></td>
+                    <td>Laboratorios: <br><b>${data.consulta_emergencia.laboratorios_bs} Bs</b></td>
+                </tr>
+                <tr>
+                    <td>Medicamentos: <br><b>${data.consulta_emergencia.medicamentos_bs} Bs</b></td>
+                    <td>Area de observación: <br><b>${data.consulta_emergencia.area_observacion_bs} Bs</b></td>
+                    <td>Enfermería: <br><b>${data.consulta_emergencia.enfermeria_bs} Bs</b></td>
+                </tr>
+                <tr>
+                    <td>Total insumos: <br><b>${data.consulta_emergencia.total_insumos_bs} Bs</b></td>
+                    <td>Total exámenes: <br><b>${data.consulta_emergencia.total_examenes_bs} Bs</b></td>
+                    <td>Total consulta: <br><b>${data.consulta_emergencia.total_consulta_bs} Bs</b></td>
+                </tr>
+            `;
+            }
+
+
+            info.paciente_beneficiado = "";
+
+            if (data.paciente_beneficiado) {
+
+                info.paciente_beneficiado = `
+                <tr><td><br></td></tr>
+                <tr><td><br></td></tr>
+                <tr>
+                    <td colspan="4"><b>Información paciente beneficiado:</b></td>
+                </tr>
+                `;
+
+                info.paciente_beneficiado += `
+                <tr>
+                    <td>Cédula: <br><b>${data.paciente_beneficiado.cedula}</b></td>
+                    <td>Nombres: <br><b>${data.paciente_beneficiado.nombre}</b></td>
+                    <td>Apellidos: <br><b>${data.paciente_beneficiado.apellidos}</b></td>
+                </tr>
+                <tr>
+                    <td>Fecha de nacimiento: <br><b>${data.paciente_beneficiado.fecha_nacimiento}</b></td>
+                    <td>Edad: <br><b>${data.paciente_beneficiado.edad}</b></td>
+                </tr>
+            `;
+            }
+
+            info.medico = "";
+
+            if (data.medico) {
+
+                info.medico = `
+                <tr><td><br></td></tr>
+                <tr><td><br></td></tr>
+                <tr>
+                    <td colspan="4"><b>Información médico:</b></td>
+                </tr>
+                `;
+
+                info.medico += `
+                <tr>
+                    <td>Cédula: <br><b>${data.medico.cedula}</b></td>
+                    <td>Nombres: <br><b>${data.medico.nombre}</b></td>
+                    <td>Apellidos: <br><b>${data.medico.apellidos}</b></td>
+                </tr>
+                <tr>
+                    <td>Especialidad: <br><b>${data?.especialidad.nombre ?? "Desconocida"}</b></td>
+                </tr>
+
+                <tr><td><br></td></tr>
+                <tr><td><br></td></tr>
+            `;
+            }
+        }
+
+        console.log(info);
+
+
+        return `
+        <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
+            <tr>
+                <td colspan="4"><b>Información consulta:</b></td>
+            </tr>
+            <tr>
+                <td>Peso: <br><b>${info.data?.consulta.peso}</b></td>
+                <td>Altura: <br><b>${info.data?.consulta.altura}</b></td>
+                <td>Fecha Cita: <br><b>${info.data?.cita?.fecha_cita ?? "No aplica"}</b></td>
+                <td>Motivo cita: <br><b>${info.data?.cita?.motivo_cita ?? "No aplica"}</b></td>
+            </tr>
+            <tr class="blue-td">
+                <td>Clave: <br><b>${info.data?.cita?.clave}</b></td>
+                <td>Exámenes realizados: <br><b>${info?.examenes}</b></td>
+                <td>Insumos utilizados: <br><b>${info?.insumos}</b></td>
+            </tr>
+            ${info.paciente_beneficiado}
+            ${info.medico}
+            ${info.factura}
+            <tr><td><br></td></tr>
+            <tr>
+                <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/consultaemergencia/${info.data?.consulta_seguro_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
+            </tr>
+        </table>
+    `
+
     }
+
+    // if (info && info.data && info.data.cita) {
+    //      fecha_cita = info.data.cita.fecha_cita;
+    //   } else {
+    //      fecha_cita = 'valor predeterminado';
+    //   }
+
+
+
+
 
 
     $('#consultaSeguro').on('click', 'td.dt-control', function () {
@@ -205,10 +443,8 @@ addEventListener("DOMContentLoaded", async e => {
     const seguro_id = urlParams.get('seguro');
 
     const btnActualizar = document.getElementById("btn-actualizar");
-    const btnEliminar = document.getElementById("btn-confirmDelete");
 
     btnActualizar.setAttribute("onclick", `updateSeguro(${seguro_id})`);
-    btnEliminar.setAttribute("onclick", `deleteSeguro(${seguro_id})`);
 
     getConsultasSegurosMes({ seguro: seguro_id });
 });

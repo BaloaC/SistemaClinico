@@ -53,16 +53,16 @@ async function addFConsulta() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto_sin_iva))) throw { message: "El monto sin iva ingresado es inválido" };
+        if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto_consulta_usd))) throw { message: "El monto ingresado en usd es inválido" };
         // if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto_con_iva))) throw { message: "El monto con iva ingresado es inválido" };
 
-        data.monto_con_iva = (parseFloat(data.monto_sin_iva) * 0.16) + parseFloat(data.monto_sin_iva)
+        // data.monto_con_iva = (parseFloat(data.monto_sin_iva) * 0.16) + parseFloat(data.monto_sin_iva)
 
         await addModule("factura/consulta","info-fconsulta",data,"Factura consulta registrada correctamente!", "#modalRegNormal", ".alertConsulta");
         Array.from(document.getElementById("info-fconsulta").elements).forEach(element => {
             element.classList.remove('valid');
         })
-        $('#consultas').DataTable().ajax.reload();
+        $('#fConsulta').DataTable().ajax.reload();
 
     } catch (error) {
         console.log(error);

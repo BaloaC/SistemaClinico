@@ -37,11 +37,11 @@
                                             <p>Dirección: <span id="direcSeguro"></span></p>
                                             <p>Porcentaje: <span id="porcentajeSeguro"></span></p>
                                             <p>Costo por consulta: <span id="costoConsultaSeguro"></span></p>
-                                            <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-eye"></i> Precio exámenes</button>
+                                            <button class="btn btn-sm btn-add" data-bs-toggle="modal" data-bs-target="#modalExamenes"><i class="fa-sm fas fa-eye"></i> Precio examenes</button>
                                         </div>
                                     </div>
                                     <div class="modal-footer d-flex justify-content-between">
-                                        <a id="btn-eliminar" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="fas fa-trash"></i></a>
+                                        <a data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="fas fa-trash"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -80,6 +80,7 @@
                                     <h5>Mes: <span id="mes-factura"></span></h5>
                                     <h5>Fecha ocurrencia: <span id="fecha-ocurrencia"></span></h5>
                                     <h5>Fecha vencimiento: <span id="fecha-vencimiento"></span></h5>
+                                    <a id="btn-cintillo-pdf" class="btn btn-sm btn-add" style="display: none;" href="#"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a>
                                 </div>
 
                                 <div class="col-lg-6 text-lg-end">
@@ -169,6 +170,57 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal Examanes-->
+        <div class="modal fade" id="modalExamenes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalExamenesLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalExamenesLabel">Precios de los exámenes</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="precioExamanes">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-addExamen" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddPrecioExamen">Registrar un nuevo precio de examen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agregar Precio de los examen -->
+        <div class="modal fade" id="modalAddPrecioExamen" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAddPrecioExamenLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalAddPrecioExamenLabel">Añadir precio de examen</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert addAlertPrecioExamen d-none" role="alert"></div>
+                        <form action="" id="info-precioExamen" class="p-3 px-4">
+                            <div class="row align-items-center">
+                                <div class="col-12 col-md-5">
+                                    <label for="examen">Examen</label>
+                                    <select id="s-examen_id" class="form-control examen" data-active="0" required>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-5">
+                                    <label for="costos">Costo del examen</label>
+                                    <input type="number" step="any" class="form-control mb-3 costos" required>
+                                </div>
+                            </div>
+                            <input type="hidden" name="seguro_id" id="seguro_precio_id">
+                            <button type="button" id="addExamenes" class="btn btn-primary" onclick="addExamenInput()">Registrar</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addPrecioExamenes()">Registrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Modal Confirmar Eliminar-->
         <div class="modal fade" id="modalDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -182,45 +234,26 @@
                         ¿Estás seguro que deseas eliminar este seguro?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn-confirmDelete" class="btn btn-danger">Eliminar Seguro</button>
+                        <button type="button" id="btn-confirmDeleteSeguro" class="btn btn-danger">Eliminar Seguro</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Modal Confirmar Eliminación -->
-        <div class="modal fade" id="modalDeletePacienteSeguro" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabel" aria-hidden="true">
+        <div class="modal fade" id="modalDeletePrecioExamen" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeletePrecioExamenLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar seguro del paciente</h1>
+                        <h1 class="modal-title fs-5" id="modalDeletePrecioExamenLabel">Eliminar precio del examen</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div id="delAlertPacienteSeguro" class="alert d-none" role="alert"></div>
-                        ¿Está seguro que desea eliminar este seguro del paciente?
+                        <div id="delAlertPrecioExamen" class="alert d-none" role="alert"></div>
+                        ¿Está seguro que desea eliminar este precio del examen?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn-confirmDeletePacienteSeguro" class="btn btn-danger">Eliminar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal Confirmar Eliminación -->
-        <div class="modal fade" id="modalDeletePacienteTitular" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar titular del paciente</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="delAlertPacienteTitular" class="alert d-none" role="alert"></div>
-                        ¿Está seguro que desea eliminar este titular del paciente?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="btn-confirmDeletePacienteTitular" class="btn btn-danger">Eliminar</button>
+                        <button type="button" id="btn-confirmDeleteExamenPrecio" class="btn btn-danger">Eliminar</button>
                     </div>
                 </div>
             </div>
@@ -229,7 +262,10 @@
 
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/consultas-seguro/mostrarConsultaSeguro.js'); ?>"></script>
-    <!-- <script type="module" src="<?php echo Url::to('assets/js/pacientes/infoPaciente.js'); ?>"></script> -->
+    <script type="module" src="<?php echo Url::to('assets/js/consultas-seguro/eliminarExamenPrecio.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas-seguro/addExamenInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas-seguro/addPrecioExamenes.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas-seguro/deleteExamenInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/seguros/actualizarSeguro.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/seguros/eliminarSeguro.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>

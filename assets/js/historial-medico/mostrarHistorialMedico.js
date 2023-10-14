@@ -33,10 +33,10 @@ export default async function mostrarHistorialMedico(id) {
 
         const infoPaciente = await getById("pacientes", id);
         const infoConsultas = await getById("consultas/paciente", id);
-        const infoCita = await getById("citas/paciente",id);
+        const listCita = await getById("citas/paciente",id);
 
         // ! Obtenemos las citas asigandas y las que están en espera. En caso de que se necesite mostrar más citas
-        // const listCitas = infoCitas.filter(cita => cita.estatus_cit === "1" || cita.estatus_cit === "3").sort((a,b) => b.cita_id - a.cita_id);
+        // const listCita = infoCitas.filter(cita => cita.estatus_cit === "1" || cita.estatus_cit === "3").sort((a,b) => b.cita_id - a.cita_id);
 
         // Obtenemos las consultas por id de manera descendente
         const listConsultas = infoConsultas.consultas.sort((a, b) => b.consulta_id - a.consulta_id);
@@ -123,7 +123,7 @@ export default async function mostrarHistorialMedico(id) {
         }
 
         // ** Validamos en caso de que el paciente tenga citas pendientes
-        if (listCita.length > 0) {
+        if (listCita) {
 
             const citasLabel = document.getElementById("citasLabel");
             citasLabel.classList.remove("d-none");
@@ -166,13 +166,14 @@ export default async function mostrarHistorialMedico(id) {
                 dropdownLink.setAttribute("aria-controls", `#cita-${listCita.cita_id}`);
                 citaContainer.setAttribute("id", `cita-${listCita.cita_id}`);
 
+                console.log(templateCita)
                 let clone = document.importNode(templateCita, true);
                 citaFragment.appendChild(clone);
             // });
 
             // Actualizamos el contenedor e insertamos los datos
-            citaContainer.replaceChildren();
-            citaContainer.appendChild(citaFragment);
+            citaAccordion.replaceChildren();
+            citaAccordion.appendChild(citaFragment);
 
         }
 
@@ -202,7 +203,7 @@ export default async function mostrarHistorialMedico(id) {
                 }
 
                 consulta_id.textContent = el.consulta_id;
-                nombre_medico.textContent = `${el.nombre_medico} ${el.apellido_medico}`;
+                nombre_medico.textContent = `${el.nombre_medico} ${el.apellidos_medico}`;
                 especialidad.textContent = el.nombre_especialidad;
                 fecha_consulta.textContent = el.fecha_consulta;
                 observaciones.textContent = el.observaciones || "Sin observaciones";

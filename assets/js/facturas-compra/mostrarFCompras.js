@@ -140,8 +140,8 @@ addEventListener("DOMContentLoaded", (e) => {
                 <tr>
                     <td>Nombre Insumo: ${e.insumo_nombre}</td>
                     <td>Unidades: ${e.unidades}</td>
-                    <td>Precio unitario: ${e.precio_unit}</td>
-                    <td>Precio total: ${e.precio_total}</td>
+                    <td>Precio unitario: ${e.precio_unit_bs}</td>
+                    <td>Precio total: ${e.precio_total_bs}</td>
                 </tr>
             `;
         });

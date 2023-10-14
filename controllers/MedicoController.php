@@ -218,7 +218,7 @@ class MedicoController extends Controller {
 
                 if (array_key_exists('especialidad', $_POST)) {
                     $especialidad = $_POST['especialidad'];
-                    unset($data['especialidad']);
+                    unset($_POST['especialidad']);
 
                     $insertarEspecialidad = new MedicoEspecialidadController;
                     $mensajeEspecialidad = $insertarEspecialidad->insertarMedicoEspecialidad($especialidad, $medico_id);
@@ -230,13 +230,13 @@ class MedicoController extends Controller {
 
                 if (array_key_exists('horario', $_POST)) {
                     $horario = $_POST['horario'];
-                    unset($data['horario']);
+                    unset($_POST['horario']);
 
                     $insertarHorario = new HorarioController;
                     $mensaje = $insertarHorario->insertarHorario($horario, $medico_id);
 
-                    if ($mensajeEspecialidad == false) {
-                        return $mensajeEspecialidad;
+                    if ($mensaje == false) {
+                        return $mensaje;
                     }
                 }
 

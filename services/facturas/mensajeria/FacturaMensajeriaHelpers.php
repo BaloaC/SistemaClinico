@@ -12,6 +12,7 @@ class FacturaMensajeriaHelpers {
         // "factura_mensajeria.total_mensajeria_usd",
         // "factura_mensajeria.seguro_id",
         "seguro.nombre AS nombre_seguro",
+        "seguro.rif AS rif_seguro",
         "factura_mensajeria_consultas.factura_mensajeria_id",
         "factura_mensajeria_consultas.factura_mensajeria_consultas_id",
         "factura_mensajeria_consultas.consulta_seguro_id",

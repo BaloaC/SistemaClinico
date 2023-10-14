@@ -114,17 +114,12 @@ class SeguroController extends Controller{
 
         if ($seguro) {
 
-            $arraySeguro = get_object_vars($seguro);
+            $seguro_lista = array();   
 
-            $inners = $_seguroModel->listInner($this->arrayInner);
-            $empresa = $_seguroModel->where('seguro.seguro_id','=',$seguro_id)->where('seguro.estatus_seg', '=', '1')->innerJoin($this->arraySelect, $inners, "seguro_empresa");
-            $mensaje = ($empresa != null);
+            $seguro_lista = SeguroService::ListarTodos($seguro);
 
-            if ( $mensaje ) { $arraySeguro['empresas'] = $empresa; } 
-            return $this->retornarMensaje($arraySeguro, $arraySeguro);
-            // $respuesta = new Response($arraySeguro ? 'CORRECTO' : 'ERROR');
-            // $respuesta->setData($arraySeguro);
-            // return $respuesta->json($arraySeguro ? '200' : '400');
+            $mensaje = ($seguro_lista != null);
+            SeguroHelpers::retornarMensaje($mensaje, $seguro_lista);
             
         } else {
             $respuesta = new Response('NOT_FOUND');

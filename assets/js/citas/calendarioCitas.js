@@ -294,7 +294,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         document.getElementById("horaSalidaCita").value = cita.hora_salida;
         document.getElementById("fechaCita").value = cita.fecha_cita;
         document.getElementById("motivoCita").textContent = cita.motivo_cita;
-        document.getElementById("claveCita").textContent = (cita.tipo_cita == 1) ? "No aplica" : cita.clave;
+        document.getElementById("claveCita").textContent = (cita.tipo_cita == 1) ? "No aplica" : cita?.cita_seguro[0]?.clave;
         document.getElementById("btn-actualizar").disabled = (cita.estatus_cit == 1) ? true : false;
         document.getElementById("btn-reprogramar").disabled = (cita.estatus_cit == 1 || cita.estatus_cit == 3) ? false : true;
         document.getElementById("export-cita").setAttribute("onclick", `openPopup('pdf/cita/${cita.cita_id}')`);
