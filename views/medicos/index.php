@@ -19,6 +19,7 @@
             <div class="row">
                 <div class="col-6">
                     <h4 class="pt-5 pb-2 text-grey">Gestion de Médicos</h4>
+                    <p id="info-medicos"> <i class="fas fa-info-circle"></i> Para registrar médicos debe tener especialidades registradas</p>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
                     <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Médicos</button>
@@ -32,7 +33,7 @@
             </div>
             <div class="row" id="card-container">
             </div>
-            <div class="d-flex justify-content-evenly">
+            <div class="d-flex justify-content-evenly mb-4">
                 <button id="boton-pagina-anterior" class="btn btn-primary">Anterior</button>
                 <div id="pagination-container" class="pagination"></div>
                 <button id="boton-pagina-siguiente" class="btn btn-primary">Siguiente</button>
@@ -243,7 +244,7 @@
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
-                        <a id="btn-eliminar" class="float-right" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="fas fa-trash"></i></a>
+                        <a type="button" id="btn-eliminar" class="float-right" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="fas fa-trash"></i></a>
                         <button type="button" id="btn-actualizar" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAct">Actualizar</button>
                     </div>
                 </div>

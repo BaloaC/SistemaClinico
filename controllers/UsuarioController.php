@@ -54,7 +54,7 @@ class UsuarioController extends Controller{
         
         $lista = $_usuarioModel->where('estatus_usu', '=', '1')->getAll();
         $mensaje = (count($lista) > 0);
-     
+
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
         $respuesta->setData($lista);
 

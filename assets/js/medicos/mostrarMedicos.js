@@ -24,6 +24,8 @@ async function getMedico(id) {
 
         if (json[0].horario?.length >= 1) {
 
+            document.getElementById('info-medicos').remove();
+            
             $("#horarioMessage").fadeOut("slow");
             $("#horarios-table").fadeIn("slow");
 
@@ -37,7 +39,7 @@ async function getMedico(id) {
                             <button class="btn btn-sm btn-empresa" id="btn-add" value="asdas${el.horario_id}" ${json[0].horario.length >= 1
                         ? `onclick=(deleteHorario(${el.horario_id})) data-bs-toggle="modal" data-bs-target="#modalDeleteRelacion"`
                         : `data-bs-toggle="modal" data-bs-target="#modalAlert"`}>
-                                <i class="fa-sm fas fa-times"></i> 
+                                <i class="fa-sm fas fa-times m-0"></i> 
                             </button>
                         </td>
                     </tr>
