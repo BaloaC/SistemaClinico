@@ -4,7 +4,7 @@ include_once './services/medico/especialidad/EspecialidadValidaciones.php';
 
 class MedicoValidaciones {
 
-    public static function validarRegistro($formulario) {
+    public static function validacionesGenerales($formulario) {
         $camposNumericos = array("cedula", "telefono", "paciente_id");
         $camposString = array("nombres", "apellidos");
         $validarMedico = new Validate;
@@ -26,12 +26,20 @@ class MedicoValidaciones {
             echo $respuesta->json(400);
             exit();
         }
+    }
 
+    public static function validarCedula($formulario) {
+        $validarMedico = new Validate;
+        
         if ( $validarMedico->isDuplicated('medico', 'cedula', $formulario["cedula"]) ) {
             $respuesta = new Response('DATOS_DUPLICADOS');
             echo $respuesta->json(400);
             exit();
         }
+    }
+
+    public static function validarRegistro($formulario) {
+        
     }
 
     public static function validarMedicoEspecialidad($especialidades) {
