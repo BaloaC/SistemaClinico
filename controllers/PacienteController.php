@@ -1,5 +1,7 @@
 <?php
 
+include_once './services/pacientes/paciente/PacienteValidaciones.php';
+
 class PacienteController extends Controller{
 
     protected $arrayInner = array(
@@ -40,106 +42,81 @@ class PacienteController extends Controller{
 
         $_POST = json_decode(file_get_contents('php://input'), true);
 
-        // Creando los strings para las validaciones
-        $camposNumericos = array("cedula", "edad", "telefono", "tipo_paciente");
-        $camposString = array("nombre", "apellidos");
         $validarPaciente = new Validate;
-        
-        switch($_POST) {
-            case ($validarPaciente->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
 
-            case $validarPaciente->isNumber($_POST, $camposNumericos):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
+        PacienteValidaciones::validacionesGenerales($_POST);
 
-            case $validarPaciente->isString($_POST, $camposString):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
+        $_pacienteModel = new PacienteModel();
 
-            case $validarPaciente->isDate($_POST['fecha_nacimiento']):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(400);
+        if ( $_POST['tipo_paciente'] != 4 && $validarPaciente->isDuplicated('paciente', 'cedula', $_POST['cedula']) ) { 
+            $respuesta = new Response(false, 'Ya existe un paciente con esa cédula');
+            $respuesta->setData("Problema al insertar el paciente con la cédula ".$_POST['cedula']);
+            return $respuesta->json(400);
+        }
 
-            case $validarPaciente->isToday($_POST['fecha_nacimiento'], false):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
-
-            default: 
+        if ( $_POST['tipo_paciente'] == 3 ) {
             
-            $_pacienteModel = new PacienteModel();
+            $pacienteSeguro = $_POST['seguro'];
+            unset($_POST['seguro']);
 
-            if ( $_POST['tipo_paciente'] != 4 && $validarPaciente->isDuplicated('paciente', 'cedula', $_POST['cedula']) ) { 
-                $respuesta = new Response(false, 'Ya existe un paciente con esa cédula');
-                $respuesta->setData("Problema al insertar el paciente con la cédula ".$_POST['cedula']);
+            if ( $validarPaciente->isEmpty($pacienteSeguro) ) {
+                $respuesta = new Response(false, 'Debe introducir los datos de seguro del paciente');
                 return $respuesta->json(400);
             }
 
-            if ( $_POST['tipo_paciente'] == 3 ) {
+            $data = $validarPaciente->dataScape($_POST);
+            $id = $_pacienteModel->insert($data);
+            
+            if ( $id > 0 ) {
+                $insertarPacienteSeguro = new PacienteSeguroController;
+                $mensaje = $insertarPacienteSeguro->insertarPacienteSeguro($pacienteSeguro, $id);
                 
-                $pacienteSeguro = $_POST['seguro'];
-                unset($_POST['seguro']);
-
-                if ( $validarPaciente->isEmpty($pacienteSeguro) ) {
-                    $respuesta = new Response(false, 'Debe introducir los datos de seguro del paciente');
-                    return $respuesta->json(400);
-                }
-
-                $data = $validarPaciente->dataScape($_POST);
-                $id = $_pacienteModel->insert($data);
-                
-                if ( $id > 0 ) {
-                    $insertarPacienteSeguro = new PacienteSeguroController;
-                    $mensaje = $insertarPacienteSeguro->insertarPacienteSeguro($pacienteSeguro, $id);
+                if ($mensaje == true) { 
                     
-                    if ($mensaje == true) { 
-                        
-                        $_pacienteModel->where('paciente_id', '=', $id)->delete();
-                        return $mensaje; 
+                    $_pacienteModel->where('paciente_id', '=', $id)->delete();
+                    return $mensaje; 
 
-                    } else {
-                      
-                        $respuesta = new Response('INSERCION_EXITOSA');
-                        return $respuesta->json(201);
-                    }
-                }
-
-            } else if( $_POST['tipo_paciente'] == 4 ) {
-
-                $pacienteBeneficiado = $_POST['titular'];
-                unset($_POST['titular']);
-
-                if ( $validarPaciente->isEmpty($pacienteBeneficiado) ) {
-                    $respuesta = new Response(false, 'Debe introducir los datos del titular del paciente');
-                    return $respuesta->json(400);
-                }
-
-                $data = $validarPaciente->dataScape($_POST);
-                $id = $_pacienteModel->insert($data);
-                
-                if ( $id > 0 ) {
-                    $insertarPacienteBeneficiado = new PacienteBeneficiadoController;
-                    $mensaje = $insertarPacienteBeneficiado->insertarPacienteBeneficiado($pacienteBeneficiado, $id);
+                } else {
                     
-                    if ($mensaje == true) { 
-                        $_pacienteModel->where('paciente_id', '=', $id)->delete();
-                        return $mensaje; 
-
-                    } else {
-                        $respuesta = new Response('INSERCION_EXITOSA');
-                        return $respuesta->json(201);
-                    }
+                    $respuesta = new Response('INSERCION_EXITOSA');
+                    return $respuesta->json(201);
                 }
-
-            }else {
-                
-                $data = $validarPaciente->dataScape($_POST);
-                $id = $_pacienteModel->insert($data);
-                $mensaje = ($id > 0);
-                $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-                return $respuesta->json($mensaje ? 201 : 400);
             }
+
+        } else if( $_POST['tipo_paciente'] == 4 ) {
+
+            $pacienteBeneficiado = $_POST['titular'];
+            unset($_POST['titular']);
+
+            if ( $validarPaciente->isEmpty($pacienteBeneficiado) ) {
+                $respuesta = new Response(false, 'Debe introducir los datos del titular del paciente');
+                return $respuesta->json(400);
+            }
+
+            $data = $validarPaciente->dataScape($_POST);
+            $id = $_pacienteModel->insert($data);
+            
+            if ( $id > 0 ) {
+                $insertarPacienteBeneficiado = new PacienteBeneficiadoController;
+                $mensaje = $insertarPacienteBeneficiado->insertarPacienteBeneficiado($pacienteBeneficiado, $id);
+                
+                if ($mensaje == true) { 
+                    $_pacienteModel->where('paciente_id', '=', $id)->delete();
+                    return $mensaje; 
+
+                } else {
+                    $respuesta = new Response('INSERCION_EXITOSA');
+                    return $respuesta->json(201);
+                }
+            }
+
+        }else {
+            
+            $data = $validarPaciente->dataScape($_POST);
+            $id = $_pacienteModel->insert($data);
+            $mensaje = ($id > 0);
+            $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+            return $respuesta->json($mensaje ? 201 : 400);
         }
     }
 

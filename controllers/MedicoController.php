@@ -1,5 +1,6 @@
 <?php
 
+include_once './services/Helpers.php';
 include_once './services/medico/medico/MedicoService.php';
 
 class MedicoController extends Controller {
@@ -84,7 +85,7 @@ class MedicoController extends Controller {
                 $resultado[] = $medicos;
             }
 
-            return $this->retornarMensaje($resultado, $resultado);
+            Helpers::retornarMensaje($resultado, $resultado);
         } else {
             $respuesta = new Response('NOT_FOUND');
             return $respuesta->json(200);
@@ -118,7 +119,7 @@ class MedicoController extends Controller {
             }
             $resultado[] = $medicos;
 
-            return $this->retornarMensaje($resultado, $resultado);
+            Helpers::retornarMensaje($resultado, $resultado);
         } else {
             $respuesta = new Response('NOT_FOUND');
             return $respuesta->json(200);

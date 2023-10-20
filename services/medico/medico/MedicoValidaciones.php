@@ -1,7 +1,5 @@
 <?php
 
-include_once './services/medico/especialidad/EspecialidadValidaciones.php';
-
 class MedicoValidaciones {
 
     public static function validacionesGenerales($formulario) {
@@ -30,7 +28,7 @@ class MedicoValidaciones {
 
     public static function validarCedula($formulario) {
         $validarMedico = new Validate;
-        
+
         if ( $validarMedico->isDuplicated('medico', 'cedula', $formulario["cedula"]) ) {
             $respuesta = new Response('DATOS_DUPLICADOS');
             echo $respuesta->json(400);
