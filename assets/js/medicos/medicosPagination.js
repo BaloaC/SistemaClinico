@@ -6,7 +6,7 @@ const registros = listadoMedicos != typeof Array ? listadoMedicos : undefined;
 
 
 // Configurar la paginación
-const registrosPorPagina = 6;
+const registrosPorPagina = 15;
 let paginaActual = 1;
 
 export function medicosPagination(registros) {

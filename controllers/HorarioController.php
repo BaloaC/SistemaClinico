@@ -2,68 +2,6 @@
 
 class HorarioController extends Controller{
 
-    public function insertarHorario($form, $id){
-        
-        $medico_id = $id;
-        foreach ($form as $forms) {
-            
-            $newForm = $forms;
-            $newForm['medico_id'] = $medico_id;
-
-            $camposNumericos = array("medico_id");
-            $camposString = array("dias_semana");
-            $validarHorario = new Validate;
-
-            switch($newForm) {
-                case ($validarHorario->isEmpty($newForm)):
-                    $respuesta = new Response(false, 'Los datos de los horarios no pueden enviarse vacíos');
-                    return $respuesta->json(400);
-
-                case $validarHorario->isString($newForm, $camposString):
-                    $respuesta = new Response(false, 'Formato de los días de la semana inválidos');
-                    return $respuesta->json(400);
-
-                case !($validarHorario->existsInDB($newForm, $camposNumericos)):   
-                    $respuesta = new Response(false, 'El médico señalado no fue encontrado para la asignación del horario'); 
-                    return $respuesta->json(404);
-                
-                case $validarHorario->isDuplicatedId('medico_id', 'dias_semana', $newForm['medico_id'], $newForm['dias_semana'], 'horario'):
-                    $respuesta = new Response(false, 'El horario ya se encuentra registrado'); 
-                    return $respuesta->json(400);
-
-                case $validarHorario->isDate($newForm['hora_entrada'], "H:i"):
-                    $respuesta = new Response('HORA_INVALIDA');
-                    $respuesta->setData('Error en la hora de entrada '.$newForm['hora_entrada']);
-                    return $respuesta->json(400);
-    
-                case $validarHorario->isDate($newForm['hora_salida'], 'H:i'):
-                    $respuesta = new Response('HORA_INVALIDA');
-                    $respuesta->setData('Error en la hora de entrada '.$newForm['hora_salida']);
-                    return $respuesta->json(400);
-    
-                case $newForm['hora_entrada'] >= $newForm['hora_salida']:
-                    $respuesta = new Response(false, 'La hora de entrada no puede ser después de la hora de salida');
-                    return $respuesta->json(400);
-
-                default: 
-                    $data = $validarHorario->dataScape($newForm);
-
-                    //sreturn $data;
-                    $_horarioModel = new HorarioModel();
-                    $id = $_horarioModel->insert($data);
-                    $mensaje = ($id > 0);
-        
-                    if (!$mensaje) {
-                        $respuesta = new Response('INSERCION_FALLIDA');
-                        return $respuesta->json($mensaje ? 201 : 400);
-                    } else {
-                        $respuesta = new Response('INSERCION_EXITOSA');
-                        return $respuesta->json(201);
-                    }
-            }
-        }
-    }
-
     public function listarHorarios(){
 
         $arrayInner = array(
@@ -82,7 +20,7 @@ class HorarioController extends Controller{
         $mensaje = $_horarioModel->where('estatus_hor','=','1')->innerJoin($arraySelect, $inners, "horario");
 
         $resultado = (count($mensaje) > 0);
-     
+
         $respuesta = new Response($resultado ? 'CORRECTO' : 'ERROR');
         $respuesta->setData($mensaje);
 

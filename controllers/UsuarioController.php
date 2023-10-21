@@ -1,5 +1,9 @@
 <?php
 
+include_once './services/cuenta/CuentaValidaciones.php';
+include_once './services/cuenta/CuentaHelpers.php';
+include_once './services/cuenta/CuentaService.php';
+
 class UsuarioController extends Controller{
 
     public function __construct(){
@@ -25,62 +29,22 @@ class UsuarioController extends Controller{
     public function insertarUsuario(/*Request $request*/){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        
-        // Creando los strings para las validaciones
-        $camposNumericos = array("rol", "pin");
-        $validarUsuario = new Validate;
+        CuentaValidaciones::validarNuevoUsuario($_POST);
 
-        switch($_POST) {
-            case $validarUsuario->isEmpty($_POST):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
+        $id = CuentaService::insertarNuevoUsuario($_POST);
+        $preguntasSeguridad = $_POST['preguntas'];
 
-            case $validarUsuario->isNumber($_POST, $camposNumericos):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
+        if ($id) {
+            
+            CuentaHelpers::insertarPreguntaSeguridad($preguntasSeguridad, $id);
+            
+            $respuesta = new Response('INSERCION_EXITOSA');
+            return $respuesta->json(201);
 
-            case $validarUsuario->isDuplicated('usuario', 'nombre', $_POST["nombre"]):
-                $respuesta = new Response('DATOS_DUPLICADOS');
-                return $respuesta->json(400);
+        } else {
 
-            case strlen($_POST['pin']) < 6:
-                $respuesta = new Response(false, 'El pin debe ser mayor a 6 digitos');
-                return $respuesta->json(400);
-
-            default: 
-                $preguntasSeguridad = $_POST['preguntas'];
-                unset($_POST['preguntas']);
-                $claveEncriptada = password_hash($_POST["clave"], PASSWORD_DEFAULT);
-                $pinEncriptado = password_hash($_POST["pin"], PASSWORD_DEFAULT);
-
-                $clave = array('clave' => $claveEncriptada, 'pin' => $pinEncriptado);
-                $ArrayNuevo = array_replace($_POST, $clave);
-                $data = $validarUsuario->dataScape($ArrayNuevo);
-                
-                $hoy = date('Y-m-d h:i:s');
-                $data['fecha_creacion'] = $hoy;
-                
-                $_usuarioModel = new UsuarioModel();
-                $id = $_usuarioModel->insert($data);
-
-                if ($id) {
-                    
-                    $_preguntasSeguridadModel = new PreguntaSeguridadController();
-                    $pregunta = $_preguntasSeguridadModel->insertarPregunta($preguntasSeguridad, $id);
-
-                    // if ($pregunta) { return $pregunta; }
-                    
-                    // $_AuditoriaController = new AuditoriaController();
-                    // $_AuditoriaController->insertarAuditoria()
-
-                    $respuesta = new Response('INSERCION_EXITOSA');
-                    return $respuesta->json(201);
-
-                } else {
-
-                    $respuesta = new Response('INSERCION_FALLIDA');
-                    return $respuesta->json(400);
-                }
+            $respuesta = new Response('INSERCION_FALLIDA');
+            return $respuesta->json(400);
         }
     }
 
@@ -90,7 +54,7 @@ class UsuarioController extends Controller{
         
         $lista = $_usuarioModel->where('estatus_usu', '=', '1')->getAll();
         $mensaje = (count($lista) > 0);
-     
+
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
         $respuesta->setData($lista);
 

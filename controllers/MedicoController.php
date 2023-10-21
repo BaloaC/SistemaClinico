@@ -1,5 +1,8 @@
 <?php
 
+include_once './services/Helpers.php';
+include_once './services/medico/medico/MedicoService.php';
+
 class MedicoController extends Controller {
 
     protected $arrayInnerHorario = array(
@@ -47,68 +50,10 @@ class MedicoController extends Controller {
     public function insertarMedico(/*Request $request*/) {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
+        MedicoService::insertarMedico($_POST);
 
-        // Creando los strings para las validaciones
-        $camposNumericos = array("cedula", "telefono", "paciente_id");
-        $camposString = array("nombres", "apellidos");
-        $validarMedico = new Validate;
-
-        switch ($_POST) {
-            case ($validarMedico->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
-
-            case $validarMedico->isNumber($_POST, $camposNumericos):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
-
-            case $validarMedico->isString($_POST, $camposString):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
-
-            case $validarMedico->isDuplicated('medico', 'cedula', $_POST["cedula"]):
-                $respuesta = new Response('DATOS_DUPLICADOS');
-                return $respuesta->json(400);
-
-            default:
-
-                // Extrayendo la información de las tablas foráneas
-                $especialidad = $_POST['especialidad'];
-                $horario = $_POST['horario'];
-                unset($_POST['especialidad']);
-                unset($_POST['horario']);
-
-                $data = $validarMedico->dataScape($_POST);
-
-                $_medicoModel = new MedicoModel();
-                $id = $_medicoModel->insert($data);
-
-                // Comprobando que se haya insertado el médico para formar las relaciones
-                if ($id > 0) {
-                    $insertarEspecialidad = new MedicoEspecialidadController;
-                    $mensaje = $insertarEspecialidad->insertarMedicoEspecialidad($especialidad, $id);
-
-                    if ($mensaje == true) {
-                        return $mensaje;
-                    } else {
-
-                        $insertarHorario = new HorarioController;
-                        $mensaje = $insertarHorario->insertarHorario($horario, $id);
-
-                        if ($mensaje == true) {
-                            return $mensaje;
-                        } else {
-
-                            $respuesta = new Response('INSERCION_EXITOSA');
-                            return $respuesta->json(201);
-                        }
-                    }
-                } else {
-
-                    $respuesta = new Response('INSERCION_FALLIDA');
-                    return $respuesta->json(400);
-                }
-        }
+        $respuesta = new Response('INSERCION_EXITOSA');
+        return $respuesta->json(201);
     }
 
     public function listarMedicos() {
@@ -140,7 +85,7 @@ class MedicoController extends Controller {
                 $resultado[] = $medicos;
             }
 
-            return $this->retornarMensaje($resultado, $resultado);
+            Helpers::retornarMensaje($resultado, $resultado);
         } else {
             $respuesta = new Response('NOT_FOUND');
             return $respuesta->json(200);
@@ -174,7 +119,7 @@ class MedicoController extends Controller {
             }
             $resultado[] = $medicos;
 
-            return $this->retornarMensaje($resultado, $resultado);
+            Helpers::retornarMensaje($resultado, $resultado);
         } else {
             $respuesta = new Response('NOT_FOUND');
             return $respuesta->json(200);
@@ -185,78 +130,9 @@ class MedicoController extends Controller {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
 
-        // Creando los strings para las validaciones
-        $camposNumericos = array("cedula", "telefono", "especialidad_id");
-        $camposString = array("nombres", "apellidos", "direccion");
-        $validarMedico = new Validate;
-
-        switch ($_POST) {
-
-            case ($validarMedico->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
-
-            case $validarMedico->isNumber($_POST, $camposNumericos):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
-
-            case $validarMedico->isString($_POST, $camposString):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
-
-            case !$validarMedico->isDuplicated('medico', 'medico_id', $medico_id):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(200);
-
-            case array_key_exists('cedula', $_POST):
-                if ($validarMedico->isDuplicated('medico', 'cedula', $_POST["cedula"])) {
-                    $respuesta = new Response('DATOS_DUPLICADOS');
-                    return $respuesta->json(400);
-                }
-
-            default:
-
-                if (array_key_exists('especialidad', $_POST)) {
-                    $especialidad = $_POST['especialidad'];
-                    unset($_POST['especialidad']);
-
-                    $insertarEspecialidad = new MedicoEspecialidadController;
-                    $mensajeEspecialidad = $insertarEspecialidad->insertarMedicoEspecialidad($especialidad, $medico_id);
-
-                    if ($mensajeEspecialidad == false) {
-                        return $mensajeEspecialidad;
-                    }
-                }
-
-                if (array_key_exists('horario', $_POST)) {
-                    $horario = $_POST['horario'];
-                    unset($_POST['horario']);
-
-                    $insertarHorario = new HorarioController;
-                    $mensaje = $insertarHorario->insertarHorario($horario, $medico_id);
-
-                    if ($mensaje == false) {
-                        return $mensaje;
-                    }
-                }
-
-                $data = $validarMedico->dataScape($_POST);
-
-                if (!empty($data)) {
-
-                    $_medicoModel = new MedicoModel();
-                    $actualizado = $_medicoModel->where('medico_id', '=', $medico_id)->update($data);
-                    $mensaje = ($actualizado > 0);
-                    $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-                    $respuesta->setData($actualizado);
-
-                    return $respuesta->json($mensaje ? 200 : 400);
-                } else {
-
-                    $respuesta = new Response(true, 'Información insertada correctamente');
-                    return $respuesta->json(201);
-                }
-        }
+        MedicoService::actualizarMedico($_POST, $medico_id);
+        $respuesta = new Response(true, 'Información insertada correctamente');
+        return $respuesta->json(200);
     }
 
     public function eliminarMedico($medico_id) {
