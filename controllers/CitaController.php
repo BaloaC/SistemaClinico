@@ -300,23 +300,19 @@ class CitaController extends Controller {
         $_citaModel = new CitaModel();
         $inners = $_citaModel->listInner($this->arrayInner);
         $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('cita.paciente_id', '=', $paciente_id)->innerJoin($this->arraySelect, $inners, "cita");
-        $mensaje = ($lista != null);
-        // $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('paciente_id', '=', $paciente_id)->getAll();
-
-        if ($lista[0]->tipo_cita == 2) {
+        
+        if ( count($lista) > 0 && $lista[0]->tipo_cita == 2) {
             $_citaSeguroModel = new CitaSeguroModel();
             $inners = $_citaSeguroModel->listInner($this->seguroInner);
             $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $lista[0]->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
             $lista[0]->cita_seguro = $citaSeguro;
+
+            return $this->retornarMensaje($lista[0]);
+        } else {
+
+            $respuesta = new Response(false, 'El paciente indicado todavía no posee citas');
+            return $respuesta->json(400);
         }
-
-        return $this->retornarMensaje($lista[0]);
-        // $mensaje = ($lista != null);
-
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        // $respuesta->setData($lista);
-
-        // return $respuesta->json($mensaje ? 200 : 404);
     }
 
     public function actualizarCita($cita_id) {
