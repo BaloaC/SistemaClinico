@@ -1,6 +1,6 @@
 @import url('base.css');
 
-body{
+body {
     background: #274462 !important;
 }
 
@@ -10,13 +10,30 @@ img {
     border-radius: 8px;
 }
 
+.fa-eye,
+.fa-eye-slash {
+    color: #55595e;
+}
+
+.no-pass {
+    width: calc(100% + 15px) !important;
+}
+
+#togglePassword {
+    cursor: pointer;
+    margin-left: -40px !important;
+    margin-top: 10px;
+    z-index: 100;
+}
+
 .register-form label {
     margin-top: 1rem;
     font-size: 0.9rem;
     font-weight: 500;
 }
 
-#form-preguntas,  #form-recovery{
+#form-preguntas,
+#form-recovery {
     position: absolute;
     top: -30px;
     right: -5rem;
@@ -25,7 +42,7 @@ img {
     /* transform: translateY(); */
 }
 
-#form-recovery{
+#form-recovery {
     position: relative;
 }
 
@@ -35,7 +52,8 @@ img {
     animation: 1016.08ms linear 0ms 1 normal forwards running moveLeft;
 }
 
-#form-info, #form-user {
+#form-info,
+#form-user {
     animation: all ease 2s;
 }
 
@@ -61,13 +79,24 @@ img {
 }
 
 @keyframes moveLeft {
-    from { right: -4rem; opacity: 0;}
-    70% { right: -1rem; opacity: 0.9;}
-    to { right: 0rem; opacity: 1;}
+    from {
+        right: -4rem;
+        opacity: 0;
+    }
+
+    70% {
+        right: -1rem;
+        opacity: 0.9;
+    }
+
+    to {
+        right: 0rem;
+        opacity: 1;
+    }
 }
 
 @media screen and (max-width: 575px) {
-    .login-container{
+    .login-container {
         overflow: hidden;
         height: 100%;
     }

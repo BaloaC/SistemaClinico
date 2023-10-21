@@ -3,46 +3,55 @@ import getAll from "../global/getAll.js";
 const pacientesList = await getAll("pacientes/consulta");
 let [asegurado, natural, representante, beneficiado] = [0, 0, 0, 0];
 
-pacientesList.forEach(paciente => {
+if (pacientesList?.length === 0) {
+
+  let mensajeVacio = document.querySelector(".pacienteTipo");
+  if (mensajeVacio.classList.contains('d-none')) {
+    mensajeVacio.classList.remove('d-none')
+  }
+
+} else {
+
+  pacientesList.forEach(paciente => {
 
     switch (true) {
-        case (paciente.tipo_paciente == 1): natural++; break;
-        case (paciente.tipo_paciente == 2): representante++; break;
-        case (paciente.tipo_paciente == 3): asegurado++; break;
-        case (paciente.tipo_paciente == 4): beneficiado++; break;
+      case (paciente.tipo_paciente == 1): natural++; break;
+      case (paciente.tipo_paciente == 2): representante++; break;
+      case (paciente.tipo_paciente == 3): asegurado++; break;
+      case (paciente.tipo_paciente == 4): beneficiado++; break;
     }
-})
+  })
 
-const allPacientes = [
+  const allPacientes = [
     { value: natural, tipo: "Natural" },
     { value: representante, tipo: "Representante" },
     { value: asegurado, tipo: "Asegurado" },
     { value: beneficiado, tipo: "Beneficiado" },
-];
+  ];
 
 
-let root = am5.Root.new("pacienteTipo");
+  let root = am5.Root.new("pacienteTipo");
 
 
-// Set themes
-root.setThemes([
-  am5themes_Animated.new(root)
-]);
+  // Set themes
+  root.setThemes([
+    am5themes_Animated.new(root)
+  ]);
 
 
-// Create chart
-let chart = root.container.children.push(am5percent.PieChart.new(root, {
-  layout: root.verticalLayout
-}));
+  // Create chart
+  let chart = root.container.children.push(am5percent.PieChart.new(root, {
+    layout: root.verticalLayout
+  }));
 
 
-// Create series
-let series = chart.series.push(am5percent.PieSeries.new(root, {
-  valueField: "value",
-  categoryField: "tipo"
-}));
+  // Create series
+  let series = chart.series.push(am5percent.PieSeries.new(root, {
+    valueField: "value",
+    categoryField: "tipo"
+  }));
 
-export let title = chart.children.unshift(am5.Label.new(root, {
+  let title = chart.children.unshift(am5.Label.new(root, {
     text: "Tipos de pacientes",
     fontSize: 25,
     fontWeight: "500",
@@ -53,11 +62,11 @@ export let title = chart.children.unshift(am5.Label.new(root, {
     paddingBottom: 0,
     dy: 1,
     id: "titleChartTipo"
-}));
+  }));
 
-// Set data
-series.data.setAll(allPacientes);
+  // Set data
+  series.data.setAll(allPacientes);
 
-
-// Play initial series animation
-series.appear(1000, 100);
+  // Play initial series animation
+  series.appear(1000, 100);
+}

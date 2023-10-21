@@ -188,7 +188,7 @@ addEventListener("DOMContentLoaded", async e => {
                 data: null,
                 render: function (data, type, row){
                     if("nombre_medico" in data){
-                        console.log(data);
+                        // console.log(data);
                         return data.nombre_medico;  
                     } else {
                         return "Consulta por emergencia"
@@ -399,7 +399,7 @@ addEventListener("DOMContentLoaded", async e => {
             </tr>
         `;
         }
-
+        console.log(tipo_cita);
 
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
@@ -425,7 +425,7 @@ addEventListener("DOMContentLoaded", async e => {
                 ${factura}
                 <tr><td><br></td></tr>
                 <tr>
-                    <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/consulta/${data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg${tipo_cita}"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button></td>
+                    <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/consulta/${data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg${tipo_cita}" onclick="pagarConsulta(${tipo_cita},${data.paciente_id}, ${data.consulta_id})"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button></td>
                 </tr>
             </table>
         `

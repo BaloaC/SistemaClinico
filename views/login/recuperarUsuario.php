@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo Url::to('assets/css/login.css'); ?>" />
+    <?php include PATH_VIEWS . '/partials/header.php'; ?>
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/bootstrap/bootstrap.min.css'); ?>" />
+    <link rel="stylesheet" href="<?php echo Url::to('assets/css/registro.css'); ?>" />
     <title>Login</title>
 </head>
 
@@ -61,6 +62,7 @@
 
     <?php include constant('PATH_VIEWS') . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/login/recuperarUsuario.js'); ?>"></script>
+    <script src="<?php echo Url::to('assets/js/global/showPassword.js'); ?>"></script>
 </body>
 
 </html>

@@ -1,0 +1,19 @@
+@import url('base.css');
+@import url('login.css');
+
+.pass-container {
+    position: relative;
+}
+
+#togglePassword1, #togglePassword2 {
+    position: absolute !important;
+    right: 1rem;
+    cursor: pointer;
+    margin-left: -40px !important;
+    margin-top: 10px;
+    z-index: 100;
+}
+
+#password2 {
+    width: 100%;
+}

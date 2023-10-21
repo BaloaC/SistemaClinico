@@ -328,6 +328,8 @@ class ConsultaController extends Controller {
                 }
             }
 
+            $data["consulta_id"] = $this->consulta_id;
+            $respuesta->setData($data);
             return $respuesta->json(201);
         } else {
             $respuesta = new Response('INSERCION_FALLIDA');

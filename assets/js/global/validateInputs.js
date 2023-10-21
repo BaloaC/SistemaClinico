@@ -24,8 +24,8 @@ export default function validateInputs() {
         //     validate(e.target, patterns[e.target.dataset.type]);
         // });
 
-        // ** Agregar evento 'blur' para validar el campo cuando pierde el foco
-        input.addEventListener('blur', (e) => {
+        // ** Agregar evento 'input' para validar el campo cuando pierde el foco
+        input.addEventListener('input', (e) => {
             validate(e.target, patterns[e.target.dataset.type]);
         });
 
@@ -39,7 +39,6 @@ export default function validateInputs() {
 
     // ** Validar si el valor del campo coincide con el patrón correspondiente
     function validate(field, regex) {
-        console.log(field);
         if (regex.test(field.value)) {
             field.className = 'form-control valid';
         } else {

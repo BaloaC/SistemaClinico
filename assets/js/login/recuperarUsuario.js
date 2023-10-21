@@ -7,17 +7,23 @@ function template(infoUser) {
     let templatePreguntas = `
         <div>
             <label for="respuesta1" class="mt-3">${questions(infoUser[0].pregunta)}</label>
-            <input class="form-control" type="text" name="respuesta1" placeholder="Introduce la respuesta a la pregunta de seguridad" required>
+            <input class="form-control" type="text" name="respuesta1" required>
             <label for="respuesta2" class="mt-3">${questions(infoUser[1].pregunta)}</label>
-            <input class="form-control" type="text" name="respuesta2" placeholder="Introduce la respuesta a la pregunta de seguridad"  required>
+            <input class="form-control" type="text" name="respuesta2"  required>
             <label for="respuesta2" class="mt-3">${questions(infoUser[2].pregunta)}</label>
-            <input class="form-control" type="text" name="respuesta3" placeholder="Introduce la respuesta a la pregunta de seguridad" required>
+            <input class="form-control" type="text" name="respuesta3" required>
             <label for="nueva_clave" class="mt-3">Nueva clave</label>
-            <input class="form-control" type="password" name="clave" placeholder="Introduzca su nueva clave" data-validate="true" data-type="password" data-max-length="20" required>
-            <small class="form-text">La contraseña debe contener al menos 8 caracteres y un número <br> y los caracteres permitdos son: "@" y "-"</small>
+            <div class="input-group mb-3 pass-container">
+                <input class="form-control" id="password1" type="password" name="clave" data-validate="true" data-type="password" data-max-length="20" required>
+                <small class="form-text">La contraseña debe contener al menos 8 caracteres y un número <br> y los caracteres permitdos son: "@" y "-"</small>
+                <i class="fas fa-eye" id="togglePassword1" onclick="showPassword(this,'password1')"></i>
+            </div>
             <label for="confirmar_nueva_clave" class="mt-3">Confirmar nueva clave</label>
-            <input class="form-control" type="password" name="confirmarClave" placeholder="Confirme su nueva clave" data-max-length="20" required>
-            <small class="form-text">Las contraseñas no coinciden</small>
+            <div class="input-group mb-3 pass-container">
+                <input class="form-control" id="password2" type="password" name="confirmarClave" data-max-length="20" required>
+                <small class="form-text">Las contraseñas no coinciden</small> 
+                <i class="fas fa-eye" id="togglePassword2" onclick="showPassword(this,'password2')"></i>
+            </div>
             <input type="hidden" name="pregunta1" value="${infoUser[0].pregunta}">
             <input type="hidden" name="pregunta2" value="${infoUser[1].pregunta}">
             <input type="hidden" name="pregunta3" value="${infoUser[2].pregunta}">
@@ -30,13 +36,19 @@ function template(infoUser) {
     let templatePin = `
         <div>
             <label for="pin" class="mt-3">Pin de Seguridad</label>
-            <input class="form-control" type="text" name="pin" placeholder="Introduzca el pin de seguridad de seguridad de 6 dígitos" required>
+            <input class="form-control" type="text" name="pin" required>
             <label for="nueva_clave" class="mt-3">Nueva clave</label>
-            <input class="form-control" type="password" name="clave" placeholder="Introduzca su nueva clave" data-validate="true" data-type="password" data-max-length="20" required>
-            <small class="form-text">La contraseña debe contener al menos 8 caracteres y un número <br> y los caracteres permitdos son: "@" y "-"</small>
+            <div class="input-group mb-3 pass-container">
+                <input class="form-control" id="password1" type="password" name="clave" data-validate="true" data-type="password" data-max-length="20" required>
+                <small class="form-text">La contraseña debe contener al menos 8 caracteres y un número <br> y los caracteres permitdos son: "@" y "-"</small>
+                <i class="fas fa-eye" id="togglePassword1" onclick="showPassword(this,'password1')"></i>
+            </div>
             <label for="confirmar_nueva_clave" class="mt-3">Confirmar nueva clave</label>
-            <input class="form-control" type="password" name="confirmarClave" placeholder="Confirme su nueva clave" required>
-            <small class="form-text">Las contraseñas no coinciden</small>
+            <div class="input-group mb-3 pass-container">
+                <input class="form-control" id="password2" type="password" name="confirmarClave" data-max-length="20" required>
+                <small class="form-text">Las contraseñas no coinciden</small> 
+                <i class="fas fa-eye" id="togglePassword2" onclick="showPassword(this,'password2')"></i>
+            </div>
             <div class="text-center mt-3"><button type="submit" id="btnEnviar" class="btn btn-primary w-50" value="${infoUser[0].usuario_id}">Enviar</button></div>
         </div>
     `

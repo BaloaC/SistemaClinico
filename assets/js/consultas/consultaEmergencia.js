@@ -22,6 +22,7 @@ export default async function consultaEmergencia(inputRadio) {
     const sinCitaSi = document.getElementById("consultaCitaSi");
     const sinCitaNo = document.getElementById("consultaCitaNo");
 
+    // No es por emergencia
     if(inputRadio.value === "0"){
 
         $(".sinCitaContainer").fadeIn("slow");
@@ -52,7 +53,7 @@ export default async function consultaEmergencia(inputRadio) {
         $("#cedula_beneficiado").fadeOut("slow");
         pacienteBeneficiado.disabled = true;
 
-    } else{
+    } else{ // Es por emergencia
 
         $(".sinCitaContainer").fadeOut("slow");
         $(".info-consulta-emergencia").fadeIn("slow");

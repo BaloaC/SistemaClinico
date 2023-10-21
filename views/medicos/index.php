@@ -315,7 +315,7 @@
                     </div>
                     <div class="modal-body">
                         <div id="delAlert" class="alert d-none" role="alert"></div>
-                        ¿Estás seugro que deseas eliminar este médico?
+                        ¿Estás seguro que deseas eliminar este médico?
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="btn-confirmDelete" class="btn btn-danger">Eliminar</button>
