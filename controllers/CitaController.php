@@ -10,7 +10,7 @@ class CitaController extends Controller {
         "medico.apellidos AS apellido_medico",
         "especialidad.nombre AS nombre_especialidad",
         "cita.cita_id",
-        "cita.medico_id",
+        "cita.paciente_id",
         "cita.medico_id",
         "cita.especialidad_id",
         "cita.fecha_cita",
@@ -57,7 +57,7 @@ class CitaController extends Controller {
 
         // Creando los strings para las validaciones
         $camposString = array("motivo_cita");
-        $campoId = array("medico_id", "medico_id", "especialidad_id", "cita_id");
+        $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id");
         $exclude = array("seguro_id");
 
         $validarCita = new Validate;
@@ -161,7 +161,7 @@ class CitaController extends Controller {
                     /*** Estas líneas fueron comentadas porque aparentemente no hacían nada ***/
                     // $siEsTitular = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '3', 'paciente');
                     // $siEsBeneficiario = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '4', 'paciente');
-                    // $siSeguroAsociado = $validarCita->isDuplicatedId('medico_id', 'seguro_id', $_POST['paciente_titular_id'], $_POST['seguro_id'], 'paciente_seguro');
+                    // $siSeguroAsociado = $validarCita->isDuplicatedId('paciente_id', 'seguro_id', $_POST['paciente_titular_id'], $_POST['seguro_id'], 'paciente_seguro');
 
                     // if (!$siEsTitular && !$siEsBeneficiario) {
                     //     $respuesta = new Response(false, 'El paciente ingresado no está registrado como asegurado');
@@ -182,23 +182,23 @@ class CitaController extends Controller {
                     }
 
                     // Verificamos que el titular este asociado a ese seguro
-                    $esSeguroAsociado = $validarCita->isDuplicatedId('medico_id', 'seguro_id', $data['paciente_titular_id'], $data['seguro_id'], 'paciente_seguro');
+                    $esSeguroAsociado = $validarCita->isDuplicatedId('paciente_id', 'seguro_id', $data['paciente_titular_id'], $data['seguro_id'], 'paciente_seguro');
                     if (!$esSeguroAsociado) {
                         $respuesta = new Response(false, 'El paciente indicado no se encuentra asociado a ese seguro');
                         return $respuesta->json(400);
                     }
 
                     $_pacienteModel = new PacienteBeneficiadoModel();
-                    $pacienteBeneficiaro = $_pacienteModel->where('medico_id', '=', $data['medico_id'])->getFirst();
+                    $pacienteBeneficiaro = $_pacienteModel->where('paciente_id', '=', $data['paciente_id'])->getFirst();
                     
                     // Validamos que sea beneficiado
-                    if ($data['medico_id'] != $data['paciente_titular_id']) {
+                    if ($data['paciente_id'] != $data['paciente_titular_id']) {
                         if ( !$pacienteBeneficiaro ) {
                             $respuesta = new Response(false, 'El paciente indicado no es beneficiario de un seguro');
                             return $respuesta->json(400);
                         } else {
                             // validamos que esté asociado a ese titular
-                            if ( !$validarCita->isDuplicatedId('medico_id', 'paciente_beneficiado_id', $data['paciente_titular_id'], $pacienteBeneficiaro->paciente_beneficiado_id, 'titular_beneficiado') ) {
+                            if ( !$validarCita->isDuplicatedId('paciente_id', 'paciente_beneficiado_id', $data['paciente_titular_id'], $pacienteBeneficiaro->paciente_beneficiado_id, 'titular_beneficiado') ) {
                                 $respuesta = new Response(false, 'El paciente indicado no tiene relación con ese titular, por favor verifique nuevamente');
                                 return $respuesta->json(400);
                             }
@@ -295,45 +295,24 @@ class CitaController extends Controller {
         return $this->retornarMensaje($lista[0]);
     }
 
-    public function listarCitaPorPacienteId($medico_id) {
+    public function listarCitaPorPacienteId($paciente_id) {
 
         $_citaModel = new CitaModel();
         $inners = $_citaModel->listInner($this->arrayInner);
-        $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('cita.medico_id', '=', $medico_id)->innerJoin($this->arraySelect, $inners, "cita");
-        $mensaje = ($lista != null);
-        // $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('medico_id', '=', $medico_id)->getAll();
-
-        if ($lista[0]->tipo_cita == 2) {
+        $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('cita.paciente_id', '=', $paciente_id)->innerJoin($this->arraySelect, $inners, "cita");
+        
+        if ( count($lista) > 0 && $lista[0]->tipo_cita == 2) {
             $_citaSeguroModel = new CitaSeguroModel();
             $inners = $_citaSeguroModel->listInner($this->seguroInner);
             $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $lista[0]->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
             $lista[0]->cita_seguro = $citaSeguro;
+
+            return $this->retornarMensaje($lista[0]);
+        } else {
+
+            $respuesta = new Response(false, 'El paciente indicado todavía no posee citas');
+            return $respuesta->json(400);
         }
-
-        return $this->retornarMensaje($lista[0]);
-        // $mensaje = ($lista != null);
-
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        // $respuesta->setData($lista);
-
-        // return $respuesta->json($mensaje ? 200 : 404);
-    }
-
-    public function listarCitaPorMedicoId($medico_id) {
-
-        $_citaModel = new CitaModel();
-        $inners = $_citaModel->listInner($this->arrayInner);
-        $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('cita.medico_id', '=', $medico_id)->innerJoin($this->arraySelect, $inners, "cita");
-        $mensaje = ($lista != null);
-
-        if (isset($lista[0]->tipo_cita) == 2) {
-            $_citaSeguroModel = new CitaSeguroModel();
-            $inners = $_citaSeguroModel->listInner($this->seguroInner);
-            $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $lista[0]->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
-            $lista[0]->cita_seguro = $citaSeguro;
-        }
-
-        return $this->retornarMensaje($lista);
     }
 
     public function actualizarCita($cita_id) {
