@@ -298,3 +298,9 @@ span.select2.select2-container.select2-container--bootstrap-5 {
 .pagination button {
     margin-inline: 0.5rem;
 }
+
+.footer-pagination {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 4rem;
+}

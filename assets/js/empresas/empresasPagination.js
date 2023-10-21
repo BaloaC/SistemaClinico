@@ -14,9 +14,14 @@ export function empresasPagination(registros) {
     if (registros == undefined) {
         const mensajeVacio = `<p class="text-center mb-5 fs-5">No se encontraron registros.</p>`
         document.getElementById('card-container').innerHTML = mensajeVacio;
+        document.getElementById('boton-pagina-siguiente').classList.add("d-none");
+        document.getElementById('boton-pagina-anterior').classList.add("d-none");
         return;
     } else {
 
+        document.getElementById('boton-pagina-siguiente').classList.remove("d-none");
+        document.getElementById('boton-pagina-anterior').classList.remove("d-none");
+        
         function crearTarjeta(registro, plantilla, separadores = {}) {
             // Crear el elemento de la tarjeta
             const tarjeta = document.createElement('div');

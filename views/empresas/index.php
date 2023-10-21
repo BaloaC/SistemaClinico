@@ -47,7 +47,7 @@
                     </ul>
                 </div> -->
             </div>
-            <div class="d-flex justify-content-evenly">
+            <div class="footer-pagination">
                 <button id="boton-pagina-anterior" class="btn btn-primary">Anterior</button>
                 <div id="pagination-container" class="pagination"></div>
                 <button id="boton-pagina-siguiente" class="btn btn-primary">Siguiente</button>
