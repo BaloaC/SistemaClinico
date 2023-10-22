@@ -1,6 +1,7 @@
 <?php
 
 include_once './services/pacientes/paciente/PacienteValidaciones.php';
+include_once './services/pacientes/paciente seguro/PacienteSeguroService.php';
 
 class PacienteController extends Controller{
 
@@ -43,8 +44,10 @@ class PacienteController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
 
         $validarPaciente = new Validate;
-
+        
         PacienteValidaciones::validacionesGenerales($_POST);
+        PacienteValidaciones::validarNuevoPaciente($_POST);
+        PacienteValidaciones::validarPacienteSeguro($_POST);
 
         $_pacienteModel = new PacienteModel();
 
@@ -55,59 +58,47 @@ class PacienteController extends Controller{
         }
 
         if ( $_POST['tipo_paciente'] == 3 ) {
-            
+            // lógica para paciente tipo asegurado
+
             $pacienteSeguro = $_POST['seguro'];
             unset($_POST['seguro']);
 
-            if ( $validarPaciente->isEmpty($pacienteSeguro) ) {
-                $respuesta = new Response(false, 'Debe introducir los datos de seguro del paciente');
-                return $respuesta->json(400);
-            }
-
             $data = $validarPaciente->dataScape($_POST);
             $id = $_pacienteModel->insert($data);
             
             if ( $id > 0 ) {
-                $insertarPacienteSeguro = new PacienteSeguroController;
-                $mensaje = $insertarPacienteSeguro->insertarPacienteSeguro($pacienteSeguro, $id);
-                
-                if ($mensaje == true) { 
-                    
-                    $_pacienteModel->where('paciente_id', '=', $id)->delete();
-                    return $mensaje; 
-
-                } else {
-                    
-                    $respuesta = new Response('INSERCION_EXITOSA');
-                    return $respuesta->json(201);
-                }
+                // $insertarPacienteSeguro = new PacienteSeguroController;
+                // $mensaje = $insertarPacienteSeguro->insertarPacienteSeguro($pacienteSeguro, $id);
+                PacienteSeguroService::insertarPacienteSeguro($pacienteSeguro, $id);
+                $respuesta = new Response('INSERCION_EXITOSA');
+                $respuesta->setData($data);
+                return $respuesta->json(201);
             }
 
         } else if( $_POST['tipo_paciente'] == 4 ) {
+            // Lógica para paciente tipo beneficiado
 
             $pacienteBeneficiado = $_POST['titular'];
+            PacienteValidaciones::validarPacienteBeneficiado($pacienteBeneficiado);
             unset($_POST['titular']);
-
-            if ( $validarPaciente->isEmpty($pacienteBeneficiado) ) {
-                $respuesta = new Response(false, 'Debe introducir los datos del titular del paciente');
-                return $respuesta->json(400);
-            }
 
             $data = $validarPaciente->dataScape($_POST);
             $id = $_pacienteModel->insert($data);
             
             if ( $id > 0 ) {
-                $insertarPacienteBeneficiado = new PacienteBeneficiadoController;
-                $mensaje = $insertarPacienteBeneficiado->insertarPacienteBeneficiado($pacienteBeneficiado, $id);
-                
-                if ($mensaje == true) { 
-                    $_pacienteModel->where('paciente_id', '=', $id)->delete();
-                    return $mensaje; 
 
-                } else {
-                    $respuesta = new Response('INSERCION_EXITOSA');
-                    return $respuesta->json(201);
-                }
+                PacienteHelpers::insertarPacienteBeneficiado($data, $id);
+                // $insertarPacienteBeneficiado = new PacienteBeneficiadoController;
+                // $mensaje = $insertarPacienteBeneficiado->insertarPacienteBeneficiado($pacienteBeneficiado, $id);
+                
+                // if ($mensaje == true) { 
+                //     $_pacienteModel->where('paciente_id', '=', $id)->delete();
+                //     return $mensaje; 
+
+                // } else {
+                $respuesta = new Response('INSERCION_EXITOSA');
+                return $respuesta->json(201);
+                // }
             }
 
         }else {
@@ -123,77 +114,95 @@ class PacienteController extends Controller{
     public function actualizarPaciente($paciente_id){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        // Creando los strings para las validaciones
-        $camposNumericos = array("cedula", "edad", "telefono", "tipo_paciente");
-        $camposString = array("nombres", "apellidos");
-
         $validarPaciente = new Validate;
-        switch($_POST) {
 
-            case ($validarPaciente->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
+        PacienteValidaciones::validarPacienteId($paciente_id);
+        PacienteValidaciones::validacionesGenerales($_POST);
+        PacienteValidaciones::validarPacienteActualizado($_POST, $paciente_id);
+        PacienteValidaciones::validarPacienteSeguro($_POST);
+        
+        // switch($_POST) {
 
-            case !$validarPaciente->isDuplicated('paciente', 'paciente_id', $paciente_id):
-                $respuesta = new Response('DATOS_DUPLICADOS');
-                return $respuesta->json(400);
+        //     case ($validarPaciente->isEmpty($_POST)):
+        //         $respuesta = new Response('DATOS_VACIOS');
+        //         return $respuesta->json(400);
 
-            case $validarPaciente->isNumber($_POST, $camposNumericos):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
+        //     case !$validarPaciente->isDuplicated('paciente', 'paciente_id', $paciente_id):
+        //         $respuesta = new Response('NOT_FOUND');
+        //         return $respuesta->json(400);
 
-            case $validarPaciente->isString($_POST, $camposString):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
+        //     case $validarPaciente->isNumber($_POST, $camposNumericos):
+        //         $respuesta = new Response('DATOS_INVALIDOS');
+        //         return $respuesta->json(400);
+
+        //     case $validarPaciente->isString($_POST, $camposString):
+        //         $respuesta = new Response('DATOS_INVALIDOS');
+        //         return $respuesta->json(400);
             
-            default:
+        //     default:
                     
-                if ( array_key_exists('fecha_nacimiento', $_POST) ) {
+                // if ( array_key_exists('fecha_nacimiento', $_POST) ) {
 
-                    if ( $validarPaciente->isDate($_POST['fecha_nacimiento']) ) {
-                        $respuesta = new Response('DATOS_INVALIDOS');
-                        return $respuesta->json(400);
-                    }
+                //     if ( $validarPaciente->isDate($_POST['fecha_nacimiento']) ) {
+                //         $respuesta = new Response('DATOS_INVALIDOS');
+                //         return $respuesta->json(400);
+                //     }
                     
-                    if ( $validarPaciente->isToday($_POST['fecha_nacimiento'], false) ) {
-                        $respuesta = new Response('DATOS_INVALIDOS');
-                        return $respuesta->json(400);
-                    }   
+                //     if ( $validarPaciente->isToday($_POST['fecha_nacimiento'], false) ) {
+                //         $respuesta = new Response('DATOS_INVALIDOS');
+                //         return $respuesta->json(400);
+                //     }   
 
-                }
+                // }
 
-                if ( !array_key_exists('tipo_paciente', $_POST) && array_key_exists('cedula', $_POST)) {
-                    // Primero verificamos si el paciente es tipo beneficiado
-                    $_pacienteModel = new PacienteModel();
-                    $paciente = $_pacienteModel->where('paciente_id', '=', $paciente_id);
-                    $isRepeated = $_pacienteModel->where('cedula', '=', $_POST['cedula']);
+                // if ( !array_key_exists('tipo_paciente', $_POST) && array_key_exists('cedula', $_POST)) {
+                //     // Primero verificamos si el paciente es tipo beneficiado
+                //     $_pacienteModel = new PacienteModel();
+                //     $paciente = $_pacienteModel->where('paciente_id', '=', $paciente_id);
+                //     $isRepeated = $_pacienteModel->where('cedula', '=', $_POST['cedula']);
 
-                    // Ahora validamos que la cédula no se repita
-                    if ($paciente->tipo_paciente != 4 && $isRepeated) {
-                        $respuesta = new Response(false, 'Ya existe un paciente con esa cédula');
-                        $respuesta->setData("Problema al insertar el paciente con la cédula ".$_POST['cedula']);
-                        return $respuesta->json(400);
-                    }
+                //     // Ahora validamos que la cédula no se repita
+                //     if ($paciente->tipo_paciente != 4 && $isRepeated) {
+                //         $respuesta = new Response(false, 'Ya existe un paciente con esa cédula');
+                //         $respuesta->setData("Problema al insertar el paciente con la cédula ".$_POST['cedula']);
+                //         return $respuesta->json(400);
+                //     }
                     
-                }
+                // }
 
-                if ( array_key_exists('tipo_paciente', $_POST) && array_key_exists('cedula', $_POST) && $_POST['tipo_paciente'] != 4 ) {
-                    $_pacienteModel = new PacienteModel();
-                    $isRepeated = $_pacienteModel->where('cedula', '=', $_POST['cedula']);
-                    if ($isRepeated) {
-                        $respuesta = new Response(false, 'Ya existe un paciente con esa cédula');
-                        $respuesta->setData("Problema al insertar el paciente con la cédula ".$_POST['cedula']);
-                        return $respuesta->json(400);
-                    }
-                }
+                // if ( array_key_exists('tipo_paciente', $_POST) && array_key_exists('cedula', $_POST) && $_POST['tipo_paciente'] != 4 ) {
+                //     $_pacienteModel = new PacienteModel();
+                //     $isRepeated = $_pacienteModel->where('cedula', '=', $_POST['cedula']);
+                //     if ($isRepeated) {
+                //         $respuesta = new Response(false, 'Ya existe un paciente con esa cédula');
+                //         $respuesta->setData("Problema al insertar el paciente con la cédula ".$_POST['cedula']);
+                //         return $respuesta->json(400);
+                //     }
+                // }
 
                 if ( array_key_exists('seguro', $_POST) ) {
                     
-                    $insertarPacienteSeguro = new PacienteSeguroController;
-                    $mensaje = $insertarPacienteSeguro->insertarPacienteSeguro($_POST['seguro'], $paciente_id);
+                    PacienteSeguroService::insertarPacienteSeguro($_POST['seguro'], $paciente_id);
+                    // $insertarPacienteSeguro = new PacienteSeguroController;
+                    // $mensaje = $insertarPacienteSeguro->insertarPacienteSeguro($_POST['seguro'], $paciente_id);
                     unset($_POST['seguro']);
-                    if ($mensaje == true) { return $mensaje; }
+                }
 
+                if ( array_key_exists('titular', $_POST) ) {
+                    
+                    $_pacienteBeneficiadoModel = new PacienteBeneficiadoModel();
+                    $paciente_beneficiado_id = $_pacienteBeneficiadoModel->where('paciente_id', '=', $paciente_id)->getFirst();
+
+                    if (is_null($paciente_beneficiado_id) || $paciente_beneficiado_id <= 0) {
+                        PacienteHelpers::insertarPacienteBeneficiado($_POST['titular'], $paciente_id);
+
+                    } else {
+                        $titular_beneficiado = $_POST;
+                        $titular_beneficiado['paciente_beneficiado_id'] = $paciente_beneficiado_id;
+                        PacienteHelpers::insertarTitularBeneficiado($titular_beneficiado);
+                    }
+
+                    unset($_POST['titular']);
                 }
 
                 if ( !empty($_POST) ) {
@@ -202,14 +211,18 @@ class PacienteController extends Controller{
                     $_pacienteModel = new PacienteModel();
                     
                     $actualizado = $_pacienteModel->where('paciente_id','=',$paciente_id)->update($data);
-                    $mensaje = ($actualizado > 0);
 
-                    $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-                    $respuesta->setData($actualizado);
-
-                    return $respuesta->json($mensaje ? 200 : 400);
+                    if (!$actualizado > 0) {
+                        $respuesta = new Response('ACTUALIZACION_FALLIDA');
+                        $respuesta->setData($data);
+                        return $respuesta->json(400);
+                    }
                 }
-        }
+
+                $respuesta = new Response('ACTUALIZACION_EXITOSA');
+                $respuesta->setData($_POST);
+                return $respuesta->json(200);
+        // }
     }
 
     public function listarPacientes(){
