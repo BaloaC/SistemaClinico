@@ -68,12 +68,12 @@ class PacienteValidaciones {
         }
 
         if ( !array_key_exists('tipo_paciente', $formulario) && array_key_exists('cedula', $formulario)) {
-
+            
             // Primero verificamos si el paciente es tipo beneficiado
             $_pacienteModel = new PacienteModel();
-            $paciente = $_pacienteModel->where('paciente_id', '=', $paciente_id);
-            $isRepeated = $_pacienteModel->where('cedula', '=', $formulario['cedula']);
-
+            $paciente = $_pacienteModel->where('paciente_id', '=', $paciente_id)->getFirst();
+            $isRepeated = $_pacienteModel->where('cedula', '=', $formulario['cedula'])->getFirst();
+            
             // Ahora validamos que la cédula no se repita
             if ($paciente->tipo_paciente != 4 && $isRepeated) {
                 $respuesta = new Response(false, 'Ya existe un paciente con esa cédula');
@@ -86,8 +86,8 @@ class PacienteValidaciones {
         if ( array_key_exists('tipo_paciente', $formulario) && array_key_exists('cedula', $formulario) && $formulario['tipo_paciente'] != 4 ) {
             
             $_pacienteModel = new PacienteModel();
-            $isRepeated = $_pacienteModel->where('cedula', '=', $formulario['cedula']);
-
+            $isRepeated = $_pacienteModel->where('cedula', '=', $formulario['cedula'])->getFirst();
+            
             if ($isRepeated) {
                 $respuesta = new Response(false, 'Ya existe un paciente con esa cédula');
                 $respuesta->setData("Problema al insertar el paciente con la cédula ".$formulario['cedula']);
@@ -102,6 +102,25 @@ class PacienteValidaciones {
 
         if ( !$validarPaciente->isDuplicated('paciente', 'paciente_id', $paciente_id) ) {
             $respuesta = new Response('NOT_FOUND');
+            echo $respuesta->json(400);
+            exit();
+        }
+    }
+
+    public static function validarTipoPaciente($formulario, $paciente_id, $tipo_paciente) {
+
+        $_pacienteModel = new PacienteModel();
+        $paciente = $_pacienteModel->where('paciente_id', '=', $paciente_id)->getFirst();
+        
+        if ($paciente->tipo_paciente != $tipo_paciente && !isset($formulario['tipo_paciente'])) {
+            $respuesta = new Response(false, 'Para actualizar la información indicada se necesita que el tipo de paciente sea '.$tipo_paciente);
+            $respuesta->setData($paciente);
+            echo $respuesta->json(400);
+            exit();
+
+        } else  if ( $paciente->tipo_paciente != $tipo_paciente && $formulario['tipo_paciente'] != $tipo_paciente ) {
+            $respuesta = new Response(false, 'Para actualizar la información indicada se necesita que el tipo de paciente sea '.$tipo_paciente);
+            $respuesta->setData($paciente);
             echo $respuesta->json(400);
             exit();
         }
@@ -151,12 +170,19 @@ class PacienteValidaciones {
                     echo $respuesta->json(400);
                     exit();
                 }
+            }
+        }
+    }
 
-                if ( $validarPaciente->isDuplicatedId('paciente_id', 'seguro_id', $seguro['paciente_id'], $seguro['seguro_id'], 'paciente_seguro') ) {
-                    $respuesta = new Response(false, 'Ya existe un registro con la misma información de seguro y paciente');
-                    echo $respuesta->json(400);
-                    exit();
-                }
+    public static function validarDuplicadoPacienteSeguro($formulario, $paciente_id) {
+        $validarPaciente = new Validate();
+
+        foreach ($formulario as $paciente_seguro) {
+            
+            if ( $validarPaciente->isDuplicatedId('paciente_id', 'seguro_id', $paciente_id, $paciente_seguro['seguro_id'], 'paciente_seguro') ) {
+                $respuesta = new Response(false, 'Ya existe un registro con la misma información de seguro y paciente');
+                echo $respuesta->json(400);
+                exit();
             }
         }
     }
@@ -164,7 +190,7 @@ class PacienteValidaciones {
     public static function validarPacienteBeneficiado($formulario) {
         $camposNumericos = array("tipo_relacion");
         $validarPacienteBeneficiado = new Validate;
-
+        
         foreach ($formulario as $titular) {
             if ( ($validarPacienteBeneficiado->isEmpty($titular)) ) {
                 $respuesta = new Response(false, 'Los datos del seguro están vacíos');
@@ -179,8 +205,8 @@ class PacienteValidaciones {
                 echo $respuesta->json(400);
                 exit();
             }
-        
-            if ( $formulario['tipo_relacion'] > 3 ) {
+            
+            if ( $titular['tipo_relacion'] > 3 ) {
                 $respuesta = new Response(false, 'Tipo de relación inválida');
                 $respuesta->setData($titular['tipo_relacion']);
                 echo $respuesta->json(400);
@@ -189,11 +215,31 @@ class PacienteValidaciones {
 
             $_pacienteModel = new PacienteModel();
             $paciente_titular = $_pacienteModel->where('paciente_id', '=', $titular['paciente_id'])->getFirst();
-
-            if ( is_null($paciente_titular)|| $paciente_titular == 0 || $paciente_titular->tipo_paciente == 1 || $paciente_titular->tipo_paciente == 4 ) {
-                
-                $respuesta = new Response(false, 'El paciente indicado no existe o no está registrado como un titular');
+            
+            if ( is_null($paciente_titular) ) {
+                $respuesta = new Response(false, 'El paciente titular indicado no existe');
                 $respuesta->setData($titular['paciente_id']);
+                echo $respuesta->json(400);
+                exit();
+            }
+
+            if ( $paciente_titular->tipo_paciente == 1 || $paciente_titular->tipo_paciente == 4 ) {
+                
+                $respuesta = new Response(false, 'El paciente titular indicado no existe o no está registrado como un titular');
+                $respuesta->setData($titular['paciente_id']);
+                echo $respuesta->json(400);
+                exit();
+            }
+        }
+    }
+
+    public static function validarDuplicadoPacienteBeneficiado($formulario, $paciente_id) {
+        $validarPaciente = new Validate();
+
+        foreach ($formulario as $paciente_beneficiado) {
+            
+            if ( $validarPaciente->isDuplicatedId('paciente_id', 'paciente_beneficiado_id', $paciente_beneficiado['paciente_id'], $paciente_id, 'titular_beneficiado') ) {
+                $respuesta = new Response(false, 'Ya existe un registro con la misma información de titular y beneficiado');
                 echo $respuesta->json(400);
                 exit();
             }

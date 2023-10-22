@@ -24,14 +24,19 @@ class PacienteHelpers {
         }
         
         $titular_beneficiado = $data;
-        $titular_beneficiado['paciente_beneficiado_id'] = $beneficiado_id;
-        PacienteHelpers::insertarTitularBeneficiado($titular_beneficiado);
+        
+        foreach ($formulario as $titular_beneficiado) {
+            PacienteHelpers::insertarTitularBeneficiado($titular_beneficiado, $beneficiado_id);
+        }
     }
 
     /**
      * Esta función inserta titulares a un paciente_beneficiado
      */
-    public static function insertarTitularBeneficiado($formulario) {
+    public static function insertarTitularBeneficiado($formulario, $paciente_beneficiado_id) {
+        
+        $formulario['paciente_beneficiado_id'] = $paciente_beneficiado_id;
+
         $_titularBeneficiadoModel = new TitularBeneficiadoModel();
         $titular_beneficiado_id = $_titularBeneficiadoModel->insert($formulario);
 
