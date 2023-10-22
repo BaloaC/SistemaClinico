@@ -24,7 +24,7 @@
             </div>
             <!-- Seguros -->
             <div class="d-flex justify-content-end align-items-center mb-4">
-                <input type="text" id="inputSearch" class="form-control w-25 border-right-none" placeholder="Buscar...">
+                <input type="text" id="inputSearch" class="form-control w-25 border-right-none" oninput="filtrarSeguros()" placeholder="Buscar...">
                 <button class="form-control input-search-icon btn-add" onclick="filtrarSeguros()"><i class="fas fa-search"></i></button>
             </div>
             <div class="row" id="card-container">
@@ -158,7 +158,7 @@
                         <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Seguro</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-seguro" class="p-3 px-4">
                             <label for="rif">Rif</label>

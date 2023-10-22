@@ -2,12 +2,12 @@ import addModule from "../global/addModule.js";
 import getAge from "../global/getAge.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import getById from "../global/getById.js";
+import scrollTo from "../global/scrollTo.js";
 
 async function addConsulta() {
 
     const $form = document.getElementById("info-consulta"),
         $alert = document.querySelector(".alert");
-    const modalRegBody = document.getElementById("modalRegBody") ?? null;
 
     try {
         const formData = new FormData($form),
@@ -144,16 +144,13 @@ async function addConsulta() {
 
     } catch (error) {
         console.log(error);
+        
+        scrollTo("modalRegBody");
+        
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
         $alert.textContent = error.message || error.result.message;
 
-        // Subir el scroll hasta inicio para visualizar mejor el mensaje de error
-        modalRegBody.scrollTo({
-            top: 0,
-            bottom: modalRegBody.scrollHeight,
-            behavior: 'smooth'
-        });
     }
 }
 

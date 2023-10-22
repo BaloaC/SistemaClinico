@@ -70,7 +70,7 @@
                         <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Antecedente</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
                         <form id="info-antecedente" class="p-3 px-4">
                             <label for="tipo_antedecente_id">Tipo de antecedente</label>
@@ -98,7 +98,7 @@
                         <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Antecedente</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form method="POST" id="act-antecedente" class="p-3 px-4">
                             <label for="tipo_antecedente_id">Tipo de antecedente</label>

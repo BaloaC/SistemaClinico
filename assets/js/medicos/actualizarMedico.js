@@ -2,7 +2,9 @@ import deleteSecondValue from "../global/deleteSecondValue.js";
 import { createOptionOrSelectInstead, select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
+import scrollTo from "../global/scrollTo.js";
 import updateModule from "../global/updateModule.js";
+import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
 import { medicosPagination } from "./medicosPagination.js";
 import { mostrarMedicos } from "./mostrarMedicos.js";
 
@@ -86,6 +88,8 @@ async function updateMedico(id) {
         $form.cod_tel.dataset.secondValue = $telCod;
         $form.direccion.value = json[0].direccion;
         $form.direccion.dataset.secondValue = json[0].direccion;
+
+        validateInputsOnUpdate();
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
@@ -176,6 +180,8 @@ async function confirmUpdate() {
         let message = error.message || error.result.message;
         $alert.textContent = message;
 
+        scrollTo("modalActBody");
+        
         setTimeout(() => {
             $alert.classList.add("d-none");
         }, 3000)

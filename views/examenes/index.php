@@ -25,7 +25,7 @@
             </div>
             <!-- Exámenes -->
             <div class="d-flex justify-content-end align-items-center mb-4">
-                <input type="text" id="inputSearch" class="form-control w-25 border-right-none" placeholder="Buscar...">
+                <input type="text" id="inputSearch" class="form-control w-25 border-right-none" oninput="filtrarExamenes()" placeholder="Buscar...">
                 <button class="form-control input-search-icon btn-add" onclick="filtrarExamenes()"><i class="fas fa-search"></i></button>
             </div>
             <div class="row" id="card-container">
@@ -60,14 +60,14 @@
                         <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Exámenes</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-examen" class="p-3 px-4">
                             <label for="nombre">Nombre exámen</label>
                             <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
                             <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="tipo">Tipo</label>
-                            <select name="tipo" id="s-tipo" class="form-control mb-3">
+                            <select name="tipo" id="s-tipo" class="form-control mb-3" required>
                                 <option value="" disabled selected>Seleccione el tipo de exámen</option>
                                 <option value="1">Ecografía</option>
                                 <option value="2">Laboratorio</option>
@@ -103,7 +103,7 @@
                         <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Empresa</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-examen" class="p-3 px-4">
                             <label for="nombre">Nombre exámen</label>

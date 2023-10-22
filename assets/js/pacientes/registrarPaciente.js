@@ -2,6 +2,7 @@ import addModule from "../global/addModule.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import getAge from "../global/getAge.js";
 import getById from "../global/getById.js";
+import scrollTo from "../global/scrollTo.js";
 
 async function addPaciente() {
 
@@ -71,17 +72,15 @@ async function addPaciente() {
             data.titular = titular;
         }
 
-        // TODO: Validar los inputs del paciente
-
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
         if (data.nombre.length < 3) throw { message: "El nombre debe tener al menos 3 caracteres" };
         if (data.apellidos.length < 3) throw { message: "El apellido debe tener al menos 3 caracteres" };
         if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
-        // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
-        // if (isNaN(data.telefono) || data.telefono.length != 7) throw { message: "El número ingresado no es válido" };
-        // if (isNaN(data.cod_tel) || data.cod_tel.length != 4) throw { message: "El número ingresado no es válido" };
+        if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
+        if (isNaN(data.telefono) || data.telefono.length != 7) throw { message: "El número ingresado no es válido" };
+        if (isNaN(data.cod_tel) || data.cod_tel.length != 4) throw { message: "El número ingresado no es válido" };
 
         // data.telefono = data.cod_tel + data.telefono;
 
@@ -96,7 +95,9 @@ async function addPaciente() {
         $('#pacientes').DataTable().ajax.reload();
 
     } catch (error) {
-        console.log(error);
+        
+        scrollTo("modalRegBody");
+
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
         $alert.textContent = error.message || error.result.message;

@@ -66,7 +66,7 @@
                         <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Paciente</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-paciente" class="p-3 px-4">
                             <div class="row">
@@ -107,8 +107,8 @@
                                 </div>
                                 <div class="col-12 col-md-6 mt-4">
                                     <label for="tipo_paciente">Tipo de paciente</label>
-                                    <select name="tipo_paciente" id="s-tipo_paciente" class="form-control mb-3" requried>
-                                        <option disabled selected>Seleccione el tipo de paciente...</option>
+                                    <select name="tipo_paciente" id="s-tipo_paciente" class="form-control mb-3" required>
+                                        <option value disabled selected>Seleccione el tipo de paciente...</option>
                                         <option value="1">Natural</option>
                                         <option value="2">Representante</option>
                                         <option value="3">Asegurado</option>
@@ -248,7 +248,7 @@
                         <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Paciente</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body" id="modalActContent">
+                    <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-paciente" class="p-3 px-4">
                             <div class="row">
@@ -265,7 +265,7 @@
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3" required>
+                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3" data-validate="true" data-type="date" required>
 
                                     <label for="telefono">Teléfono</label>
                                     <div class="input-group mb-3">

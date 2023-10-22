@@ -1,5 +1,6 @@
 import addModule from "../global/addModule.js";
 import getAll from "../global/getAll.js";
+import scrollTo from "../global/scrollTo.js";
 import { medicosPagination } from "./medicosPagination.js";
 import { mostrarMedicos } from "./mostrarMedicos.js";
 
@@ -72,6 +73,9 @@ async function addMedico() {
 
     } catch (error) {
         console.log(error);
+
+        scrollTo("modalRegBody");
+
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
         $alert.textContent = error.message || error.result.message;

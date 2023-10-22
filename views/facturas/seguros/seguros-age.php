@@ -46,7 +46,7 @@
                         <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Exámenes</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-examen" class="p-3 px-4">
                             <label for="nombre">Nombre exámen</label>
@@ -72,7 +72,7 @@
                         <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Empresa</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-examen" class="p-3 px-4">
                             <label for="nombre">Nombre exámen</label>

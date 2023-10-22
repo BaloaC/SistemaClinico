@@ -4,7 +4,9 @@ import deleteSecondValue from "../global/deleteSecondValue.js";
 import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
 import getAge from "../global/getAge.js";
 import getById from "../global/getById.js";
+import scrollTo from "../global/scrollTo.js";
 import updateModule from "../global/updateModule.js";
+import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
 import actualizarTipoPaciente from "./actualizarTipoPaciente.js";
 import getTitulares from "./getTitulares.js";
 import mostrarPacienteBeneficiado from "./mostrarPacienteBeneficiado.js";
@@ -89,6 +91,7 @@ async function updatePaciente(id) {
         $form.tipo_paciente.dataset.secondValue = json.tipo_paciente;
 
         actualizarTipoPaciente(json.tipo_paciente);
+        validateInputsOnUpdate();
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
@@ -170,13 +173,6 @@ async function confirmUpdate() {
 
         await updateModule(parseData, "paciente_id", "pacientes", "act-paciente", "Paciente actualizado correctamente!");
 
-        // Subir el scroll hasta inicio para visualizar mejor el mensaje de exito
-        modalActContent.scrollTo({
-            top: 0,
-            bottom: modalActContent.scrollHeight,
-            behavior: 'smooth'
-        });
-
         // Eliminar que el input sea valido
         Array.from(document.getElementById("act-paciente").elements).forEach(element => {
             element.classList.remove('valid');
@@ -195,12 +191,7 @@ async function confirmUpdate() {
         let message = error.message || error.result.message;
         $alert.textContent = message;
 
-        // Subir el scroll hasta inicio para visualizar mejor el mensaje de error
-        modalActContent.scrollTo({
-            top: 0,
-            bottom: modalActContent.scrollHeight,
-            behavior: 'smooth'
-        });
+        scrollTo("modalActBody");
 
         setTimeout(() => {
             $alert.classList.add("d-none");

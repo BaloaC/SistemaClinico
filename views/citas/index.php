@@ -50,7 +50,7 @@
                         <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Cita</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-cita" class="p-3 px-4">
                             <div class="row">
@@ -168,7 +168,7 @@
                         <h1 class="modal-title fs-3" id="modalActLabel">Actualización de la Cita</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-cita" class="p-3 px-4">
                             <p class="text-secondary">Las citas se mantendrán como pendientes hasta que la clave otorgada por el seguro sea insertada</p>

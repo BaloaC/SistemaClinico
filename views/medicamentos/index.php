@@ -64,7 +64,7 @@
                         <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Medicamento</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
                         <form id="info-medicamento" class="p-3 px-4">
                             <label for="nombre">Nombre</label>
@@ -97,7 +97,7 @@
                         <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Medicmaento</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form id="act-medicamento" class="p-3 px-4">
                             <label for="nombre">Nombre</label>
