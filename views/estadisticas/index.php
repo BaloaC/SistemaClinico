@@ -25,12 +25,14 @@
                     <div class="col-12 col-lg-6 order-lg-first order-last flex-column">
                         <div class="card card-home shadow-dark position-relative">
                             <div id="pacienteEdad" class="chart"></div>
+                            <p class="pacienteEdad text-no-graph d-none">Todavía no hay pacientes registrados</p>
                         </div>
                     </div>
                     <!-- Gráfica PAciente por tipo-->
                     <div class="col-12 col-lg-6 order-lg-last order-first">
                         <div class="card card-home shadow-dark position-relative">
                             <div id="pacienteTipo" class="chart"></div>
+                            <p class="pacienteTipo text-no-graph d-none">Todavía no hay pacientes registrados</p>
                         </div>
                     </div>
                 </div>
@@ -42,26 +44,29 @@
             <div class="container">
                 <h3 class="mt-5">Médicos</h3>
                 <div class="row especialidad-container mt-5">
-                    <!-- Gráfica Paciente por edad-->
+                    <!-- Gráfica Consultas Médicos-->
                     <div class="col-12 col-lg-6 order-lg-first order-last flex-column">
                         <div class="card card-home shadow-dark position-relative">
                             <div id="medicoConsulta" class="chart"></div>
+                            <p class="medicoConsulta text-no-graph d-none">Todavía no hay médicos con consultas registradas</p>
                         </div>
                     </div>
                 </div>
 
                 <h3 class="mt-5">Consultas</h3>
                 <div class="row especialidad-container mt-5">
-                    <!-- Gráfica Paciente por edad-->
+                    <!-- Gráfica Consultas Aseguradas-->
                     <div class="col-12 col-lg-6 order-lg-first order-last flex-column">
                         <div class="card card-home shadow-dark position-relative">
                             <div id="consultasAseguradas" class="chart"></div>
+                            <p class="consultasAseguradas text-no-graph d-none">Todavía no hay consultas aseguradas registradas este mes</p>
                         </div>
                     </div>
-                    <!-- Gráfica Paciente por tipo-->
+                    <!-- Gráfica Consultas por especialidad-->
                     <div class="col-12 col-lg-6 order-lg-last order-first">
                         <div class="card card-home shadow-dark position-relative">
                             <div id="consultasEspecialidad" class="chart"></div>
+                            <p class="consultasEspecialidad text-no-graph d-none">Todavía no hay consultas registradas este mes</p>
                         </div>
                     </div>
                 </div>

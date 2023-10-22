@@ -1,6 +1,7 @@
 import addModule from "../global/addModule.js";
 import { select2OnClick, emptySelect2 } from "../global/dinamicSelect2.js";
 import getById from "../global/getById.js";
+import scrollTo from "../global/scrollTo.js";
 import { calendar } from "./calendarioCitas.js";
 
 
@@ -115,6 +116,9 @@ async function addCita() {
 
     } catch (error) {
         console.log(error);
+
+        scrollTo("modalRegBody");
+        
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
         $alert.textContent = error.message || error.result.message;

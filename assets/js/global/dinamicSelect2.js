@@ -38,6 +38,16 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
             language: "es",
             dropdownParent: $(parentModal)
         })
+
+        $(selectSelector).on("change", function () {
+            if ($(selectSelector).val() != 0) {
+                $(selectSelector).addClass("is-valid");
+            } else {
+                $(selectSelector).addClass("is-invalid");
+            }
+        });
+
+       
     } catch (error) {
         console.log(error);
     }
@@ -95,6 +105,14 @@ export async function select2OnClick({ selectSelector, module, selectValue, sele
             document.querySelector(selectSelector).dataset.active = 0;
         })
     }
+
+    $(selectSelector).on("change", function () {
+        if ($(selectSelector).val() != 0) {
+            $(selectSelector).addClass("is-valid");
+        } else {
+            $(selectSelector).addClass("is-invalid");
+        }
+    });
 }
 
 export function emptySelect2({ selectSelector, selectWidth = "45%", placeholder, parentModal, disabled = false }) {
@@ -123,4 +141,12 @@ export function createOptionOrSelectInstead({ obj, selectSelector, selectValue, 
         let newOption = new Option(selectText(selectNames, obj), obj[selectValue], true, true);
         $(selectSelector).append(newOption).trigger('change');
     }
+
+    $(selectSelector).on("change", function () {
+        if ($(selectSelector).val() != 0) {
+            $(selectSelector).addClass("is-valid");
+        } else {
+            $(selectSelector).addClass("is-invalid");
+        }
+    });
 }

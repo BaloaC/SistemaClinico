@@ -179,6 +179,17 @@
                                         <label for="monto-consulta">Monto consulta</label>
                                         <input type="number" step="any" name="consultas_medicas" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
                                         <small class="form-text">No se permiten números negativos</small>
+                                        <label for="forRegistrarFactura">¿Desea registrar la factura directamente?</label>
+                                        <div class="input-radios-container">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="registrarFacturaBool" id="registrarFacturaSi" value="1" required disabled>
+                                                <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="registrarFacturaBool" id="registrarFacturaNo" value="0" checked required disabled>
+                                                <label class="form-check-label" for="inlineRadio2">No</label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <label for="cedula">Area de observación</label>
@@ -205,13 +216,13 @@
                                     </div>
                                     <div class="col-12 col-md-5">
                                         <label for="medico">Médico</label>
-                                        <select id="s-medico-pago" class="form-control medico-pago-id" data-active="0" required>
+                                        <select id="s-medico-pago" class="form-control medico-pago-id" data-active="0" required disabled>
                                             <option></option>
                                         </select>
                                     </div>
                                     <div class="col-12 col-md-5">
                                         <label for="monto" class="p-0">Monto</label>
-                                        <input type="number" step="any" class="form-control monto-pago" required>
+                                        <input type="number" name="monto_pago" step="any" class="form-control monto-pago" required disabled>
                                     </div>
                                 </div>
                             </div>
@@ -481,7 +492,7 @@
                                         <option></option>
                                     </select>
                                     <label for="monto_sin_iva">Monto</label>
-                                    <input type="number" name="monto_sin_iva" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
+                                    <input type="number" name="monto_consulta_usd" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
                                     <!-- <input type="number" name="monto_sin_iva" oninput="calcularIva(this)" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8"> -->
 
                                 </div>

@@ -69,7 +69,7 @@
                         <h1 class="modal-title fs-3" id="modalRegLabel">Registrar factura compra</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-fcompra" class="p-3 px-4">
                             <div class="row">

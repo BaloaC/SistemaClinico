@@ -25,12 +25,12 @@
             </div>
             <!-- Proveedores -->
             <div class="d-flex justify-content-end align-items-center mb-4">
-                <input type="text" id="inputSearch" class="form-control w-25 border-right-none" placeholder="Buscar...">
+                <input type="text" id="inputSearch" class="form-control w-25 border-right-none" oninput="filtrarProveedores()" placeholder="Buscar...">
                 <button class="form-control input-search-icon btn-add" onclick="filtrarProveedores()"><i class="fas fa-search"></i></button>
             </div>
             <div class="row" id="card-container">
             </div>
-            <div class="d-flex justify-content-evenly">
+            <div class="footer-pagination">
                 <button id="boton-pagina-anterior" class="btn btn-primary">Anterior</button>
                 <div id="pagination-container" class="pagination"></div>
                 <button id="boton-pagina-siguiente" class="btn btn-primary">Siguiente</button>
@@ -61,7 +61,7 @@
                         <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Proveedores</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
                         <form action="#" id="info-proveedor" class="p-3 px-4">
                             <label for="nombre">Nombre Proveedor</label>
@@ -87,7 +87,7 @@
                         <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Proveedor</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-proveedor" class="p-3 px-4">
                             <label for="nombre">Nombre Proveedor</label>

@@ -1,5 +1,6 @@
 import addModule from "../global/addModule.js";
 import getAll from "../global/getAll.js";
+import scrollTo from "../global/scrollTo.js";
 import { medicosPagination } from "./medicosPagination.js";
 import { mostrarMedicos } from "./mostrarMedicos.js";
 
@@ -16,6 +17,9 @@ async function addMedico() {
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
+        if (data.nombre.length < 3) throw { message: "El nombre debe tener al menos 3 caracteres" };
+        if (data.apellidos.length < 3) throw { message: "El apellido debe tener al menos 3 caracteres" };
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
         if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
         // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
@@ -69,6 +73,9 @@ async function addMedico() {
 
     } catch (error) {
         console.log(error);
+
+        scrollTo("modalRegBody");
+
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
         $alert.textContent = error.message || error.result.message;

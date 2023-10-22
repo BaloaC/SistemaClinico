@@ -2,11 +2,8 @@ import deleteSecondValue from "../global/deleteSecondValue.js";
 import { createOptionOrSelectInstead, select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
-import scrollTo from "../global/scrollTo.js";
 import updateModule from "../global/updateModule.js";
-import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
-import { medicosPagination } from "./medicosPagination.js";
-import { mostrarMedicos } from "./mostrarMedicos.js";
+import mostrarPerfilMedico from "./mostrarPerfilMedico.js";
 
 async function updateMedico(id) {
 
@@ -89,8 +86,6 @@ async function updateMedico(id) {
         $form.direccion.value = json[0].direccion;
         $form.direccion.dataset.secondValue = json[0].direccion;
 
-        validateInputsOnUpdate();
-
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
         $inputId.value = id;
@@ -120,8 +115,6 @@ async function confirmUpdate() {
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
-        if (data.nombre.length < 3) throw { message: "El nombre debe tener al menos 3 caracteres" };
-        if (data.apellidos.length < 3) throw { message: "El apellido debe tener al menos 3 caracteres" };
         if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
         if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
         if (isNaN(data.telefono) || data.telefono.length != 7) throw { message: "El número ingresado no es válido" };
@@ -169,9 +162,8 @@ async function confirmUpdate() {
         }
 
         await updateModule(parseData, "medico_id", "medicos", "act-medico", "Medico actualizado correctamente!");
-        const listadoMedico = await getAll("medicos/consulta");
-        medicosPagination(listadoMedico);
-
+        
+        await mostrarPerfilMedico(parseData.medico_id);
 
     } catch (error) {
         console.log(error);
@@ -180,8 +172,6 @@ async function confirmUpdate() {
         let message = error.message || error.result.message;
         $alert.textContent = message;
 
-        scrollTo("modalActBody");
-        
         setTimeout(() => {
             $alert.classList.add("d-none");
         }, 3000)

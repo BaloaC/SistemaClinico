@@ -171,7 +171,9 @@ i {
     color: #ec4561;
 }
 
-.fa-trash.disabled, .fa-edit.disabled, .fa-eye.disabled {
+.fa-trash.disabled,
+.fa-edit.disabled,
+.fa-eye.disabled {
     color: #777777;
     cursor: normal;
 }
@@ -252,13 +254,17 @@ span.select2.select2-container.select2-container--bootstrap-5 {
     padding: 0 !important;
 }
 
-.form-control.valid {
+.form-control.valid, .modal-body select:valid {
     border-color: green;
 }
 
-.form-control.invalid {
+.form-control.invalid, .modal-body select:invalid {
     border-color: red;
 }
+
+.input-validation-error ~ .select2 .select2-selection {
+    border: 1px solid red;
+  }
 
 .form-control + small {
     color: red;
@@ -297,4 +303,10 @@ span.select2.select2-container.select2-container--bootstrap-5 {
 
 .pagination button {
     margin-inline: 0.5rem;
+}
+
+.footer-pagination {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 4rem;
 }

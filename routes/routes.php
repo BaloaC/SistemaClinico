@@ -182,6 +182,7 @@ Router::get('/citas/actualizar/:id', CitaController::class . '@formActualizarCit
 Router::get('/citas/consulta', CitaController::class . '@listarCitas',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::get('/citas/:id', CitaController::class . '@listarCitaPorId',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::get('/citas/paciente/:id', CitaController::class . '@listarCitaPorPacienteId',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
+Router::get('/citas/medico/:id', CitaController::class . '@listarCitaPorMedicoId',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::post('/citas/:id', CitaController::class . '@reprogramarCita',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4") ), $auditCita]);
 Router::post('/citas', CitaController::class . '@insertarCita', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","5") )]);
 Router::put('/citas/:id', CitaController::class . '@actualizarCita',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);

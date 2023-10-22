@@ -2,12 +2,12 @@ import addModule from "../global/addModule.js";
 import getAge from "../global/getAge.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import getById from "../global/getById.js";
+import scrollTo from "../global/scrollTo.js";
 
 async function addConsulta() {
 
     const $form = document.getElementById("info-consulta"),
         $alert = document.querySelector(".alert");
-    const modalRegBody = document.getElementById("modalRegBody") ?? null;
 
     try {
         const formData = new FormData($form),
@@ -117,8 +117,13 @@ async function addConsulta() {
         // data.rif = data.cod_rif + "-" + data.rif;
 
         const registroExitoso = await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!");
-
+        
         if (!registroExitoso.code) throw { result: registroExitoso.result };
+        
+        // En caso de que se decida registrar la consulta a la factura por emergencia
+        if(registroExitoso.data !== null && data?.registrarFacturaBool === "1"){
+            await addModule("factura/consultaSeguro", "info-consulta", {consulta_id: registroExitoso.data.consulta_id}, "Consulta registrada correctamente!");
+        }
 
         Array.from(document.getElementById("info-consulta").elements).forEach(element => {
             element.classList.remove('valid');
@@ -129,8 +134,8 @@ async function addConsulta() {
         $('#s-insumo').val([]).trigger('change');
         $('#s-medicamento').val([]).trigger('change');
         $('#s-cita').val([]).trigger('change');
-        $('#s-cita').empty().trigger('change');
-        document.getElementById("s-cita").disabled = true;
+        // $('#s-cita').empty().trigger('change');
+        // document.getElementById("s-cita").disabled = true;
         deleteElementByClass("newInput");
         setTimeout(() => {
             $("#modalReg").modal("hide");
@@ -139,16 +144,13 @@ async function addConsulta() {
 
     } catch (error) {
         console.log(error);
+        
+        scrollTo("modalRegBody");
+        
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
         $alert.textContent = error.message || error.result.message;
 
-        // Subir el scroll hasta inicio para visualizar mejor el mensaje de error
-        modalRegBody.scrollTo({
-            top: 0,
-            bottom: modalRegBody.scrollHeight,
-            behavior: 'smooth'
-        });
     }
 }
 

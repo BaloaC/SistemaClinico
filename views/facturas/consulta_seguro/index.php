@@ -123,7 +123,7 @@
                         <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Seguro</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-seguro" class="p-3 px-4">
                             <label for="rif">Rif</label>
@@ -196,7 +196,7 @@
                         <h1 class="modal-title fs-5" id="modalAddPrecioExamenLabel">Añadir precio de examen</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalRegBody">
                         <div class="alert addAlertPrecioExamen d-none" role="alert"></div>
                         <form action="" id="info-precioExamen" class="p-3 px-4">
                             <div class="row align-items-center">

@@ -58,6 +58,10 @@ function pacienteMenorDeEdad(input) {
 
     } else {
 
+        // Seleccionar por defecto para que sea paciente natural
+        tipoPaciente.selectedIndex = 1;
+        tipoPaciente.dispatchEvent(new Event("change"));
+
         cedulaMenorLabel.classList.add("opacity-0");
         setTimeout(() => {
             cedulaMenorLabel.classList.add("d-none");
@@ -79,7 +83,12 @@ function pacienteMenorDeEdad(input) {
         for (let i = 0; i < tipoPaciente.options.length; i++) {
             let option = tipoPaciente.options[i];
 
-            if (i !== 4) option.disabled = false;
+            // Si el tipo de paciente es distinto a beneficiado lo habilitamos las opciones, caso contrario desabilitamos la opción de paciente beneficiado
+            if (i !== 4){
+                option.disabled = false;  
+            } else {
+                option.disabled = true;
+            }
         }
     }
 }

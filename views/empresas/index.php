@@ -26,7 +26,7 @@
             </div>
             <!-- Empresas -->
             <div class="d-flex justify-content-end align-items-center mb-4">
-                <input type="text" id="inputSearch" placeholder="Buscar" class="form-control w-25 border-right-none">
+                <input type="text" id="inputSearch" placeholder="Buscar" oninput="filtrarEmpresas()" class="form-control w-25 border-right-none">
                 <button class="form-control input-search-icon btn-add " onclick="filtrarEmpresas()"><i class="fas fa-search"></i></button>
             </div>
             <div class="row" id="card-container">
@@ -47,7 +47,7 @@
                     </ul>
                 </div> -->
             </div>
-            <div class="d-flex justify-content-evenly">
+            <div class="footer-pagination">
                 <button id="boton-pagina-anterior" class="btn btn-primary">Anterior</button>
                 <div id="pagination-container" class="pagination"></div>
                 <button id="boton-pagina-siguiente" class="btn btn-primary">Siguiente</button>
@@ -77,7 +77,7 @@
                         <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Empresa</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-empresa" class="p-3 px-4">
                             <label for="rif">Rif</label>
@@ -140,7 +140,7 @@
                         <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Empresa</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-empresa" class="p-3 px-4">
                             <label for="rif">Rif</label>

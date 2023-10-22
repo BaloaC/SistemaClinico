@@ -28,12 +28,12 @@
             </div>
             <!-- Médicos -->
             <div class="d-flex justify-content-end align-items-center mb-4">
-                <input type="text" id="inputSearch" class="form-control w-25 border-right-none" placeholder="Buscar...">
+                <input type="text" id="inputSearch" oninput="filtrarMedicos()" class="form-control w-25 border-right-none" placeholder="Buscar...">
                 <button class="form-control input-search-icon btn-add" onclick="filtrarMedicos()"><i class="fas fa-search"></i></button>
             </div>
             <div class="row" id="card-container">
             </div>
-            <div class="d-flex justify-content-evenly mb-4">
+            <div class="footer-pagination">
                 <button id="boton-pagina-anterior" class="btn btn-primary">Anterior</button>
                 <div id="pagination-container" class="pagination"></div>
                 <button id="boton-pagina-siguiente" class="btn btn-primary">Siguiente</button>
@@ -64,7 +64,7 @@
                         <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Médico</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-medico" class="p-3 px-4">
                             <div class="row">
@@ -259,7 +259,7 @@
                         <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Médico</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-medico" class="p-3 px-4">
                             <div class="row">
@@ -292,7 +292,7 @@
                                         <option value=""></option>
                                     </select>
                                     <label for="apellidos">Dirección</label>
-                                    <input type="text" name="direccion" class="form-control mb-3" data-max-length="255" required>
+                                    <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
                                 </div>
                                 <div class="act-horarios">
                                 </div>
@@ -316,7 +316,7 @@
                     </div>
                     <div class="modal-body">
                         <div id="delAlert" class="alert d-none" role="alert"></div>
-                        ¿Estás seugro que deseas eliminar este médico?
+                        ¿Estás seguro que deseas eliminar este médico?
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="btn-confirmDelete" class="btn btn-danger">Eliminar</button>

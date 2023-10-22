@@ -30,28 +30,38 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12 col-md-4 medico-info">
-                            <a class="btn btn-sm btn-add align-self-end my-3" id="consulta-pdf" href="#"><i class="fa-sm fas fa-file-export"></i></a>
-                            <img src="<?php echo Url::to('assets/img/ficha.png'); ?>" alt="">
+                            <img src="<?php echo Url::to('assets/img/ficha_medico.png'); ?>" alt="">
                             <p><b>Cédula:</b> <span id="cedula_medico"></span></p>
                             <p><b>Nombres y Apellidos:</b> <span id="nombre_medico"></span></p>
                             <p><b>Teléfono:</b> <span id="telefono"></span></p>
                             <p><b>Dirección:</b> <span id="direccion"></span></p>
                             <p><b>Acumulado:</b> <span id="acumulado"></span></p>
+                            <p><b>Especialidad:</b> <span id="especialidadMedico"></span></p>
+                            <p>Horario: <span id="horarioMessage">Este médico no posee horarios</span></p>
+                            <table id="horarios-table" class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th>Día</th>
+                                        <th>Hora Entrada</th>
+                                        <th>Hora Salida</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-medico text-end"><i class="fas fa-edit act-especialidad"></i></a>
                         </div>
                         <div class="col-12 col-md-8 medico-consulta">
                             <!-- <button class="btn btn-sm btn-add align-self-end mb-2" data-bs-toggle="modal" data-bs-target="#modalRegConsulta"><i class="fa-sm fas fa-plus"></i> Agregar consulta</button> -->
                             <h5 class="pt-5 pb-2 text-grey d-none" id="citasLabel">Citas pendientes</h4>
-                            <div class="accordion citas-accordion" id="citaAccordion">
+                                <div class="accordion citas-accordion" id="citaAccordion">
 
-                            </div>
-                            <h5 class="pt-5 pb-2 text-grey">Consultas por ver</h5>
-                            <div class="accordion consulta-accordion" id="consultaAccordion">
-
-                            </div>
+                                </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
 
         <!-- Modal Registro-->
@@ -82,25 +92,52 @@
             </div>
         </div>
 
-        <!-- Modal Actualizar -->
+        <!-- Modal Actualizar-->
         <div class="modal fade" id="modalAct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Antecedente</h1>
+                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Médico</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
-                        <form method="POST" id="act-antecedente" class="p-3 px-4">
-                            <label for="tipo_antecedente_id">Tipo de antecedente</label>
-                            <select name="tipo_antecedente_id" class="form-control mb-3" required>
-                                <option value="" disabled selected>Seleccione el tipo de antecedente</option>
-                                <option value="1">Alergía</option>
-                                <option value="2">Familiar</option>
-                            </select>
-                            <label for="descripcion">Descripción</label>
-                            <input type="text" name="descripcion" class="form-control mb-3" data-max-length="45" required>
+                        <form action="" id="act-medico" class="p-3 px-4">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <label for="nombre">Nombres</label>
+                                    <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                                    <small class="form-text">El nombre solo puede contener letras</small>
+                                    <label for="cedula">Cédula</label>
+                                    <input type="number" name="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
+                                    <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
+                                    <label for="telefono">Teléfono</label>
+                                    <div class="input-group mb-3">
+                                        <select name="cod_tel" id="cod-tel" class="me-2">
+                                            <option value="0412">0412</option>
+                                            <option value="0414">0414</option>
+                                            <option value="0424">0424</option>
+                                            <option value="0416">0416</option>
+                                            <option value="0426">0426</option>
+                                        </select>
+                                        <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
+                                        <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="apellidos">Apellidos</label>
+                                    <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                                    <small class="form-text">El apellido solo puede contener letras </small>
+                                    <label for="especialidad">Especialidad</label>
+                                    <select name="especialidad[]" id="s-especialidad-update" class="form-control mb-3" data-active="0" multiple="multiple" required>
+                                        <option value=""></option>
+                                    </select>
+                                    <label for="apellidos">Dirección</label>
+                                    <input type="text" name="direccion" class="form-control mb-3" data-max-length="255" required>
+                                </div>
+                                <div class="act-horarios">
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -271,7 +308,7 @@
                 <div id="cita1" class="collapse show" data-parent="#citaAccordion">
                     <div class="card-body">
                         <p><b>ID:</b> <span id="cita_id"></span> <br>
-                            <b>Nombre médico:</b> <span id="nombre_medico"></span> <br>
+                            <b>Nombre paciente:</b> <span id="nombre_paciente"></span> <br>
                             <b>Especialidad:</b> <span id="especialidad"></span> <br>
                             <b>Fecha cita:</b> <span id="fecha_cita"></span> <br>
                             <b>Motivo cita:</b> <span id="motivo_cita"></span> <br>
@@ -285,39 +322,133 @@
             </div>
         </template>
 
-        <template id="template-consulta">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="mb-0">
-                        <a class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#consulta1" aria-expanded="false" aria-controls="consulta1">
-                        </a>
-                    </h2>
+        <template id="horarioInitialInputs">
+            <div class="col-12 col-check mt-4">
+                <div class="py-3">Seleccione los horarios del doctor</div>
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <input type="checkbox" name="horario" value="lunes" class="form-check-input horarioInput" onchange="changeHorarioInput(this)">
+                            <label for="lunes" class="form-check-label">Lunes</label>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="hora_entrada">Hora entrada</label>
+                        <input type="time" name="hora_inicio_lunes" class="form-control mb-3 horarioEntryInput" disabled>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="hora_salida">Hora salida</label>
+                        <input type="time" name="hora_salida_lunes" class="form-control mb-3 horarioExitInput" disabled>
+                    </div>
                 </div>
-                <div id="consulta1" class="collapse show" data-parent="#consultaAccordion">
-                    <div class="card-body">
-                        <p><b>ID:</b> <span id="consulta_id"></span> <br>
-                            <b>Nombre médico:</b> <span id="nombre_medico"></span> <br>
-                            <b>Especialidad:</b> <span id="especialidad"></span> <br>
-                            <b>Fecha consulta:</b> <span id="fecha_consulta"></span> <br>
-                            <b>Motivo cita:</b> <span id="motivo_cita"></span> <br>
-                            <b>Indicaciones:</b> <span id="indicaciones"></span> <br>
-                            <b>Observaciones:</b> <span id="observaciones"></span>
-                        </p>
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <input type="checkbox" name="horario" value="martes" class="form-check-input horarioInput" onchange="changeHorarioInput(this)">
+                            <label for="martes" class="form-check-label">Martes</label>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="hora_entrada">Hora entrada</label>
+                        <input type="time" name="hora_inicio_martes" class="form-control mb-3 horarioEntryInput" disabled>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="hora_salida">Hora salida</label>
+                        <input type="time" name="hora_salida_martes" class="form-control mb-3 horarioExitInput" disabled>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <input type="checkbox" name="horario" value="miercoles" class="form-check-input horarioInput" onchange="changeHorarioInput(this)">
+                            <label for="miercoles" class="form-check-label">Miercoles</label>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="hora_entrada">Hora entrada</label>
+                        <input type="time" name="hora_inicio_miercoles" class="form-control mb-3 horarioEntryInput" disabled>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="hora_salida">Hora salida</label>
+                        <input type="time" name="hora_salida_miercoles" class="form-control mb-3 horarioExitInput" disabled>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <input type="checkbox" name="horario" value="jueves" class="form-check-input horarioInput" onchange="changeHorarioInput(this)">
+                            <label for="jueves" class="form-check-label">Jueves</label>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="hora_entrada">Hora entrada</label>
+                        <input type="time" name="hora_inicio_jueves" class="form-control mb-3 horarioEntryInput" disabled>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="hora_salida">Hora salida</label>
+                        <input type="time" name="hora_salida_jueves" class="form-control mb-3 horarioExitInput" disabled>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <input type="checkbox" name="horario" value="viernes" class="form-check-input horarioInput" onchange="changeHorarioInput(this)">
+                            <label for="viernes" class="form-check-label">Viernes</label>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="hora_entrada">Hora entrada</label>
+                        <input type="time" name="hora_inicio_viernes" class="form-control mb-3 horarioEntryInput" disabled>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="hora_salida">Hora salida</label>
+                        <input type="time" name="hora_salida_viernes" class="form-control mb-3 horarioExitInput" disabled>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <div class="form-check">
+                            <input type="checkbox" name="horario" value="sabado" class="form-check-input horarioInput" onchange="changeHorarioInput(this)">
+                            <label for="sabado" class="form-check-label">Sabado</label>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="hora_entrada">Hora entrada</label>
+                        <input type="time" name="hora_inicio_sabado" class="form-control mb-3 horarioEntryInput" disabled>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="hora_salida">Hora salida</label>
+                        <input type="time" name="hora_salida_sabado" class="form-control mb-3 horarioExitInput" disabled>
                     </div>
                 </div>
             </div>
         </template>
 
+
+        <div class="modal fade" id="modalDeleteRelacion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabelRelacion" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalDeleteLabelRelacion">Eliminar relación con seguro</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="delAlertRelacion" class="alert d-none" role="alert"></div>
+                        ¿Estás seguro que deseas eliminar esta relación?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-confirmDeleteRelacion" class="btn btn-danger">Eliminar relación</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/perfil-medico/mostrarPerfilMedico.js'); ?>"></script>
-    <!-- <script type="module" src="<?php echo Url::to('assets/js/historial-medico/registrarConsulta.js'); ?>"></script> -->
-    <!-- <script type="module" src="<?php echo Url::to('assets/js/historial-medico/addAntecedente.js'); ?>"></script> -->
-    <!-- <script type="module" src="<?php echo Url::to('assets/js/historial-medico/updateAntecedente.js'); ?>"></script> -->
-    <!-- <script type="module" src="<?php echo Url::to('assets/js/historial-medico/deleteAntecedente.js'); ?>"></script> -->
-    <script type="module" src="<?php echo Url::to('assets/js/consultas/addInsumoInput.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/consultas/addIndicacionInput.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/consultas/addRecipeInput.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/consultas/deleteInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/perfil-medico/actualizarMedico.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/perfil-medico/eliminarEspecialidadMedico.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/perfil-medico/eliminarHorarioMedico.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/medicos/changeHorarioInput.js'); ?>"></script>
 </body>

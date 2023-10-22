@@ -30,7 +30,7 @@
                             <h1 class="py-4 lt-spacing-1 fs-7">¡Bienvenido!</h1>
                             <h2 class="mb-3 text-transparent">@usuario</h2>
                         </div>
-                        <select class="w-60 select-transparent form-select form-select-lg mx-3" id="s-especialidades" name="especialidades" data-active="0">
+                        <select class="w-60 form-select form-select-lg" id="s-especialidades" name="especialidades" data-active="0">
                             <option value="all" selected>Todas las especialidades</option>
                         </select>
                         <select class="w-60 select-transparent form-select form-select-lg my-3" id="s-fecha" name="filtrarFecha">
@@ -209,7 +209,7 @@
                             </div>
                             <div class="title-holder">
                                 <img src="<?php echo Url::to('assets/img/laboratorio.png') ?>" alt="icon">
-                                <h3 class="service-title"><a>Laboratorio</a></h3>
+                                <h3 class="service-title"><a href="<?php echo Url::base() . "/laboratorios" ?>">Laboratorio</a></h3>
                                 <div class="inner-text">
                                     <p>Análisis clínicos y pruebas diagnósticas para un enfoque integral en el cuidado de la salud de nuestros pacientes.</p>
                                 </div>

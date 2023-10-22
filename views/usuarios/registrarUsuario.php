@@ -3,7 +3,7 @@
 
 <head>
     <?php include PATH_VIEWS . '/partials/header.php'; ?>
-    <link rel="stylesheet" href="<?php echo Url::to('assets/css/login.css'); ?>" />
+    <link rel="stylesheet" href="<?php echo Url::to('assets/css/registro.css'); ?>" />
     <title>Proyecto 4 | Registrar Usuario</title>
 </head>
 
@@ -32,11 +32,17 @@
                                     <input class="form-control" type="text" name="nombre" data-validate="true" data-type="username" data-max-length="16" required>
                                     <small class="form-text">Solo se permiten los siguientes caracteres: "_" y "-"</small>
                                     <label for="clave">Contraseña</label>
-                                    <input class="form-control" type="password" name="clave" data-validate="true" data-type="password" data-max-length="20" required>
-                                    <small class="form-text">La contraseña debe contener al menos 8 caracteres y un número <br> y los caracteres permitdos son: "@" y "-"</small>
+                                    <div class="input-group mb-3 pass-container">
+                                        <input class="form-control" id="password1" type="password" name="clave" data-validate="true" data-type="password" data-max-length="20" required>
+                                        <small class="form-text">La contraseña debe contener al menos 8 caracteres y un número <br> y los caracteres permitdos son: "@" y "-"</small>
+                                        <i class="fas fa-eye" id="togglePassword1"  onclick="showPassword(this,'password1')"></i>
+                                    </div>
                                     <label for="confirmarClave">Confirmar contraseña</label>
-                                    <input class="form-control" type="password" name="confirmarClave" data-max-length="20" required>
-                                    <small class="form-text">Las contraseñas no coinciden</small>
+                                    <div class="input-group mb-3 pass-container">
+                                        <input class="form-control" id="password2" type="password" name="confirmarClave" data-max-length="20" required>
+                                        <small class="form-text">Las contraseñas no coinciden</small> 
+                                        <i class="fas fa-eye" id="togglePassword2" onclick="showPassword(this,'password2')"></i>
+                                    </div>
                                     <label for="pin">Pin</label>
                                     <input class="form-control" type="password" name="pin" data-validate="true" data-type="pin" required>
                                     <small class="form-text">El pin debe contener mínimo 6 números</small>
@@ -106,6 +112,7 @@
     </main>
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
     <script src="<?php echo Url::to('assets/js/usuarios/registrarUsuario.js'); ?>"></script>
+    <script src="<?php echo Url::to('assets/js/global/showPassword.js'); ?>"></script>
 </body>
 
 </html>

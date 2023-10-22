@@ -10,6 +10,16 @@ function checkRol(rol) {
     }
 }
 
+function validateObj(obj) {
+
+    for (let prop in obj) {
+        if (obj.hasOwnProperty(prop) && obj[prop] === "" || obj[prop] === undefined) {
+            return false
+        }
+    }
+    return true;
+}
+
 async function validateSession() {
 
     try {
@@ -21,6 +31,9 @@ async function validateSession() {
             rol: Cookies.get("rol")
         }
 
+        if (validateObj(dataUser) === false) throw { message: "No se ha podido validar la sesión correctamente" };
+
+        console.log(dataUser);
         let response = await fetch(`/${path[1]}/usuarios/${dataUser.usuario_id}`),
             json = await response.json();
 
@@ -28,15 +41,9 @@ async function validateSession() {
 
         if (json.data.tokken !== dataUser.tokken) throw { message: "No se ha podido validar la sesión correctamente" };
 
-        const routes = checkRol(dataUser.rol);
-
-        if (!routes.find(route => route !== path[2])) throw { message: "No es posible acceder a la página solicitada" }
-
-        // alert('Sesion validada correctamente');
-
     } catch (error) {
 
-        alert(error.message);
+        alert(error.message)
         location = `/${path[1]}/login`;
     }
 }
@@ -53,7 +60,9 @@ function logOut() {
 
 document.addEventListener("DOMContentLoaded", e => {
 
-    // validateSession();
+    if(location.pathname !== `/${path[1]}/login` && location.pathname !== `/${path[1]}/usuarios/registrar` && location.pathname !==  `/${path[1]}/login/recuperarusuario`){
+        validateSession();
+    }
 })
 
 document.addEventListener("click", e => {

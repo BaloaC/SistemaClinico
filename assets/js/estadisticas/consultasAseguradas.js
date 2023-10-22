@@ -2,27 +2,35 @@ import getAll from "../global/getAll.js";
 
 const consultasList = await getAll("allConsultas");
 
-let root = am5.Root.new("consultasAseguradas");
+if (consultasList?.consultas_aseguradas === 0 && consultasList?.consultas_normales === 0) {
 
-// Set themes
-root.setThemes([
-  am5themes_Animated.new(root)
-]);
+  let mensajeVacio = document.querySelector(".consultasAseguradas");
+  if (mensajeVacio.classList.contains('d-none')) {
+    mensajeVacio.classList.remove('d-none')
+  }
+
+} else {
+  let root = am5.Root.new("consultasAseguradas");
+
+  // Set themes
+  root.setThemes([
+    am5themes_Animated.new(root)
+  ]);
 
 
-// Create chart
-let chart = root.container.children.push(am5percent.PieChart.new(root, {
-  layout: root.verticalLayout
-}));
+  // Create chart
+  let chart = root.container.children.push(am5percent.PieChart.new(root, {
+    layout: root.verticalLayout
+  }));
 
 
-// Create series
-let series = chart.series.push(am5percent.PieSeries.new(root, {
-  valueField: "value",
-  categoryField: "edades"
-}));
+  // Create series
+  let series = chart.series.push(am5percent.PieSeries.new(root, {
+    valueField: "value",
+    categoryField: "edades"
+  }));
 
-export let title = chart.children.unshift(am5.Label.new(root, {
+   let title = chart.children.unshift(am5.Label.new(root, {
     text: "Consultas aseguradas (Mensual)",
     fontSize: 25,
     fontWeight: "500",
@@ -33,15 +41,17 @@ export let title = chart.children.unshift(am5.Label.new(root, {
     paddingBottom: 0,
     dy: 1,
     id: "consultasAseguradas"
-}));
+  }));
 
 
-// Set data
-series.data.setAll([
-  { value: consultasList?.consultas_aseguradas ?? 0, category: "Asegurada" },
-  { value: consultasList?.consultas_normales ?? 0, category: "No asegurada" },
-]);
+  // Set data
+  series.data.setAll([
+    { value: consultasList?.consultas_aseguradas ?? 0, category: "Asegurada" },
+    { value: consultasList?.consultas_normales ?? 0, category: "No asegurada" },
+  ]);
 
 
-// Play initial series animation
-series.appear(1000, 100);
+  // Play initial series animation
+  series.appear(1000, 100);
+}
+

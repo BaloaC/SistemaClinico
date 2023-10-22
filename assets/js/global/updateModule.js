@@ -1,13 +1,14 @@
 import deleteSecondValue from "./deleteSecondValue.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import scrollTo from "./scrollTo.js";
 
 const path = location.pathname.split('/');
 
 export default async function updateModule(data, data_id, module, form, successMessage) {
 
-    const $form = document.getElementById(form),
-        $alert = document.getElementById("actAlert");
-        
+    const $form = document.getElementById(form);
+    const $alert = document.getElementById("actAlert");
+    
     try {
 
         const options = {
@@ -32,6 +33,8 @@ export default async function updateModule(data, data_id, module, form, successM
         $alert.textContent = successMessage;
         $form.reset();
 
+        scrollTo("modalActBody");
+
         setTimeout(() => {
             $("#modalAct").modal("hide");
             $alert.classList.add("d-none");
@@ -43,6 +46,8 @@ export default async function updateModule(data, data_id, module, form, successM
         $alert.classList.add("alert-danger");
         let message = error.message || error.result.message;
         $alert.textContent = message;
+
+        scrollTo("modalActBody");
 
         setTimeout(() => {
             $alert.classList.add("d-none");
