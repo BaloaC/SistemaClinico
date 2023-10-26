@@ -119,6 +119,7 @@
                                             <option value="0424">0424</option>
                                             <option value="0416">0416</option>
                                             <option value="0426">0426</option>
+                                            <option value="0243">0243</option>
                                         </select>
                                         <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
                                         <small class="form-text col-12">Solo se permiten números y 9 digitos</small>

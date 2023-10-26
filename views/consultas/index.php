@@ -211,9 +211,6 @@
                             <div class="row mt-4 info-pago-medico" style="display: none;">
                                 <h5>Pago médico</h5>
                                 <div class="row align-items-center">
-                                    <div class="col-3 col-md-1 d-none">
-                                        <button type="button" class="btn" onclick="deleteInput(this,'.medico-pago-id')"><i class="fas fa-times m-0"></i></button>
-                                    </div>
                                     <div class="col-12 col-md-5">
                                         <label for="medico">Médico</label>
                                         <select id="s-medico-pago" class="form-control medico-pago-id" data-active="0" required disabled>
@@ -224,6 +221,9 @@
                                         <label for="monto" class="p-0">Monto</label>
                                         <input type="number" name="monto_pago" step="any" class="form-control monto-pago" required disabled>
                                     </div>
+                                    <div class="col-3 col-md-1 d-none">
+                                        <button type="button" class="btn" onclick="deleteInput(this,'.medico-pago-id')"><i class="fas fa-times m-0"></i></button>
+                                    </div>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-primary mt-3" style="display: none;" id="addMedicoPago" onclick="addMedicoPagoInput()">Añadir otro médico</button>
@@ -231,9 +231,6 @@
                             <div class="row mt-4">
                                 <h5>Insumos utilizados en la Consulta (Opcional)</h5>
                                 <div class="row align-items-center">
-                                    <div class="col-3 col-md-1 d-none">
-                                        <button type="button" class="btn" onclick="deleteInput(this,'.insumo-id')"><i class="fas fa-times m-0"></i></button>
-                                    </div>
                                     <div class="col-12 col-md-5">
                                         <label for="insumo">Insumo</label>
                                         <select id="s-insumo" class="form-control insumo-id" data-active="0">
@@ -244,6 +241,9 @@
                                         <label for="cantidad" class="p-0">Cantidad utilizada</label>
                                         <input type="number" step="any" class="form-control insumo-cant">
                                     </div>
+                                    <div class="col-3 col-md-1 d-none">
+                                        <button type="button" class="btn" onclick="deleteInput(this,'.insumo-id')"><i class="fas fa-times m-0"></i></button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -252,9 +252,6 @@
                             <div class="row mt-4">
                                 <h5>Recipes otorgados en la Consulta (Opcional)</h5>
                                 <div class="row align-items-center">
-                                    <div class="col-3 col-md-1 d-none">
-                                        <button type="button" class="btn" onclick="deleteInput(this,'.medicamento-id')"><i class="fas fa-times m-0"></i></button>
-                                    </div>
                                     <div class="col-12 col-md-5">
                                         <label for="medicamento">Medicamento</label>
                                         <select id="s-medicamento" class="form-control medicamento-id" data-active="0">
@@ -265,6 +262,9 @@
                                         <label for="uso" class="p-0">Uso</label>
                                         <input type="text" class="form-control uso-medicamento">
                                     </div>
+                                    <div class="col-3 col-md-1 d-none">
+                                        <button type="button" class="btn" onclick="deleteInput(this,'.medicamento-id')"><i class="fas fa-times m-0"></i></button>
+                                    </div>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-primary mt-3" id="addRecipe" onclick="addRecipeInput()">Añadir otro insumo</button>
@@ -272,12 +272,12 @@
                             <div class="row mt-4">
                                 <h5>Indicaciones mencionadas en la Consulta (Opcional)</h5>
                                 <div class="row align-items-center">
-                                    <div class="col-3 col-md-1 d-none">
-                                        <button type="button" class="btn" onclick="deleteInput(this,'.indicaciones')"><i class="fas fa-times m-0"></i></button>
-                                    </div>
                                     <div class="col-12 col-md-5">
                                         <label for="indicacion" class="p-0">Indicación</label>
                                         <input type="text" class="form-control indicaciones">
+                                    </div>
+                                    <div class="col-3 col-md-1 d-none">
+                                        <button type="button" class="btn" onclick="deleteInput(this,'.indicaciones')"><i class="fas fa-times m-0"></i></button>
                                     </div>
                                 </div>
                             </div>

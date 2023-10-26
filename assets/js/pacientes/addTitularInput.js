@@ -15,9 +15,6 @@ async function addTitularInput() {
     let template = `
         <div class="row align-items-center newInput">
             <hr>
-            <div class="col-3 col-md-1">
-                <button type="button" class="btn" onclick="deleteTitularInput(this)"><i class="fas fa-times m-0"></i></button>
-            </div>
             <div class="col-12 col-md-5">
                 <label for="titular">Titular</label>
                 <select name="titular_id" id="s-titular_id${clicks}" class="form-control mb-3 titular" data-active="0" required>
@@ -31,6 +28,9 @@ async function addTitularInput() {
                     <option value="1">Seguro</option>
                     <option value="2">Natural</option>
                 </select>
+            </div>
+            <div class="col-3 col-md-1">
+                <button type="button" class="btn" onclick="deleteTitularInput(this)"><i class="fas fa-times m-0"></i></button>
             </div>
             <div class="col-12 col-md-5">
                 <label for="tipo_familiar">Tipo de familiar</label>

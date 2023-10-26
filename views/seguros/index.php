@@ -59,7 +59,7 @@
                         <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Seguro</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body" id="modalRegContent">
+                    <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-seguro" class="p-3 px-4">
                             <label for="rif">Rif</label>
@@ -85,6 +85,7 @@
                                     <option value="0424">0424</option>
                                     <option value="0416">0416</option>
                                     <option value="0426">0426</option>
+                                    <option value="0243">0243</option>
                                 </select>
                                 <input type="number" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" >
                                 <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
@@ -100,9 +101,6 @@
                             <small class="form-text">El precio de ser mayor o igual a 0</small>
                             <h5 class="mt-4 mb-3" id="submenu-examenes-title">Precios exámenes</h5>
                             <div class="row align-items-center">
-                                <div class="col-2">
-                                    <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>
-                                </div>
                                 <div class="col-10">
                                     <div class="col-11">
                                         <label for="examen">Exámen</label>
@@ -114,6 +112,9 @@
                                         <label for="costo">Costo</label>
                                         <input type="number" name="costo" class="form-control costos" required>
                                     </div>
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-primary mt-3" id="addExamen" onclick="addExamenSeguroInput()">Añadir otro exámen</button>
@@ -184,6 +185,7 @@
                                     <option value="0424">0424</option>
                                     <option value="0416">0416</option>
                                     <option value="0426">0426</option>
+                                    <option value="0243">0243</option>
                                 </select>
                                 <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" >
                                 <small class="form-text col-12">Solo se permiten números y 9 digitos</small>

@@ -7,9 +7,6 @@ async function addExamenSeguroInput() {
     let template = `
     <div class="row align-items-center newInput">
         <hr class="mt-4">
-            <div class="col-2">
-                <button type="button" class="btn" onclick="deleteExamenSeguroInput(this)"><i class="fas fa-times m-0"></i></button>
-            </div>
             <div class="col-10">
                 <div class="col-11">
                     <label for="examen">Exámen</label>
@@ -21,6 +18,9 @@ async function addExamenSeguroInput() {
                     <label for="costo">Costo</label>
                     <input type="number" name="costo" class="form-control costos" data-validate="true" data-type="number" data-max-length="5" required>
                 </div>
+                <div class="col-2">
+                <button type="button" class="btn" onclick="deleteExamenSeguroInput(this)"><i class="fas fa-times m-0"></i></button>
+            </div>
         </div>
     `;
     document.getElementById("addExamen").insertAdjacentHTML("beforebegin", template);

@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 
 async function addInsumo() {
     const $form = document.getElementById("info-insumo"),
@@ -16,9 +17,8 @@ async function addInsumo() {
         if (!(/^[0-9]*\.?[0-9]+$/.test(data.precio))) throw { message: "El precio ingresado no es válido" };
 
         await addModule("insumos", "info-insumo", data, "Insumo registrado con exito!");
-        Array.from(document.getElementById("info-insumo").elements).forEach(element => {
-            element.classList.remove('valid');
-        })
+       
+        cleanValdiation("info-insumo");
         $('#insumos').DataTable().ajax.reload();
 
     } catch (error) {

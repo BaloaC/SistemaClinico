@@ -3,6 +3,7 @@ import getAge from "../global/getAge.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import getById from "../global/getById.js";
 import scrollTo from "../global/scrollTo.js";
+import cleanValdiation from "../global/cleanValidations.js";
 
 async function addConsulta() {
 
@@ -124,10 +125,7 @@ async function addConsulta() {
         if(registroExitoso.data !== null && data?.registrarFacturaBool === "1"){
             await addModule("factura/consultaSeguro", "info-consulta", {consulta_id: registroExitoso.data.consulta_id}, "Consulta registrada correctamente!");
         }
-
-        Array.from(document.getElementById("info-consulta").elements).forEach(element => {
-            element.classList.remove('valid');
-        })
+        
         $form.reset();
         $('#s-paciente').val([]).trigger('change');
         $('#s-examen').val([]).trigger('change');
@@ -137,6 +135,7 @@ async function addConsulta() {
         // $('#s-cita').empty().trigger('change');
         // document.getElementById("s-cita").disabled = true;
         deleteElementByClass("newInput");
+        cleanValdiation("info-consulta");
         setTimeout(() => {
             $("#modalReg").modal("hide");
         }, 500);

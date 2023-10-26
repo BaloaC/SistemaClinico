@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import getAll from "../global/getAll.js";
 import { empresasPagination } from "./empresasPagination.js";
 import { mostrarEmpresas } from "./mostrarEmpresas.js";
@@ -32,11 +33,10 @@ async function addEmpresa() {
         data.rif = data.cod_rif + "-" + data.rif;
 
         await addModule("empresas", "info-empresa", data, "Empresa registrada exitosamente!");
-        Array.from(document.getElementById("info-empresa").elements).forEach(element => {
-            element.classList.remove('valid');
-        })
+
         const listadoEmpresas = await getAll("empresas/consulta");
         empresasPagination(listadoEmpresas);
+        cleanValdiation("info-empresa")
         $("#s-seguro").val([]).trigger('change');
 
     } catch (error) {
