@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import getAll from "../global/getAll.js";
 import { examenesPagination } from "./examenesPagination.js";
 import { mostrarExamenes } from "./mostrarExamenes.js";
@@ -18,10 +19,9 @@ async function addExamen() {
         // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.tipo))) throw { message: "El tipo ingresado no es válido" };
 
         await addModule("examenes", "info-examen", data, "Exámen registrado exitosamente!");
+
         const listadoExamenes = await getAll("examenes/consulta");
-        Array.from(document.getElementById("info-examen").elements).forEach(element => {
-            element.classList.remove('valid');
-        })
+        cleanValdiation("info-examen");
         examenesPagination(listadoExamenes);
 
     } catch (error) {

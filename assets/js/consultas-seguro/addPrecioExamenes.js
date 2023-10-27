@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import deleteElementByClass from "../global/deleteElementByClass.js";
 import { getConsultasSegurosMes } from "./mostrarConsultaSeguro.js";
 
 async function addPrecioExamenes() {
@@ -28,10 +29,10 @@ async function addPrecioExamenes() {
         data.costos = costos;
         data.examenes = examenes;
 
-        console.log(data);
-
         await addModule(`seguros/examenes/${data.seguro_id}`,"info-precioExamen", data, "Precio de exámenes registrados correctamente!","#modalAddPrecioExamen", ".addAlertPrecioExamen");
         await getConsultasSegurosMes({seguro: data.seguro_id});
+
+        deleteElementByClass("newInput");
 
     } catch (error) {
         console.log(error);

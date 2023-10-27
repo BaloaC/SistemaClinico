@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 
 async function addEspecialidad() {
     const $form = document.getElementById("info-especialidad"),
@@ -16,6 +17,7 @@ async function addEspecialidad() {
 
         await addModule("especialidades", "info-especialidad", data, "Especialidad registrada con exito!");
 
+        cleanValdiation("info-especialidad");
         $('#especialidades').DataTable().ajax.reload();
 
         setTimeout(() => {

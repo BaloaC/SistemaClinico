@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
 import getAge from "../global/getAge.js";
 
@@ -38,6 +39,8 @@ async function addFSeguro() {
 
 
         await addModule("factura/consultaSeguro","info-fseguro",data,"Factura seguro registrada correctamente!","#modalRegAsegurada", ".alertConsultaSeguro");
+        
+        cleanValdiation("info-fseguro");
         $('#consultas').DataTable().ajax.reload();
 
     } catch (error) {

@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 
 async function addMedicamento() {
     const $form = document.getElementById("info-medicamento"),
@@ -13,9 +14,8 @@ async function addMedicamento() {
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
 
         await addModule("medicamento", "info-medicamento", data, "Medicamento registrado con exito!");
-        Array.from(document.getElementById("info-medicamento").elements).forEach(element => {
-            element.classList.remove('valid');
-        })
+       
+        cleanValdiation("info-medicamento");
         $('#medicamentos').DataTable().ajax.reload();
 
     } catch (error) {

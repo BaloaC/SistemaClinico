@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import getAge from "../global/getAge.js";
 import getById from "../global/getById.js";
@@ -86,9 +87,8 @@ async function addPaciente() {
 
 
         await addModule("pacientes", "info-paciente", data, "Paciente registrado correctamente!");
-        Array.from(document.getElementById("info-paciente").elements).forEach(element => {
-            element.classList.remove('valid');
-        })
+        
+        cleanValdiation("info-paciente");
         $("#s-titular_id").val([]).trigger('change');
         deleteElementByClass("newInput");
 

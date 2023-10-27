@@ -88,17 +88,16 @@
                                     <table class="table table-hover insumos-table">
                                         <thead>
                                             <tr>
-                                                <th>&nbsp;</th>
                                                 <th>Insumo</th>
                                                 <th>Precio unitario</th>
                                                 <th>Cantidad</th>
                                                 <th>Total</th>
                                                 <th>Impuesto</th>
+                                                <th>&nbsp;</th>
                                             </tr>
                                         </thead>
                                         <tbody id="insumos-list">
                                             <tr>
-                                                <td><div class="visible d-none"><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></div></td>
                                                 <td><select name="insumo_id" id="s-insumo" class="form-control insumo-id" data-active="0" required>
                                                         <option></option>
                                                     </select></td>
@@ -106,6 +105,7 @@
                                                 <td><input type="number" step="any" name="unidades" min="0" class="form-control insumo-unid" oninput="calcularMonto(this)" required></td>
                                                 <td><b class="monto-total-p">$0.00</b></td>
                                                 <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
+                                                <td><div class="visible d-none"><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></div></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -131,7 +131,6 @@
         <!-- Insumos template -->
         <template id="insumo-template">
             <tr>
-                <td><div class="visible"><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></div></td>
                 <td><select name="insumo_id" id="s-insumo" class="form-control insumo-id" data-active="0" required>
                         <option></option>
                     </select></td>
@@ -139,6 +138,7 @@
                 <td><input type="number" step="any" name="unidades" min="0" class="form-control insumo-unid" oninput="calcularMonto(this)" required></td>
                 <td><b class="monto-total-p">$0.00</b></td>
                 <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
+                <td><div class="visible"><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></div></td>
             </tr>
         </template>
 

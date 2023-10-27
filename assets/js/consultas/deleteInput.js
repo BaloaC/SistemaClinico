@@ -6,7 +6,7 @@ function deleteInput(input, inputRefName){
     inputContainer.remove();
 
     if (inputList.length === 2) {
-        document.querySelectorAll(inputRefName)[0].parentElement.parentElement.querySelector("div").classList.add("d-none");
+        document.querySelectorAll(inputRefName)[0].parentElement.parentElement.querySelector("div:nth-child(2)").classList.add("d-none");
     }
 }
 

@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import getAll from "../global/getAll.js";
 import scrollTo from "../global/scrollTo.js";
 import { medicosPagination } from "./medicosPagination.js";
@@ -65,9 +66,7 @@ async function addMedico() {
         await addModule("medicos", "info-medico", data, "Médico registrado exitosamente!");
         const listadoMedico = await getAll("medicos/consulta");
         medicosPagination(listadoMedico);
-        Array.from(document.getElementById("info-medico").elements).forEach(element => {
-            element.classList.remove('valid');
-        })
+        cleanValdiation("info-medico");
         document.querySelectorAll("input[type='time']").forEach(element => element.disabled = true);
         $("#s-especialidad").val([]).trigger('change'); //Vaciar select2
 

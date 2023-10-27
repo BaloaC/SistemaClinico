@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import getAll from "../global/getAll.js";
 import { mostrarProveedores } from "./mostrarProveedores.js";
 import { proveedoresPagination } from "./proveedoresPagination.js";
@@ -19,8 +20,10 @@ async function addProveedor() {
         // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.ubicacion))) throw { message: "La ubicación ingresada no es válida" };
 
         await addModule("proveedores", "info-proveedor", data, "Proveedor registrado exitosamente!");
+
         const listadoProveedores = await getAll("proveedores/consulta");
         const registros = listadoProveedores;
+        cleanValdiation("info-proveedor");
         proveedoresPagination(registros);
 
     } catch (error) {

@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import getAge from "../global/getAge.js";
 
 async function addFSeguro() {
@@ -17,6 +18,8 @@ async function addFSeguro() {
 
 
         await addModule("factura/seguro","info-fseguro",data,"Factura seguro registrada correctamente!");
+
+        cleanValdiation("info-fseguro");
         $('#fSeguros').DataTable().ajax.reload();
 
     } catch (error) {

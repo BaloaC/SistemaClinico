@@ -88,6 +88,7 @@
                                             <option value="0424">0424</option>
                                             <option value="0416">0416</option>
                                             <option value="0426">0426</option>
+                                            <option value="0243">0243</option>
                                         </select>
                                         <input type="text" name="telefono" id="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
                                         <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
@@ -132,9 +133,6 @@
                                     <div class="submenu-beneficiado row opacity-0 d-none">
                                         <h5 class="mt-4 mb-3">Información titulares</h5>
                                         <div class="row align-items-center">
-                                            <div class="col-12 col-md-1 d-none">
-                                                <button type="button" class="btn" onclick="deleteTitularInput(this)"><i class="fas fa-times m-0"></i></button>
-                                            </div>
                                             <div class="col-12 col-md-5">
                                                 <label for="titular">Titular</label>
                                                 <select name="titular_id" id="s-titular_id" class="form-control mb-3 titular" data-active="0" disabled required>
@@ -161,6 +159,9 @@
                                                     <option value="6">Tío/a</option>
                                                     <option value="7">Sobrino/a</option>
                                                 </select>
+                                            </div>
+                                            <div class="col-12 col-md-1 d-none">
+                                                <button type="button" class="btn" onclick="deleteTitularInput(this)"><i class="fas fa-times m-0"></i></button>
                                             </div>
                                         </div>
                                         <button type="button" class="btn btn-primary w-25" id="addTitular" onclick="addTitularInput()">Agregar titular</button>
@@ -275,6 +276,7 @@
                                             <option value="0424">0424</option>
                                             <option value="0416">0416</option>
                                             <option value="0426">0426</option>
+                                            <option value="0243">0243</option>
                                         </select>
                                         <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
                                         <small class="form-text col-12">Solo se permiten números y 9 digitos</small>

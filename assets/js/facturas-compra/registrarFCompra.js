@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import getAge from "../global/getAge.js";
 
@@ -79,6 +80,7 @@ async function addFCompra() {
 
         let formCompra = document.getElementById("info-fcompra");
         formCompra.reset();
+        cleanValdiation("info-fcompra");
         deleteElementByClass("newInput");
         $("#s-proveedor").val([]).trigger('change');
         $("#s-insumo").val([]).trigger('change');

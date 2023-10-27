@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
 import getAge from "../global/getAge.js";
 
@@ -59,9 +60,8 @@ async function addFConsulta() {
         // data.monto_con_iva = (parseFloat(data.monto_sin_iva) * 0.16) + parseFloat(data.monto_sin_iva)
 
         await addModule("factura/consulta","info-fconsulta",data,"Factura consulta registrada correctamente!", "#modalRegNormal", ".alertConsulta");
-        Array.from(document.getElementById("info-fconsulta").elements).forEach(element => {
-            element.classList.remove('valid');
-        })
+        
+        cleanValdiation("info-fconsulta");
         $('#fConsulta').DataTable().ajax.reload();
 
     } catch (error) {

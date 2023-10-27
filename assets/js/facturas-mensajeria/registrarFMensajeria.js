@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
 import getAge from "../global/getAge.js";
 
@@ -71,6 +72,8 @@ async function addFMensajeria() {
         data.consultas = consultas;
 
         await addModule("factura/mensajeria","info-fconsulta",data,"Factura mensajeria registrada correctamente!", "#modalRegNormal", ".alertConsulta");
+
+        cleanValdiation("info-fconsulta");
         $('#fConsulta').DataTable().ajax.reload();
 
     } catch (error) {

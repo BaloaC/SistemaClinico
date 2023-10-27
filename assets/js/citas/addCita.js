@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import { select2OnClick, emptySelect2 } from "../global/dinamicSelect2.js";
 import getById from "../global/getById.js";
 import scrollTo from "../global/scrollTo.js";
@@ -112,6 +113,7 @@ async function addCita() {
 
         await addModule("citas", "info-cita", data, "Cita agendada exitosamente!");
 
+        cleanValdiation("info-cita");
         calendar.refetchEvents();
 
     } catch (error) {

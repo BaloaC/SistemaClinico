@@ -7,9 +7,6 @@ function addMedicoPagoInput(parentModal = "#modalReg") {
     let template = `
 
     <div class="row align-items-center newInput">
-        <div class="col-3 col-md-1">
-            <button type="button" class="btn" onclick="deleteInput(this,'.medico-pago-id')"><i class="fas fa-times m-0"></i></button>
-        </div>
         <div class="col-12 col-md-5">
             <label for="medico">Médico</label>
             <select id="s-medico-pago${clicks}" class="form-control medico-pago-id" data-active="0" required>
@@ -19,6 +16,9 @@ function addMedicoPagoInput(parentModal = "#modalReg") {
         <div class="col-12 col-md-5">
             <label for="monto" class="p-0">Monto</label>
             <input type="number" step="any" class="form-control monto-pago" required>
+        </div>
+        <div class="col-3 col-md-1">
+            <button type="button" class="btn" onclick="deleteInput(this,'.medico-pago-id')"><i class="fas fa-times m-0"></i></button>
         </div>
     </div>
     `;

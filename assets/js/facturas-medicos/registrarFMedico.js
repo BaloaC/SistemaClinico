@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import getAge from "../global/getAge.js";
 import getAll from "../global/getAll.js";
 
@@ -25,6 +26,8 @@ async function addFMedico() {
         const facturaMedico = await getAll(`facturaMedico/medico?fecha=${fechaFormateada}&medico=${data.medico_id}`);
 
         await addModule("factura/medico", "info-fmedico", facturaMedico, "Factura medico registrada correctamente!");
+
+        cleanValdiation("info-fmedico");
         $('#fMedicos').DataTable().ajax.reload();
 
     } catch (error) {
