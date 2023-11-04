@@ -7,6 +7,7 @@ include_once './services/pacientes/paciente seguro/PacienteSeguroService.php';
 class PacienteService{
 
     public static function insertarPaciente($formulario) {
+
         $validarPaciente = new Validate;
         $_pacienteModel = new PacienteModel();
 
@@ -50,7 +51,7 @@ class PacienteService{
             PacienteValidaciones::validarTipoPaciente($formulario, $id, 4);
             
             if ( $id > 0 ) {
-                PacienteHelpers::insertarPacienteBeneficiado($data, $id);
+                PacienteHelpers::insertarPacienteBeneficiado($pacienteBeneficiado, $id);
                 
                 $respuesta = new Response('INSERCION_EXITOSA');
                 echo $respuesta->json(201);
