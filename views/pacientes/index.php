@@ -120,11 +120,11 @@
                                     <label for="pacienteMenorLabel" class="opacity-0 d-none">¿El paciente posee cédula de identidad?</label>
                                     <div class="pacienteMenorContainer input-radios-container opacity-0 d-none">
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="cedula_beneficiario" id="cedula_menor_si" value="1" onchange="pacientePoseeCedula(this)">
+                                            <input class="form-check-input" type="radio" name="cedula_beneficiario" id="cedula_menor_si" value="1" onchange="pacientePoseeCedula(this,'cedula')">
                                             <label class="form-check-label" for="">Sí</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="cedula_beneficiario" id="cedula_menor_no" value="0" onchange="pacientePoseeCedula(this)" checked>
+                                            <input class="form-check-input" type="radio" name="cedula_beneficiario" id="cedula_menor_no" value="0" onchange="pacientePoseeCedula(this,'cedula')" checked>
                                             <label class="form-check-label" for="">No</label>
                                         </div>
                                     </div>
@@ -177,11 +177,6 @@
                                             <label for="empresa">Empresa</label>
                                             <select name="empresa_id" id="s-empresa" class="form-control mb-3" data-active="0" disabled required>
                                                 <option value="">Consultar empresas</option>
-                                            </select>
-
-                                            <label for="tipo_seguro">Tipo de seguro</label>
-                                            <select name="tipo_seguro" id="s-tipo_seguro" class="form-control mb-3" disabled required>
-                                                <option></option>
                                             </select>
                                         </div>
                                         <div class="col-12 col-md-6">
@@ -261,16 +256,27 @@
                                     <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
                                     <small class="form-text">El apellido solo puede contener letras</small>
                                     <label for="cedula">Cédula</label>
-                                    <input type="number" name="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
+                                    <input type="number" name="cedula" id="cedula-act" class="form-control" data-validate="true" data-type="dni" data-max-length="8" required>
                                     <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
+                                    <label for="pacienteMenorLabelAct" class="mt-3 opacity-0 d-none">¿El paciente posee cédula de identidad?</label>
+                                    <div class="pacienteMenorContainerAct input-radios-container opacity-0 d-none">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="cedula_beneficiario" id="cedula_menor_si_act" value="1" onchange="pacientePoseeCedula(this,'cedula-act')">
+                                            <label class="form-check-label" for="">Sí</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="cedula_beneficiario" id="cedula_menor_no_act" value="0" onchange="pacientePoseeCedula(this,'cedula-act')" checked>
+                                            <label class="form-check-label" for="">No</label>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3" data-validate="true" data-type="date" required>
+                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3" data-validate="true" data-type="date" onchange="pacienteMenorDeEdadUpdate(this)" required>
 
                                     <label for="telefono">Teléfono</label>
-                                    <div class="input-group mb-3">
-                                        <select name="cod_tel" id="cod-tel" class="me-2">
+                                    <div class="input-group">
+                                        <select name="cod_tel" id="cod-tel-act" class="me-2">
                                             <option value="0412">0412</option>
                                             <option value="0414">0414</option>
                                             <option value="0424">0424</option>
@@ -278,7 +284,7 @@
                                             <option value="0426">0426</option>
                                             <option value="0243">0243</option>
                                         </select>
-                                        <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
+                                        <input type="text" name="telefono" id="telefono-act" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
                                         <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
                                     </div>
 
@@ -286,7 +292,7 @@
                                     <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
                                     <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
 
-                                    <label for="tipo_paciente">Tipo de paciente</label>
+                                    <label for="tipo_paciente" class="mt-3">Tipo de paciente</label>
                                     <select name="tipo_paciente" id="tipo_paciente" class="form-control mb-3" onchange="actualizarTipoPaciente(this.value)" requried>
                                         <option value="1">Natural</option>
                                         <option value="2">Representante</option>
@@ -305,13 +311,13 @@
                                     <div class="row align-items-center">
                                         <div class="col-12 col-md-5 new-titular-input" style="display: none;">
                                             <label for="titular">Titular</label>
-                                            <select name="titular_id" id="s-titular_id-act" class="form-control mb-3 titular" data-active="0" disabled required>
+                                            <select name="titular_id" id="s-titular_id-act" class="form-control mb-3" data-active="0" disabled required>
                                                 <option value="" selected>Seleccione un titular</option>
                                             </select>
                                         </div>
                                         <div class="col-12 col-md-5 new-titular-input" style="display: none;">
                                             <label for="tipo_relacion">Tipo de relación</label>
-                                            <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3 relacion" disabled required>
+                                            <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3" disabled required>
                                                 <option value="" disabled selected>Seleccione el tipo de relación</option>
                                                 <option value="1">Seguro</option>
                                                 <option value="2">Natural</option>
@@ -319,7 +325,7 @@
                                         </div>
                                         <div class="col-12 col-md-5 new-titular-input" style="display: none;">
                                             <label for="tipo_familiar">Tipo de familiar</label>
-                                            <select name="tipo_familiar" id="tipo_familiar" class="form-control mb-3 tipo_familiar" disabled required>
+                                            <select name="tipo_familiar" id="tipo_familiar" class="form-control mb-3" disabled required>
                                                 <option value="" disabled selected>Seleccione el tipo de familiar</option>
                                                 <option value="1">Padre/Madre</option>
                                                 <option value="2">Representante</option>
@@ -445,6 +451,8 @@
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/addTitularInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/deleteTitularInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/pacienteMenorDeEdad.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/pacientes/pacienteMenorDeEdadUpdate.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/pacientes/pacientePoseeCedula.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/actualizarTipoPaciente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/deletePacienteSeguro.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/deletePacienteTitular.js'); ?>"></script>

@@ -14,9 +14,9 @@ export default function validateInputsOnUpdate() {
     // ** Validar si el valor del campo coincide con el patrón correspondiente
     function validate(field, regex) {
         if (regex.test(field.value)) {
-            field.className = 'form-control valid';
+            field.className = 'form-control mb-3 valid';
         } else {
-            field.className = 'form-control invalid';
+            field.className = 'form-control mb-3 invalid';
         }
     }
 }

@@ -5,7 +5,7 @@ function toggleAddSeguro(value) {
     const newSeguroTitle = document.getElementById("new-seguro-title");
     const btnAddSeguro = document.getElementById("btn-add-seguro");
     const btnHideSeguro = document.getElementById("btn-hide-seguro");
-    const modalActContent = document.getElementById("modalActContent");
+    const modalActContent = document.getElementById("modalActBody");
 
     if (value === "show") {
 

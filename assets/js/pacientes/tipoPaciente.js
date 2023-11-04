@@ -3,6 +3,7 @@ const disabledInputs = document.querySelectorAll(".form-control[disabled]");
 document.getElementById("s-tipo_paciente").addEventListener("change", e => {
 
     const subMenus = document.querySelector(".sub-menus");
+    const modalRegContent = document.getElementById("modalRegBody");
     let counter = 1,
     selectedSubMenu = e.target.value;
 
@@ -19,70 +20,26 @@ document.getElementById("s-tipo_paciente").addEventListener("change", e => {
             subMenu.classList.remove("opacity-0");
             setTimeout(() => {
                 subMenu.classList.remove("d-none");
+
+                // Bajar el scroll hacia abajo luego de mostrar todo el contenido
+                modalRegContent.scrollTo({
+                    top: modalRegContent.scrollHeight,
+                    bottom: 0, 
+                    behavior: 'smooth'
+                });
             }, 550);
-            
+
         } else {
 
             subMenuInputs.forEach(el => {
                 el.disabled = true;
             })
 
-            subMenu.classList.add("opacity-0");
             setTimeout(() => {
                 subMenu.classList.add("d-none");
             }, 550);
         }
         
         counter++;
-        // console.log(counter);
     }
-
-    // subMenus.forEach(el => {
-    //     console.log(el);
-    // });
-
-    // console.log(document.querySelector(".sub-menus").childNodes[1]);
 })
-
-
-// const disabledInputs = document.querySelectorAll(".form-control[disabled]");
-
-// $("#s-tipo_paciente").on("change", function (e) {
-
-//     disabledInputs.forEach(el => {
-//         if (e.target.value == 2) {
-
-//             document.querySelector(".extra-seguro").classList.add("opacity-0");
-//             setTimeout(() => {
-//                 document.querySelector(".extra-seguro").classList.add("d-none");
-//             }, 550);
-//             el.disabled = false;
-//         } else {
-//             document.querySelector(".extra-seguro").classList.remove("d-none");
-//             setTimeout(() => {
-//                 document.querySelector(".extra-seguro").classList.remove("opacity-0");
-//             }, 100);
-//             el.disabled = true;
-//         }
-//     })
-// })
-
-// $("#s-tipo_paciente").on("change", function (e) {
-
-//     disabledInputs.forEach(el => {
-//         if (e.target.value == 2) {
-
-//             document.querySelector(".extra-seguro").classList.add("opacity-0");
-//             setTimeout(() => {
-//                 document.querySelector(".extra-seguro").classList.add("d-none");
-//             }, 550);
-//             el.disabled = false;
-//         } else {
-//             document.querySelector(".extra-seguro").classList.remove("d-none");
-//             setTimeout(() => {
-//                 document.querySelector(".extra-seguro").classList.remove("opacity-0");
-//             }, 100);
-//             el.disabled = true;
-//         }
-//     })
-// })

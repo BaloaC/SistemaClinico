@@ -1,19 +1,19 @@
 import getAge from "../global/getAge.js";
 
-function pacienteMenorDeEdad(input) {
+function pacienteMenorDeEdadUpdate(input) {
 
     let fechaNacimiento = input.value.split("-");
     let edad = getAge(fechaNacimiento[0], fechaNacimiento[1], fechaNacimiento[2]);
 
-    const cedulaInput = document.getElementById("cedula");
-    const telefonoInput = document.getElementById("telefono");
-    const codTelInput = document.getElementById("cod-tel");
-    const tipoPaciente = document.getElementById("s-tipo_paciente");
-    const cedulaMenorLabel = document.querySelector("label[for='pacienteMenorLabel']");
-    const cedulaMenorContainer = document.querySelector(".pacienteMenorContainer");
-    const cedulaMenorSi = document.getElementById("cedula_menor_si");
-    const cedulaMenorNo = document.getElementById("cedula_menor_no");
-
+    const cedulaInput = document.getElementById("cedula-act");
+    const telefonoInput = document.getElementById("telefono-act");
+    const codTelInput = document.getElementById("cod-tel-act");
+    const tipoPaciente = document.getElementById("tipo_paciente");
+    const cedulaMenorLabel = document.querySelector("label[for='pacienteMenorLabelAct']");
+    const cedulaMenorContainer = document.querySelector(".pacienteMenorContainerAct");
+    const cedulaMenorSi = document.getElementById("cedula_menor_si_act");
+    const cedulaMenorNo = document.getElementById("cedula_menor_no_act");
+    console.log(edad);
     if (edad < 18) {
 
         // Validamos que si el paciente es mayor de 9 de años se permita eligir si posee cédula, caso contrario ocultamos los inputs radio
@@ -46,14 +46,17 @@ function pacienteMenorDeEdad(input) {
         cedulaMenorNo.disabled = false;
 
         // Seleccionar por defecto el submenu de beneficiario
-        tipoPaciente.selectedIndex = 4;
+        tipoPaciente.selectedIndex = 3;
         tipoPaciente.dispatchEvent(new Event("change"));
 
     
         // Ciclo para deshabilitar los tipos de pacientes
         for (let i = 0; i < tipoPaciente.options.length; i++) {
+
             let option = tipoPaciente.options[i];
-            if (i !== 4) option.disabled = true;
+            if (i !== 3){ 
+                option.disabled = true 
+            } 
         }
 
     } else {
@@ -87,10 +90,10 @@ function pacienteMenorDeEdad(input) {
             if (i !== 4){
                 option.disabled = false;  
             } else {
-                // option.disabled = true;
+                option.disabled = true;
             }
         }
     }
 }
 
-window.pacienteMenorDeEdad = pacienteMenorDeEdad;
+window.pacienteMenorDeEdadUpdate = pacienteMenorDeEdadUpdate;

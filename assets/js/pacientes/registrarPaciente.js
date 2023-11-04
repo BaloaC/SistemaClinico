@@ -20,6 +20,7 @@ async function addPaciente() {
 
         let edad = data.fecha_nacimiento.split("-");
         data.edad = getAge(edad[0], edad[1], edad[2]);
+        data.telefono = data.cod_tel + data.telefono;
 
 
         // Crear objeto depediendo el tipo de paciente
@@ -29,7 +30,6 @@ async function addPaciente() {
                 const seguro_id = {
                     seguro_id: el,
                     empresa_id: data.empresa_id,
-                    tipo_seguro: data.tipo_seguro,
                     cobertura_general: data.cobertura_general,
                     fecha_contra: data.fecha_contra,
                     saldo_disponible: data.saldo_disponible
@@ -78,12 +78,7 @@ async function addPaciente() {
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
         if (data.nombre.length < 3) throw { message: "El nombre debe tener al menos 3 caracteres" };
         if (data.apellidos.length < 3) throw { message: "El apellido debe tener al menos 3 caracteres" };
-        if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
         if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
-        if (isNaN(data.telefono) || data.telefono.length != 7) throw { message: "El número ingresado no es válido" };
-        if (isNaN(data.cod_tel) || data.cod_tel.length != 4) throw { message: "El número ingresado no es válido" };
-
-        // data.telefono = data.cod_tel + data.telefono;
 
 
         await addModule("pacientes", "info-paciente", data, "Paciente registrado correctamente!");

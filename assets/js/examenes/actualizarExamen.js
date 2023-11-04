@@ -5,6 +5,7 @@ import getById from "../global/getById.js";
 import { mostrarExamenes } from "./mostrarExamenes.js";
 import getAll from "../global/getAll.js";
 import { examenesPagination } from "./examenesPagination.js";
+import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
 
 async function updateExamen(id) {
 
@@ -29,6 +30,7 @@ async function updateExamen(id) {
             document.getElementById("hecho_aqui_no").checked = true;
         };
 
+        validateInputsOnUpdate();
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";

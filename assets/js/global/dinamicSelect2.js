@@ -41,8 +41,10 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
 
         $(selectSelector).on("change", function () {
             if ($(selectSelector).val() != 0) {
+                $(selectSelector).removeClass("is-invalid");
                 $(selectSelector).addClass("is-valid");
             } else {
+                $(selectSelector).removeClass("is-valid");
                 $(selectSelector).addClass("is-invalid");
             }
         });
@@ -108,8 +110,10 @@ export async function select2OnClick({ selectSelector, module, selectValue, sele
 
     $(selectSelector).on("change", function () {
         if ($(selectSelector).val() != 0) {
+            $(selectSelector).removeClass("is-invalid");
             $(selectSelector).addClass("is-valid");
         } else {
+            $(selectSelector).removeClass("is-valid");
             $(selectSelector).addClass("is-invalid");
         }
     });
@@ -144,8 +148,10 @@ export function createOptionOrSelectInstead({ obj, selectSelector, selectValue, 
 
     $(selectSelector).on("change", function () {
         if ($(selectSelector).val() != 0) {
+            $(selectSelector).removeClass("is-invalid");
             $(selectSelector).addClass("is-valid");
         } else {
+            $(selectSelector).removeClass("is-valid");
             $(selectSelector).addClass("is-invalid");
         }
     });

@@ -188,11 +188,19 @@ export function medicosPagination(registros) {
             crearBotones();
         }
     
-        // Agregar el evento de carga de la página
+        function seleccionarPrimerBoton() {
+            const primerBoton = document.querySelector('.btn.page-item.page-link');
+            if (primerBoton) {
+                primerBoton.click();
+            }
+        }
     
         // Mostrar los registros de la página actual
         mostrarRegistros();
         crearBotones();
+
+        // Seleccionar por defecto el primer botón
+        seleccionarPrimerBoton();
     
         // Agregar el evento de clic al botón de página anterior
         const botonPaginaAnterior = document.getElementById('boton-pagina-anterior');

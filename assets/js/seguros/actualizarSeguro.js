@@ -46,7 +46,7 @@ async function updateSeguro(id) {
         $form.porcentaje.value = json.porcentaje;
         $form.porcentaje.dataset.secondValue = json.porcentaje;
         $form.costo_consulta.value = json.costo_consulta;
-        $form.costo_consulta.secondValue = json.costo_consulta;
+        $form.costo_consulta.dataset.secondValue = json.costo_consulta;
         
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";

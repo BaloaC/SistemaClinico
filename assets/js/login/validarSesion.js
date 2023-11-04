@@ -24,6 +24,18 @@ async function validateSession() {
 
     try {
 
+        const failedSession = Cookies.get("failedSession");
+
+        // Si la sesión ha fallado mostramos la alerta de mensaje en el login
+        if(failedSession === "1"){
+            const alert = document.querySelector(".alert");
+            alert.textContent = "La sesión no se pudo validar correctamente";
+            alert.classList.add("alert-danger");
+            alert.classList.remove("d-none");
+            return;
+        }
+        
+
         const dataUser = {
             usuario_id: Cookies.get("usuario_id"),
             usuario: Cookies.get("usuario"),
@@ -43,8 +55,11 @@ async function validateSession() {
 
     } catch (error) {
 
-        alert(error.message)
-        location = `/${path[1]}/login`;
+        // Si la ruta no es el login redirigrlo hacia allá
+        if(location.pathname !== `/${path[1]}/login`){
+            Cookies.set("failedSession", "1");
+            location = `/${path[1]}/login`;
+        }
     }
 }
 
@@ -60,7 +75,7 @@ function logOut() {
 
 document.addEventListener("DOMContentLoaded", e => {
 
-    if(location.pathname !== `/${path[1]}/login` && location.pathname !== `/${path[1]}/usuarios/registrar` && location.pathname !==  `/${path[1]}/login/recuperarusuario`){
+    if(location.pathname !== `/${path[1]}/usuarios/registrar` && location.pathname !==  `/${path[1]}/login/recuperarusuario`){
         validateSession();
     }
 })

@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import deleteSecondValue from "../global/deleteSecondValue.js";
 import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
@@ -48,6 +49,7 @@ async function updatePaciente(id) {
 
     try {
         const json = await getById("pacientes", id);
+        let titularesPaciente;
 
         // Obtener código telefónico
         let $telCod = json.telefono.slice(0, 4),
@@ -70,10 +72,11 @@ async function updatePaciente(id) {
         }
 
         if (json.tipo_paciente == "4") {
-            const titulares = await getById("titulares", json.paciente_id) ?? [];
+            const titulares = await getById("titulares", json.paciente_id) ?? [];   
+            titularesPaciente = titulares;
             mostrarPacienteBeneficiado(titulares);
         }
-
+        
         //Establecer el option con los datos del usuario
         $form.nombre.value = json.nombre || json.nombre_paciente;
         $form.nombre.dataset.secondValue = json.nombre || json.nombre_paciente;
@@ -106,6 +109,12 @@ async function updatePaciente(id) {
         $inputEdad.name = "edad";
         $form.appendChild($inputEdad);
 
+        const inputTieneTitulares = document.createElement("input");
+        inputTieneTitulares.type = "hidden";
+        inputTieneTitulares.value = titularesPaciente?.length > 0;
+        inputTieneTitulares.name = "pacientePoseeTitulares";
+        $form.appendChild(inputTieneTitulares);
+
     } catch (error) {
 
         console.log(error);
@@ -130,10 +139,13 @@ async function confirmUpdate() {
         if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
         if (data.nombre.length < 3) throw { message: "El nombre debe tener al menos 3 caracteres" };
         if (data.apellidos.length < 3) throw { message: "El apellido debe tener al menos 3 caracteres" };
-        if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
+        if (!(/^\d{6,8}$/.test(data.cedula)) && data.tipo_paciente !== "4") throw { message: "La cédula no es válida" };
         // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
-        if (isNaN(data.telefono) || data.telefono.length != 7) throw { message: "El número ingresado no es válido" };
-        if (isNaN(data.cod_tel) || data.cod_tel.length != 4) throw { message: "El número ingresado no es válido" };
+        console.log(data);
+        if ((isNaN(data?.telefono) || data.telefono?.length != 7) && data.tipo_paciente !== "4") throw { message: "El número ingresado no es válido" };
+        if ((isNaN(data?.cod_tel) || data.cod_tel?.length != 4) && data.tipo_paciente !== "4") throw { message: "El número ingresado no es válido" };
+        if(data.pacientePoseeTitulares === "false" && data.tipo_paciente === "4" && !data?.titular_id) throw { message: "Debe ingresar al menos un representante" }
+
 
         let $tel = data.cod_tel + data.telefono;
 
@@ -158,26 +170,36 @@ async function confirmUpdate() {
             }]
         }
 
-        if ('titular_id' in parseData && 'tipo_familiar' in parseData && 'tipo_relacion' in parseData && "paciente_beneficiado_id" in parseData) {
+        if ('titular_id' in parseData && 'tipo_familiar' in parseData && 'tipo_relacion' in parseData) {
+
+            if(data.edad < 18 && data.cedula_beneficiario == 0 && data.pacientePoseeTitulares === "false"){
+
+                let titular_id = document.getElementById("s-titular_id-act").value;
+                const infoTitular =  await getById("pacientes",titular_id);
+                const titulareAct = await getById("titulares", data.paciente_id) ?? [];
+                console.log(titulareAct);
+                parseData.cedula = infoTitular.cedula;
+                parseData.telefono = infoTitular.telefono;
+                // parseData.paciente_beneficiado_id = titulareAct?.paciente_beneficiado_id;
+            }
 
             parseData.titular = [{
                 paciente_id: parseData.titular_id,
                 tipo_relacion: parseData.tipo_relacion,
                 tipo_familiar: parseData.tipo_familiar
             }]
-
-            await addModule(`titular/${parseData.paciente_beneficiado_id}`, "act-poaciente", parseData.titular, "");
+            
+            await addModule(`titular/${parseData.paciente_beneficiado_id}`, "act-paciente", parseData.titular, "");
 
             delete parseData.titular;
         }
 
+        delete parseData.cedula_beneficiario;
+
         await updateModule(parseData, "paciente_id", "pacientes", "act-paciente", "Paciente actualizado correctamente!");
 
-        // Eliminar que el input sea valido
-        Array.from(document.getElementById("act-paciente").elements).forEach(element => {
-            element.classList.remove('valid');
-        })
-
+        cleanValdiation("act-paciente");
+        cleanValdiation("info-paciente");
         $('#s-cita').val([]).trigger('change');
         toggleAddSeguro("hide");
         toggleAddTitular("hide");

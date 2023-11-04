@@ -97,11 +97,29 @@
                                     <label for="cedula">Cédula</label>
                                     <input type="number" name="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
                                     <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
-                                    <label for="especialidad">Especialidad</label>
-                                    <select name="especialidad[]" id="s-especialidad" class="form-control mb-3" data-active="0" multiple="multiple" required>
-                                        <option value=""></option>
-                                    </select>
+
                                 </div>
+
+                                <div class="row mt-4 info-medico-especialidad">
+                                    <h5>Especialidades</h5>
+                                    <div class="row align-items-start">
+                                        <div class="col-12 col-md-5">
+                                            <label for="medico">Especialidad</label>
+                                            <select id="s-especialidad" data-validate="true" class="form-control medico-especialidad-id" data-active="0" required>
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <label for="monto">Costo especialidad</label>
+                                            <input type="number" name="costo-especialidad" step="any" data-validate="true" data-type="price" class="form-control costo-especialidad" required>
+                                            <small class="form-text">No se permiten números negativos</small>
+                                        </div>
+                                        <div class="col-3 col-md-1 d-none">
+                                            <button type="button" class="btn" onclick="deleteInput(this,'.medico-especialidad-id')"><i class="fas fa-times m-0"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary mt-3 w-25" id="addMedicoEspecialidad" onclick="addMedicoEspecialidadInput()">Añadir otro médico</button>
                                 <div class="col-12 col-check mt-4">
                                     <div class="py-3">Seleccione los horarios del doctor</div>
                                     <div class="row align-items-center">
@@ -476,6 +494,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/medicos/eliminarHorarioMedico.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/eliminarEspecialidadMedico.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/changeHorarioInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/medicos/addMedicoEspecialidadInput.js'); ?>"></script>
 </body>
 
 </html>
