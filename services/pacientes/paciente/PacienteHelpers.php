@@ -34,7 +34,6 @@ class PacienteHelpers {
      * Esta función inserta titulares a un paciente_beneficiado
      */
     public static function insertarTitularBeneficiado($formulario, $paciente_beneficiado_id) {
-        
         $formulario['paciente_beneficiado_id'] = $paciente_beneficiado_id;
 
         $_titularBeneficiadoModel = new TitularBeneficiadoModel();
