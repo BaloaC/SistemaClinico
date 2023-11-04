@@ -33,7 +33,8 @@ class PacienteService{
                 PacienteSeguroService::insertarPacienteSeguro($pacienteSeguro, $id);
                 $respuesta = new Response('INSERCION_EXITOSA');
                 $respuesta->setData($data);
-                return $respuesta->json(201);
+                echo $respuesta->json(201);
+                exit();
             }
 
         } else if( $formulario['tipo_paciente'] == 4 ) {
@@ -52,7 +53,8 @@ class PacienteService{
                 PacienteHelpers::insertarPacienteBeneficiado($data, $id);
                 
                 $respuesta = new Response('INSERCION_EXITOSA');
-                return $respuesta->json(201);
+                echo $respuesta->json(201);
+                exit();
             }
 
         }else {
@@ -61,7 +63,8 @@ class PacienteService{
             $id = $_pacienteModel->insert($data);
             $mensaje = ($id > 0);
             $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-            return $respuesta->json($mensaje ? 201 : 400);
+            echo $respuesta->json($mensaje ? 201 : 400);
+            exit();
         }
     }
 

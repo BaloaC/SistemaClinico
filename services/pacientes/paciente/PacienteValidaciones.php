@@ -25,6 +25,22 @@ class PacienteValidaciones {
             echo $respuesta->json(400);
             exit();
         }
+
+        if ( isset($formulario['seguro']) && $formulario['tipo_paciente'] != 3 ) {
+
+            $respuesta = new Response(false, 'Para insertar una relación de seguros el paciente debe ser asegurado');
+            $respuesta->setData("Problema al insertar el paciente con el tipo paciente ".$formulario['tipo_paciente']);
+            echo $respuesta->json(400);
+            exit();
+
+        } else if ( isset($formulario['titular']) && $formulario['tipo_paciente'] != 4 ) {
+
+            $respuesta = new Response(false, 'Para insertar una relación de titulares el paciente debe ser beneficiado');
+            $respuesta->setData("Problema al insertar el paciente con el tipo paciente ".$formulario['tipo_paciente']);
+            echo $respuesta->json(400);
+            exit();
+
+        }
     }
 
     public static function validarNuevoPaciente($formulario) {
