@@ -192,7 +192,7 @@ class PacienteValidaciones {
 
     public static function validarDuplicadoPacienteSeguro($formulario, $paciente_id) {
         $validarPaciente = new Validate();
-
+        
         foreach ($formulario as $paciente_seguro) {
             
             if ( $validarPaciente->isDuplicatedId('paciente_id', 'seguro_id', $paciente_id, $paciente_seguro['seguro_id'], 'paciente_seguro') ) {
