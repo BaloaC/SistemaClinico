@@ -73,7 +73,7 @@ function logOut() {
 }
 
 
-document.addEventListener("DOMContentLoaded", e => {
+window.addEventListener("pageshow", () => {
 
     if(location.pathname !== `/${path[1]}/usuarios/registrar` && location.pathname !==  `/${path[1]}/login/recuperarusuario`){
         validateSession();

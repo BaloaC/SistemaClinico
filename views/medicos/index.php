@@ -71,11 +71,11 @@
                                 <div class="col-6">
                                     <label for="nombre">Nombres</label>
                                     <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                                    <small class="form-text">El nombre solo puede contener letras</small>
+                                    <small class="form-text">El nombre solo debe contener al menos 3 letras sin números o caracteres</small>
 
                                     <label for="apellidos">Apellidos</label>
                                     <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                                    <small class="form-text">El apellido solo puede contener letras</small>
+                                    <small class="form-text">El apellido solo debe contener al menos 3 letras sin números o caracteres</small>
 
                                     <label for="nombres">Teléfono</label>
                                     <div class="input-group mb-3">
@@ -115,11 +115,11 @@
                                             <small class="form-text">No se permiten números negativos</small>
                                         </div>
                                         <div class="col-3 col-md-1 d-none">
-                                            <button type="button" class="btn" onclick="deleteInput(this,'.medico-especialidad-id')"><i class="fas fa-times m-0"></i></button>
+                                            <button type="button" class="btn"><i class="fas fa-times m-0"></i></button>
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-primary mt-3 w-25" id="addMedicoEspecialidad" onclick="addMedicoEspecialidadInput()">Añadir otro médico</button>
+                                <button type="button" class="btn btn-primary mt-3 w-25" id="addMedicoEspecialidad" onclick="addMedicoEspecialidadInput('addMedicoEspecialidad')">Añadir otro médico</button>
                                 <div class="col-12 col-check mt-4">
                                     <div class="py-3">Seleccione los horarios del doctor</div>
                                     <div class="row align-items-center">
@@ -284,7 +284,7 @@
                                 <div class="col-12 col-md-6">
                                     <label for="nombre">Nombres</label>
                                     <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                                    <small class="form-text">El nombre solo puede contener letras</small>
+                                    <small class="form-text">El nombre solo debe contener al menos 3 letras sin números o caracteres</small>
                                     <label for="cedula">Cédula</label>
                                     <input type="number" name="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
                                     <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
@@ -304,14 +304,14 @@
                                 <div class="col-12 col-md-6">
                                     <label for="apellidos">Apellidos</label>
                                     <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                                    <small class="form-text">El apellido solo puede contener letras </small>
-                                    <label for="especialidad">Especialidad</label>
-                                    <select name="especialidad[]" id="s-especialidad-update" class="form-control mb-3" data-active="0" multiple="multiple" required>
-                                        <option value=""></option>
-                                    </select>
+                                    <small class="form-text">El apellido solo debe contener al menos 3 letras sin números o caracteres </small>
                                     <label for="apellidos">Dirección</label>
                                     <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
                                 </div>
+                                <div class="row mt-4 act-medico-especialidad">
+                                    <h5>Especialidades</h5>
+                                </div>
+                                <button type="button" class="btn btn-primary mt-3 w-25" id="addMedicoEspecialidadAct" onclick="addMedicoEspecialidadInput('addMedicoEspecialidadAct', '#modalAct')">Añadir otro médico</button>
                                 <div class="act-horarios">
                                 </div>
                             </div>
@@ -495,6 +495,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/medicos/eliminarEspecialidadMedico.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/changeHorarioInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/addMedicoEspecialidadInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/medicos/deleteMedicoEspecialidadInput.js'); ?>"></script>
 </body>
 
 </html>

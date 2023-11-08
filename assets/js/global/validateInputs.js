@@ -23,9 +23,11 @@ export default function validateInputs() {
     // ** Validar si el valor del campo coincide con el patrón correspondiente
     function validate(field, regex) {
         if (regex.test(field.value)) {
-            field.className = 'form-control valid';
+            field.classList.remove("invalid");
+            field.classList.add("valid");
         } else {
-            field.className = 'form-control invalid';
+            field.classList.remove("valid");
+            field.classList.add("invalid");
         }
     }
 

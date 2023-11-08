@@ -5,6 +5,9 @@ import getById from "../global/getById.js";
 import { createOptionOrSelectInstead, select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
 import { empresasPagination } from "./empresasPagination.js";
+import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
+import cleanValdiation from "../global/cleanValidations.js";
+import { patterns } from "../global/patternsValidation.js";
 
 async function updateEmpresa(id) {
 
@@ -42,6 +45,8 @@ async function updateEmpresa(id) {
         $form.direccion.value = json.direccion;
         $form.direccion.dataset.secondValue = json.direccion;
 
+        validateInputsOnUpdate();
+
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
         $inputId.value = id;
@@ -75,16 +80,22 @@ async function confirmUpdate() {
             seguro.push(seguro_id);
         })
 
-        data.seguro = seguro;
+        if(seguro.length > 0) data.seguro = seguro;
 
-        // if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
+        if (!$form.checkValidity()) { $form.reportValidity(); return; }
+        if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
+        if (!isNaN(data.cod_rif) || data.cod_rif.length !== 1) throw { message: "El RIF ingresado es inválido" };
+        if (data.nombre.length < 6) throw { message: "El nombre del seguro debe contener al menos 6 caracteres"};
+        if (!(patterns.nameCompany.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
 
-        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
 
         const parseData = deleteSecondValue("#act-empresa input, #act-empresa select", data);
 
         await updateModule(parseData, "empresa_id", "empresas", "act-empresa", "Empresa actualizada correctamente!");
         const listadoEmpresas = await getAll("empresas/consulta");
+        cleanValdiation("act-empresa");
+        cleanValdiation("info-empresa");
         empresasPagination(listadoEmpresas);
 
     } catch (error) {

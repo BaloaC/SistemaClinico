@@ -64,8 +64,8 @@
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-examen" class="p-3 px-4">
                             <label for="nombre">Nombre exámen</label>
-                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                            <small class="form-text">El nombre solo puede contener letras</small>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameExam" data-max-length="45" required>
+                            <small class="form-text">El nombre solo debe contener al menos 3 letras sin caracteres especiales</small>
                             <label for="tipo">Tipo</label>
                             <select name="tipo" id="s-tipo" class="form-control mb-3" required>
                                 <option value="" disabled selected>Seleccione el tipo de exámen</option>
@@ -75,6 +75,7 @@
                             </select>
                             <label for="nombre" id="precioExamenLabel">Precio exámen</label>
                             <input type="number" step="any" name="precio_examen" id="precioExamen" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <small class="form-text">No se permiten números negativos</small>
                             <label for="tipo">¿Este exámen lo realizan aquí?</label>
                             <div class="input-radios-container">
                                 <div class="form-check form-check-inline">
@@ -107,7 +108,8 @@
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-examen" class="p-3 px-4">
                             <label for="nombre">Nombre exámen</label>
-                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameExam" data-max-length="45" required>
+                            <small class="form-text">El nombre solo debe contener al menos 3 letras sin caracteres especiales</small>
                             <label for="tipo">Tipo</label>
                             <select name="tipo" id="s-tipo" class="form-control mb-3" required>
                                 <option value="" disabled selected>Seleccione el tipo de exámen</option>
@@ -117,6 +119,7 @@
                             </select>
                             <label for="nombre" id="precioExamenLabelAct">Precio exámen</label>
                             <input type="number" step="any" name="precio_examen" id="precioExamenAct" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <small class="form-text">No se permiten números negativos</small>
                             <label for="tipo">¿Este exámen lo realizan aquí?</label>
                             <div class="input-radios-container">
                                 <div class="form-check form-check-inline">

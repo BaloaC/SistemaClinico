@@ -8,7 +8,12 @@ $(document).ready(function() {
             url: `/${path[1]}/insumos/consulta/`,
             beforeSend: function(xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
-            }
+            },
+            error: function(xhr, error, thrown) {
+                // Manejo de errores de Ajax
+                console.log('Error de Ajax:', error);
+                console.log('Detalles:', thrown);
+              }
         },
         columns: [
             {
@@ -47,6 +52,7 @@ $(document).ready(function() {
             "emptyTable": "Sin datos guardados",
         },
         bAutoWidth: false,
+        deferLoading: 0
     });
 
     // Ocultar paginación

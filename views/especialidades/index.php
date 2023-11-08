@@ -63,7 +63,7 @@
                         <form action="" id="info-especialidad" class="p-3 px-4">
                             <label for="nombre">Nombre especialidad</label>
                             <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                            <small class="form-text">El nombre solo puede contener letras</small>
+                            <small class="form-text">El nombre solo debe contener al menos 3 letras sin números o caracteres</small>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -87,7 +87,7 @@
                             <label for="nombre">Nombre especialidad</label>
                             <input type="text" name="nombre" class="form-control mb-3"
                             data-validate="true" data-type="name" data-max-length="45" required>
-                            <small class="form-text">El nombre solo puede contener letras</small>
+                            <small class="form-text">El nombre solo debe contener al menos 3 letras sin números o caracteres</small>
                         </form>
                     </div>
                     <div class="modal-footer">

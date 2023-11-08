@@ -5,7 +5,7 @@ function toggleAddTitular(value) {
     const newTitularTitle = document.getElementById("new-titular-title");
     const btnAddTitular = document.getElementById("btn-add-titular");
     const btnHideTitular = document.getElementById("btn-hide-titular");
-    const modalActContent = document.getElementById("modalActContent");
+    const modalActContent = document.getElementById("modalActBody");
 
     if (value === "show") {
 

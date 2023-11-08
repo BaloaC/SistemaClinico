@@ -72,8 +72,8 @@
                                 <small class="form-text col-12">El rif debe contener 9 digitos</small>
                             </div>
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" >
-                            <small class="form-text">El nombre solo puede contener letras</small>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameCompany" data-max-length="45" >
+                            <small class="form-text">El nombre solo debe contener al menos 6 letras sin números</small>
                             <label for="direccion">Dirección</label>
                             <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" >
                             <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
@@ -172,8 +172,8 @@
                                 <small class="form-text col-12">El rif debe contener 9 digitos</small>
                             </div>
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" >
-                            <small class="form-text">El nombre solo puede contener letras</small>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameCompany" data-max-length="45" >
+                            <small class="form-text">El nombre solo debe contener al menos 6 letras sin números</small>
                             <label for="direccion">Dirección</label>
                             <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" >
                             <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>

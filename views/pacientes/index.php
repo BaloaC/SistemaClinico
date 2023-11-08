@@ -74,11 +74,11 @@
                                 <div class="col-12 col-md-6">
                                     <label for="nombres">Nombres</label>
                                     <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                                    <small class="form-text">El nombre solo puede contener letras</small>
+                                    <small class="form-text">El nombre debe contener al menos 3 letras sin números o caracteres</small>
 
                                     <label for="apellidos">Apellidos</label>
                                     <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                                    <small class="form-text">El apellido solo puede contener letras</small>
+                                    <small class="form-text">El apellido debe contener al menos 3 letras sin números o caracteres</small>
 
                                     <label for="telefono">Teléfono</label>
                                     <div class="input-group mb-3">
@@ -109,7 +109,7 @@
                                 <div class="col-12 col-md-6 mt-4">
                                     <label for="tipo_paciente">Tipo de paciente</label>
                                     <select name="tipo_paciente" id="s-tipo_paciente" class="form-control mb-3" required>
-                                        <option value disabled selected>Seleccione el tipo de paciente...</option>
+                                        <option value="" disabled selected>Seleccione el tipo de paciente...</option>
                                         <option value="1">Natural</option>
                                         <option value="2">Representante</option>
                                         <option value="3">Asegurado</option>
@@ -251,10 +251,10 @@
                                 <div class="col-12 col-md-6">
                                     <label for="nombres">Nombres</label>
                                     <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" require>
-                                    <small class="form-text">El nombre solo puede contener letras</small>
+                                    <small class="form-text">El nombre debe contener al menos 3 letras sin números o caracteres</small>
                                     <label for="apellidos">Apellidos</label>
                                     <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                                    <small class="form-text">El apellido solo puede contener letras</small>
+                                    <small class="form-text">El apellido debe contener al menos 3 letras sin números o caracteres</small>
                                     <label for="cedula">Cédula</label>
                                     <input type="number" name="cedula" id="cedula-act" class="form-control" data-validate="true" data-type="dni" data-max-length="8" required>
                                     <small class="form-text">La cédula debe contener entre 6 o 8 números</small>

@@ -1,6 +1,7 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import getAll from "../global/getAll.js";
+import { patterns } from "../global/patternsValidation.js";
 import { empresasPagination } from "./empresasPagination.js";
 import { mostrarEmpresas } from "./mostrarEmpresas.js";
 
@@ -26,8 +27,9 @@ async function addEmpresa() {
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
         if (!isNaN(data.cod_rif) || data.cod_rif.length !== 1) throw { message: "El RIF ingresado es inválido" };
-        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
+        if (data.nombre.length < 6) throw { message: "El nombre del seguro debe contener al menos 6 caracteres"};
+        if (!(patterns.nameCompany.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
 
         data.seguro = seguro;
         data.rif = data.cod_rif + "-" + data.rif;

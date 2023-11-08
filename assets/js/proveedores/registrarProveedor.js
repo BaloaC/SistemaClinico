@@ -1,6 +1,7 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import getAll from "../global/getAll.js";
+import { patterns } from "../global/patternsValidation.js";
 import { mostrarProveedores } from "./mostrarProveedores.js";
 import { proveedoresPagination } from "./proveedoresPagination.js";
 
@@ -16,8 +17,9 @@ async function addProveedor() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.ubicacion))) throw { message: "La ubicación ingresada no es válida" };
+        if (!data.nombre.length > 6) throw { message: "El nombre debe contener al menos 6 caracteres" };
+        if (!(patterns.nameCompany.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(patterns.address.test(data.ubicacion))) throw { message: "La ubicación ingresada no es válida" };
 
         await addModule("proveedores", "info-proveedor", data, "Proveedor registrado exitosamente!");
 

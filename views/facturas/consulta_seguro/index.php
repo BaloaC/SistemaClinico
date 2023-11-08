@@ -207,7 +207,8 @@
                                 </div>
                                 <div class="col-12 col-md-5">
                                     <label for="costos">Costo del examen</label>
-                                    <input type="number" step="any" class="form-control mb-3 costos" required>
+                                    <input type="number" step="any" data-validate="true" data-type="price" data-max-length="6" class="form-control mb-3 costos" required>
+                                    <small class="form-text">No se permiten números negativos</small>
                                 </div>
                             </div>
                             <input type="hidden" name="seguro_id" id="seguro_precio_id">

@@ -6,6 +6,8 @@ import { mostrarExamenes } from "./mostrarExamenes.js";
 import getAll from "../global/getAll.js";
 import { examenesPagination } from "./examenesPagination.js";
 import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
+import cleanValdiation from "../global/cleanValidations.js";
+import { patterns } from "../global/patternsValidation.js";
 
 async function updateExamen(id) {
 
@@ -57,9 +59,9 @@ async function confirmUpdate() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.tipo))) throw { message: "El tipo ingresado no es válido" };
-
+        if (!data.nombre.length > 3) throw { message: "El nombre debe contener al menos 3 caracteres"};
+        if (!(patterns.nameExam.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(patterns.price.test(data.precio_examen))) throw { message: "El nombre ingresado no es válido" };
 
         const parseData = deleteSecondValue("#act-examen input, #act-examen select", data);
 
@@ -73,6 +75,8 @@ async function confirmUpdate() {
 
         await updateModule(parseData, "examen_id", "examenes", "act-examen", "Examen actualizado correctamente!");
         const listadoExamenes = await getAll("examenes/consulta");
+        cleanValdiation("act-examen");
+        cleanValdiation("info-examen");
         examenesPagination(listadoExamenes);
 
     } catch (error) {

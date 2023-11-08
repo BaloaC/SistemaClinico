@@ -24,7 +24,7 @@ async function getMedico(id) {
 
         if (json[0].horario?.length >= 1) {
 
-            document.getElementById('info-medicos').remove();
+            document.getElementById('info-medicos')?.remove();
             
             $("#horarioMessage").fadeOut("slow");
             $("#horarios-table").fadeIn("slow");
@@ -86,7 +86,7 @@ async function getMedico(id) {
 
     } catch (error) {
 
-        alert(error);
+        console.log(error);
     }
 }
 

@@ -1,7 +1,10 @@
+import cleanValdiation from "../global/cleanValidations.js";
 import deleteSecondValue from "../global/deleteSecondValue.js";
 import { createOptionOrSelectInstead, select2OnClick } from "../global/dinamicSelect2.js";
 import getById from "../global/getById.js";
+import { patterns } from "../global/patternsValidation.js";
 import updateModule from "../global/updateModule.js";
+import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
 
 async function updateMedicamento(id) {
 
@@ -32,6 +35,8 @@ async function updateMedicamento(id) {
         // Añadirle el dataset en caso de que no cambie su valor
         $form["s-especialidad-update"].dataset.secondValue = json[0].especialidad_id;
 
+        validateInputsOnUpdate();
+
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
         $inputId.value = id;
@@ -58,13 +63,16 @@ async function confirmUpdate() {
 
         formData.forEach((value, key) => (data[key] = value));
 
-        // ! Para evitar el error del enpoint al enviar la especialidad
-        // let especialidad_id = data.especialidad_id;
+        if (!$form.checkValidity()) { $form.reportValidity(); return; }
+        if (!data.nombre.length > 3) throw { message: "El nombre debe contener al menos 3 caracteres" };
+        if (!(patterns.nameExam.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
 
         const parseData = deleteSecondValue("#act-medicamento input, #act-medicamento select", data);
 
         await updateModule(parseData, "medicamento_id", "medicamento", "act-medicamento", "Medicamento actualizado exitosamente!");
 
+        cleanValdiation("info-medicamento");
+        cleanValdiation("act-medicamento")
         $('#medicamentos').DataTable().ajax.reload();
 
     } catch (error) {

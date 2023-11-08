@@ -2,6 +2,7 @@ import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
 import getAge from "../global/getAge.js";
+import { patterns } from "../global/patternsValidation.js";
 
 select2OnClick({
     selectSelector: "#s-consulta-seguro",
@@ -35,7 +36,7 @@ async function addFSeguro() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto))) throw { message: "El precio ingresado es inválido" };
+        if (!(patterns.price.test(data.monto))) throw { message: "El precio ingresado es inválido" };
 
 
         await addModule("factura/consultaSeguro","info-fseguro",data,"Factura seguro registrada correctamente!","#modalRegAsegurada", ".alertConsultaSeguro");
