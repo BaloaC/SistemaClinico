@@ -278,42 +278,14 @@ class SeguroController extends Controller{
     }
 
     public function eliminarSeguroExamen($seguro_id) {
+        
         $_POST = json_decode(file_get_contents('php://input'), true);
+        
         SeguroValidaciones::validarExistenciaSeguro($seguro_id);
-
-        $_seguroExamen = new SeguroExamenModel();
-        $seguro_examen = $_seguroExamen->where('seguro_id', '=', $seguro_id)->getFirst();
-
-        // Volvemos los string array para manejar la información por índices
-        $examenes = explode(',', $seguro_examen->examenes);
-        $costos = explode(',', $seguro_examen->costos);
-
-        if ( array_search( ($_POST['examen_id']) , $examenes ) ) {
-            
-            // Obtenemos el índice donde se encuentre el examen a eliminar
-            $index_examen = array_search( ($_POST['examen_id']) , $examenes ); 
-
-        } else if ($_POST['examen_id'] == $examenes[0]) {
-            $index_examen = 0;
-
-        } else {
-            $respuesta = new Response(false, 'El examen indicado no está relacionado a ese seguro');
-            return $respuesta->json(400);
-        }
+        SeguroService::eliminarSeguroExamen($_POST, $seguro_id);
         
-        unset($examenes[$index_examen]);
-        unset($costos[$index_examen]);
-        
-        // Los volvemos string de nuevo
-        $info_update['examenes'] = implode(',', $examenes);
-        $info_update['costos'] = implode(',', $costos);
-        
-        $isUpdated = $_seguroExamen->update($info_update);
-        $bool = $isUpdated > 0;
-
-        $respuesta = new Response($bool ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        $respuesta->setData($isUpdated);
-        return $respuesta->json($bool ? 200 : 400);
+        $respuesta = new Response('ACTUALIZACION_EXITOSA');
+        return $respuesta->json(200);
     }
 
     // Funciones
