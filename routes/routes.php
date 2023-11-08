@@ -223,6 +223,7 @@ Router::get('/examenes/actualizar/:id', ExamenController::class . '@formActualiz
 Router::get('/examenes/consulta', ExamenController::class . '@listarExamen',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::get('/examenes/:id', ExamenController::class . '@listarExamenPorId',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::get('/examenes/laboratorios', ExamenController::class . '@listarExamenDeLaboratorios',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
+Router::get('/examenes/clinica', ExamenController::class . '@listarExamenRealizados',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::post('/examenes', ExamenController::class . '@insertarExamen',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::put('/examenes/:id', ExamenController::class . '@actualizarExamen',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::delete('/examenes/:id', ExamenController::class . '@eliminarExamen',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);

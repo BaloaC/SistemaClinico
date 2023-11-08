@@ -2,6 +2,7 @@
 
 include_once './services/seguro/SeguroService.php';
 include_once './services/seguro/SeguroHelpers.php';
+include_once './services/seguro/SeguroValidaciones.php';
 
 class SeguroController extends Controller{
 
@@ -278,13 +279,7 @@ class SeguroController extends Controller{
 
     public function eliminarSeguroExamen($seguro_id) {
         $_POST = json_decode(file_get_contents('php://input'), true);
-        $validarSeguro = new Validate();
-        
-        // Validamos que el seguro exista
-        if ( !$validarSeguro->isDuplicated('seguro', 'seguro_id', $seguro_id) ) {
-            $respuesta = new Response(false, 'El seguro indicado no existe');
-            return $respuesta->json(400);
-        }
+        SeguroValidaciones::validarExistenciaSeguro($seguro_id);
 
         $_seguroExamen = new SeguroExamenModel();
         $seguro_examen = $_seguroExamen->where('seguro_id', '=', $seguro_id)->getFirst();
@@ -292,13 +287,20 @@ class SeguroController extends Controller{
         // Volvemos los string array para manejar la información por índices
         $examenes = explode(',', $seguro_examen->examenes);
         $costos = explode(',', $seguro_examen->costos);
-        $index_examen = array_search( $_POST['examen_id'], $examenes ); // Obtenemos el índice donde se encuentre el examen a eliminar
-        
-        if ( !$index_examen ) { // Validamos que el examen esté asociado a ese seguro
+
+        if ( array_search( ($_POST['examen_id']) , $examenes ) ) {
+            
+            // Obtenemos el índice donde se encuentre el examen a eliminar
+            $index_examen = array_search( ($_POST['examen_id']) , $examenes ); 
+
+        } else if ($_POST['examen_id'] == $examenes[0]) {
+            $index_examen = 0;
+
+        } else {
             $respuesta = new Response(false, 'El examen indicado no está relacionado a ese seguro');
             return $respuesta->json(400);
         }
-
+        
         unset($examenes[$index_examen]);
         unset($costos[$index_examen]);
         
@@ -311,7 +313,7 @@ class SeguroController extends Controller{
 
         $respuesta = new Response($bool ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
         $respuesta->setData($isUpdated);
-        return $respuesta->json(200);
+        return $respuesta->json($bool ? 200 : 400);
     }
 
     // Funciones
