@@ -27,7 +27,7 @@ class PacienteService{
             $id = $_pacienteModel->insert($data);
 
             PacienteValidaciones::validarTipoPaciente($formulario, $id, 3);
-            PacienteValidaciones::validarDuplicadoPacienteSeguro($formulario, $id);
+            PacienteValidaciones::validarDuplicadoPacienteSeguro($pacienteSeguro, $id);
             
             if ( $id > 0 ) {
                 
