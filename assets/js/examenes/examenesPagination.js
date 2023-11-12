@@ -9,7 +9,7 @@ removeAddAccountant();
 removeAddAnalist();
 removeAddMD();
 // Configurar la paginación
-const registrosPorPagina = 6;
+const registrosPorPagina = 15;
 let paginaActual = 1;
 
 
