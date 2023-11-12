@@ -27,15 +27,6 @@ async function updateEmpresa(id) {
             }
         }
 
-        // json.seguro.forEach(el => {
-        //     createOptionOrSelectInstead({
-        //         obj: el,
-        //         selectSelector: "#s-seguro-update",
-        //         selectNames: ["nombre"],
-        //         selectValue: "seguro_id"
-        //     });
-        // });
-
         //Establecer el option con los datos del usuario
         $form.nombre.value = json.nombre;
         $form.nombre.dataset.secondValue = json.nombre;
@@ -85,7 +76,7 @@ async function confirmUpdate() {
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
         if (!isNaN(data.cod_rif) || data.cod_rif.length !== 1) throw { message: "El RIF ingresado es inválido" };
-        if (data.nombre.length < 6) throw { message: "El nombre del seguro debe contener al menos 6 caracteres"};
+        if (data.nombre.length < 6) throw { message: "El nombre de la empresa debe contener al menos 6 caracteres"};
         if (!(patterns.nameCompany.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
 
