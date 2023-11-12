@@ -68,7 +68,8 @@
                         <div class="alert d-none" role="alert"></div>
                         <form id="info-medicamento" class="p-3 px-4">
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre_medicamento" class="form-control mb-3" data-max-length="45" required>
+                            <input type="text" name="nombre_medicamento" class="form-control mb-3" data-validate="true" data-type="nameExam" data-max-length="45" required>
+                            <small class="form-text">El nombre solo debe contener al menos 3 letras sin caracteres especiales</small>
                             <label for="tipo_medicamento">Tipo de medicamento</label>
                             <select name="tipo_medicamento" class="form-control mb-3" required>
                                 <option value="" disabled selected>Seleccione el tipo de medicamento</option>
@@ -101,7 +102,8 @@
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form id="act-medicamento" class="p-3 px-4">
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre_medicamento" class="form-control mb-3" data-max-length="45" required>
+                            <input type="text" name="nombre_medicamento" class="form-control mb-3" data-validate="true" data-type="nameExam" data-max-length="45" required>
+                            <small class="form-text">El nombre solo debe contener al menos 3 letras sin caracteres especiales</small>
                             <label for="tipo_medicamento">Tipo de medicamento</label>
                             <select name="tipo_medicamento" class="form-control mb-3" required>
                                 <option value="" disabled selected>Seleccione el tipo de medicamento</option>

@@ -5,6 +5,7 @@ import deleteSecondValue from "../global/deleteSecondValue.js";
 import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
 import getAge from "../global/getAge.js";
 import getById from "../global/getById.js";
+import { patterns } from "../global/patternsValidation.js";
 import scrollTo from "../global/scrollTo.js";
 import updateModule from "../global/updateModule.js";
 import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
@@ -91,7 +92,7 @@ async function updatePaciente(id) {
         $form.telefono.value = $tel[1];
         $form.telefono.dataset.secondValue = $tel[1];
         $form.cod_tel.dataset.secondValue = $telCod;
-        $form.tipo_paciente.dataset.secondValue = json.tipo_paciente;
+        // $form.tipo_paciente.dataset.secondValue = json.tipo_paciente;
 
         actualizarTipoPaciente(json.tipo_paciente);
         validateInputsOnUpdate();
@@ -135,13 +136,12 @@ async function confirmUpdate() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
+        if (!(patterns.name.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(patterns.name.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
         if (data.nombre.length < 3) throw { message: "El nombre debe tener al menos 3 caracteres" };
         if (data.apellidos.length < 3) throw { message: "El apellido debe tener al menos 3 caracteres" };
-        if (!(/^\d{6,8}$/.test(data.cedula)) && data.tipo_paciente !== "4") throw { message: "La cédula no es válida" };
-        // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
-        console.log(data);
+        if (!(patterns.dni.test(data.cedula)) && data.tipo_paciente !== "4") throw { message: "La cédula no es válida" };
+        if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
         if ((isNaN(data?.telefono) || data.telefono?.length != 7) && data.tipo_paciente !== "4") throw { message: "El número ingresado no es válido" };
         if ((isNaN(data?.cod_tel) || data.cod_tel?.length != 4) && data.tipo_paciente !== "4") throw { message: "El número ingresado no es válido" };
         if(data.pacientePoseeTitulares === "false" && data.tipo_paciente === "4" && !data?.titular_id) throw { message: "Debe ingresar al menos un representante" }
@@ -189,9 +189,9 @@ async function confirmUpdate() {
                 tipo_familiar: parseData.tipo_familiar
             }]
             
-            await addModule(`titular/${parseData.paciente_beneficiado_id}`, "act-paciente", parseData.titular, "");
+            // await addModule(`titular/${parseData.paciente_beneficiado_id}`, "act-paciente", parseData.titular, "");
 
-            delete parseData.titular;
+            // delete parseData.titular;
         }
 
         delete parseData.cedula_beneficiario;

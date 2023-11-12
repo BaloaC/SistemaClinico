@@ -1,5 +1,6 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
+import { patterns } from "../global/patternsValidation.js";
 
 async function addMedicamento() {
     const $form = document.getElementById("info-medicamento"),
@@ -12,7 +13,9 @@ async function addMedicamento() {
         formData.forEach((value, key) => (data[key] = value));
         
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-
+        if (!data.nombre.length > 3) throw { message: "El nombre debe contener al menos 3 caracteres" };
+        if (!(patterns.nameExam.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        
         await addModule("medicamento", "info-medicamento", data, "Medicamento registrado con exito!");
        
         cleanValdiation("info-medicamento");

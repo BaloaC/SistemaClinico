@@ -1,6 +1,7 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import getAll from "../global/getAll.js";
+import { patterns } from "../global/patternsValidation.js";
 import { examenesPagination } from "./examenesPagination.js";
 import { mostrarExamenes } from "./mostrarExamenes.js";
 
@@ -15,8 +16,9 @@ async function addExamen() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.tipo))) throw { message: "El tipo ingresado no es válido" };
+        if (!data.nombre.length > 3) throw { message: "El nombre debe contener al menos 3 caracteres" };
+        if (!(patterns.nameExam.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(patterns.price.test(data.precio_examen))) throw { message: "El nombre ingresado no es válido" };
 
         await addModule("examenes", "info-examen", data, "Exámen registrado exitosamente!");
 

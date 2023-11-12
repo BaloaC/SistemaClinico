@@ -69,16 +69,13 @@
                         <div class="alert d-none" role="alert"></div>
                         <form id="info-insumo" class="p-3 px-4">
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                            <small class="form-text">El nombre solo puede contener letras</small>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameExam" data-max-length="45" required>
+                            <small class="form-text">El nombre solo debe contener al menos 3 letras sin caracteres especiales</small>
                             <label for="cantidad">Cantidad</label>
-                            <input type="number" step="any" name="cantidad" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
+                            <input type="number" step="any" name="cantidad" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small>
-                            <!-- <label for="nombre">Stock</label>
-                            <input type="number" name="stock" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
-                            <small class="form-text">El campo de ser mayor o igual a 0</small> -->
                             <label for="nombre">Cantidad mínima</label>
-                            <input type="number" step="any" name="cantidad_min" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
+                            <input type="number" step="any" name="cantidad_min" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <label for="nombre">Precio</label>
                             <input type="number" step="any" name="precio" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
@@ -104,16 +101,13 @@
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-insumo" class="p-3 px-4">
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                            <small class="form-text">El nombre solo puede contener letras</small>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameExam" data-max-length="45" required>
+                            <small class="form-text">El nombre solo debe contener al menos 3 letras sin caracteres especiales</small>
                             <label for="cantidad">Cantidad</label>
-                            <input type="number" step="any" name="cantidad" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
+                            <input type="number" step="any" name="cantidad" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small>
-                            <!-- <label for="nombre">Stock</label>
-                            <input type="number" name="stock" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
-                            <small class="form-text">El campo de ser mayor o igual a 0</small> -->
                             <label for="nombre">Cantidad mínima</label>
-                            <input type="number" step="any" name="cantidad_min" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="8" required>
+                            <input type="number" step="any" name="cantidad_min" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <label for="nombre">Precio</label>
                             <input type="number" step="any" name="precio" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>

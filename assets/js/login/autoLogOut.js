@@ -8,6 +8,6 @@ function autoLogOut() {
     Cookies.remove("rol");
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("pageshow", () => {
     autoLogOut();
 });

@@ -1,6 +1,8 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
+import deleteElementByClass from "../global/deleteElementByClass.js";
 import getAll from "../global/getAll.js";
+import { patterns } from "../global/patternsValidation.js";
 import scrollTo from "../global/scrollTo.js";
 import { medicosPagination } from "./medicosPagination.js";
 import { mostrarMedicos } from "./mostrarMedicos.js";
@@ -17,22 +19,25 @@ async function addMedico() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
+        if (!(patterns.name.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(patterns.name.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
         if (data.nombre.length < 3) throw { message: "El nombre debe tener al menos 3 caracteres" };
         if (data.apellidos.length < 3) throw { message: "El apellido debe tener al menos 3 caracteres" };
-        if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
-        if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
-        // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
+        if (!(patterns.dni.test(data.cedula))) throw { message: "La cédula no es válida" };
+        if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
         if (isNaN(data.telefono) || data.telefono.length != 7) throw { message: "El número ingresado no es válido" };
         if (isNaN(data.cod_tel) || data.cod_tel.length != 4) throw { message: "El número ingresado no es válido" };
 
         data.telefono = data.cod_tel + data.telefono;
 
-        let especialidades = formData.getAll("especialidad[]");
-        especialidades.forEach(e => {
+        const especialidades = document.querySelectorAll(".medico-especialidad-id");
+        const costoEspecialidad = document.querySelectorAll(".costo-especialidad");
+
+        especialidades.forEach((value, key) => {
+            
             const especialidad_id = {
-                especialidad_id: e
+                especialidad_id: value.value,
+                costo_especialidad: costoEspecialidad[key].value
             }
             especialidad.push(especialidad_id);
         })
@@ -67,8 +72,10 @@ async function addMedico() {
         const listadoMedico = await getAll("medicos/consulta");
         medicosPagination(listadoMedico);
         cleanValdiation("info-medico");
+        deleteElementByClass("newInput");
         document.querySelectorAll("input[type='time']").forEach(element => element.disabled = true);
         $("#s-especialidad").val([]).trigger('change'); //Vaciar select2
+        $("#s-especialidad").removeClass("is-valid"); //Limpiar validación
 
     } catch (error) {
         console.log(error);

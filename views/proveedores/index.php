@@ -65,8 +65,8 @@
                         <div class="alert d-none" role="alert"></div>
                         <form action="#" id="info-proveedor" class="p-3 px-4">
                             <label for="nombre">Nombre Proveedor</label>
-                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                            <small class="form-text">El nombre solo puede contener letras</small>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameCompany" data-max-length="45" required>
+                            <small class="form-text">El nombre solo debe contener al menos 6 letras sin caracteres especiales</small>
                             <label for="ubicacion">Ubicación</label>
                             <input type="text" name="ubicacion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
                             <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
@@ -91,8 +91,8 @@
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-proveedor" class="p-3 px-4">
                             <label for="nombre">Nombre Proveedor</label>
-                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                            <small class="form-text">El nombre solo puede contener letras</small>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameCompany" data-max-length="45" required>
+                            <small class="form-text">El nombre solo debe contener al menos 6 letras sin caracteres especiales</small>
                             <label for="ubicacion">Ubicación</label>
                             <input type="text" name="ubicacion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
                             <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>

@@ -1,8 +1,11 @@
 import { getConsultasSegurosMes } from "../consultas-seguro/mostrarConsultaSeguro.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import deleteSecondValue from "../global/deleteSecondValue.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
+import { patterns } from "../global/patternsValidation.js";
 import updateModule from "../global/updateModule.js";
+import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
 import { mostrarSeguros } from "./mostrarSeguros.js";
 // import { segurosPagination } from "./segurosPagination.js";
 
@@ -48,6 +51,8 @@ async function updateSeguro(id) {
         $form.costo_consulta.value = json.costo_consulta;
         $form.costo_consulta.dataset.secondValue = json.costo_consulta;
         
+        validateInputsOnUpdate();
+
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
         $inputId.value = id;
@@ -76,8 +81,9 @@ async function confirmUpdate() {
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
         if (!isNaN(data.cod_rif) || data.cod_rif.length !== 1) throw { message: "El RIF ingresado es inválido" };
-        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
+        if (!(patterns.nameCompany.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (data.nombre.length < 6) throw { message: "El nombre del seguro debe contener al menos 6 caracteres"};
+        if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
         if (isNaN(data.telefono) || data.telefono.length !== 7) throw { message: "El número ingresado no es válido" };
         if (isNaN(data.cod_tel) || data.cod_tel.length !== 4) throw { message: "El número ingresado no es válido" };
 
@@ -93,10 +99,8 @@ async function confirmUpdate() {
         if ('telefono' in parseData || 'cod_tel' in parseData) { parseData.telefono = $tel }
 
         await updateModule(parseData, "seguro_id", "seguros", "act-seguro", "Seguro actualizado correctamente");
-        Array.from(document.getElementById("act-seguro").elements).forEach(element => {
-            element.classList.remove('valid');
-        })
-
+        
+        cleanValdiation("act-seguro");
         getConsultasSegurosMes({seguro: parseData.seguro_id});
         // const listadoSeguros = await getAll("seguros/consulta");
         // segurosPagination(listadoSeguros);

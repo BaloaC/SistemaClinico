@@ -286,6 +286,10 @@ span.select2.select2-container.select2-container--bootstrap-5 {
     display: block;
 }
 
+.default-select {
+    border-color: #dcdcdc !important;
+}
+
 .input-search-icon {
     width: 4%;
     display: flex;

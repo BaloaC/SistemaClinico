@@ -1,5 +1,6 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
+import { patterns } from "../global/patternsValidation.js";
 
 async function addEspecialidad() {
     const $form = document.getElementById("info-especialidad"),
@@ -12,7 +13,7 @@ async function addEspecialidad() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(patterns.name.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         if (data.nombre.length < 6) throw { message: "El nombre ingresado debe ser mayor a 6 caracteres" };
 
         await addModule("especialidades", "info-especialidad", data, "Especialidad registrada con exito!");

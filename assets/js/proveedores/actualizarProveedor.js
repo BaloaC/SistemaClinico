@@ -4,6 +4,9 @@ import getById from "../global/getById.js";
 import getAll from "../global/getAll.js";
 import { proveedoresPagination } from "./proveedoresPagination.js";
 import { mostrarProveedores } from "./mostrarProveedores.js";
+import cleanValdiation from "../global/cleanValidations.js";
+import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
+import { patterns } from "../global/patternsValidation.js";
 
 async function updateProveedor(id) {
 
@@ -18,6 +21,8 @@ async function updateProveedor(id) {
         $form.nombre.dataset.secondValue = json.nombre;
         $form.ubicacion.value = json.ubicacion;
         $form.ubicacion.dataset.secondValue = json.ubicacion;
+
+        validateInputsOnUpdate();
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
@@ -44,15 +49,17 @@ async function confirmUpdate() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        // if (!(/^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9 @#+_,-]{1,255}$/.test(data.ubicacion))) throw { message: "La ubicación ingresada no es válida" };
+        if (!data.nombre.length > 6) throw { message: "El nombre debe contener al menos 6 caracteres" };
+        if (!(patterns.nameCompany.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(patterns.address.test(data.ubicacion))) throw { message: "La ubicación ingresada no es válida" };
 
         const parseData = deleteSecondValue("#act-proveedor input, #act-proveedor select", data);
 
         await updateModule(parseData, "proveedor_id", "proveedores", "act-proveedor", "Proveedor actualizado correctamente!");
         const listadoProveedores = await getAll("proveedores/consulta");
-        const registros = listadoProveedores;
-        proveedoresPagination(registros);
+        cleanValdiation("act-proveedor");
+        cleanValdiation("info-proveedor");
+        proveedoresPagination(listadoProveedores);
 
     } catch (error) {
         console.log(error);
