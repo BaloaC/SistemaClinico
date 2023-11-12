@@ -31,9 +31,6 @@
             <div class="row">
                 <div class="col-12 seg-container">
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title text-dark m-1">Insumos</h4>
-                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="insumos" class="table table-compact">
@@ -67,7 +64,7 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
-                        <form id="info-insumo" class="p-3 px-4">
+                        <form id="info-insumo" class="form-reg p-3 px-4">
                             <label for="nombre">Nombre</label>
                             <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameExam" data-max-length="45" required>
                             <small class="form-text">El nombre solo debe contener al menos 3 letras sin caracteres especiales</small>

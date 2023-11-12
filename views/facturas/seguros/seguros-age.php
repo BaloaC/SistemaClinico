@@ -48,7 +48,7 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
-                        <form action="" id="info-examen" class="p-3 px-4">
+                        <form action="" id="info-examen" class="form-reg p-3 px-4">
                             <label for="nombre">Nombre exámen</label>
                             <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
                             <small class="form-text">El nombre solo puede contener letras</small>

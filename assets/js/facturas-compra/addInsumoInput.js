@@ -1,4 +1,5 @@
 import { select2OnClick } from "../global/dinamicSelect2.js";
+import validateInputs from "../global/validateInputs.js";
 
 export let clicks = 0;
 function addInsumoInput() {
@@ -29,6 +30,8 @@ function addInsumoInput() {
         placeholder: "Seleccione el insumo",
         selectWidth: "100%"
     });
+
+    validateInputs();
 }
 
 window.addInsumoInput = addInsumoInput;

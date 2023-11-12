@@ -2,6 +2,8 @@ import dinamicSelect2, { emptySelect2, select2OnClick, selectText } from "../glo
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import isBeforeToday from "../global/isBeforeToday.js";
+import sortScheduleByDay from "../global/sortScheduleByDay.js";
+import to12HourFormat from "../global/to12HoursFormat.js";
 import parseCitas from "./parseCitas.js";
 import tipoAsegurado from "./tipoAsegurado.js";
 import tipoTitular from "./tipoTitular.js";
@@ -49,7 +51,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         });
 
         // ** Para la función de dar click luego de 
-        $("#s-paciente").on("select2:open", async function (e) {
+        $(pacientesSelect).on("select2:open", async function (e) {
             if (document.querySelector("#s-paciente").dataset.active == 0) {
 
                 const obj = await getAll("pacientes/consulta");
@@ -61,20 +63,30 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                     else if (el.tipo_paciente == 3) el.tipo_paciente = "Asegurado";
                     else if (el.tipo_paciente == 4) el.tipo_paciente = "Beneficiado";
 
-                    if ($("#s-paciente").find(`option[value="${el.paciente_id}"]`).length) {
-                        $("#s-paciente").val(el.paciente_id);
+                    if ($(pacientesSelect).find(`option[value="${el.paciente_id}"]`).length) {
+                        $(pacientesSelect).val(el.paciente_id);
                     } else {
                         let newOption = new Option(selectText(["cedula", "nombre-apellidos", "tipo_paciente"], el), el.paciente_id, false, false);
-                        $("#s-paciente").append(newOption);
+                        $(pacientesSelect).append(newOption);
                     }
                 });
 
-                $("#s-paciente").val(0).trigger('change.select2');
-                $("#s-paciente").select2("close");
+                $(pacientesSelect).val(0).trigger('change.select2');
+                $(pacientesSelect).select2("close");
                 document.querySelector("#s-paciente").dataset.active = 1;
             }
 
-            $("#s-paciente").select2("open");
+            $(pacientesSelect).on("change", function () {
+                if ($(pacientesSelect).val() != 0) {
+                    $(pacientesSelect).removeClass("is-invalid");
+                    $(pacientesSelect).addClass("is-valid");
+                } else {
+                    $(pacientesSelect).removeClass("is-valid");
+                    $(pacientesSelect).addClass("is-invalid");
+                }
+            });
+
+            $(pacientesSelect).select2("open");
         })
 
         // console.log(parentModal);
@@ -192,8 +204,6 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
             $(especialidadSelect).empty().select2();
 
-            console.log(infoMedico);
-
             dinamicSelect2({
                 obj: infoMedico[0].especialidad ?? [],
                 selectSelector: especialidadSelect,
@@ -204,18 +214,21 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             });
 
             especialidadSelect.disabled = false;
+            especialidadSelect.classList.add("is-valid");
+
+
+           const horariosOrdenados = sortScheduleByDay(infoMedico[0].horario);
 
             let listHorarios = "";
-            infoMedico[0].horario.forEach(horario => {
-                
+            horariosOrdenados.forEach(horario => {
                 listHorarios += `
-                    <tr>
-                        <td>${horario.dias_semana}</td>
-                        <td>${horario.hora_entrada}</td>
-                        <td>${horario.hora_salida}</td>
-                    </tr>
-                `;
-            })
+                <tr>
+                    <td class="text-capitalize">${horario.dias_semana}</td>
+                    <td>${to12HourFormat(horario.hora_entrada)}</td>
+                    <td>${to12HourFormat(horario.hora_salida)}</td>
+                </tr>
+              `;
+            });
 
             horariosTable.innerHTML = listHorarios;
 

@@ -1,4 +1,5 @@
 import { select2OnClick } from "../global/dinamicSelect2.js";
+import validateInputs from "../global/validateInputs.js";
 
 let clicks = 0;
 function addMedicoPagoInput(parentModal = "#modalReg") {
@@ -15,7 +16,8 @@ function addMedicoPagoInput(parentModal = "#modalReg") {
         </div>
         <div class="col-12 col-md-5">
             <label for="monto" class="p-0">Monto</label>
-            <input type="number" step="any" class="form-control monto-pago" required>
+            <input type="number" step="any" data-validate="true" data-type="price" class="form-control monto-pago" required>
+            <small class="form-text">No se permiten números negativos</small>
         </div>
         <div class="col-3 col-md-1">
             <button type="button" class="btn" onclick="deleteInput(this,'.medico-pago-id')"><i class="fas fa-times m-0"></i></button>
@@ -31,6 +33,8 @@ function addMedicoPagoInput(parentModal = "#modalReg") {
         parentModal: parentModal,
         placeholder: "Seleccione un médico"
     });
+
+    validateInputs();
 }
 
 window.addMedicoPagoInput = addMedicoPagoInput;

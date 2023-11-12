@@ -68,6 +68,7 @@
                     <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/seguroAge" ?>">Factura seguro</a></li>
                     <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/consulta" ?>">Factura consulta</a></li>
                     <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/medico" ?>">Factura médico</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/medico" ?>">Factura mensajería</a></li>
                 </ul>
             </li>
             <li class="nav-item dropdown">

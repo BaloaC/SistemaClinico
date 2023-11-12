@@ -104,7 +104,12 @@ export async function select2OnClick({ selectSelector, module, selectValue, sele
     // console.log(parentModal);
     if (parentModal !== null) {
         document.querySelector(parentModal).addEventListener("hidden.bs.modal", e => {
-            document.querySelector(selectSelector).dataset.active = 0;
+
+            let element = document.querySelector(selectSelector);
+
+            if (element?.dataset) {
+                element.dataset.active = 0;
+            } 
         })
     }
 

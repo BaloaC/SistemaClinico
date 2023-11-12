@@ -1,6 +1,7 @@
 import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
+import cleanValdiation from "../global/cleanValidations.js";
 removeAddAccountant();
 removeAddAnalist();
 const path = location.pathname.split('/');
@@ -34,6 +35,7 @@ dinamicSelect2({
     staticSelect: true
 });
 
+
 addEventListener("DOMContentLoaded", e => {
 
     const rol = Cookies.get("rol");
@@ -48,6 +50,11 @@ addEventListener("DOMContentLoaded", e => {
             url: `/${path[1]}/pacientes/consulta/`,
             beforeSend: function(xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
+            },
+            error: function(xhr, error, thrown) {
+                // Manejo de errores de Ajax
+                console.log('Error de Ajax:', error);
+                console.log('Detalles:', thrown);
             }
         },
         columns: [

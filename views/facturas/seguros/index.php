@@ -30,9 +30,6 @@
             <div class="row">
                 <div class="col-12 seg-container">
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title text-dark m-1">Facturas seguro registradas</h4>
-                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="fSeguros" class="table table-compact">

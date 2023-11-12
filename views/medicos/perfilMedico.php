@@ -74,7 +74,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="alert d-none" role="alert"></div>
-                        <form id="info-antecedente" class="p-3 px-4">
+                        <form id="info-antecedente" class="form-reg p-3 px-4">
                             <label for="tipo_antedecente_id">Tipo de antecedente</label>
                             <select name="tipo_antecedente_id" class="form-control mb-3" required>
                                 <option value="" disabled selected>Seleccione el tipo de antecedente</option>
@@ -177,7 +177,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="alert alertConsulta d-none" role="alert"></div>
-                        <form action="" id="info-consulta" class="p-3 px-4">
+                        <form action="" id="info-consulta" class="form-reg p-3 px-4">
                             <div class="row">
                                 <div class="row">
                                     <h5>Información del Paciente</h5>

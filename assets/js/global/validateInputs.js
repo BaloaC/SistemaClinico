@@ -6,6 +6,13 @@ export default function validateInputs() {
     
     // ** Agregar eventos a cada elemento input
     inputs.forEach((input) => {
+
+        // ** Agregar evento change en caso de que sea de tipo time
+        if(input.dataset.type === "time" || input.dataset.type === "date"){
+            input.addEventListener('change', (e) => {
+                validate(e.target, patterns[e.target.dataset.type]);
+            });
+        }
     
         // ** Agregar evento 'keyup' para validar el campo en cada cambio
         input.addEventListener('keyup', (e) => {

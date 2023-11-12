@@ -30,9 +30,6 @@
             <div class="row">
                 <div class="col-12 seg-container">
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title text-dark m-1">Facturas consulta registradas</h4>
-                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="fConsulta" class="table table-compact">
@@ -69,7 +66,7 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alertConsulta alert d-none" role="alert"></div>
-                        <form action="" id="info-fconsulta" class="p-3 px-4">
+                        <form action="" id="info-fconsulta" class="form-reg p-3 px-4">
                             <div class="row">
                                 <div class="col-12 col-md-6">
                                     <label for="paciente_id">Paciente</label>
@@ -78,8 +75,7 @@
                                     </select>
                                     <label for="monto_sin_iva">Monto</label>
                                     <input type="number" step="any" name="monto_consulta_usd" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
-                                    <!-- <input type="number" name="monto_sin_iva" oninput="calcularIva(this)" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8"> -->
-                                    
+                                    <small class="form-text">No se permiten números negativos</small>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <label for="consulta_id">Consulta</label>

@@ -71,6 +71,7 @@
             <hr class="border-white">
             <!-- Empresas -->
             <div class="row">
+                <h4 id="factura-doesnt-exist" class="text-center my-5" style="display: none;">No hay factura disponible actualmente para este mes</h4>
                 <div class="col-12 seg-container">
                     <div class="card">
                         <div class="card-header factura-header" style="display: none;">
@@ -198,8 +199,8 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert addAlertPrecioExamen d-none" role="alert"></div>
-                        <form action="" id="info-precioExamen" class="p-3 px-4">
-                            <div class="row align-items-center">
+                        <form action="" id="info-precioExamen" class="form-reg p-3 px-4">
+                            <div class="row align-items-start">
                                 <div class="col-12 col-md-5">
                                     <label for="examen">Examen</label>
                                     <select id="s-examen_id" class="form-control examen" data-active="0" required>
@@ -207,12 +208,12 @@
                                 </div>
                                 <div class="col-12 col-md-5">
                                     <label for="costos">Costo del examen</label>
-                                    <input type="number" step="any" data-validate="true" data-type="price" data-max-length="6" class="form-control mb-3 costos" required>
+                                    <input type="number" step="any" data-validate="true" data-type="price" data-max-length="6" value="0" class="form-control mb-3 costos" required>
                                     <small class="form-text">No se permiten números negativos</small>
                                 </div>
                             </div>
                             <input type="hidden" name="seguro_id" id="seguro_precio_id">
-                            <button type="button" id="addExamenes" class="btn btn-primary" onclick="addExamenInput()">Registrar</button>
+                            <button type="button" id="addExamenes" class="btn btn-primary" onclick="addExamenInput()">Añadir nuevo campo</button>
                         </form>
                     </div>
                     <div class="modal-footer">

@@ -60,7 +60,7 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
-                        <form action="" id="info-especialidad" class="p-3 px-4">
+                        <form action="" id="info-especialidad" class="form-reg p-3 px-4">
                             <label for="nombre">Nombre especialidad</label>
                             <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
                             <small class="form-text">El nombre solo debe contener al menos 3 letras sin números o caracteres</small>

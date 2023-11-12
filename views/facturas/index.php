@@ -31,9 +31,6 @@
             <div class="row">
                 <div class="col-12 seg-container">
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title text-dark m-1">Facturas compra registradas</h4>
-                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="fCompra" class="table table-compact">
@@ -71,7 +68,7 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
-                        <form action="" id="info-fcompra" class="p-3 px-4">
+                        <form action="" id="info-fcompra" class="form-reg p-3 px-4">
                             <div class="row">
                                 <div class="col-6">
                                     <label for="proveedor">Proveedor</label>
@@ -81,7 +78,7 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="fecha_compra">Fecha de compra</label>
-                                    <input type="date" name="fecha_compra" class="form-control mb-3" required>
+                                    <input type="date" name="fecha_compra" data-validate="true" data-type="date" class="form-control mb-3" required>
                                 </div>
                                 <h5 class=""></h5>
                                 <div class="col-12">
@@ -101,8 +98,14 @@
                                                 <td><select name="insumo_id" id="s-insumo" class="form-control insumo-id" data-active="0" required>
                                                         <option></option>
                                                     </select></td>
-                                                <td><input type="number" step="any" name="precio_unit" min="0" class="form-control insumo-uprecio" oninput="calcularMonto(this)" required></td>
-                                                <td><input type="number" step="any" name="unidades" min="0" class="form-control insumo-unid" oninput="calcularMonto(this)" required></td>
+                                                <td>
+                                                    <input type="number" step="any" name="precio_unit" min="0" class="form-control insumo-uprecio" data-validate="true" data-type="price" oninput="calcularMonto(this)" required>
+                                                    <small class="form-text">No se permiten números negativos</small>
+                                                </td>
+                                                <td>
+                                                    <input type="number" step="any" name="unidades" min="0" class="form-control insumo-unid" data-validate="true" data-type="price" oninput="calcularMonto(this)" required>
+                                                    <small class="form-text">No se permiten números negativos</small>
+                                                </td>
                                                 <td><b class="monto-total-p">$0.00</b></td>
                                                 <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
                                                 <td><div class="visible d-none"><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></div></td>
@@ -134,8 +137,14 @@
                 <td><select name="insumo_id" id="s-insumo" class="form-control insumo-id" data-active="0" required>
                         <option></option>
                     </select></td>
-                <td><input type="number" step="any" name="precio_unit" min="0" class="form-control insumo-uprecio" oninput="calcularMonto(this)" required></td>
-                <td><input type="number" step="any" name="unidades" min="0" class="form-control insumo-unid" oninput="calcularMonto(this)" required></td>
+                <td>
+                    <input type="number" step="any" name="precio_unit" min="0" class="form-control insumo-uprecio" data-validate="true" data-type="price" oninput="calcularMonto(this)" required>
+                    <small class="form-text">No se permiten números negativos</small>
+                </td>
+                <td>
+                    <input type="number" step="any" name="unidades" min="0" class="form-control insumo-unid" data-validate="true" data-type="price" oninput="calcularMonto(this)" required>
+                    <small class="form-text">No se permiten números negativos</small>
+                </td>
                 <td><b class="monto-total-p">$0.00</b></td>
                 <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
                 <td><div class="visible"><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></div></td>

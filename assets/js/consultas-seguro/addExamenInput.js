@@ -16,10 +16,10 @@ async function addExamenInput() {
             </div>
             <div class="col-12 col-md-5">
                 <label for="tipo_relacion">Costo del examen</label>
-                <input type="number" step="any" data-validate="true" data-type="price" data-max-length="6" class="form-control costos" required>
+                <input type="number" step="any" data-validate="true" data-type="price" data-max-length="6" class="form-control mb-3 costos" required>
                 <small class="form-text">No se permiten números negativos</small>
             </div>
-            <div class="col-3 col-md-1">
+            <div class="col-3 col-md-1 mt-4">
                 <button type="button" class="btn" onclick="deleteExamenInput(this)"><i class="fas fa-times m-0"></i></button>
             </div>
         </div>

@@ -63,7 +63,7 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
-                        <form action="#" id="info-proveedor" class="p-3 px-4">
+                        <form action="#" id="info-proveedor" class="form-reg p-3 px-4">
                             <label for="nombre">Nombre Proveedor</label>
                             <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameCompany" data-max-length="45" required>
                             <small class="form-text">El nombre solo debe contener al menos 6 letras sin caracteres especiales</small>

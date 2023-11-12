@@ -79,7 +79,7 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
-                        <form action="" id="info-empresa" class="p-3 px-4">
+                        <form action="" id="info-empresa" class="form-reg p-3 px-4">
                             <label for="rif">Rif</label>
                             <div class="input-group mb-3">
                                 <select name="cod_rif" id="cod-rif" class="me-2" required>

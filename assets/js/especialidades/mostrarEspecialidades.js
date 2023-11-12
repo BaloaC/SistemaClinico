@@ -15,6 +15,11 @@ addEventListener("DOMContentLoaded", e => {
             url :`/${path[1]}/especialidades/consulta/`,
             beforeSend: function(xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
+            },
+            error: function(xhr, error, thrown) {
+                // Manejo de errores de Ajax
+                console.log('Error de Ajax:', error);
+                console.log('Detalles:', thrown);
             }
         },
         columns: [

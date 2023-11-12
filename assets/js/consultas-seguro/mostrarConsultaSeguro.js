@@ -30,11 +30,12 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     seguroPrecioInput.value = infoSeguro.seguro_id;
     
     let examenesList = "";
+    precioExamanes.replaceChildren();
 
     infoSeguro?.examenes?.forEach(examen => {
         examenesList += `
-        <div class="row align-items-center newInput">
-            <div class="col-3 col-md-1">
+        <div class="row align-items-center">
+            <div class="col-3 col-md-1 px-1">
                 <button type="button" class="btn" value="${examen.examen_id}" data-bs-toggle="modal" data-bs-target="#modalDeletePrecioExamen" onclick="deletePrecioExamen(this, ${infoSeguro.seguro_id})"><i class="fas fa-times m-0"></i></button>
             </div>
             <div class="col-12 col-md-5">
@@ -108,6 +109,12 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
     } else {
         listConsultas = [];
+
+        $(".factura-header").fadeOut("slow");
+        $(".card-body").fadeOut("slow");
+        $(".total-amount").fadeOut("slow");
+        $("#factura-doesnt-exist").fadeIn("slow");
+        return;
     }
 
 
