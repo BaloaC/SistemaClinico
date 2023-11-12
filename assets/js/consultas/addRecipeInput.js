@@ -1,4 +1,5 @@
 import { select2OnClick } from "../global/dinamicSelect2.js";
+import validateInputs from "../global/validateInputs.js";
 
 let clicks = 0;
 function addRecipeInput(parentModal = "#modalReg") {
@@ -21,7 +22,8 @@ function addRecipeInput(parentModal = "#modalReg") {
                 </div>
                 <div class="col-12 col-md-5">
                 <label for="uso" class="p-0">Uso</label>
-                <input type="text" name="uso" class="form-control uso-medicamento">
+                <input type="text" name="uso" data-validate="true" data-type="address" class="form-control uso-medicamento">
+                <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
             </div>
             <div class="col-3 col-md-1">
                 <button type="button" class="btn" onclick="deleteInput(this,'.medicamento-id')"><i class="fas fa-times m-0"></i></button>
@@ -37,6 +39,8 @@ function addRecipeInput(parentModal = "#modalReg") {
         parentModal: parentModal,
         placeholder: "Seleccione el medicamento"
     });
+
+    validateInputs();
 }
 
 window.addRecipeInput = addRecipeInput;

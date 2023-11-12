@@ -66,7 +66,7 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
-                        <form action="" id="info-medico" class="p-3 px-4">
+                        <form action="" id="info-medico" class="form-reg p-3 px-4">
                             <div class="row">
                                 <div class="col-6">
                                     <label for="nombre">Nombres</label>

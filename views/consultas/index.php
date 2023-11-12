@@ -30,9 +30,6 @@
             <div class="row">
                 <div class="col-12 seg-container">
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title text-dark m-1">Consultas registradas</h4>
-                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="consultas" class="table table-compact">
@@ -69,7 +66,7 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
-                        <form action="" id="info-consulta" class="p-3 px-4">
+                        <form action="" id="info-consulta" class="form-reg p-3 px-4">
                             <div class="row">
                                 <div class="row ">
                                     <h5>Información de la cita</h5>
@@ -150,7 +147,7 @@
                                         <small class="form-text">No se permiten números negativos</small>
 
                                         <label for="altura">Observaciones</label>
-                                        <input type="text" name="observaciones" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="255">
+                                        <input type="text" name="observaciones" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255">
                                         <small class="form-text">Solo puede contener letras</small>
                                     </div>
                                     <div class="col-12 col-md-6">
@@ -160,7 +157,7 @@
                                         </select>
 
                                         <label for="fecha_consulta">Fecha consulta</label>
-                                        <input type="date" name="fecha_consulta" class="form-control mb-3 required">
+                                        <input type="date" name="fecha_consulta" class="form-control mb-3" data-validate="true" data-type="date" required>
                                     </div>
                                 </div>
 
@@ -219,7 +216,8 @@
                                     </div>
                                     <div class="col-12 col-md-5">
                                         <label for="monto" class="p-0">Monto</label>
-                                        <input type="number" name="monto_pago" step="any" class="form-control monto-pago" required disabled>
+                                        <input type="number" name="monto_pago" step="any" class="form-control monto-pago" data-validate="true" data-type="price" required disabled>
+                                        <small class="form-text">No se permiten números negativos</small>
                                     </div>
                                     <div class="col-3 col-md-1 d-none">
                                         <button type="button" class="btn" onclick="deleteInput(this,'.medico-pago-id')"><i class="fas fa-times m-0"></i></button>
@@ -239,7 +237,8 @@
                                     </div>
                                     <div class="col-12 col-md-5">
                                         <label for="cantidad" class="p-0">Cantidad utilizada</label>
-                                        <input type="number" step="any" class="form-control insumo-cant">
+                                        <input type="number" step="any" data-validate="true" data-type="number" class="form-control insumo-cant">
+                                        <small class="form-text col-12">Solo se permiten números</small>
                                     </div>
                                     <div class="col-3 col-md-1 d-none">
                                         <button type="button" class="btn" onclick="deleteInput(this,'.insumo-id')"><i class="fas fa-times m-0"></i></button>
@@ -260,7 +259,8 @@
                                     </div>
                                     <div class="col-12 col-md-5">
                                         <label for="uso" class="p-0">Uso</label>
-                                        <input type="text" class="form-control uso-medicamento">
+                                        <input type="text" data-validate="true" data-type="address" class="form-control uso-medicamento">
+                                        <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                                     </div>
                                     <div class="col-3 col-md-1 d-none">
                                         <button type="button" class="btn" onclick="deleteInput(this,'.medicamento-id')"><i class="fas fa-times m-0"></i></button>
@@ -274,7 +274,8 @@
                                 <div class="row align-items-center">
                                     <div class="col-12 col-md-5">
                                         <label for="indicacion" class="p-0">Indicación</label>
-                                        <input type="text" class="form-control indicaciones">
+                                        <input type="text" data-validate="true" data-type="address" class="form-control indicaciones">
+                                        <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                                     </div>
                                     <div class="col-3 col-md-1 d-none">
                                         <button type="button" class="btn" onclick="deleteInput(this,'.indicaciones')"><i class="fas fa-times m-0"></i></button>

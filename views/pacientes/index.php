@@ -30,9 +30,6 @@
             <div class="row">
                 <div class="col-12 seg-container">
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title text-dark m-1">Pacientes registrados</h4>
-                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="pacientes" class="table table-compact">
@@ -68,7 +65,7 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
-                        <form action="" id="info-paciente" class="p-3 px-4">
+                        <form action="" id="info-paciente" class="form-reg p-3 px-4">
                             <div class="row">
                                 <!-- Labels -->
                                 <div class="col-12 col-md-6">

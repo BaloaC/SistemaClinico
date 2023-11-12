@@ -30,9 +30,6 @@
             <div class="row">
                 <div class="col-12 seg-container">
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title text-dark m-1">Facturas entregada a mensajerías registradas</h4>
-                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="fMensajeria" class="table table-compact">
@@ -68,7 +65,7 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alertConsulta alert d-none" role="alert"></div>
-                        <form action="" id="info-fconsulta" class="p-3 px-4">
+                        <form action="" id="info-fconsulta" class="form-reg p-3 px-4">
                             <div class="row">
                                 <label for="paciente_id">Seguro</label>
                                 <select name="seguro_id" id="s-seguro" class="form-control" data-active="0" required>

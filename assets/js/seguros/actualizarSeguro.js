@@ -52,7 +52,8 @@ async function updateSeguro(id) {
         $form.costo_consulta.dataset.secondValue = json.costo_consulta;
         
         validateInputsOnUpdate();
-
+        cleanValdiation("info-precioExamen");
+        
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
         $inputId.value = id;

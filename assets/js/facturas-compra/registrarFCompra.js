@@ -23,16 +23,22 @@ async function addFCompra() {
             excento = document.getElementById("iva").textContent.slice(1),
             total_productos = document.getElementById("productos-totales").textContent,
             insumos = [];
-
-        // console.log($insumos);
+        
+        const insumoSet = new Set();
 
         $insumos.forEach((value, key) => {
 
-            // console.log($insumos[key + 1]);
-            // if($insumos[key + 1] !== undefined){
-            //     if($insumos[key].value === $insumos[key + 1].value) throw { message: "No es posible ingresar el mismo insumom verifique e intente nuevamente" }
-            // }
+            const insumoValue = $insumos[key].value;
 
+            // Validamos que no exista el mismo insumo dentro de la factura
+            if (insumoSet.has(insumoValue)) {
+                throw { message: "No es posible ingresar el mismo insumo verifique e intente nuevamente" };
+            }
+
+            insumoSet.add(insumoValue);
+
+            if($insumosUPrecio[key].value <=  0) throw { message: "Ningún precio unitario debe estar vacío" };
+            if($insumosUnid[key].value <= 0) throw { message: "Debe colocar al menos 1 unidad por insumo" };
 
             const insumo = {
                 insumo_id: value.value,
@@ -41,38 +47,15 @@ async function addFCompra() {
                 precio_total_bs: $insumosTPrecio[key].textContent.slice(1)
             }
             insumos.push(insumo);
-
-            // console.log(insumos.every(el => el === el));
-
-
         })
-        // let count = 0;
-        // console.log(insumos.every(el => { 
-
-        //     if(el.insumo_id === el.insumo_id){
-        //         count++;
-        //     }
-        //     console.log(count);
-        //     if(count > 1){
-        //         return true;
-        //     }
-        // }));
+     
         data.insumos = insumos;
         data.monto_con_iva = monto_con_iva;
         data.monto_sin_iva = monto_sin_iva;
         data.total_productos = total_productos;
         data.excento = excento;
 
-
-        // TODO: Validar los inputs del paciente
-
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-
-        // if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
-
-        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-
-        // data.rif = data.cod_rif + "-" + data.rif;
 
         const registroExitoso = await addModule("factura/compra", "info-fcompra", data, "Factura compra registrada correctamente!");
 
@@ -83,6 +66,7 @@ async function addFCompra() {
         cleanValdiation("info-fcompra");
         deleteElementByClass("newInput");
         $("#s-proveedor").val([]).trigger('change');
+        $("#s-proveedor").removeClass("is-valid");
         $("#s-insumo").val([]).trigger('change');
         document.querySelector("td > .monto-total-p").textContent = "$0.00";
         document.getElementById("productos-totales").textContent = "0";
@@ -90,6 +74,7 @@ async function addFCompra() {
         document.getElementById("iva").textContent = "$0.00";
         document.getElementById("monto-total").textContent = "$0.00";
         $('#fCompra').DataTable().ajax.reload();
+        document.querySelectorAll(".insumo-id")[0].classList.remove("is-valid");
 
     } catch (error) {
         console.log(error);

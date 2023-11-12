@@ -3,6 +3,8 @@ import getById from "../global/getById.js";
 import getAll from "../global/getAll.js";
 import concatItems from "../global/concatItems.js";
 import { removeAddAnalist } from "../global/validateRol.js";
+import to12HourFormat from "../global/to12HoursFormat.js";
+import sortScheduleByDay from "../global/sortScheduleByDay.js";
 removeAddAnalist();
 async function getMedico(id) {
     try {
@@ -25,16 +27,19 @@ async function getMedico(id) {
         if (json[0].horario?.length >= 1) {
 
             document.getElementById('info-medicos')?.remove();
-            
+
             $("#horarioMessage").fadeOut("slow");
             $("#horarios-table").fadeIn("slow");
 
-            json[0].horario.forEach(el => {
+
+            const horariosOrdenados = sortScheduleByDay(json[0].horario);
+
+            horariosOrdenados.forEach(el => {
                 horario += `
                     <tr>
-                        <td>${el.dias_semana}</td>
-                        <td>${el.hora_entrada}</td>
-                        <td>${el.hora_salida}</td>
+                        <td class="text-capitalize">${el.dias_semana}</td>
+                        <td>${to12HourFormat(el.hora_entrada)}</td>
+                        <td>${to12HourFormat(el.hora_salida)}</td>
                         <td>
                             <button class="btn btn-sm btn-empresa" id="btn-add" value="asdas${el.horario_id}" ${json[0].horario.length >= 1
                         ? `onclick=(deleteHorario(${el.horario_id})) data-bs-toggle="modal" data-bs-target="#modalDeleteRelacion"`
@@ -73,7 +78,7 @@ async function getMedico(id) {
             $especialidadMedico.innerHTML = "Este médico no posee ninguna especialidad";
         }
 
-        
+
 
         $nombreMedico.innerText = `${json[0].nombre.split(" ")[0]} ${json[0].apellidos.split(" ")[0]}`;
         $cedulaMedico.innerText = `C.I: ${json[0].cedula}`;

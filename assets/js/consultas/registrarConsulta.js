@@ -103,20 +103,6 @@ async function addConsulta() {
 
         if(data.medicamentos > 0 && !("recipes" in data)) throw { message: "Debe especificar los medicamentos utilizados" }
 
-
-        // TODO: Validar los inputs del paciente
-
-        // if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
-        // if (!(/^[0-9]*\.?[0-9]+$/.test(data.altura))) throw { message: "La altura no es válida" };
-        // if (!(/^[0-9]*\.?[0-9]+$/.test(data.peso))) throw { message: "La cédula no es válida" };
-
-
-        // if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
-
-        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-
-        // data.rif = data.cod_rif + "-" + data.rif;
-
         const registroExitoso = await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!");
         
         if (!registroExitoso.code) throw { result: registroExitoso.result };

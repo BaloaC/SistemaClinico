@@ -34,7 +34,7 @@ function calcularMonto(input) {
         montoTotalProducto += iva;
     }
 
-    monto.textContent = `$${montoTotalProducto.toFixed(2)}`;
+    monto.textContent = (montoTotalProducto == NaN) ? "$0.00" : `$${montoTotalProducto.toFixed(2)}`;
     monto.dataset.iva = iva;
     monto.dataset.montoSinIva = montoTotalProductoSinIva;
 
@@ -43,19 +43,19 @@ function calcularMonto(input) {
         allUnidades = document.querySelectorAll(".insumo-unid");
 
     allMontos.forEach((value, key) => {
-        montoTotalFactura += parseFloat(value.textContent.slice(1));
-        totalIvaFactura += parseFloat(value.dataset.iva);
-        montoTotalFacturaSinIva += parseFloat(value.dataset.montoSinIva);
-        totalUnidades += parseInt(allUnidades[key].value);
+        montoTotalFactura += (value.textContent.slice(1)) ? parseFloat(value.textContent.slice(1)) : 0;
+        console.log(value.textContent.slice(1));
+        totalIvaFactura += (value.dataset.iva !== undefined) ? parseFloat(value.dataset.iva) : 0;
+        montoTotalFacturaSinIva += (value.dataset.montoSinIva !== undefined) ? parseFloat(value.dataset.montoSinIva) : 0;
+        totalUnidades += (allUnidades[key].value !== "") ? parseInt(allUnidades[key].value) : 0;
     })
 
-    console.log(totalUnidades);
+    if (montoTotalFactura == NaN || totalIvaFactura == NaN || montoTotalFacturaSinIva == NaN || totalUnidades == NaN) return;
 
-    if (montoTotalFactura === NaN || totalIvaFactura === NaN || montoTotalFacturaSinIva === NaN || totalUnidades === NaN) return;
-    montoSinIva.textContent = `$${montoTotalFacturaSinIva.toFixed(2)}`;
-    productosTotales.textContent = `${totalUnidades}`;
-    totalIva.textContent = `$${totalIvaFactura.toFixed(2)}`;
-    total.textContent = `$${montoTotalFactura.toFixed(2)}`;
+    montoSinIva.textContent = (montoTotalFacturaSinIva == NaN) ? "$0.00" : `$${montoTotalFacturaSinIva.toFixed(2)}`;
+    productosTotales.textContent = (totalUnidades == NaN) ? "0" : `${totalUnidades}`;
+    totalIva.textContent = (totalIvaFactura == NaN) ? "$0.00" : `$${totalIvaFactura.toFixed(2)}`;
+    total.textContent = (montoTotalFactura == NaN) ? "$0.00" : `$${montoTotalFactura.toFixed(2)}`  ;
 
 }
 

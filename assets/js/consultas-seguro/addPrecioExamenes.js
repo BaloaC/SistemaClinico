@@ -38,8 +38,7 @@ async function addPrecioExamenes() {
         if (response?.code) {
 
             await getConsultasSegurosMes({ seguro: data.seguro_id });
-
-            cleanValdiation("info-precioExamen");;
+            cleanValdiation("info-precioExamen");
             deleteElementByClass("newInput");
         }
 

@@ -18,7 +18,7 @@ export default async function tipoAsegurado(paciente_id) {
         });
     }
 
-    $("#s-seguro").on("select2:open", async function (e) {
+    $(seguroSelect).on("select2:open", async function (e) {
         if (document.querySelector("#s-seguro").dataset.active == 0) {
 
             const infoPaciente = await getById("pacientes", paciente_id);
@@ -26,15 +26,15 @@ export default async function tipoAsegurado(paciente_id) {
             if ('result' in infoPaciente && infoPaciente.result.code === false) return;
 
             // Vaciar opciones del elemento select
-            $("#s-seguro").empty();
+            $(seguroSelect).empty();
 
             infoPaciente.seguro.forEach((el) => {
 
-                if ($("#s-seguro").find(`option[value="${el.seguro_id}"]`).length) {
-                    $("#s-seguro").val(el.seguro_id);
+                if ($(seguroSelect).find(`option[value="${el.seguro_id}"]`).length) {
+                    $(seguroSelect).val(el.seguro_id);
                 } else {
                     let newOption = new Option(selectText(["nombre_seguro", "nombre_empresa"], el), el.seguro_id, false, false);
-                    $("#s-seguro").append(newOption);
+                    $(seguroSelect).append(newOption);
                 }
             });
 
@@ -46,12 +46,22 @@ export default async function tipoAsegurado(paciente_id) {
                 disable: false,
             });
 
-            $("#s-seguro").val(0).trigger("change.select2");
-            $("#s-seguro").select2("close");
+            $(seguroSelect).val(0).trigger("change.select2");
+            $(seguroSelect).select2("close");
             document.querySelector("#s-seguro").dataset.active = 1;
         }
 
-        $("#s-seguro").select2("open");
+        $(seguroSelect).on("change", function () {
+            if ($(seguroSelect).val() != 0) {
+                $(seguroSelect).removeClass("is-invalid");
+                $(seguroSelect).addClass("is-valid");
+            } else {
+                $(seguroSelect).removeClass("is-valid");
+                $(seguroSelect).addClass("is-invalid");
+            }
+        });
+
+        $(seguroSelect).select2("open");
     });
 
     if ("#modalReg" !== null) {

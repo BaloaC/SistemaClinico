@@ -17,11 +17,11 @@ export default async function tipoTitular(inputRadio) {
             });
         }
 
-        $("#s-titular").on("select2:open", async function (e) {
+        $(titularSelect).on("select2:open", async function (e) {
             if (document.querySelector("#s-titular").dataset.active == 0) {
 
                 // Vaciar opciones del elemento select
-                $("#s-titular").empty();
+                $(titularSelect).empty();
 
                 let paciente_id = inputRadio.dataset.pacienteId;
                 let tipo_paciente = inputRadio.dataset.tipoPaciente;
@@ -46,11 +46,11 @@ export default async function tipoTitular(inputRadio) {
                     else if (el.tipo_paciente == 3) el.tipo_paciente = "Asegurado";
                     else if (el.tipo_paciente == 4) el.tipo_paciente = "Beneficiado";
 
-                    if ($("#s-titular").find(`option[value="${el.paciente_id}"]`).length) {
-                        $("#s-titular").val(el.paciente_id);
+                    if ($(titularSelect).find(`option[value="${el.paciente_id}"]`).length) {
+                        $(titularSelect).val(el.paciente_id);
                     } else {
                         let newOption = new Option(selectText(["cedula", "nombre-apellidos", "tipo_paciente"], el), el.paciente_id, false, false);
-                        $("#s-titular").append(newOption);
+                        $(titularSelect).append(newOption);
                     }
                 });
 
@@ -62,12 +62,22 @@ export default async function tipoTitular(inputRadio) {
                     disable: false,
                 });
 
-                $("#s-titular").val(0).trigger("change.select2");
-                $("#s-titular").select2("close");
+                $(titularSelect).val(0).trigger("change.select2");
+                $(titularSelect).select2("close");
                 document.querySelector("#s-titular").dataset.active = 1;
             }
 
-            $("#s-titular").select2("open");
+            $(titularSelect).on("change", function () {
+                if ($(titularSelect).val() != 0) {
+                    $(titularSelect).removeClass("is-invalid");
+                    $(pacientitularSelecttesSelect).addClass("is-valid");
+                } else {
+                    $(titularSelect).removeClass("is-valid");
+                    $(titularSelect).addClass("is-invalid");
+                }
+            });
+
+            $(titularSelect).select2("open");
         });
 
         if ("#modalReg" !== null) {

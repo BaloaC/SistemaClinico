@@ -1,4 +1,5 @@
 import { select2OnClick } from "../global/dinamicSelect2.js";
+import validateInputs from "../global/validateInputs.js";
 
 let clicks = 0;
 function addInsumoInput(parentModal = "#modalReg") {
@@ -22,7 +23,8 @@ function addInsumoInput(parentModal = "#modalReg") {
                 </div>
                 <div class="col-12 col-md-5">
                 <label for="cantidad" class="p-0">Cantidad utilizada</label>
-                <input type="number" step="any" name="cantidad" class="form-control insumo-cant">
+                <input type="number" step="any" name="cantidad" data-validate="true" data-type="number" class="form-control insumo-cant">
+                <small class="form-text col-12">Solo se permiten números</small>
             </div>
             <div class="col-3 col-md-1">
                 <button type="button" class="btn" onclick="deleteInput(this,'.insumo-id')"><i class="fas fa-times m-0"></i></button>
@@ -38,6 +40,8 @@ function addInsumoInput(parentModal = "#modalReg") {
         parentModal: parentModal,
         placeholder: "Seleccione el insumo"
     });
+
+    validateInputs();
 }
 
 window.addInsumoInput = addInsumoInput;

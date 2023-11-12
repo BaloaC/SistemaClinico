@@ -79,7 +79,7 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
-                        <form action="" id="info-empresa" class="p-3 px-4">
+                        <form action="" id="info-empresa" class="form-reg p-3 px-4">
                             <label for="rif">Rif</label>
                             <div class="input-group mb-3">
                                 <select name="cod_rif" id="cod-rif" class="me-2" required>
@@ -90,8 +90,8 @@
                                 <small class="form-text col-12">El rif debe contener 9 digitos</small>
                             </div>
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                            <small class="form-text">El nombre solo puede contener letras</small>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameCompany" data-max-length="45" required>
+                            <small class="form-text">El nombre solo puede contener letras y mínimo 6 caracteres</small>
                             <label for="direccion">Dirección</label>
                             <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
                             <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
@@ -153,8 +153,8 @@
                                 <small class="form-text col-12">El rif debe contener 9 digitos</small>
                             </div>
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
-                            <small class="form-text">El nombre solo puede contener letras</small>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameCompany" data-max-length="45" required>
+                            <small class="form-text">El nombre solo puede contener letras y mínimo 6 caracteres</small>
                             <label for="direccion">Dirección</label>
                             <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
                             <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>

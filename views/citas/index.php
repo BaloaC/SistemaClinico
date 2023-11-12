@@ -31,9 +31,6 @@
             <div class="row">
                 <div class="col-12 seg-container">
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title text-dark m-1">Citas</h4>
-                        </div>
                         <div class="card-body">
                             <div id="calendar"></div>
                         </div>
@@ -52,7 +49,7 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
-                        <form action="" id="info-cita" class="p-3 px-4">
+                        <form action="" id="info-cita" class="form-reg p-3 px-4">
                             <div class="row">
                                 <div class="row">
                                     <h5>Información del Paciente</h5>
@@ -80,10 +77,10 @@
                                     <h5>Información de la Cita</h4>
                                         <div class="col-12 col-md-6">
                                             <label for="fecha_cita">Fecha cita</label>
-                                            <input type="date" name="fecha_cita" id="fecha_cita" class="form-control mb-3">
+                                            <input type="date" name="fecha_cita" id="fecha_cita" data-validate="true" data-type="date" class="form-control mb-3">
 
                                             <label for="hora_entrada">Hora entrada</label>
-                                            <input type="time" name="hora_entrada" id="hora_entrada" class="form-control mb-3">
+                                            <input type="time" name="hora_entrada" id="hora_entrada" data-validate="true" data-type="time" class="form-control mb-3">
 
                                             <label for="tipo_cita">Tipo de cita</label>
                                             <select name="tipo_cita" id="s-tipo_cita" class="form-control mb-3" disabled>
@@ -106,7 +103,7 @@
                                             <small class="form-text">Solo se permiten letras y números</small>
 
                                             <label for="hora_salida">Hora salida</label>
-                                            <input type="time" name="hora_salida" id="hora_salida" class="form-control mb-3">
+                                            <input type="time" name="hora_salida" id="hora_salida" data-validate="true" data-type="time" class="form-control mb-3">
                                         </div>
                                 </div>
                                 <div class="row">
