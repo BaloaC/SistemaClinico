@@ -1,7 +1,7 @@
 <?php
 
-include_once './services/seguro/SeguroHelpers.php';
-include_once './services/seguro/SeguroValidaciones.php';
+include_once './services/seguros/seguro/SeguroHelpers.php';
+include_once './services/seguros/seguro/SeguroValidaciones.php';
 
 class SeguroService {
 

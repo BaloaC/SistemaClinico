@@ -1,8 +1,8 @@
 <?php
 
-include_once './services/seguro/SeguroService.php';
-include_once './services/seguro/SeguroHelpers.php';
-include_once './services/seguro/SeguroValidaciones.php';
+include_once './services/seguros/seguro/SeguroService.php';
+include_once './services/seguros/seguro/SeguroHelpers.php';
+include_once './services/seguros/seguro/SeguroValidaciones.php';
 
 class SeguroController extends Controller{
 

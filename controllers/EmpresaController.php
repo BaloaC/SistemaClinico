@@ -1,5 +1,10 @@
 <?php
 
+include_once './services/seguros/empresa/EmpresaValidaciones.php';
+
+include_once './services/seguros/empresa/EmpresaService.php';
+include_once './services/Helpers.php';
+
 class EmpresaController extends Controller{
 
     protected $arrayInner = array(
@@ -32,41 +37,8 @@ class EmpresaController extends Controller{
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         
-        $validarEmpresa = new Validate;
-
-        switch($_POST) {
-            case ($validarEmpresa->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
-    
-            case $validarEmpresa->isDuplicated('empresa', 'nombre', $_POST["nombre"]):
-                $respuesta = new Response('DATOS_DUPLICADOS');
-                return $respuesta->json(400);
-
-            case $validarEmpresa->isDuplicated('empresa', 'rif', $_POST["rif"]):
-                $respuesta = new Response('DATOS_DUPLICADOS');
-                return $respuesta->json(400);
-
-            default:
-             
-                $seguro = $_POST['seguro'];
-                unset($_POST['seguro']);
-                $data = $validarEmpresa->dataScape($_POST);
-                
-                $_empresaModel = new EmpresaModel();
-                $id = $_empresaModel->insert($data);
- 
-                 if ($id > 0) {
-                    $insertarSeguroEmpresa = new SeguroEmpresaController;
-                    $mensaje = $insertarSeguroEmpresa->insertarSeguroEmpresa($seguro, $id);
-
-                    if ($mensaje == true) { return $mensaje;
-                    } else {
-                        $respuesta = new Response('INSERCION_EXITOSA');
-                        return $respuesta->json(201);
-                    }
-                }
-        }
+        $empresa = EmpresaService::insertarEmpresa($_POST);
+        Helpers::retornarMensaje(true, $empresa);
     }
 
     public function actualizarEmpresa($empresa_id){
