@@ -63,7 +63,6 @@
     <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/login/iniciarSesion.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/login/autoLogOut.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/js/global/showPassword.js'); ?>"></script>
 </body>
 

@@ -78,6 +78,11 @@ window.addEventListener("pageshow", () => {
     if(location.pathname !== `/${path[1]}/usuarios/registrar` && location.pathname !==  `/${path[1]}/login/recuperarusuario`){
         validateSession();
     }
+
+    // Si hay sesión activa y regresa al login, redirigimos al usuario para el home
+    if((location.pathname === `/${path[1]}/` || location.pathname === `/${path[1]}/login`) && Cookies.get("failedSession") === "0" && Cookies.get("usuario_id")){
+        location = `/${path[1]}/home`;
+    } 
 })
 
 document.addEventListener("click", e => {
