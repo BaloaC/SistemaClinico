@@ -92,7 +92,7 @@ async function updateMedico(id) {
         $form.direccion.value = json[0].direccion;
         $form.direccion.dataset.secondValue = json[0].direccion;
 
-        validateInputsOnUpdate();
+        
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";

@@ -34,7 +34,7 @@ async function mostrarLaboratorios(inicial) {
             laboratorios.removeChild(laboratorios.lastElementChild);
         } else {
 
-            template = `<h2 class="initial">${inicial.toUpperCase()}</h2>`;
+            template = `<h4 class="initial">${inicial.toUpperCase()}</h4>`;
             template += `<h5 class="mx-5">No se encontraron exámenes de laboratorio</h5>`;
             examenesContainer.innerHTML = template;
         }

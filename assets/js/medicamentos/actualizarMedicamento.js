@@ -35,7 +35,7 @@ async function updateMedicamento(id) {
         // Añadirle el dataset en caso de que no cambie su valor
         $form["s-especialidad-update"].dataset.secondValue = json[0].especialidad_id;
 
-        validateInputsOnUpdate();
+        
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";

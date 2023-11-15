@@ -95,7 +95,7 @@ async function updatePaciente(id) {
         // $form.tipo_paciente.dataset.secondValue = json.tipo_paciente;
 
         actualizarTipoPaciente(json.tipo_paciente);
-        validateInputsOnUpdate();
+        
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";

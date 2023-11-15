@@ -19,7 +19,7 @@ async function updateEspecialidad(id) {
         $form.nombre.value = json.nombre;
         $form.nombre.dataset.secondValue = json.nombre;
 
-        validateInputsOnUpdate();
+        
 
         const $inputId = d.createElement("input");
         $inputId.type = "hidden";

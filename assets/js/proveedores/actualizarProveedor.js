@@ -22,7 +22,7 @@ async function updateProveedor(id) {
         $form.ubicacion.value = json.ubicacion;
         $form.ubicacion.dataset.secondValue = json.ubicacion;
 
-        validateInputsOnUpdate();
+        
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";

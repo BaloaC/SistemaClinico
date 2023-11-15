@@ -36,7 +36,7 @@ async function updateEmpresa(id) {
         $form.direccion.value = json.direccion;
         $form.direccion.dataset.secondValue = json.direccion;
 
-        validateInputsOnUpdate();
+        
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
