@@ -7,14 +7,12 @@ export const defaultSelect = () => {
             const selectOptions = select.options;
             let selectHasOptions = selectOptions?.length > 0;
     
-            // Si el select está vacio por defecto le añadimos la clase por defecto
-            if(select.value === ""){
-                
-                if (selectHasOptions) {
-                    selectOptions[0].disabled = true;
-                }
-                select.classList.add("default-select");
+            // Si el primer option está vacío lo deshabilitamos por defecto
+            if (selectHasOptions && selectOptions[0].value === "") {
+                selectOptions[0].disabled = true;
             }
+            select.classList.add("default-select");
+        
         
             // Evento para que cuando cambie de valor distinto se le quite la clase por defecto
             select.addEventListener("change", () => {

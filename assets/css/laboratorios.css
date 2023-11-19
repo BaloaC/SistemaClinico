@@ -8,7 +8,6 @@ a {
 
 .initial{
     font-weight: bold;
-    font-size: 2.5rem;
 }
 
 .main-home * {
@@ -24,7 +23,7 @@ a {
 
 .abc-container a {
     color: #010101;
-    font-size: 2rem;
+    font-size: 1.5rem;
     text-decoration: none;
 }
 
@@ -33,7 +32,7 @@ a {
 }
 
 .active-word {
-    font-size: 2.25rem !important;
+    font-size: 1.75rem !important;
     font-weight: bolder;
 }
 

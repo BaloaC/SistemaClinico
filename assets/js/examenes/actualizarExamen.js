@@ -32,7 +32,7 @@ async function updateExamen(id) {
             document.getElementById("hecho_aqui_no").checked = true;
         };
 
-        validateInputsOnUpdate();
+        
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";

@@ -16,7 +16,7 @@
     <main class="main-home">
         <div class="container text-light">
             <div class="row">
-                <h4 class="py-4 mt-5">Exámenes de laboratorio</h4>
+                <h4 class="pt-5 pb-2 text-grey">Gestion de Exámenes</h4>
             </div>
             <div class="row abc-container">
                 <div class="abc-elements">
