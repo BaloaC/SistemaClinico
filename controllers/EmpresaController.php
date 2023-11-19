@@ -44,69 +44,12 @@ class EmpresaController extends Controller{
     public function actualizarEmpresa($empresa_id){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        
-        $camposKey = array($empresa_id);
+        EmpresaService::actualizarEmpresa($_POST, $empresa_id);
+
         $validarEmpresa = new Validate;
-        
-        switch($_POST) {
-            case $validarEmpresa->isEmpty($_POST):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
-            
-            case $validarEmpresa->existsInDB($_POST, $camposKey):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
-
-            case !$validarEmpresa->isDuplicated('empresa', 'empresa_id', $empresa_id):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
-
-            default:
-
-                if (array_key_exists('nombre', $_POST)) {
-                    if ($validarEmpresa->isDuplicated('empresa', 'nombre', $_POST["nombre"])) {
-                        $respuesta = new Response('DATOS_DUPLICADOS');
-                        return $respuesta->json(400);
-                    }
-                }  
-
-                if (array_key_exists('rif', $_POST)) {
-                    if ($validarEmpresa->isDuplicated('empresa', 'rif', $_POST["rif"])) {
-                        $respuesta = new Response('DATOS_DUPLICADOS');
-                        return $respuesta->json(400);
-                    }
-                }
-                
-                if ( array_key_exists('seguro', $_POST) ) {
-                    $newForm = $_POST['seguro'];
-                    unset($_POST['seguro']);
-
-                    $actualizarSeguro = new SeguroEmpresaController;
-                    $mensajeSeguro = $actualizarSeguro->insertarSeguroEmpresa($newForm, $empresa_id);
-
-                    if ( $mensajeSeguro ) { return $mensajeSeguro; } 
-                }
-                
-                if ( !$validarEmpresa->isEmpty($_POST) ) { //Validamos si todavía hay cosas que insertar en la actualización
-                    
-                    $data = $validarEmpresa->dataScape($_POST);
-
-                    //Si hay más data por enviar, se hace el update de la empresa    
-                    $_empresaModel = new EmpresaModel();
-                    $actualizado = $_empresaModel->where('empresa_id','=',$empresa_id)->update($data);
-                    $mensaje = ($actualizado > 0);
-
-                    $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-                    $respuesta->setData($actualizado);
-
-                    return $respuesta->json($mensaje ? 200 : 400);                
-                } else {
-                    $respuesta = new Response('ACTUALIZACION_EXITOSA');
-                    return $respuesta->json(200);
-                }
-                
-        }
-        
+        $respuesta = new Response('ACTUALIZACION_EXITOSA');
+        $respuesta->setData($validarEmpresa->dataScape($_POST));
+        return $respuesta->json(200);
     }
 
     public function listarEmpresas(){
