@@ -5,7 +5,7 @@ const listadoSeguros = await getAll("seguros/consulta");
 const registros = listadoSeguros;
 
 // Configurar la paginación
-const registrosPorPagina = 6;
+const registrosPorPagina = 15;
 let paginaActual = 1;
 
 export async function segurosPagination(registros) {

@@ -41,7 +41,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer d-flex justify-content-between">
-                                        <a data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="fas fa-trash"></i></a>
+                                        <a data-bs-toggle="modal" data-bs-target="#modalDelete" type="button"><i class="fas fa-trash"></i></a>
                                     </div>
                                 </div>
                             </div>
