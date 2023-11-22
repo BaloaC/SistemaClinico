@@ -1,6 +1,8 @@
 <?php
 
 include_once './services/globals/GlobalsHelpers.php';
+include_once './services/facturas/insumos/facturaInsumosValidaciones.php';
+include_once './services/facturas/insumos/facturaInsumosHelpers.php';
 
 class FacturaCompraController extends Controller
 {
@@ -37,80 +39,31 @@ class FacturaCompraController extends Controller
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
-        $camposNumericos = array('proveedor_id', 'total_productos', 'monto_con_iva', 'monto_sin_iva', 'excento');
 
-        switch ($validarFactura) {
-            case ($validarFactura->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
+        FacturaInsumosValidaciones::validacionesFactura($_POST);
+        FacturaInsumosValidaciones::validarInsumo($_POST['insumos']);
 
-            case $validarFactura->isNumber($_POST, $camposNumericos):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
+        $insumos = $_POST['insumos'];
+        unset($_POST['insumos']);
 
-            case !$validarFactura->isDuplicated('proveedor', 'proveedor_id', $_POST["proveedor_id"]):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(200);
+        $data = $validarFactura->dataScape($_POST);
 
-            case $validarFactura->isDate($_POST['fecha_compra']):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(400);
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+        $data['monto_usd'] = round( $data['monto_con_iva'] / $valorDivisa, 2);
 
-            case $validarFactura->isToday($_POST['fecha_compra'], false):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(400);
+        $_facturaCompraModel = new FacturaCompraModel();
+        $id = $_facturaCompraModel->insert($data);
+        $mensaje = ($id > 0);
 
-            default:
-                $insumos = $_POST['insumos'];
+        if ($mensaje) {
 
-                unset($_POST['insumos']);
-                $data = $validarFactura->dataScape($_POST);
+            FacturaInsumoHelpers::insertarCompraInsumo($insumos, $id);
 
-                $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-                $data['monto_usd'] = round( $data['monto_con_iva'] / $valorDivisa, 2);
+        } else {
 
-                $_facturaCompraModel = new FacturaCompraModel();
-                $id = $_facturaCompraModel->insert($data);
-                $mensaje = ($id > 0);
-
-                if ($mensaje) {
-
-                    $_compraInsumoController = new CompraInsumoController;
-                    $respuestaInsumo = $_compraInsumoController->insertarCompraInsumo($insumos, $id);
-
-                    if (!$respuestaInsumo) {
-
-                        $respuesta = new Response('INSERCION_EXITOSA');
-                        return $respuesta->json(201);
-                    } else {
-                        $_facturaCompraModel->where('factura_compra_id', '=', $id)->delete();
-                        return $respuestaInsumo;
-                    }
-                } else {
-
-                    $respuesta = new Response('INSERCION_FALLIDA');
-                    return $respuesta->json(400);
-                }
-        }
-    }
-
-    public function actualizarFacturaCompra($factura_id) {
-                
-        $_compraInsumoController = new FacturaCompraModel();
-        $factura_compra = $_compraInsumoController->where('factura_compra_id', '=', $factura_id)->getFirst();
-
-        if ($factura_compra->estatus_fac != '1') {
-            $respuesta = new Response(false, 'No puede realizar operaciones con una factura ya cancelada o eliminada');
-            $respuesta->setData("Error al actualizar la factura $factura_id con estatus ".($factura_compra->estatus_fac == '2' ? 'anulada' : 'pagado'));
+            $respuesta = new Response('INSERCION_FALLIDA');
             return $respuesta->json(400);
         }
-
-        $data = array(
-            'estatus_fac' => '3'
-        );
-        
-        $actualizado = $_compraInsumoController->where('factura_compra_id', '=', $factura_id)->update($data);
-        return $this->mensajeActualizaciónExitosa($actualizado);
     }
 
     public function listarFacturaCompra() {

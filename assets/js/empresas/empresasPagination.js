@@ -5,7 +5,7 @@ const listadoEmpresas = await getAll("empresas/consulta");
 const registros = listadoEmpresas != typeof Array ? listadoEmpresas : undefined;
 
 // Configurar la paginación
-const registrosPorPagina = 6;
+const registrosPorPagina = 15;
 let paginaActual = 1;
 
 

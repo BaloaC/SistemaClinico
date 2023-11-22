@@ -1,5 +1,7 @@
 <?php
 
+include_once './services/Helpers.php';
+
 class InsumoController extends Controller{
 
     //Método index (vista principal)
@@ -55,7 +57,7 @@ class InsumoController extends Controller{
         $_insumoModel = new InsumoModel();
         $lista = $_insumoModel->where('estatus_ins', '=', '1')->getAll();
         $mensaje = (count($lista) > 0);
-        return $this->retornarMensaje($mensaje, $lista);
+        Helpers::retornarMensaje($mensaje, $lista);
     }
 
     public function listarInsumoPorId($insumo_id){
@@ -63,7 +65,7 @@ class InsumoController extends Controller{
         $_insumoModel = new InsumoModel();
         $insumo = $_insumoModel->where('estatus_ins', '=', '1')->where('insumo_id','=',$insumo_id)->getFirst();
         $mensaje = ($insumo != null);
-        return $this->retornarMensaje($mensaje, $insumo);
+        Helpers::retornarMensaje($mensaje, $insumo);
     }
 
     public function eliminarInsumo($insumo_id){
@@ -80,12 +82,5 @@ class InsumoController extends Controller{
         $respuesta->setData($eliminado);
         return $respuesta->json($mensaje ? 200 : 404);
 
-    }
-
-    // Funciones
-    public function retornarMensaje($mensaje, $dataReturn) {
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($dataReturn);
-        return $respuesta->json(200);
     }
 }

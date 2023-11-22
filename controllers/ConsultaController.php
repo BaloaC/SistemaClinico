@@ -404,7 +404,7 @@ class ConsultaController extends Controller {
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($resultado);
 
-        return $respuesta->json($mensaje ? 200 : 404);
+        return $respuesta->json($mensaje ? 200 : 400);
     }
 
     public function listarConsultaPorId($consulta_id) {
