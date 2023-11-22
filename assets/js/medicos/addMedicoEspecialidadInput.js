@@ -1,8 +1,35 @@
-import { select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2 from "../global/dinamicSelect2.js";
+import getAll from "../global/getAll.js";
 import validateInputs from "../global/validateInputs.js";
 
 let clicks = 0;
-function addMedicoEspecialidadInput(button,parentModal = "#modalReg") {
+let modalOpened = false;
+let especialidades = null;
+const modalRegister = document.getElementById("modalReg");
+const modalUpdate = document.getElementById("modalAct");
+
+const handleModalOpen = async () => {
+    if(modalOpened === false){
+        especialidades = await getAll("especialidades/consulta");
+
+        dinamicSelect2({
+            obj: especialidades,
+            selectSelector: "#s-especialidad",
+            selectValue: "especialidad_id",
+            selectNames: ["nombre"],
+            parentModal: "#modalReg",
+            placeholder: "Seleccione una especialidad",
+        });
+
+        modalOpened = true;
+    }
+}
+
+// Al abrir el modal cargar los select2
+modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen());
+modalUpdate.addEventListener('show.bs.modal', async () => await handleModalOpen());
+
+async function addMedicoEspecialidadInput(button,parentModal = "#modalReg") {
 
     clicks += 1;
 
@@ -27,15 +54,17 @@ function addMedicoEspecialidadInput(button,parentModal = "#modalReg") {
     `;
 
     document.getElementById(button).insertAdjacentHTML("beforebegin", template);
-    select2OnClick({
+
+    dinamicSelect2({
+        obj: especialidades,
         selectSelector: `#s-especialidad${clicks}`,
         selectValue: "especialidad_id",
         selectNames: ["nombre"],
-        module: "especialidades/consulta",
         parentModal: parentModal,
         placeholder: "Seleccione una especialidad"
     });
 
     validateInputs();
 }
+
 window.addMedicoEspecialidadInput = addMedicoEspecialidadInput;

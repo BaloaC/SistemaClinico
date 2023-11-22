@@ -1,7 +1,34 @@
-import { select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
+import getAll from "../global/getAll.js";
 import validateInputs from "../global/validateInputs.js";
 
 let clicks = 0;
+let modalOpened = false;
+let examenesSeguroList = null;
+const modalAddExamenSeguro = document.getElementById("modalAddPrecioExamen");
+
+
+const handleModalOpen = async () => {
+    if(modalOpened === false){
+
+        examenesSeguroList = await getAll("examenes/clinica");
+
+        dinamicSelect2({
+            obj: examenesSeguroList,
+            selectSelector: "#s-examen_id",
+            selectValue: "examen_id",
+            selectNames: ["nombre"],
+            parentModal: "#modalAddPrecioExamen",
+            placeholder: "Seleccione el examen"
+        });
+
+        modalOpened = true;
+    }
+}
+
+// Al abrir el modal cargar los select2
+modalAddExamenSeguro.addEventListener('show.bs.modal', async () => await handleModalOpen());
+
 async function addExamenInput() {
 
     clicks += 1;
@@ -26,26 +53,16 @@ async function addExamenInput() {
     `;
 
     document.getElementById("addExamenes").insertAdjacentHTML("beforebegin", template);
-    select2OnClick({
+    dinamicSelect2({
+        obj: examenesSeguroList,
         selectSelector: `#s-examen_id${clicks}`,
         selectValue: "examen_id",
         selectNames: ["nombre"],
-        module: "examenes/consulta",
         parentModal: "#modalAddPrecioExamen",
         placeholder: "Seleccione el examen"
     });
 
     validateInputs();
 }
-
-select2OnClick({
-    selectSelector: "#s-examen_id",
-    selectValue: "examen_id",
-    selectNames: ["nombre"],
-    module: "examenes/consulta",
-    parentModal: "#modalAddPrecioExamen",
-    placeholder: "Seleccione el examen"
-});
-
 
 window.addExamenInput = addExamenInput;

@@ -84,6 +84,10 @@ input::-ms-reveal {
     width: 60%;
 }
 
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
 /* .two-inputs > .row > * {
     width: 45%;
 }

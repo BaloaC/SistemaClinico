@@ -32,6 +32,7 @@ async function validateSession() {
             alert.textContent = "La sesión no se pudo validar correctamente";
             alert.classList.add("alert-danger");
             alert.classList.remove("d-none");
+            Cookies.set("failedSession", "0");
             return;
         }
         
@@ -56,8 +57,12 @@ async function validateSession() {
     } catch (error) {
 
         // Si la ruta no es el login redirigrlo hacia allá
-        if(location.pathname !== `/${path[1]}/login`){
+        if(location.pathname !== `/${path[1]}/login` && location.pathname !== `/${path[1]}/`){
             Cookies.set("failedSession", "1");
+            Cookies.remove("usuario_id");
+            Cookies.remove("usuario");
+            Cookies.remove("rol");
+            Cookies.remove("tokken");
             location = `/${path[1]}/login`;
         }
     }
@@ -68,6 +73,7 @@ function logOut() {
     Cookies.remove("usuario_id");
     Cookies.remove("usuario");
     Cookies.remove("tokken");
+    Cookies.remove("rol");
 
     location = `/${path[1]}/login`;
 }
@@ -80,7 +86,7 @@ window.addEventListener("pageshow", () => {
     }
 
     // Si hay sesión activa y regresa al login, redirigimos al usuario para el home
-    if((location.pathname === `/${path[1]}/` || location.pathname === `/${path[1]}/login`) && Cookies.get("failedSession") === "0" && Cookies.get("usuario_id")){
+    if((location.pathname === `/${path[1]}/` || location.pathname === `/${path[1]}/login`) && Cookies.get("failedSession") === "0" && Cookies.get("usuario_id") && Cookies.get("tokken") && Cookies.get("usuario")){
         location = `/${path[1]}/home`;
     } 
 })

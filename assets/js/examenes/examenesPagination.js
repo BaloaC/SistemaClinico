@@ -3,14 +3,14 @@ import getAll from "../global/getAll.js";
 import { removeAddAccountant, removeAddAnalist, removeAddMD } from "../global/validateRol.js";
 
 const listadoExamenes = await getAll("examenes/consulta");
-const registros = listadoExamenes != typeof Array ? listadoExamenes : undefined;
-console.log(registros);
+let registrosExm = listadoExamenes != typeof Array ? listadoExamenes : undefined;
 removeAddAccountant();
 removeAddAnalist();
 removeAddMD();
 // Configurar la paginación
-const registrosPorPagina = 6;
+const registrosPorPagina = 15;
 let paginaActual = 1;
+let paginationInitializated = false;
 
 
 export function examenesPagination(registros) {
@@ -20,6 +20,8 @@ export function examenesPagination(registros) {
         document.getElementById('card-container').innerHTML = mensajeVacio;
         return;
     } else {
+
+        registrosExm = registros;
 
         function crearTarjeta(registro, plantilla, separadores = {}) {
             // Crear el elemento de la tarjeta
@@ -82,8 +84,8 @@ export function examenesPagination(registros) {
             document.getElementById('card-container').innerHTML = '';
 
             // Mostrar los registros de la página actual
-            for (let i = inicio; i < fin && i < registros.length; i++) {
-                crearTarjeta(registros[i], plantilla, separadores);
+            for (let i = inicio; i < fin && i < registrosExm.length; i++) {
+                crearTarjeta(registrosExm[i], plantilla, separadores);
             }
 
             // Actualizar los botones de paginación
@@ -92,7 +94,7 @@ export function examenesPagination(registros) {
 
         function crearBotones() {
             // Calcular el número de páginas
-            const numPaginas = Math.ceil(registros.length / registrosPorPagina);
+            const numPaginas = Math.ceil(registrosExm.length / registrosPorPagina);
 
             // Limpiar el contenedor de paginación
             document.getElementById('pagination-container').innerHTML = '';
@@ -172,6 +174,7 @@ export function examenesPagination(registros) {
             // Verificar si los botones de página anterior y siguiente existen en la página
             const botonPaginaAnterior = document.getElementById('boton-pagina-anterior');
             const botonPaginaSiguiente = document.getElementById('boton-pagina-siguiente');
+
             if (!botonPaginaAnterior || !botonPaginaSiguiente) {
                 return;
             }
@@ -184,7 +187,7 @@ export function examenesPagination(registros) {
             }
 
             // Actualizar el botón de página siguiente
-            if (paginaActual === Math.ceil(registros.length / registrosPorPagina)) {
+            if (paginaActual === Math.ceil(registrosExm.length / registrosPorPagina)) {
                 botonPaginaSiguiente.setAttribute('disabled', 'disabled');
             } else {
                 botonPaginaSiguiente.removeAttribute('disabled');
@@ -198,6 +201,7 @@ export function examenesPagination(registros) {
             const primerBoton = document.querySelector('.btn.page-item.page-link');
             if (primerBoton) {
                 primerBoton.click();
+                paginaActual = 1;
             }
         }
 
@@ -209,32 +213,43 @@ export function examenesPagination(registros) {
         // Seleccionar por defecto el primer botón
         seleccionarPrimerBoton();
 
-        // Agregar el evento de clic al botón de página anterior
-        const botonPaginaAnterior = document.getElementById('boton-pagina-anterior');
-        if (botonPaginaAnterior) {
+        function botonAnteriorAction() {
+            paginaActual--;
+            console.log(paginaActual);
+            mostrarRegistros();
+        }
+
+        function botonSiguienteAction() {
+            paginaActual++;
+            console.log(paginaActual);
+            mostrarRegistros();
+        }
+
+        if (paginationInitializated === false) {
+
+            // Agregar el evento de clic al botón de página anterior
+            const botonPaginaAnterior = document.getElementById('boton-pagina-anterior');
+            const botonPaginaSiguiente = document.getElementById('boton-pagina-siguiente');
+
+            // Agregar el evento de clic al botón de página anterior
             botonPaginaAnterior.addEventListener('click', () => {
-                paginaActual--;
-                mostrarRegistros();
+                botonAnteriorAction();
             });
-        }
-
-        // Agregar el evento de clic al botón de página siguiente
-        const botonPaginaSiguiente = document.getElementById('boton-pagina-siguiente');
-        if (botonPaginaSiguiente) {
+    
+            // Agregar el evento de clic al botón de página siguiente    
             botonPaginaSiguiente.addEventListener('click', () => {
-                paginaActual++;
-                mostrarRegistros();
+                botonSiguienteAction();
             });
-        }
 
-        // Agregar el evento de cambio de tamaño de ventana
-        window.addEventListener('resize', () => {
-            // Actualizar los botones de paginación
-            actualizarBotonesPaginacion();
-        });
+            // Agregar el evento de cambio de tamaño de ventana
+            window.addEventListener('resize', () => {
+                // Actualizar los botones de paginación
+                actualizarBotonesPaginacion();
+            });
 
-       
+            paginationInitializated = true;
+        } 
     }
 }
 
-examenesPagination(registros);
+examenesPagination(registrosExm);

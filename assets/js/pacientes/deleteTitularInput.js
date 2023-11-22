@@ -7,7 +7,7 @@ function deleteTitularInput(input) {
 
     // Si se elimina el segundo titular ocultarle el icono de eliminar
     if (titulares.length === 2) {
-        document.querySelectorAll(".titular")[0].parentElement.parentElement.querySelector("div").classList.add("d-none");
+        document.querySelectorAll(".titular")[0].parentElement.parentElement.querySelector("div:nth-child(2)")[0].classList.add("d-none");
     }
 
 }

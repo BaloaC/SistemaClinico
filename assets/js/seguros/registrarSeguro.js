@@ -44,7 +44,9 @@ async function addSeguro() {
         data.examenes = examenes;
         data.costos = costos;
 
-        await addModule("seguros", "info-seguro", data, "Seguro registrado exitosamente!");
+        const registroExitoso = await addModule("seguros", "info-seguro", data, "Seguro registrado exitosamente!");
+
+        if (!registroExitoso.code) throw { result: registroExitoso.result };
 
         scrollTo("modalRegBody");
         const listadoSeguros = await getAll("seguros/consulta");

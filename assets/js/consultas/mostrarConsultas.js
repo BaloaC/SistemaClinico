@@ -8,122 +8,115 @@ import Cookies from "../../libs/jscookie/js.cookie.min.js";
 const path = location.pathname.split('/');
 const especialidadSelect = document.getElementById("s-especialidad");
 
-select2OnClick({
-    selectSelector: "#s-paciente",
-    selectValue: "paciente_id",
-    selectNames: ["cedula", "nombre-apellidos"],
-    module: "pacientes/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione un paciente",
-});
+let modalOpened = false;
+const modalRegConsulta = document.getElementById("modalRegConsulta") ?? undefined;
+const modalRegister = document.getElementById("modalReg") ?? undefined;
 
-document.getElementById("s-paciente").disabled = true;
+const handleModalOpen = async () => {
+    if (modalOpened === false) {
 
-select2OnClick({
-    selectSelector: "#s-medico",
-    selectValue: "medico_id",
-    selectNames: ["cedula", "nombre-apellidos"],
-    module: "medicos/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione un médico"
-});
+        const medicosList = await getAll("medicos/consulta");
+        const pacientesList = await getAll("pacientes/consulta");
+        const examenesList = await getAll("examenes/consulta");
+        const segurosList = await getAll("seguros/consulta");
+        const infoCitas = await getAll("citas/consulta");
+        let listCitas;
 
-select2OnClick({
-    selectSelector: `#s-medico-pago`,
-    selectValue: "medico_id",
-    selectNames: ["cedula", "nombre-apellidos"],
-    module: "medicos/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione un médico"
-});
-
-select2OnClick({
-    selectSelector: "#s-seguro-emergencia",
-    selectValue: "seguro_id",
-    selectNames: ["rif", "nombre"],
-    module: "seguros/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione un seguro"
-});
-
-document.getElementById("s-medico").disabled = true;
-
-emptySelect2({
-    selectSelector: especialidadSelect,
-    placeholder: "Debe seleccionar un médico",
-    parentModal: "#modalReg"
-})
-
-especialidadSelect.disabled = true;
-
-$("#s-medico").on("change", async function (e) {
+        if ('result' in infoCitas && infoCitas.result.code === false) listCitas = [];
 
 
-    let medico_id = this.value;
-    const infoMedico = await getById("medicos", medico_id);
+        if (infoCitas.length > 0) {
+            listCitas = infoCitas.filter(cita => cita.estatus_cit === "1");
+        }
 
-    $(especialidadSelect).empty().select2();
+        dinamicSelect2({
+            obj: listCitas ?? [],
+            selectSelector: "#s-cita",
+            selectValue: "cita_id",
+            selectNames: ["cita_id", "cedula_paciente", "nombre_paciente-apellido_paciente", "motivo_cita"],
+            parentModal: "#modalReg",
+            placeholder: "Seleccione una cita"
+        });
 
-    dinamicSelect2({
-        obj: infoMedico[0].especialidad ?? [],
-        selectSelector: especialidadSelect,
-        selectValue: "especialidad_id",
-        selectNames: ["nombre_especialidad"],
-        parentModal: "#modalReg",
-        placeholder: "Seleccione una especialidad"
-    });
+        dinamicSelect2({
+            obj: examenesList,
+            selectSelector: "#s-examen",
+            selectValue: "examen_id",
+            selectNames: ["nombre"],
+            parentModal: "#modalReg",
+            placeholder: "Seleccione los exámenes",
+            multiple: true
+        });
 
-    especialidadSelect.disabled = false;
-    especialidadSelect.classList.add("is-valid");
+        dinamicSelect2({
+            obj: segurosList,
+            selectSelector: "#s-seguro-emergencia",
+            selectValue: "seguro_id",
+            selectNames: ["rif", "nombre"],
+            parentModal: "#modalReg",
+            placeholder: "Seleccione un seguro"
+        });
 
-})
+        dinamicSelect2({
+            obj: pacientesList,
+            selectSelector: "#s-paciente",
+            selectValue: "paciente_id",
+            selectNames: ["cedula", "nombre-apellidos"],
+            parentModal: "#modalReg",
+            placeholder: "Seleccione un paciente",
+        });
 
-select2OnClick({
-    selectSelector: "#s-examen",
-    selectValue: "examen_id",
-    selectNames: ["nombre"],
-    module: "examenes/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione los exámenes",
-    multiple: true
-});
+        document.getElementById("s-paciente").disabled = true;
 
-select2OnClick({
-    selectSelector: "#s-insumo",
-    selectValue: "insumo_id",
-    selectNames: ["nombre"],
-    module: "insumos/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione el insumo"
-});
 
-select2OnClick({
-    selectSelector: "#s-medicamento",
-    selectValue: "medicamento_id",
-    selectNames: ["nombre_medicamento"],
-    module: "medicamento/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione el medicamento"
-});
+        dinamicSelect2({
+            obj: medicosList,
+            selectSelector: "#s-medico",
+            selectValue: "medico_id",
+            selectNames: ["cedula", "nombre-apellidos"],
+            parentModal: "#modalReg",
+            placeholder: "Seleccione un médico"
+        });
 
-// especialidadSelect.disabled = true;
-// TODO: Al seleccionar/cambiar el valor del medico, cargar unicamente sus especialidades, crear el input vacio afuera
-// $("#s-medico").on("change", async function (e) {
 
-//     const especialidades = await getAll("especialidades/consulta");
-//     $(especialidadSelect).empty().select2();
+        document.getElementById("s-medico").disabled = true;
 
-//     dinamicSelect2({
-//         obj: especialidades,
-//         selectSelector: especialidadSelect,
-//         selectValue: "especialidad_id",
-//         selectNames: ["nombre"],
-//         parentModal: "#modalReg",
-//         placeholder: "Seleccione una especialidad"
-//     });
+        emptySelect2({
+            selectSelector: especialidadSelect,
+            placeholder: "Debe seleccionar un médico",
+            parentModal: "#modalReg",
+        })
 
-//     especialidadSelect.disabled = false;
-// })
+        especialidadSelect.disabled = true;
+
+        $("#s-medico").on("change", async function (e) {
+
+
+            let medico_id = this.value;
+            const infoMedico = await getById("medicos", medico_id);
+
+            $(especialidadSelect).empty().select2();
+
+            dinamicSelect2({
+                obj: infoMedico[0].especialidad ?? [],
+                selectSelector: especialidadSelect,
+                selectValue: "especialidad_id",
+                selectNames: ["nombre_especialidad"],
+                parentModal: "#modalReg",
+                placeholder: "Seleccione una especialidad"
+            });
+
+            especialidadSelect.disabled = false;
+            especialidadSelect.classList.add("is-valid");
+
+        });
+
+        modalOpened = true;
+    }
+}
+
+if (modalRegister) modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen());
+if (modalRegConsulta) modalRegConsulta.addEventListener('show.bs.modal', async () => await handleModalOpen());
 
 
 addEventListener("DOMContentLoaded", async e => {
@@ -131,26 +124,6 @@ addEventListener("DOMContentLoaded", async e => {
     removeAddAccountant();
     removeAddAnalist();
 
-    let infoCitas = await getAll("citas/consulta");
-    let listCitas;
-
-    if ('result' in infoCitas && infoCitas.result.code === false) listCitas = [];
-
-
-    if (infoCitas.length > 0) {
-        listCitas = infoCitas.filter(cita => cita.estatus_cit === "1");
-    }
-
-    console.log(listCitas);
-
-    dinamicSelect2({
-        obj: listCitas ?? [],
-        selectSelector: "#s-cita",
-        selectValue: "cita_id",
-        selectNames: ["cita_id", "cedula_paciente", "nombre_paciente-apellido_paciente", "motivo_cita"],
-        parentModal: "#modalReg",
-        placeholder: "Seleccione una cita"
-    });
 
     let consultas = $('#consultas').DataTable({
 
@@ -163,7 +136,7 @@ addEventListener("DOMContentLoaded", async e => {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
             },
-            error: function(xhr, error, thrown) {
+            error: function (xhr, error, thrown) {
                 // Manejo de errores de Ajax
                 console.log('Error de Ajax:', error);
                 console.log('Detalles:', thrown);
@@ -187,26 +160,26 @@ addEventListener("DOMContentLoaded", async e => {
             {
                 data: null,
                 render: function (data, type, row) {
-                    if("nombre_paciente" in data) return data.nombre_paciente;
-                    if("beneficiado" in data) return data.beneficiado.nombre;
+                    if ("nombre_paciente" in data) return data.nombre_paciente;
+                    if ("beneficiado" in data) return data.beneficiado.nombre;
                 }
             },
-            { 
+            {
                 data: null,
-                render: function (data, type, row){
-                    if("nombre_medico" in data){
+                render: function (data, type, row) {
+                    if ("nombre_medico" in data) {
                         // console.log(data);
-                        return data.nombre_medico;  
+                        return data.nombre_medico;
                     } else {
                         return "Consulta por emergencia"
                     }
                 }
             },
-            { 
-                data: null, 
-                render: function (data, type, row){
-                    if("nombre_especialidad" in data){
-                        return data.nombre_especialidad;  
+            {
+                data: null,
+                render: function (data, type, row) {
+                    if ("nombre_especialidad" in data) {
+                        return data.nombre_especialidad;
                     } else {
                         return "Consulta por emergencia"
                     }
@@ -360,7 +333,7 @@ addEventListener("DOMContentLoaded", async e => {
         //         <td>Tipo de medicamento: <br><b>${tipo_medicamento}</b></td>
         //         <td colspan"2">Uso: <br><b>${el.uso}</b></td>
 
-        if(data.factura){
+        if (data.factura) {
 
             factura = `
             <tr>

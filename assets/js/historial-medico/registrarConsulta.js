@@ -61,23 +61,23 @@ select2OnClick({
     multiple: true
 });
 
-select2OnClick({
-    selectSelector: "#s-insumo",
-    selectValue: "insumo_id",
-    selectNames: ["nombre"],
-    module: "insumos/consulta",
-    parentModal: "#modalRegConsulta",
-    placeholder: "Seleccione el insumo"
-});
+// select2OnClick({
+//     selectSelector: "#s-insumo",
+//     selectValue: "insumo_id",
+//     selectNames: ["nombre"],
+//     module: "insumos/consulta",
+//     parentModal: "#modalRegConsulta",
+//     placeholder: "Seleccione el insumo"
+// });
 
-select2OnClick({
-    selectSelector: "#s-medicamento",
-    selectValue: "medicamento_id",
-    selectNames: ["nombre_medicamento"],
-    module: "medicamento/consulta",
-    parentModal: "#modalRegConsulta",
-    placeholder: "Seleccione el medicamento"
-});
+// select2OnClick({
+//     selectSelector: "#s-medicamento",
+//     selectValue: "medicamento_id",
+//     selectNames: ["nombre_medicamento"],
+//     module: "medicamento/consulta",
+//     parentModal: "#modalRegConsulta",
+//     placeholder: "Seleccione el medicamento"
+// });
 
 
 async function addConsulta() {

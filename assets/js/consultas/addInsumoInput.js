@@ -1,7 +1,35 @@
-import { select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
+import getAll from "../global/getAll.js";
 import validateInputs from "../global/validateInputs.js";
 
 let clicks = 0;
+let modalOpened = false;
+let insumosList = null;
+const modalRegConsulta = document.getElementById("modalRegConsulta") ?? undefined;
+const modalRegister = document.getElementById("modalReg") ?? undefined;
+
+const handleModalOpen = async (parentModal) => {
+    if(modalOpened === false){
+
+        insumosList = await getAll("insumos/consulta");    
+        
+        dinamicSelect2({
+            obj: insumosList,
+            selectSelector: `#s-insumo`,
+            selectValue: "insumo_id",
+            selectNames: ["nombre"],
+            parentModal: parentModal,
+            placeholder: "Seleccione el insumo"
+        });
+
+        modalOpened = true;
+    }
+}
+
+// Al abrir el modal cargar los select2
+if(modalRegister) modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalReg")); 
+if(modalRegConsulta) modalRegConsulta.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalRegConsulta"));
+
 function addInsumoInput(parentModal = "#modalReg") {
 
 
@@ -32,15 +60,16 @@ function addInsumoInput(parentModal = "#modalReg") {
         </div>
     `;
     document.getElementById("addInsumo").insertAdjacentHTML("beforebegin", template);
-    select2OnClick({
+
+    dinamicSelect2({
+        obj: insumosList,
         selectSelector: `#s-insumo${clicks}`,
         selectValue: "insumo_id",
         selectNames: ["nombre"],
-        module: "insumos/consulta",
         parentModal: parentModal,
         placeholder: "Seleccione el insumo"
     });
-
+    
     validateInputs();
 }
 

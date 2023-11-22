@@ -1,9 +1,46 @@
-import { select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
+import getAll from "../global/getAll.js";
 import validateInputs from "../global/validateInputs.js";
 
 export let clicks = 0;
-function addInsumoInput() {
+let modalOpened = false;
+let insumosList = null;
+const modalRegister = document.getElementById("modalReg");
 
+const handleModalOpen = async () => {
+    if(modalOpened === false){
+
+        insumosList = await getAll("insumos/consulta");
+        const proveedoresList = await getAll("proveedores/consulta");
+
+        dinamicSelect2({
+            obj: proveedoresList,
+            selectSelector: "#s-proveedor",
+            selectValue: "proveedor_id",
+            selectNames: ["proveedor_id", "nombre"],
+            parentModal: "#modalReg",
+            placeholder: "Seleccione un proveedor",
+            selectWidth: "100%",
+        });
+        
+        dinamicSelect2({
+            obj: insumosList,
+            selectSelector: "#s-insumo",
+            selectValue: "insumo_id",
+            selectNames: ["nombre"],
+            parentModal: "#modalReg",
+            placeholder: "Seleccione el insumo",
+            selectWidth: "100%",
+        });
+
+        modalOpened = true;
+    }
+}
+
+// Al abrir el modal cargar los select2
+modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen());
+
+function addInsumoInput() {
 
     const inputInsumos = document.querySelectorAll(".insumo-id");
 
@@ -21,11 +58,11 @@ function addInsumoInput() {
     clone.querySelector("tr").classList.add("newInput");
     document.getElementById("insumos-list").appendChild(clone);
 
-    select2OnClick({
+    dinamicSelect2({
+        obj: insumosList,
         selectSelector: `#s-insumo${clicks}`,
         selectValue: "insumo_id",
         selectNames: ["nombre"],
-        module: "insumos/consulta",
         parentModal: "#modalReg",
         placeholder: "Seleccione el insumo",
         selectWidth: "100%"

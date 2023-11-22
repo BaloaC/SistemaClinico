@@ -1,7 +1,35 @@
-import { select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
+import getAll from "../global/getAll.js";
 import validateInputs from "../global/validateInputs.js";
 
 let clicks = 0;
+let modalOpened = false;
+let medicamentosList = null;
+const modalRegConsulta = document.getElementById("modalRegConsulta") ?? undefined;
+const modalRegister = document.getElementById("modalReg") ?? undefined;
+
+const handleModalOpen = async (parentModal) => {
+    if(modalOpened === false){
+
+        medicamentosList = await getAll("medicamento/consulta");    
+        
+        dinamicSelect2({
+            obj: medicamentosList,
+            selectSelector: `#s-medicamento`,
+            selectValue: "medicamento_id",
+            selectNames: ["nombre_medicamento"],
+            parentModal: parentModal,
+            placeholder: "Seleccione el medicamento"
+        });
+
+        modalOpened = true;
+    }
+}
+
+// Al abrir el modal cargar los select2
+if(modalRegister) modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalReg")); 
+if(modalRegConsulta) modalRegConsulta.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalRegConsulta"));
+
 function addRecipeInput(parentModal = "#modalReg") {
 
     const inputRecipes = document.querySelectorAll(".medicamento-id");
@@ -31,11 +59,11 @@ function addRecipeInput(parentModal = "#modalReg") {
         </div>
     `;
     document.getElementById("addRecipe").insertAdjacentHTML("beforebegin", template);
-    select2OnClick({
+    dinamicSelect2({
+        obj: medicamentosList,
         selectSelector: `#s-medicamento${clicks}`,
         selectValue: "medicamento_id",
         selectNames: ["nombre_medicamento"],
-        module: "medicamento/consulta",
         parentModal: parentModal,
         placeholder: "Seleccione el medicamento"
     });

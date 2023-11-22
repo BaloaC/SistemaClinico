@@ -136,14 +136,3 @@ export async function mostrarMedicos() {
 // document.addEventListener("DOMContentLoaded", e => {
 //     mostrarMedicos();
 // });
-
-
-select2OnClick({
-    selectSelector: "#s-especialidad",
-    selectValue: "especialidad_id",
-    selectNames: ["nombre"],
-    module: "especialidades/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione una especialidad",
-    multiple: true
-});

@@ -2,11 +2,12 @@ import concatItems from "../global/concatItems.js";
 import getAll from "../global/getAll.js";
 
 const listadoProveedores = await getAll("proveedores/consulta");
-const registros = listadoProveedores != typeof Array ? listadoProveedores : undefined;
+let registrosProv = listadoProveedores != typeof Array ? listadoProveedores : undefined;
 
 // Configurar la paginación
-const registrosPorPagina = 6;
+const registrosPorPagina = 3;
 let paginaActual = 1;
+let paginationInitializated = false;
 
 export async function proveedoresPagination(registros) {
 
@@ -15,6 +16,8 @@ export async function proveedoresPagination(registros) {
         document.getElementById('card-container').innerHTML = mensajeVacio;
         return;
     } else {
+
+        registrosProv = registros;
 
         function crearTarjeta(registro, plantilla, separadores = {}) {
             // Crear el elemento de la tarjeta
@@ -54,7 +57,7 @@ export async function proveedoresPagination(registros) {
         const separadores = {};
 
         // Función para mostrar los registros de la página actual
-        function mostrarRegistros(registros) {
+        function mostrarRegistros() {
             // Obtener el número de registros a mostrar
             const inicio = (paginaActual - 1) * registrosPorPagina;
             const fin = inicio + registrosPorPagina;
@@ -63,8 +66,8 @@ export async function proveedoresPagination(registros) {
             document.getElementById('card-container').innerHTML = '';
 
             // Mostrar los registros de la página actual
-            for (let i = inicio; i < fin && i < registros.length; i++) {
-                crearTarjeta(registros[i], plantilla, separadores);
+            for (let i = inicio; i < fin && i < registrosProv.length; i++) {
+                crearTarjeta(registrosProv[i], plantilla, separadores);
             }
 
             // Actualizar los botones de paginación
@@ -73,7 +76,7 @@ export async function proveedoresPagination(registros) {
 
         function crearBotones() {
             // Calcular el número de páginas
-            const numPaginas = Math.ceil(registros.length / registrosPorPagina);
+            const numPaginas = Math.ceil(registrosProv.length / registrosPorPagina);
 
             // Limpiar el contenedor de paginación
             document.getElementById('pagination-container').innerHTML = '';
@@ -165,7 +168,7 @@ export async function proveedoresPagination(registros) {
             }
 
             // Actualizar el botón de página siguiente
-            if (paginaActual === Math.ceil(registros.length / registrosPorPagina)) {
+            if (paginaActual === Math.ceil(registrosProv.length / registrosPorPagina)) {
                 botonPaginaSiguiente.setAttribute('disabled', 'disabled');
             } else {
                 botonPaginaSiguiente.removeAttribute('disabled');
@@ -179,41 +182,55 @@ export async function proveedoresPagination(registros) {
             const primerBoton = document.querySelector('.btn.page-item.page-link');
             if (primerBoton) {
                 primerBoton.click();
+                paginaActual = 1;
             }
         }
 
         // Mostrar los registros de la página actual
-        mostrarRegistros(registros);
+        mostrarRegistros();
         crearBotones();
 
         // Seleccionar por defecto el primer botón
         seleccionarPrimerBoton();
 
-        // Agregar el evento de clic al botón de página anterior
-        const botonPaginaAnterior = document.getElementById('boton-pagina-anterior');
-        if (botonPaginaAnterior) {
+        function botonAnteriorAction() {
+            paginaActual--;
+            console.log(paginaActual);
+            mostrarRegistros();
+        }
+
+        function botonSiguienteAction() {
+            paginaActual++;
+            console.log(paginaActual);
+            mostrarRegistros();
+        }
+
+        if (paginationInitializated === false) {
+
+            // Agregar el evento de clic al botón de página anterior
+            const botonPaginaAnterior = document.getElementById('boton-pagina-anterior');
+            const botonPaginaSiguiente = document.getElementById('boton-pagina-siguiente');
+
+            // Agregar el evento de clic al botón de página anterior
             botonPaginaAnterior.addEventListener('click', () => {
-                paginaActual--;
-                mostrarRegistros(registros);
+                botonAnteriorAction();
             });
-        }
-
-        // Agregar el evento de clic al botón de página siguiente
-        const botonPaginaSiguiente = document.getElementById('boton-pagina-siguiente');
-        if (botonPaginaSiguiente) {
+    
+            // Agregar el evento de clic al botón de página siguiente    
             botonPaginaSiguiente.addEventListener('click', () => {
-                paginaActual++;
-                mostrarRegistros(registros);
+                botonSiguienteAction();
             });
-        }
 
-        // Agregar el evento de cambio de tamaño de ventana
-        window.addEventListener('resize', () => {
-            // Actualizar los botones de paginación
-            actualizarBotonesPaginacion();
-        });
+            // Agregar el evento de cambio de tamaño de ventana
+            window.addEventListener('resize', () => {
+                // Actualizar los botones de paginación
+                actualizarBotonesPaginacion();
+            });
+
+            paginationInitializated = true;
+        } 
     }
 }
 
-proveedoresPagination(registros);
+proveedoresPagination(registrosProv);
 

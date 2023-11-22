@@ -110,11 +110,9 @@
                                     </div>
                                     <div class="col-11">
                                         <label for="costo">Costo</label>
-                                        <input type="number" name="costo" class="form-control costos" required>
+                                        <input type="number" step="any" name="costo" class="form-control costos" data-validate="true" data-type="price" data-max-length="5" required>
+                                        <small class="form-text">No se permiten números negativos</small>
                                     </div>
-                                </div>
-                                <div class="col-2">
-                                    <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-primary mt-3" id="addExamen" onclick="addExamenSeguroInput()">Añadir otro exámen</button>

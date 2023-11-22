@@ -1,7 +1,30 @@
-import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
+import { defaultSelect } from "../global/defaultSelect.js";
+import dinamicSelect2 from "../global/dinamicSelect2.js";
 import getTitulares from "./getTitulares.js";
 
 let clicks = 0;
+let modalOpened = false;
+let titulares = null;
+const modalRegister = document.getElementById('modalReg');
+
+// Al abrir el modal cargar los select2
+modalRegister.addEventListener('show.bs.modal', async () => {
+    if(modalOpened === false){
+        titulares = await getTitulares();
+        
+        dinamicSelect2({
+            obj: titulares,
+            selectSelector: "#s-titular_id",
+            selectValue: "paciente_id",
+            selectNames: ["cedula", "nombre-apellidos"],
+            parentModal: "#modalReg",
+            placeholder: "Seleccione un titular"
+        });
+
+        modalOpened = true;
+    }
+})
+
 async function addTitularInput() {
 
     const inputTitulares = document.querySelectorAll(".titular");
@@ -23,7 +46,7 @@ async function addTitularInput() {
             </div>
             <div class="col-12 col-md-5">
                 <label for="tipo_relacion">Tipo de relación</label>
-                <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3 relacion" required>
+                <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3 default-select relacion" required>
                     <option value="" disabled selected>Seleccione el tipo de relación</option>
                     <option value="1">Seguro</option>
                     <option value="2">Natural</option>
@@ -34,7 +57,7 @@ async function addTitularInput() {
             </div>
             <div class="col-12 col-md-5">
                 <label for="tipo_familiar">Tipo de familiar</label>
-                <select name="tipo_familiar" id="tipo_familiar" class="form-control mb-3 tipo_familiar" required>
+                <select name="tipo_familiar" id="tipo_familiar" class="form-control mb-3 default-select tipo_familiar" required>
                     <option value="" disabled selected>Seleccione el tipo de familiar</option>
                     <option value="1">Padre/Madre</option>
                     <option value="2">Representante</option>
@@ -48,7 +71,7 @@ async function addTitularInput() {
         </div>
     `;
     document.getElementById("addTitular").insertAdjacentHTML("beforebegin", template);
-    const titulares = await getTitulares();
+
     dinamicSelect2({
         obj: titulares,
         selectSelector: `#s-titular_id${clicks}`,
@@ -57,21 +80,8 @@ async function addTitularInput() {
         parentModal: "#modalReg",
         placeholder: "Seleccione un titular"
     });
+    
+    defaultSelect();
 }
-
-//TODO: cuando cerremos el modal, se eliminen los inputs restastes
-//TODO: que al cerrar el modal o registro exitoso, se recarguen los select2
-
-const titulares = await getTitulares();
-
-// $("#s-titular_id").empty().select2();
-dinamicSelect2({
-    obj: titulares,
-    selectSelector: "#s-titular_id",
-    selectValue: "paciente_id",
-    selectNames: ["cedula", "nombre-apellidos"],
-    parentModal: "#modalReg",
-    placeholder: "Seleccione un titular"
-});
 
 window.addTitularInput = addTitularInput;

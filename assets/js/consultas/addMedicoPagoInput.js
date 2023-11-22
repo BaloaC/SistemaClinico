@@ -1,7 +1,36 @@
-import { select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
+import getAll from "../global/getAll.js";
 import validateInputs from "../global/validateInputs.js";
 
 let clicks = 0;
+let modalOpened = false;
+let medicosList = null;
+const modalRegConsulta = document.getElementById("modalRegConsulta") ?? undefined;
+const modalRegister = document.getElementById("modalReg") ?? undefined;
+
+const handleModalOpen = async (parentModal) => {
+    if(modalOpened === false){
+
+        medicosList = await getAll("medicos/consulta");    
+        
+        dinamicSelect2({
+            obj: medicosList,
+            selectSelector: `#s-medico-pago`,
+            selectValue: "medico_id",
+            selectNames: ["cedula", "nombre-apellidos"],
+            parentModal: parentModal,
+            placeholder: "Seleccione un médico"
+        });
+
+        modalOpened = true;
+    }
+}
+
+// Al abrir el modal cargar los select2
+if(modalRegister) modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalReg")); 
+if(modalRegConsulta) modalRegConsulta.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalRegConsulta"));
+
+
 function addMedicoPagoInput(parentModal = "#modalReg") {
 
     clicks += 1;
@@ -25,11 +54,11 @@ function addMedicoPagoInput(parentModal = "#modalReg") {
     </div>
     `;
     document.getElementById("addMedicoPago").insertAdjacentHTML("beforebegin", template);
-    select2OnClick({
+    dinamicSelect2({
+        obj: medicosList,
         selectSelector: `#s-medico-pago${clicks}`,
         selectValue: "medico_id",
         selectNames: ["cedula", "nombre-apellidos"],
-        module: "medicos/consulta",
         parentModal: parentModal,
         placeholder: "Seleccione un médico"
     });

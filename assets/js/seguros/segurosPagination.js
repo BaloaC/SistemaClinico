@@ -2,14 +2,17 @@ import concatItems from "../global/concatItems.js";
 import getAll from "../global/getAll.js";
 
 const listadoSeguros = await getAll("seguros/consulta");
-const registros = listadoSeguros;
+let registrosSeg = listadoSeguros;
 
 // Configurar la paginación
-const registrosPorPagina = 6;
+const registrosPorPagina = 15;
 let paginaActual = 1;
+let paginationInitializated = false;
 
 export async function segurosPagination(registros) {
 
+    registrosSeg = registros;
+    
     const separadores = {};
 
     function crearTarjeta(registro, plantilla, separadores = {}) {
@@ -23,8 +26,12 @@ export async function segurosPagination(registros) {
         // Agregar el contenido a la tarjeta
         tarjeta.innerHTML = plantilla.replace(/\${(.*?)}/g, (match, p1) => {
 
+            // Validamos que si el separador es de examenes, retornar la cantidad que contiene 
+            if (p1 == "examenes"){
+                return registro[p1]?.length ?? "0";
+            }
             // Validamos si se envía un separador o la propiedad es un array
-            if (separadores[p1] || Array.isArray(registro[p1])) {
+            else if (separadores[p1] || Array.isArray(registro[p1])) {
                 return concatItems(registro[p1], separadores[p1].propiedad, separadores[p1].mensajeVacio);
             } else {
                 return registro[p1];
@@ -43,6 +50,7 @@ export async function segurosPagination(registros) {
           <ul class="list-group list-group-flush">
             <li class="list-group-item"><span class="mb-0">Rif</span> <b class="text-muted">\${rif}</b></li>
             <li class="list-group-item"><span class="mb-0">Seguro</span> <b class="text-muted">\${telefono}</b></li>
+            <li class="list-group-item"><span class="mb-0">Cantidad de exámenes</span> <b class="text-muted">\${examenes}</b></li>
           </ul>
         </div>
       `;
@@ -57,8 +65,8 @@ export async function segurosPagination(registros) {
         document.getElementById('card-container').innerHTML = '';
 
         // Mostrar los registros de la página actual
-        for (let i = inicio; i < fin && i < registros.length; i++) {
-            crearTarjeta(registros[i], plantilla, separadores);
+        for (let i = inicio; i < fin && i < registrosSeg.length; i++) {
+            crearTarjeta(registrosSeg[i], plantilla, separadores);
         }
 
         // Actualizar los botones de paginación
@@ -67,7 +75,7 @@ export async function segurosPagination(registros) {
 
     function crearBotones() {
         // Calcular el número de páginas
-        const numPaginas = Math.ceil(registros.length / registrosPorPagina);
+        const numPaginas = Math.ceil(registrosSeg.length / registrosPorPagina);
 
         // Limpiar el contenedor de paginación
         document.getElementById('pagination-container').innerHTML = '';
@@ -159,7 +167,7 @@ export async function segurosPagination(registros) {
         }
 
         // Actualizar el botón de página siguiente
-        if (paginaActual === Math.ceil(registros.length / registrosPorPagina)) {
+        if (paginaActual === Math.ceil(registrosSeg.length / registrosPorPagina)) {
             botonPaginaSiguiente.setAttribute('disabled', 'disabled');
         } else {
             botonPaginaSiguiente.removeAttribute('disabled');
@@ -173,6 +181,7 @@ export async function segurosPagination(registros) {
         const primerBoton = document.querySelector('.btn.page-item.page-link');
         if (primerBoton) {
             primerBoton.click();
+            paginaActual = 1;
         }
     }
 
@@ -183,30 +192,40 @@ export async function segurosPagination(registros) {
     // Seleccionar por defecto el primer botón
     seleccionarPrimerBoton();
 
-    // Agregar el evento de clic al botón de página anterior
-    const botonPaginaAnterior = document.getElementById('boton-pagina-anterior');
-    if (botonPaginaAnterior) {
+    function botonAnteriorAction() {
+        paginaActual--;
+        mostrarRegistros();
+    }
+
+    function botonSiguienteAction() {
+        paginaActual++;
+        mostrarRegistros();
+    }
+
+    if (paginationInitializated === false) {
+
+        // Agregar el evento de clic al botón de página anterior
+        const botonPaginaAnterior = document.getElementById('boton-pagina-anterior');
+        const botonPaginaSiguiente = document.getElementById('boton-pagina-siguiente');
+
+        // Agregar el evento de clic al botón de página anterior
         botonPaginaAnterior.addEventListener('click', () => {
-            paginaActual--;
-            mostrarRegistros();
+            botonAnteriorAction();
         });
-    }
 
-    // Agregar el evento de clic al botón de página siguiente
-    const botonPaginaSiguiente = document.getElementById('boton-pagina-siguiente');
-    if (botonPaginaSiguiente) {
+        // Agregar el evento de clic al botón de página siguiente    
         botonPaginaSiguiente.addEventListener('click', () => {
-            paginaActual++;
-            mostrarRegistros();
+            botonSiguienteAction();
         });
-    }
 
-    // Agregar el evento de cambio de tamaño de ventana
-    window.addEventListener('resize', () => {
-        // Actualizar los botones de paginación
-        actualizarBotonesPaginacion();
-    });
+        // Agregar el evento de cambio de tamaño de ventana
+        window.addEventListener('resize', () => {
+            // Actualizar los botones de paginación
+            actualizarBotonesPaginacion();
+        });
 
+        paginationInitializated = true;
+    } 
 }
 
-segurosPagination(registros);
+segurosPagination(registrosSeg);

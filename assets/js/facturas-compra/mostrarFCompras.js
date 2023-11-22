@@ -6,26 +6,6 @@ import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
 const path = location.pathname.split("/");
 
-select2OnClick({
-    selectSelector: "#s-proveedor",
-    selectValue: "proveedor_id",
-    selectNames: ["proveedor_id", "nombre"],
-    module: "proveedores/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione un proveedor",
-    selectWidth: "100%",
-});
-
-select2OnClick({
-    selectSelector: "#s-insumo",
-    selectValue: "insumo_id",
-    selectNames: ["nombre"],
-    module: "insumos/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione el insumo",
-    selectWidth: "100%",
-});
-
 addEventListener("DOMContentLoaded", (e) => {
     let fCompra = $("#fCompra").DataTable({
         bAutoWidth: false,
