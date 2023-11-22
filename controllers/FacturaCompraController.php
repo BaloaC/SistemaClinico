@@ -161,11 +161,4 @@ class FacturaCompraController extends Controller
         $respuesta = new Response($isTrue ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
         return $respuesta->json($isTrue ? 200 : 400);
     }
-
-    public function retornarMensaje($resultado) {
-
-        $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($resultado);
-        return $respuesta->json(200);
-    }
 }
