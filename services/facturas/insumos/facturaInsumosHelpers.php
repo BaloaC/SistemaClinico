@@ -50,4 +50,25 @@ class FacturaInsumoHelpers {
             }
         }
     }
+
+    public static function listarInsumoPorFactura($factura_id) {
+        $arrayInner = array(
+            "insumo" => "compra_insumo"
+        );
+
+        $arraySelect = array(
+            "insumo.nombre AS insumo_nombre", 
+            "compra_insumo.unidades", 
+            "compra_insumo.precio_unit_bs", 
+            "compra_insumo.precio_total_bs",
+            "compra_insumo.precio_unit_usd", 
+            "compra_insumo.precio_total_usd" 
+        );
+
+        $_compraInsumoModel = new CompraInsumoModel();
+        $inners = $_compraInsumoModel->listInner($arrayInner);
+        $compra_insumo = $_compraInsumoModel->where('compra_insumo.factura_compra_id','=',$factura_id)->innerJoin($arraySelect, $inners, "compra_insumo");
+
+        return $compra_insumo;
+    }
 }

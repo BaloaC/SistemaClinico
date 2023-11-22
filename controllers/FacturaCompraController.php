@@ -1,6 +1,7 @@
 <?php
 
 include_once './services/globals/GlobalsHelpers.php';
+include_once './services/Helpers.php';
 include_once './services/facturas/insumos/facturaInsumosValidaciones.php';
 include_once './services/facturas/insumos/facturaInsumosHelpers.php';
 
@@ -58,6 +59,10 @@ class FacturaCompraController extends Controller
         if ($mensaje) {
 
             FacturaInsumoHelpers::insertarCompraInsumo($insumos, $id);
+            $respuesta = new Response('ACTUALIZACION_EXITOSA');
+            
+            $respuesta->setData( array_merge($data, array("insumos" => $insumos)) );
+            return $respuesta->json(200);
 
         } else {
 
@@ -101,9 +106,7 @@ class FacturaCompraController extends Controller
                 }
 
                 // Codigo para recibir los insumos que fueron comprados con esa factura
-                $_compraInsumoController = new CompraInsumoController;
-                $insumosFactura = $_compraInsumoController->listarCompraInsumoPorFactura($facturas->factura_compra_id);
-
+                $insumosFactura = FacturaInsumoHelpers::listarInsumoPorFactura($facturas->factura_compra_id);
                 $facturas->insummos = $insumosFactura;
 
                 if ( array_key_exists('date', $_GET) ) { // Si es el reporte por mes añadimos el total
@@ -120,10 +123,10 @@ class FacturaCompraController extends Controller
                 $resultadoFactura['monto_total_usd'] = round($total_usd, 2);
             }
 
-            return $this->retornarMensaje($resultadoFactura);
+            Helpers::retornarMensaje($resultadoFactura, $resultadoFactura);
         } else {
 
-            return $this->retornarMensaje($factura_compra);
+            Helpers::retornarMensaje($factura_compra, $factura_compra);
         }
     }
 
@@ -135,16 +138,14 @@ class FacturaCompraController extends Controller
 
         if ($factura_compra) {
             // Codigo para recibir los insumos que fueron comprados con esa factura
-            $_compraInsumoController = new CompraInsumoController;
-            $insumosFactura = $_compraInsumoController->listarCompraInsumoPorFactura($factura_compra[0]->factura_compra_id);
-
+            $insumosFactura = FacturaInsumoHelpers::listarInsumoPorFactura($factura_compra[0]->factura_compra_id);
             $factura_compra[0]->insumos = $insumosFactura;
             $resultado = $factura_compra[0];
 
-            return $this->retornarMensaje($resultado);
+            Helpers::retornarMensaje($resultado, $resultado);
         } else {
 
-            return $this->retornarMensaje($factura_compra);
+            Helpers::retornarMensaje($factura_compra, $factura_compra);
         }
     }
 
@@ -156,20 +157,15 @@ class FacturaCompraController extends Controller
         );
 
         $eliminado = $_compraInsumoController->where('factura_compra_id', '=', $factura_compra_id)->update($data);
-        return $this->mensajeActualizaciónExitosa($eliminado);
+        $isTrue = ($eliminado > 0);
+        $respuesta = new Response($isTrue ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+        return $respuesta->json($isTrue ? 200 : 400);
     }
 
-    // funciones
     public function retornarMensaje($resultado) {
 
         $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($resultado);
         return $respuesta->json(200);
-    }
-
-    public function mensajeActualizaciónExitosa($update) {
-        $isTrue = ($update > 0);
-        $respuesta = new Response($isTrue ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        return $respuesta->json($isTrue ? 200 : 400);
     }
 }
