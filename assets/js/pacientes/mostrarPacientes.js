@@ -55,6 +55,8 @@ addEventListener("DOMContentLoaded", e => {
                 // Manejo de errores de Ajax
                 console.log('Error de Ajax:', error);
                 console.log('Detalles:', thrown);
+
+                $('#pacientes').DataTable().clear().draw();
             }
         },
         columns: [

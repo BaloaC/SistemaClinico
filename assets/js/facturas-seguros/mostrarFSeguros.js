@@ -46,7 +46,7 @@ addEventListener("DOMContentLoaded", async e => {
         language: {
             url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
         },
-        data: listadoFacturas,
+        data: listadoFacturas ?? [],
         columns: [
             {
                 "className": 'dt-control',

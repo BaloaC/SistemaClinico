@@ -140,6 +140,8 @@ addEventListener("DOMContentLoaded", async e => {
                 // Manejo de errores de Ajax
                 console.log('Error de Ajax:', error);
                 console.log('Detalles:', thrown);
+
+                $('#consultas').DataTable().clear().draw(); // Limpiar los datos existentes del DataTable
             }
         },
         columns: [
