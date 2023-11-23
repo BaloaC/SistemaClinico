@@ -6,6 +6,7 @@ $AuditMiddleware = new AuditMiddleware();
 $auditCita = new AuditCita();
 
 // Router::post('/prueba/:id', UsuarioController::class . '@listarUsuarioPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") ), $auditCita]);
+Router::get('/prueba', fakerClass::class . '@usarFaker');
 
 //Auditoria - API
 Router::get('/auditoria/consulta', AuditoriaController::class . '@listarAuditoria');
@@ -265,7 +266,7 @@ Router::put('/factura/compra/:id', FacturaCompraController::class . '@actualizar
 Router::delete('/factura/compra/:id', FacturaCompraController::class . '@eliminarFacturaCompra', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 
 // //Compra_Insumo - API
-Router::get('/factura/insumos/:id', CompraInsumoController::class . '@listarCompraInsumoPorFactura');
+// Router::get('/factura/insumos/:id', CompraInsumoController::class . '@listarCompraInsumoPorFactura');
 
 // //Factura consulta_seguro - Vistas
 Router::get('/factura/consultaSeguro', ConsultaSeguroController::class . '@index');
