@@ -19,5 +19,6 @@ export default async function getAll(module) {
         return json.data;
     } catch (error) {
         console.log(error);
+        return [];
     }
 }

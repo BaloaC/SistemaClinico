@@ -1,30 +1,25 @@
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import getAll from "../global/getAll.js";
 
 const path = location.pathname.split('/');
 
-$(document).ready(function() {
+$(document).ready( async function() {
+
+    const insumosList = await getAll("insumos/consulta");
+    const insumosPorAgotarse = (insumosList?.result?.code) ? insumosList.filter(insumos => insumos.cantidad < insumos.cantidad_min) : [];
+    
     let tabla = $('#pocosInsumos').DataTable({
-        ajax: {
-            url: `/${path[1]}/insumos/consulta/`,
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
-            },
-            error: function(xhr, error, thrown) {
-                // Manejo de errores de Ajax
-                console.log('Error de Ajax:', error);
-                console.log('Detalles:', thrown);
-            }
-        },
+        data: insumosPorAgotarse ?? [],
         columns: [
-            {
-                data: "insumo_id"
-            },
             {
                 data: "nombre"
             },
             {
                 data: "cantidad"
             },
+            {
+                data: "cantidad_min"
+            }
         ],
         pageLength: 10,
         lengthChange: false,

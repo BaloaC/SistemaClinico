@@ -1,40 +1,87 @@
-import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
 import cleanValdiation from "../global/cleanValidations.js";
+import getAll from "../global/getAll.js";
 removeAddAccountant();
 removeAddAnalist();
 const path = location.pathname.split('/');
 
-select2OnClick({
-    selectSelector: "#s-seguro",
-    selectValue: "seguro_id",
-    selectNames: ["rif", "nombre"],
-    module: "seguros/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione un seguro",
-    multiple: true
-});
+let modalOpened = false;
+const modalRegister = document.getElementById("modalReg") ?? undefined;
+const modalUpdate = document.getElementById("modalAct") ?? undefined;
 
-select2OnClick({
-    selectSelector: "#s-empresa",
-    selectValue: "empresa_id",
-    selectNames: ["rif", "nombre"],
-    module: "empresas/consulta",
-    parentModal: "#modalReg",
-    placeholder: "Seleccione una empresa"
-});
+const handleModalOpen = async (modalParent) => {
+    if (modalOpened === false) {
 
-dinamicSelect2({
-    obj: [{ id: 1, text: "Acumulativo" }, { id: 2, text: "Normal" }],
-    selectNames: ["text"],
-    selectValue: "id",
-    selectSelector: "#s-tipo_seguro",
-    placeholder: "Seleccione el tipo de seguro",
-    parentModal: "#modalReg",
-    staticSelect: true
-});
+        const empresaSelect = document.getElementById(modalParent === "#modalReg" ? "s-empresa" : "s-empresa-act");
+        const seguroSelect = modalParent === "#modalReg" ? "#s-seguro" : "#s-seguro-act";
+        const segurosList = await getAll("seguros/consulta");
 
+        dinamicSelect2({
+            obj: segurosList,
+            selectSelector: seguroSelect,
+            selectValue: "seguro_id",
+            selectNames: ["rif", "nombre"],
+            parentModal: modalParent,
+            placeholder: "Seleccione un seguro",
+            multiple: true
+        });
+
+        emptySelect2({
+            selectSelector: empresaSelect,
+            placeholder: "Debe seleccionar un seguro",
+            parentModal: modalParent,
+        })
+
+        empresaSelect.disabled = true;
+
+        $(seguroSelect).on("change", async function (e) {
+
+
+            const segurosSeleccionadosValores = $(seguroSelect).val();
+
+            const segurosSeleccionados = segurosList.filter(seguro => segurosSeleccionadosValores.some(seguroSeleccionado => seguro.seguro_id == seguroSeleccionado));
+
+            // Obtener todas las empresas de los seguros seleccionados
+            const todasLasEmpresas = segurosSeleccionados.flatMap(seguro => seguro?.empresas);
+            const empresasUnicas = new Set();
+
+            // Filtrar las empresas que coinciden en todos los seguros seleccionados y evitar duplicados
+            const empresasFiltradas = todasLasEmpresas.filter(empresa => {
+                const empresaId = empresa?.empresa_id;
+
+                // Si no existe en el set lo añadimos
+                if (!empresasUnicas.has(empresaId)) {
+                    empresasUnicas.add(empresaId);
+                    return segurosSeleccionados.every(seguro => seguro.empresas?.some(objeto => objeto?.empresa_id == empresaId));
+                }
+
+                return false;
+            });
+
+ 
+            $(empresaSelect).empty().select2();
+            empresasFiltradas.length > 0 ? empresaSelect.classList.add("is-valid") : empresaSelect.classList.remove("is-valid");
+
+            dinamicSelect2({
+                obj: empresasFiltradas ?? [],
+                selectSelector: empresaSelect,
+                selectValue: "empresa_id",
+                selectNames: ["rif","nombre_empresa"],
+                parentModal: modalParent,
+                placeholder: "Seleccione una empresa"
+            });
+
+            empresaSelect.disabled = false;
+        });
+
+        modalOpened = true;
+    }
+}
+
+if (modalRegister) modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalReg"));
+if (modalUpdate) modalUpdate.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalAct"));
 
 addEventListener("DOMContentLoaded", e => {
 
@@ -48,10 +95,10 @@ addEventListener("DOMContentLoaded", e => {
         },
         ajax: {
             url: `/${path[1]}/pacientes/consulta/`,
-            beforeSend: function(xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
             },
-            error: function(xhr, error, thrown) {
+            error: function (xhr, error, thrown) {
                 // Manejo de errores de Ajax
                 console.log('Error de Ajax:', error);
                 console.log('Detalles:', thrown);
@@ -124,7 +171,7 @@ addEventListener("DOMContentLoaded", e => {
                         `;
 
                         default: return `-`;
-   
+
                     }
                 }
             }
