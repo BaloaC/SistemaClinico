@@ -123,7 +123,7 @@ export default async function mostrarHistorialMedico(id) {
         }
 
         // ** Validamos en caso de que el paciente tenga citas pendientes
-        if (listCita) {
+        if (listCita?.cita_id) {
 
             const citasLabel = document.getElementById("citasLabel");
             citasLabel.classList.remove("d-none");

@@ -2,7 +2,7 @@ import concatItems from "../global/concatItems.js";
 import getAll from "../global/getAll.js";
 
 const listadoEmpresas = await getAll("empresas/consulta");
-const registrosEmp = listadoEmpresas != typeof Array ? listadoEmpresas : undefined;
+let registrosEmp = listadoEmpresas != typeof Array ? listadoEmpresas : undefined;
 
 // Configurar la paginación
 const registrosPorPagina = 15;
@@ -11,7 +11,8 @@ let paginationInitializated = false;
 
 export function empresasPagination(registros) {
 
-    if (registros == undefined) {
+    if (registros?.length <= 0 || registros === undefined) {
+        
         const mensajeVacio = `<p class="text-center mb-5 fs-5">No se encontraron registros.</p>`
         document.getElementById('card-container').innerHTML = mensajeVacio;
         document.getElementById('boton-pagina-siguiente').classList.add("d-none");

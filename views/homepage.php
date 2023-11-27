@@ -60,9 +60,9 @@
                                     <table id="pocosInsumos" class="table table-compact">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
-                                                <th>Insumo</th>
-                                                <th>Cantidad</th>
+                                                <th>Nombre</th>
+                                                <th>Cantidad Mínima</th>
+                                                <th>Cantidad Actual</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>

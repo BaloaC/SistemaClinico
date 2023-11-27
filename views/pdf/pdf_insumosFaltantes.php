@@ -98,11 +98,12 @@
         <table class="tabla">
             <thead>
                 <tr>
-                    <th colspan="2" id="title">Insumos por agotarse</th>
+                    <th colspan="4" id="title">Insumos por agotarse</th>
                 </tr>
                 <tr class="insumos-head">
-                    <th>Nombre del insumo</th>
-                    <th>Cantidad actual</th>
+                    <th colspan="2">Nombre del insumo</th>
+                    <th colspan="1">Cantidad Mínima</th>
+                    <th colspan="1">Cantidad actual</th>
                 </tr>
             </thead>
             <tbody>

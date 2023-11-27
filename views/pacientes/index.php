@@ -175,6 +175,9 @@
                                             <select name="empresa_id" id="s-empresa" class="form-control mb-3" data-active="0" disabled required>
                                                 <option value="">Consultar empresas</option>
                                             </select>
+
+                                            <label for="saldo_disponible">Saldo disponible</label>
+                                            <input type="number" step="any" name="saldo_disponible" class="form-control mb-3" disabled required>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <label for="fecha_contra">Fecha de Contratación</label>
@@ -182,9 +185,6 @@
 
                                             <label for="cobertura_general">Cobertura General</label>
                                             <input type="number" step="any" name="cobertura_general" class="form-control mb-3" disabled required>
-
-                                            <label for="saldo_disponible">Saldo disponible</label>
-                                            <input type="number" step="any" name="saldo_disponible" class="form-control mb-3" disabled required>
                                         </div>
                                     </div>
 
@@ -301,7 +301,7 @@
 
                                 <div class="submenu-beneficiado row" style="display: none;">
                                     <h5 class="mt-4 mb-3" id="submenu-beneficiado-title">Información titulares</h5>
-                                    <div class="buttons-submenus-add">
+                                    <div class="buttons-submenus-add my-4">
                                         <button type="button" id="btn-add-titular" class="btn btn-primary w-25 gap-3" value="show" onclick="toggleAddTitular(this.value)">Añadir titular</button>
                                         <button type="button" id="btn-hide-titular" class="btn btn-danger w-25" value="hide" onclick="toggleAddTitular(this.value)" style="display:none;">Ocultar información</button>
                                     </div>
@@ -338,7 +338,7 @@
 
                                 <div class="submenu-seguro row" style="display: none;">
                                     <h5 class="mt-4 mb-3" id="submenu-seguro-title">Información del seguro</h5>
-                                    <div class="buttons-submenus-add">
+                                    <div class="buttons-submenus-add my-4">
                                         <button type="button" id="btn-add-seguro" class="btn btn-primary w-25 gap-3" value="show" onclick="toggleAddSeguro(this.value)">Añadir seguro</button>
                                         <button type="button" id="btn-hide-seguro" class="btn btn-danger w-25" value="hide" onclick="toggleAddSeguro(this.value)" style="display:none;">Ocultar información</button>
                                     </div>
@@ -354,10 +354,9 @@
                                             <option value="">Consultar empresas</option>
                                         </select>
 
-                                        <label for="tipo_seguro">Tipo de seguro</label>
-                                        <select name="tipo_seguro" id="s-tipo_seguro" value="1" class="form-control mb-3" disabled required>
-                                            <option></option>
-                                        </select>
+                                        <label for="saldo_disponible">Saldo disponible</label>
+                                        <input type="number" step="any" name="saldo_disponible" class="form-control mb-3" disabled required>
+
                                     </div>
                                     <div class="col-12 col-md-6 new-seguro-input" style="display: none;">
                                         <label for="fecha_contra">Fecha de Contratación</label>
@@ -365,9 +364,6 @@
 
                                         <label for="cobertura_general">Cobertura General</label>
                                         <input type="number" step="any" name="cobertura_general" class="form-control mb-3" disabled required>
-
-                                        <label for="saldo_disponible">Saldo disponible</label>
-                                        <input type="number" step="any" name="saldo_disponible" class="form-control mb-3" disabled required>
                                     </div>
                                 </div>
                             </div>

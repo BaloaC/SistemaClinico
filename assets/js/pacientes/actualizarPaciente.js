@@ -24,24 +24,24 @@ dinamicSelect2({
     placeholder: "Seleccione un titular"
 });
 
-select2OnClick({
-    selectSelector: "#s-seguro-act",
-    selectValue: "seguro_id",
-    selectNames: ["rif", "nombre"],
-    module: "seguros/consulta",
-    parentModal: "#modalAct",
-    placeholder: "Seleccione un seguro",
-    multiple: true
-});
+// select2OnClick({
+//     selectSelector: "#s-seguro-act",
+//     selectValue: "seguro_id",
+//     selectNames: ["rif", "nombre"],
+//     module: "seguros/consulta",
+//     parentModal: "#modalAct",
+//     placeholder: "Seleccione un seguro",
+//     multiple: true
+// });
 
-select2OnClick({
-    selectSelector: "#s-empresa-act",
-    selectValue: "empresa_id",
-    selectNames: ["rif", "nombre"],
-    module: "empresas/consulta",
-    parentModal: "#modalAct",
-    placeholder: "Seleccione una empresa"
-});
+// select2OnClick({
+//     selectSelector: "#s-empresa-act",
+//     selectValue: "empresa_id",
+//     selectNames: ["rif", "nombre"],
+//     module: "empresas/consulta",
+//     parentModal: "#modalAct",
+//     placeholder: "Seleccione una empresa"
+// });
 
 
 async function updatePaciente(id) {

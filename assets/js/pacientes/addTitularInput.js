@@ -6,24 +6,27 @@ let clicks = 0;
 let modalOpened = false;
 let titulares = null;
 const modalRegister = document.getElementById('modalReg');
+const modalUpdate = document.getElementById("modalAct");
 
-// Al abrir el modal cargar los select2
-modalRegister.addEventListener('show.bs.modal', async () => {
+const handleModalOpen = async (parentModal) => {
     if(modalOpened === false){
         titulares = await getTitulares();
         
         dinamicSelect2({
             obj: titulares,
-            selectSelector: "#s-titular_id",
+            selectSelector: parentModal === "#modalReg" ? "#s-titular_id" : "#s-titular_id",
             selectValue: "paciente_id",
             selectNames: ["cedula", "nombre-apellidos"],
-            parentModal: "#modalReg",
+            parentModal: parentModal,
             placeholder: "Seleccione un titular"
         });
 
         modalOpened = true;
     }
-})
+}
+// Al abrir el modal cargar los select2
+modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalReg"));
+modalUpdate.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalAct"));
 
 async function addTitularInput() {
 
