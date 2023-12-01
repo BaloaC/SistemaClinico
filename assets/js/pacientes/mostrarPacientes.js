@@ -262,7 +262,11 @@ addEventListener("DOMContentLoaded", e => {
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
                 <tr>
                     <td>Fecha de Nacimiento: <b>${data.fecha_nacimiento}</b></td>
+                </tr>
+                <tr>
                     <td>Teléfono: <b>${data.telefono}</b></td>
+                </tr>
+                <tr>
                     <td>Dirección: <b>${data.direccion}</b></td>
                 </tr>
             </table>

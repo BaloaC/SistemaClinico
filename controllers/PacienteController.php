@@ -45,8 +45,9 @@ class PacienteController extends Controller{
         PacienteValidaciones::validacionesGenerales($_POST);
         PacienteValidaciones::validarNuevoPaciente($_POST);
         PacienteValidaciones::validarPacienteSeguro($_POST);
-
+        
         PacienteService::insertarPaciente($_POST);
+        
         $respuesta = new Response('INSERCION_EXITOSA');
         $respuesta->setData($_POST);
         return $respuesta->json(200);
