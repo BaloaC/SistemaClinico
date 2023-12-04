@@ -36,10 +36,6 @@ class MedicoValidaciones {
         }
     }
 
-    public static function validarRegistro($formulario) {
-        
-    }
-
     public static function validarMedicoEspecialidad($especialidades) {
 
         $validarMedicoEspecialidad = new Validate();
@@ -73,6 +69,17 @@ class MedicoValidaciones {
         if ( $validarMedicoEspecialidad->isDuplicatedId('medico_id', 'especialidad_id', $especialidad['medico_id'], $especialidad['especialidad_id'], 'medico_especialidad') ) {
             $respuesta = new Response(false, 'Ya existe un registro con el médico y la especialidad');
             $respuesta->setData($especialidad);
+            echo $respuesta->json(400);
+            exit();
+        }
+    }
+
+    public static function validarMedicoImpartaEspecialidad($formulario) {
+        $validarConsulta = new Validate();
+
+        if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $formulario['especialidad_id'], $formulario['medico_id'], 'medico_especialidad')) {
+            $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
+            $respuesta->setData('El médico no está relacionado a la especialidad id'.$formulario['especialidad_id']);
             echo $respuesta->json(400);
             exit();
         }

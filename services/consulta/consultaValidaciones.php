@@ -125,4 +125,117 @@ class ConsultaValidaciones {
                 exit();
         }
     }
+
+    /**
+     * Validaciones de los insumos
+     */
+    public static function validarInsumos($insumos) {
+
+        foreach ($insumos as $insumo) {
+
+            $camposNumericos = array("insumo_id");
+            $validarConsultaInsumo = new Validate;
+
+            switch ($validarConsultaInsumo) {
+                case ($validarConsultaInsumo->isEmpty($insumo)):
+                    $respuesta = new Response(false, 'Los datos de los insumos están vacíos');
+                    echo $respuesta->json(400);
+                    exit();
+
+                case $validarConsultaInsumo->isEliminated("insumo", 'estatus_ins', $insumo['insumo_id']):
+                    $respuesta = new Response(false, 'El insumo indicado no ha sido encontrado en el sistema');
+                    echo $respuesta->json(404);
+                    exit();
+
+                case !$validarConsultaInsumo->existsInDB($insumo, $camposNumericos):
+                    $respuesta = new Response(false, 'No se encontraron resultados de los datos indicados en la base de datos');
+                    echo $respuesta->json(404);
+                    exit();
+
+                default: 
+                    $_insumoModel = new InsumoModel();
+                    $insumoExistente = $_insumoModel->where('insumo_id', '=', $insumo['insumo_id'])->getFirst();
+                    
+                    if ($insumo['cantidad'] > $insumoExistente->cantidad) {
+                        $respuesta = new Response(false, 'Cantidad de insumos mayor a la que hay en existencia');
+                        $respuesta->setData('La cantidad disponible de insumos es de '.$insumoExistente->cantidad);
+                        echo $respuesta->json(400);
+                        exit();
+                    }
+
+            }
+        }
+    }
+
+    /**
+     * Validaciones de los insumos
+     */
+    public static function validarEsEmergencia($formulario) {
+
+        if ( $formulario['es_emergencia'] != 0 && $formulario['es_emergencia'] != 1 ) {
+            $respuesta = new Response(false, 'El atributo es_emergencia tiene que ser un booleano');
+            echo $respuesta->json(400);
+            exit();
+        }
+    }
+
+    /**
+     * Validación de la cita de la consulta
+     */
+    public static function validarEstatusCita($formulario) {
+        $validarConsulta = new Validate;
+
+        if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $formulario['cita_id'], 4, 'cita') ) {
+            $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
+            echo $respuesta->json(400);
+            exit();
+        } 
+        
+        if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $formulario['cita_id'], 3, 'cita') ) {
+            $respuesta = new Response(false, 'Para realizar la consulta la cita debe tener su clave correspondiente');
+            echo $respuesta->json(400);
+            exit();
+        }
+    }
+
+    /**
+     * Validación de los exámenes en la consulta
+     */
+    public static function validarConsultaExamen($examenes) {
+        $validarConsultaExamen= new Validate();
+        $camposNumericos = array("examen_id", "consulta_id");
+
+        foreach ($examenes as $examen) {
+            
+            if ($validarConsultaExamen->isEmpty($examen)) {
+                $respuesta = new Response(false, 'Los datos de los exámenes están vacíos');
+                echo $respuesta->json(400);
+                exit();
+            }
+    
+            if ( $validarConsultaExamen->isNumber($examen, $camposNumericos) ) {
+                $respuesta = new Response(false, 'Los datos de los exámenes seguro son inválidos');
+                echo $respuesta->json(400);
+                exit();
+            }
+    
+            if ( !$validarConsultaExamen->existsInDB($examen, $camposNumericos) ) {
+                $respuesta = new Response(false, 'No se encontraron resultados de los datos indicados en la base de datos');         
+                echo $respuesta->json(404);
+                exit();
+            }
+        }
+    }
+
+    public static function validarDuplicadoConsultaExamen($examenes) {
+        $validarConsultaExamen= new Validate();
+        
+        foreach ($examenes as $examen) {
+            if ($validarConsultaExamen->isDuplicatedId('consulta_id', 'examen_id', $examen['consulta_id'], $examen['examen_id'], 'consulta_examen') ) {
+                $respuesta = new Response(false, 'Ese examen ya está registrado en la consulta');
+                echo $respuesta->json(400);
+                exit();
+            }
+        }
+    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+include_once './services/citas/CitasValidaciones.php';
+
 class CitaController extends Controller {
 
     protected $arraySelect = array(
@@ -53,211 +55,119 @@ class CitaController extends Controller {
     }
 
     public function insertarCita(/*Request $request*/) {
-        $_POST = json_decode(file_get_contents('php://input'), true);
 
-        // Creando los strings para las validaciones
-        $camposString = array("motivo_cita");
-        $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id");
-        $exclude = array("seguro_id");
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        CitasValidaciones::validacionesGenerales($_POST);
+        CitasValidaciones::validarDisponibilidad($_POST);
+        CitasValidaciones::validarHorario($_POST);
 
         $validarCita = new Validate;
-        switch ($_POST) {
 
-            case ($validarCita->isEmpty($_POST, $exclude)):
-                $respuesta = new Response('DATOS_VACIOS');
+        $data = $validarCita->dataScape($_POST);
+
+        // verificaciones si la cita es asegurada
+        if ($data['tipo_cita'] == 2) {
+
+            // verificamos que pueda solicitar cita asegurada
+            /*** Estas líneas fueron comentadas porque aparentemente no hacían nada ***/
+            // $siEsTitular = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '3', 'paciente');
+            // $siEsBeneficiario = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '4', 'paciente');
+            // $siSeguroAsociado = $validarCita->isDuplicatedId('paciente_id', 'seguro_id', $_POST['paciente_titular_id'], $_POST['seguro_id'], 'paciente_seguro');
+
+            // if (!$siEsTitular && !$siEsBeneficiario) {
+            //     $respuesta = new Response(false, 'El paciente ingresado no está registrado como asegurado');
+            //     return $respuesta->json(400);
+            // }
+
+            // if (!$siSeguroAsociado) {
+            //     $respuesta = new Response(false, 'Ese seguro no se encuentra asociado con el paciente indicado');
+            //     return $respuesta->json(400);
+            // }
+            /*** Estas líneas fueron comentadas porque aparentemente no hacían nada ***/
+
+            // verificamos que el titular pueda ser titular
+            $esTitular = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], 3, 'paciente');
+            if (!$esTitular) {
+                $respuesta = new Response(false, 'La cédula no pertenece a ningún titular de seguro');
                 return $respuesta->json(400);
+            }
 
-            case !$validarCita->existsInDB($_POST, $campoId):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
-
-            case $validarCita->isString($_POST, $camposString):
-                $respuesta = new Response('DATOS_INVALIDOS');
+            // Verificamos que el titular este asociado a ese seguro
+            $esSeguroAsociado = $validarCita->isDuplicatedId('paciente_id', 'seguro_id', $data['paciente_titular_id'], $data['seguro_id'], 'paciente_seguro');
+            if (!$esSeguroAsociado) {
+                $respuesta = new Response(false, 'El paciente indicado no se encuentra asociado a ese seguro');
                 return $respuesta->json(400);
+            }
 
-            case !$validarCita->existsInDB($_POST, $campoId):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
-
-            case !$validarCita->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad'):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
-
-            case $validarCita->isDate($_POST['fecha_cita']):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(400);
-
-            case $validarCita->isDate($_POST['hora_entrada'], "H:i"):
-                $respuesta = new Response('HORA_INVALIDA');
-                $respuesta->setData('Error en la hora de entrada '.$_POST['hora_entrada']);
-                return $respuesta->json(400);
-
-            case $validarCita->isDate($_POST['hora_salida'], 'H:i'):
-                $respuesta = new Response('HORA_INVALIDA');
-                $respuesta->setData('Error en la hora de entrada '.$_POST['hora_salida']);
-                return $respuesta->json(400);
-
-            case $validarCita->isToday($_POST['fecha_cita'], true):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(400);
-
-            case !$validarCita->isDuplicated('paciente', "cedula", $_POST['cedula_titular']):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(404);
-
-            case $_POST['hora_entrada'] >= $_POST['hora_salida']:
-                $respuesta = new Response(false, 'La hora de salida debe ser posteior de la hora de entrada');
-                return $respuesta->json(400);
-
-            default:
-
-                // Validamos que no haya otra cita a esa hora
-                $_citasDelDía = new CitaModel();
-                $isDuplicated = $_citasDelDía->where('fecha_cita', '=', $_POST['fecha_cita'])->where('hora_entrada', '>=', $_POST['hora_entrada'])->where('hora_entrada', '<=', $_POST['hora_salida'])
-                        ->orWhere('fecha_cita', '=', $_POST['fecha_cita'])->where('hora_entrada', '<=', $_POST['hora_entrada'])->where('hora_salida', '>=', $_POST['hora_salida'])
-                        ->orWhere('fecha_cita', '=', $_POST['fecha_cita'])->where('hora_entrada', '<=', $_POST['hora_entrada'])->where('hora_salida', '>=', $_POST['hora_entrada'])
-                        ->orWhere('fecha_cita', '=', $_POST['fecha_cita'])->where('hora_entrada', '>=', $_POST['hora_entrada'])->where('hora_salida', '<=', $_POST['hora_entrada'])
-                        ->getAll();
-                
-                if ( count($isDuplicated) > 0 ) {
-                    $respuesta = new Response('DUPLICATE_APPOINTMENT');
+            $_pacienteModel = new PacienteBeneficiadoModel();
+            $pacienteBeneficiaro = $_pacienteModel->where('paciente_id', '=', $data['paciente_id'])->getFirst();
+            
+            // Validamos que sea beneficiado
+            if ($data['paciente_id'] != $data['paciente_titular_id']) {
+                if ( !$pacienteBeneficiaro ) {
+                    $respuesta = new Response(false, 'El paciente indicado no es beneficiario de un seguro');
                     return $respuesta->json(400);
-                }
-
-                // Obtenemos el día según la fecha de la cita
-                setlocale(LC_TIME, 'es_VE.UTF-8','esp');
-                $fechaCita = date($_POST['fecha_cita']);
-                $dia = strftime("%A", strtotime($fechaCita));
-
-                // Obtenemos el horario del médico ese día
-                $_horarioModel = new HorarioModel();
-                $medico = $_horarioModel->where('medico_id', '=', $_POST['medico_id'])->getAll();
-                $horarioMedico = [];
-                
-                // Validamos si atiende a esa hora
-                foreach ($medico as $horario) {
-                    if ($horario->dias_semana == $dia) {
-                        array_push($horarioMedico, $horario);
-
-                        if ($_POST['hora_entrada'] < $horario->hora_entrada || $_POST['hora_entrada'] > $horario->hora_salida || $_POST['hora_salida'] > $horario->hora_salida || $_POST['hora_salida'] < $horario->hora_entrada ) {
-                            $respuesta = new Response(false, 'El médico indicado no está disponible a esa hora');
-                            $respuesta->setData("Ocurrió un problema intentando asignar la cita, el médico se encuentra disponible ese día de ".$horario->hora_entrada." a ".$horario->hora_salida);
-                            return $respuesta->json(400);
-                        } 
-                    }
-                }
-
-                if ( count($horarioMedico) <= 0 ) {
-                    $respuesta = new Response(false, 'El médico indicado no está disponible ese día');
-                    return $respuesta->json(400);
-                }
-
-                $data = $validarCita->dataScape($_POST);
-
-                // verificaciones si la cita es asegurada
-                if ($data['tipo_cita'] == 2) {
-
-                    // verificamos que pueda solicitar cita asegurada
-                    /*** Estas líneas fueron comentadas porque aparentemente no hacían nada ***/
-                    // $siEsTitular = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '3', 'paciente');
-                    // $siEsBeneficiario = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '4', 'paciente');
-                    // $siSeguroAsociado = $validarCita->isDuplicatedId('paciente_id', 'seguro_id', $_POST['paciente_titular_id'], $_POST['seguro_id'], 'paciente_seguro');
-
-                    // if (!$siEsTitular && !$siEsBeneficiario) {
-                    //     $respuesta = new Response(false, 'El paciente ingresado no está registrado como asegurado');
-                    //     return $respuesta->json(400);
-                    // }
-
-                    // if (!$siSeguroAsociado) {
-                    //     $respuesta = new Response(false, 'Ese seguro no se encuentra asociado con el paciente indicado');
-                    //     return $respuesta->json(400);
-                    // }
-                    /*** Estas líneas fueron comentadas porque aparentemente no hacían nada ***/
-
-                    // verificamos que el titular pueda ser titular
-                    $esTitular = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], 3, 'paciente');
-                    if (!$esTitular) {
-                        $respuesta = new Response(false, 'La cédula no pertenece a ningún titular de seguro');
-                        return $respuesta->json(400);
-                    }
-
-                    // Verificamos que el titular este asociado a ese seguro
-                    $esSeguroAsociado = $validarCita->isDuplicatedId('paciente_id', 'seguro_id', $data['paciente_titular_id'], $data['seguro_id'], 'paciente_seguro');
-                    if (!$esSeguroAsociado) {
-                        $respuesta = new Response(false, 'El paciente indicado no se encuentra asociado a ese seguro');
-                        return $respuesta->json(400);
-                    }
-
-                    $_pacienteModel = new PacienteBeneficiadoModel();
-                    $pacienteBeneficiaro = $_pacienteModel->where('paciente_id', '=', $data['paciente_id'])->getFirst();
-                    
-                    // Validamos que sea beneficiado
-                    if ($data['paciente_id'] != $data['paciente_titular_id']) {
-                        if ( !$pacienteBeneficiaro ) {
-                            $respuesta = new Response(false, 'El paciente indicado no es beneficiario de un seguro');
-                            return $respuesta->json(400);
-                        } else {
-                            // validamos que esté asociado a ese titular
-                            if ( !$validarCita->isDuplicatedId('paciente_id', 'paciente_beneficiado_id', $data['paciente_titular_id'], $pacienteBeneficiaro->paciente_beneficiado_id, 'titular_beneficiado') ) {
-                                $respuesta = new Response(false, 'El paciente indicado no tiene relación con ese titular, por favor verifique nuevamente');
-                                return $respuesta->json(400);
-                            }
-                        }
-                    }
-
-                    // Asignamos el estatus dependiendo del contenido del campo clave
-                    if (array_key_exists("clave", $data)) {
-
-                        $verClave = empty($data['clave']);
-                        $data['estatus_cit'] = ($verClave ? 3 : 1);
-                    } else {
-                        $data['estatus_cit'] = 3;
-                    }
-
                 } else {
-
-                    $_citaModel = new CitaModel();
-                    $id = $_citaModel->where('cedula_titular', '=', $_POST['cedula_titular'])->getFirst();
-                    $data['estatus_cit'] = 1;
-                }
-
-                $_citaModel = new CitaModel();
-                $id = $_citaModel->insert($data);
-                $mensaje = ($id > 0);
-
-                // Insertamos cita_seguro si es asegurada
-                if ($mensaje && $data['tipo_cita'] == 2) {
-                    $_citaSeguroModel = new CitaSeguroModel();
-
-                    $citaSeguro = [
-                        "cita_id" => $id,
-                        "seguro_id" => $data["seguro_id"],
-                    ];
-
-                    if ( !empty($data['clave']) ) { $citaSeguro['clave'] = $data["clave"]; }
-
-                    $isInserted = $_citaSeguroModel->insert($citaSeguro);
-
-                    if (!$isInserted) {
-                        $_citaModel = new CitaModel();
-                        $_citaModel->where('cita_id', '=', $id)->delete();
-
-                        $mensaje = new Response('INSERCION_FALLIDA');
-                        $mensaje->setData('Ocurrió un error insertando la información relacionada al seguro');
-                        return $mensaje->json(400);
-                    } else {
-                        $mensaje = new Response('INSERCION_EXITOSA');
-                        return $mensaje->json(201);
+                    // validamos que esté asociado a ese titular
+                    if ( !$validarCita->isDuplicatedId('paciente_id', 'paciente_beneficiado_id', $data['paciente_titular_id'], $pacienteBeneficiaro->paciente_beneficiado_id, 'titular_beneficiado') ) {
+                        $respuesta = new Response(false, 'El paciente indicado no tiene relación con ese titular, por favor verifique nuevamente');
+                        return $respuesta->json(400);
                     }
-
-                } else if (!$mensaje && $data['tipo_cita'] == 2) {
-                    $mensaje = new Response('INSERCION_FALLIDA');
-                    return $mensaje->json(400);
-
-                } else if ($data['tipo_cita'] == 1) { // Si es cita natural no aplicamos ninguna inserción extra
-                    $mensaje = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-                    return $mensaje->json($mensaje ? 201 : 400);
                 }
+            }
+
+            // Asignamos el estatus dependiendo del contenido del campo clave
+            if (array_key_exists("clave", $data)) {
+
+                $verClave = empty($data['clave']);
+                $data['estatus_cit'] = ($verClave ? 3 : 1);
+            } else {
+                $data['estatus_cit'] = 3;
+            }
+
+        } else {
+
+            $_citaModel = new CitaModel();
+            $id = $_citaModel->where('cedula_titular', '=', $_POST['cedula_titular'])->getFirst();
+            $data['estatus_cit'] = 1;
+        }
+
+        $_citaModel = new CitaModel();
+        $id = $_citaModel->insert($data);
+        $mensaje = ($id > 0);
+
+        // Insertamos cita_seguro si es asegurada
+        if ($mensaje && $data['tipo_cita'] == 2) {
+            $_citaSeguroModel = new CitaSeguroModel();
+
+            $citaSeguro = [
+                "cita_id" => $id,
+                "seguro_id" => $data["seguro_id"],
+            ];
+
+            if ( !empty($data['clave']) ) { $citaSeguro['clave'] = $data["clave"]; }
+
+            $isInserted = $_citaSeguroModel->insert($citaSeguro);
+
+            if (!$isInserted) {
+                $_citaModel = new CitaModel();
+                $_citaModel->where('cita_id', '=', $id)->delete();
+
+                $mensaje = new Response('INSERCION_FALLIDA');
+                $mensaje->setData('Ocurrió un error insertando la información relacionada al seguro');
+                return $mensaje->json(400);
+            } else {
+                $mensaje = new Response('INSERCION_EXITOSA');
+                return $mensaje->json(201);
+            }
+
+        } else if (!$mensaje && $data['tipo_cita'] == 2) {
+            $mensaje = new Response('INSERCION_FALLIDA');
+            return $mensaje->json(400);
+
+        } else if ($data['tipo_cita'] == 1) { // Si es cita natural no aplicamos ninguna inserción extra
+            $mensaje = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+            return $mensaje->json($mensaje ? 201 : 400);
         }
     }
 

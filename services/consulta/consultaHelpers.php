@@ -141,6 +141,23 @@ class ConsultaHelper {
         return $consultas;
     }
 
+    public static function obtenerPrecioExamenNormal($examen, $consulta_id) {
+        
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+
+        $_examenModel = new ExamenModel();
+        $examenSeguro = $_examenModel->where('examen_id', '=', $examen['examen_id'])->getFirst();
+        
+        $consulta_examen = [
+            'consulta_id' => $consulta_id,
+            'examen_id' => $examen['examen_id'],
+            'precio_examen_usd' => $examenSeguro->precio_examen,
+            'precio_examen_bs' => round($examenSeguro->precio_examen * $valorDivisa, 2),
+        ];
+
+        return $consulta_examen;
+    }
+
     public static function insertarExamenesEmergencia($formulario) {
 
         $_seguroExamen = new SeguroExamenModel();
@@ -235,21 +252,150 @@ class ConsultaHelper {
         
     }
 
-    public static function obtenerPrecioExamenNormal($examen, $consulta_id) {
-        
-        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+    public static function insertarRecipe($recipes, $consulta_id) {
 
-        $_examenModel = new ExamenModel();
-        $examenSeguro = $_examenModel->where('examen_id', '=', $examen['examen_id'])->getFirst();
-        
-        $consulta_examen = [
-            'consulta_id' => $consulta_id,
-            'examen_id' => $examen['examen_id'],
-            'precio_examen_usd' => $examenSeguro->precio_examen,
-            'precio_examen_bs' => round($examenSeguro->precio_examen * $valorDivisa, 2),
-        ];
+        foreach ($recipes as $recipe) {
 
-        return $consulta_examen;
+            $newRecipe = $recipe;
+            $newRecipe['consulta_id'] = $consulta_id;
+            $camposId = array("medicamento_id");
+            $validarRecipe = new Validate;
+
+            switch ($_POST) {
+                case ($validarRecipe->isEmpty($newRecipe)):
+                    $respuesta = new Response(false, 'No se pueden enviar recipes vacíos');
+                    echo $respuesta->json(400);
+                    exit();
+
+                case !$validarRecipe->existsInDB($newRecipe, $camposId):
+                    $respuesta = new Response(false, 'El medicamento indicado no se encuentra registrado en el sistema');
+                    echo $respuesta->json(404);
+                    exit();
+
+                default:
+                    
+                    $data = $validarRecipe->dataScape($newRecipe);
+                    $_consultaRecipeModel = new ConsultaRecipeModel();
+                    $row = $_consultaRecipeModel->insert($data);
+                    
+                    $isInsert = ($row > 0);
+
+                    if (!$isInsert) {
+                        $respuesta = new Response(false, 'Ocurrió un error insertando el recipe');
+                        $respuesta->setData("Ha ocurrido un error insertando el recipe".$newRecipe['medicamento_id']."con uso".$newRecipe['uso']);
+                        echo $respuesta->json(400);
+                        exit();
+                    }
+            }
+        }
+    }
+
+    public static function insertarIndicaciones($indicaciones, $consulta_id) {
+
+        foreach ($indicaciones as $indicacion) {
+
+            $newIndicacion = $indicacion;
+            $newIndicacion['consulta_id'] = $consulta_id;
+            $validarIndicacion = new Validate;
+            
+            if ($validarIndicacion->isEmpty($newIndicacion)) {
+                $respuesta = new Response(false, 'No se pueden enviar indicaciones vacías');
+                echo $respuesta->json(400);
+                exit();
+            }
+            
+            $data = $validarIndicacion->dataScape($newIndicacion);
+            $_consultaIndicacionesModel = new ConsultaIndicacionesModel();
+            $row = $_consultaIndicacionesModel->insert($data);
+            
+            $isInsert = ($row > 0);
+
+            if (!$isInsert) {
+                $respuesta = new Response(false, 'Ocurrió un error insertando las indicaciones');
+                $respuesta->setData("Ha ocurrido un error insertando la indicacion".$newIndicacion['descripcion']);
+                echo $respuesta->json(400);
+                exit();
+            }
+        }
+    }
+
+    public static function insertarExamen($examenes, $consulta_id) {
+        
+        foreach ($examenes as $examen) {
+            
+            $examen['consulta_id'] = $consulta_id;
+            
+            $validarConsultaExamen = new Validate;
+            $_examenModel = new ExamenModel();
+
+            $examen = $_examenModel->where('examen_id', '=', $examen['examen_id'])->getFirst();
+            $newForm['precio_examen_usd'] = $examen->precio_examen;
+
+            $_globalModel = new GlobalModel();
+            $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
+
+            $newForm['precio_examen_bs'] = $examen->precio_examen * $valorDivisa->value;
+
+            $data = $validarConsultaExamen->dataScape($newForm);
+            $_consultaExamenModel = new ConsultaExamenModel();
+            $idExamen = $_consultaExamenModel->insert($data);
+            $mensaje = ($idExamen > 0);
+            
+            if (!$mensaje) {  
+
+                $respuesta = new Response('INSERCION_FALLIDA');
+                echo $respuesta->json(400);
+                exit();
+            }
+        }
+    }
+
+    public static function insertarInsumo($insumos, $consulta_id, $es_asegurada) {
+        foreach ($insumos as $insumo) {
+
+            $insumo['consulta_id'] = $consulta_id;
+
+            $validarConsultaInsumo = new Validate;
+            $data = $validarConsultaInsumo->dataScape($insumo);
+
+            $_insumoModel = new InsumoModel();
+            $insumoUtilizado = $_insumoModel->where('insumo_id', '=', $data['insumo_id'])->getFirst();
+            $data['precio_insumo_usd'] = $insumoUtilizado->precio;
+
+            $_globalModel = new GlobalModel();
+            $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
+            
+            $data['precio_insumo_bs'] = $es_asegurada ? 0 : $insumoUtilizado->precio * (float) $valorDivisa->value;
+
+            $_consultaInsumoModel = new ConsultaInsumoModel();
+            $idInsumo = $_consultaInsumoModel->insert($data);
+            $mensaje = ($idInsumo > 0);
+
+            if ($mensaje) {
+
+                // Restando la cantidad de la factura al stock del inventario
+                $_insumoModel = new InsumoModel();
+                $insumoExistente = $_insumoModel->where('insumo_id', '=', $insumo['insumo_id'])->getFirst();
+
+                $unidadesPosts = $insumoExistente->cantidad - $insumo['cantidad'];
+                $actualizar = array('cantidad' => $unidadesPosts);
+
+                // actualizando el stock del insumo
+                $actualizado = $_insumoModel->where('insumo_id', '=', $insumo['insumo_id'])->update($actualizar);
+                if (!$actualizado) {
+
+                    $respuesta = new Response(false, 'Hubo un error en la actualización del insumo');
+                    $respuesta->setData($insumoExistente);
+                    echo $respuesta->json(400);
+                    exit();
+                }
+
+            } else if (!$mensaje) {
+                $respuesta = new Response(false, 'Actualización del insumo fallida');
+                echo $respuesta->json(400);
+                exit();
+            }
+        }
     }
 
     public static function actualizarPrecioEmergencia($consulta) {
@@ -274,5 +420,27 @@ class ConsultaHelper {
         );
 
         $_consultaEmergenciaModel->update($consulta_emergencia_nueva);
+    }
+
+    public static function separarInformación($informacion, $es_cita) {
+
+        // Separamos la información según la necesitemos para insertarla en las tablas correspondientes
+        if ($es_cita) {
+            $consultaConCita = array("cita_id" => $informacion['cita_id']);
+            unset($informacion['cita_id']);
+            return array($consultaConCita, $informacion);
+
+        } else {
+            $consultaSinCita = array(
+                "especialidad_id" => $informacion['especialidad_id'],
+                "medico_id" => $informacion["medico_id"],
+                "paciente_id" => $informacion["paciente_id"],
+            );
+
+            unset($informacion['especialidad_id']);
+            unset($informacion['medico_id']);
+            unset($informacion['paciente_id']);
+            return array($consultaSinCita, $informacion);
+        }
     }
 }
