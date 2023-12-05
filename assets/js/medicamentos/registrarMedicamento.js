@@ -16,8 +16,10 @@ async function addMedicamento() {
         if (!data.nombre.length > 3) throw { message: "El nombre debe contener al menos 3 caracteres" };
         if (!(patterns.nameExam.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         
-        await addModule("medicamento", "info-medicamento", data, "Medicamento registrado con exito!");
+        const registroExitoso = await addModule("medicamento", "info-medicamento", data, "Medicamento registrado con exito!");
        
+        if (!registroExitoso.code) throw { result: registroExitoso.result };
+
         cleanValdiation("info-medicamento");
         $('#medicamentos').DataTable().ajax.reload();
 

@@ -2,6 +2,7 @@ const path = location.pathname.split('/');
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import { defaultSelect } from "./defaultSelect.js";
 import scrollTo from "./scrollTo.js";
+import select2DefaultValue from "./select2DefaultValue.js";
 
 export default async function addModule(module, form, data, successMessage, modal = "#modalReg", alert = ".alert") {
 
@@ -33,6 +34,7 @@ export default async function addModule(module, form, data, successMessage, moda
         $alert.textContent = successMessage;
         $form.reset();
         defaultSelect();
+        select2DefaultValue();
 
         scrollTo("modalRegBody");
 

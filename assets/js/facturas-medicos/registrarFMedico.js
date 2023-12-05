@@ -25,7 +25,9 @@ async function addFMedico() {
 
         const facturaMedico = await getAll(`facturaMedico/medico?fecha=${fechaFormateada}&medico=${data.medico_id}`);
 
-        await addModule("factura/medico", "info-fmedico", facturaMedico, "Factura medico registrada correctamente!");
+        const registroExitoso = await addModule("factura/medico", "info-fmedico", facturaMedico, "Factura medico registrada correctamente!");
+
+        if (!registroExitoso.code) throw { result: registroExitoso.result };
 
         cleanValdiation("info-fmedico");
         $('#fMedicos').DataTable().ajax.reload();

@@ -18,8 +18,10 @@ async function addInsumo() {
         if (!(patterns.price.test(data.cantidad)) && !(patterns.price.test(data.cantidad_min))) throw { message: "Un campo númerico ingresado no es válido" };
         if (!(patterns.price.test(data.precio))) throw { message: "El precio ingresado no es válido" };
 
-        await addModule("insumos", "info-insumo", data, "Insumo registrado con exito!");
+        const registroExitoso = await addModule("insumos", "info-insumo", data, "Insumo registrado con exito!");
        
+        if (!registroExitoso.code) throw { result: registroExitoso.result };
+
         cleanValdiation("info-insumo");
         $('#insumos').DataTable().ajax.reload();
 

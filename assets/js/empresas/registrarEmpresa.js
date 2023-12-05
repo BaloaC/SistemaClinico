@@ -34,12 +34,13 @@ async function addEmpresa() {
         data.seguro = seguro;
         data.rif = data.cod_rif + "-" + data.rif;
 
-        await addModule("empresas", "info-empresa", data, "Empresa registrada exitosamente!");
+        const registroExitoso = await addModule("empresas", "info-empresa", data, "Empresa registrada exitosamente!");
+
+        if (!registroExitoso.code) throw { result: registroExitoso.result };
 
         const listadoEmpresas = await getAll("empresas/consulta");
         empresasPagination(listadoEmpresas);
         cleanValdiation("info-empresa")
-        $("#s-seguro").val([]).trigger('change');
 
     } catch (error) {
         console.log(error);

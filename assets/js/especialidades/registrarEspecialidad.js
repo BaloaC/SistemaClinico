@@ -16,7 +16,9 @@ async function addEspecialidad() {
         if (!(patterns.name.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         if (data.nombre.length < 6) throw { message: "El nombre ingresado debe ser mayor a 6 caracteres" };
 
-        await addModule("especialidades", "info-especialidad", data, "Especialidad registrada con exito!");
+        const registroExitoso = await addModule("especialidades", "info-especialidad", data, "Especialidad registrada con exito!");
+
+        if (!registroExitoso.code) throw { result: registroExitoso.result };
 
         cleanValdiation("info-especialidad");
         $('#especialidades').DataTable().ajax.reload();

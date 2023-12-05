@@ -98,7 +98,7 @@ const handleModalOpen = async () => {
             $(especialidadSelect).empty().select2();
 
             dinamicSelect2({
-                obj: infoMedico[0].especialidad ?? [],
+                obj: infoMedico[0]?.especialidad ?? [],
                 selectSelector: especialidadSelect,
                 selectValue: "especialidad_id",
                 selectNames: ["nombre_especialidad"],

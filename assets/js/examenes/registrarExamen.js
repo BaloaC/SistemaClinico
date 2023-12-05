@@ -20,7 +20,9 @@ async function addExamen() {
         if (!(patterns.nameExam.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         if (!(patterns.price.test(data.precio_examen))) throw { message: "El nombre ingresado no es válido" };
 
-        await addModule("examenes", "info-examen", data, "Exámen registrado exitosamente!");
+        const registroExitoso = await addModule("examenes", "info-examen", data, "Exámen registrado exitosamente!");
+
+        if (!registroExitoso.code) throw { result: registroExitoso.result };
 
         const listadoExamenes = await getAll("examenes/consulta");
         cleanValdiation("info-examen");

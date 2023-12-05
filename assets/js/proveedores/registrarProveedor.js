@@ -21,7 +21,9 @@ async function addProveedor() {
         if (!(patterns.nameCompany.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         if (!(patterns.address.test(data.ubicacion))) throw { message: "La ubicación ingresada no es válida" };
 
-        await addModule("proveedores", "info-proveedor", data, "Proveedor registrado exitosamente!");
+        const registroExitoso = await addModule("proveedores", "info-proveedor", data, "Proveedor registrado exitosamente!");
+
+        if (!registroExitoso.code) throw { result: registroExitoso.result };
 
         const listadoProveedores = await getAll("proveedores/consulta");
         const registros = listadoProveedores;
