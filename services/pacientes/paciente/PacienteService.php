@@ -10,11 +10,12 @@ class PacienteService{
 
         $validarPaciente = new Validate;
         $_pacienteModel = new PacienteModel();
-
+        
         if ( $formulario['tipo_paciente'] != 4 && $validarPaciente->isDuplicated('paciente', 'cedula', $formulario['cedula']) ) { 
             $respuesta = new Response(false, 'Ya existe un paciente con esa cédula');
             $respuesta->setData("Problema al insertar el paciente con la cédula ".$formulario['cedula']);
-            return $respuesta->json(400);
+            echo $respuesta->json(400);
+            exit();
         }
 
         if ( $formulario['tipo_paciente'] == 3 ) {
@@ -25,7 +26,7 @@ class PacienteService{
             
             $data = $validarPaciente->dataScape($formulario);
             $id = $_pacienteModel->insert($data);
-
+            
             PacienteValidaciones::validarTipoPaciente($formulario, $id, 3);
             PacienteValidaciones::validarDuplicadoPacienteSeguro($pacienteSeguro, $id);
             

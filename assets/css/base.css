@@ -285,7 +285,8 @@ span.select2.select2-container.select2-container--bootstrap-5 {
 .form-control.invalid + small {
     opacity: 1;
     height: auto;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
+    margin-bottom: 0;
     transition: opacity .4s ease-out;
     display: block;
 }

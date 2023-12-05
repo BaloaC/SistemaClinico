@@ -39,53 +39,6 @@ class HorarioController extends Controller{
         return $respuesta->json(200);
     }
 
-    // public function actualizarHorario($horario_id){
-
-    //     $_POST = json_decode(file_get_contents('php://input'), true);
-
-    //     $camposNumericos = array("medico_id");
-    //     $camposString = array("dias_semana");
-    //     $validarHorario = new Validate;
-
-    //     switch($_POST) {
-    //         case ($validarHorario->isEmpty($_POST)):
-    //             $respuesta = new Response('DATOS_VACIOS');
-    //             return $respuesta->json(400);
-
-    //         case $validarHorario->isEliminated("horario", 'estatus_hor', $horario_id):
-    //             $respuesta = new Response('NOT_FOUND');
-    //             return $respuesta->json(404);
-
-    //         case !$validarHorario->isNumber($_POST, $camposNumericos):
-    //             $respuesta = new Response('DATOS_INVALIDOS');
-    //             return $respuesta->json(400);
-
-    //         case $validarHorario->isString($_POST, $camposString):
-    //             $respuesta = new Response('DATOS_INVALIDOS');
-    //             return $respuesta->json(400);
-
-    //         case !($validarHorario->existsInDB($_POST, $camposNumericos)):   
-    //             $respuesta = new Response('NOT_FOUND'); 
-    //             return $respuesta->json(404);
-            
-    //         case $validarHorario->isDuplicatedId('medico_id', 'dias_semana', $_POST['medico_id'], $_POST['dias_semana'], 'horario'):
-    //             $respuesta = new Response('DATOS_DUPLICADOS'); 
-    //             return $respuesta->json(400);
-
-    //         default: 
-    //             $data = $validarHorario->dataScape($_POST);
-
-    //             //sreturn $data;
-    //             $_horarioModel = new HorarioModel();
-    //             $id = $_horarioModel->where('horario_id','=',$_POST['horario_id'])->update($_POST);
-    //             $mensaje = ($id > 0);
-                
-    //             $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-    //             $respuesta->setData($id);
-    //             return $respuesta->json($mensaje ? 201 : 400);
-    //     }
-    // }
-
     public function eliminarHorario($horario_id){
 
         $_horarioModel = new HorarioModel();
