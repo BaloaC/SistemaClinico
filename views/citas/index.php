@@ -76,11 +76,6 @@
                                 <div class="row mt-4">
                                     <h5>Información de la Cita</h4>
                                         <div class="col-12 col-md-6">
-                                            <label for="fecha_cita">Fecha cita</label>
-                                            <input type="date" name="fecha_cita" id="fecha_cita" data-validate="true" data-type="date" class="form-control mb-3">
-
-                                            <label for="hora_entrada">Hora entrada</label>
-                                            <input type="time" name="hora_entrada" id="hora_entrada" data-validate="true" data-type="time" class="form-control mb-3">
 
                                             <label for="tipo_cita">Tipo de cita</label>
                                             <select name="tipo_cita" id="s-tipo_cita" class="form-control mb-3" disabled>
@@ -102,8 +97,6 @@
                                             <input type="text" name="motivo_cita" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="45">
                                             <small class="form-text">Solo se permiten letras y números</small>
 
-                                            <label for="hora_salida">Hora salida</label>
-                                            <input type="time" name="hora_salida" id="hora_salida" data-validate="true" data-type="time" class="form-control mb-3">
                                         </div>
                                 </div>
                                 <div class="row">
@@ -145,6 +138,20 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
+                                        </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <h5>Horario de la cita</h2>
+                                        <div class="col-12 col-md-6">
+                                            <label for="fecha_cita">Fecha cita</label>
+                                            <input type="date" name="fecha_cita" id="fecha_cita" data-validate="true" data-type="date" class="form-control mb-3">
+                                            
+                                            <label for="hora_salida">Hora salida</label>
+                                            <input type="time" name="hora_salida" id="hora_salida" data-validate="true" data-type="time" step="2" class="form-control mb-3">
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="hora_entrada">Hora entrada</label>
+                                            <input type="time" name="hora_entrada" id="hora_entrada" data-validate="true" data-type="time" step="2" class="form-control mb-3">
                                         </div>
                                 </div>
                             </div>
