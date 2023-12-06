@@ -109,6 +109,7 @@ class CitasValidaciones {
         foreach ($medico as $horario) {
             
             if ($horario->dias_semana == $dia) {
+                array_push($horarioMedico, $horario);
                 
                 if ($formulario['hora_entrada'] < $horario->hora_entrada || $formulario['hora_entrada'] > $horario->hora_salida || $formulario['hora_salida'] > $horario->hora_salida || $formulario['hora_salida'] < $horario->hora_entrada ) {
                     $respuesta = new Response(false, 'El médico indicado no está disponible a esa hora');
