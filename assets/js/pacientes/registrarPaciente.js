@@ -86,9 +86,8 @@ async function addPaciente() {
         
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
-        cleanValdiation("info-paciente");
-        $("#s-titular_id").val([]).trigger('change');
         deleteElementByClass("newInput");
+        cleanValdiation("info-paciente");
 
         $('#pacientes').DataTable().ajax.reload();
 

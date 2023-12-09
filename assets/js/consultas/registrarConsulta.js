@@ -113,17 +113,12 @@ async function addConsulta() {
         }
         
         $form.reset();
-        $('#s-paciente').val([]).trigger('change');
-        $('#s-examen').val([]).trigger('change');
-        $('#s-insumo').val([]).trigger('change');
-        $('#s-medicamento').val([]).trigger('change');
-        $('#s-cita').val([]).trigger('change');
-        // $('#s-cita').empty().trigger('change');
-        // document.getElementById("s-cita").disabled = true;
         deleteElementByClass("newInput");
         cleanValdiation("info-consulta");
+        // alert("a");
         setTimeout(() => {
             $("#modalReg").modal("hide");
+            document.getElementById("s-especialidad").classList.remove("is-valid");
         }, 500);
         $('#consultas').DataTable().ajax.reload();
 

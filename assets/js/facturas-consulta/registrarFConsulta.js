@@ -59,7 +59,9 @@ async function addFConsulta() {
 
         // data.monto_con_iva = (parseFloat(data.monto_sin_iva) * 0.16) + parseFloat(data.monto_sin_iva)
 
-        await addModule("factura/consulta","info-fconsulta",data,"Factura consulta registrada correctamente!", "#modalRegNormal", ".alertConsulta");
+        const registroExitoso = await addModule("factura/consulta","info-fconsulta",data,"Factura consulta registrada correctamente!", "#modalRegNormal", ".alertConsulta");
+
+        if (!registroExitoso.code) throw { result: registroExitoso.result };
         
         cleanValdiation("info-fconsulta");
         $('#fConsulta').DataTable().ajax.reload();

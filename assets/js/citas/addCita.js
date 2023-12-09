@@ -111,7 +111,9 @@ async function addCita() {
         }
 
 
-        await addModule("citas", "info-cita", data, "Cita agendada exitosamente!");
+        const registroExitoso = await addModule("citas", "info-cita", data, "Cita agendada exitosamente!");
+
+        if (!registroExitoso.code) throw { result: registroExitoso.result };
 
         cleanValdiation("info-cita");
         calendar.refetchEvents();

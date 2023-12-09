@@ -18,7 +18,7 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
     try {
         const selectObj = [];
 
-        console.log(obj);
+        // console.log(obj);
 
         if (!staticSelect) {
             obj.forEach(el => {
@@ -49,7 +49,7 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
             }
         });
 
-       
+
     } catch (error) {
         console.log(error);
     }
@@ -109,7 +109,7 @@ export async function select2OnClick({ selectSelector, module, selectValue, sele
 
             if (element?.dataset) {
                 element.dataset.active = 0;
-            } 
+            }
         })
     }
 
@@ -160,4 +160,15 @@ export function createOptionOrSelectInstead({ obj, selectSelector, selectValue, 
             $(selectSelector).addClass("is-invalid");
         }
     });
+}
+
+export function emptyAllSelect2({ selectSelector, placeholder, parentModal = "#modalReg" }) {
+    $(selectSelector)
+        .empty()
+        .select2({
+            placeholder,
+            dropdownParent: $(parentModal),
+            theme: "bootstrap-5",
+            language: "es",
+        });
 }

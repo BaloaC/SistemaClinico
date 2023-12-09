@@ -1,4 +1,4 @@
-import dinamicSelect2 from "../global/dinamicSelect2.js";
+import dinamicSelect2, { emptyAllSelect2, emptySelect2 } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
 import validateInputs from "../global/validateInputs.js";
 
@@ -9,7 +9,7 @@ const modalRegister = document.getElementById("modalReg");
 const modalUpdate = document.getElementById("modalAct");
 
 const handleModalOpen = async () => {
-    if(modalOpened === false){
+    if (modalOpened === false) {
         especialidades = await getAll("especialidades/consulta");
 
         dinamicSelect2({
@@ -25,11 +25,13 @@ const handleModalOpen = async () => {
     }
 }
 
+
+
 // Al abrir el modal cargar los select2
 modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen());
 modalUpdate.addEventListener('show.bs.modal', async () => await handleModalOpen());
 
-async function addMedicoEspecialidadInput(button,parentModal = "#modalReg") {
+async function addMedicoEspecialidadInput(button, parentModal = "#modalReg") {
 
     clicks += 1;
 
@@ -55,6 +57,7 @@ async function addMedicoEspecialidadInput(button,parentModal = "#modalReg") {
 
     document.getElementById(button).insertAdjacentHTML("beforebegin", template);
 
+    let selectSelector = `#s-especialidad${clicks}`;
     dinamicSelect2({
         obj: especialidades,
         selectSelector: `#s-especialidad${clicks}`,
@@ -64,7 +67,214 @@ async function addMedicoEspecialidadInput(button,parentModal = "#modalReg") {
         placeholder: "Seleccione una especialidad"
     });
 
+    // // Vacimos el select primero antes de añadirlo
+    // emptyAllSelect2({
+    //     selectSelector,
+    //     placeholder: "Seleccione una especialidad",
+    //     parentModal: parentModal,
+    // })
+
+    // const select = document.getElementById(`s-especialidad${clicks}`);
+    // const optionVacio = document.createElement("option");
+    // optionVacio.value = "";
+    // select.insertBefore(optionVacio, select.firstChild)
+
+    // // Se inserta la nueva información
+    // dinamicSelect2({
+    //     obj: especialidades,
+    //     selectSelector,
+    //     selectValue: "especialidad_id",
+    //     selectNames: ["nombre"],
+    //     parentModal: parentModal,
+    //     placeholder: "Seleccione una especialidad"
+    // });
+
+    // validateExistingSelect2(parentModal, selectSelector);
+    // // validateExistingSelect2OnChange(parentModal,selectSelector);
+
+    // $(selectSelector).on("change", function () {
+    //     validateExistingSelect2OnChange(parentModal, selectSelector);
+    // });
+
     validateInputs();
+}
+
+// function validateExistingSelect2OnChange(parentModal, selectSelector) {
+
+//     const existingSelects = document.querySelectorAll('.medico-especialidad-id');
+
+//     existingSelects.forEach(select2 => {
+
+//         if (selectSelector != `#${select2.id}`) {
+
+//             // Desvincular temporalmente el manejador de eventos change
+//             $(`#${select2.id}`).off('change');
+
+//             let selectedOptions = [];
+
+//             // Filtrar las opciones de especialidades para excluir las ya seleccionadas
+//             selectedOptions = Array.from(existingSelects).map(select => {
+//                 if (select.value != select2.value) {
+//                     return select.value;
+//                 }
+//             });
+
+//             const filteredOptions = filterOptions(especialidades, selectedOptions);
+
+//             // Guardar el valor antes de mostrarlo
+//             let selectedValue = select2.value;
+            
+//             emptyAllSelect2({
+//                 selectSelector: `#${select2.id}`,
+//                 placeholder: "Seleccione una especialidad",
+//                 parentModal: parentModal,
+//             });
+
+//             dinamicSelect2({
+//                 obj: filteredOptions,
+//                 selectSelector: `#${select2.id}`,
+//                 selectValue: "especialidad_id",
+//                 selectNames: ["nombre"],
+//                 parentModal: parentModal,
+//                 placeholder: "Seleccione una especialidad"
+//             });
+
+//             // Cambiar el valor seleccionado a la opción guardada
+//             // $(`#${select2.id}`).val(selectedValue).trigger('change');
+
+//             // Volver a vincular el manejador de eventos change
+//             // $(`#${select2.id}`).on('change', function () {
+//                 // validateExistingSelect2OnChange(parentModal, selectSelector);
+//             // });
+//         }
+//     });
+// }
+
+//     // console.log(select2.id)
+
+
+
+
+//     dinamicSelect2({
+//         obj: filteredOptions,
+//         selectSelector: `#${select2.id}`,
+//         selectValue: "especialidad_id",
+//         selectNames: ["nombre"],
+//         parentModal: parentModal,
+//         placeholder: "Seleccione una especialidad"
+//     });
+
+//     // $(selectSelector).val(null).trigger('change');
+// }
+
+// Al añadir los inputs validar
+// function validateExistingSelect2(parentModal, selectSelector) {
+
+//     const existingSelects = document.querySelectorAll('.medico-especialidad-id');
+
+
+
+//     existingSelects.forEach(select2 => {
+
+//         if (selectSelector == `#${select2.id}`) {
+//             emptyAllSelect2({
+//                 selectSelector: `#${select2.id}`,
+//                 placeholder: "Seleccione una especialidad",
+//                 parentModal: parentModal,
+//             })
+//         }
+
+//         let selectedOptions = [];
+//         // Filtrar las opciones de especialidades para excluir las ya seleccionadas
+//         selectedOptions = Array.from(existingSelects).map(select => {
+//             if (select.value != select2.value) {
+//                 return select.value;
+//             }
+//         });
+
+//         console.log(selectedOptions);
+
+//         const filteredOptions = filterOptions(especialidades, selectedOptions);
+
+//         console.log(filteredOptions);
+
+//         // Cambiar el select2 creado únicamente
+//         if (selectSelector == `#${select2.id}`) {
+
+//             // console.log(select2.id)
+
+
+//             dinamicSelect2({
+//                 obj: filteredOptions,
+//                 selectSelector: `#${select2.id}`,
+//                 selectValue: "especialidad_id",
+//                 selectNames: ["nombre"],
+//                 parentModal: parentModal,
+//                 placeholder: "Seleccione una especialidad"
+//             });
+
+//             $(selectSelector).val(null).trigger('change');
+//         } else {
+
+
+//             // Guardamos el valor antes de mostrarlo
+//             let selectedValue = select2.value;
+
+//             emptyAllSelect2({
+//                 selectSelector: `#${select2.id}`,
+//                 placeholder: "Seleccione una especialidad",
+//                 parentModal: parentModal,
+//             })
+
+
+//             dinamicSelect2({
+//                 obj: filteredOptions,
+//                 selectSelector: `#${select2.id}`,
+//                 selectValue: "especialidad_id",
+//                 selectNames: ["nombre"],
+//                 parentModal: parentModal,
+//                 placeholder: "Seleccione una especialidad"
+//             });
+
+//             console.log(select2.id, "selected", selectedValue);
+//             $(`#${select2.id}`).val(selectedValue).trigger('change');
+//             //     let selectedOptions = [];
+
+//             //     // Filtrar las opciones de especialidades para excluir las ya seleccionadas
+//             //     selectedOptions = Array.from(existingSelects).map(select => {
+//             //         if (select.value != select2.value) {
+//             //             return select.value;
+//             //         }
+//             //     });
+
+//             //     console.log(selectedOptions);
+
+//             //     const filteredOptions = filterOptions(especialidades, selectedOptions);
+
+//             //     console.log(filteredOptions);
+
+//             //     emptyAllSelect2({
+//             //         selectSelector: `#${select2.id}`,
+//             //         placeholder: "Seleccione una especialidad",
+//             //         parentModal: parentModal,
+//             //     })
+
+//             //     dinamicSelect2({
+//             //         obj: filteredOptions,
+//             //         selectSelector: `#${select2.id}`,
+//             //         selectValue: "especialidad_id",
+//             //         selectNames: ["nombre"],
+//             //         parentModal: parentModal,
+//             //         placeholder: "Seleccione una especialidad"
+//             //     });
+
+//         }
+//     })
+// }
+
+function filterOptions(options, selectedValues) {
+
+    return options.filter(option => !selectedValues.includes(option.especialidad_id.toString()));
 }
 
 window.addMedicoEspecialidadInput = addMedicoEspecialidadInput;

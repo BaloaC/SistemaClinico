@@ -17,7 +17,9 @@ async function addFSeguro() {
         if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto))) throw { message: "El precio ingresado es inválido" };
 
 
-        await addModule("factura/seguro","info-fseguro",data,"Factura seguro registrada correctamente!");
+        const registroExitoso = await addModule("factura/seguro","info-fseguro",data,"Factura seguro registrada correctamente!");
+
+        if (!registroExitoso.code) throw { result: registroExitoso.result };
 
         cleanValdiation("info-fseguro");
         $('#fSeguros').DataTable().ajax.reload();

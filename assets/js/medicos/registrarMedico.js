@@ -68,14 +68,15 @@ async function addMedico() {
 
         if(horario.length <= 0) throw { message: "No se ha seleccionado ningún día disponible del médico" };
 
-        await addModule("medicos", "info-medico", data, "Médico registrado exitosamente!");
+        const registroExitoso = await addModule("medicos", "info-medico", data, "Médico registrado exitosamente!");
+
+        if (!registroExitoso.code) throw { result: registroExitoso.result };
+
         const listadoMedico = await getAll("medicos/consulta");
         medicosPagination(listadoMedico);
         cleanValdiation("info-medico");
         deleteElementByClass("newInput");
         document.querySelectorAll("input[type='time']").forEach(element => element.disabled = true);
-        $("#s-especialidad").val([]).trigger('change'); //Vaciar select2
-        $("#s-especialidad").removeClass("is-valid"); //Limpiar validación
 
     } catch (error) {
         console.log(error);

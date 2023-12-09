@@ -71,7 +71,9 @@ async function addFMensajeria() {
 
         data.consultas = consultas;
 
-        await addModule("factura/mensajeria","info-fconsulta",data,"Factura mensajeria registrada correctamente!", "#modalRegNormal", ".alertConsulta");
+        const registroExitoso = await addModule("factura/mensajeria","info-fconsulta",data,"Factura mensajeria registrada correctamente!", "#modalRegNormal", ".alertConsulta");
+
+        if (!registroExitoso.code) throw { result: registroExitoso.result };
 
         cleanValdiation("info-fconsulta");
         $('#fConsulta').DataTable().ajax.reload();

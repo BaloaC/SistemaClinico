@@ -65,9 +65,6 @@ async function addFCompra() {
         formCompra.reset();
         cleanValdiation("info-fcompra");
         deleteElementByClass("newInput");
-        $("#s-proveedor").val([]).trigger('change');
-        $("#s-proveedor").removeClass("is-valid");
-        $("#s-insumo").val([]).trigger('change');
         document.querySelector("td > .monto-total-p").textContent = "$0.00";
         document.getElementById("productos-totales").textContent = "0";
         document.getElementById("monto-sin-iva").textContent = "$0.00";
@@ -75,6 +72,7 @@ async function addFCompra() {
         document.getElementById("monto-total").textContent = "$0.00";
         $('#fCompra').DataTable().ajax.reload();
         document.querySelectorAll(".insumo-id")[0].classList.remove("is-valid");
+        $("#s-proveedor").removeClass("is-valid");
 
     } catch (error) {
         console.log(error);
