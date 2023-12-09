@@ -147,11 +147,11 @@
                                             <input type="date" name="fecha_cita" id="fecha_cita" data-validate="true" data-type="date" class="form-control mb-3">
                                             
                                             <label for="hora_salida">Hora salida</label>
-                                            <input type="time" name="hora_salida" id="hora_salida" data-validate="true" data-type="time" step="2" class="form-control mb-3">
+                                            <input type="time" name="hora_salida" id="hora_salida" data-validate="true" data-type="timeAppointment" step="2" class="form-control mb-3">
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <label for="hora_entrada">Hora entrada</label>
-                                            <input type="time" name="hora_entrada" id="hora_entrada" data-validate="true" data-type="time" step="2" class="form-control mb-3">
+                                            <input type="time" name="hora_entrada" id="hora_entrada" data-validate="true" data-type="timeAppointment" step="2" class="form-control mb-3">
                                         </div>
                                 </div>
                             </div>

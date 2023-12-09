@@ -70,7 +70,7 @@ export default async function tipoTitular(inputRadio) {
             $(titularSelect).on("change", function () {
                 if ($(titularSelect).val() != 0) {
                     $(titularSelect).removeClass("is-invalid");
-                    $(pacientitularSelecttesSelect).addClass("is-valid");
+                    $(titularSelect).addClass("is-valid");
                 } else {
                     $(titularSelect).removeClass("is-valid");
                     $(titularSelect).addClass("is-invalid");

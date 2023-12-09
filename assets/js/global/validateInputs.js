@@ -8,7 +8,7 @@ export default function validateInputs() {
     inputs.forEach((input) => {
 
         // ** Agregar evento change en caso de que sea de tipo time
-        if(input.dataset.type === "time" || input.dataset.type === "date"){
+        if(input.dataset.type === "time" || input.dataset.type === "timeAppointment" || input.dataset.type === "date"){
             input.addEventListener('change', (e) => {
                 validate(e.target, patterns[e.target.dataset.type]);
             });

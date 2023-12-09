@@ -14,5 +14,6 @@ export const patterns = {
     number: /^[1-9]\d*$/, // Patrón para validar inputs tipo number
     price: /^[0-9]*\.?[0-9]+$/, // Patrón para los precios
     date: /^\d{4}([\-/. ])(0?[1-9]|1[1-2])([\-/. ])(0?[1-9]|[1-2][0-9]|3[01])$/, // Patrón para fecha
+    timeAppointment: /^([01]\d|2[0-3]):[0-5]\d:[0-5]\d$/, // Patrón para tiempo en citas
     time: /^([01]\d|2[0-3]):([0-5]\d)$/ // Patrón para tiempo
 };

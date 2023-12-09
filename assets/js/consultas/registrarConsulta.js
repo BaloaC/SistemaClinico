@@ -115,7 +115,7 @@ async function addConsulta() {
         $form.reset();
         deleteElementByClass("newInput");
         cleanValdiation("info-consulta");
-        alert("a");
+        // alert("a");
         setTimeout(() => {
             $("#modalReg").modal("hide");
             document.getElementById("s-especialidad").classList.remove("is-valid");
