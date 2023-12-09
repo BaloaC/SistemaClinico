@@ -15,4 +15,11 @@ class Helpers {
         echo $respuesta->json($isTrue ? 200: 400);
         exit();
     }
+
+    public static function retornarMensajeListado($data) {
+        $respuesta = new Response($data ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($data);
+        echo $respuesta->json($data ? 200: 400);
+        exit();
+    }
 }

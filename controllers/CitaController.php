@@ -180,17 +180,17 @@ class CitaController extends Controller {
         $inners = $_citaModel->listInner($this->arrayInner);
         $lista = $_citaModel->where('estatus_cit', '!=', '2')->innerJoin($this->arraySelect, $inners, "cita");
 
+        $lista_citas = [];
         foreach ($lista as $cita) {
+
             if ($cita->tipo_cita == 2) {
-                CitasHelpers::innerCita($lista);
-                // $_citaSeguroModel = new CitaSeguroModel();
-                // $inners = $_citaSeguroModel->listInner($this->seguroInner);
-                // $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $cita->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
-                // $cita->cita_seguro = $citaSeguro;
+                $lista_citas[] = CitasHelpers::innerCita($lista);
+            } else {
+                $lista_citas[] = $lista;
             }
         }
 
-        return $this->retornarMensaje($lista);
+        Helpers::retornarMensajeListado($lista_citas);
     }
 
     public function listarCitaPorId($cita_id) {
@@ -199,15 +199,20 @@ class CitaController extends Controller {
         $inners = $_citaModel->listInner($this->arrayInner);
         $lista = $_citaModel->where('cita_id', '=', $cita_id)->where('estatus_cit', '!=', '2')->innerJoin($this->arraySelect, $inners, "cita");
         
-        if ($lista[0]->tipo_cita == 2) {
-            CitasHelpers::innerCita($lista[0]);
-            // $_citaSeguroModel = new CitaSeguroModel();
-            // $inners = $_citaSeguroModel->listInner($this->seguroInner);
-            // $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $lista[0]->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
-            // $lista[0]->cita_seguro = $citaSeguro;
+        if ($lista) {
+            $lista_citas = "";
+            
+            if ($lista[0]->tipo_cita == 2) {
+                $lista_citas = CitasHelpers::innerCita($lista[0]);
+                var_dump($lista_citas);
+            } else {
+                $lista_citas = $lista[0];
+            }
+
+            Helpers::retornarMensajeListado($lista_citas);
         }
 
-        return $this->retornarMensaje($lista[0]);
+        return Helpers::retornarMensajeListado(false, false);
     }
 
     public function listarCitaPorPacienteId($paciente_id) {
@@ -215,15 +220,10 @@ class CitaController extends Controller {
         $_citaModel = new CitaModel();
         $inners = $_citaModel->listInner($this->arrayInner);
         $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('cita.paciente_id', '=', $paciente_id)->innerJoin($this->arraySelect, $inners, "cita");
-        
+        var_dump($lista);
         if ( count($lista) > 0 && $lista[0]->tipo_cita == 2) {
-            CitasHelpers::innerCita($lista[0]);
-            // $_citaSeguroModel = new CitaSeguroModel();
-            // $inners = $_citaSeguroModel->listInner($this->seguroInner);
-            // $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $lista[0]->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
-            // $lista[0]->cita_seguro = $citaSeguro;
-
-            return $this->retornarMensaje($lista[0]);
+            $lista_citas = CitasHelpers::innerCita($lista[0]);
+            Helpers::retornarMensajeListado($lista_citas);
         } else {
 
             $respuesta = new Response(false, 'El paciente indicado todavía no posee citas');
@@ -255,15 +255,10 @@ class CitaController extends Controller {
         $mensaje = ($esActualizado > 0);
 
         Helpers::retornarMensajeActualizacion($mensaje, $actualizado);
-        // $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        // $respuesta->setData($actualizado);
-        // return $respuesta->json($mensaje ? 200 : 400);
     }
 
     public function reprogramarCita($cita_id) {
         $_POST = json_decode(file_get_contents('php://input'), true);
-        $validarCita = new Validate;
-
         CitasValidaciones::validarCitaId($cita_id);
         CitasValidaciones::validarFecha($_POST);
 
@@ -312,16 +307,5 @@ class CitaController extends Controller {
         $respuesta->setData($eliminado);
 
         return $respuesta->json($mensaje ? 200 : 400);
-    }
-
-    // utils
-    public function retornarMensaje($mensaje) {
-
-        $bool = ($mensaje != null);
-
-        $respuesta = new Response($bool ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($mensaje);
-
-        return $respuesta->json($bool ? 200 : 404);
     }
 }
