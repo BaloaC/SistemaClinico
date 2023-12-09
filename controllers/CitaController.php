@@ -1,6 +1,8 @@
 <?php
 
 include_once './services/citas/CitasValidaciones.php';
+include_once './services/citas/CitasHelpers.php';
+include_once './services/Helpers.php';
 
 class CitaController extends Controller {
 
@@ -60,6 +62,7 @@ class CitaController extends Controller {
         CitasValidaciones::validacionesGenerales($_POST);
         CitasValidaciones::validarDisponibilidad($_POST);
         CitasValidaciones::validarHorario($_POST);
+        CitasValidaciones::validarFecha($_POST);
 
         $validarCita = new Validate;
 
@@ -179,10 +182,11 @@ class CitaController extends Controller {
 
         foreach ($lista as $cita) {
             if ($cita->tipo_cita == 2) {
-                $_citaSeguroModel = new CitaSeguroModel();
-                $inners = $_citaSeguroModel->listInner($this->seguroInner);
-                $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $cita->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
-                $cita->cita_seguro = $citaSeguro;
+                CitasHelpers::innerCita($lista);
+                // $_citaSeguroModel = new CitaSeguroModel();
+                // $inners = $_citaSeguroModel->listInner($this->seguroInner);
+                // $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $cita->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
+                // $cita->cita_seguro = $citaSeguro;
             }
         }
 
@@ -196,10 +200,11 @@ class CitaController extends Controller {
         $lista = $_citaModel->where('cita_id', '=', $cita_id)->where('estatus_cit', '!=', '2')->innerJoin($this->arraySelect, $inners, "cita");
         
         if ($lista[0]->tipo_cita == 2) {
-            $_citaSeguroModel = new CitaSeguroModel();
-            $inners = $_citaSeguroModel->listInner($this->seguroInner);
-            $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $lista[0]->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
-            $lista[0]->cita_seguro = $citaSeguro;
+            CitasHelpers::innerCita($lista[0]);
+            // $_citaSeguroModel = new CitaSeguroModel();
+            // $inners = $_citaSeguroModel->listInner($this->seguroInner);
+            // $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $lista[0]->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
+            // $lista[0]->cita_seguro = $citaSeguro;
         }
 
         return $this->retornarMensaje($lista[0]);
@@ -212,10 +217,11 @@ class CitaController extends Controller {
         $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('cita.paciente_id', '=', $paciente_id)->innerJoin($this->arraySelect, $inners, "cita");
         
         if ( count($lista) > 0 && $lista[0]->tipo_cita == 2) {
-            $_citaSeguroModel = new CitaSeguroModel();
-            $inners = $_citaSeguroModel->listInner($this->seguroInner);
-            $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $lista[0]->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
-            $lista[0]->cita_seguro = $citaSeguro;
+            CitasHelpers::innerCita($lista[0]);
+            // $_citaSeguroModel = new CitaSeguroModel();
+            // $inners = $_citaSeguroModel->listInner($this->seguroInner);
+            // $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $lista[0]->cita_id)->innerJoin($this->seguroSelect, $inners, "cita_seguro");
+            // $lista[0]->cita_seguro = $citaSeguro;
 
             return $this->retornarMensaje($lista[0]);
         } else {
@@ -230,102 +236,66 @@ class CitaController extends Controller {
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarCita = new Validate;
 
-        switch ($validarCita) {
-            case $validarCita->isEmpty($_POST):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
+        CitasValidaciones::validarActualizacion($_POST, $cita_id);
+        CitasValidaciones::validarCitaId($cita_id);
 
-                // ** Enrique
-            case !$validarCita->isDuplicated('cita', 'cita_id', $cita_id):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(400);
+        $data = $validarCita->dataScape($_POST);
+        $newStatus['estatus_cit'] = 1;
+        $newArray['clave'] = $data['clave'];
 
-            case !$validarCita->isDuplicatedId('cita_id', 'estatus_cit', $cita_id, 3, 'cita'):
-                $respuesta = new Response(false, 'La cita seleccionada ya se encuentra asignada');
-                return $respuesta->json(400);
-
-            default:
-
-                $data = $validarCita->dataScape($_POST);
-                $newStatus['estatus_cit'] = 1;
-                $newArray['clave'] = $data['clave'];
-
-                $_citaSeguroModel = new CitaSeguroModel();
-                $actualizado = $_citaSeguroModel->where('cita_id', '=', $cita_id)->update($newArray);
-                $esActualizado = "";
-                
-                if ($actualizado > 0) {
-                    $_cita = new CitaModel();
-                    $esActualizado = $_cita->where('cita_id', '=', $cita_id)->update($newStatus);
-                }
-
-                $mensaje = ($esActualizado > 0);
-
-                $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-                $respuesta->setData($actualizado);
-                return $respuesta->json($mensaje ? 200 : 400);
+        $_citaSeguroModel = new CitaSeguroModel();
+        $actualizado = $_citaSeguroModel->where('cita_id', '=', $cita_id)->update($newArray);
+        $esActualizado = "";
+        
+        if ($actualizado > 0) {
+            $_cita = new CitaModel();
+            $esActualizado = $_cita->where('cita_id', '=', $cita_id)->update($newStatus);
         }
+
+        $mensaje = ($esActualizado > 0);
+
+        Helpers::retornarMensajeActualizacion($mensaje, $actualizado);
+        // $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+        // $respuesta->setData($actualizado);
+        // return $respuesta->json($mensaje ? 200 : 400);
     }
 
     public function reprogramarCita($cita_id) {
         $_POST = json_decode(file_get_contents('php://input'), true);
-
         $validarCita = new Validate;
 
-        switch ($validarCita) {
-            case !$validarCita->isDuplicated('cita', 'cita_id', $cita_id):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(400);
+        CitasValidaciones::validarCitaId($cita_id);
+        CitasValidaciones::validarFecha($_POST);
 
-            case $validarCita->isDate($_POST['fecha_cita']):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(400);
+        $_citaModel = new CitaModel();
+        $cita = $_citaModel->where('cita_id', '=', $cita_id)->getFirst();
 
-            case $validarCita->isToday($_POST['fecha_cita'], true):
-                $respuesta = new Response('FECHA_POSTERIOR');
-                return $respuesta->json(400);
+        CitasValidaciones::validarReprogramacion($cita);
 
-            default:
+        // Le actualizamos el estatus a la cita original
+        $newEstatus = array( "estatus_cit" => "5" );
 
-                $_citaModel = new CitaModel();
-                $cita = $_citaModel->where('cita_id', '=', $cita_id)->getFirst();
+        $actualizado = $_citaModel->update($newEstatus);
+        $isUpdate = ($actualizado > 0);
 
-                if ($cita->estatus_cit == 2 || $cita->estatus_cit == 4 || $cita->estatus_cit == 5) {
-                    $respuesta = new Response(false, 'La cita no puede estar eliminada, reprogramada o asociada a una consulta');
-                    $respuesta->setData("Ocurrió un error reprogramando la cita con estatus ".$cita->estatus_cit);
-                    return $respuesta->json(400);
-
-                } else if ( $validarCita->isDuplicatedId('medico_id', 'fecha_cita', $cita->medico_id, $_POST['fecha_cita'], 'cita') ) {
-                    $respuesta = new Response('DUPLICATE_APPOINTMENT');
-                    $respuesta->setData("Ya existe una cita el día ".$cita->fecha_cita);
-                    return $respuesta->json(400);
-                }
-
-                // Le actualizamos el estatus a la cita original
-                $newEstatus = array( "estatus_cit" => "5" );
-
-                $actualizado = $_citaModel->update($newEstatus);
-                $isUpdate = ($actualizado > 0);
-
-                if (!$isUpdate) {
-                    $respuesta = new Response(false, 'Ha ocurrido un error actualizando la cita actual');
-                    return $respuesta->json(400);
-                }
-
-                // Comenzamos a insertar la cita nueva
-                $cita->fecha_cita = $_POST['fecha_cita'];
-                $newCita = get_object_vars( $cita ); // (Volvemos nuestro objeto un array)
-                unset($newCita['cita_id']);
-                unset($newCita['estatus_cit']);
-                unset($newCita['clave']);
-
-                $_cita = new CitaModel();
-                $id = $_cita->insert($newCita);
-                $isInserted = ($id > 0);
-
-                $isInserted = new Response($isInserted, $isInserted ? 'Cita reprogramada exitosamente' : 'Ocurrió un error reprogramando la cita');
-                return $isInserted->json($isInserted ? 201 : 400);
+        if (!$isUpdate) {
+            $respuesta = new Response(false, 'Ha ocurrido un error actualizando la cita actual');
+            return $respuesta->json(400);
         }
+
+        // Comenzamos a insertar la cita nueva
+        $cita->fecha_cita = $_POST['fecha_cita'];
+        $newCita = get_object_vars( $cita ); // (Volvemos nuestro objeto un array)
+        unset($newCita['cita_id']);
+        unset($newCita['estatus_cit']);
+        unset($newCita['clave']);
+
+        $_cita = new CitaModel();
+        $id = $_cita->insert($newCita);
+        $isInserted = ($id > 0);
+
+        $isInserted = new Response($isInserted, $isInserted ? 'Cita reprogramada exitosamente' : 'Ocurrió un error reprogramando la cita');
+        return $isInserted->json($isInserted ? 201 : 400);
     }
 
     public function eliminarCita($cita_id) {

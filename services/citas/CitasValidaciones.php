@@ -33,8 +33,56 @@ class CitasValidaciones {
             exit();
         }
 
+        if ( !$validarCita->isDuplicated('paciente', "cedula", $formulario['cedula_titular']) ) {
+            $respuesta = new Response(false, 'Paciente titular no encontrado');
+            echo $respuesta->json(404);
+            exit();
+        }
+
+        if ( $formulario['hora_entrada'] >= $formulario['hora_salida']) {
+            $respuesta = new Response(false, 'La hora de salida debe ser posteior de la hora de entrada');
+            echo $respuesta->json(400);
+            exit();
+        }
+    }
+
+    public static function validarActualizacion($formulario, $cita_id) {
+        $validarCita = new Validate;
+
+        if ( $validarCita->isEmpty($formulario) ) {
+            $respuesta = new Response('DATOS_VACIOS');
+            echo $respuesta->json(400);
+            exit();
+        }
+
+        if ( !$validarCita->isDuplicatedId('cita_id', 'estatus_cit', $cita_id, 3, 'cita') ) {
+            $respuesta = new Response(false, 'La cita seleccionada ya se encuentra asignada');
+            echo $respuesta->json(400);
+            exit();
+        }
+    }
+
+    public static function validarCitaId($cita_id) {
+        $validarCita = new Validate;
+        
+        if ( !$validarCita->isDuplicated('cita', 'cita_id', $cita_id) ) {
+            $respuesta = new Response('NOT_FOUND');
+            echo $respuesta->json(400);
+            exit();
+        }
+    }
+
+    public static function validarFecha($formulario) {
+        $validarCita = new Validate;
+
         if ( $validarCita->isDate($formulario['fecha_cita']) ) {
             $respuesta = new Response('FECHA_INVALIDA');
+            echo $respuesta->json(400);
+            exit();
+        }
+
+        if ( $validarCita->isToday($formulario['fecha_cita'], true) ) {
+            $respuesta = new Response('FECHA_POSTERIOR');
             echo $respuesta->json(400);
             exit();
         }
@@ -49,24 +97,6 @@ class CitasValidaciones {
         if ( $validarCita->isDate($formulario['hora_salida'], 'H:i:s') ) {
             $respuesta = new Response('HORA_INVALIDA');
             $respuesta->setData('Error en la hora de entrada '.$formulario['hora_salida']);
-            echo $respuesta->json(400);
-            exit();
-        }
-
-        if ( $validarCita->isToday($formulario['fecha_cita'], true) ) {
-            $respuesta = new Response('FECHA_INVALIDA');
-            echo $respuesta->json(400);
-            exit();
-        }
-
-        if ( !$validarCita->isDuplicated('paciente', "cedula", $formulario['cedula_titular']) ) {
-            $respuesta = new Response(false, 'Paciente titular no encontrado');
-            echo $respuesta->json(404);
-            exit();
-        }
-
-        if ( $formulario['hora_entrada'] >= $formulario['hora_salida']) {
-            $respuesta = new Response(false, 'La hora de salida debe ser posteior de la hora de entrada');
             echo $respuesta->json(400);
             exit();
         }
@@ -126,4 +156,21 @@ class CitasValidaciones {
             exit();
         }
     }
-}
+
+    public static function validarReprogramacion($cita) {
+        $validarCita = new Validate;
+        
+        if ($cita->estatus_cit == 2 || $cita->estatus_cit == 4 || $cita->estatus_cit == 5) {
+            $respuesta = new Response(false, 'La cita no puede estar eliminada, reprogramada o asociada a una consulta');
+            $respuesta->setData("Ocurrió un error reprogramando la cita con estatus ".$cita->estatus_cit);
+            echo $respuesta->json(400);
+            exit();
+
+        } else if ( $validarCita->isDuplicatedId('medico_id', 'fecha_cita', $cita->medico_id, $_POST['fecha_cita'], 'cita') ) {
+            $respuesta = new Response('DUPLICATE_APPOINTMENT');
+            $respuesta->setData("Ya existe una cita el día ".$cita->fecha_cita);
+            echo $respuesta->json(400);
+            exit();
+        }
+    }
+};
