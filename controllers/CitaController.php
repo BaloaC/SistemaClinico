@@ -204,7 +204,7 @@ class CitaController extends Controller {
             
             if ($lista[0]->tipo_cita == 2) {
                 $lista_citas = CitasHelpers::innerCita($lista[0]);
-                var_dump($lista_citas);
+                // var_dump($lista_citas);
             } else {
                 $lista_citas = $lista[0];
             }

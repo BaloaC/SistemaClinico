@@ -1,4 +1,5 @@
 import dinamicSelect2, { emptySelect2, select2OnClick, selectText } from "../global/dinamicSelect2.js";
+import formattedHour from "../global/formattedHour.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import isBeforeToday from "../global/isBeforeToday.js";
@@ -217,7 +218,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             especialidadSelect.classList.add("is-valid");
 
 
-           const horariosOrdenados = sortScheduleByDay(infoMedico[0].horario);
+            const horariosOrdenados = sortScheduleByDay(infoMedico[0].horario);
 
             let listHorarios = "";
             horariosOrdenados.forEach(horario => {
@@ -283,6 +284,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         const cita = await getById(module, arg.event._def.publicId);
 
         let estatusCita;
+        let claveCita = (cita.tipo_cita === 1) ? "No aplica" : ((cita.cita_seguro && cita.cita_seguro[0]) ? cita.cita_seguro[0].clave : "Por asignar");
 
         switch (cita.estatus_cit) {
             case "1": estatusCita = "Asignada"; break;
@@ -293,6 +295,17 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         }
 
         if (cita.estatus_cit == 5) estatusCita = "Reasignada";
+
+        if (cita.cita_seguro && cita.cita_seguro[0]) {
+            claveCita = cita.cita_seguro[0].clave;
+        } else {
+            claveCita = "Por asignar";
+        }
+
+        if (cita.tipo_cita == 1) {
+            claveCita = "No aplica";
+        }
+
 
 
         document.getElementById("paciente").textContent = `${cita.nombre_paciente} ${cita.apellido_paciente}`;
@@ -307,7 +320,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         document.getElementById("horaSalidaCita").value = cita.hora_salida;
         document.getElementById("fechaCita").value = cita.fecha_cita;
         document.getElementById("motivoCita").textContent = cita.motivo_cita;
-        document.getElementById("claveCita").textContent = (cita.tipo_cita == 1) ? "No aplica" : cita?.cita_seguro[0]?.clave;
+        document.getElementById("claveCita").textContent = claveCita;
         document.getElementById("btn-actualizar").disabled = (cita.estatus_cit == 1) ? true : false;
         document.getElementById("btn-reprogramar").disabled = (cita.estatus_cit == 1 || cita.estatus_cit == 3) ? false : true;
         document.getElementById("export-cita").setAttribute("onclick", `openPopup('pdf/cita/${cita.cita_id}')`);
@@ -320,6 +333,12 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
     dayMaxEvents: true, // allow "more" link when too many events
 });
 calendar.render();
+
+const horaEntradaInput = document.getElementById('hora_entrada');
+const horaSalidaInput = document.getElementById('hora_salida');
+
+horaEntradaInput.addEventListener("click", () => formattedHour(horaEntradaInput));
+horaSalidaInput.addEventListener("click", () => formattedHour(horaSalidaInput));
 
 // ! Para actualizar
 // let newOption = new Option("Hola", 1, true, true);
