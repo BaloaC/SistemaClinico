@@ -127,6 +127,9 @@ class CitasValidaciones {
 
         if (iconv('UTF-8', 'ISO-8859-1//IGNORE', $dia) == "mircoles") {
             $dia = "miercoles";
+
+        } else if (iconv('UTF-8', 'ISO-8859-1//IGNORE', $dia) == "sbado") {
+            $dia = "sabado";
         }
         
         // Obtenemos el horario del médico ese día
