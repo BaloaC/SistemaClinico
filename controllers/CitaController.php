@@ -184,9 +184,9 @@ class CitaController extends Controller {
         foreach ($lista as $cita) {
 
             if ($cita->tipo_cita == 2) {
-                $lista_citas[] = CitasHelpers::innerCita($lista);
+                $lista_citas[] = CitasHelpers::innerCita($cita);
             } else {
-                $lista_citas[] = $lista;
+                $lista_citas[] = $cita;
             }
         }
 

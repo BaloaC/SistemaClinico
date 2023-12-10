@@ -9,6 +9,7 @@ class CitasHelpers {
         "medico.nombre AS nombre_medico",
         "medico.apellidos AS apellido_medico",
         "especialidad.nombre AS nombre_especialidad",
+        "cita.clave",
         "cita.cita_id",
         "cita.paciente_id",
         "cita.medico_id",
@@ -39,7 +40,7 @@ class CitasHelpers {
     );
 
     public static function innerCita($lista) {
-
+        
         $_citaSeguroModel = new CitaSeguroModel();
         $inners = $_citaSeguroModel->listInner(CitasHelpers::$seguroInner);
         $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $lista->cita_id)->innerJoin(CitasHelpers::$seguroSelect, $inners, "cita_seguro");

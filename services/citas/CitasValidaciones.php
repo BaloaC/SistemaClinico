@@ -103,15 +103,17 @@ class CitasValidaciones {
     }
 
     public static function validarDisponibilidad($cita) {
-
+        // echo '<pre>';
+        // var_dump($cita);
+        // echo 'cita';
         // Validamos que no haya otra cita a esa hora
         $_citasDelDía = new CitaModel();
-        $isDuplicated = $_citasDelDía->where('fecha_cita', '=', $cita['fecha_cita'])->where('hora_entrada', '>=', $cita['hora_entrada'])->where('hora_entrada', '<=', $cita['hora_salida'])
-                ->orWhere('fecha_cita', '=', $cita['fecha_cita'])->where('hora_entrada', '<=', $cita['hora_entrada'])->where('hora_salida', '>=', $cita['hora_salida'])
-                ->orWhere('fecha_cita', '=', $cita['fecha_cita'])->where('hora_entrada', '<=', $cita['hora_entrada'])->where('hora_salida', '>=', $cita['hora_entrada'])
-                ->orWhere('fecha_cita', '=', $cita['fecha_cita'])->where('hora_entrada', '>=', $cita['hora_entrada'])->where('hora_salida', '<=', $cita['hora_entrada'])
+        $isDuplicated = $_citasDelDía->where('fecha_cita', '=', $cita['fecha_cita'])->where('hora_entrada', '>=', $cita['hora_entrada'])->where('hora_entrada', '<=', $cita['hora_salida'])->where('medico_id ', '=', $cita["medico_id"])
+                ->orWhere('fecha_cita', '=', $cita['fecha_cita'])->where('hora_entrada', '<=', $cita['hora_entrada'])->where('hora_salida', '>=', $cita['hora_salida'])->where('medico_id ', '=', $cita["medico_id"])
+                ->orWhere('fecha_cita', '=', $cita['fecha_cita'])->where('hora_entrada', '<=', $cita['hora_entrada'])->where('hora_salida', '>=', $cita['hora_entrada'])->where('medico_id ', '=', $cita["medico_id"])
+                ->orWhere('fecha_cita', '=', $cita['fecha_cita'])->where('hora_entrada', '>=', $cita['hora_entrada'])->where('hora_salida', '<=', $cita['hora_entrada'])->where('medico_id ', '=', $cita["medico_id"])
                 ->getAll();
-        
+        // var_dump($_citasDelDía);
         if ( count($isDuplicated) > 0 ) {
             $respuesta = new Response('DUPLICATE_APPOINTMENT');
             echo $respuesta->json(400);
