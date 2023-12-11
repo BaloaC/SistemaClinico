@@ -111,6 +111,7 @@ class CitasValidaciones {
                 ->orWhere('fecha_cita', '=', $cita['fecha_cita'])->where('hora_entrada', '>=', $cita['hora_entrada'])->where('hora_salida', '<=', $cita['hora_entrada'])->where('medico_id ', '=', $cita["medico_id"])
                 ->getAll();
         
+        
         if ( count($isDuplicated) > 0 ) {
             $respuesta = new Response('DUPLICATE_APPOINTMENT');
             echo $respuesta->json(400);
@@ -151,7 +152,7 @@ class CitasValidaciones {
                 } 
             }
         }
-
+        
         if ( count($horarioMedico) <= 0 ) {
             $respuesta = new Response(false, 'El médico indicado no está disponible ese día');
             echo $respuesta->json(400);

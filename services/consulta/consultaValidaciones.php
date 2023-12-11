@@ -184,18 +184,18 @@ class ConsultaValidaciones {
      */
     public static function validarEstatusCita($formulario) {
         $validarConsulta = new Validate;
-
+        
         if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $formulario['cita_id'], 4, 'cita') ) {
             $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
             echo $respuesta->json(400);
             exit();
         } 
         
-        if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $formulario['cita_id'], 3, 'cita') ) {
-            $respuesta = new Response(false, 'Para realizar la consulta la cita debe tener su clave correspondiente');
-            echo $respuesta->json(400);
-            exit();
-        }
+        // if ( !$validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $formulario['cita_id'], 3, 'cita') ) {
+        //     $respuesta = new Response(false, 'Para realizar la consulta la cita debe tener su clave correspondiente');
+        //     echo $respuesta->json(400);
+        //     exit();
+        // }
     }
 
     /**

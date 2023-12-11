@@ -173,20 +173,14 @@ class ConsultaController extends Controller {
             ConsultaValidaciones::validarConsultaExamen($examenes);
         }
 
-        $insumos = isset($_POST['insumos']) ? $_POST['insumos'] : false;
+        
         $recipe = isset($_POST['recipes']) ? $_POST['recipes'] : false;
         $indicaciones = isset($_POST['indicaciones']) ? $_POST['indicaciones'] : false;
         
-        
-
+        $insumos = isset($_POST['insumos']) ? $_POST['insumos'] : false;
         if ($insumos) { 
-
             unset($_POST['insumos']);
             ConsultaValidaciones::validarInsumos($insumos);
-            // $isValido = $this->validarInsumos($insumos);
-            // if ($isValido) {
-            //     return $isValido;
-            // }
         }
 
         if ($recipe) { unset($_POST['recipes']); }
@@ -217,7 +211,7 @@ class ConsultaController extends Controller {
             }
 
         } else {
-        
+            
             $data = $validarConsulta->dataScape($_POST);
             $por_cita = isset($data['cita_id']);
             $consulta_separada = ConsultaHelper::separarInformación($_POST, $por_cita);
@@ -279,40 +273,61 @@ class ConsultaController extends Controller {
 
         if ( $this->consulta_id > 0) {
 
-            if (!$es_emergencia) {
-                if (!$por_cita) {
+            if ($examenes) {
+                if ($data['tipo_cita'] == 1 || !$por_cita && !$es_emergencia) {
+                    ConsultaHelper::insertarExamen($examenes, $this->consulta_id);
+                }
 
-                    if ($examenes) {
-                        ConsultaHelper::insertarExamen($examenes, $this->consulta_id);
-                        // $respuestaExamen = $this->insertarExamen($examenes, $this->consulta_id);
-                        // if ($respuestaExamen) {
-                        //     return $respuestaExamen;
-                        // }
-                    }
-        
-                    if ($insumos) {
-        
-                        ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, false);
-                        // $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id, false);
-                        // if ($respuestaInsumo) {
-                        //     return $respuestaInsumo;
-                        // }
-                    }
-
-                } else {
-                    if ($examenes) {
-                        ConsultaHelper::insertarExamenesSeguro($examenes, $this->consulta_id);
-                    }
-
-                    if ($insumos) {
-                        ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, true);
-                        // $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id, true);
-                        // if ($respuestaInsumo) {
-                        //     return $respuestaInsumo;
-                        // }
-                    }
+                if ($data['tipo_cita'] == 2 || $es_emergencia) {
+                    ConsultaHelper::insertarExamenesSeguro($examenes, $this->consulta_id);
                 }
             }
+
+            if ($insumos) {
+                if ($data['tipo_cita'] == 1 || !$por_cita && !$es_emergencia) {
+                    ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, false);
+                }
+
+                if ($data['tipo_cita'] == 2 || $es_emergencia) {
+                    ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, true);
+                }
+            }
+
+            // if (!$es_emergencia) {
+            //     if (!$por_cita) {
+                    
+            //         if ($examenes) {
+            //             ConsultaHelper::insertarExamen($examenes, $this->consulta_id);
+            //             // $respuestaExamen = $this->insertarExamen($examenes, $this->consulta_id);
+            //             // if ($respuestaExamen) {
+            //             //     return $respuestaExamen;
+            //             // }
+            //         }
+        
+            //         if ($insumos) {
+        
+            //             ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, false);
+            //             // $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id, false);
+            //             // if ($respuestaInsumo) {
+            //             //     return $respuestaInsumo;
+            //             // }
+            //         }
+
+            //     } else {
+            //         var_dump($consulta_separada[0]);
+            //         if ($examenes) {
+            //             ConsultaHelper::insertarExamenesSeguro($examenes, $this->consulta_id);
+            //         }
+
+            //         if ($insumos) {
+            //             ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, true);
+            //             // $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id, true);
+            //             // if ($respuestaInsumo) {
+            //             //     return $respuestaInsumo;
+            //             // }
+            //         }
+            //     }
+            // }
 
             if ($recipe) {
 
