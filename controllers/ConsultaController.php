@@ -190,7 +190,7 @@ class ConsultaController extends Controller {
 
         if ( $es_emergencia ) {
             $por_cita = true;
-
+            var_dump('por emergencia');
             // if ( $_POST['es_emergencia'] != 0 && $_POST['es_emergencia'] != 1 ) {
             //     $respuesta = new Response(false, 'El atributo es_emergencia tiene que ser un booleano');
             //     echo $respuesta->json(400);
@@ -272,77 +272,36 @@ class ConsultaController extends Controller {
         }
 
         if ( $this->consulta_id > 0) {
+            
+            $_citaModel = new CitaModel;
+            $cita_previa = $_citaModel->where('cita_id', '=', $data['cita_id'])->getFirst();
 
             if ($examenes) {
-                if ($data['tipo_cita'] == 1 || !$por_cita && !$es_emergencia) {
+                if ($cita_previa->tipo_cita == 1 || !$por_cita && !$es_emergencia) {
                     ConsultaHelper::insertarExamen($examenes, $this->consulta_id);
                 }
 
-                if ($data['tipo_cita'] == 2 || $es_emergencia) {
+                if ($cita_previa->tipo_cita == 2 || $es_emergencia) {
                     ConsultaHelper::insertarExamenesSeguro($examenes, $this->consulta_id);
                 }
             }
 
             if ($insumos) {
-                if ($data['tipo_cita'] == 1 || !$por_cita && !$es_emergencia) {
+                if ($cita_previa->tipo_cita == 1 || !$por_cita && !$es_emergencia) {
                     ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, false);
                 }
 
-                if ($data['tipo_cita'] == 2 || $es_emergencia) {
+                if ($cita_previa->tipo_cita == 2 || $es_emergencia) {
                     ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, true);
                 }
             }
 
-            // if (!$es_emergencia) {
-            //     if (!$por_cita) {
-                    
-            //         if ($examenes) {
-            //             ConsultaHelper::insertarExamen($examenes, $this->consulta_id);
-            //             // $respuestaExamen = $this->insertarExamen($examenes, $this->consulta_id);
-            //             // if ($respuestaExamen) {
-            //             //     return $respuestaExamen;
-            //             // }
-            //         }
-        
-            //         if ($insumos) {
-        
-            //             ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, false);
-            //             // $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id, false);
-            //             // if ($respuestaInsumo) {
-            //             //     return $respuestaInsumo;
-            //             // }
-            //         }
-
-            //     } else {
-            //         var_dump($consulta_separada[0]);
-            //         if ($examenes) {
-            //             ConsultaHelper::insertarExamenesSeguro($examenes, $this->consulta_id);
-            //         }
-
-            //         if ($insumos) {
-            //             ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, true);
-            //             // $respuestaInsumo = $this->insertarInsumo($insumos, $this->consulta_id, true);
-            //             // if ($respuestaInsumo) {
-            //             //     return $respuestaInsumo;
-            //             // }
-            //         }
-            //     }
-            // }
-
             if ($recipe) {
-
                 ConsultaHelper::insertarRecipe($recipe, $this->consulta_id);
-                // $respuestaRecipe = $this->insertarRecipe($recipe, $this->consulta_id);
-                // if ( $respuestaRecipe) { return $respuestaRecipe; }
             }
 
             if ($indicaciones) {
-                
                 ConsultaHelper::insertarIndicaciones($indicaciones, $this->consulta_id);
-                // $respuestaIndicaciones = $this->insertarIndicaciones();
-                // if ($respuestaIndicaciones) {
-                //     return $respuestaIndicaciones;
-                // }
             }
 
             $respuesta = new Response('INSERCION_EXITOSA');
