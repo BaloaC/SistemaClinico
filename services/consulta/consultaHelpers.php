@@ -352,7 +352,7 @@ class ConsultaHelper {
 
     public static function insertarInsumo($insumos, $consulta_id, $es_asegurada) {
         foreach ($insumos as $insumo) {
-
+            echo '<pre>'; var_dump($insumo);
             $insumo['consulta_id'] = $consulta_id;
 
             $validarConsultaInsumo = new Validate;

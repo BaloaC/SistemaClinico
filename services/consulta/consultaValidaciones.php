@@ -119,10 +119,10 @@ class ConsultaValidaciones {
                 echo $respuesta->json(400);
                 exit();
 
-            case $validarConsulta->isToday($formulario['fecha_consulta'], true):
-                $respuesta = new Response('FECHA_INVALIDA');
-                echo $respuesta->json(400);
-                exit();
+            // case $validarConsulta->isToday($formulario['fecha_consulta'], true):
+            //     $respuesta = new Response('FECHA_INVALIDA');
+            //     echo $respuesta->json(400);
+            //     exit();
         }
     }
 

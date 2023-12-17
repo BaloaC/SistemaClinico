@@ -6,6 +6,7 @@ class ConsultaInsumoModel extends GenericModel {
 
     protected $consulta_id;
     protected $insumo_id;
+    protected $cantidad;
     protected $precio_insumo_bs;
     protected $precio_insumo_usd;
 
@@ -16,12 +17,14 @@ class ConsultaInsumoModel extends GenericModel {
     /* Getters */
     public function getConsultaId(){return $this->consulta_id;}
     public function getInsumoId(){return $this->insumo_id;}
+    public function getCantidad(){return $this->cantidad;}
     public function getPrecioInsumoBs(){return $this->precio_insumo_bs;}
     public function getPrecioInsumoUsd(){return $this->precio_insumo_usd;}
 
     /* Setters */
     public function setConsultaId($consulta_id){return $this->consulta_id = $consulta_id;}
     public function setInsumoId($insumo_id){return $this->insumo_id = $insumo_id;}
+    public function setCantidad($cantidad){return $this->cantidad = $cantidad;}
     public function setPrecioInsumoBs($precio_insumo_bs){return $this->precio_insumo_bs = $precio_insumo_bs;}
     public function setPrecioInsumoUsd($precio_insumo_usd){return $this->precio_insumo_usd = $precio_insumo_usd;}
 }
