@@ -173,7 +173,6 @@ class ConsultaController extends Controller {
             ConsultaValidaciones::validarConsultaExamen($examenes);
         }
 
-        
         $recipe = isset($_POST['recipes']) ? $_POST['recipes'] : false;
         $indicaciones = isset($_POST['indicaciones']) ? $_POST['indicaciones'] : false;
         
@@ -189,8 +188,8 @@ class ConsultaController extends Controller {
         $es_emergencia = isset($_POST['es_emergencia']); // Validamos que el atributo emergencia sea booleano
 
         if ( $es_emergencia ) {
-            $por_cita = true;
-            var_dump('por emergencia');
+            // $por_cita = true;
+            
             // if ( $_POST['es_emergencia'] != 0 && $_POST['es_emergencia'] != 1 ) {
             //     $respuesta = new Response(false, 'El atributo es_emergencia tiene que ser un booleano');
             //     echo $respuesta->json(400);
@@ -221,20 +220,9 @@ class ConsultaController extends Controller {
             if ($por_cita) {
 
                 ConsultaValidaciones::validarEstatusCita($_POST);
-                // if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 4, 'cita') ) {
-                //     $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
-                //     return $respuesta->json(400);
-                // } else if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $_POST['cita_id'], 3, 'cita') ) {
-                //     $respuesta = new Response(false, 'Para realizar la consulta la cita debe tener su clave correspondiente');
-                //     return $respuesta->json(400);
-                // }
 
             } else {
                 MedicoValidaciones::validarMedicoImpartaEspecialidad($_POST);
-                // if (!$validarConsulta->isDuplicatedId('especialidad_id', 'medico_id', $_POST['especialidad_id'], $_POST['medico_id'], 'medico_especialidad')) {
-                //     $respuesta = new Response(false, 'El médico no atiende la especialidad indicada');
-                //     return $respuesta->json(400);
-                // }
             }
 
             $_consultaModel = new ConsultaModel();
@@ -270,12 +258,12 @@ class ConsultaController extends Controller {
                 }
             }
         }
-
+        
         if ( $this->consulta_id > 0) {
             
             $_citaModel = new CitaModel;
             $cita_previa = $_citaModel->where('cita_id', '=', $data['cita_id'])->getFirst();
-
+            
             if ($examenes) {
                 if ($cita_previa->tipo_cita == 1 || !$por_cita && !$es_emergencia) {
                     ConsultaHelper::insertarExamen($examenes, $this->consulta_id);

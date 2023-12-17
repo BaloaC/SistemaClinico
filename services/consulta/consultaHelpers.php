@@ -246,6 +246,7 @@ class ConsultaHelper {
         }
 
         foreach ($consulta_examen as $consulta) {
+            var_dump($consulta);
             $_consultaExamenModel = new ConsultaExamenModel();
             $_consultaExamenModel->insert($consulta);
         }
@@ -322,23 +323,23 @@ class ConsultaHelper {
     public static function insertarExamen($examenes, $consulta_id) {
         
         foreach ($examenes as $examen) {
-            
-            $examen['consulta_id'] = $consulta_id;
-            
+                        
             $validarConsultaExamen = new Validate;
             $_examenModel = new ExamenModel();
 
             $examen = $_examenModel->where('examen_id', '=', $examen['examen_id'])->getFirst();
-            $newForm['precio_examen_usd'] = $examen->precio_examen;
+            $examen->precio_examen_usd = $examen->precio_examen;
+            $examen->consulta_id = $consulta_id;
 
             $_globalModel = new GlobalModel();
             $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
 
-            $newForm['precio_examen_bs'] = $examen->precio_examen * $valorDivisa->value;
-
-            $data = $validarConsultaExamen->dataScape($newForm);
+            $examen->precio_examen_bs = $examen->precio_examen * $valorDivisa->value;
+            
+            $data = $validarConsultaExamen->dataScape($examen);
             $_consultaExamenModel = new ConsultaExamenModel();
             $idExamen = $_consultaExamenModel->insert($data);
+            
             $mensaje = ($idExamen > 0);
             
             if (!$mensaje) {  
@@ -352,7 +353,7 @@ class ConsultaHelper {
 
     public static function insertarInsumo($insumos, $consulta_id, $es_asegurada) {
         foreach ($insumos as $insumo) {
-            echo '<pre>'; var_dump($insumo);
+            
             $insumo['consulta_id'] = $consulta_id;
 
             $validarConsultaInsumo = new Validate;
@@ -365,7 +366,7 @@ class ConsultaHelper {
             $_globalModel = new GlobalModel();
             $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
             
-            $data['precio_insumo_bs'] = $es_asegurada ? 0 : $insumoUtilizado->precio * (float) $valorDivisa->value;
+            // $data['precio_insumo_bs'] = $es_asegurada ? 0 : $insumoUtilizado->precio * (float) $valorDivisa->value;
 
             $_consultaInsumoModel = new ConsultaInsumoModel();
             $idInsumo = $_consultaInsumoModel->insert($data);

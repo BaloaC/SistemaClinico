@@ -103,27 +103,27 @@ class ConsultaValidaciones {
         $exclude = array("peso","altura","es_emergencia","observaciones");
         $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id");
 
-        switch ($validarConsulta) {
-            case !$validarConsulta->existsInDB($formulario, $campoId):
-                $respuesta = new Response('NOT_FOUND');
-                echo $respuesta->json(404);
-                exit();
+        // switch ($validarConsulta) {
+        //     case !$validarConsulta->existsInDB($formulario, $campoId):
+        //         $respuesta = new Response('NOT_FOUND');
+        //         echo $respuesta->json(404);
+        //         exit();
 
-            case ($validarConsulta->isEmpty($formulario, $exclude)):
-                $respuesta = new Response('DATOS_VACIOS');
-                echo $respuesta->json(400);
-                exit();
+        //     case ($validarConsulta->isEmpty($formulario, $exclude)):
+        //         $respuesta = new Response('DATOS_VACIOS');
+        //         echo $respuesta->json(400);
+        //         exit();
 
-            case $validarConsulta->isDate($formulario['fecha_consulta']):
-                $respuesta = new Response('FECHA_INVALIDA');
-                echo $respuesta->json(400);
-                exit();
+        //     case $validarConsulta->isDate($formulario['fecha_consulta']):
+        //         $respuesta = new Response('FECHA_INVALIDA');
+        //         echo $respuesta->json(400);
+        //         exit();
 
             // case $validarConsulta->isToday($formulario['fecha_consulta'], true):
             //     $respuesta = new Response('FECHA_INVALIDA');
             //     echo $respuesta->json(400);
             //     exit();
-        }
+        // }
     }
 
     /**
