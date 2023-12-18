@@ -246,7 +246,6 @@ class ConsultaHelper {
         }
 
         foreach ($consulta_examen as $consulta) {
-            var_dump($consulta);
             $_consultaExamenModel = new ConsultaExamenModel();
             $_consultaExamenModel->insert($consulta);
         }
@@ -334,7 +333,7 @@ class ConsultaHelper {
             $_globalModel = new GlobalModel();
             $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
 
-            $examen->precio_examen_bs = $examen->precio_examen * $valorDivisa->value;
+            // $examen->precio_examen_bs = $examen->precio_examen * $valorDivisa->value;
             
             $data = $validarConsultaExamen->dataScape($examen);
             $_consultaExamenModel = new ConsultaExamenModel();
