@@ -204,7 +204,7 @@ class CitaController extends Controller {
             
             if ($lista[0]->tipo_cita == 2) {
                 $lista_citas = CitasHelpers::innerCita($lista[0]);
-                // var_dump($lista_citas);
+                
             } else {
                 $lista_citas = $lista[0];
             }
@@ -220,7 +220,7 @@ class CitaController extends Controller {
         $_citaModel = new CitaModel();
         $inners = $_citaModel->listInner($this->arrayInner);
         $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('cita.paciente_id', '=', $paciente_id)->innerJoin($this->arraySelect, $inners, "cita");
-        var_dump($lista);
+        
         if ( count($lista) > 0 && $lista[0]->tipo_cita == 2) {
             $lista_citas = CitasHelpers::innerCita($lista[0]);
             Helpers::retornarMensajeListado($lista_citas);
