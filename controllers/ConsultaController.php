@@ -84,7 +84,6 @@ class ConsultaController extends Controller {
             
             // Validaciones generales si es por cita o si es sin cita
             if ($por_cita) {
-
                 ConsultaValidaciones::validarEstatusCita($_POST);
 
             } else {
@@ -232,7 +231,7 @@ class ConsultaController extends Controller {
         if (count($antecedentList) > 0) {
             $resultado['antecedentes_medicos'] = $antecedentList;
         }
-        
+
         $consultasCompletas = [];
 
         if (count($consultasArray)) {
