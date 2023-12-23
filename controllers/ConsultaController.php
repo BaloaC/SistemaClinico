@@ -229,7 +229,10 @@ class ConsultaController extends Controller {
                                     ->where('antecedentes_medicos.paciente_id', '=', $paciente_id)
                                     ->innerJoin($selectAntecedentes, $inners, "antecedentes_medicos");
 
-        $resultado['antecedentes_medicos'] = $antecedentList;
+        if (count($antecedentList) > 0) {
+            $resultado['antecedentes_medicos'] = $antecedentList;
+        }
+        
         $consultasCompletas = [];
 
         if (count($consultasArray)) {
@@ -257,14 +260,24 @@ class ConsultaController extends Controller {
         $consultaList = $_consultaModel->where('estatus_con', '=', 1)
                                         ->where('consulta_id', '=', $consulta_id)
                                         ->getFirst();
-       $consultas = [];
+        $consultas = [];
+        
+        if ($consultaList != null) {
+            ($consultaList->es_emergencia) ?  $consultas[] = ConsultaService::obtenerConsultaEmergencia($consultaList) : $consultas[] = ConsultaService::obtenerConsultaNormal($consultaList);
+            
+            $informacion_consulta = $consultas[0];
+            $relaciones = ConsultaHelper::obtenerRelaciones($informacion_consulta->consulta_id);
+            $consulta_completa = array_merge((array) $informacion_consulta, (array) $relaciones);
 
-        ($consultaList->es_emergencia) ?  $consultas[] = ConsultaService::obtenerConsultaEmergencia($consultaList) : $consultas[] = ConsultaService::obtenerConsultaNormal($consultaList);
+            $mensaje = (count( $consulta_completa ) > 0);
+            $respuesta = new Response('CORRECTO');
+            $respuesta->setData( [ $consulta_completa ]);
+            return $respuesta->json(200);
 
+        } else {
+            $respuesta = new Response('NOT_FOUND');
+            return $respuesta->json(400);
+        }
 
-        $mensaje = (count($consultas) > 0);
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($consultas[0]);
-        return $respuesta->json(200);
     }
 }
