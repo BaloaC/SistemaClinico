@@ -27,9 +27,10 @@
                     <div id="btn-actualizar" data-bs-toggle="modal" data-bs-target="#modalAct">
                         <div class="modal fade" id="modalInfo" data-bs-keyboard="true" tabindex="-1" aria-labelledby="modalInfoLabel" aria-hidden="true" style="opacity: 1; position:relative; display:block; z-index: 0;">
                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                <div class="modal-content mt-5">
-                                    <div class="modal-header">
+                                <div class="modal-content mt-5 cursor-pointer">
+                                    <div class="modal-header flex-column align-items-start">
                                         <h1 class="modal-title fs-5" id="titleCard">Información adicional del seguro</h1>
+                                        <small>Nota: al hacer click en cualquier parte blanca del recuadro podrá actualizar la información del seguro</small>
                                     </div>
                                     <div class="modal-body">
                                         <div class="container">
@@ -195,7 +196,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="modalAddPrecioExamenLabel">Añadir precio de examen</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-target="#modalExamenes" data-bs-toggle="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert addAlertPrecioExamen d-none" role="alert"></div>

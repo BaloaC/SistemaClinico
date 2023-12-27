@@ -142,11 +142,11 @@
                                         <input type="number" step="any" name="peso" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" required>
                                         <small class="form-text">No se permiten números negativos</small>
 
-                                        <label for="altura">Altura</label>
+                                        <label for="estatura">Estatura</label>
                                         <input type="number" step="any" name="altura" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" required>
                                         <small class="form-text">No se permiten números negativos</small>
 
-                                        <label for="altura">Observaciones</label>
+                                        <label for="observaciones">Observaciones</label>
                                         <input type="text" name="observaciones" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255">
                                         <small class="form-text">Solo puede contener letras</small>
                                     </div>
@@ -267,7 +267,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-primary mt-3" id="addRecipe" onclick="addRecipeInput()">Añadir otro insumo</button>
+                            <button type="button" class="btn btn-primary mt-3" id="addRecipe" onclick="addRecipeInput()">Añadir otro medicamento</button>
 
                             <div class="row mt-4">
                                 <h5>Indicaciones mencionadas en la Consulta (Opcional)</h5>
@@ -282,7 +282,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-primary mt-3" id="addIndicacion" onclick="addIndicacionInput()">Añadir otro insumo</button>
+                            <button type="button" class="btn btn-primary mt-3" id="addIndicacion" onclick="addIndicacionInput()">Añadir otra indicación</button>
                         </form>
                     </div>
                     <div class="modal-footer">

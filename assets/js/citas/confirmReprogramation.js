@@ -1,4 +1,5 @@
 import addModule from "../global/addModule.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import deleteSecondValue from "../global/deleteSecondValue.js";
 import updateModule from "../global/updateModule.js";
 import { calendar } from "./calendarioCitas.js";
@@ -21,6 +22,7 @@ async function confirmReprogramation() {
         if (!reprogramacionExitosa.code) throw { result: reprogramacionExitosa.result };
 
         calendar.refetchEvents();
+        cleanValdiation("reprogramacion-cita");
 
     } catch (error) {
         console.log(error);

@@ -147,11 +147,11 @@
                                             <input type="date" name="fecha_cita" id="fecha_cita" data-validate="true" data-type="date" class="form-control mb-3">
                                             
                                             <label for="hora_salida">Hora salida</label>
-                                            <input type="time" name="hora_salida" id="hora_salida" data-validate="true" data-type="timeAppointment" step="2" class="form-control mb-3">
+                                            <input type="time" name="hora_salida" id="hora_salida" data-validate="true" data-type="timeAppointment" step="1" class="form-control mb-3">
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <label for="hora_entrada">Hora entrada</label>
-                                            <input type="time" name="hora_entrada" id="hora_entrada" data-validate="true" data-type="timeAppointment" step="2" class="form-control mb-3">
+                                            <input type="time" name="hora_entrada" id="hora_entrada" data-validate="true" data-type="timeAppointment" step="1" class="form-control mb-3">
                                         </div>
                                 </div>
                             </div>
@@ -201,7 +201,11 @@
                         <form action="" id="reprogramacion-cita" class="p-3 px-4">
                             <p class="text-secondary">Las citas se mantendrán como pendientes hasta que la clave otorgada por el seguro sea insertada</p>
                             <label for="clave">Nueva fecha</label>
-                            <input type="date" name="fecha_cita" id="fecha_cita_reprogramada" class="form-control" required>
+                            <input type="date" name="fecha_cita" id="fecha_cita_reprogramada" data-validate="true" data-type="date" class="form-control" required>
+                            <label for="hora_salida">Hora salida</label>
+                            <input type="time" name="hora_salida" id="hora_salida2" data-validate="true" data-type="timeAppointment" step="1" class="form-control mb-3">
+                            <label for="hora_entrada">Hora entrada</label>
+                            <input type="time" name="hora_entrada" id="hora_entrada2" data-validate="true" data-type="timeAppointment" step="1" class="form-control mb-3">
                         </form>
                     </div>
                     <div class="modal-footer">

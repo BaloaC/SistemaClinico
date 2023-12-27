@@ -103,7 +103,7 @@ async function addCita() {
         data.cedula_titular = infoTitular.cedula;
         console.log(data);
         if (data.tipo_cita == 1) {
-            data.seguro_id = 0;
+            delete data.seguro_id;
         }
 
         if (infoTitular.tipo_paciente == 3 && data.tipo_cita == 2) {

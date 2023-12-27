@@ -4,6 +4,7 @@ import deleteElementByClass from "../global/deleteElementByClass.js";
 import getById from "../global/getById.js";
 import scrollTo from "../global/scrollTo.js";
 import cleanValdiation from "../global/cleanValidations.js";
+import { registerStatusConsulta } from "./mostrarConsultas.js";
 
 async function addConsulta() {
 
@@ -115,7 +116,10 @@ async function addConsulta() {
         $form.reset();
         deleteElementByClass("newInput");
         cleanValdiation("info-consulta");
-        // alert("a");
+
+        // Si la consulta es por cita, luego de registrarse satisfactoriamente, 
+        if(data?.cita_id) registerStatusConsulta.successfulConsulta = true;
+
         setTimeout(() => {
             $("#modalReg").modal("hide");
             document.getElementById("s-especialidad").classList.remove("is-valid");

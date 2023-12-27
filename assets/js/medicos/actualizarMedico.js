@@ -210,12 +210,3 @@ async function confirmUpdate() {
 
 window.confirmUpdate = confirmUpdate;
 
-select2OnClick({
-    selectSelector: "#s-especialidad-update",
-    selectValue: "especialidad_id",
-    selectNames: ["nombre"],
-    module: "especialidades/consulta",
-    parentModal: "#modalAct",
-    placeholder: "Seleccione una especialidad",
-});
-

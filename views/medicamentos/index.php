@@ -73,6 +73,7 @@
                                 <option value="1">Cápsula</option>
                                 <option value="2">Jarabe</option>
                                 <option value="3">Inyección</option>
+                                <option value="4">Solución</option>
                             </select>
                             <label for="especialidad">Especialidad</label>
                             <select name="especialidad_id" id="s-especialidad" class="form-control mb-3" data-active="0" required>
@@ -107,6 +108,7 @@
                                 <option value="1">Cápsula</option>
                                 <option value="2">Jarabe</option>
                                 <option value="3">Inyección</option>
+                                <option value="4">Solución</option>
                             </select>
                             <label for="especialidad">Especialidad</label>
                             <select name="especialidad_id" id="s-especialidad-update" class="form-control mb-3" data-active="0" required>

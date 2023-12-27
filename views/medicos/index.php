@@ -119,7 +119,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-primary mt-3 w-25" id="addMedicoEspecialidad" onclick="addMedicoEspecialidadInput('addMedicoEspecialidad')">Añadir otro médico</button>
+                                <button type="button" class="btn btn-primary mt-3 w-25" id="addMedicoEspecialidad" onclick="addMedicoEspecialidadInput('addMedicoEspecialidad')">Añadir otra especialidad</button>
                                 <div class="col-12 col-check mt-4">
                                     <div class="py-3">Seleccione los horarios del doctor</div>
                                     <div class="row align-items-center">
@@ -311,7 +311,7 @@
                                 <div class="row mt-4 act-medico-especialidad">
                                     <h5>Especialidades</h5>
                                 </div>
-                                <button type="button" class="btn btn-primary mt-3 w-25" id="addMedicoEspecialidadAct" onclick="addMedicoEspecialidadInput('addMedicoEspecialidadAct', '#modalAct')">Añadir otro médico</button>
+                                <button type="button" class="btn btn-primary mt-3 w-25" id="addMedicoEspecialidadAct" onclick="addMedicoEspecialidadInput('addMedicoEspecialidadAct', '#modalAct')">Añadir otra especialidad</button>
                                 <div class="act-horarios">
                                 </div>
                             </div>
@@ -496,6 +496,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/medicos/changeHorarioInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/addMedicoEspecialidadInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/deleteMedicoEspecialidadInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/medicos/medicosSelect2.js'); ?>"></script>
 </body>
 
 </html>

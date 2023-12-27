@@ -13,8 +13,8 @@ async function addMedicamento() {
         formData.forEach((value, key) => (data[key] = value));
         
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        if (!data.nombre.length > 3) throw { message: "El nombre debe contener al menos 3 caracteres" };
-        if (!(patterns.nameExam.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!data.nombre_medicamento.length > 3) throw { message: "El nombre debe contener al menos 3 caracteres" };
+        if (!(patterns.nameExam.test(data.nombre_medicamento))) throw { message: "El nombre ingresado no es válido" };
         
         const registroExitoso = await addModule("medicamento", "info-medicamento", data, "Medicamento registrado con exito!");
        

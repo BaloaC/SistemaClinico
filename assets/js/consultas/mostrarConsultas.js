@@ -1,5 +1,5 @@
 import concatItems from "../global/concatItems.js";
-import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { emptyAllSelect2, emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
@@ -9,10 +9,49 @@ const path = location.pathname.split('/');
 const especialidadSelect = document.getElementById("s-especialidad");
 
 let modalOpened = false;
+export const registerStatusConsulta = {
+    successfulConsulta: false,
+};
 const modalRegConsulta = document.getElementById("modalRegConsulta") ?? undefined;
 const modalRegister = document.getElementById("modalReg") ?? undefined;
 
 const handleModalOpen = async () => {
+
+
+    // En caso de que se haya registrado correctamente una consulta por cita, volvemos actualizar el select de las citas
+    if (registerStatus.successfulConsulta === true) {
+
+        const infoCitas = await getAll("citas/consulta");
+        let listCitas;
+
+        if ('result' in infoCitas && infoCitas.result.code === false) listCitas = [];
+
+
+        if (infoCitas.length > 0) {
+            listCitas = infoCitas.filter(cita => cita.estatus_cit === "1");
+        }
+
+        emptyAllSelect2({
+            selectSelector: "#s-cita",
+            placeholder: "Seleccione una cita",
+            parentModal: "#modalReg"
+        });
+
+        dinamicSelect2({
+            obj: listCitas ?? [],
+            selectSelector: "#s-cita",
+            selectValue: "cita_id",
+            selectNames: ["cita_id", "cedula_paciente", "nombre_paciente-apellido_paciente", "motivo_cita"],
+            parentModal: "#modalReg",
+            placeholder: "Seleccione una cita"
+        });
+
+        $("#s-cita").val([]).trigger("change");
+        document.getElementById("s-cita").classList.remove("is-valid");
+
+        registerStatus.successfulConsulta = false;
+    }
+
     if (modalOpened === false) {
 
         const medicosList = await getAll("medicos/consulta");
@@ -387,7 +426,7 @@ addEventListener("DOMContentLoaded", async e => {
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
                 <tr>
                     <td>Peso: <br><b>${data.peso}</b></td>
-                    <td>Altura: <br><b>${data.altura}</b></td>
+                    <td>Estatura: <br><b>${data.altura}</b></td>
                     <td>Fecha Cita: <br><b>${data.fecha_cita ?? "No aplica"}</b></td>
                     <td>Motivo cita: <br><b>${data.motivo_cita ?? "No aplica"}</b></td>
                 </tr>

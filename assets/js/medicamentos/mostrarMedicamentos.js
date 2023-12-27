@@ -45,6 +45,7 @@ addEventListener("DOMContentLoaded", e => {
                     if(data == 1) return "Cápsula";
                     if(data == 2) return "Jarabe";
                     if(data == 3) return "Inyección";
+                    if(data == 4) return "Solución";
                 }
             },
             {
