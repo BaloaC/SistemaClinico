@@ -101,7 +101,7 @@ class ConsultaValidaciones {
 
         $validarConsulta = new Validate;
         $exclude = array("peso","altura","es_emergencia","observaciones");
-        $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id");
+        $campoId = array("paciente_id", "medico_id", "especialidad_id");
 
         switch ($validarConsulta) {
             case !$validarConsulta->existsInDB($formulario, $campoId):

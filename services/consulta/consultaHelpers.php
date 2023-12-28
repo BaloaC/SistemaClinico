@@ -158,6 +158,77 @@ class ConsultaHelper {
         return $consulta_examen;
     }
 
+    public static function insertarConsulta($formulario, $separar) {
+        $consulta = "";
+
+        if ($separar == 'emergencia') {
+            $consulta = array(
+                "observaciones" => isset($formulario["observaciones"]) ? $formulario["observaciones"] : null,
+                "peso" => isset($formulario["peso"]) ? $formulario["peso"] : null,
+                "altura" => isset($formulario["altura"]) ? $formulario["altura"] : null,
+                "fecha_consulta" => $formulario["fecha_consulta"],
+                "es_emergencia" => $formulario["es_emergencia"]
+            );
+        }
+
+        $_consultaModel = new ConsultaModel();
+        $id = $_consultaModel->insert($consulta);
+
+        if ($id > 0) {
+            return $id;
+        } else {
+            $respuesta = new Response('INSERCION_FALLIDA');
+            $respuesta->setData($consulta);
+            return $respuesta->json(400);
+        }
+    }
+
+    public static function insertarConsultaEmergencia($formulario) {
+        $_consultaEmergencia = new ConsultaEmergenciaModel();
+
+        $formulario['total_examenes'] = 0;
+        $formulario['total_examenes_bs'] = 0;
+                
+        if ( isset($formulario['examenes']) ) {
+            $formulario = ConsultaHelper::insertarExamenesEmergencia($formulario);
+            unset($formulario['examenes']);
+        }
+        
+        $total_consulta = $formulario['consultas_medicas'] + $formulario['laboratorios'] + $formulario['medicamentos'] + $formulario['area_observacion'] 
+                        + $formulario['enfermeria']; + $formulario['total_insumos'] + $formulario['total_examenes'];
+        $formulario['total_consulta'] = $total_consulta;
+
+        // Calculamos los montos en bolívares
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+
+        $formulario['consultas_medicas_bs'] = 0;
+        $formulario['laboratorios_bs'] = 0;
+        $formulario['medicamentos_bs'] = 0;
+        $formulario['area_observacion_bs'] = 0;
+        $formulario['enfermeria_bs'] = 0;
+        $formulario['total_insumos_bs'] = 0;
+        $formulario['total_examenes_bs'] = 0;
+        $formulario['total_consulta_bs'] = 0;
+
+        // $formulario['consultas_medicas_bs'] = round( $formulario['consultas_medicas'] * $valorDivisa, 2);
+        // $formulario['laboratorios_bs'] = round( $formulario['laboratorios'] * $valorDivisa, 2);
+        // $formulario['medicamentos_bs'] = round( $formulario['medicamentos'] * $valorDivisa, 2);
+        // $formulario['area_observacion_bs'] = round( $formulario['area_observacion'] * $valorDivisa, 2);
+        // $formulario['enfermeria_bs'] = round( $formulario['enfermeria'] * $valorDivisa, 2);
+        // $formulario['total_insumos_bs'] = round( $formulario['total_insumos'] * $valorDivisa, 2);
+        // $formulario['total_examenes_bs'] = round($formulario['total_examenes_bs'], 2);
+        // $formulario['total_consulta_bs'] = round( $formulario['total_consulta'] * $valorDivisa, 2);
+        
+        $fueInsertado = $_consultaEmergencia->insert($formulario); 
+
+        if ($fueInsertado <= 0) {
+            $respuesta = new Response('INSERCION_FALLIDA');
+            $respuesta->setData($formulario);
+            echo $respuesta->json(400);
+            exit();
+        }
+    }
+
     public static function insertarExamenesEmergencia($formulario) {
 
         $_seguroExamen = new SeguroExamenModel();

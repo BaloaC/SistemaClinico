@@ -35,7 +35,7 @@ class ConsultaController extends Controller {
         // Validamos relaciones externas
         $examenes = isset($_POST['examenes']) ? $_POST['examenes'] : false;
         if ($examenes) {
-            unset($_POST['examenes']); 
+            // unset($_POST['examenes']); 
             ConsultaValidaciones::validarConsultaExamen($examenes);
         }
 
@@ -44,43 +44,23 @@ class ConsultaController extends Controller {
         
         $insumos = isset($_POST['insumos']) ? $_POST['insumos'] : false;
         if ($insumos) { 
-            unset($_POST['insumos']);
+            // unset($_POST['insumos']);
             ConsultaValidaciones::validarInsumos($insumos);
         }
 
-        if ($recipe) { unset($_POST['recipes']); }
-        if ($indicaciones) { unset($_POST['indicaciones']); }
+        // if ($recipe) { unset($_POST['recipes']); }
+        // if ($indicaciones) { unset($_POST['indicaciones']); }
 
         $es_emergencia = isset($_POST['es_emergencia']); // Validamos que el atributo emergencia sea booleano
 
         if ( $es_emergencia ) {
-            // $por_cita = true;
-            
-            // if ( $_POST['es_emergencia'] != 0 && $_POST['es_emergencia'] != 1 ) {
-            //     $respuesta = new Response(false, 'El atributo es_emergencia tiene que ser un booleano');
-            //     echo $respuesta->json(400);
-            //     exit();
-            // }
-            ConsultaValidaciones::validarEsEmergencia($_POST);
-            ConsultaValidaciones::validarConsultaEmergencia($_POST);
-            
-            $consultaEmergencia = $validarConsulta->dataScape($_POST);
-            
-            $this->consulta_id = ConsultaService::insertarConsulta($consultaEmergencia, 'emergencia');
-            $consultaEmergencia['consulta_id'] = $this->consulta_id;
-            $consultaEmergencia['examenes'] = $examenes;    
-            ConsultaService::insertarConsultaEmergencia($consultaEmergencia);
-
-            if( isset($consultaEmergencia['pagos']) ) {
-                ConsultaService::actualizarAcumuladoMedico($consultaEmergencia['pagos']);
-            }
+            ConsultaService::insertarConsultaEmergencia($_POST);
 
         } else {
             
             $data = $validarConsulta->dataScape($_POST);
             $por_cita = isset($data['cita_id']);
             $consulta_separada = ConsultaHelper::separarInformación($_POST, $por_cita);
-            // $consulta_separada = $this->separarInformación($data, $por_cita);
             
             // Validaciones generales si es por cita o si es sin cita
             if ($por_cita) {
@@ -97,78 +77,62 @@ class ConsultaController extends Controller {
             if ($por_cita && $mensaje) {
 
                 $consulta_separada[0]['consulta_id'] = $this->consulta_id;
-                $_consultaConCita = new ConsultaCitaModel();
-                $consulta_cita_id = $_consultaConCita->insert($consulta_separada[0]);
-                
-                if ($consulta_cita_id == 0) {
-                    $_consultaModel = new ConsultaModel();
-                    $_consultaModel->where('consulta_id', '=',$this->consulta_id)->delete();
-
-                    $respuesta = new Response(false, 'Ocurrió un error insertando la relación consulta_cita');
-                    return $respuesta->json(400);
-                }
+                ConsultaService::insertarConsultaPorCita($_POST, $consulta_separada);
 
             } else if (!$por_cita && $mensaje) {
 
                 $consulta_separada[0]['consulta_id'] = $this->consulta_id;
-                $_consultaSinCita = new ConsultaSinCitaModel();
-                $consulta_sin_cita = $_consultaSinCita->insert($consulta_separada[0]);
-                
-                if ($consulta_sin_cita == 0) {
-                    $_consultaModel = new ConsultaModel();
-                    $_consultaModel->where('consulta_id', '=',$this->consulta_id)->delete();
-                    
-                    $respuesta = new Response(false, 'Ocurrió un error insertando la relación consulta_sin_cita');
-                    return $respuesta->json(400);
-                }
+                ConsultaService::insertarConsultaNormal($_POST, $consulta_separada);
             }
         }
         
         if ( $this->consulta_id > 0) {
-            
-            $_citaModel = new CitaModel;
-            $cita_previa = $_citaModel->where('cita_id', '=', $data['cita_id'])->getFirst();
-            
-            if ($examenes) {
-                if ($cita_previa->tipo_cita == 1 || !$por_cita && !$es_emergencia) {
-                    ConsultaHelper::insertarExamen($examenes, $this->consulta_id);
-                }
 
-                if ($cita_previa->tipo_cita == 2 || $es_emergencia) {
-                    ConsultaHelper::insertarExamenesSeguro($examenes, $this->consulta_id);
-                }
-            }
+            // if (isset($data['cita_id'])) {
+            //     $_citaModel = new CitaModel;
+            //     $cita_previa = $_citaModel->where('cita_id', '=', $data['cita_id'])->getFirst();
+            // }
 
-            if ($insumos) {
-                if ($cita_previa->tipo_cita == 1 || !$por_cita && !$es_emergencia) {
-                    ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, false);
-                }
+            // if ($examenes) {
+            //     if ($cita_previa->tipo_cita == 1 || !$por_cita && !$es_emergencia) {
+            //         ConsultaHelper::insertarExamen($examenes, $this->consulta_id);
+            //     }
 
-                if ($cita_previa->tipo_cita == 2 || $es_emergencia) {
-                    ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, true);
-                }
-            }
+            //     if ($cita_previa->tipo_cita == 2 || $es_emergencia) {
+            //         ConsultaHelper::insertarExamenesSeguro($examenes, $this->consulta_id);
+            //     }
+            // }
 
-            if ($recipe) {
-                ConsultaHelper::insertarRecipe($recipe, $this->consulta_id);
-            }
+            // if ($insumos) {
+            //     if ($cita_previa->tipo_cita == 1 || !$por_cita && !$es_emergencia) {
+            //         ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, false);
+            //     }
 
-            if ($indicaciones) {
-                ConsultaHelper::insertarIndicaciones($indicaciones, $this->consulta_id);
-            }
+            //     if ($cita_previa->tipo_cita == 2 || $es_emergencia) {
+            //         ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, true);
+            //     }
+            // }
+
+            // if ($recipe) {
+            //     ConsultaHelper::insertarRecipe($recipe, $this->consulta_id);
+            // }
+
+            // if ($indicaciones) {
+            //     ConsultaHelper::insertarIndicaciones($indicaciones, $this->consulta_id);
+            // }
 
             $respuesta = new Response('INSERCION_EXITOSA');
 
-            if ( isset($data['cita_id']) ) {
+            // if ( isset($data['cita_id']) ) {
             
-                $cambioEstatus = array('estatus_cit' => '4');
-                $_citaModel = new CitaModel;
-                $res = $_citaModel->where('cita_id', '=', $data['cita_id'])->update($cambioEstatus);
+            //     $cambioEstatus = array('estatus_cit' => '4');
+            //     $_citaModel = new CitaModel;
+            //     $res = $_citaModel->where('cita_id', '=', $data['cita_id'])->update($cambioEstatus);
                 
-                if ($res <= 0) {
-                    $respuesta->setData('La consulta fue insertada, pero la cita no fue actualizada correctamente, por favor actualicela manualmente para evitar errores');
-                }
-            }
+            //     if ($res <= 0) {
+            //         $respuesta->setData('La consulta fue insertada, pero la cita no fue actualizada correctamente, por favor actualicela manualmente para evitar errores');
+            //     }
+            // }
 
             $data["consulta_id"] = $this->consulta_id;
             $respuesta->setData($data);
