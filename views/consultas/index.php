@@ -139,11 +139,11 @@
                                     <h5>Información de la Consulta</h5>
                                     <div class="col-12 col-md-6">
                                         <label for="peso">Peso</label>
-                                        <input type="number" step="any" name="peso" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" required>
+                                        <input type="number" step="any" name="peso" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6">
                                         <small class="form-text">No se permiten números negativos</small>
 
                                         <label for="estatura">Estatura</label>
-                                        <input type="number" step="any" name="altura" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" required>
+                                        <input type="number" step="any" name="altura" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6">
                                         <small class="form-text">No se permiten números negativos</small>
 
                                         <label for="observaciones">Observaciones</label>
