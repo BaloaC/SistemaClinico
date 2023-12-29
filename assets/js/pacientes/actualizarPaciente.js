@@ -14,36 +14,6 @@ import getTitulares from "./getTitulares.js";
 import mostrarPacienteBeneficiado from "./mostrarPacienteBeneficiado.js";
 import mostrarPacienteSeguro from "./mostrarPacienteSeguro.js";
 
-const titulares = await getTitulares();
-dinamicSelect2({
-    obj: titulares,
-    selectSelector: `#s-titular_id-act`,
-    selectValue: "paciente_id",
-    selectNames: ["cedula", "nombre-apellidos"],
-    parentModal: "#modalAct",
-    placeholder: "Seleccione un titular"
-});
-
-// select2OnClick({
-//     selectSelector: "#s-seguro-act",
-//     selectValue: "seguro_id",
-//     selectNames: ["rif", "nombre"],
-//     module: "seguros/consulta",
-//     parentModal: "#modalAct",
-//     placeholder: "Seleccione un seguro",
-//     multiple: true
-// });
-
-// select2OnClick({
-//     selectSelector: "#s-empresa-act",
-//     selectValue: "empresa_id",
-//     selectNames: ["rif", "nombre"],
-//     module: "empresas/consulta",
-//     parentModal: "#modalAct",
-//     placeholder: "Seleccione una empresa"
-// });
-
-
 async function updatePaciente(id) {
 
     const $form = document.getElementById("act-paciente");

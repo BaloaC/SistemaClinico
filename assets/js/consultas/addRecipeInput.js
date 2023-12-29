@@ -1,18 +1,26 @@
-import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { emptyAllSelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
+import validateExistingSelect2 from "../global/validateExistingSelect2.js";
+import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
 import validateInputs from "../global/validateInputs.js";
+
+export let medicamentosList = null;
+const select2Options = {
+    selectValue: "medicamento_id",
+    selectNames: ["nombre_medicamento"],
+    placeholder: "Seleccione el medicamento"
+}
 
 let clicks = 0;
 let modalOpened = false;
-let medicamentosList = null;
 const modalRegConsulta = document.getElementById("modalRegConsulta") ?? undefined;
 const modalRegister = document.getElementById("modalReg") ?? undefined;
 
 const handleModalOpen = async (parentModal) => {
-    if(modalOpened === false){
+    if (modalOpened === false) {
 
-        medicamentosList = await getAll("medicamento/consulta");    
-        
+        medicamentosList = await getAll("medicamento/consulta");
+
         dinamicSelect2({
             obj: medicamentosList,
             selectSelector: `#s-medicamento`,
@@ -22,13 +30,24 @@ const handleModalOpen = async (parentModal) => {
             placeholder: "Seleccione el medicamento"
         });
 
+        $("#s-medicamento").on("change", () => {
+            validateExistingSelect2OnChange({
+                parentModal,
+                selectSelector: "#s-medicamento",
+                selectClass: "medicamento-id",
+                objList: medicamentosList,
+                select2Options,
+                optionId: "medicamento_id"
+            });
+        });
+
         modalOpened = true;
     }
 }
 
 // Al abrir el modal cargar los select2
-if(modalRegister) modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalReg")); 
-if(modalRegConsulta) modalRegConsulta.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalRegConsulta"));
+if (modalRegister) modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalReg"));
+if (modalRegConsulta) modalRegConsulta.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalRegConsulta"));
 
 function addRecipeInput(parentModal = "#modalReg") {
 
@@ -59,14 +78,46 @@ function addRecipeInput(parentModal = "#modalReg") {
         </div>
     `;
     document.getElementById("addRecipe").insertAdjacentHTML("beforebegin", template);
+
+    let selectSelector = `#s-medicamento${clicks}`;
+
+    // Vacimos el select primero antes de añadirlo
+    emptyAllSelect2({
+        selectSelector,
+        placeholder: select2Options.placeholder,
+        parentModal,
+    })
+
     dinamicSelect2({
         obj: medicamentosList,
-        selectSelector: `#s-medicamento${clicks}`,
-        selectValue: "medicamento_id",
-        selectNames: ["nombre_medicamento"],
-        parentModal: parentModal,
-        placeholder: "Seleccione el medicamento"
+        selectSelector: selectSelector,
+        selectValue: select2Options.selectValue,
+        selectNames: select2Options.selectNames,
+        parentModal,
+        placeholder: select2Options.placeholder
     });
+
+    validateExistingSelect2({
+        parentModal,
+        selectSelector,
+        selectClass: "medicamento-id",
+        addButtonId: "#addRecipe",
+        objList: medicamentosList,
+        select2Options,
+        optionId: "medicamento_id"
+    });
+
+    validateExistingSelect2OnChange({
+        parentModal,
+        selectSelector,
+        selectClass: "medicamento-id",
+        objList: medicamentosList,
+        select2Options,
+        optionId: "medicamento_id"
+    });
+
+
+    $(selectSelector).on("change", () => { validateExistingSelect2OnChange({ parentModal, selectSelector, selectClass: "medicamento-id", objList: medicamentosList, select2Options, optionId: "medicamento_id" }); });
 
     validateInputs();
 }

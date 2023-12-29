@@ -1,14 +1,24 @@
-import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { emptyAllSelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
+import validateExistingSelect2 from "../global/validateExistingSelect2.js";
+import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
 import validateInputs from "../global/validateInputs.js";
+
+
+export let insumosList = null;
+const select2Options = {
+    selectValue: "insumo_id",
+    selectNames: ["nombre"],
+    placeholder: "Seleccione el insumo",
+    selectWidth: "100%",
+}
 
 export let clicks = 0;
 let modalOpened = false;
-let insumosList = null;
 const modalRegister = document.getElementById("modalReg");
 
 const handleModalOpen = async () => {
-    if(modalOpened === false){
+    if (modalOpened === false) {
 
         insumosList = await getAll("insumos/consulta");
         const proveedoresList = await getAll("proveedores/consulta");
@@ -22,7 +32,7 @@ const handleModalOpen = async () => {
             placeholder: "Seleccione un proveedor",
             selectWidth: "100%",
         });
-        
+
         dinamicSelect2({
             obj: insumosList,
             selectSelector: "#s-insumo",
@@ -31,6 +41,17 @@ const handleModalOpen = async () => {
             parentModal: "#modalReg",
             placeholder: "Seleccione el insumo",
             selectWidth: "100%",
+        });
+
+        $("#s-insumo").on("change", () => {
+            validateExistingSelect2OnChange({
+                parentModal: "#modalReg",
+                selectSelector: "#s-insumo",
+                selectClass: "insumo-id",
+                objList: insumosList,
+                select2Options,
+                optionId: "insumo_id"
+            });
         });
 
         modalOpened = true;
@@ -50,23 +71,57 @@ function addInsumoInput() {
     }
 
     clicks += 1;
+    let selectSelector = `#s-insumo${clicks}`;
 
     const insumoTemplate = document.getElementById("insumo-template").content;
     let clone = document.importNode(insumoTemplate, true);
 
-    clone.getElementById("s-insumo").id = `s-insumo${clicks}`;
+    // Vacimos el select primero antes de añadirlo
+    emptyAllSelect2({
+        selectSelector,
+        placeholder: "Seleccione el insumo",
+        parentModal: "#modalReg",
+    })
+
+    const select = clone.getElementById("s-insumo");
+    const optionVacio = document.createElement("option");
+
+    select.id = `s-insumo${clicks}`;
+    optionVacio.value = "";
+    select.insertBefore(optionVacio, select.firstChild)
     clone.querySelector("tr").classList.add("newInput");
     document.getElementById("insumos-list").appendChild(clone);
 
     dinamicSelect2({
         obj: insumosList,
-        selectSelector: `#s-insumo${clicks}`,
-        selectValue: "insumo_id",
-        selectNames: ["nombre"],
+        selectSelector,
+        selectValue: select2Options.selectValue,
+        selectNames: select2Options.selectNames,
         parentModal: "#modalReg",
-        placeholder: "Seleccione el insumo",
+        placeholder: select2Options.placeholder,
         selectWidth: "100%"
     });
+
+    validateExistingSelect2({
+        parentModal: "#modalReg",
+        selectSelector,
+        selectClass: "insumo-id",
+        addButtonId: "#addInsumoInputBtn",
+        objList: insumosList,
+        optionId: "insumo_id",
+        select2Options
+    });
+
+    validateExistingSelect2OnChange({
+        parentModal: "#modalReg",
+        selectSelector,
+        selectClass: "insumo-id",
+        objList: insumosList,
+        optionId: "insumo_id",
+        select2Options
+    });
+
+    $(selectSelector).on("change", () => { validateExistingSelect2OnChange({ parentModal: "#modalReg", selectSelector, selectClass: "insumo-id", objList: insumosList, optionId: "insumo_id", select2Options }); });
 
     validateInputs();
 }

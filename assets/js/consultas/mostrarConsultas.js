@@ -19,7 +19,7 @@ const handleModalOpen = async () => {
 
 
     // En caso de que se haya registrado correctamente una consulta por cita, volvemos actualizar el select de las citas
-    if (registerStatus.successfulConsulta === true) {
+    if (registerStatusConsulta.successfulConsulta === true) {
 
         const infoCitas = await getAll("citas/consulta");
         let listCitas;
@@ -49,10 +49,16 @@ const handleModalOpen = async () => {
         $("#s-cita").val([]).trigger("change");
         document.getElementById("s-cita").classList.remove("is-valid");
 
-        registerStatus.successfulConsulta = false;
+        registerStatusConsulta.successfulConsulta = false;
     }
 
     if (modalOpened === false) {
+
+        emptyAllSelect2({
+            selectSelector: "#s-cita",
+            placeholder: "Seleccione una cita",
+            parentModal: "#modalReg"
+        });
 
         const medicosList = await getAll("medicos/consulta");
         const pacientesList = await getAll("pacientes/consulta");

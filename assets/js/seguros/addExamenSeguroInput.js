@@ -1,17 +1,25 @@
-import dinamicSelect2 from "../global/dinamicSelect2.js";
+import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
+import validateExistingSelect2 from "../global/validateExistingSelect2.js";
+import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
 import validateInputs from "../global/validateInputs.js";
+
+export let examenesSeguroList = null;
+const select2Options = {
+    selectValue: "examen_id",
+    selectNames: ["nombre"],
+    placeholder: "Seleccione un exámen",
+}
 
 let clicks = 0;
 let modalOpened = false;
-let examenesSeguroList = null;
 const modalRegister = document.getElementById('modalReg');
 
 // Al abrir el modal cargar los select2
 modalRegister.addEventListener('show.bs.modal', async () => {
     if(modalOpened === false){
         examenesSeguroList = await getAll("examenes/clinica");
-
+        console.log(examenesSeguroList);
         dinamicSelect2({
             obj: examenesSeguroList,
             selectSelector: `#s-examen_id`,
@@ -19,6 +27,17 @@ modalRegister.addEventListener('show.bs.modal', async () => {
             selectNames: ["nombre"],
             parentModal: "#modalReg",
             placeholder: "Seleccione un exámen"
+        });
+
+        $("#s-examen_id").on("change", () => {
+            validateExistingSelect2OnChange({
+                parentModal: "#modalReg",
+                selectSelector: "#s-examen_id",
+                selectClass: "examen",
+                objList: examenesSeguroList,
+                select2Options,
+                optionId: "examen_id"
+            });
         });
 
         modalOpened = true;
@@ -51,14 +70,44 @@ async function addExamenSeguroInput() {
     `;
     document.getElementById("addExamen").insertAdjacentHTML("beforebegin", template);
 
+    let selectSelector = `#s-examen_id${clicks}`;
+
+    // Vacimos el select primero antes de añadirlo
+    emptyAllSelect2({
+        selectSelector,
+        placeholder: "Seleccione un exámen",
+        parentModal: "#modalReg",
+    })
+
     dinamicSelect2({
         obj: examenesSeguroList,
-        selectSelector: `#s-examen_id${clicks}`,
-        selectValue: "examen_id",
-        selectNames: ["nombre"],
+        selectSelector,
+        selectValue: select2Options.selectValue,
+        selectNames: select2Options.selectNames,
         parentModal: "#modalReg",
-        placeholder: "Seleccione un exámen"
+        placeholder: select2Options.placeholder
     });
+
+    validateExistingSelect2({
+        parentModal: "#modalReg",
+        selectSelector,
+        selectClass: "examen",
+        addButtonId: "#addExamen",
+        objList: examenesSeguroList,
+        select2Options,
+        optionId: "examen_id"
+    });
+
+    validateExistingSelect2OnChange({
+        parentModal: "#modalReg",
+        selectSelector,
+        selectClass: "examen",
+        objList: examenesSeguroList,
+        select2Options,
+        optionId: "examen_id"
+    });
+
+    $(selectSelector).on("change", () => { validateExistingSelect2OnChange({ parentModal: "#modalReg", selectSelector, selectClass: "examen", objList: examenesSeguroList, select2Options, optionId: "examen_id" }); });
 
     validateInputs();
 }

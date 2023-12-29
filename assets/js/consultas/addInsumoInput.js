@@ -1,10 +1,18 @@
-import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { emptyAllSelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
+import validateExistingSelect2 from "../global/validateExistingSelect2.js";
+import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
 import validateInputs from "../global/validateInputs.js";
+
+export let insumosList = null;
+const select2Options = {
+    selectValue: "insumo_id",
+    selectNames: ["nombre"],
+    placeholder: "Seleccione el insumo"
+}
 
 let clicks = 0;
 let modalOpened = false;
-let insumosList = null;
 const modalRegConsulta = document.getElementById("modalRegConsulta") ?? undefined;
 const modalRegister = document.getElementById("modalReg") ?? undefined;
 
@@ -20,6 +28,17 @@ const handleModalOpen = async (parentModal) => {
             selectNames: ["nombre"],
             parentModal: parentModal,
             placeholder: "Seleccione el insumo"
+        });
+
+        $("#s-insumo").on("change", () => {
+            validateExistingSelect2OnChange({
+                parentModal,
+                selectSelector: "#s-insumo",
+                selectClass: "insumo-id",
+                objList: insumosList,
+                select2Options,
+                optionId: "insumo_id"
+            });
         });
 
         modalOpened = true;
@@ -55,21 +74,52 @@ function addInsumoInput(parentModal = "#modalReg") {
                 <small class="form-text col-12">Solo se permiten números</small>
             </div>
             <div class="col-3 col-md-1">
-                <button type="button" class="btn" onclick="deleteInput(this,'.insumo-id')"><i class="fas fa-times m-0"></i></button>
+                <button type="button" class="btn" onclick="deleteInput(this,'.insumo-id', '${parentModal}')"><i class="fas fa-times m-0"></i></button>
             </div>
         </div>
     `;
     document.getElementById("addInsumo").insertAdjacentHTML("beforebegin", template);
 
+
+    let selectSelector = `#s-insumo${clicks}`;
+
+    // Vacimos el select primero antes de añadirlo
+    emptyAllSelect2({
+        selectSelector,
+        placeholder: select2Options.placeholder,
+        parentModal,
+    })
+
     dinamicSelect2({
         obj: insumosList,
-        selectSelector: `#s-insumo${clicks}`,
-        selectValue: "insumo_id",
-        selectNames: ["nombre"],
-        parentModal: parentModal,
-        placeholder: "Seleccione el insumo"
+        selectSelector: selectSelector,
+        selectValue: select2Options.selectValue,
+        selectNames: select2Options.selectNames,
+        parentModal,
+        placeholder: select2Options.placeholder
+    });
+
+    validateExistingSelect2({
+        parentModal,
+        selectSelector,
+        selectClass: "insumo-id",
+        addButtonId: "#addInsumo",
+        objList: insumosList,
+        select2Options,
+        optionId: "insumo_id"
+    });
+
+    validateExistingSelect2OnChange({
+        parentModal,
+        selectSelector,
+        selectClass: "insumo-id",
+        objList: insumosList,
+        select2Options,
+        optionId: "insumo_id"
     });
     
+    $(selectSelector).on("change", () => { validateExistingSelect2OnChange({ parentModal, selectSelector, selectClass: "insumo-id", objList: insumosList, select2Options, optionId: "insumo_id" }); });
+
     validateInputs();
 }
 

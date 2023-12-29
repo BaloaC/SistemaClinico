@@ -112,7 +112,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <td><button type="button" class="btn" onclick="addInsumoInput()"><i class="fas fa-plus m-0"></i></i></button></td>
+                                    <td><button type="button" class="btn" id="addInsumoInputBtn" onclick="addInsumoInput()"><i class="fas fa-plus m-0"></i></i></button></td>
                                 </div>
                                 <div class="col-4 offset-8">
                                     <p>Productos totales: <b id="productos-totales" class="float-end">0</b></p>

@@ -3,8 +3,6 @@ import filterOptionsSelect2  from "./filterOptionsSelect2.js";
 
 export default function validateExistingSelect2({ parentModal, selectSelector, selectClass, addButtonId, objList, optionId, select2Options }) {
 
-    console.log(selectClass, objList);
-
     const existingSelects = document.querySelectorAll(`.${selectClass}`);
 
     if (objList.length <= existingSelects.length) {
@@ -12,8 +10,6 @@ export default function validateExistingSelect2({ parentModal, selectSelector, s
     }
 
     existingSelects.forEach(select2 => {
-
-        console.log(select2);
 
         if (selectSelector == `#${select2.id}`) {
             emptyAllSelect2({

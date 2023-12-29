@@ -3,8 +3,6 @@ import filterOptionsSelect2 from "./filterOptionsSelect2.js";
 
 export default function validateExistingSelect2OnChange({ parentModal, selectSelector, selectClass, objList, optionId, select2Options }) { 
 
-    // console.log(parentModal, selectSelector, selectClass, objList, optionId, select2Options);
-
     const existingSelects = document.querySelectorAll(`.${selectClass}`);
 
     try {
