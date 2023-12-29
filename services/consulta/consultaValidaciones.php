@@ -101,8 +101,8 @@ class ConsultaValidaciones {
 
         $validarConsulta = new Validate;
         $exclude = array("peso","altura","es_emergencia","observaciones");
-        $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id");
-
+        $campoId = array("paciente_id", "medico_id", "especialidad_id");
+        
         switch ($validarConsulta) {
             case !$validarConsulta->existsInDB($formulario, $campoId):
                 $respuesta = new Response('NOT_FOUND');
@@ -113,7 +113,7 @@ class ConsultaValidaciones {
                 $respuesta = new Response('DATOS_VACIOS');
                 echo $respuesta->json(400);
                 exit();
-
+            
             case $validarConsulta->isDate($formulario['fecha_consulta']):
                 $respuesta = new Response('FECHA_INVALIDA');
                 echo $respuesta->json(400);

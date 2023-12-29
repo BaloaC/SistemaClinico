@@ -66,74 +66,126 @@ class ConsultaService {
         "paciente" => "paciente_beneficiado"
     );
 
-    public static function insertarConsulta($formulario, $separar) {
-        $consulta = "";
+    public static function insertarConsultaEmergencia($formulario) {
+        
+        ConsultaValidaciones::validarEsEmergencia($formulario);
+        ConsultaValidaciones::validarConsultaEmergencia($formulario);
+        
+        $validarConsulta = new Validate;
+        $consultaEmergencia = $validarConsulta->dataScape($formulario);
+        
+        $consulta_id = ConsultaHelper::insertarConsulta($consultaEmergencia, 'emergencia');
+        $consultaEmergencia['consulta_id'] = $consulta_id;  
+        ConsultaHelper::insertarConsultaEmergencia($consultaEmergencia);
 
-        if ($separar == 'emergencia') {
-            $consulta = array(
-                "observaciones" => isset($formulario["observaciones"]) ? $formulario["observaciones"] : null,
-                "peso" => isset($formulario["peso"]) ? $formulario["peso"] : null,
-                "altura" => isset($formulario["altura"]) ? $formulario["altura"] : null,
-                "fecha_consulta" => $formulario["fecha_consulta"],
-                "es_emergencia" => $formulario["es_emergencia"]
-            );
+        if( isset($consultaEmergencia['pagos']) ) {
+            ConsultaService::actualizarAcumuladoMedico($consultaEmergencia['pagos']);
         }
 
-        $_consultaModel = new ConsultaModel();
-        $id = $_consultaModel->insert($consulta);
+        if (isset($formulario['examenes'])) {
+            ConsultaHelper::insertarExamenesSeguro($formulario['examenes'], $consulta_id);
+        }
 
-        if ($id > 0) {
-            return $id;
-        } else {
-            $respuesta = new Response('INSERCION_FALLIDA');
-            $respuesta->setData($consulta);
-            return $respuesta->json(400);
+        if (isset($formulario['insumos'])) {
+            ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_id, true);
+        }
+
+        if (isset($formulario['recipes'])) {
+            ConsultaHelper::insertarRecipe($formulario['recipes'], $consulta_id);
+        }
+
+        if (isset($formulario['indicaciones'])) {
+            ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_id);
         }
     }
 
-    public static function insertarConsultaEmergencia($formulario) {
-        $_consultaEmergencia = new ConsultaEmergenciaModel();
+    public static function insertarConsultaNormal($formulario, $consulta_separada) {
 
-        $formulario['total_examenes'] = 0;
-        $formulario['total_examenes_bs'] = 0;
-                
-        if ( isset($formulario['examenes']) ) {
-            $formulario = ConsultaHelper::insertarExamenesEmergencia($formulario);
-            unset($formulario['examenes']);
+        $_consultaSinCita = new ConsultaSinCitaModel();
+        $consulta_sin_cita = $_consultaSinCita->insert($consulta_separada[0]);
+        
+        if ($consulta_sin_cita == 0) {
+            $_consultaModel = new ConsultaModel();
+            $_consultaModel->where('consulta_id', '=', $consulta_separada[0]['consulta_id'])->delete();
+            
+            $respuesta = new Response(false, 'Ocurrió un error insertando la relación consulta_sin_cita');
+            return $respuesta->json(400);
+        }
+
+        if (isset($formulario['examenes'])) {
+            ConsultaHelper::insertarExamen($formulario['examenes'], $consulta_separada[0]['consulta_id']);
         }
         
-        $total_consulta = $formulario['consultas_medicas'] + $formulario['laboratorios'] + $formulario['medicamentos'] + $formulario['area_observacion'] 
-                        + $formulario['enfermeria']; + $formulario['total_insumos'] + $formulario['total_examenes'];
-        $formulario['total_consulta'] = $total_consulta;
+        if (array_key_exists('insumos', $formulario)) {
+        // if (isset($formulario['insumos'])) {
+            ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], false);
+        }
 
-        // Calculamos los montos en bolívares
-        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+        if (array_key_exists('indicaciones', $formulario)) {
+        // if (isset($formulario['indicaciones'])) {
+            ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_separada[0]['consulta_id']);
+        }
 
-        $formulario['consultas_medicas_bs'] = 0;
-        $formulario['laboratorios_bs'] = 0;
-        $formulario['medicamentos_bs'] = 0;
-        $formulario['area_observacion_bs'] = 0;
-        $formulario['enfermeria_bs'] = 0;
-        $formulario['total_insumos_bs'] = 0;
-        $formulario['total_examenes_bs'] = 0;
-        $formulario['total_consulta_bs'] = 0;
+        if (array_key_exists('recipes', $formulario)) {
+        // if (isset($formulario['recipes'])) {
+            ConsultaHelper::insertarRecipe($formulario['recipes'], $consulta_separada[0]['consulta_id']);
+        }
+    }
 
-        // $formulario['consultas_medicas_bs'] = round( $formulario['consultas_medicas'] * $valorDivisa, 2);
-        // $formulario['laboratorios_bs'] = round( $formulario['laboratorios'] * $valorDivisa, 2);
-        // $formulario['medicamentos_bs'] = round( $formulario['medicamentos'] * $valorDivisa, 2);
-        // $formulario['area_observacion_bs'] = round( $formulario['area_observacion'] * $valorDivisa, 2);
-        // $formulario['enfermeria_bs'] = round( $formulario['enfermeria'] * $valorDivisa, 2);
-        // $formulario['total_insumos_bs'] = round( $formulario['total_insumos'] * $valorDivisa, 2);
-        // $formulario['total_examenes_bs'] = round($formulario['total_examenes_bs'], 2);
-        // $formulario['total_consulta_bs'] = round( $formulario['total_consulta'] * $valorDivisa, 2);
+    public static function insertarConsultaPorCita($formulario, $consulta_separada) {
+
+        $_consultaConCita = new ConsultaCitaModel();
+        $consulta_cita_id = $_consultaConCita->insert($consulta_separada[0]);
         
-        $fueInsertado = $_consultaEmergencia->insert($formulario); 
+        if ($consulta_cita_id == 0) {
+            $_consultaModel = new ConsultaModel();
+            $_consultaModel->where('consulta_id', '=', $consulta_separada[0]['consulta_id'])->delete();
 
-        if ($fueInsertado <= 0) {
-            $respuesta = new Response('INSERCION_FALLIDA');
-            $respuesta->setData($formulario);
-            echo $respuesta->json(400);
-            exit();
+            $respuesta = new Response(false, 'Ocurrió un error insertando la relación consulta_cita');
+            return $respuesta->json(400);
+        }
+
+        $_citaModel = new CitaModel;
+        $cita_previa = $_citaModel->where('cita_id', '=', $formulario['cita_id'])->getFirst();
+
+        if ($cita_previa->tipo_cita == 1 && array_key_exists('examenes', $formulario)) {
+            ConsultaHelper::insertarExamen($formulario['examenes'], $consulta_separada[0]['consulta_id']);
+        }
+
+        if ($cita_previa->tipo_cita == 2 && array_key_exists('examenes', $formulario)) {
+            ConsultaHelper::insertarExamenesSeguro($formulario['examenes'], $consulta_separada[0]['consulta_id']);
+        }
+
+        if (array_key_exists('insumos', $formulario)) {
+        // if ($formulario['insumos']) {
+            if ($cita_previa->tipo_cita == 1) {
+                ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], false);
+            }
+
+            if ($cita_previa->tipo_cita == 2) {
+                ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], true);
+            }
+        }
+
+        if (array_key_exists('recipes', $formulario)) {
+        // if ($formulario['recipes']) {
+            ConsultaHelper::insertarRecipe($formulario['recipes'], $consulta_separada[0]['consulta_id']);
+        }
+
+        if (array_key_exists('indicaciones', $formulario)) {
+        // if ($formulario['indicaciones']) {
+            ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_separada[0]['consulta_id']);
+        }
+
+        $respuesta = new Response('INSERCION_EXITOSA');
+
+        $cambioEstatus = array('estatus_cit' => '4');
+        $_citaModel = new CitaModel;
+        $res = $_citaModel->where('cita_id', '=', $formulario['cita_id'])->update($cambioEstatus);
+        $respuesta = new Response('INSERCION_EXITOSA');
+        
+        if ($res <= 0) {
+            $respuesta->setData('La consulta fue insertada, pero la cita no fue actualizada correctamente, por favor actualicela manualmente para evitar errores');
         }
     }
 

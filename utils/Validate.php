@@ -15,14 +15,11 @@ class Validate extends BaseModel{
         foreach($data as $key => $value){
 
             if ($exclude != null) {
-            
                 if(is_numeric(array_search($key,$exclude))){
-
                     continue;
                 }
             }
             if(empty($value)){
-                
                 return true;
             }
         }
