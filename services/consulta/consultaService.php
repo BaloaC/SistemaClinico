@@ -90,8 +90,8 @@ class ConsultaService {
             ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_id, true);
         }
 
-        if (isset($formulario['recipe'])) {
-            ConsultaHelper::insertarRecipe($formulario['recipe'], $consulta_id);
+        if (isset($formulario['recipes'])) {
+            ConsultaHelper::insertarRecipe($formulario['recipes'], $consulta_id);
         }
 
         if (isset($formulario['indicaciones'])) {
@@ -115,17 +115,20 @@ class ConsultaService {
         if (isset($formulario['examenes'])) {
             ConsultaHelper::insertarExamen($formulario['examenes'], $consulta_separada[0]['consulta_id']);
         }
-
-        if (isset($formulario['insumos'])) {
+        
+        if (array_key_exists('insumos', $formulario)) {
+        // if (isset($formulario['insumos'])) {
             ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], false);
         }
 
-        if (isset($formulario['indicaciones'])) {
+        if (array_key_exists('indicaciones', $formulario)) {
+        // if (isset($formulario['indicaciones'])) {
             ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_separada[0]['consulta_id']);
         }
 
-        if (isset($formulario['recipe'])) {
-            ConsultaHelper::insertarRecipe($formulario['recipe'], $consulta_separada[0]['consulta_id']);
+        if (array_key_exists('recipes', $formulario)) {
+        // if (isset($formulario['recipes'])) {
+            ConsultaHelper::insertarRecipe($formulario['recipes'], $consulta_separada[0]['consulta_id']);
         }
     }
 
@@ -145,15 +148,16 @@ class ConsultaService {
         $_citaModel = new CitaModel;
         $cita_previa = $_citaModel->where('cita_id', '=', $formulario['cita_id'])->getFirst();
 
-        if ($cita_previa->tipo_cita == 1) {
+        if ($cita_previa->tipo_cita == 1 && array_key_exists('examenes', $formulario)) {
             ConsultaHelper::insertarExamen($formulario['examenes'], $consulta_separada[0]['consulta_id']);
         }
 
-        if ($cita_previa->tipo_cita == 2) {
+        if ($cita_previa->tipo_cita == 2 && array_key_exists('examenes', $formulario)) {
             ConsultaHelper::insertarExamenesSeguro($formulario['examenes'], $consulta_separada[0]['consulta_id']);
         }
 
-        if ($formulario['insumos']) {
+        if (array_key_exists('insumos', $formulario)) {
+        // if ($formulario['insumos']) {
             if ($cita_previa->tipo_cita == 1) {
                 ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], false);
             }
@@ -163,11 +167,13 @@ class ConsultaService {
             }
         }
 
-        if ($formulario['recipe']) {
-            ConsultaHelper::insertarRecipe($formulario['recipe'], $consulta_separada[0]['consulta_id']);
+        if (array_key_exists('recipes', $formulario)) {
+        // if ($formulario['recipes']) {
+            ConsultaHelper::insertarRecipe($formulario['recipes'], $consulta_separada[0]['consulta_id']);
         }
 
-        if ($formulario['indicaciones']) {
+        if (array_key_exists('indicaciones', $formulario)) {
+        // if ($formulario['indicaciones']) {
             ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_separada[0]['consulta_id']);
         }
 
