@@ -54,7 +54,7 @@ class ConsultaController extends Controller {
         $es_emergencia = isset($_POST['es_emergencia']); // Validamos que el atributo emergencia sea booleano
 
         if ( $es_emergencia ) {
-            ConsultaService::insertarConsultaEmergencia($_POST);
+            $this->consulta_id = ConsultaService::insertarConsultaEmergencia($_POST);
 
         } else {
             
@@ -86,7 +86,7 @@ class ConsultaController extends Controller {
             }
         }
         
-        if ( $this->consulta_id > 0) {
+        if ( $this->consulta_id > 0 ) {
 
             // if (isset($data['cita_id'])) {
             //     $_citaModel = new CitaModel;
