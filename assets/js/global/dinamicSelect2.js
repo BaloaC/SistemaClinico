@@ -139,7 +139,7 @@ export function emptySelect2({ selectSelector, selectWidth = "45%", placeholder,
 export function insertOptionSelect2({ selectSelector, text, id }) {
 
     let newOption = new Option(text, id, true, true);
-    $(selectSelector).append(newOption).trigger('change');
+    $(selectSelector).append(newOption);
 }
 
 export function createOptionOrSelectInstead({ obj, selectSelector, selectValue, selectNames }) {

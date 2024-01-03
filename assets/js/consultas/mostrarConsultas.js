@@ -54,11 +54,42 @@ const handleModalOpen = async () => {
 
     if (modalOpened === false) {
 
+        //Inicializamos los select2
         emptyAllSelect2({
             selectSelector: "#s-cita",
-            placeholder: "Seleccione una cita",
+            placeholder: "Cargando",
             parentModal: "#modalReg"
         });
+
+        emptySelect2({
+            selectSelector: "#s-examen",
+            placeholder: "Cargando",
+            parentModal: "#modalReg",
+        });
+
+        emptyAllSelect2({
+            selectSelector: "#s-paciente",
+            placeholder: "Cargando",
+            parentModal: "#modalReg"
+        });
+
+        emptyAllSelect2({
+            selectSelector: "#s-medico",
+            placeholder: "Cargando",
+            parentModal: "#modalReg"
+        });
+
+        emptySelect2({
+            selectSelector: especialidadSelect,
+            placeholder: "Debe seleccionar un médico",
+            parentModal: "#modalReg",
+        });
+
+
+        document.getElementById("s-paciente").disabled = true;
+        document.getElementById("s-medico").disabled = true;
+        especialidadSelect.disabled = true;
+
 
         const medicosList = await getAll("medicos/consulta");
         const pacientesList = await getAll("pacientes/consulta");
@@ -83,6 +114,9 @@ const handleModalOpen = async () => {
             placeholder: "Seleccione una cita"
         });
 
+        $("#s-cita").val([]).trigger("change")
+        document.getElementById("s-cita").classList.remove("is-valid");
+
         dinamicSelect2({
             obj: examenesList,
             selectSelector: "#s-examen",
@@ -103,7 +137,7 @@ const handleModalOpen = async () => {
         });
 
         dinamicSelect2({
-            obj: pacientesList,
+            obj: pacientesList ?? [],
             selectSelector: "#s-paciente",
             selectValue: "paciente_id",
             selectNames: ["cedula", "nombre-apellidos"],
@@ -111,8 +145,8 @@ const handleModalOpen = async () => {
             placeholder: "Seleccione un paciente",
         });
 
-        document.getElementById("s-paciente").disabled = true;
-
+        $("#s-paciente").val([]).trigger("change")
+        document.getElementById("s-paciente").classList.remove("is-valid");
 
         dinamicSelect2({
             obj: medicosList,
@@ -123,16 +157,8 @@ const handleModalOpen = async () => {
             placeholder: "Seleccione un médico"
         });
 
-
-        document.getElementById("s-medico").disabled = true;
-
-        emptySelect2({
-            selectSelector: especialidadSelect,
-            placeholder: "Debe seleccionar un médico",
-            parentModal: "#modalReg",
-        })
-
-        especialidadSelect.disabled = true;
+        $("#s-medico").val([]).trigger("change")
+        document.getElementById("s-medico").classList.remove("is-valid");
 
         $("#s-medico").on("change", async function (e) {
 
