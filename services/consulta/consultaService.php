@@ -83,7 +83,8 @@ class ConsultaService {
         }
 
         if (isset($formulario['examenes'])) {
-            ConsultaHelper::insertarExamenesSeguro($formulario['examenes'], $consulta_id);
+            $formulario['consulta_id'] = $consulta_id;
+            ConsultaHelper::insertarExamenesEmergencia($formulario);
         }
 
         if (isset($formulario['insumos'])) {
@@ -97,6 +98,8 @@ class ConsultaService {
         if (isset($formulario['indicaciones'])) {
             ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_id);
         }
+
+        return $consulta_id;
     }
 
     public static function insertarConsultaNormal($formulario, $consulta_separada) {
