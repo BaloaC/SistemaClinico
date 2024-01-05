@@ -85,3 +85,15 @@
     font-size: 22px;
     color: #85878f;
 }
+
+.popover-header {
+    background-color: #ffffff !important;
+    border-bottom: none !important;
+}
+
+.popoverOptions {
+    cursor: pointer;
+    color: #0d6efd;
+    text-decoration: underline;
+    margin-right: 0.25rem;
+}

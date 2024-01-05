@@ -114,8 +114,8 @@
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <label for="cedula" id="cedula_beneficiado-label" style="display: none;">Cédula beneificado</label>
-                                        <input type="number" name="cedula_beneficiado" id="cedula_beneficiado" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" style="display: none;" disabled required>
-                                        <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
+                                        <input type="number" name="cedula_beneficiado" id="cedula_beneficiado" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" style="display: none;" data-bs-toggle="popover" disabled required>
+                                        <small class="form-text" id="cedulaBeneficiadoSmall">La cédula debe contener entre 6 o 8 números</small>
                                     </div>
                                 </div>
 
@@ -163,6 +163,7 @@
 
                                 <div class="row mt-4 info-consulta-emergencia" style="display: none;">
                                     <h5>Información de la consulta de emergencia</h5>
+                                    <h6>Nota: todos los montos ingresados deben ser en dólares.</h6>
                                     <div class="col-12 col-md-6">
                                         <label for="monto-consulta">Enfermería</label>
                                         <input type="number" step="any" name="enfermeria" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
@@ -202,6 +203,17 @@
                                         <select id="s-seguro-emergencia" name="seguro_id" class="form-control seguro-emergencia" data-active="0" disabled required>
                                             <option></option>
                                         </select>
+                                        <label for="forRegistrarPagoMedico" id="registrarPagoMedicoLabel">¿Desea registrar el pago de algún médico?</label>
+                                        <div class="input-radios-container inputRadioPagoMedico">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="registrarPagoMedicoBool" id="RegistrarPagoMedicoSi" value="1" onchange="pagoMedicosInput(this.value)" required disabled>
+                                                <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="registrarPagoMedicoBool" id="RegistrarPagoMedicoNo" value="0" onchange="pagoMedicosInput(this.value)" checked required disabled>
+                                                <label class="form-check-label" for="inlineRadio2">No</label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -210,21 +222,21 @@
                                 <div class="row align-items-center">
                                     <div class="col-12 col-md-5">
                                         <label for="medico">Médico</label>
-                                        <select id="s-medico-pago" class="form-control medico-pago-id" data-active="0" required disabled>
+                                        <select id="s-medico-pago" class="form-control medico-pago-id" data-active="0" disabled>
                                             <option></option>
                                         </select>
                                     </div>
                                     <div class="col-12 col-md-5">
                                         <label for="monto" class="p-0">Monto</label>
-                                        <input type="number" name="monto_pago" step="any" class="form-control monto-pago" data-validate="true" data-type="price" required disabled>
+                                        <input type="number" name="monto_pago" step="any" class="form-control monto-pago" data-validate="true" data-type="price" disabled>
                                         <small class="form-text">No se permiten números negativos</small>
                                     </div>
                                     <div class="col-3 col-md-1 d-none">
                                         <button type="button" class="btn" onclick="deleteInput(this,'.medico-pago-id')"><i class="fas fa-times m-0"></i></button>
                                     </div>
                                 </div>
+                                <button type="button" class="btn btn-primary mt-3" style="display: none;" id="addMedicoPago" onclick="addMedicoPagoInput()">Añadir otro médico</button>
                             </div>
-                            <button type="button" class="btn btn-primary mt-3" style="display: none;" id="addMedicoPago" onclick="addMedicoPagoInput()">Añadir otro médico</button>
 
                             <div class="row mt-4">
                                 <h5>Insumos utilizados en la Consulta (Opcional)</h5>
@@ -564,6 +576,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/consultas-seguro/registrarConsultaSeguro.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/consultaEmergencia.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/consultaSinCita.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/pagoMedicosInput.js'); ?>"></script>
 </body>
 
 </html>

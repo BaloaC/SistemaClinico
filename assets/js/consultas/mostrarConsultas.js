@@ -85,11 +85,15 @@ const handleModalOpen = async () => {
             parentModal: "#modalReg",
         });
 
+        emptySelect2({
+            selectSelector: "#s-seguro-emergencia",
+            placeholder: "Debe seleccionar un paciente",
+            parentModal: "#modalReg"
+        });
+
 
         document.getElementById("s-paciente").disabled = true;
         document.getElementById("s-medico").disabled = true;
-        especialidadSelect.disabled = true;
-
 
         const medicosList = await getAll("medicos/consulta");
         const pacientesList = await getAll("pacientes/consulta");
@@ -128,15 +132,6 @@ const handleModalOpen = async () => {
         });
 
         dinamicSelect2({
-            obj: segurosList,
-            selectSelector: "#s-seguro-emergencia",
-            selectValue: "seguro_id",
-            selectNames: ["rif", "nombre"],
-            parentModal: "#modalReg",
-            placeholder: "Seleccione un seguro"
-        });
-
-        dinamicSelect2({
             obj: pacientesList ?? [],
             selectSelector: "#s-paciente",
             selectValue: "paciente_id",
@@ -162,7 +157,6 @@ const handleModalOpen = async () => {
 
         $("#s-medico").on("change", async function (e) {
 
-
             let medico_id = this.value;
             const infoMedico = await getById("medicos", medico_id);
 
@@ -179,6 +173,76 @@ const handleModalOpen = async () => {
 
             especialidadSelect.disabled = false;
             especialidadSelect.classList.add("is-valid");
+
+        });
+
+        $("#s-paciente").on("change", async function (e) {
+
+            let paciente_id = this.value;
+            const infoPaciente = await getById("pacientes", paciente_id);
+
+            $("#s-seguro-emergencia").empty().select2();
+
+            dinamicSelect2({
+                obj: infoPaciente?.seguro ?? [],
+                selectSelector: "#s-seguro-emergencia",
+                selectValue: "seguro_id",
+                selectNames: ["rif", "nombre_seguro"],
+                parentModal: "#modalReg",
+                placeholder: "Seleccione un seguro"
+            });
+
+            document.getElementById("s-seguro-emergencia").disabled = false;
+            if (document.getElementById("s-seguro-emergencia").value) document.getElementById("s-seguro-emergencia").classList.add("is-valid");
+
+
+            const popover = new bootstrap.Popover(document.getElementById('cedula_beneficiado'), {
+                container: 'body',
+                title: 'Sugerencia',
+                html: true,
+                placement: 'right',
+                sanitize: false,
+                content() {
+                    return `
+                        <div>
+                            <h6 style="font-size: 0.75rem">¿Desea que la cédula del beneficiado sea igual que la del paciente titular?</h6>
+                            <a id="acceptSuggestion" class="popoverOptions">Sí</a>
+                            <a id="dismissPopover" class="popoverOptions">Ignorar</a>
+                        </div>`;
+                }
+            })
+
+            const hidePopoverHandle = (time) => {
+                setTimeout(() => {
+                    if (popover._isEnabled) popover.hide();
+                }, time);
+                setTimeout(() => {
+                    if (popover._isEnabled) popover.dispose();
+                }, time + 500);
+            }
+
+            const acceptSuggestionHandle = () => {
+
+                let cedulaPaciente = infoPaciente.cedula;
+                document.getElementById("cedula_beneficiado").value = cedulaPaciente;
+                document.getElementById("cedula_beneficiado").dispatchEvent(new Event("keyup"));
+            }
+
+            document.getElementById("cedula_beneficiado").addEventListener("shown.bs.popover", () => {
+
+                document.getElementById("dismissPopover").addEventListener("click", () => {
+                    hidePopoverHandle(0);
+                    return;
+                });
+
+                document.getElementById("acceptSuggestion").addEventListener("click", () => {
+                    acceptSuggestionHandle();
+                    hidePopoverHandle(0);
+                    return;
+                });
+
+                hidePopoverHandle(3000);
+            });
 
         });
 
@@ -417,20 +481,20 @@ addEventListener("DOMContentLoaded", async e => {
             factura += `
             <tr>
                 <td>Cantidad de consultas médicas: <br><b>${data.factura.cantidad_consultas_medicas}</b></td>
-                <td>Consultas médicas: <br><b>${data.factura.consultas_medicas}</b></td>
+                <td>Consultas médicas: <br><b>$${data.factura.consultas_medicas}</b></td>
                 <td>Cantidad laboratorio: <br><b>${data.factura.cantidad_laboratorios}</b></td>
-                <td>Laboratorios: <br><b>${data.factura.laboratorios}</b></td>
+                <td>Laboratorios: <br><b>$${data.factura.laboratorios}</b></td>
             </tr>
             <tr>
                 <td>Cantidad de medicamentos: <br><b>${data.factura.cantidad_medicamentos}</b></td>
-                <td>Medicamentos: <br><b>${data.factura.medicamentos}</b></td>
-                <td>Area de observación: <br><b>${data.factura.area_observacion}</b></td>
-                <td>Enfermería: <br><b>${data.factura.enfermeria}</b></td>
+                <td>Medicamentos: <br><b>$${data.factura.medicamentos}</b></td>
+                <td>Area de observación: <br><b>$${data.factura.area_observacion}</b></td>
+                <td>Enfermería: <br><b>$${data.factura.enfermeria}</b></td>
             </tr>
             <tr>
-                <td>Total insumos: <br><b>${data.factura.total_insumos}</b></td>
-                <td>Total exámenes: <br><b>${data.factura.total_examenes}</b></td>
-                <td>Total consulta: <br><b>${data.factura.total_consulta}</b></td>
+                <td>Total insumos: <br><b>$${data.factura.total_insumos}</b></td>
+                <td>Total exámenes: <br><b>$${data.factura.total_examenes}</b></td>
+                <td>Total consulta: <br><b>$${data.factura.total_consulta}</b></td>
             </tr>
             <tr><td><br></td></tr>
             <tr>
@@ -457,8 +521,8 @@ addEventListener("DOMContentLoaded", async e => {
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
                 <tr>
-                    <td>Peso: <br><b>${data.peso}</b></td>
-                    <td>Estatura: <br><b>${data.altura}</b></td>
+                    <td>Peso: <br><b>${data.peso ?? "No especificado"}</b></td>
+                    <td>Estatura: <br><b>${data.altura ?? "No especificado"}</b></td>
                     <td>Fecha Cita: <br><b>${data.fecha_cita ?? "No aplica"}</b></td>
                     <td>Motivo cita: <br><b>${data.motivo_cita ?? "No aplica"}</b></td>
                 </tr>

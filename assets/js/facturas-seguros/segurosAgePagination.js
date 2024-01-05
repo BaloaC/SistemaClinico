@@ -3,9 +3,6 @@ import getAll from "../global/getAll.js";
 import { removeAddAccountant, removeAddAnalist, removeAddMD } from "../global/validateRol.js";
 
 const listadoFacturas = await getAll("factura/seguro/consulta");
-$('.dropdown-link').on('click', function () {
-    alert("a");
-});
 
 /* 
     Obtenemos los años a mostrar de acuerdo a las fechas registrados
@@ -30,20 +27,22 @@ const listaSegurosPorAge = listadoFacturas.reduce((lista, factura) => {
 // const uniqueAges = [...new Set(listadoFacturas.filter(factura => factura.fecha_ocurrencia).map(factura => factura.fecha_ocurrencia.slice(0, 4)))].sort((a, b) => b - a);
 
 const registros = listaSegurosPorAge != typeof Array ? listaSegurosPorAge : undefined;
-console.log(registros);
+
 removeAddAccountant();
 removeAddAnalist();
 removeAddMD();
 // Configurar la paginación
-const registrosPorPagina = 6;
+const registrosPorPagina = 15;
 let paginaActual = 1;
 
 
 export function examenesPagination(registros) {
 
-    if (registros == undefined) {
+    if (registros?.length === 0 || registros === undefined) {
         const mensajeVacio = `<p class="text-center mb-5 fs-5">No se encontraron registros.</p>`
         document.getElementById('card-container').innerHTML = mensajeVacio;
+        document.getElementById('boton-pagina-siguiente').classList.add("d-none");
+        document.getElementById('boton-pagina-anterior').classList.add("d-none");
         return;
     } else {
 

@@ -5,6 +5,7 @@ import getById from "../global/getById.js";
 import scrollTo from "../global/scrollTo.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { registerStatusConsulta } from "./mostrarConsultas.js";
+import consultaEmergencia from "./consultaEmergencia.js";
 
 async function addConsulta() {
 
@@ -102,7 +103,7 @@ async function addConsulta() {
 
         if (indicaciones.length != 0 && indicaciones[0].descripcion != "") { data.indicaciones = indicaciones; }
 
-        if(data.medicamentos > 0 && !("recipes" in data)) throw { message: "Debe especificar los medicamentos utilizados" }
+        if(data.total_insumos > 0 && !("insumos" in data)) throw { message: "Debe especificar los insumos utilizados" }
 
         const registroExitoso = await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!");
         
@@ -110,13 +111,16 @@ async function addConsulta() {
         
         // En caso de que se decida registrar la consulta a la factura por emergencia
         if(registroExitoso.data !== null && data?.registrarFacturaBool === "1"){
-            await addModule("factura/consultaSeguro", "info-consulta", {consulta_id: registroExitoso.data.consulta_id}, "Consulta registrada correctamente!");
+
+            const facturaExitosa = await addModule("factura/consultaSeguro", "info-consulta", {consulta_id: registroExitoso.data.consulta_id}, "Consulta registrada correctamente!");
+
+            if (!facturaExitosa.code) throw { result: facturaExitosa.result};
         }
         
         $form.reset();
         deleteElementByClass("newInput");
         cleanValdiation("info-consulta");
-
+        consultaEmergencia({value: "0"});
         // Si la consulta es por cita, luego de registrarse satisfactoriamente, 
         if(data?.cita_id) registerStatusConsulta.successfulConsulta = true;
 

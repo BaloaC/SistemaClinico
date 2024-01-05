@@ -79,7 +79,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
 
     if (listConsultas) {
-
+        console.log(listConsultas);
         idRecibo.textContent = listConsultas.factura[0].factura_seguro_id;
         mesRecibo.textContent = listConsultas.factura[0].mes;
         fechaOcurrencia.textContent = listConsultas.factura[0].fecha_ocurrencia.split(" ")[0];
@@ -140,7 +140,17 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                 "data": null,
                 "defaultContent": ''
             },
-            { data: "paciente_titular.cedula" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    console.log(data);
+                    if (data.beneficiado && data.beneficiado.cedula) {
+                        return data.beneficiado.cedula;
+                    } else {
+                        return 'Desconocido';
+                    }
+                }
+            },
             {
                 data: null,
                 render: function (data, type, row) {
