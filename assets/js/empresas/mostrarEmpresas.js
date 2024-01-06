@@ -47,46 +47,6 @@ async function getEmpresa(id) {
 
 window.getEmpresa = getEmpresa;
 
-
-export function mostrarEmpresas(listadoEmpresas) {
-
-    try {
-
-
-        // // ! 0 = para empresas sin seguro afiliado, 1 = seguros afiliados empresas
-        // listadoEmpresas.forEach(el => {
-
-        //     if(!el.seguro) return;
-
-        //     let $nombreEmpresa = $cardTemplate.querySelector("h3"),
-        //         $cardContainer = $cardTemplate.querySelector(".card-container"),
-        //         $rif = $cardTemplate.querySelector(".list-group > li:nth-child(1) > b"),
-        //         $nombreSeguro = $cardTemplate.querySelector(".list-group > li:nth-child(2) > b");
-
-        //     $nombreEmpresa.textContent = el.nombre;
-        //     $rif.textContent = el.rif;
-        //     $nombreSeguro.textContent = concatItems(el.seguro, "nombre", "No posee ningún seguro")
-        //     $cardContainer.setAttribute("onclick", `getEmpresa(${el.empresa_id})`);
-
-        //     let clone = document.importNode($cardTemplate, true);
-        //     $fragment.appendChild(clone);
-        // })
-
-        // $empresasContainer.replaceChildren();
-        // $empresasContainer.appendChild($fragment);
-
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-// document.addEventListener("DOMContentLoaded", async () => {
-
-
-// })
-
-// addEventListener("DOMContentLoaded", );
-
 select2OnClick({
     selectSelector: "#s-seguro",
     selectValue: "seguro_id",

@@ -14,7 +14,7 @@ async function addEspecialidad() {
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (!(patterns.name.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        if (data.nombre.length < 6) throw { message: "El nombre ingresado debe ser mayor a 6 caracteres" };
+        if (data.nombre.length < 3) throw { message: "El nombre ingresado debe ser mayor a 3 caracteres" };
 
         const registroExitoso = await addModule("especialidades", "info-especialidad", data, "Especialidad registrada con exito!");
 

@@ -1,21 +1,11 @@
-import getAll from "../global/getAll.js";
-import { proveedoresPagination } from "./proveedoresPagination.js";
-
-let listadoProveedores;
-
-async function obtenerListadoProveedores() {
-    listadoProveedores = await getAll("proveedores/consulta");
-}
+import { filterPaginationHandle } from "../global/filterPaginationHandle.js";
+import { listadoProveedoresPagination, proveedoresPagination } from "./proveedoresPagination.js";
 
 async function filtrarProveedores() {
     const filtro = document.getElementById("inputSearch");
-    const filtrado = listadoProveedores.filter(provedor => provedor.nombre.match(new RegExp(filtro.value, 'i')));
+    const filtrado = listadoProveedoresPagination.registros.filter(proveedor => filterPaginationHandle(filtro, proveedor, ["nombre"]));
+    
     proveedoresPagination(filtrado);
 }
-
-await obtenerListadoProveedores();
-
-// Actualizar el listado cada 60 segundos
-window.setInterval(obtenerListadoProveedores, 60000);
 
 window.filtrarProveedores = filtrarProveedores;

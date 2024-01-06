@@ -32,9 +32,11 @@ export default function validateInputs() {
         if (regex.test(field.value)) {
             field.classList.remove("invalid");
             field.classList.add("valid");
+            return true;
         } else {
             field.classList.remove("valid");
             field.classList.add("invalid");
+            return false;
         }
     }
 
@@ -54,11 +56,16 @@ export default function validateInputs() {
             }
         }
 
-        // ** Agregar evento 'blur' e 'input' a los campos de contraseña y confirmación
-        password.addEventListener('blur', validatePassword);
-        password.addEventListener('input', validatePassword);
-        confirmPassword.addEventListener('blur', validatePassword);
-        confirmPassword.addEventListener('input', validatePassword);
+        const passwordInputsHandle = () => {
+            password.addEventListener('blur', validatePassword);
+            password.addEventListener('input', validatePassword);
+            confirmPassword.addEventListener('blur', validatePassword);
+            confirmPassword.addEventListener('input', validatePassword);
+        }
+
+        // ** Agregar evento 'blur' e 'input' a los campos de confirmación
+        confirmPassword.addEventListener("click", passwordInputsHandle);
+        confirmPassword.addEventListener("input", passwordInputsHandle);
     }
 }
 validateInputs();

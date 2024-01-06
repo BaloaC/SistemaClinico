@@ -125,7 +125,6 @@
         </div>
     </main>
 
-    <script type="module" src="<?php echo Url::to('assets/js/proveedores/mostrarProveedores.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/proveedores/proveedoresPagination.js'); ?>"></script>
     <?php include constant('PATH_VIEWS') . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/login/validarSesion.js'); ?>"></script>

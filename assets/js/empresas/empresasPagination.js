@@ -1,8 +1,8 @@
 import concatItems from "../global/concatItems.js";
 import getAll from "../global/getAll.js";
 
-const listadoEmpresas = await getAll("empresas/consulta");
-let registrosEmp = listadoEmpresas != typeof Array ? listadoEmpresas : undefined;
+export const listadoEmpresasPagination = { registros: await getAll("empresas/consulta") };
+let registrosEmp = listadoEmpresasPagination.registros != typeof Array ? listadoEmpresasPagination.registros : undefined;
 
 // Configurar la paginación
 const registrosPorPagina = 15;
@@ -12,7 +12,7 @@ let paginationInitializated = false;
 export function empresasPagination(registros) {
 
     if (registros?.length <= 0 || registros === undefined) {
-        
+
         const mensajeVacio = `<p class="text-center mb-5 fs-5">No se encontraron registros.</p>`
         document.getElementById('card-container').innerHTML = mensajeVacio;
         document.getElementById('boton-pagina-siguiente').classList.add("d-none");
@@ -227,7 +227,7 @@ export function empresasPagination(registros) {
             botonPaginaAnterior.addEventListener('click', () => {
                 botonAnteriorAction();
             });
-    
+
             // Agregar el evento de clic al botón de página siguiente    
             botonPaginaSiguiente.addEventListener('click', () => {
                 botonSiguienteAction();
@@ -240,7 +240,7 @@ export function empresasPagination(registros) {
             });
 
             paginationInitializated = true;
-        } 
+        }
     }
 }
 

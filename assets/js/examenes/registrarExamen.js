@@ -2,8 +2,7 @@ import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import getAll from "../global/getAll.js";
 import { patterns } from "../global/patternsValidation.js";
-import { examenesPagination } from "./examenesPagination.js";
-import { mostrarExamenes } from "./mostrarExamenes.js";
+import { examenesPagination, listadoExamenesPagination } from "./examenesPagination.js";
 
 async function addExamen() {
     const $form = document.getElementById("info-examen"),
@@ -27,6 +26,7 @@ async function addExamen() {
         const listadoExamenes = await getAll("examenes/consulta");
         cleanValdiation("info-examen");
         examenesPagination(listadoExamenes);
+        listadoExamenesPagination.registros = listadoExamenes;
 
     } catch (error) {
         console.log(error);

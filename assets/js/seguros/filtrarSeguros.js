@@ -1,21 +1,10 @@
-import getAll from "../global/getAll.js";
-import { segurosPagination } from "./segurosPagination.js";
-
-let listadoSeguros;
-
-async function obtenerListadoSeguros() {
-    listadoSeguros = await getAll("seguros/consulta");
-}
+import { filterPaginationHandle } from "../global/filterPaginationHandle.js";
+import { listadoSegurosPagination, segurosPagination } from "./segurosPagination.js";
 
 async function filtrarSeguros() {
     const filtro = document.getElementById("inputSearch");
-    const filtrado = listadoSeguros.filter(seguro => seguro.nombre.match(new RegExp(filtro.value, 'i')));
+    const filtrado = listadoSegurosPagination.registros.filter(seguro => filterPaginationHandle(filtro, seguro, ["nombre"]));
     segurosPagination(filtrado);
 }
-
-await obtenerListadoSeguros();
-
-// Actualizar el listado cada 60 segundos
-window.setInterval(obtenerListadoSeguros, 60000);
 
 window.filtrarSeguros = filtrarSeguros;

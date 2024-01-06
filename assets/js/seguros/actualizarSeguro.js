@@ -1,13 +1,9 @@
 import { getConsultasSegurosMes } from "../consultas-seguro/mostrarConsultaSeguro.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import deleteSecondValue from "../global/deleteSecondValue.js";
-import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import { patterns } from "../global/patternsValidation.js";
 import updateModule from "../global/updateModule.js";
-import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
-import { mostrarSeguros } from "./mostrarSeguros.js";
-// import { segurosPagination } from "./segurosPagination.js";
 
 async function updateSeguro(id) {
     const $form = document.getElementById("act-seguro");

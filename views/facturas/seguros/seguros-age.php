@@ -164,14 +164,9 @@
 
     </main>
 
-    <!-- <script type="module" src="<?php echo Url::to('assets/js/examenes/mostrarExamenes.js'); ?>"></script> -->
     <script type="module" src="<?php echo Url::to('assets/js/facturas-seguros/segurosAgePagination.js'); ?>"></script>
     <?php include constant('PATH_VIEWS') . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/login/validarSesion.js'); ?>"></script>
-    <!-- <script type="module" src="<?php echo Url::to('assets/js/examenes/registrarExamen.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/examenes/actualizarExamen.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/examenes/eliminarExamen.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/examenes/filtrarExamenes.js'); ?>"></script> -->
 </body>
 
 </html>

@@ -1,22 +1,11 @@
-import getAll from "../global/getAll.js";
-import { medicosPagination } from "./medicosPagination.js";
-
-
-let listadoMedicos;
-
-async function obtenerListadoMedicos() {
-    listadoMedicos = await getAll("medicos/consulta");
-}
+import { filterPaginationHandle } from "../global/filterPaginationHandle.js";
+import { listadoMedicosPagination, medicosPagination } from "./medicosPagination.js";
 
 async function filtrarMedicos() {
     const filtro = document.getElementById("inputSearch");
-    const filtrado = listadoMedicos.filter(medico => `${medico.nombre} ${medico.apellidos}`.match(new RegExp(filtro.value, 'i')));
+    const filtrado = listadoMedicosPagination.registros.filter(medico => filterPaginationHandle(filtro, medico, ["nombre", "apellidos"]));
+    
     medicosPagination(filtrado);
 }
-
-await obtenerListadoMedicos();
-
-// Actualizar el listado cada 60 segundos
-window.setInterval(obtenerListadoMedicos, 60000);
 
 window.filtrarMedicos = filtrarMedicos;

@@ -1,11 +1,9 @@
-import { mostrarEmpresas } from "./mostrarEmpresas.js";
 import deleteSecondValue from "../global/deleteSecondValue.js";
 import updateModule from "../global/updateModule.js";
 import getById from "../global/getById.js";
-import { createOptionOrSelectInstead, select2OnClick } from "../global/dinamicSelect2.js";
+import { select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
-import { empresasPagination } from "./empresasPagination.js";
-import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
+import { empresasPagination, listadoEmpresasPagination } from "./empresasPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { patterns } from "../global/patternsValidation.js";
 
@@ -88,6 +86,7 @@ async function confirmUpdate() {
         cleanValdiation("act-empresa");
         cleanValdiation("info-empresa");
         empresasPagination(listadoEmpresas);
+        listadoEmpresasPagination.registros = listadoEmpresas;
 
     } catch (error) {
         console.log(error);

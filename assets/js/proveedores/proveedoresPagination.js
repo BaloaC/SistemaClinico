@@ -1,8 +1,8 @@
 import concatItems from "../global/concatItems.js";
 import getAll from "../global/getAll.js";
 
-const listadoProveedores = await getAll("proveedores/consulta");
-let registrosProv = listadoProveedores != typeof Array ? listadoProveedores : undefined;
+export const listadoProveedoresPagination = { registros: await getAll("proveedores/consulta") }
+let registrosProv = listadoProveedoresPagination.registros != typeof Array ? listadoProveedoresPagination.registros : undefined;
 
 // Configurar la paginación
 const registrosPorPagina = 15;
@@ -29,8 +29,6 @@ export async function proveedoresPagination(registros) {
             // Crear el elemento de la tarjeta
             const tarjeta = document.createElement('div');
             tarjeta.classList.add('card-container', 'col-xl-4', 'col-lg-4', 'col-md-6', 'col-sm-12');
-            tarjeta.setAttribute("data-bs-toggle", "modal");
-            tarjeta.setAttribute("data-bs-target", "#modalInfo");
 
             // Agregar el contenido a la tarjeta
             tarjeta.innerHTML = plantilla.replace(/\${(.*?)}/g, (match, p1) => {
@@ -221,7 +219,7 @@ export async function proveedoresPagination(registros) {
             botonPaginaAnterior.addEventListener('click', () => {
                 botonAnteriorAction();
             });
-    
+
             // Agregar el evento de clic al botón de página siguiente    
             botonPaginaSiguiente.addEventListener('click', () => {
                 botonSiguienteAction();
@@ -234,7 +232,7 @@ export async function proveedoresPagination(registros) {
             });
 
             paginationInitializated = true;
-        } 
+        }
     }
 }
 

@@ -1,11 +1,8 @@
-// import { mostrarEmpresas } from "./mostrarEmpresas.js";
 import deleteSecondValue from "../global/deleteSecondValue.js";
 import updateModule from "../global/updateModule.js";
 import getById from "../global/getById.js";
-import { mostrarExamenes } from "./mostrarExamenes.js";
 import getAll from "../global/getAll.js";
-import { examenesPagination } from "./examenesPagination.js";
-import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
+import { examenesPagination, listadoExamenesPagination } from "./examenesPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { patterns } from "../global/patternsValidation.js";
 
@@ -78,6 +75,7 @@ async function confirmUpdate() {
         cleanValdiation("act-examen");
         cleanValdiation("info-examen");
         examenesPagination(listadoExamenes);
+        listadoExamenesPagination.registros = listadoExamenes;
 
     } catch (error) {
         console.log(error);

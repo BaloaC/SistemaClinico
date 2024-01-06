@@ -2,10 +2,8 @@ import deleteSecondValue from "../global/deleteSecondValue.js";
 import updateModule from "../global/updateModule.js";
 import getById from "../global/getById.js";
 import getAll from "../global/getAll.js";
-import { proveedoresPagination } from "./proveedoresPagination.js";
-import { mostrarProveedores } from "./mostrarProveedores.js";
+import { listadoProveedoresPagination, proveedoresPagination } from "./proveedoresPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
-import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
 import { patterns } from "../global/patternsValidation.js";
 
 async function updateProveedor(id) {
@@ -60,6 +58,7 @@ async function confirmUpdate() {
         cleanValdiation("act-proveedor");
         cleanValdiation("info-proveedor");
         proveedoresPagination(listadoProveedores);
+        listadoProveedoresPagination.registros = listadoProveedores;
 
     } catch (error) {
         console.log(error);

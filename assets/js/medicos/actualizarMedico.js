@@ -1,15 +1,13 @@
 import cleanValdiation from "../global/cleanValidations.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import deleteSecondValue from "../global/deleteSecondValue.js";
-import { createOptionOrSelectInstead, select2OnClick } from "../global/dinamicSelect2.js";
+import { createOptionOrSelectInstead } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import { patterns } from "../global/patternsValidation.js";
 import scrollTo from "../global/scrollTo.js";
 import updateModule from "../global/updateModule.js";
-import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
-import { medicosPagination } from "./medicosPagination.js";
-import { mostrarMedicos } from "./mostrarMedicos.js";
+import { listadoMedicosPagination, medicosPagination } from "./medicosPagination.js";
 
 async function updateMedico(id) {
 
@@ -192,6 +190,7 @@ async function confirmUpdate() {
         cleanValdiation("act-medico");
         cleanValdiation("info-medico");
         medicosPagination(listadoMedico);
+        listadoMedicosPagination.registros = listadoMedico;
 
     } catch (error) {
         console.log(error);

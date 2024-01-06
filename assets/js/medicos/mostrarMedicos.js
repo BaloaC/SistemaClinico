@@ -1,7 +1,4 @@
-import { select2OnClick } from "../global/dinamicSelect2.js";
 import getById from "../global/getById.js";
-import getAll from "../global/getAll.js";
-import concatItems from "../global/concatItems.js";
 import { removeAddAnalist } from "../global/validateRol.js";
 import to12HourFormat from "../global/to12HoursFormat.js";
 import sortScheduleByDay from "../global/sortScheduleByDay.js";
@@ -96,43 +93,3 @@ async function getMedico(id) {
 }
 
 window.getMedico = getMedico;
-
-export async function mostrarMedicos() {
-
-    // try {
-
-    //     const listadoMedicos = await getAll("medicos/consulta"),
-    //         $cardTemplate = document.getElementById("card-template").content,
-    //         $medicosContainer = document.getElementById("medicos-container"),
-    //         $fragment = document.createDocumentFragment();
-
-    //     listadoMedicos.forEach(el => {
-
-    //         let $nombreMedico = $cardTemplate.querySelector("h3"),
-    //             $cardContainer = $cardTemplate.querySelector(".card-container"),
-    //             $cedula = $cardTemplate.querySelector(".list-group > li:nth-child(1) > b"),
-    //             $especialidad = $cardTemplate.querySelector(".list-group > li:nth-child(2) > b"),
-    //             $telefono = $cardTemplate.querySelector(".list-group > li:nth-child(3) > b");
-
-
-    //         $nombreMedico.textContent = `${el.nombre.split(" ")[0]} ${el.apellidos.split(" ")[0]}`;
-    //         $cedula.textContent = el.cedula;
-    //         $especialidad.textContent = el.especialidad !== undefined ? concatItems(el.especialidad, "nombre_especialidad", "No posee ninguna especialidad") : "No posee ninguna especialidad";
-    //         $telefono.textContent = el.telefono;
-    //         $cardContainer.setAttribute("onclick", `getMedico(${el.medico_id})`);
-
-    //         let clone = document.importNode($cardTemplate, true);
-    //         $fragment.appendChild(clone);
-    //     })
-
-    //     $medicosContainer.replaceChildren();
-    //     $medicosContainer.appendChild($fragment);
-
-    // } catch (error) {
-    //     console.log(error);
-    // }
-}
-
-// document.addEventListener("DOMContentLoaded", e => {
-//     mostrarMedicos();
-// });

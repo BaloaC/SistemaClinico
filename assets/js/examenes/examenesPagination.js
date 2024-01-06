@@ -2,8 +2,8 @@ import concatItems from "../global/concatItems.js";
 import getAll from "../global/getAll.js";
 import { removeAddAccountant, removeAddAnalist, removeAddMD } from "../global/validateRol.js";
 
-const listadoExamenes = await getAll("examenes/consulta");
-let registrosExm = listadoExamenes != typeof Array ? listadoExamenes : undefined;
+export const listadoExamenesPagination = { registros: await getAll("examenes/consulta") };
+let registrosExm = listadoExamenesPagination.registros != typeof Array ? listadoExamenesPagination.registros : undefined;
 removeAddAccountant();
 removeAddAnalist();
 removeAddMD();
@@ -241,7 +241,7 @@ export function examenesPagination(registros) {
             botonPaginaAnterior.addEventListener('click', () => {
                 botonAnteriorAction();
             });
-    
+
             // Agregar el evento de clic al botón de página siguiente    
             botonPaginaSiguiente.addEventListener('click', () => {
                 botonSiguienteAction();
@@ -254,7 +254,7 @@ export function examenesPagination(registros) {
             });
 
             paginationInitializated = true;
-        } 
+        }
     }
 }
 

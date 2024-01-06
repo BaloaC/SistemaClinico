@@ -1,8 +1,8 @@
 import getAll from "../global/getAll.js";
 import concatItems from "../global/concatItems.js";
 
-const listadoMedicos = await getAll("medicos/consulta");
-let registrosMed = listadoMedicos != typeof Array ? listadoMedicos : undefined;
+export const listadoMedicosPagination = { registros: await getAll("medicos/consulta") };
+let registrosMed = listadoMedicosPagination.registros != typeof Array ? listadoMedicosPagination.registros : undefined;
 
 // Configurar la paginación
 const registrosPorPagina = 15;

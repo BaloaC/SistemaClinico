@@ -4,8 +4,7 @@ import deleteElementByClass from "../global/deleteElementByClass.js";
 import getAll from "../global/getAll.js";
 import { patterns } from "../global/patternsValidation.js";
 import scrollTo from "../global/scrollTo.js";
-import { medicosPagination } from "./medicosPagination.js";
-import { mostrarMedicos } from "./mostrarMedicos.js";
+import { listadoMedicosPagination, medicosPagination } from "./medicosPagination.js";
 
 async function addMedico() {
     const $form = document.getElementById("info-medico"),
@@ -77,6 +76,7 @@ async function addMedico() {
         cleanValdiation("info-medico");
         deleteElementByClass("newInput");
         document.querySelectorAll("input[type='time']").forEach(element => element.disabled = true);
+        listadoMedicosPagination.registros = listadoMedico
 
     } catch (error) {
         console.log(error);

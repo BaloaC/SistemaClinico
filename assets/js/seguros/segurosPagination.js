@@ -1,8 +1,8 @@
 import concatItems from "../global/concatItems.js";
 import getAll from "../global/getAll.js";
 
-const listadoSeguros = await getAll("seguros/consulta");
-let registrosSeg = listadoSeguros != typeof Array ? listadoSeguros : undefined;
+export const listadoSegurosPagination = { registros: await getAll("seguros/consulta") }
+let registrosSeg = listadoSegurosPagination.registros != typeof Array ? listadoSegurosPagination.registros : undefined;
 
 // Configurar la paginación
 const registrosPorPagina = 15;

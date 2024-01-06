@@ -4,8 +4,7 @@ import deleteElementByClass from "../global/deleteElementByClass.js";
 import getAll from "../global/getAll.js";
 import { patterns } from "../global/patternsValidation.js";
 import scrollTo from "../global/scrollTo.js";
-import { mostrarSeguros } from "./mostrarSeguros.js";
-import { segurosPagination } from "./segurosPagination.js";
+import { listadoSegurosPagination, segurosPagination } from "./segurosPagination.js";
 
 async function addSeguro() {
     const $form = document.getElementById("info-seguro"),
@@ -53,6 +52,7 @@ async function addSeguro() {
         cleanValdiation("info-seguro");
         deleteElementByClass("newInput");
         segurosPagination(listadoSeguros);
+        listadoSegurosPagination.registros = listadoSeguros;
 
     } catch (error) {
         console.log(error);
