@@ -42,7 +42,7 @@ export default function validateExistingSelect2({ parentModal, selectSelector, s
             });
 
             $(selectSelector).val(null).trigger('change');
-
+            document.getElementById(select2.id).classList.remove("is-valid");
         }
     })
 }

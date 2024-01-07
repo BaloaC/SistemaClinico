@@ -19,7 +19,6 @@ const modalRegister = document.getElementById('modalReg');
 modalRegister.addEventListener('show.bs.modal', async () => {
     if(modalOpened === false){
         examenesSeguroList = await getAll("examenes/clinica");
-        console.log(examenesSeguroList);
         dinamicSelect2({
             obj: examenesSeguroList,
             selectSelector: `#s-examen_id`,

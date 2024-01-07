@@ -46,7 +46,6 @@ async function validateSession() {
 
         if (validateObj(dataUser) === false) throw { message: "No se ha podido validar la sesión correctamente" };
 
-        console.log(dataUser);
         let response = await fetch(`/${path[1]}/usuarios/${dataUser.usuario_id}`),
             json = await response.json();
 

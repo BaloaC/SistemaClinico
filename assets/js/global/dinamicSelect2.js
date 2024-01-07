@@ -18,8 +18,6 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
     try {
         const selectObj = [];
 
-        // console.log(obj);
-
         if (!staticSelect) {
             obj.forEach(el => {
                 let option = {
@@ -40,12 +38,13 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
         })
 
         $(selectSelector).on("change", function () {
-            if ($(selectSelector).val() != 0) {
-                $(selectSelector).removeClass("is-invalid");
-                $(selectSelector).addClass("is-valid");
-            } else {
-                $(selectSelector).removeClass("is-valid");
-                $(selectSelector).addClass("is-invalid");
+
+            const selectElement = document.querySelector(selectSelector);
+
+            if(selectElement.value){
+                const isValid = selectElement.value !== 0;
+                selectElement.classList.toggle("is-invalid", !isValid);
+                selectElement.classList.toggle("is-valid", isValid);
             }
         });
 
@@ -58,7 +57,7 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
 export async function select2OnClick({ selectSelector, module, selectValue, selectNames, placeholder = null, selectWidth = "45%", parentModal = null, multiple = false }) {
 
     // ** Crear select en caso de que no exista
-    if (!document.querySelector(selectSelector).classList.contains("select2-hidden-accessible")) {
+    if (!document.querySelector(selectSelector)?.classList.contains("select2-hidden-accessible")) {
 
         const options = {
             width: selectWidth,
@@ -101,7 +100,6 @@ export async function select2OnClick({ selectSelector, module, selectValue, sele
         $(selectSelector).select2("open");
     })
 
-    // console.log(parentModal);
     if (parentModal !== null) {
         document.querySelector(parentModal).addEventListener("hidden.bs.modal", e => {
 

@@ -18,7 +18,6 @@ async function actualizarFSeguro(infoSeguro) {
     };
 
     let response = await fetch(`/${path[1]}/factura/seguro`, options)
-    console.log(response);
 
     const id = infoSeguro.split("-");
     let listadoFacturas = await getById("factura/seguro", id[0]);

@@ -3,7 +3,6 @@ export default function parseCitas(citas) {
         const allCitas = [];
 
         citas.forEach((el) => {
-            console.log(`${el.fecha_cita.replace(" ", "T")}${el.hora_entrada}`);
             let cita = {
                 color: (el.tipo_cita === "1") ? "blue" : "black",
                 allDay: 0,

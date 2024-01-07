@@ -1,6 +1,5 @@
 export default function dinamicSelect(obj, selectName, selectValue, selectSelector) {
     try {
-        console.log(obj, selectName, selectValue, selectSelector);
         obj.forEach(el => {
             
             let template = `

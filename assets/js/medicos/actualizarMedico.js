@@ -19,9 +19,6 @@ async function updateMedico(id) {
 
         const json = await getById("medicos", id);
 
-        // especialidad = await getById("especialidades", json[0].especialidad_id);
-        console.log(json);
-
         // Obtener código telefónico
         let $telCod = json[0].telefono.slice(0, 4),
             $tel = json[0].telefono.split($telCod);
@@ -164,7 +161,6 @@ async function confirmUpdate() {
                 // [0] = Hora entrada | [1] = Hora salida
                 const inputsTime = e.parentElement.parentElement.parentElement.querySelectorAll("input[type='time']");
 
-                console.log(inputsTime);
                 if (inputsTime[0].value >= inputsTime[1].value && (inputsTime[0].disabled == false || inputsTime[1].disabled == false)) {
                     throw { message: `La hora de salida es menor igual a la fecha de entrada en el día ${e.value}` }
                 }

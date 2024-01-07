@@ -305,7 +305,6 @@ addEventListener("DOMContentLoaded", async e => {
                 data: null,
                 render: function (data, type, row) {
                     if ("nombre_medico" in data) {
-                        // console.log(data);
                         return data.nombre_medico;
                     } else {
                         return "Consulta por emergencia"
@@ -516,8 +515,7 @@ addEventListener("DOMContentLoaded", async e => {
             </tr>
         `;
         }
-        console.log(tipo_cita);
-
+        
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
                 <tr>

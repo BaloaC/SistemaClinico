@@ -4,8 +4,6 @@ import getById from "../global/getById.js";
 
 export default async function tipoAsegurado(paciente_id) {
 
-    console.log("a");
-
     const seguroSelect = document.getElementById("s-seguro");
     document.querySelector("label[for='seguro'").classList.remove("d-none");
 

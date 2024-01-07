@@ -10,12 +10,10 @@ document.addEventListener('DOMContentLoaded', async () =>{
 
             json = await response.json();
 
-            console.log(json);
 
             if(json.code === true){
 
                 //Rellenar los inputs
-                console.log('Consulta exitosa!');  
 
             } else{
 
@@ -30,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () =>{
 
     } catch (error) {
         
-        alert(error);
+        console.log(error);
     }
 })
 
@@ -63,8 +61,6 @@ document.addEventListener("submit", async event => {
         const response = await fetch("http://127.0.0.1/codigo_backend/usuarios/actualizar", options);
 
         json = await response.json();
-
-        console.log(json);
 
         if (json.code === true) {
 

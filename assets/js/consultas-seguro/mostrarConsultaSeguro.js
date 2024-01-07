@@ -5,6 +5,7 @@ import getById from "../global/getById.js";
 import concatItems from "../global/concatItems.js";
 
 const path = location.pathname.split('/');
+export let infoSeguro;
 
 export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" } = {}) {
 
@@ -18,7 +19,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     const precioExamanes = document.getElementById("precioExamanes");
     const seguroPrecioInput = document.getElementById("seguro_precio_id");
     const btnDelete = document.getElementById("btn-confirmDeleteSeguro");
-    const infoSeguro = await getById("seguros", seguro);
+    infoSeguro = await getById("seguros", seguro);
 
     nombreSeguro.textContent = infoSeguro.nombre;
     rifSeguro.textContent = infoSeguro.rif;
@@ -79,7 +80,6 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
 
     if (listConsultas) {
-        console.log(listConsultas);
         idRecibo.textContent = listConsultas.factura[0].factura_seguro_id;
         mesRecibo.textContent = listConsultas.factura[0].mes;
         fechaOcurrencia.textContent = listConsultas.factura[0].fecha_ocurrencia.split(" ")[0];
@@ -246,7 +246,6 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
             info.examenes = data.examenes !== undefined ? concatItems(data.examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen";
             info.insumos = data.insumos !== undefined ? concatItems(data.insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo";
-            console.log(info.insumos);
             info.indicaciones = data.indicaciones !== undefined ? concatItems(data.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación";
 
             info.recipes = `
@@ -301,7 +300,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                     <td colspan="4"><b>Factura consulta emergencia:</b></td>
                 </tr>
                 `;
-                console.log(data);
+
                 info.factura += `
                 <tr>
                     <td>Cantidad de consultas médicas: <br><b>${data.consulta_emergencia.cantidad_consultas_medicas}</b></td>
@@ -395,7 +394,6 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             }
         }
 
-        console.log(info);
 
 
         return `

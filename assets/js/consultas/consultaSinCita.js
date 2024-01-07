@@ -11,8 +11,6 @@ export default async function consultaSinCita(inputRadio) {
     
     const consultaCita = document.querySelector(".input[name='consultaPorEmergencia']:checked");
     
-    console.log(especialidadSelect.value, "cita"); 
-    
     if(inputRadio.value === "0"){
 
         pacienteSelect.disabled = true;

@@ -13,7 +13,7 @@ function pacienteMenorDeEdadUpdate(input) {
     const cedulaMenorContainer = document.querySelector(".pacienteMenorContainerAct");
     const cedulaMenorSi = document.getElementById("cedula_menor_si_act");
     const cedulaMenorNo = document.getElementById("cedula_menor_no_act");
-    console.log(edad);
+    
     if (edad < 18) {
 
         // Validamos que si el paciente es mayor de 9 de años se permita eligir si posee cédula, caso contrario ocultamos los inputs radio

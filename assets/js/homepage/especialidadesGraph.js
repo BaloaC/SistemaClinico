@@ -149,7 +149,7 @@ series.appear(1000);
 chart.appear(1000, 100);
 
 $("#s-especialidades").on("change", async function (e) {
-    console.log($("#s-fecha").val());
+    
     if ($("#s-fecha").val() === "year") {
         await getAllConsultationsForYear(this.value);
     } else if ($("#s-fecha").val() === "month") {

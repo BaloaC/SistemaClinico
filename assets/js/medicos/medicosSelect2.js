@@ -1,4 +1,4 @@
-import { select2OnClick } from "../global/dinamicSelect2";
+import { select2OnClick } from "../global/dinamicSelect2.js";
 
 // Update
 select2OnClick({

@@ -6,11 +6,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         json = await response.json();
 
-        console.log(json);
-
         if (json.code === true) {
-
-            console.log("Consulta exitosa");
 
         } else {
 
@@ -18,6 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     } catch (error) {
 
-        alert(error);
+        console.log(error);
     }
 });

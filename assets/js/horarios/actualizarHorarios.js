@@ -51,7 +51,6 @@ addEventListener("click", async e => {
 
             inputs.forEach(e => {
                 if (e.dataset.secondValue === e.value) {
-                    console.log(e.dataset.secondValue, e.value)
                     delete data[e.name];
                 }
             })

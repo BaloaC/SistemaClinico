@@ -44,6 +44,7 @@ export default function validateExistingSelect2OnChange({ parentModal, selectSel
 
                 // Cambiar el valor seleccionado a la opción guardada
                 $(`#${select2.id}`).val(selectedValue).trigger('change');
+                !selectedValue && document.getElementById(select2.id).classList.remove("is-valid");
 
                 // Volver a vincular el manejador de eventos change
                 $(`#${select2.id}`).on('change', function () {
@@ -55,6 +56,7 @@ export default function validateExistingSelect2OnChange({ parentModal, selectSel
                         select2Options,
                         optionId
                     });
+                    document.getElementById(select2.id).classList.remove("is-valid");
                 });
             }
         });

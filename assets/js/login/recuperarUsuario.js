@@ -2,7 +2,6 @@ import getAll from "../global/getAll.js";
 import questions from "../global/questions.js";
 import validateInputs from "../global/validateInputs.js";
 function template(infoUser) {
-    console.log(infoUser);
     // Template para la opción 2
     let templatePreguntas = `
         <div>

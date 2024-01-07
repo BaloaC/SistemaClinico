@@ -1,8 +1,9 @@
-import dinamicSelect2, { emptyAllSelect2, select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
 import validateExistingSelect2 from "../global/validateExistingSelect2.js";
 import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
 import validateInputs from "../global/validateInputs.js";
+import { infoSeguro } from "./mostrarConsultaSeguro.js";
 
 export let examenesSeguroList = null;
 const select2Options = {
@@ -16,12 +17,35 @@ let clicks = 0;
 let modalOpened = false;
 const modalAddExamenSeguro = document.getElementById("modalAddPrecioExamen");
 
+let myVariable = 0;
+
+const handleChange = (newValue) => {
+  console.log('La variable ha cambiado:', newValue);
+  // Realizar acciones adicionales aquí
+};
+
+const variableProxy = new Proxy({ value: myVariable }, {
+  set(target, prop, value) {
+    target[prop] = value;
+
+    if (prop === 'value') {
+      handleChange(value);
+    }
+
+    return true;
+  }
+});
+
+// Prueba cambiando el valor de la variable
+variableProxy.value = 42;
+variableProxy.value = 'Hola mundo';
 
 const handleModalOpen = async () => {
     if(modalOpened === false){
 
-        examenesSeguroList = await getAll("examenes/clinica");
-
+        const examenesSeguroListAll = await getAll("examenes/clinica");
+        examenesSeguroList = examenesSeguroListAll.filter(examenSeguro => !infoSeguro?.examenes.some(examen => examenSeguro.examen_id == examen.examen_id));
+        variableProxy.value = "soy yo";
         dinamicSelect2({
             obj: examenesSeguroList,
             selectSelector: "#s-examen_id",
@@ -30,6 +54,8 @@ const handleModalOpen = async () => {
             parentModal: "#modalAddPrecioExamen",
             placeholder: "Seleccione el examen"
         });
+        
+        $("#s-examen_id").val(null).trigger("change");
 
         $("#s-examen_id").on("change", () => {
             validateExistingSelect2OnChange({

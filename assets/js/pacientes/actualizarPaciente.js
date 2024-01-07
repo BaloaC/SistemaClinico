@@ -147,7 +147,6 @@ async function confirmUpdate() {
                 let titular_id = document.getElementById("s-titular_id-act").value;
                 const infoTitular =  await getById("pacientes",titular_id);
                 const titulareAct = await getById("titulares", data.paciente_id) ?? [];
-                console.log(titulareAct);
                 parseData.cedula = infoTitular.cedula;
                 parseData.telefono = infoTitular.telefono;
                 // parseData.paciente_beneficiado_id = titulareAct?.paciente_beneficiado_id;

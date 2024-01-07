@@ -3,7 +3,6 @@ import Cookies from "../../libs/jscookie/js.cookie.min.js";
 export function removeAddAnalist() {
     if (Cookies.get("rol") == 4) {
         document.getElementById('btn-add').classList.add('d-none');
-        console.log(document.getElementById('btn-eliminar'));
     }
 }
 

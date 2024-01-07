@@ -166,7 +166,6 @@ export default async function mostrarHistorialMedico(id) {
                 dropdownLink.setAttribute("aria-controls", `#cita-${listCita.cita_id}`);
                 citaContainer.setAttribute("id", `cita-${listCita.cita_id}`);
 
-                console.log(templateCita)
                 let clone = document.importNode(templateCita, true);
                 citaFragment.appendChild(clone);
             // });

@@ -44,7 +44,6 @@ function calcularMonto(input) {
 
     allMontos.forEach((value, key) => {
         montoTotalFactura += (value.textContent.slice(1)) ? parseFloat(value.textContent.slice(1)) : 0;
-        console.log(value.textContent.slice(1));
         totalIvaFactura += (value.dataset.iva !== undefined) ? parseFloat(value.dataset.iva) : 0;
         montoTotalFacturaSinIva += (value.dataset.montoSinIva !== undefined) ? parseFloat(value.dataset.montoSinIva) : 0;
         totalUnidades += (allUnidades[key].value !== "") ? parseInt(allUnidades[key].value) : 0;

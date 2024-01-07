@@ -60,7 +60,6 @@ addEventListener("DOMContentLoaded", e => {
             {
                 data: null,
                 render: function (data, type, row) {
-                    // console.log(row);
                     if (row.estatus_fac == 1) {
                         return `<span class="badge light badge-success">Pagada</span>`;
                     } else {
@@ -153,8 +152,6 @@ addEventListener("DOMContentLoaded", e => {
     });
 
     function format(data) {
-
-        console.log(data);
 
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">

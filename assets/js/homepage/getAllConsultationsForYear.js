@@ -20,9 +20,9 @@ export default async function getAllConsultationsForYear(bySpeciality) {
     }
 
     consultationsYear.forEach(el => {
-        // console.log(el.fecha_consulta);
+
         let mes = new Date(el.fecha_consulta).getMonth()
-        // console.log(mes);
+        
         switch (mes) {
             case 0: enero++; break;
             case 1: febrero++; break;

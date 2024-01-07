@@ -101,7 +101,7 @@ async function addCita() {
         }
 
         data.cedula_titular = infoTitular.cedula;
-        console.log(data);
+
         if (data.tipo_cita == 1) {
             delete data.seguro_id;
         }

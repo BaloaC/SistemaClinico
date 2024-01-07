@@ -21,8 +21,6 @@ async function addConsulta() {
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
 
-        console.log(data);
-
         if (data.consultaPorEmergencia === "0" && data.consultaSinCitaPrevia === "0") {
             const infoCita = await getById("citas", data.cita_id);
             data.cedula_titular = infoCita.cedula_titular;

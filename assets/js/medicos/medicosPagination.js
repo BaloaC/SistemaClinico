@@ -208,13 +208,11 @@ export function medicosPagination(registros) {
 
         function botonAnteriorAction() {
             paginaActual--;
-            console.log(paginaActual);
             mostrarRegistros();
         }
 
         function botonSiguienteAction() {
             paginaActual++;
-            console.log(paginaActual);
             mostrarRegistros();
         }
 

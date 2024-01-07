@@ -25,7 +25,6 @@ export default async function tipoTitular(inputRadio) {
 
                 let paciente_id = inputRadio.dataset.pacienteId;
                 let tipo_paciente = inputRadio.dataset.tipoPaciente;
-                console.log(tipo_paciente);
                 let infoPaciente;
 
                 if (tipo_paciente == 2) {
@@ -35,8 +34,6 @@ export default async function tipoTitular(inputRadio) {
                 }
 
                 if ('result' in infoPaciente && infoPaciente.result.code === false) return;
-
-                console.log(infoPaciente);
 
                 infoPaciente.forEach((el) => {
 

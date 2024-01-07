@@ -90,7 +90,6 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             $(pacientesSelect).select2("open");
         })
 
-        // console.log(parentModal);
         if ("#modalReg" !== null) {
             document.querySelector("#modalReg").addEventListener("hidden.bs.modal", e => {
                 document.querySelector("#s-paciente").dataset.active = 0;
@@ -110,8 +109,6 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                 inputTipoCita.removeChild(inputTipoCitaDefault);
                 inputTipoCita.disabled = false;
             }
-
-            console.log(infoPaciente);
 
             // ** Si es representante o beneficiario
             if (infoPaciente.tipo_paciente == 2 || infoPaciente.tipo_paciente == 4) {

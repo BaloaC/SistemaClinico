@@ -254,7 +254,6 @@ addEventListener("DOMContentLoaded", e => {
 
     function format(data) {
 
-        console.log(data);
         if (!data.nombre_seguro) data.nombre_seguro = "No aplica";
         if (!data.saldo_disponible) data.saldo_disponible = "No aplica";
 

@@ -10,8 +10,6 @@ export default async function listarMedicos() {
 
         if (!json.code) throw { result: json };
 
-        console.log(json);
-
         return json.data;
 
     } catch (error) {

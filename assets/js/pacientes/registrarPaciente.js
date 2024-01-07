@@ -60,8 +60,8 @@ async function addPaciente() {
                 tipo_familiar = document.querySelectorAll(".tipo_familiar");
 
             titulares.forEach((value, key) => {
+                
                 // TODO: Validar que ambos valores se envien
-                console.log(relacion[key].value);
                 const titular_id = {
                     paciente_id: value.value,
                     tipo_relacion: relacion[key].value,

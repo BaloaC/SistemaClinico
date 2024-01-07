@@ -120,7 +120,6 @@ addEventListener("DOMContentLoaded", (e) => {
     });
 
     function format(data) {
-        console.log(data);
         let template = `<table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">`;
         data.insummos.forEach((e) => {
             template += `
