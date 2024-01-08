@@ -235,7 +235,7 @@
                                         <button type="button" class="btn" onclick="deleteInput(this,'.medico-pago-id')"><i class="fas fa-times m-0"></i></button>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-primary mt-3" style="display: none;" id="addMedicoPago" onclick="addMedicoPagoInput()">Añadir otro médico</button>
+                                <button type="button" class="btn btn-primary mt-3 w-50" style="display: none;" id="addMedicoPago" onclick="addMedicoPagoInput()">Añadir otro médico</button>
                             </div>
 
                             <div class="row mt-4">
