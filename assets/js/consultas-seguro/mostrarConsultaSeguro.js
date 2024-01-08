@@ -6,6 +6,7 @@ import concatItems from "../global/concatItems.js";
 
 const path = location.pathname.split('/');
 export let infoSeguro;
+export let examenesSeguroListAll;
 
 export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" } = {}) {
 
@@ -18,8 +19,10 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     const costoSeguro = document.getElementById("costoConsultaSeguro");
     const precioExamanes = document.getElementById("precioExamanes");
     const seguroPrecioInput = document.getElementById("seguro_precio_id");
+    const btnAddExamen = document.getElementById("btn-addExamen");
     const btnDelete = document.getElementById("btn-confirmDeleteSeguro");
     infoSeguro = await getById("seguros", seguro);
+    examenesSeguroListAll = await getAll("examenes/clinica");
 
     nombreSeguro.textContent = infoSeguro.nombre;
     rifSeguro.textContent = infoSeguro.rif;
@@ -55,6 +58,18 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
         `;
     });
 
+    // Si no hay exámenes por añadir, mostramos una alerta que diga ya no hay más exámenes por añadir
+    if(examenesSeguroListAll.length == infoSeguro?.examenes.length || examenesSeguroListAll.length == 0) {
+
+        const alertMessage = document.getElementById("alertMessage");
+        alertMessage.textContent = "No hay exámenes por registrar disponibles o el seguro ya posee el precio de todos los exámenes registrados";
+        alertMessage.classList.remove("d-none");
+
+        btnAddExamen.setAttribute("data-bs-target", "#modalAlert");
+    } else {
+        btnAddExamen.setAttribute("data-bs-target", "#modalAddPrecioExamen");
+    }
+
     // Si el seguro tiene precio de exámenes lo mostramos, de lo contrario mostramos una alerta de que no posee
     if(examenesList !== ""){
         precioExamanes.innerHTML = examenesList;
@@ -78,8 +93,9 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     const estatusFactura = document.getElementById("factura-estatus");
     const btnCintillo  = document.getElementById("btn-cintillo-pdf");
 
-
-    if (listConsultas) {
+    console.log(listConsultas);
+    if (listConsultas?.length > 0) {
+       
         idRecibo.textContent = listConsultas.factura[0].factura_seguro_id;
         mesRecibo.textContent = listConsultas.factura[0].mes;
         fechaOcurrencia.textContent = listConsultas.factura[0].fecha_ocurrencia.split(" ")[0];

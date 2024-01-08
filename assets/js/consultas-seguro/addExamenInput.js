@@ -3,7 +3,7 @@ import getAll from "../global/getAll.js";
 import validateExistingSelect2 from "../global/validateExistingSelect2.js";
 import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
 import validateInputs from "../global/validateInputs.js";
-import { infoSeguro } from "./mostrarConsultaSeguro.js";
+import { examenesSeguroListAll, infoSeguro } from "./mostrarConsultaSeguro.js";
 
 export let examenesSeguroList = null;
 const select2Options = {
@@ -17,35 +17,37 @@ let clicks = 0;
 let modalOpened = false;
 const modalAddExamenSeguro = document.getElementById("modalAddPrecioExamen");
 
-let myVariable = 0;
+// let myVariable = 0;
 
-const handleChange = (newValue) => {
-  console.log('La variable ha cambiado:', newValue);
-  // Realizar acciones adicionales aquí
-};
+// const handleChange = (newValue) => {
+//   console.log('La variable ha cambiado:', newValue);
+//   // Realizar acciones adicionales aquí
+// };
 
-const variableProxy = new Proxy({ value: myVariable }, {
-  set(target, prop, value) {
-    target[prop] = value;
+// const variableProxy = new Proxy({ value: myVariable }, {
+//   set(target, prop, value) {
+//     target[prop] = value;
 
-    if (prop === 'value') {
-      handleChange(value);
-    }
+//     if (prop === 'value') {
+//       handleChange(value);
+//     }
 
-    return true;
-  }
-});
+//     return true;
+//   }
+// });
 
-// Prueba cambiando el valor de la variable
-variableProxy.value = 42;
-variableProxy.value = 'Hola mundo';
+// // Prueba cambiando el valor de la variable
+// variableProxy.value = 42;
+// variableProxy.value = 'Hola mundo';
 
 const handleModalOpen = async () => {
     if(modalOpened === false){
 
-        const examenesSeguroListAll = await getAll("examenes/clinica");
+        
         examenesSeguroList = examenesSeguroListAll.filter(examenSeguro => !infoSeguro?.examenes.some(examen => examenSeguro.examen_id == examen.examen_id));
-        variableProxy.value = "soy yo";
+
+        // variableProxy.value = "soy yo";
+
         dinamicSelect2({
             obj: examenesSeguroList,
             selectSelector: "#s-examen_id",
