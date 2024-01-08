@@ -13,17 +13,17 @@ export default async function consultaSinCita(inputRadio) {
     
     if(inputRadio.value === "0"){
 
-        pacienteSelect.disabled = true;
-        medicoSelect.disabled = true;
-        especialidadSelect.disabled = true;
-        citaSelect.disabled = false;
+        // pacienteSelect.disabled = true;
+        // medicoSelect.disabled = true;
+        // especialidadSelect.disabled = true;
+        // citaSelect.disabled = false;
         $(".info-cita").fadeIn("slow");
         $(".info-paciente").fadeOut("slow");
         $(".info-medico").fadeOut("slow");
     } else{
-        pacienteSelect.disabled = false;
-        medicoSelect.disabled = false;
-        especialidadSelect.disabled = false;
+        // pacienteSelect.disabled = false;
+        // medicoSelect.disabled = false;
+        // especialidadSelect.disabled = false;
         citaSelect.disabled = true;
         $(".info-cita").fadeOut("slow");
         $(".info-paciente").fadeIn("slow");
