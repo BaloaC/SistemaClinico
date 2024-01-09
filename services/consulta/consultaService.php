@@ -76,6 +76,17 @@ class ConsultaService {
         
         $consulta_id = ConsultaHelper::insertarConsulta($consultaEmergencia, 'emergencia');
         $consultaEmergencia['consulta_id'] = $consulta_id;  
+
+        $consultaSinCita = array(
+            "consulta_id" => $consultaEmergencia['consulta_id'],
+            "especialidad_id" => $formulario['especialidad_id'],
+            "medico_id" => $formulario["medico_id"],
+            "paciente_id" => $formulario["paciente_id"],
+        );
+        $consultaSinCitaModel = new ConsultaSinCitaModel();
+        $consultaSinCitaModel->insert($consultaSinCita);
+
+
         ConsultaHelper::insertarConsultaEmergencia($consultaEmergencia);
 
         if( isset($consultaEmergencia['pagos']) ) {
@@ -120,17 +131,14 @@ class ConsultaService {
         }
         
         if (array_key_exists('insumos', $formulario)) {
-        // if (isset($formulario['insumos'])) {
             ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], false);
         }
 
         if (array_key_exists('indicaciones', $formulario)) {
-        // if (isset($formulario['indicaciones'])) {
             ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_separada[0]['consulta_id']);
         }
 
         if (array_key_exists('recipes', $formulario)) {
-        // if (isset($formulario['recipes'])) {
             ConsultaHelper::insertarRecipe($formulario['recipes'], $consulta_separada[0]['consulta_id']);
         }
     }
@@ -236,6 +244,24 @@ class ConsultaService {
 
     public static function obtenerConsultaEmergencia($consulta) {
         
+        $selectInner = array(
+            "medico.medico_id",
+            "medico.nombre AS nombre_medico",
+            "medico.apellidos AS apellidos_medico",
+            "especialidad.especialidad_id",
+            "especialidad.nombre AS nombre_especialidad"
+        );
+
+        $inner = array(
+            "medico" => "consulta_sin_cita",
+            "especialidad" => "consulta_sin_cita"
+        );
+
+        $_consultaSinCita = new ConsultaSinCitaModel();
+        $innersConsulta = $_consultaSinCita->listInner($inner);
+        $consultaSinCita = $_consultaSinCita->where('consulta_sin_cita.consulta_id', '=', $consulta->consulta_id)
+                                            ->innerJoin($selectInner, $innersConsulta, "consulta_sin_cita");
+
         $_consultaEmergencia = new ConsultaEmergenciaModel();
         $consultaEmergencia = $_consultaEmergencia->where('consulta_id','=', $consulta->consulta_id)->getFirst();
         
@@ -246,6 +272,7 @@ class ConsultaService {
         $beneficiado = $_pacienteModel->where('cedula', '=', $consultaEmergencia->cedula_beneficiado)->getFirst();
         
         $consultas = $consulta;
+        $consultas->medico = $consultaSinCita;
         $consultas->paciente_id = $consultaEmergencia->paciente_id;
         $consultas->factura = $consultaEmergencia;
         $consultas->titular = $paciente;
