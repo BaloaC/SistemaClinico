@@ -2,6 +2,8 @@
 
 include_once "./services/facturas/consulta/FacturaConsultaHelpers.php";
 include_once "./services/facturas/consulta/FacturaConsultaService.php";
+include_once "./services/facturas/consulta/FacturaConsultaValidaciones.php";
+include_once './services/consulta/consultaHelpers.php';
 
 class FacturaConsultaController extends Controller {
 
@@ -21,49 +23,28 @@ class FacturaConsultaController extends Controller {
     public function insertarFacturaConsulta(/*Request $request*/) {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        $validarFactura = new Validate;
-        $camposNumericos = array('monto_consulta_usd');
-        $camposId = array('consulta_id', 'paciente_id');
+        $validarFactura = new Validate;        
+        FacturaConsultaValidaciones::validacionesGenerales($_POST);
 
-        switch ($validarFactura) {
-            case ($validarFactura->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
+        $_globalModel = new GlobalModel();
+        $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
+        $_POST['monto_consulta_bs'] = $_POST['monto_consulta_usd'] * (float) $valorDivisa->value;
 
-            case $validarFactura->isNumber($_POST, $camposNumericos):
-                $respuesta = new Response('DATOS_INVALIDOS');
-                return $respuesta->json(400);
+        $data = $validarFactura->dataScape($_POST);
+        $_facturaConsultaModel = new FacturaConsultaModel();
+        $id = $_facturaConsultaModel->insert($data);
+        
+        if ($id > 0) {
+            FacturaConsultaHelpers::insertarPreciosFacturaNormal($_POST['consulta_id']);
+            $_consultaModel = new ConsultaModel();
+            $_consultaModel->where('consulta_id', '=', $_POST['consulta_id'])->update(array('estatus_con' => 3));
 
-            case !$validarFactura->existsInDB($_POST, $camposId):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(200);
-
-            case $validarFactura->isEliminated('consulta', 'consulta_id', $_POST['consulta_id']):
-                $respuesta = new Response('NOT_FOUND');
-                return $respuesta->json(200);
-
-            // case !$validarFactura->isDuplicatedId('paciente_id', 'consulta_id', $_POST['consulta_id'], $_POST['paciente_id'], 'consulta'):
-            //     $respuesta = new Response(false, 'La consulta indicada no coincide con el paciente ingresado');
-            //     return $respuesta->json(400);
-
-            case $validarFactura->isDuplicated('factura_consulta', 'consulta_id', $_POST['consulta_id']):
-                $respuesta = new Response('DATOS_DUPLICADOS');
-                return $respuesta->json(400);
-
-            default:
-
-                $_globalModel = new GlobalModel();
-                $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
-                $_POST['monto_consulta_bs'] = $_POST['monto_consulta_usd'] * (float) $valorDivisa->value;
-
-                $data = $validarFactura->dataScape($_POST);
-                $_facturaConsultaModel = new FacturaConsultaModel();
-                $id = $_facturaConsultaModel->insert($data);
-                $mensaje = ($id > 0);
-
-                $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-                return $respuesta->json($mensaje ? 201 : 400);
+            $respuesta = new Response('INSERCION_EXITOSA');
+            return $respuesta->json(201);
         }
+
+        $respuesta = new Response('INSERCION_FALLIDA');
+        return $respuesta->json(400);
     }
 
     public function listarFacturaConsulta() {

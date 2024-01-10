@@ -89,7 +89,7 @@ class FacturaConsultaHelpers {
                     $consulta_insumo->monto_total_bs = $consulta_insumo->cantidad * $consulta_insumo->precio_insumo_bs;
 
                 } else {
-                    $consulta_insumo->monto_total_bs = $consulta_insumo->cantidad * $consulta_insumo->precio_insumo_bs;
+                    $consulta_insumo->monto_total_bs = round($consulta_insumo->cantidad * $consulta_insumo->precio_insumo_bs, 2);
                 }
 
                 $consulta_insumo->monto_total_usd = $consulta_insumo->cantidad * $consulta_insumo->precio_insumo_usd;
@@ -183,6 +183,34 @@ class FacturaConsultaHelpers {
         // }
         
         return $consulta;
+    }
+
+    public static function insertarPreciosFacturaNormal($consulta_id) {
+        
+        $_globalModel = new GlobalModel();
+        $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
+
+        $_consultaExamenModel = new ConsultaExamenModel();
+        $examenes = $_consultaExamenModel->where('consulta_id', '=', $consulta_id)->getAll();
+        
+        foreach ($examenes as $examen) {
+            $precio_examen_bs = $examen->precio_examen_usd * (float) $valorDivisa->value;
+            $precio_examen_bs = round($precio_examen_bs, 2);
+            
+            $consultaExamen = new ConsultaExamenModel();
+            $actualizado = $consultaExamen->where('consulta_examen_id', '=', $examen->consulta_examen_id)->update(array('precio_examen_bs' => $precio_examen_bs));
+        }
+
+        $_consultaInsumoModel = new ConsultaInsumoModel();
+        $insumos = $_consultaInsumoModel->where('consulta_id', '=', $consulta_id)->getAll();
+
+        foreach ($insumos as $insumo) {
+            $precio_insumo_bs = $insumo->precio_insumo_usd * (float) $valorDivisa->value;
+            $precio_insumo_bs = round($precio_insumo_bs, 2);
+            
+            $consultaInsumo = new ConsultaInsumoModel();
+            $consultaInsumo->where('consulta_insumo_id', '=', $insumo->consulta_insumo_id)->update(array('precio_insumo_bs' => $precio_insumo_bs));
+        }
     }
 
     public static function RetornarMensaje($mensaje, $data) {
