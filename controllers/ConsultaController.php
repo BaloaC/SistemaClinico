@@ -35,7 +35,6 @@ class ConsultaController extends Controller {
         // Validamos relaciones externas
         $examenes = isset($_POST['examenes']) ? $_POST['examenes'] : false;
         if ($examenes) {
-            // unset($_POST['examenes']); 
             ConsultaValidaciones::validarConsultaExamen($examenes);
         }
 
@@ -44,12 +43,9 @@ class ConsultaController extends Controller {
         
         $insumos = isset($_POST['insumos']) ? $_POST['insumos'] : false;
         if ($insumos) { 
-            // unset($_POST['insumos']);
             ConsultaValidaciones::validarInsumos($insumos);
         }
 
-        // if ($recipe) { unset($_POST['recipes']); }
-        // if ($indicaciones) { unset($_POST['indicaciones']); }
 
         $es_emergencia = isset($_POST['es_emergencia']); // Validamos que el atributo emergencia sea booleano
 
@@ -88,51 +84,7 @@ class ConsultaController extends Controller {
         
         if ( $this->consulta_id > 0 ) {
 
-            // if (isset($data['cita_id'])) {
-            //     $_citaModel = new CitaModel;
-            //     $cita_previa = $_citaModel->where('cita_id', '=', $data['cita_id'])->getFirst();
-            // }
-
-            // if ($examenes) {
-            //     if ($cita_previa->tipo_cita == 1 || !$por_cita && !$es_emergencia) {
-            //         ConsultaHelper::insertarExamen($examenes, $this->consulta_id);
-            //     }
-
-            //     if ($cita_previa->tipo_cita == 2 || $es_emergencia) {
-            //         ConsultaHelper::insertarExamenesSeguro($examenes, $this->consulta_id);
-            //     }
-            // }
-
-            // if ($insumos) {
-            //     if ($cita_previa->tipo_cita == 1 || !$por_cita && !$es_emergencia) {
-            //         ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, false);
-            //     }
-
-            //     if ($cita_previa->tipo_cita == 2 || $es_emergencia) {
-            //         ConsultaHelper::insertarInsumo($insumos, $this->consulta_id, true);
-            //     }
-            // }
-
-            // if ($recipe) {
-            //     ConsultaHelper::insertarRecipe($recipe, $this->consulta_id);
-            // }
-
-            // if ($indicaciones) {
-            //     ConsultaHelper::insertarIndicaciones($indicaciones, $this->consulta_id);
-            // }
-
             $respuesta = new Response('INSERCION_EXITOSA');
-
-            // if ( isset($data['cita_id']) ) {
-            
-            //     $cambioEstatus = array('estatus_cit' => '4');
-            //     $_citaModel = new CitaModel;
-            //     $res = $_citaModel->where('cita_id', '=', $data['cita_id'])->update($cambioEstatus);
-                
-            //     if ($res <= 0) {
-            //         $respuesta->setData('La consulta fue insertada, pero la cita no fue actualizada correctamente, por favor actualicela manualmente para evitar errores');
-            //     }
-            // }
 
             $data["consulta_id"] = $this->consulta_id;
             $respuesta->setData($data);
@@ -150,9 +102,7 @@ class ConsultaController extends Controller {
         
         foreach ($consultaList as $consulta) {
             if ($consulta->es_emergencia) {
-                
                 $consultas[] = ConsultaService::obtenerConsultaEmergencia($consulta);
-                // $consulta[] = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
             } else {
                 $consultas[] = array_merge( (Array) ConsultaService::obtenerConsultaNormal($consulta), (Array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id) ) ;
             }
@@ -165,15 +115,42 @@ class ConsultaController extends Controller {
     }
 
     public function listarConsultasPorPaciente($paciente_id) {
+        $params = isset($_GET['status']) ? $_GET['status'] : null;
+        $lista_consultas = [];
 
-        $consultaList = $this->listarConsultas();
-        $consultas = json_decode($consultaList)->data;
+        $consultaEmergenciaModel = new ConsultaEmergenciaModel();
+        $consultasEmergencia = $consultaEmergenciaModel->where('paciente_id', '=', $paciente_id)->getAll();
+        if ($consultasEmergencia != 0 && count($consultasEmergencia) > 0) {
+            foreach ($consultasEmergencia as $consulta) {
+
+                $consultasModel = new ConsultaModel();
+                $consulta_normal = $consultasModel->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
+                $consulta = ConsultaService::obtenerConsultaEmergencia($consulta);
+                $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+            }
+        }
+
+        $consultasSinCitaModel = new ConsultaSinCitaModel();
+        $consultasSinCitas = $consultasSinCitaModel->where('paciente_id', '=', $paciente_id)->getAll();
+        if ($consultasSinCitas != 0 && count($consultasSinCitas) > 0) {
+            foreach ($consultasSinCitas as $consulta) {
+
+                $consultasModel = new ConsultaModel();
+                $consulta_normal = $consultasModel->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
+                $consulta = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
+                $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+            }
+        }
         
-        $consultasPaciente = array_filter($consultas, fn($consulta) => $consulta->paciente_id == $paciente_id);
-        
-        $consultasArray = [];
-        foreach ($consultasPaciente as $consulta) {
-            $consultasArray[] = $consulta;
+        $consultasCitas = ConsultaService::obtenerConsultaPorCita($paciente_id);
+        if ($consultasCitas != 0 && count($consultasCitas) > 0) {
+            foreach ($consultasCitas as $consulta) {
+
+                $consultasModel = new ConsultaModel();
+                $consulta_normal = $consultasModel->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
+                $consulta = array_merge((array) $consulta, (array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id));
+                $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+            }
         }
 
         $_antecedenteModel = new AntecedenteMedicoModel();
@@ -188,27 +165,15 @@ class ConsultaController extends Controller {
         ];
 
         $inners = $_antecedenteModel->listInner($innerAntecedentes);
-        $antecedentList = $_antecedenteModel->where('estatus_ant', '!=', '2')
-                                    ->where('antecedentes_medicos.paciente_id', '=', $paciente_id)
-                                    ->innerJoin($selectAntecedentes, $inners, "antecedentes_medicos");
+        $antecedentList = $_antecedenteModel->where('antecedentes_medicos.paciente_id', '=', $paciente_id)
+                                            ->where('estatus_ant', ($params ? '=' : '!='), ($params ? $params : '2'))
+                                            ->innerJoin($selectAntecedentes, $inners, "antecedentes_medicos");
 
         if (count($antecedentList) > 0) {
             $resultado['antecedentes_medicos'] = $antecedentList;
         }
 
-        $consultasCompletas = [];
-
-        if (count($consultasArray)) {
-            foreach ($consultasArray as $consulta) {
-                $consultasCompletas[] = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
-            }
-    
-            if ( count($consultasCompletas) > 0) {
-                $consulta = (object) array_merge((array) $consulta, (array) $consultasCompletas);
-            }
-        }
-        
-        $resultado['consultas'] = $consultasArray;
+        $resultado['consultas'] = $lista_consultas;
 
         $mensaje = (count($resultado) > 0);
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
