@@ -143,7 +143,7 @@ class ConsultaHelper {
 
     public static function obtenerPrecioExamenNormal($examen, $consulta_id) {
         
-        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+        // $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
 
         $_examenModel = new ExamenModel();
         $examenSeguro = $_examenModel->where('examen_id', '=', $examen['examen_id'])->getFirst();
@@ -152,7 +152,8 @@ class ConsultaHelper {
             'consulta_id' => $consulta_id,
             'examen_id' => $examen['examen_id'],
             'precio_examen_usd' => $examenSeguro->precio_examen,
-            'precio_examen_bs' => round($examenSeguro->precio_examen * $valorDivisa, 2),
+            'precio_examen_bs' => 0,
+            // 'precio_examen_bs' => round($examenSeguro->precio_examen * $valorDivisa, 2),
         ];
 
         return $consulta_examen;

@@ -71,7 +71,11 @@ class FacturaConsultaService {
 
         $facturas = [];
         foreach ($consultaList as $consulta) {
+            // $montoRelaciones =  FacturaConsultaHelpers::obtenerMontoTotal($consulta);
+
             $facturas[] = FacturaConsultaHelpers::obtenerMontoTotal($consulta);
+
+
         }
 
         return $facturas;
