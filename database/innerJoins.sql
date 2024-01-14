@@ -20,6 +20,7 @@ INNER JOIN paciente on paciente.paciente_id = paciente_seguro.paciente_id
 INNER JOIN seguro on seguro.seguro_id = paciente_seguro.seguro_id
 INNER JOIN empresa on empresa.empresa_id = paciente_seguro.empresa_id
 where paciente.paciente_id = 5;
+
 -- empresa/seguro
 select
 	empresa.empresa_id,

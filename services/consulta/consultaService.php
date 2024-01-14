@@ -324,4 +324,14 @@ class ConsultaService {
             return $consultas;
         }
     }
+
+    public static function obtenerConsultaPorCita($paciente_id) {
+        $_citaModel = new CitaModel();
+        $innersCita = $_citaModel->listInner(ConsultaService::$innerConsultaCita);
+        $cita = $_citaModel->where('cita.paciente_id', '=', $paciente_id)
+                                ->where('consulta.estatus_con','!=',2)
+                                ->innerJoin(ConsultaService::$selectConsultaCita, $innersCita, "consulta_cita");
+
+        return $cita;
+    }
 }
