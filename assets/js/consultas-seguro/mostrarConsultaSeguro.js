@@ -171,7 +171,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             {
                 data: null,
                 render: function (data, type, row) {
-                    // consol
+
                     if (data.especialidad && data.especialidad.nombre) {
                         return data.especialidad.nombre;
                     } else if (data?.medico[0]?.nombre_especialidad){
@@ -183,7 +183,18 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             },
             { data: "tipo_servicio" },
             { data: "fecha_ocurrencia" },
-            { data: "monto_consulta_usd" },
+
+            {  
+                data: null,
+                render: function (data, type, row) {
+
+                    if(data.monto_consulta_usd != undefined){
+                        return  `$${data.monto_consulta_usd}`;
+                    } else {
+                        return "Desconocido";
+                    }
+                }
+            },
             // {
             //     data: "factura_seguro_id",
             //     render: function (data, type, row) {
@@ -261,7 +272,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
             info.data = data;
 
-            if (data.clave == null) data.clave = "No aplica";
+            if (data.clave == null ||   data.clave == undefined) data.clave = "No aplica";
             info.tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
 
             info.examenes = data.examenes !== undefined ? concatItems(data.examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen";
@@ -402,12 +413,12 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
                 info.medico += `
                 <tr>
-                    <td>Cédula: <br><b>${data.medico.cedula}</b></td>
-                    <td>Nombres: <br><b>${data.medico.nombre}</b></td>
-                    <td>Apellidos: <br><b>${data.medico.apellidos}</b></td>
+                    <td>Cédula: <br><b>${data?.medico[0].cedula}</b></td>
+                    <td>Nombres: <br><b>${data?.medico[0].nombre_medico}</b></td>
+                    <td>Apellidos: <br><b>${data?.medico[0].apellidos_medico}</b></td>
                 </tr>
                 <tr>
-                    <td>Especialidad: <br><b>${data?.especialidad?.nombre ?? "Desconocida"}</b></td>
+                    <td>Especialidad: <br><b>${data?.medico[0].nombre_especialidad ?? "Desconocida"}</b></td>
                 </tr>
 
                 <tr><td><br></td></tr>
@@ -424,13 +435,13 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                 <td colspan="4"><b>Información consulta:</b></td>
             </tr>
             <tr>
-                <td>Peso: <br><b>${info.data?.consulta.peso}</b></td>
-                <td>Altura: <br><b>${info.data?.consulta.altura}</b></td>
+                <td>Peso: <br><b>${data.peso ? data.peso + " " + "kg" : "No especificado"} </b></td>
+                <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m": "No especificado"}</b></td>
                 <td>Fecha Cita: <br><b>${info.data?.cita?.fecha_cita ?? "No aplica"}</b></td>
                 <td>Motivo cita: <br><b>${info.data?.cita?.motivo_cita ?? "No aplica"}</b></td>
             </tr>
             <tr class="blue-td">
-                <td>Clave: <br><b>${info.data?.cita?.clave}</b></td>
+                <td>Clave: <br><b>${data.clave}</b></td>
                 <td>Exámenes realizados: <br><b>${info?.examenes}</b></td>
                 <td>Insumos utilizados: <br><b>${info?.insumos}</b></td>
             </tr>

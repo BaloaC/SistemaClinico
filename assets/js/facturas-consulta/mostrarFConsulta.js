@@ -126,12 +126,12 @@ addEventListener("DOMContentLoaded", e => {
             },
             {
                 data: function (row) {
-                    return `$${row.monto_consulta_usd}`;
+                    return `${row.monto_consulta_bs} Bs`;
                 }
             },
             {
                 data: function (row) {
-                    return `${row.monto_consulta_bs} Bs`;
+                    return `$${row.monto_consulta_usd}`;
                 }
             },
             {
