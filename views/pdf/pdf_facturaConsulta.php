@@ -105,7 +105,7 @@
         <table class="tabla">
             <thead>
                 <tr>
-                    <th colspan="2" id="title">Factura de pago de consulta médica</th>
+                    <th colspan="2" id="title">Recibo de pago de consulta médica</th>
                 </tr>
                 <tr>
                     <th colspan="2" id="title">Recibo de pago correspondiente a la fecha de la consulta: <span id="fecha">2023-02-18</span></th>

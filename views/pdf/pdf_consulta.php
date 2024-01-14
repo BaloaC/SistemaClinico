@@ -57,7 +57,7 @@
         }
 
         .tabla{
-            width: 950px;
+            width: 750px;
             padding: 2rem;
         }
 
@@ -67,7 +67,7 @@
         }
 
         #footer{
-            height: 200px;
+            height: 100px;
             text-align: start;
             display: flex;
         }
@@ -75,7 +75,7 @@
         /* Estilos para la firma y sello */
 
         .firma{
-            margin-top: 175px;
+            margin-top: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;

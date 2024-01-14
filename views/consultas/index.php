@@ -235,7 +235,7 @@
                                         <button type="button" class="btn" onclick="deleteInput(this,'.medico-pago-id')"><i class="fas fa-times m-0"></i></button>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-primary mt-3 w-50" style="display: none;" id="addMedicoPago" onclick="addMedicoPagoInput()">Añadir otro médico</button>
+                                <button type="button" class="btn btn-primary mt-3 w-25" style="display: none;" id="addMedicoPago" onclick="addMedicoPagoInput()">Añadir otro médico</button>
                             </div>
 
                             <div class="row mt-4">
@@ -473,12 +473,12 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar Paciente</h1>
+                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar Consulta</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div id="delAlert" class="alert d-none" role="alert"></div>
-                        ¿Está seguro que desea eliminar este paciente?
+                        ¿Está seguro que desea eliminar esta consulta?
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="btn-confirmDelete" class="btn btn-danger">Eliminar</button>

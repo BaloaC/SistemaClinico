@@ -13,6 +13,8 @@ class ConsultaService {
         "paciente.nombre AS nombre_paciente",
         "paciente.apellidos AS apellido_paciente",
         "paciente.cedula AS cedula_paciente",
+        "paciente.edad AS edad_paciente",
+        "paciente.tipo_paciente",
         "medico.medico_id",
         "medico.nombre AS nombre_medico",
         "medico.apellidos AS apellidos_medico",
@@ -32,6 +34,8 @@ class ConsultaService {
         "paciente.nombre AS nombre_paciente",
         "paciente.apellidos AS apellido_paciente",
         "paciente.cedula AS cedula_paciente",
+        "paciente.edad AS edad_paciente",
+        "paciente.tipo_paciente",
         "medico.medico_id",
         "medico.nombre AS nombre_medico",
         "medico.apellidos AS apellidos_medico",
@@ -59,7 +63,9 @@ class ConsultaService {
         "paciente.nombre AS nombre_paciente",
         "paciente.apellidos AS apellidos_paciente",
         "paciente.cedula",
-        "paciente_beneficiado.paciente_beneficiado_id"
+        "paciente_beneficiado.paciente_beneficiado_id",
+        "paciente.edad AS edad_beneficiado",
+        "paciente.tipo_paciente",
     );
 
     protected static $innerPacienteBeneficiado = array(

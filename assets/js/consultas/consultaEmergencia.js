@@ -35,22 +35,22 @@ export default async function consultaEmergencia(inputRadio) {
         $(".info-pago-medico").fadeOut("slow");
         turnInput(".info-pago-medico",true);
         $("#addMedicoPago").fadeOut("slow");
-        // seguroSelect.disabled = true;
+        seguroSelect.disabled = true;
 
         if(sinCitaNo.checked){
-            // citaSelect.disabled = false
+            citaSelect.disabled = false
             $(".info-cita").fadeIn("slow");
             $(".info-paciente").fadeOut("slow");
             $(".info-medico").fadeOut("slow");
-            // pacienteSelect.disabled = true;
-            // medicoSelect.disabled = true;
-            // especialidadSelect.disabled = true;
+            pacienteSelect.disabled = true;
+            medicoSelect.disabled = true;
+            especialidadSelect.disabled = true;
         } else{
             $(".info-paciente").fadeIn("slow");
             $(".info-medico").fadeIn("slow");
-            // pacienteSelect.disabled = false;
-            // medicoSelect.disabled = false;
-            // especialidadSelect.disabled = false;
+            pacienteSelect.disabled = false;
+            medicoSelect.disabled = false;
+            especialidadSelect.disabled = false;
         };
 
         
@@ -58,7 +58,7 @@ export default async function consultaEmergencia(inputRadio) {
         $("#cedula_beneficiado-label").fadeOut("slow");
         $("#cedula_beneficiado").fadeOut("slow");
         $("#cedulaBeneficiadoSmall").fadeOut("slow");
-        // pacienteBeneficiado.disabled = true;
+        pacienteBeneficiado.disabled = true;
 
     } else{ // Es por emergencia
 
@@ -73,23 +73,23 @@ export default async function consultaEmergencia(inputRadio) {
         const pagoMedicosChecked = document.getElementById("RegistrarPagoMedicoSi");
         pagoMedicosChecked.checked ? pagoMedicosInput("1") : pagoMedicosInput("0");
        
-        // citaSelect.disabled = true;
-        // seguroSelect.disabled = true;
+        citaSelect.disabled = true;
+        seguroSelect.disabled = true;
         
 
         if(sinCitaNo.checked){
             $(".info-paciente").fadeIn("slow");
             $(".info-medico").fadeIn("slow");
-            // pacienteSelect.disabled = false;
-            // medicoSelect.disabled = false;
-            // !especialidadSelect.value ? especialidadSelect.disabled = true : especialidadSelect.disabled = false;
+            pacienteSelect.disabled = false;
+            medicoSelect.disabled = false;
+            !especialidadSelect.value ? especialidadSelect.disabled = true : especialidadSelect.disabled = false;
         } 
                     
 
         $("#cedula_beneficiado-label").fadeIn("slow");
         $("#cedula_beneficiado").fadeIn("slow");
         $("#cedulaBeneficiadoSmall").fadeIn("slow");
-        // pacienteBeneficiado.disabled = false;
+        pacienteBeneficiado.disabled = false;
     }
 
 }

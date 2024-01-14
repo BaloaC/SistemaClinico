@@ -164,7 +164,7 @@ const handleModalOpen = async () => {
 
             dinamicSelect2({
                 obj: infoMedico[0]?.especialidad ?? [],
-                selectSelector: especialidadSelect,
+                selectSelector: `#${especialidadSelect.id}`,
                 selectValue: "especialidad_id",
                 selectNames: ["nombre_especialidad"],
                 parentModal: "#modalReg",
@@ -200,12 +200,12 @@ const handleModalOpen = async () => {
                 container: 'body',
                 title: 'Sugerencia',
                 html: true,
-                placement: 'right',
+                placement: 'bottom',
                 sanitize: false,
                 content() {
                     return `
                         <div>
-                            <h6 style="font-size: 0.75rem">¿Desea que la cédula del beneficiado sea igual que la del paciente titular?</h6>
+                            <h6 style="font-size: 1rem">¿Desea que la cédula del beneficiado sea igual que la del paciente titular?</h6>
                             <a id="acceptSuggestion" class="popoverOptions">Sí</a>
                             <a id="dismissPopover" class="popoverOptions">Ignorar</a>
                         </div>`;
@@ -297,15 +297,19 @@ addEventListener("DOMContentLoaded", async e => {
             {
                 data: null,
                 render: function (data, type, row) {
-                    if ("nombre_paciente" in data) return data.nombre_paciente;
-                    if ("beneficiado" in data) return data.beneficiado.nombre;
+                    console.log(data);
+                    if ("nombre_paciente" in data) return `${data.nombre_paciente} ${data.apellido_paciente}`;
+                    if ("beneficiado" in data) return `${data.beneficiado.nombre} ${data.beneficiado.apellidos}`;
                 }
             },
             {
                 data: null,
                 render: function (data, type, row) {
+
                     if ("nombre_medico" in data) {
-                        return data.nombre_medico;
+                        return `${data.nombre_medico} ${data.apellidos_medico}`;
+                    } else if ("medico" in data && data.medico?.length > 0) {
+                        return `${data.medico[0].nombre_medico} ${data.medico[0].apellidos_medico}`;
                     } else {
                         return "Consulta por emergencia"
                     }
@@ -314,8 +318,11 @@ addEventListener("DOMContentLoaded", async e => {
             {
                 data: null,
                 render: function (data, type, row) {
+
                     if ("nombre_especialidad" in data) {
                         return data.nombre_especialidad;
+                    } else if ("medico" in data && data.medico?.length > 0) {
+                        return `${data.medico[0].nombre_especialidad}`;
                     } else {
                         return "Consulta por emergencia"
                     }
@@ -342,6 +349,7 @@ addEventListener("DOMContentLoaded", async e => {
             }
 
         ],
+        order: [[6, 'desc']],
         // ! Ocultar los paneles por defecto 
         columnDefs: [{
             searchPanes: {
@@ -362,28 +370,33 @@ addEventListener("DOMContentLoaded", async e => {
                         {
                             label: 'Paciente natural',
                             value: function (rowData, rowIdx) {
-                                return rowData.tipo_paciente === "1";
+
+                                if(rowData.tipo_paciente) return rowData.tipo_paciente === "1"; 
+                                if(rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "1";
                             },
                             className: 'paciente-natural'
                         },
                         {
                             label: 'Paciente representante',
                             value: function (rowData, rowIdx) {
-                                return rowData.tipo_paciente === "2";
+                                if(rowData.tipo_paciente) return rowData.tipo_paciente === "2"; 
+                                if(rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "2";
                             },
                             className: 'paciente-representante'
                         },
                         {
                             label: 'Paciente asegurado',
                             value: function (rowData, rowIdx) {
-                                return rowData.tipo_paciente === "3";
+                                if(rowData.tipo_paciente) return rowData.tipo_paciente === "3"; 
+                                if(rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "3";
                             },
                             className: 'paciente-asegurado'
                         },
                         {
                             label: 'Paciente beneficiado',
                             value: function (rowData, rowIdx) {
-                                return rowData.tipo_paciente === "4";
+                                if(rowData.tipo_paciente) return rowData.tipo_paciente === "4"; 
+                                if(rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "4";
                             },
                             className: 'paciente-beneficiado'
                         }
@@ -399,16 +412,45 @@ addEventListener("DOMContentLoaded", async e => {
                         {
                             label: 'Menores de 18 años',
                             value: function (rowData, rowIdx) {
-                                return rowData.edad < 18;
+                                if(rowData.edad_paciente){
+                                    return rowData.edad_paciente < 18;
+                                }
+                                if(rowData?.beneficiado.edad){
+                                    return rowData.beneficiado.edad < 18;
+                                }
                             },
                             className: 'may-18'
                         },
                         {
                             label: 'Mayores de 18 años',
                             value: function (rowData, rowIdx) {
-                                return rowData.edad > 18;
+                                if(rowData.edad_paciente){
+                                    return rowData.edad_paciente > 18;
+                                }
+                                if(rowData?.beneficiado.edad){
+                                    return rowData.beneficiado.edad > 18;
+                                }
                             },
                             className: 'men-18'
+                        }
+                    ],
+                },
+                {
+                    header: 'Filtrar por tipo de consulta:',
+                    options: [
+                        {
+                            label: 'Consulta normal',
+                            value: function (rowData, rowIdx) {
+                                return rowData.es_emergencia === 0;
+                            },
+                            className: 'noes_emergencia'
+                        },
+                        {
+                            label: 'Consulta por emergencia',
+                            value: function (rowData, rowIdx) {
+                                return rowData.es_emergencia === 1;
+                            },
+                            className: 'es_emergencia'
                         }
                     ],
                 }
@@ -418,6 +460,8 @@ addEventListener("DOMContentLoaded", async e => {
     });
 
     function format(data) {
+
+        console.log(data);
 
         if (data.clave == null) data.clave = "No aplica";
         let tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
@@ -437,6 +481,8 @@ addEventListener("DOMContentLoaded", async e => {
 
             data.recipes.forEach(el => {
 
+                console.log(el);
+
                 let tipo_medicamento = "";
 
                 if (el.tipo_medicamento == 1) {
@@ -445,6 +491,8 @@ addEventListener("DOMContentLoaded", async e => {
                     tipo_medicamento = "Jarabe";
                 } else if (el.tipo_medicamento == 3) {
                     tipo_medicamento = "Inyección";
+                } else if (el.tipo_medicamento == 4) {
+                    tipo_medicamento = "Solución";
                 } else {
                     tipo_medicamento = "Desconocido";
                 }
@@ -515,12 +563,12 @@ addEventListener("DOMContentLoaded", async e => {
             </tr>
         `;
         }
-        
+
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
                 <tr>
-                    <td>Peso: <br><b>${data.peso ?? "No especificado"}</b></td>
-                    <td>Estatura: <br><b>${data.altura ?? "No especificado"}</b></td>
+                    <td>Peso: <br><b>${data.peso ? data.peso + " " + "kg" : "No especificado"} </b></td>
+                    <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m": "No especificado"}</b></td>
                     <td>Fecha Cita: <br><b>${data.fecha_cita ?? "No aplica"}</b></td>
                     <td>Motivo cita: <br><b>${data.motivo_cita ?? "No aplica"}</b></td>
                 </tr>
@@ -540,7 +588,7 @@ addEventListener("DOMContentLoaded", async e => {
                 ${factura}
                 <tr><td><br></td></tr>
                 <tr>
-                    <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/consulta/${data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg${tipo_cita}" onclick="pagarConsulta(${tipo_cita},${data.paciente_id}, ${data.consulta_id})"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button></td>
+                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="openPopup('pdf/consulta/${data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> <br> <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg${tipo_cita}" ><i class="fa-sm fas fa-plus"></i> Pagar consulta</button></td>
                 </tr>
             </table>
         `

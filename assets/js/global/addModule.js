@@ -4,7 +4,7 @@ import { defaultSelect } from "./defaultSelect.js";
 import scrollTo from "./scrollTo.js";
 import select2DefaultValue from "./select2DefaultValue.js";
 
-export default async function addModule(module, form, data, successMessage, modal = "#modalReg", alert = ".alert") {
+export default async function addModule(module, form, data, successMessage, modal = "#modalReg", alert = ".alert", autoCloseModal = { success: true, error: true }) {
 
     const $form = document.getElementById(form),
         $alert = document.querySelector(alert),
@@ -38,10 +38,13 @@ export default async function addModule(module, form, data, successMessage, moda
 
         scrollTo("modalRegBody");
 
-        setTimeout(() => {
-            $(modal).modal("hide");
-            $alert.classList.add("d-none");
-        }, 500);
+        if (autoCloseModal.success) {
+            setTimeout(() => {
+                $(modal).modal("hide");
+                $alert.classList.add("d-none");
+            }, 500);
+
+        }
 
         return json;
 
@@ -53,9 +56,12 @@ export default async function addModule(module, form, data, successMessage, moda
 
         scrollTo("modalRegBody");
 
-        setTimeout(() => {
-            $alert.classList.add("d-none");
-        }, 1500)
+        if (autoCloseModal.error) {
+            setTimeout(() => {
+                $alert.classList.add("d-none");
+            }, 1500)
+
+        }
 
         return error;
     }

@@ -89,6 +89,8 @@
 .popover-header {
     background-color: #ffffff !important;
     border-bottom: none !important;
+    margin-top: 0.25rem;
+    font-size: 1.2rem;
 }
 
 .popoverOptions {
@@ -96,4 +98,5 @@
     color: #0d6efd;
     text-decoration: underline;
     margin-right: 0.25rem;
+    font-size: 1rem;
 }

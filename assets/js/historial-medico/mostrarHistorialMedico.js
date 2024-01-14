@@ -79,7 +79,7 @@ export default async function mostrarHistorialMedico(id) {
         }
 
         // ** Validamos si el paciente cuenta con antecedetes médicos
-        if (infoConsultas.antecedentes_medicos.length > 0) {
+        if (infoConsultas?.antecedentes_medicos?.length > 0) {
 
             infoConsultas.antecedentes_medicos.forEach(el => {
 

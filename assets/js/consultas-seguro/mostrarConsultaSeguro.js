@@ -93,8 +93,8 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     const estatusFactura = document.getElementById("factura-estatus");
     const btnCintillo  = document.getElementById("btn-cintillo-pdf");
 
-    console.log(listConsultas);
-    if (listConsultas?.length > 0) {
+    console.log(listConsultas, listConsultas?.length);
+    if (listConsultas?.factura?.length > 0) {
        
         idRecibo.textContent = listConsultas.factura[0].factura_seguro_id;
         mesRecibo.textContent = listConsultas.factura[0].mes;
@@ -120,6 +120,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
         $(".factura-header").fadeIn("slow");
         $(".card-body").fadeIn("slow");
         $(".total-amount").fadeIn("slow");
+        $("#factura-doesnt-exist").fadeOut("slow");
 
         window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
 
@@ -170,8 +171,11 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             {
                 data: null,
                 render: function (data, type, row) {
+                    // consol
                     if (data.especialidad && data.especialidad.nombre) {
                         return data.especialidad.nombre;
+                    } else if (data?.medico[0]?.nombre_especialidad){
+                        return data?.medico[0]?.nombre_especialidad
                     } else {
                         return 'Desconocido';
                     }
@@ -283,6 +287,8 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                         tipo_medicamento = "Jarabe";
                     } else if (el.tipo_medicamento == 3) {
                         tipo_medicamento = "Inyección";
+                    } else if (el.tipo_medicamento == 4) {
+                        tipo_medicamento = "Solución";
                     } else {
                         tipo_medicamento = "Desconocido";
                     }
@@ -401,7 +407,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                     <td>Apellidos: <br><b>${data.medico.apellidos}</b></td>
                 </tr>
                 <tr>
-                    <td>Especialidad: <br><b>${data?.especialidad.nombre ?? "Desconocida"}</b></td>
+                    <td>Especialidad: <br><b>${data?.especialidad?.nombre ?? "Desconocida"}</b></td>
                 </tr>
 
                 <tr><td><br></td></tr>
