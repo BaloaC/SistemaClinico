@@ -203,8 +203,8 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             $(especialidadSelect).empty().select2();
 
             dinamicSelect2({
-                obj: infoMedico[0].especialidad ?? [],
-                selectSelector: especialidadSelect,
+                obj: infoMedico[0]?.especialidad ?? [],
+                selectSelector: `#${especialidadSelect.id}`,
                 selectValue: "especialidad_id",
                 selectNames: ["nombre_especialidad"],
                 parentModal: "#modalReg",
@@ -215,7 +215,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             especialidadSelect.classList.add("is-valid");
 
 
-            const horariosOrdenados = sortScheduleByDay(infoMedico[0].horario);
+            const horariosOrdenados = sortScheduleByDay(infoMedico[0]?.horario);
 
             let listHorarios = "";
             horariosOrdenados.forEach(horario => {

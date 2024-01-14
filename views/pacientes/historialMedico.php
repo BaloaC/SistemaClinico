@@ -76,8 +76,15 @@
                             <label for="tipo_antedecente_id">Tipo de antecedente</label>
                             <select name="tipo_antecedente_id" class="form-control mb-3" required>
                                 <option value="" disabled selected>Seleccione el tipo de antecedente</option>
-                                <option value="1">Alergía</option>
-                                <option value="2">Familiar</option>
+                                <option value="1">Antecedentes Patológicos</option>
+                                <option value="2">Antecedentes Psicológicos</option>
+                                <option value="2">Antecedentes médicos familiares</option>
+                                <option value="2">Cirugías o traumatismos</option>
+                                <option value="2">Alergias</option>
+                                <option value="2">Reacción a medicamentos</option>
+                                <option value="2">Enfermedades Padecidas</option>
+                                <option value="2">Tratamientos</option>
+                                <option value="2">Hábitos de salud</option>
                             </select>
                             <label for="descripcion">Descripción</label>
                             <input type="text" name="descripcion" class="form-control mb-3" data-max-length="45" required>

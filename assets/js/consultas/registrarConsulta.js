@@ -101,38 +101,60 @@ async function addConsulta() {
 
         if (indicaciones.length != 0 && indicaciones[0].descripcion != "") { data.indicaciones = indicaciones; }
 
-        if(data.total_insumos > 0 && !("insumos" in data)) throw { message: "Debe especificar los insumos utilizados" }
+        if (data.total_insumos > 0 && !("insumos" in data)) throw { message: "Debe especificar los insumos utilizados" }
 
-        const registroExitoso = await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!");
-        
+        const registroExitoso = await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!", "#modalReg", ".alert", {success: false, error: true});
+
         if (!registroExitoso.code) throw { result: registroExitoso.result };
-        
-        // En caso de que se decida registrar la consulta a la factura por emergencia
-        if(registroExitoso.data !== null && data?.registrarFacturaBool === "1"){
 
-            const facturaExitosa = await addModule("factura/consultaSeguro", "info-consulta", {consulta_id: registroExitoso.data.consulta_id}, "Consulta registrada correctamente!");
-
-            if (!facturaExitosa.code) throw { result: facturaExitosa.result};
-        }
-        
         $form.reset();
         deleteElementByClass("newInput");
         cleanValdiation("info-consulta");
-        consultaEmergencia({value: "0"});
+        consultaEmergencia({ value: "0" });
         // Si la consulta es por cita, luego de registrarse satisfactoriamente, 
-        if(data?.cita_id) registerStatusConsulta.successfulConsulta = true;
+        if (data?.cita_id) registerStatusConsulta.successfulConsulta = true;
 
-        setTimeout(() => {
-            $("#modalReg").modal("hide");
-            document.getElementById("s-especialidad").classList.remove("is-valid");
-        }, 500);
+        let registroFacturaExitoso = true;
+
+        // En caso de que se decida registrar la consulta a la factura por emergencia
+        if (registroExitoso.data !== null && data?.registrarFacturaBool === "1") {
+
+            const facturaExitosa = await addModule("factura/consultaSeguro", "info-consulta", { consulta_id: registroExitoso.data.consulta_id, tipo_servicio: "consulta" }, "Consulta registrada correctamente!", "#modalReg", ".alert", {success: false, error: false});
+
+            if (facturaExitosa?.result?.code === false) { registroFacturaExitoso = false; }
+        }
+
+        const hideModalHandler = ({ registroFacturaExitoso }) => {
+
+            if(registroFacturaExitoso === false){
+                $alert.classList.remove("alert-success");
+                $alert.classList.remove("alert-danger");
+                $alert.classList.add("alert-warning");
+                $alert.innerText = "La consulta fue registrada correctamente, pero la factura no pudo ser procesada por lo que deberá realizarla manualmente";
+                $alert.classList.remove("d-none");
+            }
+
+            setTimeout(() => {
+
+                $("#modalReg").modal("hide");
+                $alert.classList.add("d-none");
+                $alert.classList.remove("alert-success");
+                $alert.classList.remove("alert-danger");
+                $alert.classList.remove("alert-warning")
+                document.getElementById("s-especialidad").classList.remove("is-valid");
+            }, 1500);
+        }
+
+        hideModalHandler({ registroFacturaExitoso });
+
         $('#consultas').DataTable().ajax.reload();
+
 
     } catch (error) {
         console.log(error);
-        
+
         scrollTo("modalRegBody");
-        
+
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
         $alert.textContent = error.message || error.result.message;

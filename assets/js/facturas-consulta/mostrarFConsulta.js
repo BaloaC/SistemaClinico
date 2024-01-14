@@ -1,7 +1,89 @@
-import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { emptyAllSelect2, emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import getAll from "../global/getAll.js";
+import getById from "../global/getById.js";
 
 const path = location.pathname.split('/');
+
+
+let modalOpened = false;
+const modalRegister = document.getElementById("modalRegNormal") ?? undefined;
+
+const handleModalOpen = async (modalParent) => {
+    if (modalOpened === false) {
+
+        alert("a");
+        emptyAllSelect2({
+            selectSelector: "#s-paciente-consulta",
+            parentModal: modalParent,
+            placeholder: "Cargando"
+        })
+
+        emptyAllSelect2({
+            selectSelector: "#s-consulta-normal",
+            parentModal: modalParent,
+            placeholder: "Debe seleccionar un paciente"
+        })
+
+        const empresaSelect = document.getElementById(modalParent === "#modalReg" ? "s-empresa" : "s-empresa-act");
+        const seguroSelect = modalParent === "#modalReg" ? "#s-seguro" : "#s-seguro-act";
+        const segurosList = await getAll("seguros/consulta");
+
+        const pacientesList = await getAll("pacientes/consulta");
+
+        dinamicSelect2({
+            obj: pacientesList,
+            selectSelector: "#s-paciente-consulta",
+            selectValue: "paciente_id",
+            selectNames: ["cedula", "nombre-apellidos"],
+            parentModal: "#modalRegNormal",
+            placeholder: "Seleccione un paciente"
+        });
+
+        $("#s-paciente-consulta").val([]).trigger("change")
+        document.getElementById("s-paciente-consulta").classList.remove("is-valid");
+
+        $("#s-paciente-consulta").on("change", async function () {
+
+            let paciente_id = this.value;
+            const infoConsultas = await getById("consultas/paciente", paciente_id);
+
+            $("#s-consulta-normal").empty().select2();
+
+            console.log(infoConsultas);
+
+            dinamicSelect2({
+                obj: infoConsultas?.consultas ?? [],
+                selectSelector: `#s-consulta-normal`,
+                selectValue: "consulta_id",
+                selectNames: ["consulta_id", "motivo_cita"],
+                parentModal: "#modalRegNormal",
+                placeholder: "Seleccione una consulta",
+                defaultLabel: ["Consulta por emergencia"]
+            });
+
+
+            const consultaSelect = document.getElementById("s-consulta-normal");
+            consultaSelect.disabled = false;
+            consultaSelect.classList.add("is-valid");
+        });
+
+        dinamicSelect2({
+            obj: [{ id: "efectivo", text: "Efectivo" }, { id: "debito", text: "Debito" }],
+            selectNames: ["text"],
+            selectValue: "id",
+            selectSelector: "#s-metodo-pago",
+            placeholder: "Seleccione un método de pago",
+            parentModal: "#modalRegNormal",
+            staticSelect: true
+        });
+
+
+        modalOpened = true;
+    }
+}
+
+if (modalRegister) modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalRegNormal"));
 
 
 addEventListener("DOMContentLoaded", e => {
@@ -17,11 +99,11 @@ addEventListener("DOMContentLoaded", e => {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
             },
-            error: function(xhr, error, thrown) {
+            error: function (xhr, error, thrown) {
                 // Manejo de errores de Ajax
                 console.log('Error de Ajax:', error);
                 console.log('Detalles:', thrown);
-                
+
                 $('#fConsulta').DataTable().clear().draw();
             }
         },
@@ -44,12 +126,12 @@ addEventListener("DOMContentLoaded", e => {
             },
             {
                 data: function (row) {
-                    return row.monto_total_usd;
+                    return `$${row.monto_consulta_usd}`;
                 }
             },
             {
                 data: function (row) {
-                    return row.monto_total_bs;
+                    return `${row.monto_consulta_bs} Bs`;
                 }
             },
             {
@@ -82,73 +164,7 @@ addEventListener("DOMContentLoaded", e => {
             // }
 
         ],
-        order: [[5, 'desc']],
-        // ! Ocultar los paneles por defecto 
-        columnDefs: [{
-            searchPanes: {
-                show: false,
-            },
-            targets: [0, 1, 2, 3, 4, 5],
-        }],
-        // ! rowData (Devuelve toda la fila)
-        searchPanes: {
-            controls: false,
-            hideCount: true,
-            collapse: true,
-            initCollapsed: true,
-            // panes: [
-            //     {
-            //         header: 'Filtrar por tipo de paciente:',
-            //         options: [
-            //             {
-            //                 label: 'Paciente natural',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.tipo_paciente === "1";
-            //                 },
-            //                 className: 'paciente-natural'
-            //             },
-            //             {
-            //                 label: 'Paciente asegurado',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.tipo_paciente === "2";
-            //                 },
-            //                 className: 'paciente-asegurado'
-            //             },
-            //             {
-            //                 label: 'Paciente beneficiado',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.tipo_paciente === "3";
-            //                 },
-            //                 className: 'paciente-beneficiado'
-            //             }
-            //         ],
-            //         dtOpts: {
-            //             searching: false,
-            //             order: [[1, 'desc']]
-            //         }
-            //     },
-            //     {
-            //         header: 'Filtrar por edad:',
-            //         options: [
-            //             {
-            //                 label: 'Menores de 18 años',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.edad < 18;
-            //                 },
-            //                 className: 'may-18'
-            //             },
-            //             {
-            //                 label: 'Mayores de 18 años',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.edad > 18;
-            //                 },
-            //                 className: 'men-18'
-            //             }
-            //         ],
-            //     }
-            // ]
-        },
-        dom: 'Plfrtip'
+        order: [[5, 'desc']]
     });
 
     function format(data) {
@@ -161,8 +177,8 @@ addEventListener("DOMContentLoaded", e => {
                 <tr>
                     <td>Nombre médico: <br><b>${data?.nombre_medico ? data?.nombre_medico + " " + data?.apellidos_medico : "Desconocido"}</b></td>
                     <td>Especialidad: <br><b>${data?.nombre_especialidad ?? "Desconocido"}</b></td>
-                    <td>Monto consulta BS: <br><b>${data?.monto_consulta_bs ?? "Desconocido"}</b></td>
-                    <td>Monto consulta USD: <br><b>${data?.monto_consulta_usd ?? "Desconocido"}</b></td>
+                    <td>Monto consulta BS: <br><b>${data?.monto_consulta_bs ?? "Desconocido"} Bs</b></td>
+                    <td>Monto consulta USD: <br><b>$${data?.monto_consulta_usd ?? "Desconocido"}</b></td>
                 </tr>
                 <tr><td><br></td></tr>
                 <tr>

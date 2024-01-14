@@ -28,7 +28,7 @@ export default async function consultaSinCita(inputRadio) {
         $(".info-cita").fadeOut("slow");
         $(".info-paciente").fadeIn("slow");
         $(".info-medico").fadeIn("slow");
-        // $("#cedulaBeneficiadoSmall").fadeOut("slow");
+        $("#cedulaBeneficiadoSmall").fadeOut("slow");
     }
 
 }

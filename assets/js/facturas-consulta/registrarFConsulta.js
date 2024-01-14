@@ -3,37 +3,6 @@ import cleanValdiation from "../global/cleanValidations.js";
 import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
 import getAge from "../global/getAge.js";
 
-
-select2OnClick({
-    selectSelector: "#s-paciente-consulta",
-    selectValue: "paciente_id",
-    selectNames: ["cedula", "nombre-apellidos"],
-    module: "pacientes/consulta",
-    parentModal: "#modalRegNormal",
-    placeholder: "Seleccione un paciente"
-});
-
-select2OnClick({
-    selectSelector: "#s-consulta-normal",
-    selectValue: "consulta_id",
-    selectNames: ["consulta_id", "motivo_cita"],
-    module: "consultas/consulta",
-    parentModal: "#modalRegNormal",
-    placeholder: "Seleccione una consulta"
-});
-
-dinamicSelect2({
-    obj: [{ id: "efectivo", text: "Efectivo" }, { id: "debito", text: "Debito" }],
-    selectNames: ["text"],
-    selectValue: "id",
-    selectSelector: "#s-metodo-pago",
-    placeholder: "Seleccione un método de pago",
-    parentModal: "#modalRegNormal",
-    staticSelect: true
-});
-
-
-
 function calcularIva(montoInput) {
 
     let montoTotal = (parseFloat(montoInput.value) * 0.16) + parseFloat(montoInput.value);
@@ -65,6 +34,10 @@ async function addFConsulta() {
         
         cleanValdiation("info-fconsulta");
         $('#fConsulta').DataTable().ajax.reload();
+
+        setTimeout(() => {
+            document.getElementById("s-consulta-normal").classList.remove("is-valid");
+        }, 500);
 
     } catch (error) {
         console.log(error);

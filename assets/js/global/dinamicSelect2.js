@@ -1,6 +1,6 @@
 import getAll from "./getAll.js";
 
-export function selectText(selectTexts, obj) {
+export function selectText(selectTexts, obj, defaultLabel = []) {
     let text = "";
     selectTexts.forEach(el => {
         let combinedText;
@@ -9,12 +9,12 @@ export function selectText(selectTexts, obj) {
             let keys = el.split("-");
             combinedText = `${obj[keys[0]].split(" ")[0]} ${obj[keys[1]].split(" ")[0]}`;
         }
-        text += `${combinedText || obj[el]} - `;
+        text += `${combinedText || (obj[el] ?? defaultLabel[0])} - `;
     });
     return text.slice(0, -3);
 }
 
-export default function dinamicSelect2({ obj = null, selectNames = null, selectValue = null, selectSelector = null, placeholder = null, parentModal = null, selectWidth = "45%", staticSelect = false }) {
+export default function dinamicSelect2({ obj = null, selectNames = null, selectValue = null, selectSelector = null, placeholder = null, parentModal = null, selectWidth = "45%", staticSelect = false, defaultLabel = [] }) {
     try {
         const selectObj = [];
 
@@ -22,7 +22,7 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
             obj.forEach(el => {
                 let option = {
                     id: el[selectValue],
-                    text: selectText(selectNames, el)
+                    text: selectText(selectNames, el, defaultLabel)
                 }
                 selectObj.push(option);
             });
@@ -41,7 +41,8 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
 
             const selectElement = document.querySelector(selectSelector);
 
-            if(selectElement.value){
+            if(selectElement?.value){
+
                 const isValid = selectElement.value !== 0;
                 selectElement.classList.toggle("is-invalid", !isValid);
                 selectElement.classList.toggle("is-valid", isValid);
