@@ -115,18 +115,26 @@ class ConsultaController extends Controller {
     }
 
     public function listarConsultasPorPaciente($paciente_id) {
-        $params = isset($_GET['status']) ? $_GET['status'] : null;
+        $params = isset($_GET['estatus']) ? $_GET['estatus'] : null;
         $lista_consultas = [];
-
+        
         $consultaEmergenciaModel = new ConsultaEmergenciaModel();
         $consultasEmergencia = $consultaEmergenciaModel->where('paciente_id', '=', $paciente_id)->getAll();
         if ($consultasEmergencia != 0 && count($consultasEmergencia) > 0) {
             foreach ($consultasEmergencia as $consulta) {
 
                 $consultasModel = new ConsultaModel();
-                $consulta_normal = $consultasModel->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
-                $consulta = ConsultaService::obtenerConsultaEmergencia($consulta);
-                $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+                $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
+
+                if (!is_null($params)) {
+                    $consultasModel->where('estatus_con', '=', $params);
+                }
+                
+                $consulta_normal = $consultasModel->getFirst();
+                if (!is_null($consulta_normal)) {
+                    $consulta = ConsultaService::obtenerConsultaEmergencia($consulta);
+                    $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+                }
             }
         }
 
@@ -136,20 +144,37 @@ class ConsultaController extends Controller {
             foreach ($consultasSinCitas as $consulta) {
 
                 $consultasModel = new ConsultaModel();
-                $consulta_normal = $consultasModel->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
-                $consulta = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
-                $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+                $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
+                
+                if (!is_null($params)) {
+                    $consultasModel->where('estatus_con', '=', $params);
+                    
+                }
+
+                $consulta_normal = $consultasModel->getFirst();
+                if (!is_null($consulta_normal)) {
+                    $consulta = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
+                    $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+                }
             }
         }
         
         $consultasCitas = ConsultaService::obtenerConsultaPorCita($paciente_id);
         if ($consultasCitas != 0 && count($consultasCitas) > 0) {
             foreach ($consultasCitas as $consulta) {
-
+                
                 $consultasModel = new ConsultaModel();
-                $consulta_normal = $consultasModel->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
-                $consulta = array_merge((array) $consulta, (array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id));
-                $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+                $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
+
+                if (!is_null($params)) {
+                    $consultasModel->where('estatus_con', '=', $params);
+                }
+
+                $consulta_normal = $consultasModel->getFirst();
+                if (!is_null($consulta_normal)) {
+                    $consulta = array_merge((array) $consulta, (array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id));
+                    $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+                }
             }
         }
 

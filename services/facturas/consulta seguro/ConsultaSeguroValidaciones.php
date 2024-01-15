@@ -35,6 +35,27 @@ class ConsultaSeguroValidaciones {
     }
 
     /**
+     * Validar si es tipo cita asegurada si es por cita
+     */
+    public static function validarConsultaAsegurada($formulario) {
+        $_consultaPorCitaModel = new ConsultaCitaModel();
+        $consulta = $_consultaPorCitaModel->where('consulta_id', '=', $formulario['consulta_id'])->getFirst();
+
+        if (!is_null($consulta)) {
+            $_citaModel = new CitaModel();
+            $cita = $_citaModel->where('cita_id', '=', $consulta->cita_id)->getFirst();
+
+            if (!is_null($cita)) {
+                if ($cita->tipo_cita == 1) {
+                    $respuesta = new Response(false, 'Por este medio solo puedes pagar citas aseguradas');
+                    echo $respuesta->json(400);
+                    exit();
+                }
+            }
+        }
+    }
+
+    /**
      * Validaciones para insertar factura de consulta por emergencia
      */
     public static function validarConsultaEmergencia($formulario) {

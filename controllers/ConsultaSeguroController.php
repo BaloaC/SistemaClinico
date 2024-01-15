@@ -28,7 +28,8 @@ class ConsultaSeguroController extends Controller{
     public function insertarConsultaSeguro(/*Request $request*/){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        ConsultaSeguroValidaciones::validarConsultaSeguro($_POST);        
+        ConsultaSeguroValidaciones::validarConsultaSeguro($_POST);
+        ConsultaSeguroValidaciones::validarConsultaAsegurada($_POST);
         
         $validarConsulta = new Validate;
         $data = $validarConsulta->dataScape($_POST);
@@ -57,6 +58,8 @@ class ConsultaSeguroController extends Controller{
             
             $_citaSeguro = new CitaSeguroModel();
             $citaSeguro = $_citaSeguro->where('cita_id', '=', $consulta->cita_id)->getFirst();
+            echo '<pre>';
+            var_dump($citaSeguro);
             $data['seguro_id'] = $citaSeguro->seguro_id;
 
             $_pacienteSeguro = new PacienteSeguroModel();
