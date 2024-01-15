@@ -49,8 +49,6 @@ const handleModalOpen = async (modalParent) => {
 
             $("#s-consulta-normal").empty().select2();
 
-            console.log(infoConsultas);
-
             dinamicSelect2({
                 obj: infoConsultas?.consultas ?? [],
                 selectSelector: `#s-consulta-normal`,

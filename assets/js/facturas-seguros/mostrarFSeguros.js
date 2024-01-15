@@ -38,8 +38,6 @@ addEventListener("DOMContentLoaded", async e => {
     // Filtramos las facturas por el año que se consulta
     listadoFacturas = listadoFacturas.filter(factura => factura.fecha_ocurrencia.slice(0, 4) === id[1]);
 
-    console.log(listadoFacturas);
-
     let fSeguros = $('#fSeguros').DataTable({
 
         bAutoWidth: false,

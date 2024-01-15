@@ -93,7 +93,6 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     const estatusFactura = document.getElementById("factura-estatus");
     const btnCintillo  = document.getElementById("btn-cintillo-pdf");
 
-    console.log(listConsultas, listConsultas?.length);
     if (listConsultas?.factura?.length > 0) {
        
         idRecibo.textContent = listConsultas.factura[0].factura_seguro_id;
