@@ -12,7 +12,6 @@ const modalRegister = document.getElementById("modalRegNormal") ?? undefined;
 const handleModalOpen = async (modalParent) => {
     if (modalOpened === false) {
 
-        alert("a");
         emptyAllSelect2({
             selectSelector: "#s-paciente-consulta",
             parentModal: modalParent,

@@ -6,6 +6,7 @@ import scrollTo from "../global/scrollTo.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { registerStatusConsulta } from "./mostrarConsultas.js";
 import consultaEmergencia from "./consultaEmergencia.js";
+import { updateConsultaSeguroSelect } from "../consultas-seguro/registrarConsultaSeguro.js";
 
 async function addConsulta() {
 
@@ -148,7 +149,7 @@ async function addConsulta() {
         hideModalHandler({ registroFacturaExitoso });
 
         $('#consultas').DataTable().ajax.reload();
-
+        await updateConsultaSeguroSelect("#modalRegAsegurada");
 
     } catch (error) {
         console.log(error);

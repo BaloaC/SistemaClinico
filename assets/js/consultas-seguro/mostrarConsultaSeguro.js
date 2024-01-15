@@ -100,7 +100,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
         mesRecibo.textContent = listConsultas.factura[0].mes;
         fechaOcurrencia.textContent = listConsultas.factura[0].fecha_ocurrencia.split(" ")[0];
         fechaVencimiento.textContent = listConsultas.factura[0].fecha_vencimiento;
-        montoTotal.textContent = listConsultas.factura[0].monto_usd;
+        montoTotal.textContent = `$${listConsultas.factura[0].monto_usd}`;
 
         // Si hay consultas disponibles mostrar el boton del pdf
         if(listConsultas.consultas?.length > 0){
