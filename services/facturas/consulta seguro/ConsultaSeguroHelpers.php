@@ -104,16 +104,29 @@ class ConsultaSeguroHelpers {
      * Helper para calcular la sumatoría de los costos de la consulta_emergencia
      */
     public static function calcularConsultaEmergencia($consulta) {
-        $consultaTotal = $consulta["consulta_emergencia"]->consultas_medicas 
-            + $consulta["consulta_emergencia"]->laboratorios 
-            + $consulta["consulta_emergencia"]->medicamentos 
-            + $consulta["consulta_emergencia"]->enfermeria
-            + $consulta["consulta_emergencia"]->total_insumos 
-            + $consulta["consulta_emergencia"]->total_examenes 
-            + $consulta["consulta_emergencia"]->total_consulta;
+        $consultaTotal = $consulta["factura"]->consultas_medicas 
+            + $consulta["factura"]->laboratorios 
+            + $consulta["factura"]->medicamentos 
+            + $consulta["factura"]->enfermeria
+            + $consulta["factura"]->total_insumos 
+            + $consulta["factura"]->total_examenes 
+            + $consulta["factura"]->total_consulta;
 
         $consulta["monto_consulta"] = $consultaTotal;
         return $consulta;
+    }
+
+    /**
+     * Helpers para calcular el total de los exámenes de la consulta por emergencia
+     */
+    public static function calcularExamenesEmergencia($examenes) {
+        $costo_total_examenes = 0;
+
+        foreach ($examenes as $examen) {
+            $costo_total_examenes += $examen->precio_examen_usd;
+        }
+
+        return $costo_total_examenes;
     }
 
     /**
