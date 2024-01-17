@@ -94,6 +94,7 @@ const handleModalOpen = async () => {
 
         document.getElementById("s-paciente").disabled = true;
         document.getElementById("s-medico").disabled = true;
+        document.getElementById("s-seguro-emergencia").disabled = true;
 
         const medicosList = await getAll("medicos/consulta");
         const pacientesList = await getAll("pacientes/consulta");

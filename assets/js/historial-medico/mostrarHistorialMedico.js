@@ -179,7 +179,7 @@ export default async function mostrarHistorialMedico(id) {
 
         // ** Validación en caso de que el paciente tenga consultas registradas
         if (listConsultas.length > 0) {
-
+            console.log(listConsultas);
             consultaPdf.classList.remove("d-none");
             consultaPdf.setAttribute("onclick", `openPopup('pdf/historialmedico/${id}')`);
 

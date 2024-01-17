@@ -196,9 +196,6 @@
                                         <label for="cedula">Total insumos</label>
                                         <input type="number" name="total_insumos" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="6" value="0" disabled required>
                                         <small class="form-text">No se permiten números negativos</small>
-                                        <label for="cedula">Total exámenes</label>
-                                        <input type="number" name="total_examenes" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="6" value="0" disabled required>
-                                        <small class="form-text">No se permiten números negativos</small>
                                         <label for="seguro">Seguro</label>
                                         <select id="s-seguro-emergencia" name="seguro_id" class="form-control seguro-emergencia" data-active="0" disabled required>
                                             <option></option>
@@ -215,6 +212,14 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    
                                 </div>
                             </div>
                             <div class="row mt-4 info-pago-medico" style="display: none;">
