@@ -64,7 +64,7 @@ class ConsultaSeguroService {
                 $consultas[] = $consulta;
                 // $consultas[] = ConsultaSeguroHelpers::calcularConsultaEmergencia($consulta);
 
-            } else { // Si no es consulta por emergencia
+            } else {
                 $consultas[] = FacturaConsultaHelpers::obtenerMontoTotal($consulta);
             }
         }
