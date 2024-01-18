@@ -66,10 +66,11 @@ class FacturaConsultaHelpers {
 
     public static function obtenerInsumos($factura) {
         $_consultaInsumo = new ConsultaInsumoModel();
+        $inners = $_consultaInsumo->listInner(['insumo' => 'consulta_insumo']);
+        $array_select = Array('consulta_insumo.consulta_insumo_id', 'consulta_insumo.consulta_id', 'consulta_insumo.cantidad', 'consulta_insumo.estatus_con', 'consulta_insumo.precio_insumo_bs', 'consulta_insumo.precio_insumo_usd', 'consulta_insumo.insumo_id', 'insumo.nombre');
         $consultaInsumos = $_consultaInsumo->where('consulta_id', '=', $factura->consulta_id)
                                     ->where('estatus_con', '!=', '2')
-                                    ->getAll();
-
+                                    ->innerJoin($array_select, $inners, "consulta_insumo");
         $consulta = [];
 
         // Revisamos si tienes insumos asociados
@@ -103,12 +104,13 @@ class FacturaConsultaHelpers {
     }
 
     public static function obtenerExamenes($factura) { 
-        // echo '<pre>'; var_dump($factura);
+        
         $_consultaExamenModel = new ConsultaExamenModel();
-        $consultaExamenes = $_consultaExamenModel->where('consulta_id', '=', $factura->consulta_id)
-                                    ->where('estatus_con', '!=', '2')
-                                    ->getAll();
-
+        $inners = $_consultaExamenModel->listInner(['examen' => 'consulta_examen']);
+        $array_select = Array('consulta_examen.precio_examen_usd', 'consulta_examen.precio_examen_bs', 'consulta_examen.consulta_examen_id', 'consulta_examen.consulta_id', 'consulta_examen.examen_id', 'consulta_examen.estatus_con', 'examen.nombre');
+        $consultaExamenes = $_consultaExamenModel->where('consulta_examen.consulta_id', '=', $factura->consulta_id)
+                                                ->where('consulta_examen.estatus_con', '!=', '2')
+                                                ->innerJoin($array_select, $inners, "consulta_examen");
         $consulta = [];
 
         // Revisamos si tienes insumos asociados
