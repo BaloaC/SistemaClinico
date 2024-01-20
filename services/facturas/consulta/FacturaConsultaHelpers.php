@@ -65,6 +65,7 @@ class FacturaConsultaHelpers {
     }
 
     public static function obtenerInsumos($factura) {
+        
         $_consultaInsumo = new ConsultaInsumoModel();
         $inners = $_consultaInsumo->listInner(['insumo' => 'consulta_insumo']);
         $array_select = Array('consulta_insumo.consulta_insumo_id', 'consulta_insumo.consulta_id', 'consulta_insumo.cantidad', 'consulta_insumo.estatus_con', 'consulta_insumo.precio_insumo_bs', 'consulta_insumo.precio_insumo_usd', 'consulta_insumo.insumo_id', 'insumo.nombre');
@@ -74,7 +75,7 @@ class FacturaConsultaHelpers {
         $consulta = [];
 
         // Revisamos si tienes insumos asociados
-        if ( count($consultaInsumos) > 0 ) {
+        if ( !is_null($consultaInsumos) && count($consultaInsumos) > 0 ) {
             // $monto = $factura->monto_consulta;
 
             foreach ($consultaInsumos as $consulta_insumo) {
@@ -104,7 +105,6 @@ class FacturaConsultaHelpers {
     }
 
     public static function obtenerExamenes($factura) { 
-        
         $_consultaExamenModel = new ConsultaExamenModel();
         $inners = $_consultaExamenModel->listInner(['examen' => 'consulta_examen']);
         $array_select = Array('consulta_examen.precio_examen_usd', 'consulta_examen.precio_examen_bs', 'consulta_examen.consulta_examen_id', 'consulta_examen.consulta_id', 'consulta_examen.examen_id', 'consulta_examen.estatus_con', 'examen.nombre');
@@ -163,7 +163,8 @@ class FacturaConsultaHelpers {
             
             if (isset($consulta['examenes'])) {
                 foreach ($consulta['examenes'] as $examenes) {
-
+                    // var_dump($consulta['examenes']);
+                    // var_dump($examenes);
                     $montoUsd += $examenes->precio_examen_usd;
                     
                     if ( $examenes->precio_examen_bs == 0 ) {

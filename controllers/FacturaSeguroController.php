@@ -92,6 +92,9 @@ class FacturaSeguroController extends Controller{
                     $_facturaSeguroModel->insert($factura);
                 }
             }
+
+            $respuesta = new Response('CORRECTO');
+            return $respuesta->json(200);
         // }
     }
 

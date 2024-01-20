@@ -13,46 +13,42 @@ class FacturaSeguroService {
      */
     public static function calcularFactura($seguro_id, $mes, $anio) {
         
-        $consultaInner = array (
-            "consulta" => "consulta_seguro"
-        );
-    
-        $consultaSelect = array(
-            "consulta.consulta_id",
-            "consulta.fecha_consulta",
-            "consulta_seguro.consulta_seguro_id",
-            "consulta_seguro.seguro_id",
-            "consulta_seguro.tipo_servicio",
-            "consulta_seguro.fecha_ocurrencia",
-            "consulta_seguro.monto",
-            "consulta_seguro.estatus_con"
-        );
-
         $facturaList = [];
         $consultaList = FacturaSeguroHelpers::innerFacturaSeguro($seguro_id, $mes, $anio);
         
         // Por cada factura en consulta, sumamos el monto para obtener el total
-        $montoConsultaBs = 0;
-        $montoConsultaUsd = 0;
-
+        $monto_consulta_bs = 0;
+        $monto_consulta_usd = 0;
         if (count($consultaList) > 0) {
             foreach ($consultaList as $consulta) {
+                
+                $examenes = FacturaConsultaHelpers::obtenerExamenes($consulta);
+                if (!is_null($examenes) && count($examenes) > 0) {
+                    $consulta->examenes = $examenes["examenes"];
+                }
 
-                $montoConsultaUsd += $consulta->monto_consulta_bs;
+                $insumos = FacturaConsultaHelpers::obtenerInsumos($consulta);
+                if (!is_null($insumos) && count($insumos) > 0) {
+                    $consulta->insumos = $insumos["insumos"];
+                }
+                
+                $consultaCalculada = FacturaConsultaHelpers::obtenerMontoTotal((array) $consulta);
+                $monto_consulta_usd += $consultaCalculada['monto_total_usd'];
 
-                if ($consulta->monto_consulta_bs == 0) {
+                if ($consultaCalculada['monto_total_bs'] == 0) {
                     $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-                    $montoConsultaBs += round( $consulta->monto_consulta_usd * $valorDivisa, 2 );
+                    $monto_consulta_bs += $consultaCalculada['monto_total_usd'] * $valorDivisa;
 
                 } else {
-                    $montoConsultaBs += $consulta->monto_consulta_usd;
+                    $monto_consulta_bs += $consultaCalculada['monto_total_bs'];
                 }
             }
         }
         
         // Le sumamos 1 mes a la fecha de hoy
-        $fecha_actual = date("Y-m-d"); 
-        $fecha_vencimiento = strtotime('+1 month', strtotime($fecha_actual));
+        // $fecha_actual = date("Y-m-d"); 
+        $primerDiaDelMes = date("Y-m-01");
+        $fecha_vencimiento = strtotime('+1 month', strtotime($primerDiaDelMes));
         $fecha_vencimiento = date('Y-m-d', $fecha_vencimiento);
         
         // date_default_timezone_set("America/Caracas");
@@ -61,8 +57,8 @@ class FacturaSeguroService {
         $facturaList = [
             "seguro_id" => $seguro_id,
             "fecha_vencimiento" => "$fecha_vencimiento",
-            "monto_bs" => $montoConsultaBs,
-            "monto_usd" => $montoConsultaUsd,
+            "monto_bs" => round( $monto_consulta_bs, 2 ),
+            "monto_usd" => $monto_consulta_usd,
             "mes" => strftime("%B")
         ];
 
