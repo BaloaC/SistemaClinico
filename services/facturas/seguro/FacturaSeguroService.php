@@ -15,32 +15,49 @@ class FacturaSeguroService {
         
         $facturaList = [];
         $consultaList = FacturaSeguroHelpers::innerFacturaSeguro($seguro_id, $mes, $anio);
-        
+        // echo '<pre>';
         // Por cada factura en consulta, sumamos el monto para obtener el total
         $monto_consulta_bs = 0;
         $monto_consulta_usd = 0;
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+
         if (count($consultaList) > 0) {
             foreach ($consultaList as $consulta) {
-                
-                $examenes = FacturaConsultaHelpers::obtenerExamenes($consulta);
-                if (!is_null($examenes) && count($examenes) > 0) {
-                    $consulta->examenes = $examenes["examenes"];
-                }
+                // var_dump($consulta);
 
-                $insumos = FacturaConsultaHelpers::obtenerInsumos($consulta);
-                if (!is_null($insumos) && count($insumos) > 0) {
-                    $consulta->insumos = $insumos["insumos"];
-                }
-                
-                $consultaCalculada = FacturaConsultaHelpers::obtenerMontoTotal((array) $consulta);
-                $monto_consulta_usd += $consultaCalculada['monto_total_usd'];
+                $_consultaEmergencia = new ConsultaEmergenciaModel();
+                $esEmergencia = $_consultaEmergencia->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
+                // var_dump($esEmergencia);
+                if ($esEmergencia) {
+                    $monto_consulta_usd += $esEmergencia->total_consulta;
 
-                if ($consultaCalculada['monto_total_bs'] == 0) {
-                    $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-                    $monto_consulta_bs += $consultaCalculada['monto_total_usd'] * $valorDivisa;
+                    if ($esEmergencia->total_consulta_bs == 0) {
+                        $monto_consulta_bs += round($esEmergencia->total_consulta * $valorDivisa, 2);
+                    } else {
+                        $monto_consulta_bs = $esEmergencia->total_consulta_bs;
+                    }
 
                 } else {
-                    $monto_consulta_bs += $consultaCalculada['monto_total_bs'];
+
+                    $examenes = FacturaConsultaHelpers::obtenerExamenes($consulta);
+                    if (!is_null($examenes) && count($examenes) > 0) {
+                        $consulta->examenes = $examenes["examenes"];
+                    }
+    
+                    $insumos = FacturaConsultaHelpers::obtenerInsumos($consulta);
+                    if (!is_null($insumos) && count($insumos) > 0) {
+                        $consulta->insumos = $insumos["insumos"];
+                    }
+                    
+                    $consultaCalculada = FacturaConsultaHelpers::obtenerMontoTotal((array) $consulta);
+                    $monto_consulta_usd += $consultaCalculada['monto_total_usd'];
+    
+                    if ($consultaCalculada['monto_total_bs'] == 0) {
+                        $monto_consulta_bs += $consultaCalculada['monto_total_usd'] * $valorDivisa;
+    
+                    } else {
+                        $monto_consulta_bs += $consultaCalculada['monto_total_bs'];
+                    }
                 }
             }
         }
