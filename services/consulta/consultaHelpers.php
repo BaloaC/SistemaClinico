@@ -192,9 +192,8 @@ class ConsultaHelper {
                 
         if ( isset($formulario['examenes']) ) {
             $precios_examenes = ConsultaHelper::insertarExamenesEmergencia($formulario);
+            $formulario['total_examenes'] = $precios_examenes['total_examenes'];
         }
-        
-        $formulario['total_examenes'] = $precios_examenes['total_examenes'];
 
         $total_consulta = $formulario['consultas_medicas'] + $formulario['laboratorios'] 
                         + $formulario['medicamentos'] + $formulario['area_observacion'] 

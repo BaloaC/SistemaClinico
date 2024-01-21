@@ -34,7 +34,7 @@ class FacturaMensajeriaValidaciones {
 
                 $_consultaSeguroModel = new ConsultaSeguroModel();
                 $consulta_seguro = $_consultaSeguroModel->where('consulta_seguro_id', '=', $consulta['consulta_seguro_id'])->getFirst();
-
+                
                 if ($consulta_seguro->seguro_id != $formulario['seguro_id']) {
                     $respuesta = new Response(false, 'La consulta indicada no está relacionada a ese seguro');
                     $respuesta->setData('La consulta_seguro_id '.$consulta['consulta_seguro_id'].' no está facturada con ese seguro');

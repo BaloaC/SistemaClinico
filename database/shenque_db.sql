@@ -720,7 +720,7 @@ CREATE TABLE  IF NOT EXISTS `factura_seguro` (
 
 CREATE TABLE IF NOT EXISTS `factura_mensajeria` (
     `factura_mensajeria_id` int(9) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
-    `fecha_mensajeria` DATETIME NOT NULL,
+    `fecha_mensajeria` timestamp NOT NULL,
     `seguro_id` int(11) NOT NULL,
     `total_mensajeria_bs` float NOT NULL,
     `total_mensajeria_usd` float NOT NULL,
@@ -738,7 +738,7 @@ CREATE TABLE IF NOT EXISTS `factura_mensajeria_consultas` (
     `factura_mensajeria_consultas_id` int(9) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
     `factura_mensajeria_id` int(9) UNSIGNED ZEROFILL NOT NULL,
     `consulta_seguro_id` int(9) UNSIGNED ZEROFILL NOT NULL,
-    `fecha_mensajeria_consultas` DATETIME NOT NULL,
+    `fecha_mensajeria_consultas` timestamp NOT NULL,
     PRIMARY KEY (`factura_mensajeria_consultas_id`),
     KEY `fk_mensajeria_consultas` (`consulta_seguro_id`),
     FOREIGN KEY (`consulta_seguro_id`) REFERENCES `consulta_seguro` (`consulta_seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
