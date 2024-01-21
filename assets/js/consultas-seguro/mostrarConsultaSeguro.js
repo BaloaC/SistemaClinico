@@ -265,6 +265,8 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
     function format(data) {
 
+        console.log(data);
+
         const info = {};
 
         if (data !== undefined) {
@@ -412,12 +414,12 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
                 info.medico += `
                 <tr>
-                    <td>Cédula: <br><b>${data?.medico[0].cedula}</b></td>
-                    <td>Nombres: <br><b>${data?.medico[0].nombre_medico}</b></td>
-                    <td>Apellidos: <br><b>${data?.medico[0].apellidos_medico}</b></td>
+                    <td>Cédula: <br><b>${data?.medico[0]?.cedula}</b></td>
+                    <td>Nombres: <br><b>${data?.medico[0]?.nombre_medico}</b></td>
+                    <td>Apellidos: <br><b>${data?.medico[0]?.apellidos_medico}</b></td>
                 </tr>
                 <tr>
-                    <td>Especialidad: <br><b>${data?.medico[0].nombre_especialidad ?? "Desconocida"}</b></td>
+                    <td>Especialidad: <br><b>${data?.medico[0]?.nombre_especialidad ?? "Desconocida"}</b></td>
                 </tr>
 
                 <tr><td><br></td></tr>
@@ -434,7 +436,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                 <td colspan="4"><b>Información consulta:</b></td>
             </tr>
             <tr>
-                <td>Peso: <br><b>${data.peso ? data.peso + " " + "kg" : "No especificado"} </b></td>
+                <td>Peso: <br><b>${data.peso ? data?.peso + " " + "kg" : "No especificado"} </b></td>
                 <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m": "No especificado"}</b></td>
                 <td>Fecha Cita: <br><b>${info.data?.cita?.fecha_cita ?? "No aplica"}</b></td>
                 <td>Motivo cita: <br><b>${info.data?.cita?.motivo_cita ?? "No aplica"}</b></td>
