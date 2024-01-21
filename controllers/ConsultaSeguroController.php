@@ -109,6 +109,14 @@ class ConsultaSeguroController extends Controller{
         return $respuesta->json(200);
     }
 
+    public function listarConsultaSeguroPorSeguro($seguro_id) {
+        $factura = ConsultaSeguroService::listarConsultasSeguroPorSeguro($seguro_id);
+        $siExiste = count($factura) > 0;
+        $respuesta = new Response($siExiste ? 'CORRECTO' : 'ERROR');
+        $respuesta->setData($factura);
+        return $respuesta->json(200);
+    }
+
     public function eliminarConsultaSeguro($consulta_seguro_id){
 
         $validarConsulta = new Validate;

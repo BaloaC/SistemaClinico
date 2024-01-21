@@ -39,7 +39,7 @@ class ConsultaSeguroService {
         $formulario['monto_consulta_usd'] = $consultaEmergencia->total_consulta;
 
         $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-        $formulario['monto_consulta_bs'] = $consultaEmergencia->total_consulta * $valorDivisa;
+        $formulario['monto_consulta_bs'] = 0;
 
         $_consultaSeguroModel = new ConsultaSeguroModel();
         $fueInsertado = $_consultaSeguroModel->insert($formulario);
@@ -87,6 +87,27 @@ class ConsultaSeguroService {
         }
         
         return $consulta;
+    }
+
+    public static function listarConsultasSeguroPorSeguro($seguro_id) {
+
+        $_consultaSeguroModel = new ConsultaSeguroModel();
+        $consulta_seguros = $_consultaSeguroModel->where('seguro_id', '=', $seguro_id)->getAll();
+        $consultas = [];
+
+        if ( !is_null($consulta_seguros) && count($consulta_seguros) > 0) {
+            $consultas_completas = ConsultaSeguroHelpers::obtenerInformacionCompleta($consulta_seguros);
+            
+            foreach ($consultas_completas as $consulta) {
+                if ( isset( $_consulta['consulta_emergencia'] ) ) {
+                    $consultas[] = $consulta;
+                } else {
+                    $consultas[] = array_merge($consulta, FacturaConsultaHelpers::obtenerMontoTotal($consulta));
+                }
+            }
+        }
+        
+        return $consultas;
     }
 
     public static function listarConsultasPorSeguroYMes($seguro_id, $mes, $anio) {
