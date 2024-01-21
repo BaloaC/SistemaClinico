@@ -702,7 +702,7 @@ CREATE TABLE  IF NOT EXISTS `factura_medico` (
 --
 
 CREATE TABLE  IF NOT EXISTS `factura_seguro` (
-    `factura_seguro_id` int(8) UNSIGNED ZEROFILL NOT NULL,
+    `factura_seguro_id` int(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
     `seguro_id` int(11) NOT NULL,
     `mes` varchar(10) NOT NULL,
     `fecha_ocurrencia` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),

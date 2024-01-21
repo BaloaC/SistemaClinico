@@ -92,22 +92,19 @@ class ConsultaService {
         $consultaSinCitaModel = new ConsultaSinCitaModel();
         $consultaSinCitaModel->insert($consultaSinCita);
 
-
-        ConsultaHelper::insertarConsultaEmergencia($consultaEmergencia);
-
         if( isset($consultaEmergencia['pagos']) ) {
             ConsultaService::actualizarAcumuladoMedico($consultaEmergencia['pagos']);
         }
-
-        if (isset($formulario['examenes'])) {
-            $formulario['consulta_id'] = $consulta_id;
-            ConsultaHelper::insertarExamenesEmergencia($formulario);
-        }
+        
+        // if (isset($formulario['examenes'])) {
+            //     $formulario['consulta_id'] = $consulta_id;
+        //     ConsultaHelper::insertarExamenesEmergencia($formulario);
+        // }
 
         if (isset($formulario['insumos'])) {
             ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_id, true);
         }
-
+        
         if (isset($formulario['recipes'])) {
             ConsultaHelper::insertarRecipe($formulario['recipes'], $consulta_id);
         }
@@ -115,6 +112,7 @@ class ConsultaService {
         if (isset($formulario['indicaciones'])) {
             ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_id);
         }
+        ConsultaHelper::insertarConsultaEmergencia($consultaEmergencia);
 
         return $consulta_id;
     }

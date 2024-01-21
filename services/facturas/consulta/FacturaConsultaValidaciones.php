@@ -44,4 +44,20 @@ class FacturaConsultaValidaciones {
             exit();
         }
     }
+
+    public static function validarSiEsAsegurada($consulta_id) {
+        $_consultaPorCitaModel = new ConsultaCitaModel();
+        $consulta = $_consultaPorCitaModel->where('consulta_id', '=', $consulta_id)->where('estatus_con', '=', 1)->getFirst();
+
+        if (!is_null($consulta)) {
+            $_citaModel = new CitaModel();
+            $cita = $_citaModel->where('cita_id', '=', $consulta->cita_id)->getFirst();
+
+            if ($cita->tipo_cita == 2) {
+                $respuesta = new Response(false, 'Por este medio solo puedes insertar facturas de consultas naturales');
+                echo $respuesta->json(400);
+                exit();
+            }
+        }
+    }
 }

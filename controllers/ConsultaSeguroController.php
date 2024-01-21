@@ -28,7 +28,8 @@ class ConsultaSeguroController extends Controller{
     public function insertarConsultaSeguro(/*Request $request*/){
 
         $_POST = json_decode(file_get_contents('php://input'), true);
-        ConsultaSeguroValidaciones::validarConsultaSeguro($_POST);        
+        ConsultaSeguroValidaciones::validarConsultaSeguro($_POST);
+        ConsultaSeguroValidaciones::validarConsultaAsegurada($_POST);
         
         $validarConsulta = new Validate;
         $data = $validarConsulta->dataScape($_POST);
@@ -87,13 +88,6 @@ class ConsultaSeguroController extends Controller{
         }
     }
 
-    // public function probandoalgo() {
-    //     $clta = [
-    //         "consulta_seguro_id" => '00000025'
-    //     ];
-    //     ConsultaSeguroHelpers::actualizarConsultaSeguro($clta);
-    // }
-
     public function listarConsultaSeguro(){
 
         $consultasSeguros = ConsultaSeguroService::listarconsultasSeguros();
@@ -108,8 +102,6 @@ class ConsultaSeguroController extends Controller{
 
     public function listarConsultaSeguroPorId($consulta_seguro_id){
 
-        // $consultasSeguro = json_decode($this->listarConsultaSeguro());
-        // $factura = array_filter($consultasSeguro->data, fn($consulta) => $consulta->consulta_seguro_id == $consulta_seguro_id);
         $factura = ConsultaSeguroService::listarConsultasSeguroId($consulta_seguro_id);
         $siExiste = count($factura) > 0;
         $respuesta = new Response($siExiste ? 'CORRECTO' : 'ERROR');
