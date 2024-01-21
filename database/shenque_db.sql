@@ -724,6 +724,7 @@ CREATE TABLE IF NOT EXISTS `factura_mensajeria` (
     `seguro_id` int(11) NOT NULL,
     `total_mensajeria_bs` float NOT NULL,
     `total_mensajeria_usd` float NOT NULL,
+    `estatus_fac` ENUM('1','2','3') NOT NULL DEFAULT '1'
     PRIMARY KEY (`factura_mensajeria_id`),
     KEY `fk_mensajeria_seguro` (`seguro_id`),
     CONSTRAINT `fk_mensajeria_seguro` FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
