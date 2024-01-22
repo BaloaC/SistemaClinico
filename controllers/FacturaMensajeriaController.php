@@ -30,11 +30,11 @@ class FacturaMensajeriaController extends Controller{
         return $respuesta->json(201);
     }
 
-    public function insertarFacturaMedicoPorId(/*Request $request*/){
-        
+    public function actualizarFacturaMensajeria($factura_mensajeria_id) {
+        FacturaMensajeriaService::actualizarFactura($factura_mensajeria_id);
+        $respuesta = new Response('ACTUALIZACION_EXITOSA');
+        return $respuesta->json(201);
     }
-
-    public function actualizarFacturaMedico($factura_medico_id){}
 
     public function listarFacturaMensajeria(){
         $_facturaMensajeriaModel = new FacturaMensajeriaModel();
@@ -64,9 +64,5 @@ class FacturaMensajeriaController extends Controller{
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($facturaLista);
         return $respuesta->json(200);
-    }
-
-    public function listarFacturaPorSeguro($seguro_id){
-      
     }
 }

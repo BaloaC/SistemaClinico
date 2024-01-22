@@ -345,6 +345,7 @@ Router::get('/factura/mensajeria/actualizar/:id', FacturaMensajeriaController::c
 Router::get('/factura/mensajeria/consulta', FacturaMensajeriaController::class . '@listarFacturaMensajeria', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::get('/factura/mensajeria/:id', FacturaMensajeriaController::class . '@listarFacturaMensajeriaPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::post('/factura/mensajeria', FacturaMensajeriaController::class . '@insertarFacturaMensajeria', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+Router::put('/factura/mensajeria/:id', FacturaMensajeriaController::class . '@actualizarFacturaMensajeria', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 
 // Estadísticas - Vistas
 Router::get("/estadisticas", EstadisticasController::class . '@index');
