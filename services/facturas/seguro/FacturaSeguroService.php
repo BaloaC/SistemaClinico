@@ -100,16 +100,26 @@ class FacturaSeguroService {
         if ( count($consultaList) > 0 ) {
             $consultas = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultaList);
             $facturas = [];
+            $facturas['consultas'] = [];
+            $consultas_pagadas = 0;
+            $consultas_no_pagadas = 0;
 
             foreach ($consultas as $consulta) {
+                if ($consulta["estatus_con"] == 3) {
+                    $consultas_pagadas += 1;
+                } else {
+                    $consultas_no_pagadas += 1;
+                }
+
                 if ( isset( $consulta['consulta_emergencia'] ) ) { // Si es por emergencia
-                    $facturas[] = $consulta;
+                    $facturas['consultas'][] = $consulta;
     
                 } else { // Si no es consulta por emergencia
-                    $facturas[] = FacturaConsultaHelpers::obtenerMontoTotal($consulta);
+                    $facturas['consultas'][] = FacturaConsultaHelpers::obtenerMontoTotal($consulta);
                 }
             }
 
+            $facturas['consultas_pagadas'] = $consultas_pagadas; $facturas['consultas_no_pagadas'] = $consultas_no_pagadas;
             return FacturaSeguroHelpers::retornarMensaje($facturas);
 
         } else {
