@@ -132,6 +132,7 @@ class ConsultaSeguroHelpers {
         if ( !is_null($consulta_emergencia) ) {
             ConsultaHelper::actualizarPrecioEmergencia($consulta_emergencia);
         }
+        
         // if (is_null($consulta_seguro)) {
         
         // } else {
