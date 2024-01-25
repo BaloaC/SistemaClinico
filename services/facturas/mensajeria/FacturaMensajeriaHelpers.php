@@ -37,15 +37,21 @@ class FacturaMensajeriaHelpers {
             $consulta = ConsultaSeguroService::listarConsultasSeguroId($consulta['consulta_seguro_id']);
             $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
 
-            if ( !isset($consulta[0]['monto_total_usd']) ) {
-                $monto['monto_total_usd'] = $consulta[0]["factura"]->total_consulta;
-                $monto['monto_total_bs'] = round( $consulta[0]["factura"]->total_consulta * $valorDivisa , 2);
+            // if (array_key_exists('factura', $consulta)) {
+                // FALTA SUMAR EL TOTAL DE LA EMERGENCIAS
+
+            // } else {
                 
-                
-            } else {
-                $monto['monto_total_usd'] += $consulta[0]['monto_total_usd'];
-                $monto['monto_total_bs'] += round( $consulta[0]['monto_total_usd'] * $valorDivisa, 2);
-            }
+                if ( !isset($consulta[0]['monto_total_usd']) ) {
+                    $monto['monto_total_usd'] = $consulta[0]["factura"]->total_consulta;
+                    $monto['monto_total_bs'] = round( $consulta[0]["factura"]->total_consulta * $valorDivisa , 2);
+                    
+                    
+                } else {
+                    $monto['monto_total_usd'] += $consulta[0]['monto_total_usd'];
+                    $monto['monto_total_bs'] += round( $consulta[0]['monto_total_usd'] * $valorDivisa, 2);
+                }
+            // }
         }
         
         return $monto;

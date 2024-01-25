@@ -46,25 +46,14 @@ class ConsultaSeguroHelpers {
      * Helper para obtener la información de una consulta_seguro por emergencia
      */
     public static function obtenerInformacionEmergencia($consulta) {
-        // $_consultaEmergencia = new ConsultaEmergenciaModel();
-        // $consulta_emergencia = $_consultaEmergencia->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
-
-        $_consultaModel = new ConsultaModel();
+                $_consultaModel = new ConsultaModel();
         $consultaBase = $_consultaModel->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
-
-        // $_pacienteModel = new PacienteModel();
-        // $paciente = $_pacienteModel->where('cedula', '=', $consulta_emergencia->cedula_beneficiado)->getFirst();
         $consulta_emergencia = ConsultaService::obtenerConsultaEmergencia($consulta);
-        // $_paciente = new PacienteModel();
-        // $titular = $_paciente->where('paciente_id', '=', $consulta_emergencia->paciente_id)->getFirst();
-
+        
         $_seguroModel = new SeguroModel();
         $seguro = $_seguroModel->where('seguro_id', '=', $consulta_emergencia->seguro_id)->getFirst();
 
-        // $consulta->consulta_emergencia = $consulta_emergencia;
         $consulta->consulta = $consultaBase;
-        // $consulta->paciente_beneficiado = $paciente;
-        // $consulta->paciente_titular = $titular;
         $consulta->seguro = $seguro;
         
         return $consulta;
@@ -137,10 +126,15 @@ class ConsultaSeguroHelpers {
         $consultaSeguroModel = new ConsultaSeguroModel();
         $consulta_seguro = $consultaSeguroModel->where('consulta_seguro_id', '=', $consulta["consulta_seguro_id"])->getFirst();
         
-        if (is_null($consulta_seguro)) {
-            ConsultaHelper::actualizarPrecioEmergencia($consulta);
+        $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
+        $consulta_emergencia = $_consultaEmergenciaModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getFirst();
 
-        } else {
+        if ( !is_null($consulta_emergencia) ) {
+            ConsultaHelper::actualizarPrecioEmergencia($consulta_emergencia);
+        }
+        // if (is_null($consulta_seguro)) {
+        
+        // } else {
 
             $consultaExamenModel = new ConsultaExamenModel();
             $consulta_examenes = $consultaExamenModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
@@ -183,6 +177,6 @@ class ConsultaSeguroHelpers {
             $monto_sumatoria_bs = $monto_total_bs + $costo_examenes_bs + $costo_insumos_bs;
             $consulta_modificada = Array("monto_consulta_bs" => $monto_sumatoria_bs);
             $consultaUpdate = $consultaSeguroModel->update($consulta_modificada);
-        }
+        // }
     }
 }
