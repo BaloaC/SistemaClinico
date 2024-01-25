@@ -133,51 +133,47 @@ class ConsultaSeguroHelpers {
             ConsultaHelper::actualizarPrecioEmergencia($consulta_emergencia);
         }
         
-        // if (is_null($consulta_seguro)) {
+        $consultaExamenModel = new ConsultaExamenModel();
+        $consulta_examenes = $consultaExamenModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
+
+        $consultaInsumoModel = new ConsultaInsumoModel();
+        $consulta_insumos = $consultaInsumoModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
+
+        $costo_examenes_bs = 0; $costo_insumos_bs = 0;
+
+        if( !is_null($consulta_examenes) ) {
+            foreach ($consulta_examenes as $examen) {
+                
+                $examen_modificado = Array( 'precio_examen_bs' => 0 );
+
+                $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+                $examen_modificado['precio_examen_bs'] = round( $examen->precio_examen_usd * $valorDivisa ,2 );
+                $costo_examenes_bs += $examen_modificado['precio_examen_bs'];
+                
+                $consultaExamenModel = new ConsultaExamenModel();
+                $isUpdate = $consultaExamenModel->where('consulta_examen_id', '=', $examen->consulta_examen_id)->update($examen_modificado);
+            }
+        }
         
-        // } else {
+        if( !is_null($consulta_insumos) ) {
+            foreach ($consulta_insumos as $insumo) {
+                
+                $insumo_modificado = Array( 'precio_insumo_bs' => 0 );
 
-            $consultaExamenModel = new ConsultaExamenModel();
-            $consulta_examenes = $consultaExamenModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
-
-            $consultaInsumoModel = new ConsultaInsumoModel();
-            $consulta_insumos = $consultaInsumoModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
-
-            $costo_examenes_bs = 0; $costo_insumos_bs = 0;
-
-            if( !is_null($consulta_examenes) ) {
-                foreach ($consulta_examenes as $examen) {
-                    
-                    $examen_modificado = Array( 'precio_examen_bs' => 0 );
-
-                    $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-                    $examen_modificado['precio_examen_bs'] = round( $examen->precio_examen_usd * $valorDivisa ,2 );
-                    $costo_examenes_bs += $examen_modificado['precio_examen_bs'];
-                    
-                    $consultaExamenModel = new ConsultaExamenModel();
-                    $isUpdate = $consultaExamenModel->where('consulta_examen_id', '=', $examen->consulta_examen_id)->update($examen_modificado);
-                }
+                $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+                $precio_bs_actual = round( $insumo->precio_insumo_usd * $valorDivisa ,2 );
+                // $insumo_modificado['precio_insumo_bs'] = $precio_bs_actual * $insumo->cantidad;
+                $insumo_modificado['precio_insumo_bs'] = $precio_bs_actual;
+                $costo_insumos_bs += $insumo_modificado['precio_insumo_bs'];
+                
+                $consultaInsumoModel = new ConsultaInsumoModel();
+                $isUpdate = $consultaInsumoModel->where('consulta_insumo_id', '=', $insumo->consulta_insumo_id)->update($insumo_modificado);
             }
-            
-            if( !is_null($consulta_insumos) ) {
-                foreach ($consulta_insumos as $insumo) {
-                    
-                    $insumo_modificado = Array( 'precio_insumo_bs' => 0 );
+        }
 
-                    $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-                    $precio_bs_actual = round( $insumo->precio_insumo_usd * $valorDivisa ,2 );
-                    $insumo_modificado['precio_insumo_bs'] = $precio_bs_actual * $insumo->cantidad;
-                    $costo_insumos_bs += $insumo_modificado['precio_insumo_bs'];
-                    
-                    $consultaInsumoModel = new ConsultaInsumoModel();
-                    $isUpdate = $consultaInsumoModel->where('consulta_insumo_id', '=', $insumo->consulta_insumo_id)->update($insumo_modificado);
-                }
-            }
-
-            $monto_total_bs = round($consulta_seguro->monto_consulta_usd * $valorDivisa, 2);
-            $monto_sumatoria_bs = $monto_total_bs + $costo_examenes_bs + $costo_insumos_bs;
-            $consulta_modificada = Array("monto_consulta_bs" => $monto_sumatoria_bs);
-            $consultaUpdate = $consultaSeguroModel->update($consulta_modificada);
-        // }
+        $monto_total_bs = round($consulta_seguro->monto_consulta_usd * $valorDivisa, 2);
+        $monto_sumatoria_bs = $monto_total_bs + $costo_examenes_bs + $costo_insumos_bs;
+        $consulta_modificada = Array("monto_consulta_bs" => $monto_total_bs);
+        $consultaUpdate = $consultaSeguroModel->update($consulta_modificada);
     }
 }
