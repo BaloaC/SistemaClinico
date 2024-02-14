@@ -26,11 +26,12 @@ class FacturaMedicoHelpers {
         $innersConsulta = $_facturaConsultaModel->listInner($innerConsulta, $innerConsultaCustom);
         $consultas_aseguradas = $_facturaConsultaModel->where('cita.medico_id', '=', $form['medico_id'])
             ->where('consulta_seguro.estatus_con', '!=', 2)
-            ->whereDate('consulta.fecha_consulta', $fechas['fecha_inicio'], $fechas['fecha_fin'])
+            ->whereDate('consulta_seguro.fecha_ocurrencia', $fechas['fecha_inicio'], $fechas['fecha_fin'])
             ->innerJoin($selectConsultas, $innersConsulta, "consulta_seguro");
 
-        $calculos['monto'] = 0;
+        $calculos['monto_pago'] = 0;
         $calculos['pacientes'] = 0;
+        $calculos['monto_total_consulta'] = 0;
         
         if (!is_null($consultas_aseguradas) && count($consultas_aseguradas) > 0) {
             foreach ($consultas_aseguradas as $consulta) {
@@ -38,11 +39,12 @@ class FacturaMedicoHelpers {
                 $_seguroModel = new SeguroModel();
                 $seguro = $_seguroModel->where('seguro_id', '=', $consulta->seguro_id)->getFirst();
 
-                $calculos['monto'] += $consulta->monto_consulta_usd * $seguro->porcentaje / 100;
+                $calculos['monto_total_consulta'] += $consulta->monto_consulta_usd;
+                $calculos['monto_pago'] += $consulta->monto_consulta_usd * $seguro->porcentaje / 100;
                 $calculos['pacientes'] += 1;
             }
         }
-
+        
         return $calculos;
     }
 
@@ -97,24 +99,90 @@ class FacturaMedicoHelpers {
             ->whereDate('consulta.fecha_consulta', $fechas['fecha_inicio'], $fechas['fecha_fin'])
             ->innerJoin($selectConsultas, $innersConsulta, "factura_consulta");
 
-        $calculos['monto'] = 0;
-        $calculos['pacientes'] = 0;
+        $calculosSinCitas = FacturaMedicoHelpers::calculosConsultas($consultas_normales);
+        
+        // Facturas por citas naturales
+        $selectCitas = array(
+            "cita.medico_id",
+            "consulta_cita.cita_id",
+            "consulta_cita.consulta_id"
+        );
 
+        $innerCitaCustom = array('consulta_cita', 'cita', 'cita');
+        $_citaModel = new FacturaConsultaModel();
+        $innersCita = $_citaModel->listInner(null, $innerCitaCustom);
+        $consultas_con_citas = $_citaModel->where('cita.medico_id', '=', $form['medico_id'])->innerJoin($selectCitas, $innersCita, "cita");
+        $facturas_consultas_citas = [];
+        
+        foreach ($consultas_con_citas as $cita) {
+
+            $selectFactura = array(
+                "factura_consulta.consulta_id",
+                "factura_consulta.monto_consulta_usd",
+                "consulta.fecha_consulta"
+            );
+
+            $innerFactura = array(
+                "consulta" => "factura_consulta",
+            );
+
+            $_facturaConsulta = new FacturaConsultaModel();
+            $innersFactura = $_facturaConsulta->listInner($innerFactura);
+            $factura = $_facturaConsulta->where('factura_consulta.consulta_id', '=', $cita->consulta_id)
+                                        ->where('factura_consulta.estatus_fac', '!=', 2)
+                                        ->whereDate('consulta.fecha_consulta', $fechas['fecha_inicio'], $fechas['fecha_fin'])
+                                        ->innerJoin($selectFactura, $innersFactura, "factura_consulta");
+            
+            if ($factura != null) {
+                $facturas_consultas_citas[] = $factura[0];
+            }
+        }
+        
+        $calculosConCitas = FacturaMedicoHelpers::calculosConsultas($facturas_consultas_citas);
+        
         $_medicoModel = new MedicoModel();
         $medico = $_medicoModel->where('medico_id', '=', $form['medico_id'])->getFirst();
+
+        $calculos = Array(
+            "monto_total_consultas" => $calculosSinCitas['monto_total_consulta'] + $calculosConCitas['monto_total_consulta'],
+            "monto_pago" => $calculosSinCitas['monto'] + $calculosConCitas['monto'],
+            "pacientes" => $calculosSinCitas['pacientes'] + $calculosConCitas['pacientes'],
+            "acumulado" => $medico->acumulado
+        );
+
+        return $calculos;
+        // if (count($consultas_normales) > 0) {
+
+        //     foreach ($consultas_normales as $consulta) {
+        //         $calculos['monto'] += $consulta->monto_consulta_usd;
+        //         $calculos['pacientes'] += 1;
+        //     }
+
+        //     $porcentaje_medico = GlobalsHelpers::obtenerPorcentajeMedico();
+        //     $calculos['monto'] = $calculos['monto'] * $porcentaje_medico / 100;
+        // }
+
+        // $calculos['monto'] += $medico->acumulado;
+
+        // return $calculos;
+        
+    }
+
+    public static function calculosConsultas($consultas_normales) {
+        $calculos['monto'] = 0;
+        $calculos['pacientes'] = 0;
+        $calculos['monto_total_consulta'] = 0;
 
         if (count($consultas_normales) > 0) {
 
             foreach ($consultas_normales as $consulta) {
-                $calculos['monto'] += $consulta->monto_consulta_usd;
+                $calculos['monto_total_consulta'] += $consulta->monto_consulta_usd;
                 $calculos['pacientes'] += 1;
             }
 
             $porcentaje_medico = GlobalsHelpers::obtenerPorcentajeMedico();
-            $calculos['monto'] = $calculos['monto'] * $porcentaje_medico / 100;
+            $calculos['monto'] = $calculos['monto_total_consulta'] * $porcentaje_medico / 100;
         }
-
-        $calculos['monto'] += $medico->acumulado;
 
         return $calculos;
     }

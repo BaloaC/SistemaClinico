@@ -21,11 +21,14 @@ class FacturaMedicoService {
 
         $factura = array(
             "medico_id" => $formulario['medico_id'],
-            "acumulado_seguro_total" => $consultas_aseguradas['monto'],
-            "acumulado_consulta_total" => $consultas_normales['monto'],
+            "sumatoria_consultas_aseguradas" => $consultas_aseguradas['monto_total_consulta'],
+            "sumatoria_consultas_naturales" => $consultas_normales['monto_total_consultas'],
+            "acumulado_seguro_total" => $consultas_aseguradas['monto_pago'],
+            "acumulado_consulta_total" => $consultas_normales['monto_pago'],
             "pacientes_seguro" => $consultas_aseguradas['pacientes'],
             "pacientes_consulta" => $consultas_normales['pacientes'],
-            "pago_total" => $consultas_aseguradas['monto'] + $consultas_normales['monto']
+            "acumulado_medico" => $consultas_normales['acumulado'],
+            "pago_total" => $consultas_aseguradas['monto_pago'] + $consultas_normales['monto_pago'] + $consultas_normales['acumulado']
         );
 
         return $factura;

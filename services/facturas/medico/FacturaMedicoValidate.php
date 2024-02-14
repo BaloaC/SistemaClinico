@@ -3,6 +3,31 @@
 class FacturaMedicoValidate {
 
     /**
+     * Funciones para las validaciones del solicitar factura
+     */
+    public static function validacionesPrincipales($formulario) {
+        $validarFactura = new Validate;
+
+        if ( $validarFactura->isEmpty($formulario) ) {
+            $respuesta = new Response('DATOS_VACIOS');
+            echo $respuesta->json(400);
+            exit();
+        }
+
+        if ( $validarFactura->isDate($formulario['fecha_actual']) ) {
+            $respuesta = new Response('FECHA_INVALIDA');
+            echo $respuesta->json(200);
+            exit();
+        }
+
+        if ( !$validarFactura->isToday($formulario['fecha_actual'], true) ) {
+            $respuesta = new Response('FECHA_INVALIDA');
+            echo $respuesta->json(200);
+            exit();
+        }
+    }
+
+    /**
      * Función para las validaciones generales de la factura medico
      */
     public static function validateGeneral($formulario) {
@@ -63,7 +88,7 @@ class FacturaMedicoValidate {
         if (is_null($factura)) {
             return false;
         } else {
-            return true;
+            return $factura;
         }
     }
 }

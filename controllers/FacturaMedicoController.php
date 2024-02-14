@@ -42,56 +42,51 @@ class FacturaMedicoController extends Controller{
     public function solicitarFacturasMedicos(/*Request $request*/) { // método para obtener todas las facturas
         
         $_POST = json_decode(file_get_contents('php://input'), true);
+        FacturaMedicoValidate::validacionesPrincipales($_POST);
         $validarFactura = new Validate;
         
-        switch ($validarFactura) {
-            case ($validarFactura->isEmpty($_POST)):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
+        $_medicoModel = new MedicoModel();
+        $medicoList = $_medicoModel->where('estatus_med','=', 1)->getAll();
+        $data = $validarFactura->dataScape($_POST);
 
-            case $validarFactura->isDate($_POST['fecha_actual']):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(200);
+        $_facturaMedicoModel = new FacturaMedicoModel();
 
-            case !$validarFactura->isToday($_POST['fecha_actual'], true):
-                $respuesta = new Response('FECHA_INVALIDA');
-                return $respuesta->json(200);
+        foreach ($medicoList as $medico) {
             
-            default:
-                
-                $_medicoModel = new MedicoModel();
-                $medicoList = $_medicoModel->where('estatus_med','=', 1)->getAll();
-                $data = $validarFactura->dataScape($_POST);
+            $factura = array(
+                "fecha_actual" => $data['fecha_actual'],
+                "medico_id" => $medico->medico_id
+            );
 
-                $_facturaMedicoModel = new FacturaMedicoModel();
+            $facturaMedico = FacturaMedicoService::contabilizarFactura($factura);
+            $estaDuplicado = FacturaMedicoValidate::validarFacturaMes($factura);
 
-                foreach ($medicoList as $medico) {
-                    
-                    $factura = array(
-                        "fecha_actual" => $data['fecha_actual'],
-                        "medico_id" => $medico->medico_id
-                    );
+            if (!$estaDuplicado) {
+                $isInserted = $_facturaMedicoModel->insert($facturaMedico);
 
-                    $estaDuplicado = FacturaMedicoValidate::validarFacturaMes($factura);
+                if ( !($isInserted  > 0) ) {
+                    $respuesta = new Response('INSERCION_FALLIDA');
+                    $respuesta->setData('Error generando la factura del medico_id' + $medico->medico_id);
+                    return $respuesta->json(400);
 
-                    if (!$estaDuplicado) {
-                            
-                        $facturaMedico = FacturaMedicoService::contabilizarFactura($factura);
-                        $isInserted = $_facturaMedicoModel->insert($facturaMedico);
-
-                        if ( !($isInserted  > 0) ) {
-                            $respuesta = new Response('INSERCION_FALLIDA');
-                            $respuesta->setData('Error generando la factura del medico_id' + $medico->medico_id);
-                            return $respuesta->json(400);
-                        }
-
-                        FacturaMedicoHelpers::reiniciarAcumuladoMedico($medico->medico_id);
-                    }
+                } else {
+                    FacturaMedicoHelpers::reiniciarAcumuladoMedico($medico->medico_id);
                 }
 
-                $respuesta = new Response('INSERCION_EXITOSA');
-                return $respuesta->json(201);
+            } else {
+                $_facturaMedicoModel = new FacturaMedicoModel();
+                $factura = $_facturaMedicoModel->where('factura_medico_id', '=', $estaDuplicado->factura_medico_id)->update($facturaMedico);
+
+                if ( !($factura <= 0) ) {
+                    $respuesta = new Response('ACTUALIZACION_FALLIDA');
+                    $respuesta->setData('Error generando la factura del medico_id' + $medico->medico_id);
+                    return $respuesta->json(400);
+                }
+            }
         }
+
+        $respuesta = new Response('INSERCION_EXITOSA');
+        return $respuesta->json(201);
     }
 
     public function insertarFacturaMedicoPorId(/*Request $request*/){

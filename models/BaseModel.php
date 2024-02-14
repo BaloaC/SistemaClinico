@@ -145,16 +145,27 @@ class BaseModel{
     }
 
     // Armar los inner del inner join
-    public function listInner($obj, $objManual = null) {
+    public function listInner($obj, $objManual = null, $isFirst = true) {
         $inner = array();
-
+        $inner_custom = "";
+        
         if (isset($objManual)) {
-            $inner[] = "INNER JOIN $objManual[0] ON $objManual[0].$objManual[1]"."_id = $objManual[2]".".$objManual[1]"."_id";
+            $inner_custom = "INNER JOIN $objManual[0] ON $objManual[0].$objManual[1]"."_id = $objManual[2]".".$objManual[1]"."_id";
+
+            if ($isFirst) {
+                $inner[] =  "INNER JOIN $objManual[0] ON $objManual[0].$objManual[1]"."_id = $objManual[2]".".$objManual[1]"."_id";
+            }
         }
 
-        foreach ($obj as $key => $ref) {
-            $line = "INNER JOIN $key ON $key.$key"."_id = $ref".".$key"."_id";
-            $inner[] = $line;
+        if ($obj != null) {
+            foreach ($obj as $key => $ref) {
+                $line = "INNER JOIN $key ON $key.$key"."_id = $ref".".$key"."_id";
+                $inner[] = $line;
+            }
+        }
+
+        if (!$isFirst) {
+            array_push($inner, $inner_custom);
         }
 
         return implode(" ", $inner);
