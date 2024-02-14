@@ -685,8 +685,12 @@ CREATE TABLE  IF NOT EXISTS `factura_medico` (
     `medico_id` int(11) NOT NULL,
     `acumulado_seguro_total` float DEFAULT NULL,
     `acumulado_consulta_total` float DEFAULT NULL,
+    `sumatoria_consultas_aseguradas` FLOAT NOT NULL,
+    `sumatoria_consultas_naturales` FLOAT NOT NULL,
+    `acumulado_medico` FLOAT NOT NULL,
     `pago_total` float DEFAULT NULL,
-    `fecha_pago` date NOT NULL,
+    `fecha_pago` date DEFAULT NULL,
+    'fecha_emision' TIMESTAMP NOT NULL;
     `pacientes_seguro` int(11) DEFAULT NULL,
     `pacientes_consulta` int(11) DEFAULT NULL,
     `estatus_fac` enum('1','2','3') NOT NULL DEFAULT '1',
