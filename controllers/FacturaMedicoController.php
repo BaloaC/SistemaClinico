@@ -120,8 +120,10 @@ class FacturaMedicoController extends Controller{
             return $respuesta->json(400);
         }
 
+        date_default_timezone_set('America/Caracas');
         $data = array(
-            'estatus_fac' => '3'
+            'estatus_fac' => '3',
+            'fecha_pago' => date("Y-m-d H:i:s")
         );
         
         $actualizado = $_facturaMedico->where('factura_medico_id', '=', $factura_medico_id)->update($data);
