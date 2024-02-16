@@ -3,6 +3,7 @@
 include_once "./services/facturas/medico/FacturaMedicoHelpers.php";
 include_once "./services/facturas/medico/FacturaMedicoService.php";
 include_once "./services/facturas/medico/FacturaMedicoValidate.php";
+include_once "./services/Helpers.php";
 
 class FacturaMedicoController extends Controller{
     
@@ -17,10 +18,15 @@ class FacturaMedicoController extends Controller{
         "factura_medico.factura_medico_id",
         "factura_medico.acumulado_seguro_total",
         "factura_medico.acumulado_consulta_total",
+        "factura_medico.sumatoria_consultas_aseguradas",
+        "factura_medico.sumatoria_consultas_naturales",
+        "factura_medico.acumulado_medico",
         "factura_medico.pago_total",
         "factura_medico.pacientes_seguro",
         "factura_medico.pacientes_consulta",
-        "factura_medico.fecha_pago"
+        "factura_medico.fecha_pago",
+        "factura_medico.fecha_emision",
+        "factura_medico.precio_dolar"
     );
 
     //Método index (vista principal)
@@ -148,7 +154,8 @@ class FacturaMedicoController extends Controller{
         $_facturaMedicoModel = new FacturaMedicoModel();
         $inners = $_facturaMedicoModel->listInner($this->arrayInner);
         $id = $_facturaMedicoModel->where('factura_medico_id','=',$factura_medico_id)->innerJoin($this->arraySelect, $inners, "factura_medico");
-        FacturaMedicoHelpers::retornarMensaje($id);
+        $factura_total = FacturaMedicoHelpers::calcularMontosBs($id[0]);
+        Helpers::retornarMensaje($id, $factura_total);
     }
 
     public function listarFacturaPorMedico($medico_id){

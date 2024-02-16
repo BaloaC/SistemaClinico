@@ -218,6 +218,21 @@ class FacturaMedicoHelpers {
         $medico = $_medicoModel->where('medico_id', '=', $medico_id)->update(array("acumulado" => 0));
     }
 
+    public static function calcularMontosBs($factura) {
+        $valor_divisa = GlobalsHelpers::obtenerValorDivisa();
+        $valor_multiplicar = $factura->precio_dolar == 0 ? $valor_divisa : $factura->precio_dolar;
+        $factura_bs = array(
+            "acumulado_seguro_total_bs" => round($factura->acumulado_seguro_total * $valor_multiplicar, 2),
+            "acumulado_consulta_total_bs" => round($factura->acumulado_consulta_total * $valor_multiplicar, 2),
+            "sumatoria_consultas_aseguradas_bs" => round($factura->sumatoria_consultas_aseguradas * $valor_multiplicar, 2),
+            "sumatoria_consultas_naturales_bs" => round($factura->sumatoria_consultas_naturales * $valor_multiplicar, 2),
+            "acumulado_medico_bs" => round($factura->acumulado_medico * $valor_multiplicar, 2),
+            "pago_total_bs" => round($factura->pago_total * $valor_multiplicar, 2)
+        );
+
+        return array_merge((array) $factura, $factura_bs);
+    }
+
     public static function retornarMensaje($booleano) {
         $esTrue = ($booleano > 0);
 
