@@ -14,6 +14,7 @@ class FacturaMedicoModel extends GenericModel {
     protected $pago_total;
     protected $pacientes_seguro;
     protected $pacientes_consulta;
+    protected $precio_dolar;
     protected $estatus_fac;
 
     public function __construct($propiedades = null) {
@@ -31,6 +32,7 @@ class FacturaMedicoModel extends GenericModel {
     public function getPagoTotal(){return $this->pago_total;}
     public function getPacientesSeguro(){return $this->pacientes_seguro;}
     public function getPacientesConsulta(){return $this->pacientes_consulta;}
+    public function getPrecioDolar(){return $this->precio_dolar;}
     public function getEstatusFac(){return $this->estatus_fac;} 
 
     /* Setters */
@@ -44,6 +46,7 @@ class FacturaMedicoModel extends GenericModel {
     public function setPagoTotal($pago_total){return $this->pago_total = $pago_total;}
     public function setPacientesSeguro($pacientes_seguro){return $this->pacientes_seguro = $pacientes_seguro;}
     public function setPacientesConsulta($pacientes_consulta){return $this->pacientes_consulta = $pacientes_consulta;}
+    public function setPrecioDolar($precio_dolar){return $this->precio_dolar = $precio_dolar;}
     public function setEstatusFac($estatus_fac){return $this->estatus_fac = $estatus_fac;}
 }
 
