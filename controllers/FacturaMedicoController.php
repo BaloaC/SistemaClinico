@@ -73,7 +73,8 @@ class FacturaMedicoController extends Controller{
                 if ( !($isInserted  > 0) ) {
                     $respuesta = new Response('INSERCION_FALLIDA');
                     $respuesta->setData('Error generando la factura del medico_id' + $medico->medico_id);
-                    return $respuesta->json(400);
+                    echo $respuesta->json(400);
+                    exit();
 
                 } else {
                     FacturaMedicoHelpers::reiniciarAcumuladoMedico($medico->medico_id);
@@ -86,13 +87,15 @@ class FacturaMedicoController extends Controller{
                 if ( !($factura <= 0) ) {
                     $respuesta = new Response('ACTUALIZACION_FALLIDA');
                     $respuesta->setData('Error generando la factura del medico_id' + $medico->medico_id);
-                    return $respuesta->json(400);
+                    echo $respuesta->json(400);
+                    exit();
                 }
             }
         }
 
         $respuesta = new Response('INSERCION_EXITOSA');
-        return $respuesta->json(201);
+        echo $respuesta->json(201);
+        exit();
     }
 
     public function insertarFacturaMedicoPorId(/*Request $request*/){

@@ -139,7 +139,7 @@ class FacturaMedicoHelpers {
         }
         
         $calculosConCitas = FacturaMedicoHelpers::calculosConsultas($facturas_consultas_citas);
-        
+        echo '<pre>'; var_dump($facturas_consultas_citas);
         $_medicoModel = new MedicoModel();
         $medico = $_medicoModel->where('medico_id', '=', $form['medico_id'])->getFirst();
 
@@ -150,22 +150,7 @@ class FacturaMedicoHelpers {
             "acumulado" => $medico->acumulado
         );
 
-        return $calculos;
-        // if (count($consultas_normales) > 0) {
-
-        //     foreach ($consultas_normales as $consulta) {
-        //         $calculos['monto'] += $consulta->monto_consulta_usd;
-        //         $calculos['pacientes'] += 1;
-        //     }
-
-        //     $porcentaje_medico = GlobalsHelpers::obtenerPorcentajeMedico();
-        //     $calculos['monto'] = $calculos['monto'] * $porcentaje_medico / 100;
-        // }
-
-        // $calculos['monto'] += $medico->acumulado;
-
-        // return $calculos;
-        
+        return $calculos;        
     }
 
     public static function calculosConsultas($consultas_normales) {
