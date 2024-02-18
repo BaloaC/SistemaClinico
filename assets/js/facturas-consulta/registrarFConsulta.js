@@ -28,12 +28,13 @@ async function addFConsulta() {
 
         // data.monto_con_iva = (parseFloat(data.monto_sin_iva) * 0.16) + parseFloat(data.monto_sin_iva)
 
-        const registroExitoso = await addModule("factura/consulta","info-fconsulta",data,"Factura consulta registrada correctamente!", "#modalRegNormal", ".alertConsulta");
+        const registroExitoso = await addModule("factura/consulta","info-fconsulta",data,"La factura consulta ha generada correctamente!", "#modalRegNormal", ".alertConsulta");
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
         
         cleanValdiation("info-fconsulta");
         $('#fConsulta').DataTable().ajax.reload();
+        $('#consultas').DataTable().ajax.reload();
 
         setTimeout(() => {
             document.getElementById("s-consulta-normal").classList.remove("is-valid");

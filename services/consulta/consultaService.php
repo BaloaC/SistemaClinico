@@ -252,6 +252,7 @@ class ConsultaService {
             "medico.medico_id",
             "medico.nombre AS nombre_medico",
             "medico.apellidos AS apellidos_medico",
+            "medico.cedula AS cedula",
             "especialidad.especialidad_id",
             "especialidad.nombre AS nombre_especialidad"
         );

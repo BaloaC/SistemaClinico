@@ -297,7 +297,7 @@ addEventListener("DOMContentLoaded", async e => {
             {
                 data: null,
                 render: function (data, type, row) {
-                    console.log(data);
+                    // console.log(data);
                     if ("nombre_paciente" in data) return `${data.nombre_paciente} ${data.apellido_paciente}`;
                     if ("beneficiado" in data) return `${data.beneficiado.nombre} ${data.beneficiado.apellidos}`;
                 }
@@ -371,32 +371,32 @@ addEventListener("DOMContentLoaded", async e => {
                             label: 'Paciente natural',
                             value: function (rowData, rowIdx) {
 
-                                if(rowData.tipo_paciente) return rowData.tipo_paciente === "1"; 
-                                if(rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "1";
+                                if (rowData.tipo_paciente) return rowData.tipo_paciente === "1";
+                                if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "1";
                             },
                             className: 'paciente-natural'
                         },
                         {
                             label: 'Paciente representante',
                             value: function (rowData, rowIdx) {
-                                if(rowData.tipo_paciente) return rowData.tipo_paciente === "2"; 
-                                if(rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "2";
+                                if (rowData.tipo_paciente) return rowData.tipo_paciente === "2";
+                                if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "2";
                             },
                             className: 'paciente-representante'
                         },
                         {
                             label: 'Paciente asegurado',
                             value: function (rowData, rowIdx) {
-                                if(rowData.tipo_paciente) return rowData.tipo_paciente === "3"; 
-                                if(rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "3";
+                                if (rowData.tipo_paciente) return rowData.tipo_paciente === "3";
+                                if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "3";
                             },
                             className: 'paciente-asegurado'
                         },
                         {
                             label: 'Paciente beneficiado',
                             value: function (rowData, rowIdx) {
-                                if(rowData.tipo_paciente) return rowData.tipo_paciente === "4"; 
-                                if(rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "4";
+                                if (rowData.tipo_paciente) return rowData.tipo_paciente === "4";
+                                if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "4";
                             },
                             className: 'paciente-beneficiado'
                         }
@@ -412,10 +412,10 @@ addEventListener("DOMContentLoaded", async e => {
                         {
                             label: 'Menores de 18 años',
                             value: function (rowData, rowIdx) {
-                                if(rowData.edad_paciente){
+                                if (rowData.edad_paciente) {
                                     return rowData.edad_paciente < 18;
                                 }
-                                if(rowData?.beneficiado.edad){
+                                if (rowData?.beneficiado.edad) {
                                     return rowData.beneficiado.edad < 18;
                                 }
                             },
@@ -424,10 +424,10 @@ addEventListener("DOMContentLoaded", async e => {
                         {
                             label: 'Mayores de 18 años',
                             value: function (rowData, rowIdx) {
-                                if(rowData.edad_paciente){
+                                if (rowData.edad_paciente) {
                                     return rowData.edad_paciente > 18;
                                 }
-                                if(rowData?.beneficiado.edad){
+                                if (rowData?.beneficiado.edad) {
                                     return rowData.beneficiado.edad > 18;
                                 }
                             },
@@ -465,6 +465,7 @@ addEventListener("DOMContentLoaded", async e => {
 
         if (data.clave == null) data.clave = "No aplica";
         let tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
+        if (data.es_emergencia === 1) tipo_cita = "Asegurada";
 
         let examenes = data.examenes !== undefined ? concatItems(data.examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen",
             insumos = data.insumos !== undefined ? concatItems(data.insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo",
@@ -568,7 +569,7 @@ addEventListener("DOMContentLoaded", async e => {
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
                 <tr>
                     <td>Peso: <br><b>${data.peso ? data.peso + " " + "kg" : "No especificado"} </b></td>
-                    <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m": "No especificado"}</b></td>
+                    <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m" : "No especificado"}</b></td>
                     <td>Fecha Cita: <br><b>${data.fecha_cita ?? "No aplica"}</b></td>
                     <td>Motivo cita: <br><b>${data.motivo_cita ?? "No aplica"}</b></td>
                 </tr>
@@ -588,7 +589,7 @@ addEventListener("DOMContentLoaded", async e => {
                 ${factura}
                 <tr><td><br></td></tr>
                 <tr>
-                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="openPopup('pdf/consulta/${data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> <br> <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg${tipo_cita}" ><i class="fa-sm fas fa-plus"></i> Pagar consulta</button></td>
+                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="openPopup('pdf/consulta/${data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> <br> <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg${tipo_cita}" onclick="pagarConsulta(${JSON.stringify({ citaType: tipo_cita, consulta_id: data.consulta_id, paciente_id: data.paciente_id }).replaceAll("\"", "'")})"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button></td>
                 </tr>
             </table>
         `

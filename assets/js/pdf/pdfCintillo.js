@@ -12,11 +12,11 @@ if(infoCintillo.consultas?.length > 0){
             <tr>
                 <td>${consulta.consulta_seguro_id}</td>
                 <td>${consulta.fecha_ocurrencia}</td>
-                <td>${consulta?.especialidad?.nombre ?? "Desconocido"}</td>
-                <td>${consulta.paciente_beneficiado.nombre} ${consulta.paciente_beneficiado.apellidos}</td>
-                <td>${consulta.paciente_beneficiado.cedula}</td>
+                <td>${consulta?.medico[0]?.nombre_especialidad ?? "Desconocido"}</td>
+                <td>${consulta.beneficiado.nombre} ${consulta.beneficiado.apellidos}</td>
+                <td>${consulta.beneficiado.cedula}</td>
                 <td>${consulta.tipo_servicio}</td>
-                <td>${consulta.monto_consulta_usd}</td>
+                <td>$${consulta.monto_consulta_usd}</td>
             </tr>
         `;
     });

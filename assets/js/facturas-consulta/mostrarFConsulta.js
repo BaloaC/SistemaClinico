@@ -12,7 +12,6 @@ const modalRegister = document.getElementById("modalRegNormal") ?? undefined;
 const handleModalOpen = async (modalParent) => {
     if (modalOpened === false) {
 
-        alert("a");
         emptyAllSelect2({
             selectSelector: "#s-paciente-consulta",
             parentModal: modalParent,
@@ -49,8 +48,6 @@ const handleModalOpen = async (modalParent) => {
             const infoConsultas = await getById("consultas/paciente", paciente_id);
 
             $("#s-consulta-normal").empty().select2();
-
-            console.log(infoConsultas);
 
             dinamicSelect2({
                 obj: infoConsultas?.consultas ?? [],
@@ -126,12 +123,12 @@ addEventListener("DOMContentLoaded", e => {
             },
             {
                 data: function (row) {
-                    return `$${row.monto_consulta_usd}`;
+                    return `${row.monto_consulta_bs} Bs`;
                 }
             },
             {
                 data: function (row) {
-                    return `${row.monto_consulta_bs} Bs`;
+                    return `$${row.monto_consulta_usd}`;
                 }
             },
             {
