@@ -280,11 +280,13 @@ class CitaController extends Controller {
 
         // Comenzamos a insertar la cita nueva
         $cita->fecha_cita = $_POST['fecha_cita'];
+        $cita->hora_entrada = $_POST['hora_entrada'];
+        $cita->hora_salida = $_POST['hora_salida'];
         $newCita = get_object_vars( $cita ); // (Volvemos nuestro objeto un array)
         unset($newCita['cita_id']);
         unset($newCita['estatus_cit']);
         unset($newCita['clave']);
-
+        
         $_cita = new CitaModel();
         $id = $_cita->insert($newCita);
         $isInserted = ($id > 0);
