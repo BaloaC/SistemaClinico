@@ -161,7 +161,7 @@ export default async function mostrarHistorialMedico(id) {
                 estatus_cit.textContent = listCita.estatus_cit === "3" ? "Pendiente" : "Asignada";
                 
 
-                dropdownLink.innerHTML = `<b>ID:</b> ${cita_id.textContent} - <b>Nombre médico:</b> ${nombre_medico.textContent} - <b>Especialidad:</b> ${especialidad.textContent} - <b>Fecha:</b> ${fecha_cita.textContent}`;
+                dropdownLink.innerHTML = `<b>Especialidad:</b> ${especialidad.textContent} - <b>Fecha:</b> ${fecha_cita.textContent}`;
                 dropdownLink.setAttribute("data-bs-target", `#cita-${listCita.cita_id}`);
                 dropdownLink.setAttribute("aria-controls", `#cita-${listCita.cita_id}`);
                 citaContainer.setAttribute("id", `cita-${listCita.cita_id}`);
@@ -209,7 +209,7 @@ export default async function mostrarHistorialMedico(id) {
                 motivo_cita.textContent = el.motivo_cita;
                 indicaciones.textContent = el.indicaciones !== undefined ? concatItems(el.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación";
 
-                dropdownLink.innerHTML = `<b>ID:</b> ${consulta_id.textContent} - <b>Nombre médico:</b> ${nombre_medico.textContent} - <b>Especialidad:</b> ${especialidad.textContent} - <b>Fecha:</b> ${fecha_consulta.textContent}`;
+                dropdownLink.innerHTML = `<b>Especialidad:</b> ${especialidad.textContent} <br> <b>Fecha:</b> ${fecha_consulta.textContent}`;
                 dropdownLink.setAttribute("data-bs-target", `#consulta-${el.consulta_id}`);
                 dropdownLink.setAttribute("aria-controls", `#consulta-${el.consulta_id}`);
                 consultaContainer.setAttribute("id", `consulta-${el.consulta_id}`);

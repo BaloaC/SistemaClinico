@@ -22,7 +22,8 @@
                     <h4 class="pt-5 pb-2 text-grey">Historial Médico</h4>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
-                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> antecedentes</button>
+                    <button class="btn btn-sm btn-add mx-1" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> antecedentes</button>
+                    <button class="btn btn-sm btn-add mx-1" data-bs-toggle="modal" data-bs-target="#modalRegConsulta"><i class="fa-sm fas fa-plus"></i> Agregar consulta</button>
                 </div>
                 <hr class="border-white">
             </div>
@@ -31,23 +32,41 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12 col-md-4 paciente-info">
-                            <a class="btn btn-sm btn-add align-self-end my-3" id="consulta-pdf" href="#"><i class="fa-sm fas fa-file-export"></i></a>
-                            <img src="<?php echo Url::to('assets/img/ficha.png'); ?>" alt="">
-                            <p><b>Nombres y Apellidos:</b> <span id="nombre_paciente"></span></p>
-                            <p><b>Fecha de nacimiento:</b> <span id="fecha"></span></p>
-                            <p><b>Edad:</b> <span id="edad"></span></p>
-                            <p><b>Tipo paciente:</b> <span id="tipo_paciente"></span></p>
-                            <p id="seguroLabel" class="d-none"><b>Seguros:</b></p>
-                            <div class="seguro-container">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="text-end">
+                                        <a class="btn btn-sm btn-add my-3" id="consulta-pdf" href="#"><i class="fa-sm fas fa-file-export"></i></a>
+                                    </div>
+                                    <div class="text-center">
+                                        <img src="<?php echo Url::to('assets/img/3135715.webp'); ?>" style="height: 10rem;">
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="fw-bold mb-0"><span id="nombre_paciente"></span></p>
+                                        <p>Paciente <span id="tipo_paciente"></span></p>
+                                    </div>
+                                    <p class="text-secondary mb-0">Fecha de nacimiento <span id="fecha"></span></p>
+                                    <p class="text-secondary">Edad <span id="edad"></span></p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <p class="fw-bold">Antecedentes</p>
+                                    <div class="antecedente-container">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <p id="seguroLabel" class="d-none"><b>Seguros:</b></p>
+                                    <div class="seguro-container">
+                                </div>
+                            </div>
 
                             </div>
-                            <p><b>Antecedentes:</b></p>
-                            <div class="antecedente-container">
-
-                            </div>
+                            
                         </div>
-                        <div class="col-12 col-md-8 paciente-consulta">
-                            <button class="btn btn-sm btn-add align-self-end mb-2" data-bs-toggle="modal" data-bs-target="#modalRegConsulta"><i class="fa-sm fas fa-plus"></i> Agregar consulta</button>
+                        <div class="col-12 col-md-8 paciente-consulta">                            
                             <h5 class="pt-5 pb-2 text-grey d-none" id="citasLabel">Citas pendientes</h4>
                             <div class="accordion citas-accordion" id="citaAccordion">
 

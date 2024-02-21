@@ -131,6 +131,7 @@ class ConsultaController extends Controller {
                 }
                 
                 $consulta_normal = $consultasModel->getFirst();
+                
                 if (!is_null($consulta_normal)) {
                     $consulta = ConsultaService::obtenerConsultaEmergencia($consulta);
                     $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
@@ -154,7 +155,7 @@ class ConsultaController extends Controller {
                 $consulta_normal = $consultasModel->getFirst();
                 if (!is_null($consulta_normal)) {
                     $consulta = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
-                    $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+                    $lista_consultas[] = array_merge((array) $consulta, (array) ConsultaService::obtenerConsultaNormal($consulta_normal));
                 }
             }
         }

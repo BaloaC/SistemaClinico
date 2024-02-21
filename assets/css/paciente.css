@@ -16,13 +16,13 @@
     white-space: nowrap;
 }
 
-.paciente-info {
+/* .paciente-info {
     align-self: baseline;
     background-color: #ff8383;
     border-radius: 5px;
     padding: 2.5rem;
     margin-top: 0.25rem;
-}
+} */
 
 .paciente-info > img {
     margin: auto;
@@ -33,10 +33,6 @@
 .paciente-consulta > ul > li {
     border-bottom: 1px solid #d1d1d1;
     margin-top: 0.75rem;
-}
-
-.paciente-info p {
-    margin-bottom: 0.5rem !important;
 }
 
 .sub-menus > div{
