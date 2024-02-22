@@ -201,17 +201,6 @@ class PacienteController extends Controller{
         return $respuesta->json(200);
     }
     
-    // Funciones
-    public function RetornarTipo($paciente_id){
-
-        $_pacienteModel = new PacienteModel();
-        $paciente = $_pacienteModel->where('paciente_id','=',$paciente_id)->where('estatus_pac', '=', '1')->getFirst();
-        $mensaje = ($paciente != null);
-        $respuesta = $mensaje ? $paciente->tipo_paciente : false;
-        return $respuesta;
-        
-    }
-
     public function retornarMensaje($mensaje) {
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($mensaje);

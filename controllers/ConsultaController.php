@@ -107,7 +107,7 @@ class ConsultaController extends Controller {
                 $consultas[] = array_merge( (Array) ConsultaService::obtenerConsultaNormal($consulta), (Array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id) ) ;
             }
         }
-
+        
         $mensaje = (count($consultas) > 0);
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($consultas);
