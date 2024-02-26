@@ -24,8 +24,9 @@ addEventListener("DOMContentLoaded", e => {
                 $('#especialidades').DataTable().clear().draw();
             }
         },
+        processing: true,
+        serverSide: true,
         columns: [
-
             { data: "especialidad_id" },
             { data: "nombre" },
             {

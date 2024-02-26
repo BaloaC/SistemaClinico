@@ -52,39 +52,35 @@ class EspecialidadController extends Controller{
 
     public function listarEspecialidades(){
         $_especialidadModel = new EspecialidadModel();
-        $especialidad = $_especialidadModel->where('estatus_esp', '=', '1')->getAll();
-        $resultado = array();
+        $_especialidadModel->where('estatus_esp', '=', '1');
 
-        foreach ($especialidad as $especialidades) {
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
 
-            $id = $especialidades->especialidad_id;
-            $validarEspecialidad = new Validate;
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_especialidadModel->limit([$primer_registro, $size]);
+            }
 
-            // Verificamos si hay que aplicarle un inner join a ese seguro en específico
-            $respuesta = $validarEspecialidad->isDuplicated('medico_especialidad', 'especialidad_id', $id);
-            $newArray = get_object_vars($especialidades);
-
-            if($respuesta){
-
-                $newArray['medicos'] = '';
-                $_medicoModel = new MedicoModel();
-                $inners = $_medicoModel->listInner($this->arrayInner);
-                $medicoEspecialidad = $_medicoModel->where('especialidad.especialidad_id','=',$id)->where('especialidad.estatus_esp', '=', '1')->innerJoin($this->arraySelect, $inners, "medico_especialidad");
-                $arrayMedico = array();
-
-                foreach ($medicoEspecialidad as $medicos) {
-                    // Guardamos cada empresa en un array
-                    $arrayMedico[] = $medicos;
-                }
-                // Agregamos las empresas en el seguro al que pertenecen
-                $newArray['medicos'] = $arrayMedico;
-                $resultado[] = $newArray;
-
-            } else { $resultado[] = $newArray; } // Si no necesita inner join, lo agregamos tal cual como está
+            if (strlen($_GET['search']['value']) > 0) {
+                $_especialidadModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            }
         }
 
-        $mensaje = ($resultado != null);
-        Helpers::retornarMensaje($mensaje, $resultado);
+        $especialidades =  $_especialidadModel->getAll();
+        $_especialidadModel->resetValues();
+
+        if (strlen($_GET['search']['value']) > 0) {
+            $_especialidadModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        } else {
+            $_especialidadModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_especialidadModel->where('estatus_esp', '=', '1')->getAll();
+        
+        Helpers::retornarGet(($_GET['draw'] ? $_GET['draw'] : 0), $total_registros[0]->total, $especialidades);
     }
 
     public function listarEspecialidadPorId($especialidad_id){

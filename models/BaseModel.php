@@ -8,6 +8,8 @@ class BaseModel{
     protected $table;
     protected $sql = null;
     protected $wheres = "";
+    protected $limits = "";
+    protected $select = "*";
 
     public function __construct($table = null){
 
@@ -19,7 +21,7 @@ class BaseModel{
     public function getAll(){
         try {
 
-            $this->sql = "SELECT * FROM {$this->table} {$this->wheres}";
+            $this->sql = "SELECT {$this->select} FROM {$this->table} {$this->wheres} {$this->limits}";
             
             $query = $this->connection->prepare($this->sql);
             $query->execute();
@@ -45,6 +47,11 @@ class BaseModel{
 
             return null;
         }
+    }
+
+    public function setSelect($select_value) {
+        $this->select = $select_value;
+        return $this;
     }
 
     //Método para insertar un registro
@@ -193,6 +200,11 @@ class BaseModel{
         }
     }
 
+    public function limit($limits) {
+        $limit = is_array($limits) ? implode(', ', $limits) : $limits;
+        $this->limits = "LIMIT ".$limit;
+    }
+
     //Método para ejectuar una consulta
     private function execute($obj = null){
 
@@ -217,10 +229,12 @@ class BaseModel{
     }
 
     //Reestablecer los valores de los atributos wheres y sql
-    private function resetValues(){
+    public function resetValues(){
         
         $this->wheres = "";
         $this->sql = null;
+        $this->select = "*";
+        $this->limits = "";
     }
 }
 
