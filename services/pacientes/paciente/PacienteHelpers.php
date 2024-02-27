@@ -45,4 +45,32 @@ class PacienteHelpers {
             exit();
         }
     }
+
+    /**
+     * Esta función verifica si existen otras cédulas con algún sufijo y retorna la que no existe
+     */
+    public static function retornarCedulaFormateada($formulario) {
+        foreach ($formulario['titular'] as $titular) {
+            // var_dump($titular);
+            if ( $titular['tipo_familiar'] == 1 || $titular['tipo_familiar'] == '1' ) {
+
+                $_pacienteModel = new PacienteModel();
+                $paciente = $_pacienteModel->where('paciente_id', '=', $titular['paciente_id'])->getFirst();
+
+                $cedula = $paciente->cedula;
+                $numero = 1;
+
+                while (true) {
+                    $nueva_cedula = $numero . '-' . $cedula;
+                    $_paciente = new PacienteModel();
+                    $paciente_cedula = $_paciente->where('cedula', '=', $nueva_cedula)->getFirst();
+
+                    if ( is_null($paciente_cedula) ) {
+                        return $nueva_cedula;
+                    }
+                    $numero++;
+                }
+            }
+        }
+    }
 }

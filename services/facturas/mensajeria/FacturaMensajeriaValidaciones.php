@@ -44,4 +44,12 @@ class FacturaMensajeriaValidaciones {
             }
         }
     }
+
+    public static function validarEstatusFactura($factura) {
+        if ($factura->estatus_fac == 2) {
+            $respuesta = new Response(false, 'Esa factura ya se encuentra marcada como pagada');
+            echo $respuesta->json(400);
+            exit();
+        }
+    }
 }

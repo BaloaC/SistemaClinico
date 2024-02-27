@@ -284,27 +284,6 @@ class ConsultaService {
         $consultas->beneficiado = $beneficiado;
 
         $relaciones = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
-        // var_dump($consulta->consulta_id);
-        // var_dump(property_exists($relaciones, 'examenes'));
-
-        // if ( property_exists($relaciones, 'examenes') || property_exists($relaciones, 'insumos') ) {
-
-        //     // if ( property_exists($relaciones, 'examenes') ) {
-        //     //     unset($relaciones->examenes);
-        //     // }
-            
-        //     // if ( property_exists($relaciones, 'insumos') ) {
-        //     //     unset($relaciones->insumos);
-        //     // }
-
-        //     $consulta_examenes_insumos = FacturaConsultaHelpers::obtenerMontoTotal((Array) $consultas);
-        //     // No recuerdo muy bien que hacia la línea de arriba
-        //     echo '<pre>'; var_dump($consulta_examenes_insumos);
-        //     $relaciones = array_merge((array) $relaciones, (array) $consulta_examenes_insumos);
-        // }
-        // var_dump($relaciones);
-
-        // echo '<pre>'; var_dump($consultas);
 
         $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
         $consultas->factura->consultas_medicas_bs = round( $consultas->factura->consultas_medicas * $valorDivisa, 2);

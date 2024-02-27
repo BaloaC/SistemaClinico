@@ -9,6 +9,7 @@ class FacturaMensajeriaModel extends GenericModel {
     protected $fecha_mensajeria;
     protected $total_mensajeria_usd;
     protected $total_mensajeria_bs;
+    protected $estatus_fac;
     
     public function __construct($propiedades = null) {
         parent::__construct('factura_mensajeria', FacturaMensajeriaModel::class, $propiedades);
@@ -20,6 +21,7 @@ class FacturaMensajeriaModel extends GenericModel {
     public function getFechaMensajeria(){return $this->fecha_mensajeria;}
     public function getTotalMensajeriaUsd(){return $this->total_mensajeria_usd;}
     public function getTotalMensajeriaBs(){return $this->total_mensajeria_bs;}
+    public function getEstatusCon(){return $this->estatus_fac;}
 
     /* Setters */
     public function setFacturaMensajeriaId($fecha_mensajeria_id){return $this->fecha_mensajeria_id = $fecha_mensajeria_id;}
@@ -27,6 +29,7 @@ class FacturaMensajeriaModel extends GenericModel {
     public function setFechaMensajeria($fecha_mensajeria){return $this->fecha_mensajeria = $fecha_mensajeria;}
     public function setTotalMensajeriaUsd($total_mensajeria_usd){return $this->total_mensajeria_usd = $total_mensajeria_usd;}
     public function setTotalMensajeriaBs($total_mensajeria_bs){return $this->total_mensajeria_bs = $total_mensajeria_bs;}
+    public function setEstatusCon($estatus_fac){return $this->estatus_fac = $estatus_fac;}
 }
 
 ?>

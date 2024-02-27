@@ -27,7 +27,7 @@ class FacturaSeguroHelpers {
         $_consultaSeguro = new ConsultaSeguroModel();
         
         $inners = $_consultaSeguro->listInner($consultaInner);
-        $consultaList = $_consultaSeguro->where('consulta_seguro.estatus_con', '=', '1')
+        $consultaList = $_consultaSeguro->where('consulta_seguro.estatus_con', '!=', '2')
                                         ->where('consulta_seguro.seguro_id', '=', $seguro_id)
                                         ->where('YEAR(consulta_seguro.fecha_ocurrencia)', '=', $anio)
                                         ->where('MONTH(consulta_seguro.fecha_ocurrencia)', '=', $mes)

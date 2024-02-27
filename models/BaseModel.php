@@ -8,6 +8,8 @@ class BaseModel{
     protected $table;
     protected $sql = null;
     protected $wheres = "";
+    protected $limits = "";
+    protected $select = "*";
 
     public function __construct($table = null){
 
@@ -19,7 +21,7 @@ class BaseModel{
     public function getAll(){
         try {
 
-            $this->sql = "SELECT * FROM {$this->table} {$this->wheres}";
+            $this->sql = "SELECT {$this->select} FROM {$this->table} {$this->wheres} {$this->limits}";
             
             $query = $this->connection->prepare($this->sql);
             $query->execute();
@@ -45,6 +47,11 @@ class BaseModel{
 
             return null;
         }
+    }
+
+    public function setSelect($select_value) {
+        $this->select = $select_value;
+        return $this;
     }
 
     //Método para insertar un registro
@@ -145,16 +152,27 @@ class BaseModel{
     }
 
     // Armar los inner del inner join
-    public function listInner($obj, $objManual = null) {
+    public function listInner($obj, $objManual = null, $isFirst = true) {
         $inner = array();
-
+        $inner_custom = "";
+        
         if (isset($objManual)) {
-            $inner[] = "INNER JOIN $objManual[0] ON $objManual[0].$objManual[1]"."_id = $objManual[2]".".$objManual[1]"."_id";
+            $inner_custom = "INNER JOIN $objManual[0] ON $objManual[0].$objManual[1]"."_id = $objManual[2]".".$objManual[1]"."_id";
+
+            if ($isFirst) {
+                $inner[] =  "INNER JOIN $objManual[0] ON $objManual[0].$objManual[1]"."_id = $objManual[2]".".$objManual[1]"."_id";
+            }
         }
 
-        foreach ($obj as $key => $ref) {
-            $line = "INNER JOIN $key ON $key.$key"."_id = $ref".".$key"."_id";
-            $inner[] = $line;
+        if ($obj != null) {
+            foreach ($obj as $key => $ref) {
+                $line = "INNER JOIN $key ON $key.$key"."_id = $ref".".$key"."_id";
+                $inner[] = $line;
+            }
+        }
+
+        if (!$isFirst) {
+            array_push($inner, $inner_custom);
         }
 
         return implode(" ", $inner);
@@ -182,6 +200,11 @@ class BaseModel{
         }
     }
 
+    public function limit($limits) {
+        $limit = is_array($limits) ? implode(', ', $limits) : $limits;
+        $this->limits = "LIMIT ".$limit;
+    }
+
     //Método para ejectuar una consulta
     private function execute($obj = null){
 
@@ -206,10 +229,12 @@ class BaseModel{
     }
 
     //Reestablecer los valores de los atributos wheres y sql
-    private function resetValues(){
+    public function resetValues(){
         
         $this->wheres = "";
         $this->sql = null;
+        $this->select = "*";
+        $this->limits = "";
     }
 }
 

@@ -2,6 +2,9 @@
 
 class Response{
 
+    public $recordsFiltered = 0;
+    public $recordsTotal = 0;
+    public $draw = 0;
     public $code;
     public $message;
     public $data;
@@ -137,5 +140,10 @@ class Response{
     public function setCode($code){$this->code = $code;}
     public function setMessage($message){$this->message = $message;}
     public function setData($data){$this->data = $data;}
+    public function setRecords($data) {
+        $this->draw = $data[0];
+        $this->recordsFiltered = $data[1];
+        $this->recordsTotal = $data[1];
+    }
 
 }

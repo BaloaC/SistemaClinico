@@ -43,7 +43,7 @@ class ConsultaSeguroController extends Controller{
             // Si no es consulta por cita, es consulta por emergencia
             ConsultaSeguroValidaciones::validarConsultaEmergencia($data);
             ConsultaSeguroService::insertarConsultaEmergencia($data);
-            ConsultaSeguroService::actualizarEstatusConsulta($data['consulta_id']);
+            // ConsultaSeguroService::actualizarEstatusConsulta($data['consulta_id']);
 
             $respuesta = new Response('INSERCION_EXITOSA');
             return $respuesta->json(201);

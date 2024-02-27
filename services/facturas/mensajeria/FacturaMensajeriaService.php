@@ -55,6 +55,33 @@ class FacturaMensajeriaService {
         }
     }
 
+    public static function actualizarFactura($factura_mensajeria_id) {
+        $_facturaMensajeriaModel = new FacturaMensajeriaModel();
+        $factura_mensajeria = $_facturaMensajeriaModel->where('factura_mensajeria_id', '=', $factura_mensajeria_id)->getFirst();
+
+        FacturaMensajeriaValidaciones::validarEstatusFactura($factura_mensajeria);
+        
+        $_facturaMensajeriaConsultasModel = new FacturaMensajeriaConsultasModel();
+        $factura_mensajeria_consultas = $_facturaMensajeriaConsultasModel->where('factura_mensajeria_id', '=', $factura_mensajeria_id)->getAll();
+
+        foreach ($factura_mensajeria_consultas as $consultas) {
+            $_consultaSeguroModel = new ConsultaSeguroModel();
+            $consulta_seguro = $_consultaSeguroModel->where('consulta_seguro_id', '=', $consultas->consulta_seguro_id)->getFirst();
+
+            $seActualizo = $_consultaSeguroModel->update(['estatus_con' => 3]);
+            
+            if (!$seActualizo) {
+                $respuesta = new Response(false, 'Ocurrió un error actualizando la factura mensajería');
+                echo $respuesta->json(400);
+                exit();
+            }
+        }
+    
+        if ($seActualizo) {
+            $seActualizoFactura =  $_facturaMensajeriaModel->where('factura_mensajeria_id', '=', $factura_mensajeria_id)->update(['estatus_fac' => 3]);
+        }
+    }
+
     public static function listarFacturas($facturas) {
 
         $facturaLista = [];

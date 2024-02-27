@@ -221,8 +221,11 @@ class CitaController extends Controller {
         $inners = $_citaModel->listInner($this->arrayInner);
         $lista = $_citaModel->where('estatus_cit', '!=', '2')->where('cita.paciente_id', '=', $paciente_id)->innerJoin($this->arraySelect, $inners, "cita");
         
-        if ( count($lista) > 0 && $lista[0]->tipo_cita == 2) {
-            $lista_citas = CitasHelpers::innerCita($lista[0]);
+        if ( count($lista) > 0 ) {
+            $lista_citas = [];
+            foreach ($lista as $cita) {
+                $lista_citas[] = CitasHelpers::innerCita($cita);
+            }
             Helpers::retornarMensajeListado($lista_citas);
         } else {
 
@@ -280,11 +283,13 @@ class CitaController extends Controller {
 
         // Comenzamos a insertar la cita nueva
         $cita->fecha_cita = $_POST['fecha_cita'];
+        $cita->hora_entrada = $_POST['hora_entrada'];
+        $cita->hora_salida = $_POST['hora_salida'];
         $newCita = get_object_vars( $cita ); // (Volvemos nuestro objeto un array)
         unset($newCita['cita_id']);
         unset($newCita['estatus_cit']);
         unset($newCita['clave']);
-
+        
         $_cita = new CitaModel();
         $id = $_cita->insert($newCita);
         $isInserted = ($id > 0);

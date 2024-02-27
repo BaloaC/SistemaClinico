@@ -23,7 +23,7 @@ class PacienteService{
 
             $pacienteSeguro = $formulario['seguro'];
             unset($formulario['seguro']);
-            
+                        
             $data = $validarPaciente->dataScape($formulario);
             $id = $_pacienteModel->insert($data);
             
@@ -41,11 +41,16 @@ class PacienteService{
 
         } else if( $formulario['tipo_paciente'] == 4 ) {
             // Lógica para paciente tipo beneficiado
-
             $pacienteBeneficiado = $formulario['titular'];
             PacienteValidaciones::validarPacienteBeneficiado($pacienteBeneficiado);
+            $cedula_nueva = PacienteHelpers::retornarCedulaFormateada($formulario);
+            
+            if (!is_null($cedula_nueva)) {
+                $formulario['cedula'] = $cedula_nueva;
+            }
+            
             unset($formulario['titular']);
-
+            
             $data = $validarPaciente->dataScape($formulario);
             $id = $_pacienteModel->insert($data);
             

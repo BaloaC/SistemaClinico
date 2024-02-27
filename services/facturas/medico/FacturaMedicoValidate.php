@@ -3,6 +3,31 @@
 class FacturaMedicoValidate {
 
     /**
+     * Funciones para las validaciones del solicitar factura
+     */
+    public static function validacionesPrincipales($formulario) {
+        $validarFactura = new Validate;
+
+        if ( $validarFactura->isEmpty($formulario) ) {
+            $respuesta = new Response('DATOS_VACIOS');
+            echo $respuesta->json(400);
+            exit();
+        }
+
+        if ( $validarFactura->isDate($formulario['fecha_actual']) ) {
+            $respuesta = new Response('FECHA_INVALIDA');
+            echo $respuesta->json(200);
+            exit();
+        }
+
+        if ( !$validarFactura->isToday($formulario['fecha_actual'], true) ) {
+            $respuesta = new Response('FECHA_INVALIDA');
+            echo $respuesta->json(200);
+            exit();
+        }
+    }
+
+    /**
      * Función para las validaciones generales de la factura medico
      */
     public static function validateGeneral($formulario) {
@@ -49,21 +74,23 @@ class FacturaMedicoValidate {
     public static function validarFacturaMes($formulario) {
 
         $fecha_mes = new DateTime($formulario['fecha_actual']);
-        $fecha_mes->modify('first day of this month');
-        $primer_dia = $fecha_mes->format('Y-m-d H:i:s');
+        // $fecha_mes->modify('first day of this month');
+        // $primer_dia = $fecha_mes->format('Y-m-d H:i:s');
         
-        $fecha_mes->modify('last day of this month');
-        $ultimo_dia = $fecha_mes->format('Y-m-d H:i:s');
+        // $fecha_mes->modify('last day of this month');
+        // $ultimo_dia = $fecha_mes->format('Y-m-d H:i:s');
         
         $_facturaMedicoModel = new FacturaMedicoModel();
         $factura = $_facturaMedicoModel->where('medico_id', '=', $formulario['medico_id'])
-                                    ->whereDate('fecha_pago',$primer_dia, $ultimo_dia)
+                                    ->where('YEAR(fecha_emision)',"=", date('Y', strtotime($formulario['fecha_actual'])) )
+                                    ->where('MONTH(fecha_emision)', '=', date('m', strtotime($formulario['fecha_actual'])) )
+                                    // ->whereDate('fecha_pago',$primer_dia, $ultimo_dia)
                                     ->getFirst();
 
         if (is_null($factura)) {
             return false;
         } else {
-            return true;
+            return $factura;
         }
     }
 }
