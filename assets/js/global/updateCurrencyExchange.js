@@ -14,7 +14,7 @@ async function updateCurrencyExchange() {
     try {
 
         const currentPrice = document.getElementById("currencyExchange").textContent.split(" ")[0];
-        document.getElementById("cambioDivisaInput").value = currentPrice;
+        document.getElementById("cambioDivisaInput").value = currentPrice.replace(",",".");
 
     } catch (error) {
 
