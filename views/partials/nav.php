@@ -24,7 +24,7 @@
 
         <!-- Links -->
         <div class="collapse navbar-collapse" id="navBarGod">
-            <ul class="list-nav navbar-nav align-items-center">
+            <ul class="list-nav navbar-nav align-items-center justify-content-center flex-wrap">
                 <li class="nav-item"><a class="nav-link rol-1 rol-2 rol-3 rol-4 rol-5 rol-0" href="<?php echo Url::base() . "/home" ?>"><i class="fas fa-home"></i> Inicio</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle rol-1 rol-2 rol-4 rol-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -68,7 +68,7 @@
                     <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/seguroAge" ?>">Factura seguro</a></li>
                     <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/consulta" ?>">Factura consulta</a></li>
                     <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/medico" ?>">Factura médico</a></li>
-                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/medico" ?>">Factura mensajería</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/mensajeria" ?>">Factura mensajería</a></li>
                 </ul>
             </li>
             <li class="nav-item dropdown">
@@ -90,8 +90,36 @@
                     <li><a class="dropdown-item rol-1 rol-2" onclick="openPopup('pdf/insumosfaltantes')" href="#">Insumos faltantes</a></li>
                 </ul>
             </li>
+            <li class="nav-item">
+                <a class="nav-link rol-1 rol-2 rol-3 rol-4 rol-5" data-bs-toggle="modal" data-bs-target="#modalAct" onclick="updateCurrencyExchange()">
+                    <i class="fas fa-hand-holding-usd"></i>Cambio de divisa: <span id="currencyExchange">0 Bs</span></a>
+                </a>
+            </li>
             </ul>
         </div>
     </div>
 </nav>
 <!-- Fin Nav -->
+
+<!-- Modal Actualizar Precio Divisa -->
+<div class="modal fade" id="modalAct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-3" id="modalActLabel">Actualizar cambio de divisa</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalActBody">
+                <div id="actAlert" class="alert d-none" role="alert"></div>
+                <form action="" id="act-cambioDivisa" class="p-3 px-4">
+                    <label for="nombre">Monto de cambio de divisa</label>
+                    <input type="number" name="cambio_divisa" id="cambioDivisaInput" step="any" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="45" required>
+                    <small class="form-text">No se permiten números negativos</small>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdateCurrencyExchange()">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>

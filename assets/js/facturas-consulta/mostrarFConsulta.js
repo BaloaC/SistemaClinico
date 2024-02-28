@@ -2,6 +2,7 @@ import dinamicSelect2, { emptyAllSelect2, emptySelect2, select2OnClick } from ".
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
+import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
 
 const path = location.pathname.split('/');
 
@@ -123,7 +124,7 @@ addEventListener("DOMContentLoaded", e => {
             },
             {
                 data: function (row) {
-                    return `${row.monto_consulta_bs} Bs`;
+                    return `${convertCurrencyToVES(row.monto_consulta_bs)} Bs`;
                 }
             },
             {

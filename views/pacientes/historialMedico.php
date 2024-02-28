@@ -56,7 +56,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card">
+                            <div class="card" id="seguroContainer">
                                 <div class="card-body">
                                     <p id="seguroLabel" class="d-none"><b>Seguros:</b></p>
                                     <div class="seguro-container">

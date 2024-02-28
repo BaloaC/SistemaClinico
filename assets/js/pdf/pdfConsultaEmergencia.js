@@ -1,3 +1,4 @@
+import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
 import getById from "../global/getById.js";
 
 const id = location.pathname.split("/")[4];
@@ -19,8 +20,8 @@ document.getElementById("cant_medicamentos").textContent = dataFactura.factura?.
 document.getElementById("total_medicamentos").textContent = dataFactura.factura?.medicamentos_bs ?? "-";
 document.getElementById("enfermeria").textContent = dataFactura.factura?.enfermeria_bs ?? "-";
 document.getElementById("cant_consultas").textContent = dataFactura.factura?.cantidad_consultas_medicas ?? "-";
-document.getElementById("total_consultas").textContent = dataFactura.factura?.consultas_medicas_bs ? `${dataFactura.factura?.consultas_medicas_bs} Bs` : `${dataFactura.monto_consulta_bs} Bs`;
-document.getElementById("monto_total_consulta").textContent = dataFactura?.monto_consulta_bs ? `${dataFactura?.monto_consulta_bs} Bs` : `${dataFactura.monto_total_bs} Bs`;
+document.getElementById("total_consultas").textContent = dataFactura.factura?.consultas_medicas_bs ? `${convertCurrencyToVES(dataFactura.factura?.consultas_medicas_bs)} Bs` : `${convertCurrencyToVES(dataFactura.monto_consulta_bs)} Bs`;
+document.getElementById("monto_total_consulta").textContent = dataFactura?.monto_consulta_bs ? `${convertCurrencyToVES(dataFactura?.monto_consulta_bs)} Bs` : `${convertCurrencyToVES(dataFactura.monto_total_bs)} Bs`;
 // document.getElementById("nombre_paciente").textContent = `${dataConsulta[0].nombre_paciente} ${dataConsulta[0].apellido_paciente}`;
 // document.getElementById("cedula_paciente").textContent = dataConsulta[0].cedula_paciente;
 // document.getElementById("cedula_titular").textContent = dataConsulta[0].cedula_titular;

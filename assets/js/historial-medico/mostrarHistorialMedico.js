@@ -76,6 +76,11 @@ export default async function mostrarHistorialMedico(id) {
             // Actualizamos el contenedor e insertamos los datos
             seguroContainer.replaceChildren();
             seguroContainer.appendChild(seguroFragment);
+        } else {
+
+            // Ocultamos el container
+            const seguroContainer = document.getElementById("seguroContainer");
+            seguroContainer.classList.add("invisible");
         }
 
         // ** Validamos si el paciente cuenta con antecedetes médicos
@@ -123,7 +128,7 @@ export default async function mostrarHistorialMedico(id) {
         }
 
         // ** Validamos en caso de que el paciente tenga citas pendientes
-        if (listCita?.cita_id) {
+        if (listCita[0]?.cita_id) {
 
             const citasLabel = document.getElementById("citasLabel");
             citasLabel.classList.remove("d-none");
@@ -150,21 +155,21 @@ export default async function mostrarHistorialMedico(id) {
                 //     citaContainer.classList.remove("show");
                 // }
 
-                cita_id.textContent = listCita.cita_id;
-                nombre_medico.textContent = `${listCita.nombre_medico} ${listCita.apellido_medico}`;
-                especialidad.textContent = listCita.nombre_especialidad;
-                fecha_cita.textContent = listCita.fecha_cita;
-                motivo_cita.textContent = listCita.motivo_cita;
-                hora_entrada.textContent = listCita.hora_entrada;
-                hora_salida.textContent = listCita.hora_salida;
-                tipo_cita.textContent = listCita.tipo_cita === "2" ? "Asegurada" : "Natural";
-                estatus_cit.textContent = listCita.estatus_cit === "3" ? "Pendiente" : "Asignada";
+                cita_id.textContent = listCita[0].cita_id;
+                nombre_medico.textContent = `${listCita[0].nombre_medico} ${listCita[0].apellido_medico}`;
+                especialidad.textContent = listCita[0].nombre_especialidad;
+                fecha_cita.textContent = listCita[0].fecha_cita;
+                motivo_cita.textContent = listCita[0].motivo_cita;
+                hora_entrada.textContent = listCita[0].hora_entrada;
+                hora_salida.textContent = listCita[0].hora_salida;
+                tipo_cita.textContent = listCita[0].tipo_cita === "2" ? "Asegurada" : "Natural";
+                estatus_cit.textContent = listCita[0].estatus_cit === "3" ? "Pendiente" : "Asignada";
                 
 
                 dropdownLink.innerHTML = `<b>Especialidad:</b> ${especialidad.textContent} - <b>Fecha:</b> ${fecha_cita.textContent}`;
-                dropdownLink.setAttribute("data-bs-target", `#cita-${listCita.cita_id}`);
-                dropdownLink.setAttribute("aria-controls", `#cita-${listCita.cita_id}`);
-                citaContainer.setAttribute("id", `cita-${listCita.cita_id}`);
+                dropdownLink.setAttribute("data-bs-target", `#cita-${listCita[0].cita_id}`);
+                dropdownLink.setAttribute("aria-controls", `#cita-${listCita[0].cita_id}`);
+                citaContainer.setAttribute("id", `cita-${listCita[0].cita_id}`);
 
                 let clone = document.importNode(templateCita, true);
                 citaFragment.appendChild(clone);

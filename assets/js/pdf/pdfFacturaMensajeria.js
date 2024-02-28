@@ -1,3 +1,4 @@
+import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
 import getAll from "../global/getAll.js";
 
 const data = location.pathname.split("/")[4];
@@ -9,15 +10,16 @@ console.log(infoFactura);
 
 if(infoFactura.consultas?.length > 0){
 
-    infoFactura.consultas.forEach(consulta => {
+    infoFactura.consultas.forEach((consulta, iterator) => {
         consultas += `
             <tr>
+                <td>${iterator + 1}</td>
                 <td>${consulta.factura_mensajeria_consultas_id}</td>
                 <td>${consulta.fecha_ocurrencia}</td>
-                <td>${consulta.paciente_beneficiado.cedula}</td>
-                <td>${consulta.paciente_titular.cedula}</td>
-                <td>${consulta.paciente_beneficiado.nombre} ${consulta.paciente_beneficiado.apellidos}</td>
-                <td>${consulta.monto_consulta_bs}</td>
+                <td>${consulta.beneficiado.cedula}</td>
+                <td>${consulta.titular.cedula}</td>
+                <td>${consulta.beneficiado.nombre} ${consulta.beneficiado.apellidos}</td>
+                <td>${convertCurrencyToVES(consulta.monto_consulta_bs)} Bs</td>
             </tr>
         `;
     });
@@ -28,8 +30,9 @@ if(infoFactura.consultas?.length > 0){
             <td><br></td>
             <td><br></td>
             <td><br></td>
+            <td><br></td>
             <td>Total Bs:</td>
-            <td>${infoFactura.total_mensajeria_bs}</td>
+            <td>${infoFactura.total_mensajeria_bs} Bs</td>
         </tr>
     `;
 }

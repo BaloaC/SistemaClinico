@@ -1,4 +1,6 @@
 <script type="module" src="<?php echo Url::to('assets/js/global/navbarOptions.js'); ?>"></script>
+<script type="module" src="<?php echo Url::to('assets/js/global/getGlobalValues.js'); ?>"></script>
+<script type="module" src="<?php echo Url::to('assets/js/global/updateCurrencyExchange.js'); ?>"></script>
 <script type="module" src="<?php echo Url::to('assets/js/global/openPopup.js'); ?>"></script>
 <script type="module" src="<?php echo Url::to('assets/js/global/defaultSelect.js'); ?>"></script>
 <script type="module" src="<?php echo Url::to('assets/js/global/cleanRegFormAfterCloseAct.js'); ?>"></script>

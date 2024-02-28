@@ -37,9 +37,12 @@
                                     <thead>
                                         <tr>
                                             <th>Nombre doctor</th>
+                                            <th>Sumatoria consultas naturales</th>
+                                            <th>Sumatoria consultas aseguradas</th>
                                             <th>Acumulado seguro</th>
                                             <th>Acumulado consulta</th>
                                             <th>Fecha de pago</th>
+                                            <th>Fecha emisión</th>
                                             <th>Total a pagar</th>
                                             <th>Acciones</th>
                                         </tr>

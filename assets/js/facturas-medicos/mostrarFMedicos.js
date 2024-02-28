@@ -24,10 +24,10 @@ addEventListener("DOMContentLoaded", e => {
         },
         ajax: {
             url: `/${path[1]}/factura/medico/consulta/`,
-            beforeSend: function(xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
             },
-            error: function(xhr, error, thrown) {
+            error: function (xhr, error, thrown) {
                 // Manejo de errores de Ajax
                 console.log('Error de Ajax:', error);
                 console.log('Detalles:', thrown);
@@ -36,11 +36,33 @@ addEventListener("DOMContentLoaded", e => {
             }
         },
         columns: [
-            { data: "nombre" },
-            { data: "acumulado_seguro_total" },
-            { data: "acumulado_consulta_total" },
+            {
+                data: "nombre",
+                render: function (data, type, row) {
+                    return `${row.nombre} ${row.apellidos}`;
+                }
+            },
+            { data: "sumatoria_consultas_aseguradas" },
+            { data: "sumatoria_consultas_naturales" },
+            {
+                data: "acumulado_seguro_total",
+                render: function (data, type, row) {
+                    return `$${data}`;
+                }
+            },
+            {
+                data: "acumulado_consulta_total",
+                render: function (data, type, row) {
+                    return `$${data}`;
+                }
+            },
             { data: "fecha_pago" },
-            { data: "pago_total" },
+            { data: "fecha_emision" },
+            {
+                data: "pago_total", render: function (data, type, row) {
+                    return `$${data}`;
+                }
+            },
             {
                 data: "factura_medico_id",
                 render: function (data, type, row) {

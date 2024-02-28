@@ -20,6 +20,7 @@
                 <div class="col-6">
                     <h4 class="pt-5 pb-2 text-grey">Gestion de Médicos</h4>
                     <p id="info-medicos"> <i class="fas fa-info-circle"></i> Para registrar médicos debe tener especialidades registradas</p>
+                    <p id="info-medicos" data-bs-toggle="modal" data-bs-target="#modalActPercentage" onclick="updatePercentage()"> <i class="fas fa-pencil-alt fa-edit"></i> Porcentaje del médico: <span id="medicPercentage">0%</span></p>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
                     <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Médicos</button>
@@ -483,6 +484,29 @@
         </div>
     </div>
 
+    <!-- Modal Actualizar Precio Divisa -->
+    <div class="modal fade" id="modalActPercentage" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-3" id="modalActLabel">Actualizar porcentaje médico</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalActBodyPercentage">
+                    <div id="actAlertPercentage" class="alert d-none" role="alert"></div>
+                    <form action="" id="act-cambioPorcentaje" class="p-3 px-4">
+                        <label for="nombre">Porcentaje</label>
+                        <input type="number" name="porcentaje_medico" id="porcentajeMedicoInput" step="any" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="45" required>
+                        <small class="form-text">No se permiten números negativos</small>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdatePercentage()">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <?php include constant('PATH_VIEWS') . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/mostrarMedicos.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/registrarMedico.js'); ?>"></script>
@@ -497,6 +521,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/medicos/addMedicoEspecialidadInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/deleteMedicoEspecialidadInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/medicosSelect2.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/medicos/updatePercentage.js'); ?>"></script>
 </body>
 
 </html>

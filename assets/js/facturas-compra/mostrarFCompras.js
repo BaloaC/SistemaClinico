@@ -12,12 +12,12 @@ addEventListener("DOMContentLoaded", (e) => {
         language: {
             url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`,
         },
-        ajax: { 
+        ajax: {
             url: `/${path[1]}/factura/compra/consulta/`,
-            beforeSend: function(xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
             },
-            error: function(xhr, error, thrown) {
+            error: function (xhr, error, thrown) {
                 // Manejo de errores de Ajax
                 console.log('Error de Ajax:', error);
                 console.log('Detalles:', thrown);
@@ -41,8 +41,18 @@ addEventListener("DOMContentLoaded", (e) => {
                     return totalInsumos;
                 },
             },
-            { data: "monto_con_iva" },
-            { data: "monto_sin_iva" },
+            {
+                data: "monto_con_iva",
+                render: function (data, type, row) {
+                    return `$${data}`
+                }
+            },
+            {
+                data: "monto_sin_iva",
+                render: function (data, type, row) {
+                    return `$${data}`
+                }
+            },
             {
                 data: "excento",
                 render: function (data, type, row) {
@@ -53,9 +63,9 @@ addEventListener("DOMContentLoaded", (e) => {
             {
                 data: "estatus_fac",
                 render: function (data, type, row) {
-                    if(data == 1){
+                    if (data == 1) {
                         return `<span class="badge light badge-success">Pagada</span>`;
-                    } else{
+                    } else {
                         return `<span class="badge light badge-danger">Anulada</span>`;
                     }
                 },
@@ -64,11 +74,11 @@ addEventListener("DOMContentLoaded", (e) => {
                 data: "factura_compra_id",
                 render: function (data, type, row) {
                     // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-                    if(row.estatus_fac == 1){
+                    if (row.estatus_fac == 1) {
                         return `
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFCompra(${data})"><i class="fas fa-trash del-consulta"></i></a>
                         `;
-                    } else{
+                    } else {
                         return `-`;
                     }
                 },

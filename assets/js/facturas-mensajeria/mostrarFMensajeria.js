@@ -1,5 +1,6 @@
 // import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
 
 const path = location.pathname.split('/');
 
@@ -41,10 +42,16 @@ addEventListener("DOMContentLoaded", e => {
                 data: "fecha_mensajeria"
             },
             {
-                data: "total_mensajeria_usd"
+                data: "total_mensajeria_usd",
+                render: function (data, row, type) {
+                    return `$${data}`;
+                }
             },
             {
-                data: "total_mensajeria_bs"
+                data: "total_mensajeria_bs",
+                render: function (data, row, type) {
+                    return `${convertCurrencyToVES(data)} Bs`
+                }
             },
             {
                 data: "factura_mensajeria_id",

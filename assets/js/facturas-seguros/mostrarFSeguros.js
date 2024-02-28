@@ -1,6 +1,7 @@
 import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import getById from "../global/getById.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
 
 
 const path = location.pathname.split('/');
@@ -57,8 +58,18 @@ addEventListener("DOMContentLoaded", async e => {
             { data: "mes" },
             { data: "fecha_ocurrencia" },
             { data: "fecha_vencimiento" },
-            { data: "monto_usd" },
-            { data: "monto_bs" },
+            {
+                data: "monto_usd",
+                render: function (data, type, row) {
+                    return `$${data}`
+                }
+            },
+            {
+                data: "monto_bs",
+                render: function (data, type, row) {
+                    return `${convertCurrencyToVES(data)} Bs`
+                }
+            },
             {
                 data: "fecha_vencimiento",
                 render: function (data, type, row) {
@@ -68,9 +79,9 @@ addEventListener("DOMContentLoaded", async e => {
                     const diasRestantes = Math.round(fechaVencimiento.diff(fechaActual, 'days').toObject().days) + 1;
 
                     // Si la factura está pagada o anulada rellenar este campo de fecha con dicho estatus
-                    if(row.estatus_fac == 3){
+                    if (row.estatus_fac == 3) {
                         return `<span class="badge light badge-success">Pagada</span>`;
-                    } else if(row.estatus_fac == 2){
+                    } else if (row.estatus_fac == 2) {
                         return `<span class="badge light badge-danger">Anulada</span>`
                     }
 
@@ -86,9 +97,9 @@ addEventListener("DOMContentLoaded", async e => {
                     const diasRestantes = Math.round(fechaVencimiento.diff(fechaActual, 'days').toObject().days) + 1;
 
                     // Si la factura está pagada o anulada rellenar este campo de fecha con dicho estatus
-                    if(row.estatus_fac == 3){
+                    if (row.estatus_fac == 3) {
                         return `<span class="badge light badge-success">Pagada</span>`;
-                    } else if(row.estatus_fac == 2){
+                    } else if (row.estatus_fac == 2) {
                         return `<span class="badge light badge-danger">Anulada</span>`
                     }
 
@@ -102,13 +113,13 @@ addEventListener("DOMContentLoaded", async e => {
                         return `<span class="badge light badge-success">Pagada</span>`;
                     } else if (data == 1) {
                         return `<span class="badge light badge-warning">Pendiente</span>`;
-                    } else if(data == 2) {
+                    } else if (data == 2) {
                         return `<span class="badge light badge-danger">Anulada</span>`;
                     } else {
                         return `<span class="badge light badge-warning">Pendiente</span>`;
                     }
                 },
-            }, 
+            },
             {
                 data: "factura_seguro_id",
                 render: function (data, type, row) {

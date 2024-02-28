@@ -23,10 +23,13 @@
             margin: 0;
         }
 
+        h3, header p {
+            text-align: center;
+        }
+
         header p {
             margin: 0;
             font-size: 18px;
-            text-align: center;
             line-height: 2.5;
         }
 
@@ -53,7 +56,7 @@
 
         .paper {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             /* margin-top: 2rem; */
         }
 
@@ -114,7 +117,8 @@
         <table class="tabla">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Item</th>
+                    <th>Nro. Factura</th>
                     <th>Fecha</th>
                     <th>Cédula Paciente</th>
                     <th>Cédula Titular</th>

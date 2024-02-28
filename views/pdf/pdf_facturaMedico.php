@@ -56,7 +56,7 @@
         }
 
         .tabla {
-            /* width: 950px; */
+            width: 800px;
             padding: 2rem;
         }
 
@@ -109,9 +109,20 @@
                 <tr>
                     <th colspan="2" id="sub-title">Recibo de pago correspondiente a la fecha: <span id="fecha">2023-02-18</span></th>
                 </tr>
+                <tr>
+                    <th colspan="2" id="sub-title">Fecha de emisión: <span id="fecha_emision">2023-02-18</span></th>
+                </tr>
                 <tr class="insumos-head light">
                     <th>Nombre</th>
                     <th id="nombre">Enrique Chacón</th>
+                </tr>
+                <tr class="insumos-head light">
+                    <th>Sumatoria Consultas Aseguradas</th>
+                    <th id="sumatoria_consultas_aseguradas">0</th>
+                </tr>
+                <tr class="insumos-head light">
+                    <th>Sumatoria Consultas Naturales</th>
+                    <th id="sumatoria_consultas_naturales">0</th>
                 </tr>
                 <tr class="insumos-head">
                     <th>Pacientes atendidos</th>
