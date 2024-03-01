@@ -22,7 +22,9 @@ class ConsultaController extends Controller {
     }
 
     public function insertarConsulta(/*Request $request*/) {
-        
+        global $isEnabledAudit;
+        $isEnabledAudit = 'consultas';
+
         $_POST = json_decode(file_get_contents('php://input'), true);
 
         $validarConsulta = new Validate;

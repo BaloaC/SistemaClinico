@@ -21,6 +21,8 @@ class ExamenController extends Controller{
     } 
 
     public function insertarExamen(/*Request $request*/){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'exámenes';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         

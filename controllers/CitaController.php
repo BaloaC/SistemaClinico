@@ -57,6 +57,8 @@ class CitaController extends Controller {
     }
 
     public function insertarCita(/*Request $request*/) {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'citas';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         CitasValidaciones::validacionesGenerales($_POST);

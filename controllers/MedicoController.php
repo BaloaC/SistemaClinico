@@ -26,6 +26,8 @@ class MedicoController extends Controller {
     }
 
     public function insertarMedico(/*Request $request*/) {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'médicos';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         MedicoService::insertarMedico($_POST);

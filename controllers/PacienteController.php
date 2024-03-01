@@ -40,6 +40,8 @@ class PacienteController extends Controller{
     } 
 
     public function insertarPaciente(/*Request $request*/){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'pacientes';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         

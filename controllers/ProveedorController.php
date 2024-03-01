@@ -23,6 +23,9 @@ class ProveedorController extends Controller
     }
 
     public function insertarProveedor(/*Request $request*/) {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'proveedores';
+
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarProveedor = new Validate;
 

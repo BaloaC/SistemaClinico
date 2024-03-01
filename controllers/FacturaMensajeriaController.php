@@ -17,7 +17,9 @@ class FacturaMensajeriaController extends Controller{
     }
 
     public function insertarFacturaMensajeria(/*Request $request*/) { // método para obtener todas las facturas
-        
+        global $isEnabledAudit;
+        $isEnabledAudit = 'facturas mensajería';
+
         $_POST = json_decode(file_get_contents('php://input'), true);
 
         FacturaMensajeriaValidaciones::validarFactura($_POST);

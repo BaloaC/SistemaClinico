@@ -99,7 +99,9 @@ class FacturaMedicoController extends Controller{
     }
 
     public function insertarFacturaMedicoPorId(/*Request $request*/){
-        
+        global $isEnabledAudit;
+        $isEnabledAudit = 'facturas médicas';
+
         $_POST = json_decode(file_get_contents('php://input'), true);
         FacturaMedicoValidate::validateInsertMedico($_POST);
 

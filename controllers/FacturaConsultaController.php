@@ -21,6 +21,8 @@ class FacturaConsultaController extends Controller {
     }
 
     public function insertarFacturaConsulta(/*Request $request*/) {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'facturas de consultas';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;        

@@ -38,13 +38,10 @@ class BaseModel{
     public function getFirst(){
 
         $list = $this->getAll();
-        // echo '<pre>'; var_dump($list);
         if(count($list) > 0){
-
             return $list[0];
 
         } else{
-
             return null;
         }
     }

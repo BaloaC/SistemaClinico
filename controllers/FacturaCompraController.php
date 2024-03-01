@@ -37,6 +37,8 @@ class FacturaCompraController extends Controller
     }
 
     public function insertarFacturaCompra(/*Request $request*/) {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'facturas de compras';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;

@@ -27,6 +27,8 @@ class UsuarioController extends Controller{
     } 
 
     public function insertarUsuario(/*Request $request*/){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'usuarios';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         CuentaValidaciones::validarNuevoUsuario($_POST);

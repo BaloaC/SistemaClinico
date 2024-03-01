@@ -45,10 +45,7 @@ class Response{
             return json_encode($obj);
         }
 
-        // Ejecutando el middleware
-        // $auditMiddleware = new AuditMiddleware();
-        // $auditMiddleware->handleResponse();
-
+        self::handleAudit();        
         return json_encode($this);
     }
 
@@ -128,6 +125,14 @@ class Response{
 
             default: 
                 return [false, 'No se ha establecido ningún mensaje'];
+        }
+    }
+
+    public function handleAudit() {
+        global $isEnabledAudit;
+        if ($this->code && $isEnabledAudit) {
+            $auditMiddleware = new AuditMiddleware($this->code, $this->data);
+            $auditMiddleware->handleRequest();
         }
     }
 

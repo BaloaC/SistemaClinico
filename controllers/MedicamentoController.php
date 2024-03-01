@@ -35,6 +35,8 @@ class MedicamentoController extends Controller{
     } 
 
     public function insertarMedicamento(/*Request $request*/){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'medicamentos';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
 

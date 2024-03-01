@@ -61,7 +61,9 @@ class FacturaSeguroController extends Controller{
     } 
 
     public function solicitarFacturaSeguro(/*Request $request*/) { // método para obtener todas las facturas
-        
+        global $isEnabledAudit;
+        $isEnabledAudit = 'facturas de consultas aseguradas';
+
         // if ( date("d") != "01") {
             
             date_default_timezone_set('America/Caracas');

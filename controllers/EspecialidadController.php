@@ -33,7 +33,8 @@ class EspecialidadController extends Controller{
     }
 
     public function insertarEspecialidad(/*Request $request*/){
-
+        global $isEnabledAudit;
+        $isEnabledAudit = 'especialidad';
         $_POST = json_decode(file_get_contents('php://input'), true);
         EspecialidadValidaciones::validacionesGenerales($_POST);
         

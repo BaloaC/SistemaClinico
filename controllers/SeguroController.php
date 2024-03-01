@@ -24,6 +24,8 @@ class SeguroController extends Controller{
     } 
 
     public function insertarSeguro(/*Request $request*/){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'seguros';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         SeguroService::insertarSeguro($_POST);
