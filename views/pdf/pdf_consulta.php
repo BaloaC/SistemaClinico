@@ -22,6 +22,10 @@
             margin: 0;
         }
 
+        h3, header p {
+            text-align: center;
+        }
+
         header p {
             margin: 0;
             font-size: 18px;
@@ -44,6 +48,8 @@
         .cuadro {
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .cuadro p {

@@ -106,10 +106,10 @@ async function confirmUpdate() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        if (!(patterns.name.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        if (!(patterns.name.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
         if (data.nombre.length < 3) throw { message: "El nombre debe tener al menos 3 caracteres" };
         if (data.apellidos.length < 3) throw { message: "El apellido debe tener al menos 3 caracteres" };
+        if (!(patterns.name.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(patterns.name.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
         if (!(patterns.dni.test(data.cedula)) && data.tipo_paciente !== "4") throw { message: "La cédula no es válida" };
         if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
         if ((isNaN(data?.telefono) || data.telefono?.length != 7) && data.tipo_paciente !== "4") throw { message: "El número ingresado no es válido" };

@@ -39,13 +39,11 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
 
         $(selectSelector).on("change", function () {
 
-            const selectElement = document.querySelector(selectSelector);
+            if(selectSelector?.value){
 
-            if(selectElement?.value){
-
-                const isValid = selectElement.value !== 0;
-                selectElement.classList.toggle("is-invalid", !isValid);
-                selectElement.classList.toggle("is-valid", isValid);
+                const isValid = selectSelector.value !== 0;
+                selectSelector.classList.toggle("is-invalid", !isValid);
+                selectSelector.classList.toggle("is-valid", isValid);
             }
         });
 

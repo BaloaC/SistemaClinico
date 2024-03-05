@@ -22,6 +22,10 @@
             margin: 0;
         }
 
+        h3, header p {
+            text-align: center;
+        }
+
         header p {
             margin: 0;
             font-size: 18px;
@@ -43,6 +47,8 @@
 
         .title {
             display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .title p {

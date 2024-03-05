@@ -179,10 +179,11 @@ addEventListener("DOMContentLoaded", async e => {
     });
 
     function format(data) {
-
+        console.log(data);
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
                 <tr>
+                <td><a href="../../factura/consultaSeguro?seguro=${data.seguro_id}&mes=${new Date(data.fecha_ocurrencia).getMonth() + 1}&anio=${new Date(data.fecha_ocurrencia).getFullYear()}">Visualizar consultas de las facturas</a></td>
                     <td>Datos consulta: ${data.factura_seguro_id}</td>
                 </tr>
             </table>

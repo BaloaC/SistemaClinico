@@ -1,80 +1,94 @@
-document.addEventListener('DOMContentLoaded', async () =>{
-    
-    const idUsuario = document.getElementById('idUsuario').value;
+import cleanValdiation from "../global/cleanValidations.js";
+import deleteSecondValue from "../global/deleteSecondValue.js";
+import { createOptionOrSelectInstead, select2OnClick } from "../global/dinamicSelect2.js";
+import getById from "../global/getById.js";
+import { patterns } from "../global/patternsValidation.js";
+import updateModule from "../global/updateModule.js";
+import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
+
+async function updateUsuario(id) {
+
+    const $form = document.getElementById("act-usuario");
 
     try {
-        
-        if(idUsuario !== null && idUsuario > 0){
-            
-            const response = await fetch('http://127.0.0.1/codigo_backend/usuarios/consulta/' + idUsuario),
+        const json = await getById("usuarios", id);
 
-            json = await response.json();
+        //Establecer el option con los datos del usuario
+        $form.nombre.value = json.nombre;
+        $form.nombre.dataset.secondValue = json.nombre;
+        $form.rol.dataset.secondValue = json.rol;
 
-
-            if(json.code === true){
-
-                //Rellenar los inputs
-
-            } else{
-
-                //La consulta no se ejecutó correctamente
-                throw new Error('No se ha consultado correctamente el usuario');
+        // Seleccionar el valor por defecto
+        for (const option of $form.rol.options) {
+            if (option.value == json.rol) {
+                option.defaultSelected = true;
             }
-        } else{
-
-            //El usuario id envíado no es correcto
-            throw new Error('Usuario id inválido');
         }
 
+
+        const $inputId = document.createElement("input");
+        $inputId.type = "hidden";
+        $inputId.value = id;
+        $inputId.name = "usuario_id";
+        // ! Para evitar error sql del endpoint
+        // $inputId.dataset.secondValue = id;
+        $form.appendChild($inputId);
+
     } catch (error) {
-        
+
         console.log(error);
     }
-})
+}
 
-document.addEventListener("submit", async event => {
+window.updateUsuario = updateUsuario;
 
-    event.preventDefault();
-
-    const data = new FormData(event.target),
-        values = Object.fromEntries(data.entries()),
-        user = {
-
-            nombres: values.nombres,
-            apellidos: values.apellidos,
-            correo: values.correo,
-            idUsuario: values.idUsuario
-        };
+async function confirmUpdate() {
+    const $form = document.getElementById("act-usuario"),
+        $alert = document.getElementById("actAlert");
 
     try {
+        const formData = new FormData($form),
+            data = {};
 
-        const options = {
+        formData.forEach((value, key) => (data[key] = value));
 
-            method: "PUT",
-            mode: "cors", //Opcional
-            headers: {
-                "Content-type": "application/json; charset=utf-8",
-            },
-            body: JSON.stringify(user),
-        };
+        if (!$form.checkValidity()) { $form.reportValidity(); return; }
+        if (!data.nombre.length > 3) throw { message: "El nombre debe contener al menos 3 caracteres" };
+        if (!(patterns.name.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(patterns.password.test(data.clave)) && data.clave !== "") throw { message: "La clave ingresada no es válida" };
 
-        const response = await fetch("http://127.0.0.1/codigo_backend/usuarios/actualizar", options);
+        const parseData = deleteSecondValue("#act-usuario input, #act-usuario select", data);
 
-        json = await response.json();
+        await updateModule(parseData, "usuario_id", "usuarios", "act-usuario", "Usuario actualizado exitosamente!");
 
-        if (json.code === true) {
+        // cleanValdiation("info-usuario");
+        cleanValdiation("act-usuario");
+        $('#usuariosTable').DataTable().ajax.reload();
 
-            alert("Usuario actualizado correctamente");
-
-        } else {
-
-            throw new Error("El usuario no se ha registrado correctamente!");
-        }
     } catch (error) {
+        console.log(error);
+        $alert.classList.remove("d-none");
+        $alert.classList.add("alert-danger");
+        let message = error.message || error.result.message;
+        $alert.textContent = message;
 
-        alert(error);
+        setTimeout(() => {
+            $alert.classList.add("d-none");
+        }, 3000)
     }
+}
+
+window.confirmUpdate = confirmUpdate;
+
+
+
+
+select2OnClick({
+    selectSelector: "#s-especialidad-update",
+    selectValue: "especialidad_id",
+    selectNames: ["nombre"],
+    module: "especialidades/consulta",
+    parentModal: "#modalAct",
+    placeholder: "Seleccione una especialidad",
+    selectWidth: "100%"
 });
-
-
-

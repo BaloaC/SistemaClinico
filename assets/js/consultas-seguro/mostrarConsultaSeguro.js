@@ -32,7 +32,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     costoSeguro.textContent = infoSeguro.costo_consulta;
     btnDelete.setAttribute("onclick", `deleteSeguro(${infoSeguro.seguro_id})`);
     seguroPrecioInput.value = infoSeguro.seguro_id;
-    
+
     let examenesList = "";
     precioExamanes.replaceChildren();
 
@@ -59,7 +59,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     });
 
     // Si no hay exámenes por añadir, mostramos una alerta que diga ya no hay más exámenes por añadir
-    if(examenesSeguroListAll.length == infoSeguro?.examenes.length || examenesSeguroListAll.length == 0) {
+    if (examenesSeguroListAll.length == infoSeguro?.examenes.length || examenesSeguroListAll.length == 0) {
 
         const alertMessage = document.getElementById("alertMessage");
         alertMessage.textContent = "No hay exámenes por registrar disponibles o el seguro ya posee el precio de todos los exámenes registrados";
@@ -71,7 +71,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     }
 
     // Si el seguro tiene precio de exámenes lo mostramos, de lo contrario mostramos una alerta de que no posee
-    if(examenesList !== ""){
+    if (examenesList !== "") {
         precioExamanes.innerHTML = examenesList;
     } else {
         precioExamanes.innerHTML = `<div class="alert alert-warning" role="alert">Este seguro no cuenta con ningún exámen registrado</div>`;
@@ -91,10 +91,10 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     const fechaOcurrencia = document.getElementById("fecha-ocurrencia");
     const fechaVencimiento = document.getElementById("fecha-vencimiento");
     const estatusFactura = document.getElementById("factura-estatus");
-    const btnCintillo  = document.getElementById("btn-cintillo-pdf");
+    const btnCintillo = document.getElementById("btn-cintillo-pdf");
 
     if (listConsultas?.factura?.length > 0) {
-       
+
         idRecibo.textContent = listConsultas.factura[0].factura_seguro_id;
         mesRecibo.textContent = listConsultas.factura[0].mes;
         fechaOcurrencia.textContent = listConsultas.factura[0].fecha_ocurrencia.split(" ")[0];
@@ -102,8 +102,8 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
         montoTotal.textContent = `$${listConsultas.factura[0].monto_usd}`;
 
         // Si hay consultas disponibles mostrar el boton del pdf
-        if(listConsultas.consultas?.length > 0){
-            btnCintillo.setAttribute("onclick",`openPopup('pdf/cintillo/${seguro}-${anio}-${mes}')`)
+        if (listConsultas.consultas?.length > 0) {
+            btnCintillo.setAttribute("onclick", `openPopup('pdf/cintillo/${seguro}-${anio}-${mes}')`)
             $("#btn-cintillo-pdf").fadeIn("slow");
         } else {
             $("#btn-cintillo-pdf").fadeOut("slow");
@@ -173,7 +173,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
                     if (data.especialidad && data.especialidad.nombre) {
                         return data.especialidad.nombre;
-                    } else if (data?.medico[0]?.nombre_especialidad){
+                    } else if (data?.medico[0]?.nombre_especialidad) {
                         return data?.medico[0]?.nombre_especialidad
                     } else {
                         return 'Desconocido';
@@ -183,12 +183,12 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             { data: "tipo_servicio" },
             { data: "fecha_ocurrencia" },
 
-            {  
+            {
                 data: null,
                 render: function (data, type, row) {
 
-                    if(data.monto_consulta_usd != undefined){
-                        return  `$${data.monto_consulta_usd}`;
+                    if (data.monto_consulta_usd != undefined) {
+                        return `$${data.monto_consulta_usd}`;
                     } else {
                         return "Desconocido";
                     }
@@ -273,7 +273,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
             info.data = data;
 
-            if (data.clave == null ||   data.clave == undefined) data.clave = "No aplica";
+            if (data.clave == null || data.clave == undefined) data.clave = "No aplica";
             info.tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
 
             info.examenes = data.examenes !== undefined ? concatItems(data.examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen";
@@ -437,7 +437,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             </tr>
             <tr>
                 <td>Peso: <br><b>${data.peso ? data?.peso + " " + "kg" : "No especificado"} </b></td>
-                <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m": "No especificado"}</b></td>
+                <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m" : "No especificado"}</b></td>
                 <td>Fecha Cita: <br><b>${info.data?.cita?.fecha_cita ?? "No aplica"}</b></td>
                 <td>Motivo cita: <br><b>${info.data?.cita?.motivo_cita ?? "No aplica"}</b></td>
             </tr>
@@ -490,12 +490,14 @@ addEventListener("DOMContentLoaded", async e => {
 
     const urlParams = new URLSearchParams(window.location.search);
     const seguro_id = urlParams.get('seguro');
+    const anio = urlParams.get('anio');
+    const mes = urlParams.get('mes');
 
     const btnActualizar = document.getElementById("btn-actualizar");
 
     btnActualizar.setAttribute("onclick", `updateSeguro(${seguro_id})`);
 
-    getConsultasSegurosMes({ seguro: seguro_id });
+    getConsultasSegurosMes({ seguro: seguro_id, anio: anio ?? null, mes: mes ?? null });
 });
 
 function getConsultasSegurosMesByClick() {

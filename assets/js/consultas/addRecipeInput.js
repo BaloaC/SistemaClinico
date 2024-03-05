@@ -60,7 +60,7 @@ function addRecipeInput(parentModal = "#modalReg") {
 
     clicks += 1;
     let template = `
-        <div class="row align-items-center newInput">
+        <div class="row align-items-start newInput">
             <div class="col-12 col-md-5">
                 <label for="medicamento">Medicamento</label>
                 <select name="medicamento_id" id="s-medicamento${clicks}" class="form-control medicamento-id" data-active="0">
@@ -68,11 +68,11 @@ function addRecipeInput(parentModal = "#modalReg") {
                 </select>
                 </div>
                 <div class="col-12 col-md-5">
-                <label for="uso" class="p-0">Uso</label>
+                <label for="uso">Uso</label>
                 <input type="text" name="uso" data-validate="true" data-type="address" class="form-control uso-medicamento">
                 <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
             </div>
-            <div class="col-3 col-md-1">
+            <div class="col-3 col-md-1 pt-4-5">
                 <button type="button" class="btn" onclick="deleteInput(this,'.medicamento-id')"><i class="fas fa-times m-0"></i></button>
             </div>
         </div>

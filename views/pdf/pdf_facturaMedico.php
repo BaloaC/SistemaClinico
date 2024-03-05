@@ -18,7 +18,9 @@
             position: absolute;
         }
 
-
+        h3, header p {
+            text-align: center;
+        }
         header h1 {
             margin: 0;
         }
@@ -45,6 +47,8 @@
         .cuadro {
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .cuadro th {
@@ -67,8 +71,6 @@
 
         .insumos-head>th, #sub-title, #title {
             text-align: center;
-
-
         }
 
         .insumos-head>th:nth-child(1){
@@ -85,11 +87,15 @@
 
         .firma {
             /* margin-top: 50px; */
-            margin-top: 150px;
+            margin-top: 100px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             text-align: center;
+        }
+
+        .firma > div {
+            margin: 0 1rem;
         }
     </style>
 </head>

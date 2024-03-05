@@ -83,7 +83,7 @@ const especialidadSelect = document.getElementById("s-especialidad");
 async function addCita() {
 
     const $form = document.getElementById("info-cita"),
-        $alert = document.querySelector(".alert");
+        $alert = document.getElementById("alertAddCita");
 
     try {
         const formData = new FormData($form),

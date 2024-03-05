@@ -86,12 +86,14 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item rol-1" href="<?php echo Url::base() . "/auditoria" ?>">Auditoria</a></li>
+                    <li><a class="dropdown-item rol-1" href="<?php echo Url::base() . "/usuarios" ?>">Usuarios</a></li>
+                    <li><a class="dropdown-item rol-1" href="<?php echo Url::base() . "/estadisticas" ?>">Estadísticas</a></li>
                     <li><a class="dropdown-item rol-1 rol-2" onclick="openPopup('pdf/seguros')" href="#">Total de seguros</a></li>
                     <li><a class="dropdown-item rol-1 rol-2" onclick="openPopup('pdf/insumosfaltantes')" href="#">Insumos faltantes</a></li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link rol-1 rol-2 rol-3 rol-4 rol-5" data-bs-toggle="modal" data-bs-target="#modalAct" onclick="updateCurrencyExchange()">
+                <a class="nav-link rol-1 rol-2 rol-3 rol-4 rol-5" data-bs-toggle="modal" data-bs-target="#modalActCambioDivisa" onclick="updateCurrencyExchange()">
                     <i class="fas fa-hand-holding-usd"></i>Cambio de divisa: <span id="currencyExchange">0 Bs</span></a>
                 </a>
             </li>
@@ -102,7 +104,7 @@
 <!-- Fin Nav -->
 
 <!-- Modal Actualizar Precio Divisa -->
-<div class="modal fade" id="modalAct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
+<div class="modal fade" id="modalActCambioDivisa" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -110,7 +112,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="modalActBody">
-                <div id="actAlert" class="alert d-none" role="alert"></div>
+                <div id="actAlertDivisa" class="d-none" role="alert"></div>
                 <form action="" id="act-cambioDivisa" class="p-3 px-4">
                     <label for="nombre">Monto de cambio de divisa</label>
                     <input type="number" name="cambio_divisa" id="cambioDivisaInput" step="any" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="45" required>

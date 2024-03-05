@@ -19,10 +19,10 @@ async function addSeguro() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
+        if (data.nombre.length < 6) throw { message: "El nombre del seguro debe contener al menos 6 caracteres"};
         if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
         if (!isNaN(data.cod_rif) || data.cod_rif.length !== 1) throw { message: "El RIF ingresado es inválido" };
         if (!(patterns.nameCompany.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        if (data.nombre.length < 6) throw { message: "El nombre del seguro debe contener al menos 6 caracteres"};
         if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
         if (isNaN(data.telefono) || data.telefono.length !== 7) throw { message: "El número ingresado no es válido" };
         if (isNaN(data.cod_tel) || data.cod_tel.length !== 4) throw { message: "El número ingresado no es válido" };

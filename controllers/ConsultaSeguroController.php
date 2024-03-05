@@ -15,6 +15,10 @@ class ConsultaSeguroController extends Controller{
         return $this->view('facturas/consulta_seguro/index');
     }
 
+    public function getAllConsultasSeguro() {
+        return $this->view('consulta-seguro/index');
+    }
+
     public function formRegistrarConsultaSeguro(){
 
         return $this->view('facturas/consulta_seguro/registrarFacturas');

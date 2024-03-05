@@ -193,7 +193,8 @@ const handleModalOpen = async () => {
                 placeholder: "Seleccione un seguro"
             });
 
-            document.getElementById("s-seguro-emergencia").disabled = false;
+            const consultaSinCita = document.getElementById("consultaCitaSi").value;
+            document.getElementById("s-seguro-emergencia").disabled = consultaSinCita == 1 ? true : false;
             if (document.getElementById("s-seguro-emergencia").value) document.getElementById("s-seguro-emergencia").classList.add("is-valid");
 
 

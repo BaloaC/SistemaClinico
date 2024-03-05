@@ -26,7 +26,7 @@ window.updateCurrencyExchange = updateCurrencyExchange;
 
 async function confirmUpdateCurrencyExchange() {
     const form = document.getElementById("act-cambioDivisa"),
-        alert = document.getElementById("actAlert");
+        alert = document.getElementById("actAlertDivisa");
 
     try {
         const formData = new FormData(form),
@@ -62,6 +62,7 @@ async function confirmUpdateCurrencyExchange() {
         }
 
 
+        alert.classList.add("alert");
         alert.classList.remove("alert-danger");
         alert.classList.add("alert-success");
         alert.classList.remove("d-none");
@@ -70,16 +71,18 @@ async function confirmUpdateCurrencyExchange() {
         scrollTo("modalActBody");
 
         setTimeout(() => {
-            $("#modalAct").modal("hide");
+            $("#modalActCambioDivisa").modal("hide");
             alert.classList.add("d-none");
+            alert.classList.remove("alert");
         }, 750);
 
         cleanValdiation("act-cambioDivisa");
         await getGlobalValues();
-        $('#especialidades').DataTable().ajax.reload();
 
     } catch (error) {
         console.log(error);
+
+        alert.classList.add("alert");
         alert.classList.remove("d-none");
         alert.classList.add("alert-danger");
         let message = error.message || error.result.message;
@@ -87,6 +90,7 @@ async function confirmUpdateCurrencyExchange() {
 
         setTimeout(() => {
             alert.classList.add("d-none");
+            alert.classList.remove("alert");
         }, 3000)
     }
 }

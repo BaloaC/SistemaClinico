@@ -273,6 +273,7 @@ Router::delete('/factura/compra/:id', FacturaCompraController::class . '@elimina
 
 // //Factura consulta_seguro - Vistas
 Router::get('/factura/consultaSeguro', ConsultaSeguroController::class . '@index');
+Router::get('/consultaSeguro', ConsultaSeguroController::class . '@getAllConsultasSeguro');
 Router::get('/factura/consultaSeguro/registrar', ConsultaSeguroController::class . '@formRegistrarConsultaSeguro');
 Router::get('/factura/consultaSeguro/actualizar/:id', ConsultaSeguroController::class . '@formActualizarConsultaSeguro');
 
