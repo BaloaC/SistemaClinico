@@ -38,7 +38,7 @@ class FacturaCompraController extends Controller
 
     public function insertarFacturaCompra(/*Request $request*/) {
         global $isEnabledAudit;
-        $isEnabledAudit = 'facturas de compras';
+        $isEnabledAudit = 'orden de compra';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
@@ -56,6 +56,7 @@ class FacturaCompraController extends Controller
 
         $_facturaCompraModel = new FacturaCompraModel();
         $id = $_facturaCompraModel->insert($data);
+        $data['factura_id'] = $id;
         $mensaje = ($id > 0);
 
         if ($mensaje) {
@@ -152,6 +153,8 @@ class FacturaCompraController extends Controller
     }
 
     public function eliminarFacturaCompra($factura_compra_id) {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'orden de compra';
         
         $_compraInsumoController = new FacturaCompraModel();
         $data = array(

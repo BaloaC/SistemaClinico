@@ -7,13 +7,18 @@ class AuditMiddleware extends Middleware {
     protected $data;
     protected $code;
     
-    public function __construct($data, $code) {
+    public function __construct() {
         parent::__construct();
 
-        $this->code = $code;
-        $this->data = $data;
+        $this->code;
+        $this->data;
         $this->POST = json_decode(file_get_contents('php://input'), true);
         $this->method = $_SERVER['REQUEST_METHOD'];
+    }
+
+    public function setValues($data, $code) {
+        $this->code = $code;
+        $this->data = $data;
     }
 
     public function handleRequest($request = null) {
@@ -21,18 +26,22 @@ class AuditMiddleware extends Middleware {
         $this->getUsuario(); 
         $this->insertAudit();
         global $isEnabledAudit;
+
+        $accion = '';
         
         switch ($this->method) {
             case 'POST':
                 $this->row = $this->usuario->nombre." ha insertado un nuevo elemento ".$_POST['nombre']." en el módulo $isEnabledAudit";
                 break;
             
-            case 'PUT':
-                $this->row = $this->usuario->nombre." ha actualizado al elemento ".$_POST['nombre']." en el módulo $isEnabledAudit";
+            case 'PUT': {
+                $campos = array_keys($_POST);
+                $this->row = $this->usuario->nombre." ha actualizado al elemento id ".preg_replace('/[^0-9]/', '', $_GET['uri'])." los campos ".implode(", ", $campos)." en el módulo $isEnabledAudit";
                 break;
+            }
             
             case 'DELETE':
-                $this->row = $this->usuario->nombre." ha eliminado al elemento ".$_POST['nombre']." en el módulo $isEnabledAudit";
+                $this->row = $this->usuario->nombre." ha eliminado al elemento id ".preg_replace('/[^0-9]/', '', $_GET['uri'])." en el módulo $isEnabledAudit";
                 break;
         }
 
@@ -43,9 +52,9 @@ class AuditMiddleware extends Middleware {
         $accion = "";
 
         if ( $this->method == 'POST' ) {
-            $accion = 'insert';
+            $accion = 'inserción';
         } else {
-            $accion = $this->method == 'PUT' ? 'update' : 'delete';
+            $accion = $this->method == 'PUT' ? 'actualización' : 'eliminación';
         }
         
         $data = [
@@ -59,6 +68,7 @@ class AuditMiddleware extends Middleware {
     }
 
     public function insertAudit() {
-        
+        $_auditModel = new AuditoriaModel();
+        $inserted = $_auditModel->insert($this->row);
     }
 }

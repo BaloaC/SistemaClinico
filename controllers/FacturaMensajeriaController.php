@@ -18,7 +18,7 @@ class FacturaMensajeriaController extends Controller{
 
     public function insertarFacturaMensajeria(/*Request $request*/) { // método para obtener todas las facturas
         global $isEnabledAudit;
-        $isEnabledAudit = 'facturas mensajería';
+        $isEnabledAudit = 'recibo de mensajería';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
 
@@ -26,13 +26,18 @@ class FacturaMensajeriaController extends Controller{
         $validarFactura = new Validate;
         $data = $validarFactura->dataScape($_POST);
 
-        FacturaMensajeriaService::insertarFactura($data);
+        $id = FacturaMensajeriaService::insertarFactura($data);
+        $data['factura_id'] = $id;
         
         $respuesta = new Response('INSERCION_EXITOSA');
+        $respuesta->setData($data);
         return $respuesta->json(201);
     }
 
     public function actualizarFacturaMensajeria($factura_mensajeria_id) {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'recibo de mensajería';
+
         FacturaMensajeriaService::actualizarFactura($factura_mensajeria_id);
         $respuesta = new Response('ACTUALIZACION_EXITOSA');
         return $respuesta->json(201);

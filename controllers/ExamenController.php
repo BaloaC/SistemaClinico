@@ -86,6 +86,8 @@ class ExamenController extends Controller{
     }
 
     public function actualizarExamen($examen_id){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'exámenes';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $exclude = array('hecho_aqui');
@@ -123,8 +125,8 @@ class ExamenController extends Controller{
     }
 
     public function eliminarExamen($examen_id){
-
-        $validarExamen = new Validate;
+        global $isEnabledAudit;
+        $isEnabledAudit = 'exámenes';
 
         $_examenModel = new ExamenModel();
         $data = array (

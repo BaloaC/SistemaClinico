@@ -26,6 +26,8 @@ class ConsultaSeguroController extends Controller{
     }
 
     public function insertarConsultaSeguro(/*Request $request*/){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'recibo de consulta asegurada';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         ConsultaSeguroValidaciones::validarConsultaSeguro($_POST);
@@ -73,6 +75,7 @@ class ConsultaSeguroController extends Controller{
             // $data['monto_consulta_bs'] = $data['monto_consulta_usd'] * $valorDivisa;
             $data['monto_consulta_bs'] = 0;
             $id = $_consultaSeguroModel->insert($data);
+            $data['factura_id'];
             $mensaje = ($id > 0);
 
             if (!$mensaje) {

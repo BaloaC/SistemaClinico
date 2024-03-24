@@ -11,33 +11,43 @@ class AuditCita extends AuditMiddleware {
         $paciente = "";
         $_paciente = new PacienteModel();
 
-        if (array_key_exists('cedula_titular', $this->POST)) {    
-            $paciente = $_paciente->where('cedula', '=', $this->POST['cedula_titular']);
+        $this->getToken();
+        $this->getUsuario();
+        $row = '';
         
-        } else {
-            $citaId = preg_replace('/[^0-9]/', '', $_GET['uri']);
-            $_citaModel = new CitaModel();
-            $cita = $_citaModel->where('cita_id', '=', $citaId)->getFirst();
-            $paciente = $_paciente->where('cedula', '=', $cita->cedula_titular);
-        }
-
-        $function = explode("@", $request['function']);
-
         if ($this->method == 'POST') {
 
-            if( $function[1] == 'reprogramarCita' ) {
-                $this->row = "El usuario $this->usuario['nombre'] reprogramó la cita del paciente $paciente->nombre a la fecha $this->POST['fecha_cita']";
+            if( count($this->POST) == 3 ) {
+                $_citaModel = new CitaModel();
+                $cita = $_citaModel->where('cita_id', '=', preg_replace('/[^0-9]/', '', $_GET['uri']))->getFirst();
+                $paciente = $_paciente->where('paciente_id', '=', $cita->paciente_id)->getFirst();
+
+                $row = "El usuario ".$this->usuario->nombre." reprogramó la cita_id ".preg_replace('/[^0-9]/', '', $_GET['uri'])." del paciente ".$paciente->nombre." ".$paciente->apellidos." a la fecha ".$this->POST['fecha_cita'];
             } else {
                 
-                $this->row = "El usuario $this->usuario['nombre'] insertó cita ".$this->POST['tipo_cita'] == 1 ? 'normal' : 'asegurada'." para el paciente $paciente->nombre";
+                $paciente = $_paciente->where('paciente_id', '=', $this->POST['paciente_id'])->getFirst();
+                $row = "El usuario ".$this->usuario->nombre." insertó cita ".($this->POST['tipo_cita'] == 1 ? 'normal' : 'asegurada')." para el paciente ".$paciente->nombre." ".$paciente->apellidos;
             }
 
         } else if ($this->method == 'PUT') {
-            $this->row = "El usuario $this->usuario['nombre'] insertó la clave de la cita del paciente $paciente->nombre";
+            $_citaModel = new CitaModel();
+            $cita = $_citaModel->where('cita_id', '=', preg_replace('/[^0-9]/', '', $_GET['uri']))->getFirst();
+            $paciente = $_paciente->where('paciente_id', '=', $cita->paciente_id)->getFirst();
+
+            $row = "El usuario ".$this->usuario->nombre." insertó la clave de la cita_id ".preg_replace('/[^0-9]/', '', $_GET['uri'])." del paciente ".$paciente->nombre." ".$paciente->apellidos;
         }
+
+        $this->row = [
+            "usuario_id" => $this->usuario->usuario_id,
+            "accion" => $this->method == 'POST' ? 'inserción' : 'actualización',
+            "descripcion" => $row
+        ];
+
+        $this->handleResponse();
     }
 
     public function handleResponse($request = null) {
-        $this->insertAudit();
+        
+        $this->insertAudit($this->row);
     }
 }

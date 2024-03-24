@@ -57,6 +57,7 @@ class CitaController extends Controller {
     }
 
     public function insertarCita(/*Request $request*/) {
+        
         global $isEnabledAudit;
         $isEnabledAudit = 'citas';
 
@@ -237,6 +238,9 @@ class CitaController extends Controller {
     }
 
     public function actualizarCita($cita_id) {
+        
+        global $isEnabledAudit;
+        $isEnabledAudit = 'citas';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarCita = new Validate;
@@ -263,6 +267,9 @@ class CitaController extends Controller {
     }
 
     public function reprogramarCita($cita_id) {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'citas';
+
         $_POST = json_decode(file_get_contents('php://input'), true);
         CitasValidaciones::validarCitaId($cita_id);
         CitasValidaciones::validarFecha($_POST);

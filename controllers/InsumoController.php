@@ -71,6 +71,8 @@ class InsumoController extends Controller{
     }
 
     public function eliminarInsumo($insumo_id){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'insumos';
         
         $_insumoModel = new InsumoModel();
         $data = array(

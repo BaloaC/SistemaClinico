@@ -46,7 +46,9 @@ class FacturaMedicoController extends Controller{
     } 
 
     public function solicitarFacturasMedicos(/*Request $request*/) { // método para obtener todas las facturas
-        
+        global $isEnabledAudit;
+        $isEnabledAudit = 'recibo de pago médico';
+
         $_POST = json_decode(file_get_contents('php://input'), true);
         FacturaMedicoValidate::validacionesPrincipales($_POST);
         $validarFactura = new Validate;
@@ -100,7 +102,7 @@ class FacturaMedicoController extends Controller{
 
     public function insertarFacturaMedicoPorId(/*Request $request*/){
         global $isEnabledAudit;
-        $isEnabledAudit = 'facturas médicas';
+        $isEnabledAudit = 'recibo de pago médico';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         FacturaMedicoValidate::validateInsertMedico($_POST);
@@ -110,6 +112,7 @@ class FacturaMedicoController extends Controller{
         
         $_facturaMedicoModel = new FacturaMedicoModel();
         $id = $_facturaMedicoModel->insert($data);
+        $data['factura_id'] = $id;
         $mensaje = ($id > 0);
 
         if ($mensaje) {
@@ -117,10 +120,13 @@ class FacturaMedicoController extends Controller{
         }
 
         $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
+        $respuesta->setData($data);
         return $respuesta->json($mensaje ? 201 : 400);
     }
 
     public function actualizarFacturaMedico($factura_medico_id){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'recibo de pago médico';
 
         $_facturaMedico = new FacturaMedicoModel();
         $factura_medico = $_facturaMedico->where('factura_medico_id', '=', $factura_medico_id)->getFirst();

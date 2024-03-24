@@ -121,7 +121,6 @@ class PreguntaSeguridadController extends Controller {
         return $this->retornarMensaje($mensaje, $preguntas);
     }
 
-
     public function eliminarPreguntaSeguridad($pregunta_seguridad_id) {
 
         $_preguntaSeguridadModel = new PreguntaSeguridadModel();

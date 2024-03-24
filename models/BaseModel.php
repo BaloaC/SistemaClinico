@@ -58,7 +58,6 @@ class BaseModel{
             $values = ":" . implode(", :",array_keys($obj));
             
             $this->sql = "INSERT INTO $this->table (`$keys`) VALUES($values)";
-            
             $this->execute($obj);
 
             $id = $this->connection->lastInsertId();

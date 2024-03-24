@@ -66,6 +66,8 @@ class SeguroController extends Controller{
     }
 
     public function actualizarSeguro($seguro_id){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'seguros';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         SeguroService::actualizarSeguro($_POST, $seguro_id);
@@ -77,6 +79,8 @@ class SeguroController extends Controller{
     }
 
     public function eliminarSeguro($idSeguro){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'seguros';
 
         $_seguroModel = new SeguroModel();
         $data = array(
@@ -97,7 +101,9 @@ class SeguroController extends Controller{
     }
 
     public function eliminarSeguroExamen($seguro_id) {
-        
+        global $isEnabledAudit;
+        $isEnabledAudit = 'seguro examen';
+
         $_POST = json_decode(file_get_contents('php://input'), true);
         
         SeguroValidaciones::validarExistenciaSeguro($seguro_id);

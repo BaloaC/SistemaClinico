@@ -22,7 +22,7 @@ class FacturaConsultaController extends Controller {
 
     public function insertarFacturaConsulta(/*Request $request*/) {
         global $isEnabledAudit;
-        $isEnabledAudit = 'facturas de consultas';
+        $isEnabledAudit = 'recibo de consulta';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;        
@@ -36,6 +36,7 @@ class FacturaConsultaController extends Controller {
         $data = $validarFactura->dataScape($_POST);
         $_facturaConsultaModel = new FacturaConsultaModel();
         $id = $_facturaConsultaModel->insert($data);
+        $data['factura_id'] = $id;
         
         if ($id > 0) {
             FacturaConsultaHelpers::insertarPreciosFacturaNormal($_POST['consulta_id']);
@@ -43,6 +44,7 @@ class FacturaConsultaController extends Controller {
             $_consultaModel->where('consulta_id', '=', $_POST['consulta_id'])->update(array('estatus_con' => 3));
 
             $respuesta = new Response('INSERCION_EXITOSA');
+            $respuesta->setData($data);
             return $respuesta->json(201);
         }
 

@@ -31,6 +31,9 @@ class AntecedenteMedicoController extends Controller {
 
     public function insertarAntecedente(/*Request $request*/) {
         global $isEnabledAudit;
+        $isEnabledAudit = 'antecedentes';
+
+        global $isEnabledAudit;
         $isEnabledAudit = 'antecedente médico';
         $_POST = json_decode(file_get_contents('php://input'), true);
         $campoId = array("tipo_antecedente_id","paciente_id");
@@ -88,6 +91,8 @@ class AntecedenteMedicoController extends Controller {
     }
 
     public function actualizarAntecedente($antecedentes_medicos_id) {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'antecedentes';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $campoId = array("paciente_id" , "tipo_antecedente_id ");
@@ -125,6 +130,8 @@ class AntecedenteMedicoController extends Controller {
     }
 
     public function eliminarAntecedente($antecedentes_medicos_id) {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'antecedentes';
 
         $_antecedenteModel = new AntecedenteMedicoModel();
         $data = array(

@@ -131,8 +131,32 @@ class Response{
     public function handleAudit() {
         global $isEnabledAudit;
         if ($this->code && $isEnabledAudit) {
-            $auditMiddleware = new AuditMiddleware($this->code, $this->data);
-            $auditMiddleware->handleRequest();
+
+            if ($isEnabledAudit == 'citas') {
+                $auditCita = new AuditCita();
+                $auditCita->handleRequest();
+
+            } else if ($isEnabledAudit == 'consultas') {
+                $auditConsulta = new AuditConsulta();
+                $auditConsulta->handleRequest();
+
+            } else if ($isEnabledAudit == 'antecedentes') {
+                $auditAntecedente = new AuditAntecedente();
+                $auditAntecedente->handleRequest();
+
+            } else if ($isEnabledAudit == 'horaios') {
+                $auditHorario = new AuditHorario();
+                $auditHorario->handleRequest();
+
+            } else if ( count(explode(' ', $isEnabledAudit)) > 2) {
+                $auditFactura = new AuditFactura();
+                $auditFactura->handleRequest($this->data);
+                
+            } else {
+                $auditMiddleware = new AuditMiddleware();
+                $auditMiddleware->setValues($this->code, $this->data);
+                $auditMiddleware->handleRequest();
+            }
         }
     }
 
