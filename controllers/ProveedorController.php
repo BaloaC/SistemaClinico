@@ -23,6 +23,9 @@ class ProveedorController extends Controller
     }
 
     public function insertarProveedor(/*Request $request*/) {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'proveedores';
+
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarProveedor = new Validate;
 
@@ -48,6 +51,8 @@ class ProveedorController extends Controller
     }
 
     public function actualizarProveedor($proveedor_id) {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'proveedores';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarProveedor = new Validate;
@@ -100,9 +105,9 @@ class ProveedorController extends Controller
     }
 
     public function eliminarProveedor($proveedor_id) {
-
-        $validarProveedor = new Validate;
-
+        global $isEnabledAudit;
+        $isEnabledAudit = 'proveedores';
+        
         $_proveedorModel = new ProveedorModel();
         $data = array(
             "estatus_pro" => "2"

@@ -45,10 +45,7 @@ class Response{
             return json_encode($obj);
         }
 
-        // Ejecutando el middleware
-        // $auditMiddleware = new AuditMiddleware();
-        // $auditMiddleware->handleResponse();
-
+        self::handleAudit();        
         return json_encode($this);
     }
 
@@ -128,6 +125,38 @@ class Response{
 
             default: 
                 return [false, 'No se ha establecido ningún mensaje'];
+        }
+    }
+
+    public function handleAudit() {
+        global $isEnabledAudit;
+        if ($this->code && $isEnabledAudit) {
+
+            if ($isEnabledAudit == 'citas') {
+                $auditCita = new AuditCita();
+                $auditCita->handleRequest();
+
+            } else if ($isEnabledAudit == 'consultas') {
+                $auditConsulta = new AuditConsulta();
+                $auditConsulta->handleRequest();
+
+            } else if ($isEnabledAudit == 'antecedentes') {
+                $auditAntecedente = new AuditAntecedente();
+                $auditAntecedente->handleRequest();
+
+            } else if ($isEnabledAudit == 'horaios') {
+                $auditHorario = new AuditHorario();
+                $auditHorario->handleRequest();
+
+            } else if ( count(explode(' ', $isEnabledAudit)) > 2) {
+                $auditFactura = new AuditFactura();
+                $auditFactura->handleRequest($this->data);
+                
+            } else {
+                $auditMiddleware = new AuditMiddleware();
+                $auditMiddleware->setValues($this->code, $this->data);
+                $auditMiddleware->handleRequest();
+            }
         }
     }
 

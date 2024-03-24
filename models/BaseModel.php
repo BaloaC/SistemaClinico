@@ -38,13 +38,10 @@ class BaseModel{
     public function getFirst(){
 
         $list = $this->getAll();
-        // echo '<pre>'; var_dump($list);
         if(count($list) > 0){
-
             return $list[0];
 
         } else{
-
             return null;
         }
     }
@@ -61,7 +58,6 @@ class BaseModel{
             $values = ":" . implode(", :",array_keys($obj));
             
             $this->sql = "INSERT INTO $this->table (`$keys`) VALUES($values)";
-            
             $this->execute($obj);
 
             $id = $this->connection->lastInsertId();

@@ -3,11 +3,11 @@
 class Router {
     private static $routes = array();
 
-    //Método para agregar el método HTTP
-    public static function add($method, $uri, $function = null) {
-        // Router::$uris[$uri] = new Uri(self::parseUri($uri),$method,$function);
-        // return;
-    }
+    // //Método para agregar el método HTTP
+    // public static function add($method, $uri, $function = null) {
+    //     // Router::$uris[$uri] = new Uri(self::parseUri($uri),$method,$function);
+    //     // return;
+    // }
 
     public static function get($uri,  $function = null, $middlewares = null) {
         Router::$routes['GET'][$uri] = new Uri(self::parseUri($uri), 'GET', $function, $middlewares, $middlewares);
@@ -29,10 +29,10 @@ class Router {
         return;
     }
 
-    public static function any($uri, $function = null){
+    // public static function any($uri, $function = null){
 
-        return Router::add('ANY', $uri, $function);
-    }
+    //     return Router::add('ANY', $uri, $function);
+    // }
 
     //Método para parsear la uri
     public static function parseUri($uri){

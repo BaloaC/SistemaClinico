@@ -27,6 +27,8 @@ class UsuarioController extends Controller{
     } 
 
     public function insertarUsuario(/*Request $request*/){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'usuarios';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         CuentaValidaciones::validarNuevoUsuario($_POST);
@@ -74,6 +76,8 @@ class UsuarioController extends Controller{
     }
 
     public function actualizarUsuario($usuario_id){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'usuarios';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         // Creando los strings para las validaciones
@@ -114,6 +118,8 @@ class UsuarioController extends Controller{
     }
 
     public function eliminarUsuario($usuario_id){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'usuarios';
 
         $_usuarioModel = new UsuarioModel();
 

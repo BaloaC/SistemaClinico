@@ -21,8 +21,6 @@ class AuditoriaController extends Controller{
     }
 
     public function listarAuditoria(){
-
-        
         $_auditoriaModel = new AuditoriaModel();
 
         // ** Enrique
