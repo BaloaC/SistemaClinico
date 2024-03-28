@@ -3,10 +3,15 @@ import dinamicSelect2, {
     select2OnClick,
 } from "../global/dinamicSelect2.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import formatToRealDate from "../global/formatToRealDate.js";
 
 const path = location.pathname.split("/");
 
 addEventListener("DOMContentLoaded", (e) => {
+
+    // Para permitir que se filtre con la fecha formateada
+    $.fn.dataTable.moment('DD-MM-YYYY');
+
     let fCompra = $("#fCompra").DataTable({
         bAutoWidth: false,
         language: {
@@ -59,7 +64,12 @@ addEventListener("DOMContentLoaded", (e) => {
                     return data === null ? "Ninguno" : data;
                 },
             },
-            { data: "fecha_compra" },
+            {
+                data: "fecha_compra",
+                render: function (data, type, row) {
+                    return formatToRealDate(data);
+                },
+            },
             {
                 data: "estatus_fac",
                 render: function (data, type, row) {
@@ -93,6 +103,11 @@ addEventListener("DOMContentLoaded", (e) => {
                 },
                 targets: [0, 1, 2, 3, 4, 5, 6, 7],
             },
+            // Para permitir el filtrado con la fecha filtrada
+            {
+                type: 'datetime-moment',
+                targets: 7
+            },
         ],
         // ! rowData (Devuelve toda la fila)
         searchPanes: {
@@ -102,7 +117,7 @@ addEventListener("DOMContentLoaded", (e) => {
             initCollapsed: true,
             panes: [
                 {
-                    header: 'Filtrar por estatus de la factura:',
+                    header: 'Filtrar por estatus del recibo:',
                     options: [
                         {
                             label: 'Pagada',

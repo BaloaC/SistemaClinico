@@ -3,6 +3,7 @@ import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
+import formatToRealDate from "../global/formatToRealDate.js";
 removeAddAccountant();
 removeAddAnalist();
 
@@ -42,7 +43,7 @@ export default async function mostrarHistorialMedico(id) {
         const listConsultas = infoConsultas.consultas.sort((a, b) => b.consulta_id - a.consulta_id);
 
         nombre.textContent = `${infoPaciente.nombre || infoPaciente.nombre_paciente} ${infoPaciente.apellidos}`;
-        fecha.textContent = `${infoPaciente.fecha_nacimiento}`;
+        fecha.textContent = `${formatToRealDate(infoPaciente.fecha_nacimiento)}`;
         edad.textContent = `${infoPaciente.edad}`;
     
         switch(infoPaciente.tipo_paciente){
@@ -158,7 +159,7 @@ export default async function mostrarHistorialMedico(id) {
                 cita_id.textContent = listCita[0].cita_id;
                 nombre_medico.textContent = `${listCita[0].nombre_medico} ${listCita[0].apellido_medico}`;
                 especialidad.textContent = listCita[0].nombre_especialidad;
-                fecha_cita.textContent = listCita[0].fecha_cita;
+                fecha_cita.textContent = formatToRealDate(listCita[0].fecha_cita);
                 motivo_cita.textContent = listCita[0].motivo_cita;
                 hora_entrada.textContent = listCita[0].hora_entrada;
                 hora_salida.textContent = listCita[0].hora_salida;
@@ -209,7 +210,7 @@ export default async function mostrarHistorialMedico(id) {
                 consulta_id.textContent = el.consulta_id;
                 nombre_medico.textContent = `${el.nombre_medico} ${el.apellidos_medico}`;
                 especialidad.textContent = el.nombre_especialidad;
-                fecha_consulta.textContent = el.fecha_consulta;
+                fecha_consulta.textContent = formatToRealDate(el.fecha_consulta);
                 observaciones.textContent = el.observaciones || "Sin observaciones";
                 motivo_cita.textContent = el.motivo_cita;
                 indicaciones.textContent = el.indicaciones !== undefined ? concatItems(el.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación";

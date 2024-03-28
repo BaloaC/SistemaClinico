@@ -1,5 +1,6 @@
 import { select2OnClick } from "../global/dinamicSelect2.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import formatToRealDate from "../global/formatToRealDate.js";
 const path = location.pathname.split('/');
 
 // select2OnClick({
@@ -15,6 +16,9 @@ addEventListener("DOMContentLoaded", e => {
 
     const rol = Cookies.get("rol");
 
+    // Para permitir que se filtre con la fecha formateada
+    $.fn.dataTable.moment('DD-MM-YYYY');
+
     let usuarios = $('#usuariosTable').DataTable({
 
         bAutoWidth: false,
@@ -23,10 +27,10 @@ addEventListener("DOMContentLoaded", e => {
         },
         ajax: {
             url: `/${path[1]}/usuarios/consulta/`,
-            beforeSend: function(xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
             },
-            error: function(xhr, error, thrown) {
+            error: function (xhr, error, thrown) {
                 // Manejo de errores de Ajax
                 console.log('Error de Ajax:', error);
                 console.log('Detalles:', thrown);
@@ -37,27 +41,32 @@ addEventListener("DOMContentLoaded", e => {
         columns: [
 
             { data: "nombre" },
-            { 
+            {
                 data: "rol",
-                render: function(data, type, row){
-                    if(data == 1) return "Administrador";
-                    if(data == 2) return "Gerente";
-                    if(data == 3) return "Contador";
-                    if(data == 4) return "Analista";
-                    if(data == 5) return "Facultativo de salud";
+                render: function (data, type, row) {
+                    if (data == 1) return "Administrador";
+                    if (data == 2) return "Gerente";
+                    if (data == 3) return "Contador";
+                    if (data == 4) return "Analista";
+                    if (data == 5) return "Facultativo de salud";
                 }
             },
-            { data: "fecha_creacion" },
+            {
+                data: "fecha_creacion",
+                render: function (data, type, row) {
+                    return formatToRealDate(data);
+                }
+            },
             {
                 data: "usuario_id",
                 render: function (data, type, row) {
-                    switch(rol){
+                    switch (rol) {
 
                         case "1": return `
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-usuario" onclick="updateUsuario(${data})"><i class="fas fa-edit act-usuario"></i></a>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-usuario" onclick="deleteUsuario(${data})"><i class="fas fa-trash del-usuario"></i></a>
                         `;
-                    
+
                         case "2": return `
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-usuario" onclick="deleteUsuario(${data})"><i class="fas fa-trash del-usuario"></i></a>
                         `;
@@ -68,12 +77,19 @@ addEventListener("DOMContentLoaded", e => {
             }
 
         ],
-        columnDefs: [{
-            searchPanes: {
-                show: false,
+        order: [[2, 'desc']],
+        columnDefs: [
+            {
+                searchPanes: {
+                    show: false,
+                },
+                targets: [2, 3],
             },
-            targets: [2,3],
-        }],
+            {
+                type: 'datetime-moment',
+                targets: 3
+            }
+        ],
         // ! rowData (Devuelve toda la fila)
         searchPanes: {
             controls: false,

@@ -15,8 +15,8 @@ const module = "citas",
     modalInfo = new bootstrap.Modal("#modalInfo"),
     formReg = document.getElementById("info-cita");
 
-const calendarEl = document.getElementById("calendar"),
-    citas = async () => parseCitas(await getAll(`${module}/consulta`));
+const calendarEl = document.getElementById("calendar");
+const citas = async () => parseCitas(await getAll(`${module}/consulta`));
 
 export const calendar = new FullCalendar.Calendar(calendarEl, {
     locale: "es",
@@ -161,8 +161,6 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             }
         })
 
-
-        // TODO: Colocar en la vista los horarios disponible de este medico
         select2OnClick({
             selectSelector: "#s-medico",
             selectValue: "medico_id",
@@ -239,16 +237,6 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                 behavior: 'smooth'
             });
         })
-
-        // dinamicSelect2({
-        //     obj: [{ id: 1, text: "Normal" }, { id: 2, text: "Asegurada" }],
-        //     selectNames: ["text"],
-        //     selectValue: "id",
-        //     selectSelector: "#s-tipo_cita",
-        //     placeholder: "Seleccione el tipo de cita",
-        //     parentModal: "#modalReg",
-        //     staticSelect: true
-        // });
 
         $("#s-tipo_cita").on("change", function (e) {
 
@@ -337,11 +325,3 @@ const horaSalidaInput = document.getElementById('hora_salida');
 
 horaEntradaInput.addEventListener("click", () => formattedHour(horaEntradaInput));
 horaSalidaInput.addEventListener("click", () => formattedHour(horaSalidaInput));
-
-// ! Para actualizar
-// let newOption = new Option("Hola", 1, true, true);
-// $('#s-paciente').append(newOption).trigger('change');
-
-
-
-

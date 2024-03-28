@@ -3,6 +3,7 @@ import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
+import formatToRealDate from "../global/formatToRealDate.js";
 
 const path = location.pathname.split('/');
 
@@ -24,10 +25,6 @@ const handleModalOpen = async (modalParent) => {
             parentModal: modalParent,
             placeholder: "Debe seleccionar un paciente"
         })
-
-        const empresaSelect = document.getElementById(modalParent === "#modalReg" ? "s-empresa" : "s-empresa-act");
-        const seguroSelect = modalParent === "#modalReg" ? "#s-seguro" : "#s-seguro-act";
-        const segurosList = await getAll("seguros/consulta");
 
         const pacientesList = await getAll("pacientes/consulta");
 
@@ -86,6 +83,9 @@ if (modalRegister) modalRegister.addEventListener('show.bs.modal', async () => a
 
 addEventListener("DOMContentLoaded", e => {
 
+    // Para permitir que se filtre con la fecha formateada
+    $.fn.dataTable.moment('DD-MM-YYYY');
+
     let fConsulta = $('#fConsulta').DataTable({
 
         bAutoWidth: false,
@@ -134,7 +134,7 @@ addEventListener("DOMContentLoaded", e => {
             },
             {
                 data: function (row) {
-                    return row.fecha_consulta;
+                    return formatToRealDate(row.fecha_consulta);
                 }
             },
             {
@@ -162,7 +162,12 @@ addEventListener("DOMContentLoaded", e => {
             // }
 
         ],
-        order: [[5, 'desc']]
+        order: [[5, 'desc']],
+        // Para permitir el filtrado con la fecha filtrada
+        columnDefs: [{
+            type: 'datetime-moment',
+            targets: 6
+        }],
     });
 
     function format(data) {

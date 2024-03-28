@@ -1,4 +1,5 @@
 import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
+import formatToRealDate from "../global/formatToRealDate.js";
 import getById from "../global/getById.js";
 
 const id = location.pathname.split("/")[4];
@@ -6,7 +7,7 @@ const dataFactura = await getById(`factura/consulta`,id);
 
 console.log(dataFactura);
 
-document.getElementById("fecha").textContent = dataFactura.fecha_consulta;
+document.getElementById("fecha").textContent = formatToRealDate(dataFactura.fecha_consulta);
 document.getElementById("nombre_paciente").textContent = `${dataFactura.nombre_paciente} ${dataFactura.apellidos}`;
 document.getElementById("cedula_paciente").textContent = dataFactura.cedula;
 document.getElementById("cedula_titular").textContent = dataFactura.cedula;

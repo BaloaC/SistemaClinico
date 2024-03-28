@@ -4,6 +4,7 @@ import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import formatToRealDate from "../global/formatToRealDate.js";
 
 const path = location.pathname.split('/');
 const especialidadSelect = document.getElementById("s-especialidad");
@@ -258,9 +259,12 @@ if (modalRegConsulta) modalRegConsulta.addEventListener('show.bs.modal', async (
 
 addEventListener("DOMContentLoaded", async e => {
 
+    // Ocultar botones de acuerdo a los roles
     removeAddAccountant();
     removeAddAnalist();
 
+    // Para permitir que se filtre con la fecha formateada
+    $.fn.dataTable.moment('DD-MM-YYYY');
 
     let consultas = $('#consultas').DataTable({
 
@@ -338,26 +342,37 @@ addEventListener("DOMContentLoaded", async e => {
                     if ("cedula_titular" in data) return data.cedula_titular;
                 }
             },
-            { data: "fecha_consulta" },
             {
-                data: "consulta_id",
+                data: "fecha_consulta",
                 render: function (data, type, row) {
+                    return formatToRealDate(data);
+                },
+            },
+            // {
+            //     data: "consulta_id",
+            //     render: function (data, type, row) {
 
-                    // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-                    return `
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteConsulta(${data})"><i class="fas fa-trash del-consulta"></i></a>
-                    `
-                }
-            }
+            //         // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
+            //         return `
+            //             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteConsulta(${data})"><i class="fas fa-trash del-consulta"></i></a>
+            //         `
+            //     }
+            // }
 
         ],
+
+        // Para permitir el filtrado con la fecha filtrada
+        columnDefs: [{
+            type: 'datetime-moment',
+            targets: 7
+        }],
         order: [[6, 'desc']],
         // ! Ocultar los paneles por defecto 
         columnDefs: [{
             searchPanes: {
                 show: false,
             },
-            targets: [0, 1, 2, 3, 4, 5, 6, 7],
+            targets: [0, 1, 2, 3, 4, 5, 6],
         }],
         // ! rowData (Devuelve toda la fila)
         searchPanes: {
@@ -572,7 +587,7 @@ addEventListener("DOMContentLoaded", async e => {
                 <tr>
                     <td>Peso: <br><b>${data.peso ? data.peso + " " + "kg" : "No especificado"} </b></td>
                     <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m" : "No especificado"}</b></td>
-                    <td>Fecha Cita: <br><b>${data.fecha_cita ?? "No aplica"}</b></td>
+                    <td>Fecha Cita: <br><b>${formatToRealDate(data.fecha_cita) ?? "No aplica"}</b></td>
                     <td>Motivo cita: <br><b>${data.motivo_cita ?? "No aplica"}</b></td>
                 </tr>
                 <tr class="blue-td">
@@ -597,7 +612,7 @@ addEventListener("DOMContentLoaded", async e => {
         `
     }
 
-    $('#consultas').on('click', 'td.dt-control', function () {
+    $('#consultas').on('click', 'td.dt-control', async function () {
         let tr = $(this).closest('tr');
         let row = consultas.row(tr);
 

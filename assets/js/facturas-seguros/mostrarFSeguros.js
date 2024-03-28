@@ -2,6 +2,7 @@ import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicS
 import getById from "../global/getById.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
+import formatToRealDate from "../global/formatToRealDate.js";
 
 
 const path = location.pathname.split('/');
@@ -56,8 +57,18 @@ addEventListener("DOMContentLoaded", async e => {
             { data: "rif" },
             { data: "nombre" },
             { data: "mes" },
-            { data: "fecha_ocurrencia" },
-            { data: "fecha_vencimiento" },
+            {
+                data: "fecha_ocurrencia",
+                render: function (data, type, row) {
+                    return formatToRealDate(data);
+                },
+            },
+            {
+                data: "fecha_vencimiento",
+                render: function (data, type, row) {
+                    return formatToRealDate(data);
+                },
+            },
             {
                 data: "monto_usd",
                 render: function (data, type, row) {
@@ -151,7 +162,7 @@ addEventListener("DOMContentLoaded", async e => {
             initCollapsed: true,
             panes: [
                 {
-                    header: 'Filtrar por estatus de la factura:',
+                    header: 'Filtrar por estatus del recibo:',
                     options: [
                         {
                             label: 'Pagada',

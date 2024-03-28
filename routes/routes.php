@@ -33,6 +33,7 @@ Router::get("/pdf/cita/:id", PdfController::class . '@pdf_citas');
 Router::get("/pdf/consultaemergencia/:id", PdfController::class . '@pdf_consultasEmergencia');
 Router::get("/pdf/cintillo/:id", PdfController::class . '@pdf_cintillo');
 Router::get("/pdf/facturamensajeria/:id", PdfController::class . '@pdf_facturaMensajeria');
+Router::get("/pdf/consultaseguro/:id", PdfController::class . '@pdf_consultaSeguro');
 
 // //Login - vista
 Router::get('/login', LoginController::class . '@index');
@@ -74,8 +75,8 @@ Router::get('/pacientes/actualizar/:id', PacienteController::class . '@formActua
 Router::get('/pacientes/historialmedico/:id', PacienteController::class . '@historialMedico');
 
 // //Pacientes - API
-Router::get('/pacientes/consulta', PacienteController::class . '@listarPacientes', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
-Router::get('/pacientes/:id', PacienteController::class . '@listarPacientePorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
+Router::get('/pacientes/consulta', PacienteController::class . '@listarPacientes', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3","4","5") )]);
+Router::get('/pacientes/:id', PacienteController::class . '@listarPacientePorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3","4","5") )]);
 Router::post('/pacientes', PacienteController::class . '@insertarPaciente', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::put('/pacientes/:id', PacienteController::class . '@actualizarPaciente', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::delete('/pacientes/:id', PacienteController::class . '@eliminarPaciente', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
@@ -116,9 +117,9 @@ Router::get('/medicos/actualizar/:id', MedicoController::class . '@formActualiza
 Router::get('/medicos/perfilmedico', MedicoController::class . '@perfilMedico');
 
 // //Medicos - API
-Router::get('/medicos/consulta', MedicoController::class . '@listarmedicos', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4") )]);
-Router::get('/medicos/:id', MedicoController::class . '@listarMedicoPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4") )]);
-Router::get('/medicos/cedula/:ci', MedicoController::class . '@listarMedicoPorCI', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4") )]);
+Router::get('/medicos/consulta', MedicoController::class . '@listarmedicos', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3","4","5") )]);
+Router::get('/medicos/:id', MedicoController::class . '@listarMedicoPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3","4","5") )]);
+Router::get('/medicos/cedula/:ci', MedicoController::class . '@listarMedicoPorCI', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::post('/medicos', MedicoController::class . '@insertarMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::put('/medicos/:id', MedicoController::class . '@actualizarMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::delete('/medicos/:id', MedicoController::class . '@eliminarMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
@@ -154,8 +155,8 @@ Router::get('/seguros/registrar', SeguroController::class . '@formRegistrarSegur
 Router::get('/seguros/actualizar/:id', SeguroController::class . '@formActualizarSeguro');
 
 // //Seguros - API
-Router::get('/seguros/consulta', SeguroController::class . '@listarSeguros', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4") )]);
-Router::get('/seguros/:id', SeguroController::class . '@listarSeguroPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4") )]);
+Router::get('/seguros/consulta', SeguroController::class . '@listarSeguros', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4", "5") )]);
+Router::get('/seguros/:id', SeguroController::class . '@listarSeguroPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::post('/seguros', SeguroController::class . '@insertarSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::post('/seguros/examenes/:id', SeguroController::class . '@insertarSeguroExamen', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::put('/seguros/:id', SeguroController::class . '@actualizarSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
@@ -198,8 +199,8 @@ Router::get('/consultas/registrar', ConsultaController::class . '@formRegistrarC
 Router::get('/consultas/actualizar/:id', ConsultaController::class . '@formActualizarConsulta');
 
 // //Consulta - API
-Router::get('/consultas/consulta', ConsultaController::class . '@listarConsultas',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
-Router::get('/consultas/:id', ConsultaController::class . '@listarConsultaPorId',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
+Router::get('/consultas/consulta', ConsultaController::class . '@listarConsultas',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3","4","5") )]);
+Router::get('/consultas/:id', ConsultaController::class . '@listarConsultaPorId',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3","4","5") )]);
 Router::get('/consultas/paciente/:id', ConsultaController::class . '@listarConsultasPorPaciente',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::post('/consultas', ConsultaController::class . '@insertarConsulta',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::put('/consultas/:id', ConsultaController::class . '@actualizarConsulta',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
@@ -238,11 +239,11 @@ Router::get('/proveedores/registrar', ProveedorController::class . '@formRegistr
 Router::get('/proveedores/actualizar/:id', ProveedorController::class . '@formActualizarProveedor');
 
 // //Proveedor - API
-Router::get('/proveedores/consulta', ProveedorController::class . '@listarProveedor',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
-Router::get('/proveedores/:id', ProveedorController::class . '@listarProveedorPorId',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
-Router::post('/proveedores', ProveedorController::class . '@insertarProveedor', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
-Router::put('/proveedores/:id', ProveedorController::class . '@actualizarProveedor', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
-Router::delete('/proveedores/:id', ProveedorController::class . '@eliminarProveedor', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
+Router::get('/proveedores/consulta', ProveedorController::class . '@listarProveedor',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2", "3") )]);
+Router::get('/proveedores/:id', ProveedorController::class . '@listarProveedorPorId',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2", "3") )]);
+Router::post('/proveedores', ProveedorController::class . '@insertarProveedor', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2", "3") )]);
+Router::put('/proveedores/:id', ProveedorController::class . '@actualizarProveedor', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2", "3") )]);
+Router::delete('/proveedores/:id', ProveedorController::class . '@eliminarProveedor', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2", "3") )]);
 
 // //Insumo - Vistas
 Router::get('/insumos', InsumoController::class . '@index');
@@ -250,11 +251,11 @@ Router::get('/insumos/registrar', InsumoController::class . '@formRegistrarInsum
 Router::get('/insumos/actualizar/:id', InsumoController::class . '@formActualizarInsumo');
 
 // //Insumo - API
-Router::get('/insumos/consulta', InsumoController::class . '@listarInsumo', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
-Router::get('/insumos/:id', InsumoController::class . '@listarInsumoPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
-Router::post('/insumos', InsumoController::class . '@insertarInsumo', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
+Router::get('/insumos/consulta', InsumoController::class . '@listarInsumo', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3", "5") )]);
+Router::get('/insumos/:id', InsumoController::class . '@listarInsumoPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3", "5") )]);
+Router::post('/insumos', InsumoController::class . '@insertarInsumo', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::put('/insumos/:id', InsumoController::class . '@actualizarInsumo', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
-Router::delete('/insumos/:id', InsumoController::class . '@eliminarInsumo', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
+Router::delete('/insumos/:id', InsumoController::class . '@eliminarInsumo', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 
 // //Factura_Compra - Vistas
 Router::get('/factura/compra', FacturaCompraController::class . '@index');

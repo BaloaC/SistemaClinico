@@ -100,3 +100,10 @@ document.getElementById("act-cambioDivisa").addEventListener('submit', (event) =
     event.preventDefault();
     confirmUpdateCurrencyExchange();
 })
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (Cookies.get("rol") == 4 || Cookies.get("rol") == 5) {
+        document.getElementById("currencyExchangeNavLink").removeAttribute("data-bs-target");
+        document.getElementById("currencyExchangeNavLink").classList.remove("cursor-pointer");
+    }
+})

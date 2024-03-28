@@ -4,6 +4,7 @@ import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import formatToRealDate from "../global/formatToRealDate.js";
 
 const path = location.pathname.split('/');
 const especialidadSelect = document.getElementById("s-especialidad");
@@ -17,9 +18,11 @@ const modalRegister = document.getElementById("modalReg") ?? undefined;
 
 addEventListener("DOMContentLoaded", async e => {
 
-    removeAddAccountant();
+    // Ocultar botones de acuerdo a los roles
     removeAddAnalist();
 
+    // Para permitir que se filtre con la fecha formateada
+    $.fn.dataTable.moment('DD-MM-YYYY');
 
     let consultas = $('#consultas').DataTable({
 
@@ -52,9 +55,8 @@ addEventListener("DOMContentLoaded", async e => {
                 render: function (data, type, row) {
                     if ("cedula_paciente" in data) return data.cedula_paciente;
                     else if ("beneficiado" in data) return data.beneficiado.cedula;
-                    else {
-                        return "Consulta por emergencia"
-                    }
+                    else if ("paciente_beneficiado" in data) return data.paciente_beneficiado.cedula;
+                    else { return "Consulta por emergencia" }
                 }
 
             },
@@ -64,6 +66,7 @@ addEventListener("DOMContentLoaded", async e => {
                     // console.log(data);
                     if ("nombre_paciente" in data) return `${data.nombre_paciente} ${data.apellido_paciente}`;
                     else if ("beneficiado" in data) return `${data.beneficiado.nombre} ${data.beneficiado.apellidos}`;
+                    else if ("paciente_beneficiado" in data) return `${data.paciente_beneficiado.nombre} ${data.paciente_beneficiado.apellidos}`;
                     else {
                         return "Consulta por emergencia"
                     }
@@ -75,9 +78,10 @@ addEventListener("DOMContentLoaded", async e => {
 
                     if ("nombre_medico" in data) {
                         return `${data.nombre_medico} ${data.apellidos_medico}`;
-                    } else if ("medico" in data && data.medico?.length > 0) {
-                        return `${data.medico[0].nombre_medico} ${data.medico[0].apellidos_medico}`;
-                    } else {
+                    } else if ("medico" in data) {
+                        return `${data.medico[0]?.nombre_medico ?? data.medico.nombre} ${data.medico[0]?.apellidos_medico ?? data.medico.apellidos}`;
+                    } 
+                    else {
                         return "Consulta por emergencia"
                     }
                 }
@@ -90,6 +94,8 @@ addEventListener("DOMContentLoaded", async e => {
                         return data.nombre_especialidad;
                     } else if ("medico" in data && data.medico?.length > 0) {
                         return `${data.medico[0].nombre_especialidad}`;
+                    } else if ("especialidad" in data)  {
+                        return `${data.especialidad.nombre}`
                     } else {
                         return "Consulta por emergencia"
                     }
@@ -101,12 +107,18 @@ addEventListener("DOMContentLoaded", async e => {
                     if ("cedula_paciente" in data) return data.cedula_paciente;
                     else if ("titular" in data) return data.titular.cedula;
                     else if ("cedula_titular" in data) return data.cedula_titular;
+                    else if ("paciente_titular" in data) return data.paciente_titular.cedula;
                     else {
                         return "Consulta por emergencia"
                     }
                 }
             },
-            { data: "fecha_ocurrencia" },
+            { 
+                data: "fecha_ocurrencia",
+                render: function (data, type, row){
+                    return formatToRealDate(data);
+                }
+            },
             {
                 data: "consulta_id",
                 render: function (data, type, row) {
@@ -119,6 +131,11 @@ addEventListener("DOMContentLoaded", async e => {
             }
 
         ],
+        // Para permitir el filtrado con la fecha filtrada
+        columnDefs: [{
+            type: 'datetime-moment',
+            targets: 7
+        }],
         order: [[6, 'desc']],
         // ! Ocultar los paneles por defecto 
         columnDefs: [{
@@ -133,98 +150,6 @@ addEventListener("DOMContentLoaded", async e => {
             hideCount: true,
             collapse: true,
             initCollapsed: true,
-            // panes: [
-            //     {
-            //         header: 'Filtrar por tipo de paciente:',
-            //         options: [
-            //             {
-            //                 label: 'Paciente natural',
-            //                 value: function (rowData, rowIdx) {
-
-            //                     if (rowData.tipo_paciente) return rowData.tipo_paciente === "1";
-            //                     if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "1";
-            //                 },
-            //                 className: 'paciente-natural'
-            //             },
-            //             {
-            //                 label: 'Paciente representante',
-            //                 value: function (rowData, rowIdx) {
-            //                     if (rowData.tipo_paciente) return rowData.tipo_paciente === "2";
-            //                     if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "2";
-            //                 },
-            //                 className: 'paciente-representante'
-            //             },
-            //             {
-            //                 label: 'Paciente asegurado',
-            //                 value: function (rowData, rowIdx) {
-            //                     if (rowData.tipo_paciente) return rowData.tipo_paciente === "3";
-            //                     if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "3";
-            //                 },
-            //                 className: 'paciente-asegurado'
-            //             },
-            //             {
-            //                 label: 'Paciente beneficiado',
-            //                 value: function (rowData, rowIdx) {
-            //                     if (rowData.tipo_paciente) return rowData.tipo_paciente === "4";
-            //                     if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "4";
-            //                 },
-            //                 className: 'paciente-beneficiado'
-            //             }
-            //         ],
-            //         dtOpts: {
-            //             searching: false,
-            //             order: [[1, 'desc']]
-            //         }
-            //     },
-            //     {
-            //         header: 'Filtrar por edad:',
-            //         options: [
-            //             {
-            //                 label: 'Menores de 18 años',
-            //                 value: function (rowData, rowIdx) {
-            //                     if (rowData.edad_paciente) {
-            //                         return rowData.edad_paciente < 18;
-            //                     }
-            //                     if (rowData?.beneficiado.edad) {
-            //                         return rowData.beneficiado.edad < 18;
-            //                     }
-            //                 },
-            //                 className: 'may-18'
-            //             },
-            //             {
-            //                 label: 'Mayores de 18 años',
-            //                 value: function (rowData, rowIdx) {
-            //                     if (rowData.edad_paciente) {
-            //                         return rowData.edad_paciente > 18;
-            //                     }
-            //                     if (rowData?.beneficiado.edad) {
-            //                         return rowData.beneficiado.edad > 18;
-            //                     }
-            //                 },
-            //                 className: 'men-18'
-            //             }
-            //         ],
-            //     },
-            //     {
-            //         header: 'Filtrar por tipo de consulta:',
-            //         options: [
-            //             {
-            //                 label: 'Consulta normal',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.es_emergencia === 0;
-            //                 },
-            //                 className: 'noes_emergencia'
-            //             },
-            //             {
-            //                 label: 'Consulta por emergencia',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.es_emergencia === 1;
-            //                 },
-            //                 className: 'es_emergencia'
-            //             }
-            //         ],
-            //     }
-            // ]
         },
         dom: 'Plfrtip'
     });
@@ -233,7 +158,8 @@ addEventListener("DOMContentLoaded", async e => {
 
         console.log(data);
 
-        if (data.clave == null) data.clave = "No aplica";
+        if (data.clave == null && data?.cita?.tipo_cita != 2) data.clave = "No aplica";
+        if (data.clave == null && data?.cita?.tipo_cita == 2) data.clave = "Desconocida";
         let tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
         if (data.es_emergencia === 1) tipo_cita = "Asegurada";
 
@@ -338,10 +264,10 @@ addEventListener("DOMContentLoaded", async e => {
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
                 <tr>
-                    <td>Peso: <br><b>${data.peso ? data.peso + " " + "kg" : "No especificado"} </b></td>
-                    <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m" : "No especificado"}</b></td>
-                    <td>Fecha Cita: <br><b>${data.fecha_cita ?? "No aplica"}</b></td>
-                    <td>Motivo cita: <br><b>${data.motivo_cita ?? "No aplica"}</b></td>
+                    <td>Peso: <br><b>${data?.consulta?.peso ? data?.consulta?.peso + " " + "kg" : "No especificado"} </b></td>
+                    <td>Estatura: <br><b>${data?.consulta?.altura ? data?.consulta?.altura + " " + "m" : "No especificado"}</b></td>
+                    <td>Fecha Cita: <br><b>${formatToRealDate(data?.cita?.fecha_cita) ?? "No aplica"}</b></td>
+                    <td>Motivo cita: <br><b>${data?.cita?.motivo_cita ?? "No aplica"}</b></td>
                 </tr>
                 <tr class="blue-td">
                     <td>Clave: <br><b>${data.clave}</b></td>
@@ -359,7 +285,7 @@ addEventListener("DOMContentLoaded", async e => {
                 ${factura}
                 <tr><td><br></td></tr>
                 <tr>
-                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="openPopup('pdf/consulta/${data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
+                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="openPopup('pdf/consultaseguro/${data.consulta_seguro_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
                 </tr>
             </table>
         `

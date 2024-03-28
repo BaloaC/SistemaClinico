@@ -3,10 +3,14 @@ import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import concatItems from "../global/concatItems.js";
+import formatToRealDate from "../global/formatToRealDate.js";
+import { removeActAnalist, removeDeleteAnalist } from "../global/validateRol.js";
 
 const path = location.pathname.split('/');
 export let infoSeguro;
 export let examenesSeguroListAll;
+removeActAnalist();
+removeDeleteAnalist();
 
 export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" } = {}) {
 
@@ -28,8 +32,8 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     rifSeguro.textContent = infoSeguro.rif;
     telSeguro.textContent = infoSeguro.telefono;
     direcSeguro.textContent = infoSeguro.direccion;
-    porcentajeSeguro.textContent = infoSeguro.porcentaje;
-    costoSeguro.textContent = infoSeguro.costo_consulta;
+    porcentajeSeguro.textContent = `${infoSeguro.porcentaje}%`;
+    costoSeguro.textContent = `$${infoSeguro.costo_consulta}`;
     btnDelete.setAttribute("onclick", `deleteSeguro(${infoSeguro.seguro_id})`);
     seguroPrecioInput.value = infoSeguro.seguro_id;
 
@@ -97,8 +101,8 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
         idRecibo.textContent = listConsultas.factura[0].factura_seguro_id;
         mesRecibo.textContent = listConsultas.factura[0].mes;
-        fechaOcurrencia.textContent = listConsultas.factura[0].fecha_ocurrencia.split(" ")[0];
-        fechaVencimiento.textContent = listConsultas.factura[0].fecha_vencimiento;
+        fechaOcurrencia.textContent = formatToRealDate(listConsultas.factura[0].fecha_ocurrencia.split(" ")[0]);
+        fechaVencimiento.textContent = formatToRealDate(listConsultas.factura[0].fecha_vencimiento);
         montoTotal.textContent = `$${listConsultas.factura[0].monto_usd}`;
 
         // Si hay consultas disponibles mostrar el boton del pdf
@@ -137,7 +141,11 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     $('#consultaSeguro').DataTable().clear();
     $('#consultaSeguro').DataTable().destroy();
 
+    // Para permitir que se filtre con la fecha formateada
+    $.fn.dataTable.moment('DD-MM-YYYY');
+
     let consultaSeguro = $('#consultaSeguro').DataTable({
+        
 
         bAutoWidth: false,
         paging: false,
@@ -162,6 +170,8 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                     console.log(data);
                     if (data.beneficiado && data.beneficiado.cedula) {
                         return data.beneficiado.cedula;
+                    }else if(data.paciente_beneficiado && data.paciente_beneficiado.cedula){
+                        return data.paciente_beneficiado.cedula;
                     } else {
                         return 'Desconocido';
                     }
@@ -181,7 +191,12 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                 }
             },
             { data: "tipo_servicio" },
-            { data: "fecha_ocurrencia" },
+            { 
+                data: "fecha_ocurrencia",
+                render: function (data, type, row){
+                    return formatToRealDate(data);
+                }
+            },
 
             {
                 data: null,
@@ -209,14 +224,19 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             // }
 
         ],
-        // ! Alinear con text-end los montos
+        // ! Alinear con text-end los montos y que la fecha filtre bien
         columnDefs: [
             {
                 targets: 5,
                 createdCell: function (cell, cellData, rowData, rowIndex, colIndex) {
                     // Añadir una clase al td
                     $(cell).addClass('text-end');
-                }
+                },
+                
+            },
+            {
+                type: 'datetime-moment',
+                targets: 4
             }
         ],
         order: [[4, 'desc']],
@@ -394,7 +414,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                     <td>Apellidos: <br><b>${data.paciente_beneficiado.apellidos}</b></td>
                 </tr>
                 <tr>
-                    <td>Fecha de nacimiento: <br><b>${data.paciente_beneficiado.fecha_nacimiento}</b></td>
+                    <td>Fecha de nacimiento: <br><b>${formatToRealDate(data.paciente_beneficiado.fecha_nacimiento)}</b></td>
                     <td>Edad: <br><b>${data.paciente_beneficiado.edad}</b></td>
                 </tr>
             `;
@@ -414,12 +434,12 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
                 info.medico += `
                 <tr>
-                    <td>Cédula: <br><b>${data?.medico[0]?.cedula}</b></td>
-                    <td>Nombres: <br><b>${data?.medico[0]?.nombre_medico}</b></td>
-                    <td>Apellidos: <br><b>${data?.medico[0]?.apellidos_medico}</b></td>
+                    <td>Cédula: <br><b>${data?.medico[0]?.cedula ?? data?.medico?.cedula}</b></td>
+                    <td>Nombres: <br><b>${data?.medico[0]?.nombre_medico ?? data?.medico?.cedula}</b></td>
+                    <td>Apellidos: <br><b>${data?.medico[0]?.apellidos_medico ?? data?.medico?.cedula}</b></td>
                 </tr>
                 <tr>
-                    <td>Especialidad: <br><b>${data?.medico[0]?.nombre_especialidad ?? "Desconocida"}</b></td>
+                    <td>Especialidad: <br><b>${data?.medico[0]?.nombre_especialidad ?? data?.especialidad.nombre}</b></td>
                 </tr>
 
                 <tr><td><br></td></tr>
@@ -427,7 +447,9 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             `;
             }
         }
+    
 
+        console.log(info);
 
 
         return `
@@ -438,7 +460,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             <tr>
                 <td>Peso: <br><b>${data.peso ? data?.peso + " " + "kg" : "No especificado"} </b></td>
                 <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m" : "No especificado"}</b></td>
-                <td>Fecha Cita: <br><b>${info.data?.cita?.fecha_cita ?? "No aplica"}</b></td>
+                <td>Fecha Cita: <br><b>${formatToRealDate(info.data?.cita?.fecha_cita) ?? "No aplica"}</b></td>
                 <td>Motivo cita: <br><b>${info.data?.cita?.motivo_cita ?? "No aplica"}</b></td>
             </tr>
             <tr class="blue-td">
@@ -451,7 +473,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             ${info.factura}
             <tr><td><br></td></tr>
             <tr>
-                <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/consultaemergencia/${info.data?.consulta_seguro_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
+                <td><a class="btn btn-sm btn-add" href="#" onclick="${info?.data?.consulta?.es_emergencia == 1 ? "openPopup('pdf/consultaemergencia/" + info?.data?.consulta_seguro_id + "')" : "openPopup('pdf/consultaseguro/" + info?.data?.consulta_seguro_id + "')"}"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
             </tr>
         </table>
     `

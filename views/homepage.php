@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/homepage.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/datatables.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/custom-datatables.css'); ?>">
-    <title>Proyecto 4 | Welcome</title>
+    <title>Proyecto 4 | Inicio</title>
 </head>
 
 <body class="bg-transparent">

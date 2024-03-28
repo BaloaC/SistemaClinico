@@ -58,7 +58,7 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Medicamento</h1>
+                        <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Usuario</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="modalRegBody">
@@ -97,7 +97,7 @@
 
                             <div id="form-preguntas" class="form-preguntas">
                                 <label>Pregunta de Seguridad 1</label>
-                                <select class="form-select mb-3" name="pregunta1" required>
+                                <select class="form-select mb-3 preguntasSeguridad" id="pregunta1" name="pregunta1" required>
                                     <option value="">Seleccione una pregunta de seguridad</option>
                                     <option value="1">Cuál es tu color favorito</option>
                                     <option value="2">Nombre de tu mascota de la infancia</option>
@@ -111,7 +111,7 @@
                                 <input class="form-control mt-3 mb-3" type="text" name="respuesta1" placeholder="Respuesta a la pregunta de Seguridad" required>
 
                                 <label>Pregunta de Seguridad 2</label>
-                                <select class="form-select mb-3" name="pregunta2" required>
+                                <select class="form-select mb-3 preguntasSeguridad" id="pregunta2" name="pregunta2" required>
                                     <option value="">Seleccione una pregunta de seguridad</option>
                                     <option value="1">Cuál es tu color favorito</option>
                                     <option value="2">Nombre de tu mascota de la infancia</option>
@@ -125,7 +125,7 @@
                                 <input class="form-control mt-3 mb-3" type="text" name="respuesta2" placeholder="Respuesta a la pregunta de Seguridad" required>
 
                                 <label>Pregunta de Seguridad 3</label>
-                                <select class="form-select mb-3" name="pregunta3" required>
+                                <select class="form-select mb-3 preguntasSeguridad" id="pregunta3" name="pregunta3" required>
                                     <option value="">Seleccione una pregunta de seguridad</option>
                                     <option value="1">Cuál es tu color favorito</option>
                                     <option value="2">Nombre de tu mascota de la infancia</option>
@@ -209,6 +209,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/usuarios/registrarUsuarioModule.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/usuarios/actualizarUsuario.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/usuarios/eliminarUsuario.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/global/filterOptionsVanillaSelect.js'); ?>"></script>
 </body>
 
 </html>

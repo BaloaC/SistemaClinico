@@ -1,10 +1,11 @@
+import formatToRealDate from "../global/formatToRealDate.js";
 import getById from "../global/getById.js";
 
 const id = location.pathname.split("/")[4];
 const data = await getById("factura/medico",id);
 
-document.getElementById("fecha").textContent = data.fecha_pago;
-document.getElementById("fecha_emision").textContent = data.fecha_emision;
+document.getElementById("fecha").textContent = formatToRealDate(data.fecha_pago);
+document.getElementById("fecha_emision").textContent = formatToRealDate(data.fecha_emision);
 document.getElementById("sumatoria_consultas_aseguradas").textContent = data.sumatoria_consultas_aseguradas;
 document.getElementById("sumatoria_consultas_naturales").textContent = data.sumatoria_consultas_naturales;
 document.getElementById("nombre").textContent = `${data.nombre} ${data.apellidos}`;

@@ -1,6 +1,7 @@
 import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import formatToRealDate from "../global/formatToRealDate.js";
 
 const path = location.pathname.split('/');
 
@@ -15,6 +16,9 @@ select2OnClick({
 });
 
 addEventListener("DOMContentLoaded", e => {
+
+    // Para permitir que se filtre con la fecha formateada
+    $.fn.dataTable.moment('DD-MM-YYYY');
 
     let fMedicos = $('#fMedicos').DataTable({
 
@@ -56,8 +60,19 @@ addEventListener("DOMContentLoaded", e => {
                     return `$${data}`;
                 }
             },
-            { data: "fecha_pago" },
-            { data: "fecha_emision" },
+            {
+                data: "fecha_pago",
+                render: function (data, type, row) {
+                    console.log(row);
+                    return formatToRealDate(data);
+                },
+            },
+            {
+                data: "fecha_emision",
+                render: function (data, type, row) {
+                    return formatToRealDate(data);
+                },
+            },
             {
                 data: "pago_total", render: function (data, type, row) {
                     return `$${data}`;
@@ -77,12 +92,20 @@ addEventListener("DOMContentLoaded", e => {
 
         ],
         // ! Ocultar los paneles por defecto 
-        columnDefs: [{
-            searchPanes: {
-                show: false,
+        columnDefs: [
+            {
+                searchPanes: {
+                    show: false,
+                },
+                targets: [0, 1, 2, 3, 4, 5],
             },
-            targets: [0, 1, 2, 3, 4, 5],
-        }],
+            // Para permitir el filtrado con la fecha filtrada
+            {
+                type: 'datetime-moment',
+                targets: 7
+            },
+        ],
+        order: [[6, 'desc']],
         // ! rowData (Devuelve toda la fila)
         searchPanes: {
             controls: false,

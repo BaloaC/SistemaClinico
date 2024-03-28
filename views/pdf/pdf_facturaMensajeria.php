@@ -111,14 +111,14 @@
         <p><b>CENTRO MEDICO HIPERBARICO Y DE REHABILITACION <br> SHENQUE C.A <br> CALLE PRONLONGACION MIRANDA 3-05
                 SEC.PUNTO FRESCO <br> CAGUA EDO ARAGUA</b></p>
     </header>
-    <h3 id="titulo">FACTURA ENTREGADA A MENSAJERÍA Y RECEPCIONADA</h3>
+    <h3 id="titulo">RECIBO ENTREGADO A MENSAJERÍA Y RECEPCIONADA</h3>
     <h3>Seguro: <span id="seguro"></span> <span id="rif"></span> <span id="fecha"></span></h3>
     <div class="paper">
         <table class="tabla">
             <thead>
                 <tr>
                     <th>Item</th>
-                    <th>Nro. Factura</th>
+                    <th>Nro. Recibo</th>
                     <th>Fecha</th>
                     <th>Cédula Paciente</th>
                     <th>Cédula Titular</th>

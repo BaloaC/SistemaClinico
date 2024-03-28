@@ -1,11 +1,19 @@
 // import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
+import formatToRealDate from "../global/formatToRealDate.js";
+import { removeAddAccountant } from "../global/validateRol.js";
 
 const path = location.pathname.split('/');
 
 
 addEventListener("DOMContentLoaded", e => {
+
+    // Eliminar el botón de añadir según el rol
+    removeAddAccountant();
+
+    // Para permitir que se filtre con la fecha formateada
+    $.fn.dataTable.moment('DD-MM-YYYY');
 
     let fConsulta = $('#fMensajeria').DataTable({
 
@@ -18,7 +26,7 @@ addEventListener("DOMContentLoaded", e => {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
             },
-            error: function(xhr, error, thrown) {
+            error: function (xhr, error, thrown) {
                 // Manejo de errores de Ajax
                 console.log('Error de Ajax:', error);
                 console.log('Detalles:', thrown);
@@ -39,7 +47,10 @@ addEventListener("DOMContentLoaded", e => {
                 }
             },
             {
-                data: "fecha_mensajeria"
+                data: "fecha_mensajeria",
+                render: function (data, type, row) {
+                    return formatToRealDate(data);
+                },
             },
             {
                 data: "total_mensajeria_usd",
@@ -100,14 +111,21 @@ addEventListener("DOMContentLoaded", e => {
             // }
 
         ],
-        order: [[5, 'desc']],
+        order: [[3, 'desc']],
         // ! Ocultar los paneles por defecto 
-        columnDefs: [{
-            searchPanes: {
-                show: false,
+        columnDefs: [
+            {
+                searchPanes: {
+                    show: false,
+                },
+                targets: [0, 1, 2, 3, 4, 5],
             },
-            targets: [0, 1, 2, 3, 4, 5],
-        }],
+            // Para permitir el filtrado con la fecha filtrada
+            {
+                type: 'datetime-moment',
+                targets: 3
+            },
+        ],
         // ! rowData (Devuelve toda la fila)
     });
 

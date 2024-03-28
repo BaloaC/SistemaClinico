@@ -1,4 +1,5 @@
 import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
+import formatToRealDate from "../global/formatToRealDate.js";
 import getById from "../global/getById.js";
 
 const id = location.pathname.split("/")[4];
@@ -7,7 +8,7 @@ const dataFactura = await getById(`factura/consultaSeguro`,id);
 console.log(dataFactura);
 
 document.getElementById("recibo_id").textContent = dataFactura.consulta_seguro_id;
-document.getElementById("fecha").textContent = dataFactura.fecha_ocurrencia;
+document.getElementById("fecha").textContent = formatToRealDate(dataFactura.fecha_ocurrencia);
 document.getElementById("nombre_seguro").textContent = dataFactura.seguro?.nombre ?? "Desconocido";
 document.getElementById("rif").textContent = dataFactura.seguro?.rif ?? "Desconocido";
 document.getElementById("direccion").textContent = dataFactura.seguro?.direccion ?? "Desconocida";

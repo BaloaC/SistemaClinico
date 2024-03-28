@@ -5,7 +5,7 @@
     <?php include constant('PATH_VIEWS') . '/partials/header.php'; ?>
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/seguro.css'); ?>">
 
-    <title>Proyecto 4 | Examenes</title>
+    <title>Proyecto 4 | Exámenes</title>
 </head>
 
 <body>
@@ -101,7 +101,7 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Empresa</h1>
+                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Examen</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="modalActBody">
@@ -146,7 +146,7 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar exámen</h1>
+                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar examen</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">

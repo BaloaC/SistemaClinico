@@ -60,4 +60,8 @@ class PdfController extends Controller
     public function pdf_facturaMensajeria(){
         return $this->view("pdf/pdf_facturaMensajeria");
     }
+
+    public function pdf_consultaSeguro(){
+        return $this->view("pdf/pdf_consultaSeguro");
+    }
 }

@@ -29,7 +29,12 @@ addEventListener("DOMContentLoaded", e => {
             { data: "nombre" },
             { data: "cantidad" },
             { data: "cantidad_min" },
-            { data: "precio" },
+            { 
+                data: "precio" ,
+                render: function (data, type, row) {
+                    return `$${data}`;
+                }
+            },
             {
                 data: "insumo_id",
                 render: function (data, type, row) {

@@ -33,6 +33,7 @@ addEventListener("DOMContentLoaded", e => {
                 data: "especialidad_id",
                 render: function (data, type, row) {
 
+                    // TODO: Filtrar opciones por rol
                     return `
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-especialidad" onclick="updateEspecialidad(${data})"><i class="fas fa-edit act-especialidad"></i></a>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-especialidad" onclick="deleteEspecialidad(${data})"><i class="fas fa-trash del-especialidad"></i></a>

@@ -3,6 +3,7 @@ import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import getAll from "../global/getAll.js";
+import formatToRealDate from "../global/formatToRealDate.js";
 removeAddAccountant();
 removeAddAnalist();
 const path = location.pathname.split('/');
@@ -260,7 +261,7 @@ addEventListener("DOMContentLoaded", e => {
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
                 <tr>
-                    <td>Fecha de Nacimiento: <b>${data.fecha_nacimiento}</b></td>
+                    <td>Fecha de Nacimiento: <b>${formatToRealDate(data.fecha_nacimiento)}</b></td>
                 </tr>
                 <tr>
                     <td>Teléfono: <b>${data.telefono}</b></td>

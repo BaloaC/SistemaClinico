@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/custom-datatables.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
-    <title>Proyecto 4 | Facturas Consulta</title>
+    <title>Proyecto 4 | Recibos Mensajería Consultas</title>
 </head>
 
 <body>
@@ -19,10 +19,10 @@
             <!-- Cabezera -->
             <div class="row">
                 <div class="col-6">
-                    <h4 class="pt-5 pb-2 text-grey">Facturas entregada a mensajería</h4>
+                    <h4 class="pt-5 pb-2 text-grey">Recibos entregada a mensajería</h4>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
-                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalRegNormal"><i class="fa-sm fas fa-plus"></i> Factura</button>
+                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalRegNormal"><i class="fa-sm fas fa-plus"></i> Recibo</button>
                 </div>
                 <hr class="border-white">
             </div>
@@ -60,7 +60,7 @@
             <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalRegNormalLabel">Registrar factura consulta</h1>
+                        <h1 class="modal-title fs-3" id="modalRegNormalLabel">Registrar recibo consulta</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="modalRegBody">

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/custom-datatables.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
-    <title>Proyecto 4 | Consultar Usuarios</title>
+    <title>Proyecto 4 | Consultas</title>
 </head>
 
 <body>
@@ -42,7 +42,7 @@
                                             <th>Especialidad</th>
                                             <th>Cédula Titular</th>
                                             <th>Fecha Consulta</th>
-                                            <th>Acciones</th>
+                                            <!-- <th>Acciones</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>

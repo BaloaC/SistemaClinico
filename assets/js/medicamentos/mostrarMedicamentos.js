@@ -1,5 +1,6 @@
 import { select2OnClick } from "../global/dinamicSelect2.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import { removeAddMD } from "../global/validateRol.js";
 const path = location.pathname.split('/');
 
 select2OnClick({
@@ -12,6 +13,9 @@ select2OnClick({
 });
 
 addEventListener("DOMContentLoaded", e => {
+
+    // Remover el boton de añadir dependiendo el rol
+    removeAddMD();    
 
     const rol = Cookies.get("rol");
 

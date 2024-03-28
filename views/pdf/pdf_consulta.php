@@ -64,7 +64,7 @@
 
         .tabla{
             width: 750px;
-            padding: 2rem;
+            padding: 1rem 2rem;
         }
 
         #title {
