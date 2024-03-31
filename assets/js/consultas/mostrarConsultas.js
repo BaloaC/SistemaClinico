@@ -5,6 +5,7 @@ import getById from "../global/getById.js";
 import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import formatToRealDate from "../global/formatToRealDate.js";
+import createDataTable from "../global/createDataTable.js";
 
 const path = location.pathname.split('/');
 const especialidadSelect = document.getElementById("s-especialidad");
@@ -100,7 +101,6 @@ const handleModalOpen = async () => {
         const medicosList = await getAll("medicos/consulta");
         const pacientesList = await getAll("pacientes/consulta");
         const examenesList = await getAll("examenes/consulta");
-        const segurosList = await getAll("seguros/consulta");
         const infoCitas = await getAll("citas/consulta");
         let listCitas;
 
@@ -266,217 +266,197 @@ addEventListener("DOMContentLoaded", async e => {
     // Para permitir que se filtre con la fecha formateada
     $.fn.dataTable.moment('DD-MM-YYYY');
 
-    let consultas = $('#consultas').DataTable({
-
-        bAutoWidth: false,
-        language: {
-            url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
+    const consultasColumns = [
+        {
+            "className": 'dt-control',
+            "orderable": false,
+            "data": null,
+            "defaultContent": ''
         },
-        ajax: {
-            url: `/${path[1]}/consultas/consulta/`,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
-            },
-            error: function (xhr, error, thrown) {
-                // Manejo de errores de Ajax
-                console.log('Error de Ajax:', error);
-                console.log('Detalles:', thrown);
+        {
+            data: null,
+            render: function (data, type, row) {
+                if ("cedula_paciente" in data) return data.cedula_paciente;
+                if ("beneficiado" in data) return data.beneficiado.cedula;
+            }
 
-                $('#consultas').DataTable().clear().draw(); // Limpiar los datos existentes del DataTable
+        },
+        {
+            data: null,
+            render: function (data, type, row) {
+                // console.log(data);
+                if ("nombre_paciente" in data) return `${data.nombre_paciente} ${data.apellido_paciente}`;
+                if ("beneficiado" in data) return `${data.beneficiado.nombre} ${data.beneficiado.apellidos}`;
             }
         },
-        columns: [
-            {
-                "className": 'dt-control',
-                "orderable": false,
-                "data": null,
-                "defaultContent": ''
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    if ("cedula_paciente" in data) return data.cedula_paciente;
-                    if ("beneficiado" in data) return data.beneficiado.cedula;
+        {
+            data: null,
+            render: function (data, type, row) {
+
+                if ("nombre_medico" in data) {
+                    return `${data.nombre_medico} ${data.apellidos_medico}`;
+                } else if ("medico" in data && data.medico?.length > 0) {
+                    return `${data.medico[0].nombre_medico} ${data.medico[0].apellidos_medico}`;
+                } else {
+                    return "Consulta por emergencia"
                 }
+            }
+        },
+        {
+            data: null,
+            render: function (data, type, row) {
 
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    // console.log(data);
-                    if ("nombre_paciente" in data) return `${data.nombre_paciente} ${data.apellido_paciente}`;
-                    if ("beneficiado" in data) return `${data.beneficiado.nombre} ${data.beneficiado.apellidos}`;
+                if ("nombre_especialidad" in data) {
+                    return data.nombre_especialidad;
+                } else if ("medico" in data && data.medico?.length > 0) {
+                    return `${data.medico[0].nombre_especialidad}`;
+                } else {
+                    return "Consulta por emergencia"
                 }
+            }
+        },
+        {
+            data: null,
+            render: function (data, type, row) {
+                if ("cedula_paciente" in data) return data.cedula_paciente;
+                if ("titular" in data) return data.titular.cedula;
+                if ("cedula_titular" in data) return data.cedula_titular;
+            }
+        },
+        {
+            data: "fecha_consulta",
+            render: function (data, type, row) {
+                return formatToRealDate(data);
             },
-            {
-                data: null,
-                render: function (data, type, row) {
+        },
+        // {
+        //     data: "consulta_id",
+        //     render: function (data, type, row) {
 
-                    if ("nombre_medico" in data) {
-                        return `${data.nombre_medico} ${data.apellidos_medico}`;
-                    } else if ("medico" in data && data.medico?.length > 0) {
-                        return `${data.medico[0].nombre_medico} ${data.medico[0].apellidos_medico}`;
-                    } else {
-                        return "Consulta por emergencia"
-                    }
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
+        //         // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
+        //         return `
+        //             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteConsulta(${data})"><i class="fas fa-trash del-consulta"></i></a>
+        //         `
+        //     }
+        // }
 
-                    if ("nombre_especialidad" in data) {
-                        return data.nombre_especialidad;
-                    } else if ("medico" in data && data.medico?.length > 0) {
-                        return `${data.medico[0].nombre_especialidad}`;
-                    } else {
-                        return "Consulta por emergencia"
-                    }
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    if ("cedula_paciente" in data) return data.cedula_paciente;
-                    if ("titular" in data) return data.titular.cedula;
-                    if ("cedula_titular" in data) return data.cedula_titular;
-                }
-            },
-            {
-                data: "fecha_consulta",
-                render: function (data, type, row) {
-                    return formatToRealDate(data);
-                },
-            },
-            // {
-            //     data: "consulta_id",
-            //     render: function (data, type, row) {
+    ];
 
-            //         // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-            //         return `
-            //             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteConsulta(${data})"><i class="fas fa-trash del-consulta"></i></a>
-            //         `
-            //     }
-            // }
-
-        ],
-
-        // Para permitir el filtrado con la fecha filtrada
-        columnDefs: [{
+    const columnDefsConsultas = [
+        {
             type: 'datetime-moment',
-            targets: 7
-        }],
-        order: [[6, 'desc']],
-        // ! Ocultar los paneles por defecto 
-        columnDefs: [{
+            targets: 6
+        },
+        {
             searchPanes: {
                 show: false,
             },
             targets: [0, 1, 2, 3, 4, 5, 6],
-        }],
-        // ! rowData (Devuelve toda la fila)
-        searchPanes: {
-            controls: false,
-            hideCount: true,
-            collapse: true,
-            initCollapsed: true,
-            panes: [
-                {
-                    header: 'Filtrar por tipo de paciente:',
-                    options: [
-                        {
-                            label: 'Paciente natural',
-                            value: function (rowData, rowIdx) {
+        }
+    ];
 
-                                if (rowData.tipo_paciente) return rowData.tipo_paciente === "1";
-                                if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "1";
-                            },
-                            className: 'paciente-natural'
+    const searchPanesConsultas = {
+        controls: false,
+        hideCount: true,
+        collapse: true,
+        initCollapsed: true,
+        panes: [
+            {
+                header: 'Filtrar por tipo de paciente:',
+                options: [
+                    {
+                        label: 'Paciente natural',
+                        value: function (rowData, rowIdx) {
+
+                            if (rowData.tipo_paciente) return rowData.tipo_paciente === "1";
+                            if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "1";
                         },
-                        {
-                            label: 'Paciente representante',
-                            value: function (rowData, rowIdx) {
-                                if (rowData.tipo_paciente) return rowData.tipo_paciente === "2";
-                                if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "2";
-                            },
-                            className: 'paciente-representante'
+                        className: 'paciente-natural'
+                    },
+                    {
+                        label: 'Paciente representante',
+                        value: function (rowData, rowIdx) {
+                            if (rowData.tipo_paciente) return rowData.tipo_paciente === "2";
+                            if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "2";
                         },
-                        {
-                            label: 'Paciente asegurado',
-                            value: function (rowData, rowIdx) {
-                                if (rowData.tipo_paciente) return rowData.tipo_paciente === "3";
-                                if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "3";
-                            },
-                            className: 'paciente-asegurado'
+                        className: 'paciente-representante'
+                    },
+                    {
+                        label: 'Paciente asegurado',
+                        value: function (rowData, rowIdx) {
+                            if (rowData.tipo_paciente) return rowData.tipo_paciente === "3";
+                            if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "3";
                         },
-                        {
-                            label: 'Paciente beneficiado',
-                            value: function (rowData, rowIdx) {
-                                if (rowData.tipo_paciente) return rowData.tipo_paciente === "4";
-                                if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "4";
-                            },
-                            className: 'paciente-beneficiado'
-                        }
-                    ],
-                    dtOpts: {
-                        searching: false,
-                        order: [[1, 'desc']]
+                        className: 'paciente-asegurado'
+                    },
+                    {
+                        label: 'Paciente beneficiado',
+                        value: function (rowData, rowIdx) {
+                            if (rowData.tipo_paciente) return rowData.tipo_paciente === "4";
+                            if (rowData?.beneficiado.tipo_paciente) return rowData.beneficiado.tipo_paciente === "4";
+                        },
+                        className: 'paciente-beneficiado'
                     }
-                },
-                {
-                    header: 'Filtrar por edad:',
-                    options: [
-                        {
-                            label: 'Menores de 18 años',
-                            value: function (rowData, rowIdx) {
-                                if (rowData.edad_paciente) {
-                                    return rowData.edad_paciente < 18;
-                                }
-                                if (rowData?.beneficiado.edad) {
-                                    return rowData.beneficiado.edad < 18;
-                                }
-                            },
-                            className: 'may-18'
-                        },
-                        {
-                            label: 'Mayores de 18 años',
-                            value: function (rowData, rowIdx) {
-                                if (rowData.edad_paciente) {
-                                    return rowData.edad_paciente > 18;
-                                }
-                                if (rowData?.beneficiado.edad) {
-                                    return rowData.beneficiado.edad > 18;
-                                }
-                            },
-                            className: 'men-18'
-                        }
-                    ],
-                },
-                {
-                    header: 'Filtrar por tipo de consulta:',
-                    options: [
-                        {
-                            label: 'Consulta normal',
-                            value: function (rowData, rowIdx) {
-                                return rowData.es_emergencia === 0;
-                            },
-                            className: 'noes_emergencia'
-                        },
-                        {
-                            label: 'Consulta por emergencia',
-                            value: function (rowData, rowIdx) {
-                                return rowData.es_emergencia === 1;
-                            },
-                            className: 'es_emergencia'
-                        }
-                    ],
+                ],
+                dtOpts: {
+                    searching: false,
+                    order: [[1, 'desc']]
                 }
-            ]
-        },
-        dom: 'Plfrtip'
-    });
+            },
+            {
+                header: 'Filtrar por edad:',
+                options: [
+                    {
+                        label: 'Menores de 18 años',
+                        value: function (rowData, rowIdx) {
+                            if (rowData.edad_paciente) {
+                                return rowData.edad_paciente < 18;
+                            }
+                            if (rowData?.beneficiado.edad) {
+                                return rowData.beneficiado.edad < 18;
+                            }
+                        },
+                        className: 'may-18'
+                    },
+                    {
+                        label: 'Mayores de 18 años',
+                        value: function (rowData, rowIdx) {
+                            if (rowData.edad_paciente) {
+                                return rowData.edad_paciente > 18;
+                            }
+                            if (rowData?.beneficiado.edad) {
+                                return rowData.beneficiado.edad > 18;
+                            }
+                        },
+                        className: 'men-18'
+                    }
+                ],
+            },
+            {
+                header: 'Filtrar por tipo de consulta:',
+                options: [
+                    {
+                        label: 'Consulta normal',
+                        value: function (rowData, rowIdx) {
+                            return rowData.es_emergencia === 0;
+                        },
+                        className: 'noes_emergencia'
+                    },
+                    {
+                        label: 'Consulta por emergencia',
+                        value: function (rowData, rowIdx) {
+                            return rowData.es_emergencia === 1;
+                        },
+                        className: 'es_emergencia'
+                    }
+                ],
+            }
+        ]
+    }
 
-    function format(data) {
+    const order = [[6, 'desc']];
+
+    const format = (data) => {
 
         console.log(data);
 
@@ -612,21 +592,17 @@ addEventListener("DOMContentLoaded", async e => {
         `
     }
 
-    $('#consultas').on('click', 'td.dt-control', async function () {
-        let tr = $(this).closest('tr');
-        let row = consultas.row(tr);
-
-        if (row.child.isShown()) {
-
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-
-            row.child(format(row.data())).show();
-            tr.addClass('shown');
-        }
+    createDataTable({
+        id: "#consultas",
+        columns: consultasColumns,
+        url: `/${path[1]}/consultas/consulta/`,
+        columnDefs: columnDefsConsultas,
+        searchPanes: searchPanesConsultas,
+        order,
+        format,
+        formatDataCustom: true,
+        formatDataCustomUrl: "consultas",
+        formatDataCustomId: "consulta_id",
+        dom: "Plfrtip"
     });
 });
-
-

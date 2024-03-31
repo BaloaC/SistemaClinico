@@ -1,9 +1,5 @@
-import dinamicSelect2, {
-    emptySelect2,
-    select2OnClick,
-} from "../global/dinamicSelect2.js";
-import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import formatToRealDate from "../global/formatToRealDate.js";
+import createDataTable from "../global/createDataTable.js";
 
 const path = location.pathname.split("/");
 
@@ -12,141 +8,122 @@ addEventListener("DOMContentLoaded", (e) => {
     // Para permitir que se filtre con la fecha formateada
     $.fn.dataTable.moment('DD-MM-YYYY');
 
-    let fCompra = $("#fCompra").DataTable({
-        bAutoWidth: false,
-        language: {
-            url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`,
+    const fComprasColumns = [
+        {
+            className: "dt-control",
+            orderable: false,
+            data: null,
+            defaultContent: "",
         },
-        ajax: {
-            url: `/${path[1]}/factura/compra/consulta/`,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
+        { data: "proveedor_nombre" },
+        {
+            data: "insummos",
+            render: function (data) {
+                let totalInsumos = 0;
+                data.forEach((insumos) => (totalInsumos += insumos.unidades));
+                return totalInsumos;
             },
-            error: function (xhr, error, thrown) {
-                // Manejo de errores de Ajax
-                console.log('Error de Ajax:', error);
-                console.log('Detalles:', thrown);
-
-                $('#fCompra').DataTable().clear().draw();
+        },
+        {
+            data: "monto_con_iva",
+            render: function (data, type, row) {
+                return `$${data}`
             }
         },
-        columns: [
-            {
-                className: "dt-control",
-                orderable: false,
-                data: null,
-                defaultContent: "",
+        {
+            data: "monto_sin_iva",
+            render: function (data, type, row) {
+                return `$${data}`
+            }
+        },
+        {
+            data: "excento",
+            render: function (data, type, row) {
+                return data === null ? "Ninguno" : data;
             },
-            { data: "proveedor_nombre" },
-            {
-                data: "insummos",
-                render: function (data) {
-                    let totalInsumos = 0;
-                    data.forEach((insumos) => (totalInsumos += insumos.unidades));
-                    return totalInsumos;
-                },
+        },
+        {
+            data: "fecha_compra",
+            render: function (data, type, row) {
+                return formatToRealDate(data);
             },
-            {
-                data: "monto_con_iva",
-                render: function (data, type, row) {
-                    return `$${data}`
+        },
+        {
+            data: "estatus_fac",
+            render: function (data, type, row) {
+                if (data == 1) {
+                    return `<span class="badge light badge-success">Pagada</span>`;
+                } else {
+                    return `<span class="badge light badge-danger">Anulada</span>`;
                 }
             },
-            {
-                data: "monto_sin_iva",
-                render: function (data, type, row) {
-                    return `$${data}`
-                }
-            },
-            {
-                data: "excento",
-                render: function (data, type, row) {
-                    return data === null ? "Ninguno" : data;
-                },
-            },
-            {
-                data: "fecha_compra",
-                render: function (data, type, row) {
-                    return formatToRealDate(data);
-                },
-            },
-            {
-                data: "estatus_fac",
-                render: function (data, type, row) {
-                    if (data == 1) {
-                        return `<span class="badge light badge-success">Pagada</span>`;
-                    } else {
-                        return `<span class="badge light badge-danger">Anulada</span>`;
-                    }
-                },
-            },
-            {
-                data: "factura_compra_id",
-                render: function (data, type, row) {
-                    // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-                    if (row.estatus_fac == 1) {
-                        return `
+        },
+        {
+            data: "factura_compra_id",
+            render: function (data, type, row) {
+                // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
+                if (row.estatus_fac == 1) {
+                    return `
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFCompra(${data})"><i class="fas fa-trash del-consulta"></i></a>
                         `;
-                    } else {
-                        return `-`;
-                    }
-                },
+                } else {
+                    return `-`;
+                }
             },
-        ],
-        order: [[7, 'desc'], [6, 'desc']],
-        // ! Ocultar los paneles por defecto
-        columnDefs: [
-            {
-                searchPanes: {
-                    show: false,
-                },
-                targets: [0, 1, 2, 3, 4, 5, 6, 7],
-            },
-            // Para permitir el filtrado con la fecha filtrada
-            {
-                type: 'datetime-moment',
-                targets: 7
-            },
-        ],
-        // ! rowData (Devuelve toda la fila)
-        searchPanes: {
-            controls: false,
-            hideCount: true,
-            collapse: true,
-            initCollapsed: true,
-            panes: [
-                {
-                    header: 'Filtrar por estatus del recibo:',
-                    options: [
-                        {
-                            label: 'Pagada',
-                            value: function (rowData, rowIdx) {
-                                return rowData.estatus_fac === "1";
-                            },
-                            className: 'factura-pagada'
-                        },
-                        {
-                            label: 'Anulada',
-                            value: function (rowData, rowIdx) {
-                                return rowData.estatus_fac === "2";
-                            },
-                            className: 'factura-anulada'
-                        },
-                    ],
-                    dtOpts: {
-                        searching: false,
-                        order: [[1, 'desc']]
-                    }
-                },
-            ]
         },
-        dom: "Plfrtip",
-    });
+    ];
 
-    function format(data) {
+    const columnDefsFCompras = [
+        {
+            searchPanes: {
+                show: false,
+            },
+            targets: [0, 1, 2, 3, 4, 5, 6, 7],
+        },
+        // Para permitir el filtrado con la fecha filtrada
+        {
+            type: 'datetime-moment',
+            targets: 7
+        },
+    ];
+
+    const searchPanesFCompras = {
+        controls: false,
+        hideCount: true,
+        collapse: true,
+        initCollapsed: true,
+        panes: [
+            {
+                header: 'Filtrar por estatus del recibo:',
+                options: [
+                    {
+                        label: 'Pagada',
+                        value: function (rowData, rowIdx) {
+                            return rowData.estatus_fac === "1";
+                        },
+                        className: 'factura-pagada'
+                    },
+                    {
+                        label: 'Anulada',
+                        value: function (rowData, rowIdx) {
+                            return rowData.estatus_fac === "2";
+                        },
+                        className: 'factura-anulada'
+                    },
+                ],
+                dtOpts: {
+                    searching: false,
+                    order: [[1, 'desc']]
+                }
+            },
+        ]
+    };
+
+    const order = [[7, 'desc'], [6, 'desc']];
+
+    const format = (data) => {
         let template = `<table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">`;
-        data.insummos.forEach((e) => {
+        data.insumos.forEach((e) => {
             template += `
                 <tr>
                     <td>Nombre Insumo: ${e.insumo_nombre}</td>
@@ -163,16 +140,17 @@ addEventListener("DOMContentLoaded", (e) => {
         return template;
     }
 
-    $("#fCompra").on("click", "td.dt-control", function () {
-        let tr = $(this).closest("tr");
-        let row = fCompra.row(tr);
-
-        if (row.child.isShown()) {
-            row.child.hide();
-            tr.removeClass("shown");
-        } else {
-            row.child(format(row.data())).show();
-            tr.addClass("shown");
-        }
+    createDataTable({
+        id: "#fCompra",
+        url: `/${path[1]}/factura/compra/consulta/`,
+        columns: fComprasColumns,
+        columnDefs: columnDefsFCompras,
+        searchPanes: searchPanesFCompras,
+        order,
+        format,
+        dom: "Plfrtip",
+        formatDataCustom: true,
+        formatDataCustomUrl: "factura/compra",
+        formatDataCustomId: "factura_compra_id"
     });
 });

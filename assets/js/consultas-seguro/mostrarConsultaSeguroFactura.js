@@ -1,10 +1,7 @@
 import concatItems from "../global/concatItems.js";
-import dinamicSelect2, { emptyAllSelect2, emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
-import getAll from "../global/getAll.js";
-import getById from "../global/getById.js";
-import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
-import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import { removeAddAnalist } from "../global/validateRol.js";
 import formatToRealDate from "../global/formatToRealDate.js";
+import createDataTable from "../global/createDataTable.js";
 
 const path = location.pathname.split('/');
 const especialidadSelect = document.getElementById("s-especialidad");
@@ -24,137 +21,118 @@ addEventListener("DOMContentLoaded", async e => {
     // Para permitir que se filtre con la fecha formateada
     $.fn.dataTable.moment('DD-MM-YYYY');
 
-    let consultas = $('#consultas').DataTable({
-
-        bAutoWidth: false,
-        language: {
-            url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
+    const consultaSeguroColumns = [
+        {
+            "className": 'dt-control',
+            "orderable": false,
+            "data": null,
+            "defaultContent": ''
         },
-        ajax: {
-            url: `/${path[1]}/factura/consultaSeguro/consulta/`,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
-            },
-            error: function (xhr, error, thrown) {
-                // Manejo de errores de Ajax
-                console.log('Error de Ajax:', error);
-                console.log('Detalles:', thrown);
+        {
+            data: null,
+            render: function (data, type, row) {
+                if ("cedula_paciente" in data) return data.cedula_paciente;
+                else if ("beneficiado" in data) return data.beneficiado.cedula;
+                else if ("paciente_beneficiado" in data) return data.paciente_beneficiado.cedula;
+                else { return "Consulta por emergencia" }
+            }
 
-                $('#consultas').DataTable().clear().draw(); // Limpiar los datos existentes del DataTable
+        },
+        {
+            data: null,
+            render: function (data, type, row) {
+                // console.log(data);
+                if ("nombre_paciente" in data) return `${data.nombre_paciente} ${data.apellido_paciente}`;
+                else if ("beneficiado" in data) return `${data.beneficiado.nombre} ${data.beneficiado.apellidos}`;
+                else if ("paciente_beneficiado" in data) return `${data.paciente_beneficiado.nombre} ${data.paciente_beneficiado.apellidos}`;
+                else {
+                    return "Consulta por emergencia"
+                }
             }
         },
-        columns: [
-            {
-                "className": 'dt-control',
-                "orderable": false,
-                "data": null,
-                "defaultContent": ''
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    if ("cedula_paciente" in data) return data.cedula_paciente;
-                    else if ("beneficiado" in data) return data.beneficiado.cedula;
-                    else if ("paciente_beneficiado" in data) return data.paciente_beneficiado.cedula;
-                    else { return "Consulta por emergencia" }
-                }
+        {
+            data: null,
+            render: function (data, type, row) {
 
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    // console.log(data);
-                    if ("nombre_paciente" in data) return `${data.nombre_paciente} ${data.apellido_paciente}`;
-                    else if ("beneficiado" in data) return `${data.beneficiado.nombre} ${data.beneficiado.apellidos}`;
-                    else if ("paciente_beneficiado" in data) return `${data.paciente_beneficiado.nombre} ${data.paciente_beneficiado.apellidos}`;
-                    else {
-                        return "Consulta por emergencia"
-                    }
+                if ("nombre_medico" in data) {
+                    return `${data.nombre_medico} ${data.apellidos_medico}`;
+                } else if ("medico" in data) {
+                    return `${data.medico[0]?.nombre_medico ?? data.medico.nombre} ${data.medico[0]?.apellidos_medico ?? data.medico.apellidos}`;
                 }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
+                else {
+                    return "Consulta por emergencia"
+                }
+            }
+        },
+        {
+            data: null,
+            render: function (data, type, row) {
 
-                    if ("nombre_medico" in data) {
-                        return `${data.nombre_medico} ${data.apellidos_medico}`;
-                    } else if ("medico" in data) {
-                        return `${data.medico[0]?.nombre_medico ?? data.medico.nombre} ${data.medico[0]?.apellidos_medico ?? data.medico.apellidos}`;
-                    } 
-                    else {
-                        return "Consulta por emergencia"
-                    }
+                if ("nombre_especialidad" in data) {
+                    return data.nombre_especialidad;
+                } else if ("medico" in data && data.medico?.length > 0) {
+                    return `${data.medico[0].nombre_especialidad}`;
+                } else if ("especialidad" in data) {
+                    return `${data.especialidad.nombre}`
+                } else {
+                    return "Consulta por emergencia"
                 }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
+            }
+        },
+        {
+            data: null,
+            render: function (data, type, row) {
+                if ("cedula_paciente" in data) return data.cedula_paciente;
+                else if ("titular" in data) return data.titular.cedula;
+                else if ("cedula_titular" in data) return data.cedula_titular;
+                else if ("paciente_titular" in data) return data.paciente_titular.cedula;
+                else {
+                    return "Consulta por emergencia"
+                }
+            }
+        },
+        {
+            data: "fecha_ocurrencia",
+            render: function (data, type, row) {
+                return formatToRealDate(data);
+            }
+        },
+        {
+            data: "consulta_id",
+            render: function (data, type, row) {
 
-                    if ("nombre_especialidad" in data) {
-                        return data.nombre_especialidad;
-                    } else if ("medico" in data && data.medico?.length > 0) {
-                        return `${data.medico[0].nombre_especialidad}`;
-                    } else if ("especialidad" in data)  {
-                        return `${data.especialidad.nombre}`
-                    } else {
-                        return "Consulta por emergencia"
-                    }
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    if ("cedula_paciente" in data) return data.cedula_paciente;
-                    else if ("titular" in data) return data.titular.cedula;
-                    else if ("cedula_titular" in data) return data.cedula_titular;
-                    else if ("paciente_titular" in data) return data.paciente_titular.cedula;
-                    else {
-                        return "Consulta por emergencia"
-                    }
-                }
-            },
-            { 
-                data: "fecha_ocurrencia",
-                render: function (data, type, row){
-                    return formatToRealDate(data);
-                }
-            },
-            {
-                data: "consulta_id",
-                render: function (data, type, row) {
-
-                    // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-                    return `
+                // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
+                return `
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteConsulta(${data})"><i class="fas fa-trash del-consulta"></i></a>
                     `
-                }
             }
+        }
 
-        ],
-        // Para permitir el filtrado con la fecha filtrada
-        columnDefs: [{
-            type: 'datetime-moment',
-            targets: 7
-        }],
-        order: [[6, 'desc']],
-        // ! Ocultar los paneles por defecto 
-        columnDefs: [{
+    ];
+
+    const columnDefsConsultaSeguro = [
+        {
             searchPanes: {
                 show: false,
             },
             targets: [0, 1, 2, 3, 4, 5, 6, 7],
-        }],
-        // ! rowData (Devuelve toda la fila)
-        searchPanes: {
-            controls: false,
-            hideCount: true,
-            collapse: true,
-            initCollapsed: true,
         },
-        dom: 'Plfrtip'
-    });
+        {
+            type: 'datetime-moment',
+            targets: 7
+        }
+    ];
 
-    function format(data) {
+    const searchPanesConsultaSeguro = {
+        controls: false,
+        hideCount: true,
+        collapse: true,
+        initCollapsed: true,
+    };
+
+    const order = [[6, 'desc']];
+
+    const format = (data) => {
 
         console.log(data);
 
@@ -291,19 +269,18 @@ addEventListener("DOMContentLoaded", async e => {
         `
     }
 
-    $('#consultas').on('click', 'td.dt-control', function () {
-        let tr = $(this).closest('tr');
-        let row = consultas.row(tr);
-
-        if (row.child.isShown()) {
-
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-
-            row.child(format(row.data())).show();
-            tr.addClass('shown');
-        }
+    createDataTable({
+        id: "#consultas",
+        url: `/${path[1]}/factura/consultaSeguro/consulta/`,
+        columns: consultaSeguroColumns,
+        columnDefs: columnDefsConsultaSeguro,
+        searchPanes: searchPanesConsultaSeguro,
+        order,
+        format,
+        dom: "Plfrtip",
+        formatDataCustom: true,
+        formatDataCustomUrl: "factura/consultaSeguro",
+        formatDataCustomId: "consulta_seguro_id"
     });
+
 });

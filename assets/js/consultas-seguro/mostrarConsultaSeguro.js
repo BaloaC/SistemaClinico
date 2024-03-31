@@ -5,6 +5,7 @@ import getById from "../global/getById.js";
 import concatItems from "../global/concatItems.js";
 import formatToRealDate from "../global/formatToRealDate.js";
 import { removeActAnalist, removeDeleteAnalist } from "../global/validateRol.js";
+import createDataTable from "../global/createDataTable.js";
 
 const path = location.pathname.split('/');
 export let infoSeguro;
@@ -144,146 +145,94 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     // Para permitir que se filtre con la fecha formateada
     $.fn.dataTable.moment('DD-MM-YYYY');
 
-    let consultaSeguro = $('#consultaSeguro').DataTable({
-        
-
-        bAutoWidth: false,
-        paging: false,
-        info: false,
-        scrollX: true,
-        scrollY: 350,
-        scrollCollapse: true,
-        language: {
-            url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
+    const consultaSeguroColumns = [
+        {
+            "className": 'dt-control',
+            "orderable": false,
+            "data": null,
+            "defaultContent": ''
         },
-        data: listConsultas.consultas ?? [],
-        columns: [
-            {
-                "className": 'dt-control',
-                "orderable": false,
-                "data": null,
-                "defaultContent": ''
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    console.log(data);
-                    if (data.beneficiado && data.beneficiado.cedula) {
-                        return data.beneficiado.cedula;
-                    }else if(data.paciente_beneficiado && data.paciente_beneficiado.cedula){
-                        return data.paciente_beneficiado.cedula;
-                    } else {
-                        return 'Desconocido';
-                    }
+        {
+            data: null,
+            render: function (data, type, row) {
+                console.log(data);
+                if (data.beneficiado && data.beneficiado.cedula) {
+                    return data.beneficiado.cedula;
+                } else if (data.paciente_beneficiado && data.paciente_beneficiado.cedula) {
+                    return data.paciente_beneficiado.cedula;
+                } else {
+                    return 'Desconocido';
                 }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-
-                    if (data.especialidad && data.especialidad.nombre) {
-                        return data.especialidad.nombre;
-                    } else if (data?.medico[0]?.nombre_especialidad) {
-                        return data?.medico[0]?.nombre_especialidad
-                    } else {
-                        return 'Desconocido';
-                    }
-                }
-            },
-            { data: "tipo_servicio" },
-            { 
-                data: "fecha_ocurrencia",
-                render: function (data, type, row){
-                    return formatToRealDate(data);
-                }
-            },
-
-            {
-                data: null,
-                render: function (data, type, row) {
-
-                    if (data.monto_consulta_usd != undefined) {
-                        return `$${data.monto_consulta_usd}`;
-                    } else {
-                        return "Desconocido";
-                    }
-                }
-            },
-            // {
-            //     data: "factura_seguro_id",
-            //     render: function (data, type, row) {
-            //         // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-            //         if (row.estatus_con == 1) {
-            //             return `
-            //                 <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFSeguro(${data})"><i class="fas fa-trash del-consulta"></i></a>
-            //             `
-            //         } else {
-            //             return `-`;
-            //         }
-            //     }
-            // }
-
-        ],
-        // ! Alinear con text-end los montos y que la fecha filtre bien
-        columnDefs: [
-            {
-                targets: 5,
-                createdCell: function (cell, cellData, rowData, rowIndex, colIndex) {
-                    // Añadir una clase al td
-                    $(cell).addClass('text-end');
-                },
-                
-            },
-            {
-                type: 'datetime-moment',
-                targets: 4
             }
-        ],
-        order: [[4, 'desc']],
-        // ! Ocultar los paneles por defecto 
-        // columnDefs: [{
-        //     searchPanes: {
-        //         show: false,
-        //     },
-        //     targets: [0, 1, 2, 3, 4, 5, 6, 7],
-        // }],
-        // ! rowData (Devuelve toda la fila)
-        // searchPanes: {
-        //     controls: false,
-        //     hideCount: true,
-        //     collapse: true,
-        //     initCollapsed: true,
-        //     panes: [
-        //         {
-        //             header: 'Filtrar por estatus de la consulta:',
-        //             options: [
-        //                 {
-        //                     label: 'Pagada',
-        //                     value: function (rowData, rowIdx) {
-        //                         console.log(rowData.estatus_con);
-        //                         return rowData.estatus_con == "1";
-        //                     },
-        //                     className: 'consulta-pagada'
-        //                 },
-        //                 {
-        //                     label: 'Anulada',
-        //                     value: function (rowData, rowIdx) {
-        //                         return rowData.estatus_con == "2";
-        //                     },
-        //                     className: 'consulta-anulada'
-        //                 },
-        //             ],
-        //             dtOpts: {
-        //                 searching: false,
-        //                 order: [[1, 'desc']]
-        //             }
-        //         }
-        //     ]
-        // },
-        // dom: 'Plfrtip'
-    });
+        },
+        {
+            data: null,
+            render: function (data, type, row) {
 
-    function format(data) {
+                if (data.especialidad && data.especialidad.nombre) {
+                    return data.especialidad.nombre;
+                } else if (data?.medico[0]?.nombre_especialidad) {
+                    return data?.medico[0]?.nombre_especialidad
+                } else {
+                    return 'Desconocido';
+                }
+            }
+        },
+        { data: "tipo_servicio" },
+        {
+            data: "fecha_ocurrencia",
+            render: function (data, type, row) {
+                return formatToRealDate(data);
+            }
+        },
+
+        {
+            data: null,
+            render: function (data, type, row) {
+
+                if (data.monto_consulta_usd != undefined) {
+                    return `$${data.monto_consulta_usd}`;
+                } else {
+                    return "Desconocido";
+                }
+            }
+        },
+        // {
+        //     data: "factura_seguro_id",
+        //     render: function (data, type, row) {
+        //         // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
+        //         if (row.estatus_con == 1) {
+        //             return `
+        //                 <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFSeguro(${data})"><i class="fas fa-trash del-consulta"></i></a>
+        //             `
+        //         } else {
+        //             return `-`;
+        //         }
+        //     }
+        // }
+
+    ];
+
+    const dataConsultaSeguro = listConsultas.consultas ?? [];
+
+    const columnDefsConsultaSeguro = [
+        {
+            targets: 5,
+            createdCell: function (cell, cellData, rowData, rowIndex, colIndex) {
+                // Añadir una clase al td
+                $(cell).addClass('text-end');
+            },
+
+        },
+        {
+            type: 'datetime-moment',
+            targets: 4
+        }
+    ];
+
+    const order = [[4, 'desc']];
+
+    const format = (data) => {
 
         console.log(data);
 
@@ -447,7 +396,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             `;
             }
         }
-    
+
 
         console.log(info);
 
@@ -480,31 +429,21 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
     }
 
-    // if (info && info.data && info.data.cita) {
-    //      fecha_cita = info.data.cita.fecha_cita;
-    //   } else {
-    //      fecha_cita = 'valor predeterminado';
-    //   }
-
-
-
-
-
-
-    $('#consultaSeguro').on('click', 'td.dt-control', function () {
-        let tr = $(this).closest('tr');
-        let row = consultaSeguro.row(tr);
-
-        if (row.child.isShown()) {
-
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-
-            row.child(format(row.data())).show();
-            tr.addClass('shown');
-        }
+    let consultaSeguroDatatable = createDataTable({
+        id: "#consultaSeguro",
+        data: dataConsultaSeguro,
+        columnDefs: columnDefsConsultaSeguro,
+        columns: consultaSeguroColumns,
+        order,
+        format,
+        paging: false,
+        info: false,
+        scrollX: true,
+        scrollY: 350,
+        scrollCollapse: true,
+        formatDataCustom: true,
+        formatDataCustomUrl: "factura/consultaSeguro",
+        formatDataCustomId: "consulta_seguro_id"
     });
 }
 
@@ -541,5 +480,3 @@ window.getConsultasSegurosMesByClick = getConsultasSegurosMesByClick;
 document.getElementById("search-button").addEventListener("click", async e => {
 
 })
-
-

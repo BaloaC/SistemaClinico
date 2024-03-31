@@ -17,9 +17,9 @@ if(infoFactura.consultas?.length > 0){
                 <td>${iterator + 1}</td>
                 <td>${consulta.factura_mensajeria_consultas_id}</td>
                 <td>${formatToRealDate(consulta.fecha_ocurrencia)}</td>
-                <td>${consulta.beneficiado.cedula}</td>
-                <td>${consulta.titular.cedula}</td>
-                <td>${consulta.beneficiado.nombre} ${consulta.beneficiado.apellidos}</td>
+                <td>${consulta?.beneficiado?.cedula ?? consulta.paciente_beneficiado.cedula}</td>
+                <td>${consulta?.titular?.cedula ?? consulta.paciente_titular.cedula}</td>
+                <td>${consulta?.beneficiado?.nombre ?? consulta?.paciente_beneficiado.nombre} ${consulta?.beneficiado?.apellidos ?? consulta?.paciente_beneficiado.apellidos}</td>
                 <td>${convertCurrencyToVES(consulta.monto_consulta_bs)} Bs</td>
             </tr>
         `;
@@ -33,7 +33,7 @@ if(infoFactura.consultas?.length > 0){
             <td><br></td>
             <td><br></td>
             <td>Total Bs:</td>
-            <td>${infoFactura.total_mensajeria_bs} Bs</td>
+            <td>${convertCurrencyToVES(infoFactura.total_mensajeria_bs)} Bs</td>
         </tr>
     `;
 }

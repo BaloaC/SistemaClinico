@@ -1,7 +1,6 @@
-import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
-import getAll from "../global/getAll.js";
-import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import { select2OnClick } from "../global/dinamicSelect2.js";
 import formatToRealDate from "../global/formatToRealDate.js";
+import createDataTable from "../global/createDataTable.js";
 
 const path = location.pathname.split('/');
 
@@ -20,152 +19,90 @@ addEventListener("DOMContentLoaded", e => {
     // Para permitir que se filtre con la fecha formateada
     $.fn.dataTable.moment('DD-MM-YYYY');
 
-    let fMedicos = $('#fMedicos').DataTable({
-
-        bAutoWidth: false,
-        language: {
-            url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
-        },
-        ajax: {
-            url: `/${path[1]}/factura/medico/consulta/`,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
-            },
-            error: function (xhr, error, thrown) {
-                // Manejo de errores de Ajax
-                console.log('Error de Ajax:', error);
-                console.log('Detalles:', thrown);
-
-                $('#fMedicos').DataTable().clear().draw();
+    const fMedicosColumns = [
+        {
+            data: "nombre",
+            render: function (data, type, row) {
+                return `${row.nombre} ${row.apellidos}`;
             }
         },
-        columns: [
-            {
-                data: "nombre",
-                render: function (data, type, row) {
-                    return `${row.nombre} ${row.apellidos}`;
-                }
+        { data: "sumatoria_consultas_aseguradas" },
+        { data: "sumatoria_consultas_naturales" },
+        {
+            data: "acumulado_seguro_total",
+            render: function (data, type, row) {
+                return `$${data}`;
+            }
+        },
+        {
+            data: "acumulado_consulta_total",
+            render: function (data, type, row) {
+                return `$${data}`;
+            }
+        },
+        {
+            data: "fecha_pago",
+            render: function (data, type, row) {
+                console.log(row);
+                return formatToRealDate(data);
             },
-            { data: "sumatoria_consultas_aseguradas" },
-            { data: "sumatoria_consultas_naturales" },
-            {
-                data: "acumulado_seguro_total",
-                render: function (data, type, row) {
-                    return `$${data}`;
-                }
+        },
+        {
+            data: "fecha_emision",
+            render: function (data, type, row) {
+                return formatToRealDate(data);
             },
-            {
-                data: "acumulado_consulta_total",
-                render: function (data, type, row) {
-                    return `$${data}`;
-                }
-            },
-            {
-                data: "fecha_pago",
-                render: function (data, type, row) {
-                    console.log(row);
-                    return formatToRealDate(data);
-                },
-            },
-            {
-                data: "fecha_emision",
-                render: function (data, type, row) {
-                    return formatToRealDate(data);
-                },
-            },
-            {
-                data: "pago_total", render: function (data, type, row) {
-                    return `$${data}`;
-                }
-            },
-            {
-                data: "factura_medico_id",
-                render: function (data, type, row) {
+        },
+        {
+            data: "pago_total", render: function (data, type, row) {
+                return `$${data}`;
+            }
+        },
+        {
+            data: "factura_medico_id",
+            render: function (data, type, row) {
 
-                    // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-                    return `
+                // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
+                return `
                         <a href="#" onclick="openPopup('pdf/facturamedico/${data}')"><i class="fas fa-file-export"></i></a>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFMedico(${data})"><i class="fas fa-trash del-consulta"></i></a>
                     `
-                }
             }
+        }
 
-        ],
-        // ! Ocultar los paneles por defecto 
-        columnDefs: [
-            {
-                searchPanes: {
-                    show: false,
-                },
-                targets: [0, 1, 2, 3, 4, 5],
+    ];
+
+    const columnDefsFMedico = [
+        {
+            searchPanes: {
+                show: false,
             },
-            // Para permitir el filtrado con la fecha filtrada
-            {
-                type: 'datetime-moment',
-                targets: 7
-            },
-        ],
-        order: [[6, 'desc']],
-        // ! rowData (Devuelve toda la fila)
-        searchPanes: {
-            controls: false,
-            hideCount: true,
-            collapse: true,
-            initCollapsed: true,
-            // panes: [
-            //     {
-            //         header: 'Filtrar por tipo de paciente:',
-            //         options: [
-            //             {
-            //                 label: 'Paciente natural',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.tipo_paciente === "1";
-            //                 },
-            //                 className: 'paciente-natural'
-            //             },
-            //             {
-            //                 label: 'Paciente asegurado',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.tipo_paciente === "2";
-            //                 },
-            //                 className: 'paciente-asegurado'
-            //             },
-            //             {
-            //                 label: 'Paciente beneficiado',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.tipo_paciente === "3";
-            //                 },
-            //                 className: 'paciente-beneficiado'
-            //             }
-            //         ],
-            //         dtOpts: {
-            //             searching: false,
-            //             order: [[1, 'desc']]
-            //         }
-            //     },
-            //     {
-            //         header: 'Filtrar por edad:',
-            //         options: [
-            //             {
-            //                 label: 'Menores de 18 años',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.edad < 18;
-            //                 },
-            //                 className: 'may-18'
-            //             },
-            //             {
-            //                 label: 'Mayores de 18 años',
-            //                 value: function (rowData, rowIdx) {
-            //                     return rowData.edad > 18;
-            //                 },
-            //                 className: 'men-18'
-            //             }
-            //         ],
-            //     }
-            // ]
+            targets: [0, 1, 2, 3, 4, 5, 6, 7],
         },
-        dom: 'Plfrtip'
-    });
+        // Para permitir el filtrado con la fecha filtrada
+        {
+            type: 'datetime-moment',
+            targets: 7
+        },
+    ];
+
+    const searchPanesFMedico = {
+        controls: false,
+        hideCount: true,
+        collapse: true,
+        initCollapsed: true
+    };
+
+    const order = [[6, 'desc']];
+
+    createDataTable({
+        id: "#fMedicos",
+        url: `/${path[1]}/factura/medico/consulta/`,
+        columns: fMedicosColumns,
+        columnDefs: columnDefsFMedico,
+        searchPanes: searchPanesFMedico,
+        order,
+        dom: "Plfrtip"
+    })
+
 });
-
-

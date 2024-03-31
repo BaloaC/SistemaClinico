@@ -1,9 +1,9 @@
-import dinamicSelect2, { emptyAllSelect2, emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
-import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
 import formatToRealDate from "../global/formatToRealDate.js";
+import createDataTable from "../global/createDataTable.js";
 
 const path = location.pathname.split('/');
 
@@ -86,91 +86,72 @@ addEventListener("DOMContentLoaded", e => {
     // Para permitir que se filtre con la fecha formateada
     $.fn.dataTable.moment('DD-MM-YYYY');
 
-    let fConsulta = $('#fConsulta').DataTable({
-
-        bAutoWidth: false,
-        language: {
-            url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
+    const fConsultaColumns = [
+        {
+            "className": 'dt-control',
+            "orderable": false,
+            "data": null,
+            "defaultContent": ''
         },
-        ajax: {
-            url: `/${path[1]}/factura/consulta/consulta/`,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
-            },
-            error: function (xhr, error, thrown) {
-                // Manejo de errores de Ajax
-                console.log('Error de Ajax:', error);
-                console.log('Detalles:', thrown);
-
-                $('#fConsulta').DataTable().clear().draw();
+        {
+            data: function (row) {
+                return `${row.nombre_paciente} ${row.apellidos}` ?? `Consulta por emergercia`;
             }
         },
-        columns: [
-            {
-                "className": 'dt-control',
-                "orderable": false,
-                "data": null,
-                "defaultContent": ''
-            },
-            {
-                data: function (row) {
-                    return `${row.nombre_paciente} ${row.apellidos}` ?? `Consulta por emergercia`;
+        {
+            data: function (row) {
+                return row.metodo_pago;
+            }
+        },
+        {
+            data: function (row) {
+                return `${convertCurrencyToVES(row.monto_consulta_bs)} Bs`;
+            }
+        },
+        {
+            data: function (row) {
+                return `$${row.monto_consulta_usd}`;
+            }
+        },
+        {
+            data: function (row) {
+                return formatToRealDate(row.fecha_consulta);
+            }
+        },
+        {
+            data: null,
+            render: function (data, type, row) {
+                if (row.estatus_fac == 1) {
+                    return `<span class="badge light badge-success">Pagada</span>`;
+                } else {
+                    return `<span class="badge light badge-danger">Anulada</span>`;
                 }
             },
-            {
-                data: function (row) {
-                    return row.metodo_pago;
-                }
-            },
-            {
-                data: function (row) {
-                    return `${convertCurrencyToVES(row.monto_consulta_bs)} Bs`;
-                }
-            },
-            {
-                data: function (row) {
-                    return `$${row.monto_consulta_usd}`;
-                }
-            },
-            {
-                data: function (row) {
-                    return formatToRealDate(row.fecha_consulta);
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    if (row.estatus_fac == 1) {
-                        return `<span class="badge light badge-success">Pagada</span>`;
-                    } else {
-                        return `<span class="badge light badge-danger">Anulada</span>`;
-                    }
-                },
-            },
-            // {
-            //     data: null,
-            //     render: function (data, type, row) {
-            //         // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-            //         if (row.estatus_fac == 1) {
-            //             return `
-            //                 <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFConsulta(${row.estatus_fac})"><i class="fas fa-trash del-consulta"></i></a>
-            //             `
-            //         } else {
-            //             return `-`;
-            //         }
-            //     }
-            // }
+        },
+        // {
+        //     data: null,
+        //     render: function (data, type, row) {
+        //         // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
+        //         if (row.estatus_fac == 1) {
+        //             return `
+        //                 <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFConsulta(${row.estatus_fac})"><i class="fas fa-trash del-consulta"></i></a>
+        //             `
+        //         } else {
+        //             return `-`;
+        //         }
+        //     }
+        // }
 
-        ],
-        order: [[5, 'desc']],
-        // Para permitir el filtrado con la fecha filtrada
-        columnDefs: [{
-            type: 'datetime-moment',
-            targets: 6
-        }],
-    });
+    ];
 
-    function format(data) {
+    const columnDefsFConsulta = [{
+        type: 'datetime-moment',
+        targets: 6
+    }];
+
+    const order = [[5, 'desc']];
+
+    const format = (data) => {
 
         return `
             <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
@@ -189,23 +170,17 @@ addEventListener("DOMContentLoaded", e => {
                 </tr>
             </table>
         `;
-    }
+    };
 
-    $('#fConsulta').on('click', 'td.dt-control', function () {
-        let tr = $(this).closest('tr');
-        let row = fConsulta.row(tr);
-
-        if (row.child.isShown()) {
-
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-
-            row.child(format(row.data())).show();
-            tr.addClass('shown');
-        }
+    createDataTable({
+        id: "#fConsulta",
+        url: `/${path[1]}/factura/consulta/consulta/`,
+        columns: fConsultaColumns,
+        columnDefs: columnDefsFConsulta,
+        order,
+        format,
+        formatDataCustom: true,
+        formatDataCustomUrl: "factura/consulta",
+        formatDataCustomId: "factura_consulta_id"
     });
 });
-
-
