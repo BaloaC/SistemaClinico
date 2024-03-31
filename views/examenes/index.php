@@ -76,17 +76,6 @@
                             <label for="nombre" id="precioExamenLabel">Precio exámen</label>
                             <input type="number" step="any" name="precio_examen" id="precioExamen" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">No se permiten números negativos</small>
-                            <label for="tipo">¿Este exámen lo realizan aquí?</label>
-                            <div class="input-radios-container">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="hecho_aqui" id="tipoPacienteTitular" value="1" required>
-                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="hecho_aqui" id="tipoPacienteBeneficiado" value="0" required>
-                                    <label class="form-check-label" for="inlineRadio2">No</label>
-                                </div>
-                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -120,18 +109,6 @@
                             <label for="nombre" id="precioExamenLabelAct">Precio exámen</label>
                             <input type="number" step="any" name="precio_examen" id="precioExamenAct" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">No se permiten números negativos</small>
-                            <label for="tipo">¿Este exámen lo realizan aquí?</label>
-                            <div class="input-radios-container">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="hecho_aqui" id="hecho_aqui_si" value="1" required>
-                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="hecho_aqui" id="hecho_aqui_no" value="0" required>
-                                    <label class="form-check-label" for="inlineRadio2">No</label>
-                                </div>
-                                <input type="hidden" name="hecho_aqui_value" id="hecho_aqui_value">
-                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">

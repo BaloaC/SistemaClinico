@@ -11,6 +11,10 @@ export default async function updateModule(data, data_id, module, form, successM
     
     try {
 
+        // Para no enviar el id al momento de actualizar
+        let dataId = data[data_id];
+        delete data[data_id];
+
         const options = {
 
             method: "PUT",
@@ -22,7 +26,7 @@ export default async function updateModule(data, data_id, module, form, successM
             body: JSON.stringify(data),
         };
 
-        const response = await fetch(`/${path[1]}/${module}/${data[data_id]}`, options),
+        const response = await fetch(`/${path[1]}/${module}/${dataId}`, options),
             json = await response.json();
 
         if (!json.code) throw { result: json };

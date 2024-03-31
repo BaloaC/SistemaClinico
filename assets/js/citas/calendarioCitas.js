@@ -161,33 +161,31 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             }
         })
 
-        select2OnClick({
-            selectSelector: "#s-medico",
-            selectValue: "medico_id",
-            selectNames: ["cedula", "nombre-apellidos"],
-            module: "medicos/consulta",
-            parentModal: "#modalReg",
-            placeholder: "Seleccione un médico"
-        });
+        // Validamos que ya se encuentre inicializado y con datos el select2
+        if(!document.getElementById("s-medico").value){
+            select2OnClick({
+                selectSelector: "#s-medico",
+                selectValue: "medico_id",
+                selectNames: ["cedula", "nombre-apellidos"],
+                module: "medicos/consulta",
+                parentModal: "#modalReg",
+                placeholder: "Seleccione un médico"
+            });
+        }
 
-        emptySelect2({
-            selectSelector: especialidadSelect,
-            placeholder: "Debe seleccionar un médico",
-            parentModal: "#modalReg"
-        })
+        // Validamos que ya se encuentre inicializado y con datos el select2
+        if(!especialidadSelect.value){
 
-        // select2OnClick({
-        //     selectSelector: "#s-seguro",
-        //     selectValue: "seguro_id",
-        //     selectNames: ["rif", "nombre"],
-        //     module: "seguros/consulta",
-        //     parentModal: "#modalReg",
-        //     placeholder: "Seleccione un seguro"
-        // });
+            emptySelect2({
+                selectSelector: especialidadSelect,
+                placeholder: "Debe seleccionar un médico",
+                parentModal: "#modalReg"
+            })
+            
+            especialidadSelect.disabled = true;
+        }
 
-        // $('#s-seguro').next('.select2-container').fadeOut('slow');
-        // seguroSelect.disabled = true;
-        especialidadSelect.disabled = true;
+        
 
         $("#s-medico").on("change", async function (e) {
 
@@ -323,5 +321,5 @@ calendar.render();
 const horaEntradaInput = document.getElementById('hora_entrada');
 const horaSalidaInput = document.getElementById('hora_salida');
 
-horaEntradaInput.addEventListener("click", () => formattedHour(horaEntradaInput));
-horaSalidaInput.addEventListener("click", () => formattedHour(horaSalidaInput));
+horaEntradaInput.addEventListener("click", (event) => event.target.value === "" ? formattedHour(horaEntradaInput) : null);
+horaSalidaInput.addEventListener("click", (event) => event.target.value === "" ? formattedHour(horaSalidaInput) : null);

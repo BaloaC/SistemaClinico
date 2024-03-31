@@ -19,18 +19,9 @@ async function updateExamen(id) {
         $form.nombre.dataset.secondValue = json.nombre;
         $form.tipo.value = json.tipo;
         $form.tipo.dataset.secondValue = json.tipo;
-        $form.hecho_aqui_value.value = json.hecho_aqui;
         $form.precio_examen.dataset.secondValue = json.precio_examen;
         $form.precio_examen.value = json.precio_examen;
-
-        if (json.hecho_aqui === 1) {
-            document.getElementById("hecho_aqui_si").checked = true;
-        } else {
-            document.getElementById("hecho_aqui_no").checked = true;
-        };
-
         
-
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
         $inputId.value = id;
@@ -62,13 +53,7 @@ async function confirmUpdate() {
 
         const parseData = deleteSecondValue("#act-examen input, #act-examen select", data);
 
-        // Verificamos que el valor en la actualización sea distinto, de ser iguales no lo mandamos en la pteición
-        if ($form.hecho_aqui_value.value == data.hecho_aqui) {
-            delete data.hecho_aqui;
-        }
-
-        delete data.hecho_aqui_value;
-
+        console.log(parseData);
 
         await updateModule(parseData, "examen_id", "examenes", "act-examen", "Examen actualizado correctamente!");
         const listadoExamenes = await getAll("examenes/consulta");

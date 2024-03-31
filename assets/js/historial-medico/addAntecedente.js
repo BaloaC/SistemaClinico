@@ -8,7 +8,7 @@ async function addAntecedente() {
     const id = location.pathname.split("/")[4];
 
     const $form = document.getElementById("info-antecedente"),
-        alert = document.querySelector(".alert");
+        alert = document.querySelector(".alertAntecedentes");
 
     try {
         const formData = new FormData($form),
@@ -22,7 +22,7 @@ async function addAntecedente() {
         
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
 
-        await addModule("antecedentes", "info-antecedente", data, "Antecedente registrado con exito!");
+        await addModule("antecedentes", "info-antecedente", data, "Antecedente registrado con exito!", "#modalRegAntecedentes", ".alertAntecedentes");
         Array.from(document.getElementById("info-antecedente").elements).forEach(element => {
             element.classList.remove('valid');
         })

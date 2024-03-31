@@ -61,7 +61,8 @@ export default function createDataTable({ id, columns, url = null, data = null, 
 
                 let formatData = row.data();
 
-                if (formatDataCustom == true) {
+                // Se realiza una petición en caso de ser verdadero, para mostrar el detalle a través de la misma
+                if (formatDataCustom === true) {
                     formatData = await getById(formatDataCustomUrl, row.data()[formatDataCustomId]);
                     if(formatData[0]) formatData = formatData[0];
                 }
