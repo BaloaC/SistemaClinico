@@ -101,21 +101,7 @@ addEventListener("DOMContentLoaded", async e => {
                     return `<span class="badge light badge-warning">Pendiente</span>`;
                 }
             },
-        },
-        {
-            data: "factura_seguro_id",
-            render: function (data, type, row) {
-                // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-                if (row.estatus_fac == 1) {
-                    return `
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFSeguro(${data})"><i class="fas fa-trash del-consulta"></i></a>
-                        `
-                } else {
-                    return `-`;
-                }
-            }
         }
-
     ];
 
     const dataFSeguro = listadoFacturas ?? [];
@@ -157,7 +143,7 @@ addEventListener("DOMContentLoaded", async e => {
         searchPanes: {
             show: false,
         },
-        targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     }];
 
     const format = (data) => {

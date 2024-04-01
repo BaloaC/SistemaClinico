@@ -3,6 +3,7 @@ import deleteSecondValue from "../global/deleteSecondValue.js";
 import { createOptionOrSelectInstead, select2OnClick } from "../global/dinamicSelect2.js";
 import getById from "../global/getById.js";
 import { patterns } from "../global/patternsValidation.js";
+import showDefaultModalAct from "../global/showDefaultModalAct.js";
 import updateModule from "../global/updateModule.js";
 import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
 
@@ -52,18 +53,28 @@ async function confirmUpdate() {
 
         formData.forEach((value, key) => (data[key] = value));
 
+
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        if (!data.nombre.length > 3) throw { message: "El nombre debe contener al menos 3 caracteres" };
-        if (!(patterns.name.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        if (!(patterns.password.test(data.clave)) && data.clave !== "") throw { message: "La clave ingresada no es válida" };
+        if (!((/^[a-zA-Z0-9_-]{1,16}$/).test(data.nombre))) throw { message: "Nombre de usuario inválido" };
+        if (!((/^(?=.*\d)[\d\w@-]{8,20}$/i).test(data.clave)) && data.clave !== "") throw { message: "Contraseña inválida" };
+        // if (!((/^\d{6,}$/).test(data.pin))) throw { message: "Pin inválido" };
+        if (!(data.rol > 0 && data.rol <= 5)) throw { message: "Nivel de usuario inválido" };
 
         const parseData = deleteSecondValue("#act-usuario input, #act-usuario select", data);
 
-        await updateModule(parseData, "usuario_id", "usuarios", "act-usuario", "Usuario actualizado exitosamente!");
 
+        if(parseData.clave === "") delete parseData.clave;
+        // Validamos que se envie al menos una propiedad para hacer la petición
+        if (Object.values(parseData)?.length > 1) {
+
+            await updateModule(parseData, "usuario_id", "usuarios", "act-usuario", "Usuario actualizado exitosamente!");
+            $('#usuariosTable').DataTable().ajax.reload();
+        } else {
+
+            showDefaultModalAct({form: $form, successMessage: "Usuario actualizado correctamente!"});
+        }
         // cleanValdiation("info-usuario");
         cleanValdiation("act-usuario");
-        $('#usuariosTable').DataTable().ajax.reload();
 
     } catch (error) {
         console.log(error);

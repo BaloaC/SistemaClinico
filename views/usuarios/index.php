@@ -62,7 +62,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="modalRegBody">
-                        <div id="actAlert" class="alert d-none" role="alert"></div>
+                        <div id="alert" class="alert d-none" role="alert"></div>
                         <form id="info-usuario" class="register-form p-3 px-4">
                             <div id="form-info" class="form-info">
                                 <label for="nombre">Nombre de usuario</label>

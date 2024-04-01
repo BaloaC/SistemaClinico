@@ -7,6 +7,7 @@ import getAge from "../global/getAge.js";
 import getById from "../global/getById.js";
 import { patterns } from "../global/patternsValidation.js";
 import scrollTo from "../global/scrollTo.js";
+import showDefaultModalAct from "../global/showDefaultModalAct.js";
 import updateModule from "../global/updateModule.js";
 import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
 import actualizarTipoPaciente from "./actualizarTipoPaciente.js";
@@ -165,7 +166,16 @@ async function confirmUpdate() {
 
         delete parseData.cedula_beneficiario;
 
-        await updateModule(parseData, "paciente_id", "pacientes", "act-paciente", "Paciente actualizado correctamente!");
+        // Validamos que se envie al menos una propiedad para hacer la petición
+        if (Object.values(parseData)?.length > 3) {
+
+            await updateModule(parseData, "paciente_id", "pacientes", "act-paciente", "Paciente actualizado correctamente!");
+            $('#pacientes').DataTable().ajax.reload();
+        } else {
+
+            showDefaultModalAct({form: $form, successMessage: "Paciente actualizado correctamente!"});
+        }
+
 
         cleanValdiation("act-paciente");
         cleanValdiation("info-paciente");
@@ -173,7 +183,6 @@ async function confirmUpdate() {
         toggleAddSeguro("hide");
         toggleAddTitular("hide");
         deleteElementByClass("newInput");
-        $('#pacientes').DataTable().ajax.reload();
 
     } catch (error) {
         console.log(error);

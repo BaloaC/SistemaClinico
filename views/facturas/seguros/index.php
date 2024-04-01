@@ -46,7 +46,6 @@
                                             <th>Días para caducarse</th>
                                             <th>Días caducada</th>
                                             <th>Estatus</th>
-                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -53,7 +53,8 @@ async function confirmUpdateCurrencyExchange() {
         const currentPrice = document.getElementById("currencyExchange").textContent.split(" ")[0];
 
         // Validamos que si el precio es igual, no hacer la petición
-        if (currentPrice != parseData.cambio_divisa){
+        console.log(currentPrice.toString().replace(",","."), Number(parseData.cambio_divisa));
+        if (currentPrice.toString().replace(",",".") != parseData.cambio_divisa){
         
             let response = await fetch(`/${path[1]}/cambioDivisa`, options)
             const json = await response.json();

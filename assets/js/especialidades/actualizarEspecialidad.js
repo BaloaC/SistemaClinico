@@ -2,6 +2,7 @@ import cleanValdiation from "../global/cleanValidations.js";
 import deleteSecondValue from "../global/deleteSecondValue.js";
 import getById from "../global/getById.js";
 import { patterns } from "../global/patternsValidation.js";
+import showDefaultModalAct from "../global/showDefaultModalAct.js";
 import updateModule from "../global/updateModule.js";
 import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
 
@@ -54,11 +55,17 @@ async function confirmUpdate() {
 
         const parseData = deleteSecondValue("#act-especialidad input, #act-especialidad select", data);
 
-        await updateModule(parseData, "especialidad_id", "especialidades", "act-especialidad", "Especialidad actualizada exitosamente!");
+        // Validamos que se envie al menos una propiedad para hacer la petición
+        if (Object.values(parseData)?.length > 1) {
 
+            await updateModule(parseData, "especialidad_id", "especialidades", "act-especialidad", "Especialidad actualizada exitosamente!");
+            $('#especialidades').DataTable().ajax.reload();
+        } else {
+
+            showDefaultModalAct({form: $form, successMessage: "Especialidad actualizada correctamente!"});
+        }
         cleanValdiation("act-especialidad");
         cleanValdiation("info-especialidad");
-        $('#especialidades').DataTable().ajax.reload();
 
     } catch (error) {
         console.log(error);

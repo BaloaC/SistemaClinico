@@ -63,7 +63,7 @@ async function confirmUpdate() {
             listadoProveedoresPagination.registros = listadoProveedores;
 
         } else {
-            showDefaultModalAct({form: $form, successMessage: "Proveedor actualizado correctamente!"})
+            showDefaultModalAct({form: $form, successMessage: "Proveedor actualizado correctamente!"});
         }
 
         // await updateModule(parseData, "proveedor_id", "proveedores", "act-proveedor", "Proveedor actualizado correctamente!");

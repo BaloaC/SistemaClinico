@@ -5,6 +5,7 @@ import getAll from "../global/getAll.js";
 import { examenesPagination, listadoExamenesPagination } from "./examenesPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { patterns } from "../global/patternsValidation.js";
+import showDefaultModalAct from "../global/showDefaultModalAct.js";
 
 async function updateExamen(id) {
 
@@ -53,14 +54,20 @@ async function confirmUpdate() {
 
         const parseData = deleteSecondValue("#act-examen input, #act-examen select", data);
 
-        console.log(parseData);
+        // Validamos que se envie al menos una propiedad para hacer la petición
+        if (Object.values(parseData)?.length > 1) {
 
-        await updateModule(parseData, "examen_id", "examenes", "act-examen", "Examen actualizado correctamente!");
-        const listadoExamenes = await getAll("examenes/consulta");
+            await updateModule(parseData, "examen_id", "examenes", "act-examen", "Examen actualizado correctamente!");
+            const listadoExamenes = await getAll("examenes/consulta");
+            examenesPagination(listadoExamenes);
+            listadoExamenesPagination.registros = listadoExamenes;
+        } else {
+
+            showDefaultModalAct({form: $form, successMessage: "Examen actualizado correctamente!"});
+        }
+
         cleanValdiation("act-examen");
         cleanValdiation("info-examen");
-        examenesPagination(listadoExamenes);
-        listadoExamenesPagination.registros = listadoExamenes;
 
     } catch (error) {
         console.log(error);

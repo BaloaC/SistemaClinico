@@ -62,9 +62,9 @@ const handleModalOpen = async () => {
             parentModal: "#modalRegNormal"
         });
 
-        emptySelect2({
+        emptyAllSelect2({
             selectSelector: "#s-consultas",
-            placeholder: "Cargando",
+            placeholder: "Seleccione el seguro primero",
             parentModal: "#modalRegNormal",
         });
 
@@ -87,15 +87,13 @@ const handleModalOpen = async () => {
             let seguro_id = this.value;
             const consultasSeguro = await getById("factura/consultaSeguro/seguro", seguro_id);
 
-            console.log(consultasSeguro);
-
             $("#s-consultas").empty().select2();
 
             dinamicSelect2({
                 selectSelector: "#s-consultas",
                 selectValue: "consulta_seguro_id",
                 selectNames: ["consulta_seguro_id", "tipo_servicio", "fecha_ocurrencia"],
-                obj: consultasSeguro ?? [],
+                obj: consultasSeguro?.result?.code === false ? [] : consultasSeguro,
                 parentModal: "#modalRegNormal",
                 placeholder: "Seleccione alguna consulta",
                 multiple: true

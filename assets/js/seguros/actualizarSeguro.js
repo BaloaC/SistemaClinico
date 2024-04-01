@@ -3,6 +3,7 @@ import cleanValdiation from "../global/cleanValidations.js";
 import deleteSecondValue from "../global/deleteSecondValue.js";
 import getById from "../global/getById.js";
 import { patterns } from "../global/patternsValidation.js";
+import showDefaultModalAct from "../global/showDefaultModalAct.js";
 import updateModule from "../global/updateModule.js";
 
 async function updateSeguro(id) {
@@ -95,12 +96,17 @@ async function confirmUpdate() {
         // ** Si no existe tel o cod_tel en la data, añadirle el tel completo
         if ('telefono' in parseData || 'cod_tel' in parseData) { parseData.telefono = $tel }
 
-        await updateModule(parseData, "seguro_id", "seguros", "act-seguro", "Seguro actualizado correctamente");
-        
+        // Validamos que se envie al menos una propiedad para hacer la petición
+        if (Object.values(parseData)?.length > 1) {
+            
+            const seguro_id = parseData.seguro_id;
+            await updateModule(parseData, "seguro_id", "seguros", "act-seguro", "Seguro actualizado correctamente");
+            getConsultasSegurosMes({seguro: seguro_id});
+        } else {
+
+            showDefaultModalAct({form: $form, successMessage: "Seguro actualizado correctamente!"});
+        }
         cleanValdiation("act-seguro");
-        getConsultasSegurosMes({seguro: parseData.seguro_id});
-        // const listadoSeguros = await getAll("seguros/consulta");
-        // segurosPagination(listadoSeguros);
 
     } catch (error) {
         console.log(error);

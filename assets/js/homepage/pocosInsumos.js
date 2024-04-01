@@ -6,8 +6,13 @@ const path = location.pathname.split('/');
 $(document).ready( async function() {
 
     const insumosList = await getAll("insumos/consulta");
-    const insumosPorAgotarse = (insumosList?.result?.code) ? insumosList.filter(insumos => insumos.cantidad < insumos.cantidad_min) : [];
     
+    // console.log(insumosList);
+
+    const insumosPorAgotarse = (insumosList?.result && !insumosList?.result?.code) ? [] : insumosList.filter(insumos => insumos.cantidad < insumos.cantidad_min);
+
+    console.log(insumosPorAgotarse);
+
     let tabla = $('#pocosInsumos').DataTable({
         data: insumosPorAgotarse ?? [],
         columns: [
