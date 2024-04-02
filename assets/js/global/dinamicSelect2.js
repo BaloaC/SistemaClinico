@@ -16,16 +16,13 @@ export function selectText(selectTexts, obj, defaultLabel = []) {
 
 export default function dinamicSelect2({ obj = null, selectNames = null, selectValue = null, selectSelector = null, placeholder = null, parentModal = null, selectWidth = "45%", staticSelect = false, defaultLabel = [] }) {
     try {
-        const selectObj = [];
+        let selectObj = [];
 
         if (!staticSelect) {
-            obj.forEach(el => {
-                let option = {
-                    id: el[selectValue],
-                    text: selectText(selectNames, el, defaultLabel)
-                }
-                selectObj.push(option);
-            });
+            selectObj = obj.map(el => ({
+                id: el[selectValue],
+                text: selectText(selectNames, el, defaultLabel)
+            }));
         }
 
         $(selectSelector).select2({
@@ -39,7 +36,7 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
 
         $(selectSelector).on("change", function () {
 
-            if(selectSelector?.value){
+            if (selectSelector?.value) {
 
                 const isValid = selectSelector.value !== 0;
                 selectSelector.classList.toggle("is-invalid", !isValid);
@@ -82,17 +79,18 @@ export async function select2OnClick({ selectSelector, module, selectValue, sele
 
             const obj = await getAll(module);
 
+            const selectElement = $(selectSelector);
             obj.forEach(el => {
-                if ($(selectSelector).find(`option[value="${el[selectValue]}"]`).length) {
-                    $(selectSelector).val(el[selectValue]);
+                if (selectElement.find(`option[value="${el[selectValue]}"]`).length) {
+                    selectElement.val(el[selectValue]);
                 } else {
                     let newOption = new Option(selectText(selectNames, el), el[selectValue], false, false);
-                    $(selectSelector).append(newOption);
+                    selectElement.append(newOption);
                 }
             });
 
-            $(selectSelector).val(0).trigger('change.select2');
-            $(selectSelector).select2("close");
+            selectElement.val(0).trigger('change.select2');
+            selectElement.select2("close");
             document.querySelector(selectSelector).dataset.active = 1;
         }
 
