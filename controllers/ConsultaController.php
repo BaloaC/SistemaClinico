@@ -22,7 +22,9 @@ class ConsultaController extends Controller {
     }
 
     public function insertarConsulta(/*Request $request*/) {
-        
+        global $isEnabledAudit;
+        $isEnabledAudit = 'consultas';
+
         $_POST = json_decode(file_get_contents('php://input'), true);
 
         $validarConsulta = new Validate;
@@ -45,7 +47,6 @@ class ConsultaController extends Controller {
         if ($insumos) { 
             ConsultaValidaciones::validarInsumos($insumos);
         }
-
 
         $es_emergencia = isset($_POST['es_emergencia']); // Validamos que el atributo emergencia sea booleano
 

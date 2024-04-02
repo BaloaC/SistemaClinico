@@ -185,6 +185,13 @@ class ConsultaValidaciones {
     public static function validarEstatusCita($formulario) {
         $validarConsulta = new Validate;
         
+        if ( !$validarConsulta->existsInDB($formulario, ['cita_id']) ) {
+            $respuesta = new Response(false, 'La cita indicada no existe');
+            $respuesta->setData('Ocurrió un problema con la cita_id '.$formulario['cita_id']);
+            echo $respuesta->json(400);
+            exit();
+        }
+
         if ( $validarConsulta->isDuplicatedId('cita_id', 'estatus_cit', $formulario['cita_id'], 4, 'cita') ) {
             $respuesta = new Response(false, 'La cita indicada ya se encuentra asociada a una consulta');
             echo $respuesta->json(400);

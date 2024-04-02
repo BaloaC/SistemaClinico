@@ -52,6 +52,8 @@ class FacturaMensajeriaService {
                 $respuesta = new Response(false, 'Ha ocurrido un error insertando la consulta_id '.$consulta['consulta_seguro_id']);
                 echo $respuesta->json(400);
             }
+
+            return $consulta;
         }
     }
 

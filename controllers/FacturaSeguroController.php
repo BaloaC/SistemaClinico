@@ -61,7 +61,9 @@ class FacturaSeguroController extends Controller{
     } 
 
     public function solicitarFacturaSeguro(/*Request $request*/) { // método para obtener todas las facturas
-        
+        global $isEnabledAudit;
+        $isEnabledAudit = 'recibo de seguros';
+
         // if ( date("d") != "01") {
             
             date_default_timezone_set('America/Caracas');
@@ -146,6 +148,9 @@ class FacturaSeguroController extends Controller{
     }
 
     public function actualizarFacturaSeguro($factura_seguro_id) {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'recibo de seguros';
+        
         $respuesta = FacturaSeguroService::actualizarEstatus($factura_seguro_id);
         return $respuesta;
     }

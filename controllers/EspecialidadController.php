@@ -33,7 +33,8 @@ class EspecialidadController extends Controller{
     }
 
     public function insertarEspecialidad(/*Request $request*/){
-
+        global $isEnabledAudit;
+        $isEnabledAudit = 'especialidad';
         $_POST = json_decode(file_get_contents('php://input'), true);
         EspecialidadValidaciones::validacionesGenerales($_POST);
         
@@ -93,6 +94,8 @@ class EspecialidadController extends Controller{
     }
 
     public function actualizarEspecialidad($especialidad_id){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'especialidad';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         EspecialidadValidaciones::validacionesGenerales($_POST);
@@ -112,10 +115,10 @@ class EspecialidadController extends Controller{
     }
 
     public function eliminarEspecialidad($especialidad_id){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'especialidad';
 
         $_especialidadModel = new EspecialidadModel();
-        $validarEspecialidad = new Validate;
-
         $data = array(
             "estatus_esp" => "2"
         );

@@ -34,6 +34,8 @@ class EmpresaController extends Controller{
     } 
 
     public function insertarEmpresa(/*Request $request*/){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'empresas';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         
@@ -42,6 +44,8 @@ class EmpresaController extends Controller{
     }
 
     public function actualizarEmpresa($empresa_id){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'empresas';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         EmpresaService::actualizarEmpresa($_POST, $empresa_id);
@@ -105,12 +109,10 @@ class EmpresaController extends Controller{
         }
     }
 
-
-
     public function eliminarEmpresa($empresa_id){
-
-        $validarEmpresa = new Validate;
-
+        global $isEnabledAudit;
+        $isEnabledAudit = 'empresas';
+        
         $_EmpresaModel = new EmpresaModel();
         $data = array(
             "estatus_emp" => "2"

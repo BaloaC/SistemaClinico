@@ -40,6 +40,8 @@ class HorarioController extends Controller{
     }
 
     public function eliminarHorario($horario_id){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'horarios';
 
         $_horarioModel = new HorarioModel();
         $data = array(

@@ -21,6 +21,8 @@ class InsumoController extends Controller{
     } 
 
     public function insertarInsumo(/*Request $request*/){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'insumos';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         
@@ -69,6 +71,8 @@ class InsumoController extends Controller{
     }
 
     public function eliminarInsumo($insumo_id){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'insumos';
         
         $_insumoModel = new InsumoModel();
         $data = array(

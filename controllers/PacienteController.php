@@ -40,6 +40,8 @@ class PacienteController extends Controller{
     } 
 
     public function insertarPaciente(/*Request $request*/){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'pacientes';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         
@@ -55,6 +57,8 @@ class PacienteController extends Controller{
     }
 
     public function actualizarPaciente($paciente_id){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'pacientes';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
                 
@@ -186,6 +190,8 @@ class PacienteController extends Controller{
     }
 
     public function eliminarPaciente($paciente_id){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'pacientes';
 
         $_pacienteModel = new PacienteModel();
         $data = array(
