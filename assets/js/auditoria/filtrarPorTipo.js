@@ -2,35 +2,27 @@ const disabledInputs = document.querySelectorAll(".form-control[disabled]");
 
 document.getElementById("inputFiltro").addEventListener("change", e => {
 
-    const subMenus = document.querySelector(".sub-menus");
+    const subMenus = document.getElementById("filtrarPor");
     let counter = 1,
     selectedSubMenu = e.target.value;
 
+    // Recorremos todos los menú
     for (const subMenu of subMenus.children) {
         
         const subMenuInputs = subMenu.querySelectorAll("input, select");
 
-        if((selectedSubMenu == "fecha" && counter == 1) || (selectedSubMenu == "usuario" && counter == 2) || (selectedSubMenu == "accion" && counter == 3) ){
+        // Mostramos el menú que sea seleccionado
+        if((selectedSubMenu == "submenu-fecha" && counter == 1) || (selectedSubMenu == "submenu-usuario" && counter == 2) || (selectedSubMenu == "submenu-accion" && counter == 3) ){
         
-            subMenuInputs.forEach(el => {
-                el.disabled = false;
-            });
+            $(subMenu).fadeIn("slow");
+            subMenuInputs.forEach(el => { el.disabled = false; });
 
-            subMenu.classList.remove("opacity-0");
-            setTimeout(() => {
-                subMenu.classList.remove("d-none");
-            }, 550);
-            
         } else {
 
-            subMenuInputs.forEach(el => {
-                el.disabled = true;
-            })
-
-            subMenu.classList.add("opacity-0");
-            setTimeout(() => {
-                subMenu.classList.add("d-none");
-            }, 550);
+            // Ocultamos todo menos el botón para filtrar
+            if(!subMenu.classList.contains("btn")) $(subMenu).fadeOut("slow");
+            
+            subMenuInputs.forEach(el => { el.disabled = true; });
         }
         
         counter++;

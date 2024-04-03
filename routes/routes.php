@@ -12,7 +12,7 @@ global $isEnabledAudit;
 Router::get("/welcome", welcomeController::class . '@index');
 
 // Router::post('/prueba/:id', UsuarioController::class . '@listarUsuarioPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") ), $auditCita]);
-Router::get('/prueba', fakerClass::class . '@usarFaker');
+// Router::get('/prueba', fakerClass::class . '@usarFaker');
 
 //Auditoria - API
 Router::get('/auditoria/consulta', AuditoriaController::class . '@listarAuditoria');
@@ -21,7 +21,7 @@ Router::post('/auditoria/accion', AuditoriaController::class . '@listarAuditoria
 Router::get('/auditoria/:id', AuditoriaController::class . '@listarAuditoriaPorUsuario');
 
 // //Auditoria - Vista
-// Router::get("/auditoria", AuditoriaController::class . '@index');
+Router::get("/auditoria", AuditoriaController::class . '@index');
 
 // // PDF - Vista
 Router::get("/pdf/seguros", PdfController::class . '@pdf_seguro');

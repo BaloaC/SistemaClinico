@@ -10,15 +10,15 @@ async function getAuditoria(type, form = null) {
         body = {};
 
 
-    if (type === "fecha") {
+    if (type === "submenu-fecha") {
         url = "fecha";
         body = {
             fecha_inicio: form.fecha_inicio.value,
             fecha_fin: form.fecha_fin.value
         }
-    } else if (type === "usuario") {
+    } else if (type === "submenu-usuario") {
         url = `${form.usuario.value}`;
-    } else if (type === "accion") {
+    } else if (type === "submenu-accion") {
         url = "accion";
         body = {
             accion: form.accion.value
@@ -41,7 +41,7 @@ async function getAuditoria(type, form = null) {
             body: JSON.stringify(body),
         };
 
-        if (type === "usuario") {
+        if (type === "submenu-usuario") {
             options.method = "GET";
             delete options.body;
         }
