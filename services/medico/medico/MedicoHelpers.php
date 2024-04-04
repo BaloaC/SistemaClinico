@@ -26,7 +26,7 @@ class MedicoHelpers {
         "medico_especialidad.medico_especialidad_id"
     );
 
-    public static function obtenerRelaciones($medicos) {
+    public static function obtenerRelaciones($medicos, $obtenerHorario = true) {
         // Especialidad
         $_medicoModel = new MedicoModel();
         $inners = $_medicoModel->listInner(MedicoHelpers::$arrayInner);
@@ -36,12 +36,14 @@ class MedicoHelpers {
             $medicos->especialidad = $medico;
         }
 
-        $_medicoModel = new MedicoModel();
-        $innersH = $_medicoModel->listInner(MedicoHelpers::$arrayInnerHorario);
-        $horario = $_medicoModel->where('horario.medico_id', '=', $medicos->medico_id)->where('horario.estatus_hor', '=', '1')->innerJoin(MedicoHelpers::$arraySelectHorario, $innersH, "horario");
-
-        if ($horario && $medico) {
-            $medicos->horario = $horario;
+        if ($obtenerHorario) {
+            $_medicoModel = new MedicoModel();
+            $innersH = $_medicoModel->listInner(MedicoHelpers::$arrayInnerHorario);
+            $horario = $_medicoModel->where('horario.medico_id', '=', $medicos->medico_id)->where('horario.estatus_hor', '=', '1')->innerJoin(MedicoHelpers::$arraySelectHorario, $innersH, "horario");
+    
+            if ($horario && $medico) {
+                $medicos->horario = $horario;
+            }
         }
 
         $resultado = $medicos;
