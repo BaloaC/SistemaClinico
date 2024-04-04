@@ -77,6 +77,21 @@ class FacturaCompraController extends Controller
     public function listarFacturaCompra() {
         
         $_compraInsumoModel = new CompraInsumoModel();
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_compraInsumoModel->limit([$primer_registro, $size]);
+            }
+
+            if (strlen($_GET['search']['value']) > 0) {
+                $_compraInsumoModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            }
+        }
+
         $inners = $_compraInsumoModel->listInner($this->arrayInner);
 
         if ( array_key_exists('date', $_GET) ) {
@@ -94,6 +109,15 @@ class FacturaCompraController extends Controller
         }
 
         $resultadoFactura = array();
+        $_compraInsumoModel->resetValues();
+
+        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+            $_compraInsumoModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        } else {
+            $_compraInsumoModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_compraInsumoModel->where('estatus_fac', '=', '1')->getAll();
 
         if ($factura_compra) {
 
@@ -126,10 +150,10 @@ class FacturaCompraController extends Controller
                 $resultadoFactura['monto_total_usd'] = round($total_usd, 2);
             }
 
-            Helpers::retornarMensaje($resultadoFactura, $resultadoFactura);
+            Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $resultadoFactura);
         } else {
 
-            Helpers::retornarMensaje($factura_compra, $factura_compra);
+            Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $factura_compra);
         }
     }
 

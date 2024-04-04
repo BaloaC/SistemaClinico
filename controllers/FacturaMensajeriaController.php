@@ -2,6 +2,7 @@
 
 include_once "./services/facturas/mensajeria/FacturaMensajeriaValidaciones.php";
 include_once './services/facturas/mensajeria/FacturaMensajeriaService.php';
+include_once './services/Helpers.php';
 
 class FacturaMensajeriaController extends Controller{
 
@@ -45,14 +46,40 @@ class FacturaMensajeriaController extends Controller{
 
     public function listarFacturaMensajeria(){
         $_facturaMensajeriaModel = new FacturaMensajeriaModel();
+        
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_facturaMensajeriaModel->limit([$primer_registro, $size]);
+            }
+
+            if (strlen($_GET['search']['value']) > 0) {
+                $_facturaMensajeriaModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            }
+        }
+        
         $facturas = $_facturaMensajeriaModel->getAll();
-        
         $facturaLista = FacturaMensajeriaService::listarFacturas($facturas);
+
+        $_facturaMensajeriaModel->resetValues();
+
+        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+            $_facturaMensajeriaModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        } else {
+            $_facturaMensajeriaModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_facturaMensajeriaModel->where('estatus_fac', '=', '1')->getAll();
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $facturaLista);
         
-        $mensaje = (count( (Array) $facturaLista) > 0);
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($facturaLista);
-        return $respuesta->json(200);
+        // $mensaje = (count( (Array) $facturaLista) > 0);
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        // $respuesta->setData($facturaLista);
+        // return $respuesta->json(200);
     }
 
     public function listarFacturaMensajeriaPorId($factura_mensajeria_id){

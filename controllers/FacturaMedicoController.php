@@ -26,7 +26,7 @@ class FacturaMedicoController extends Controller{
         "factura_medico.pacientes_consulta",
         "factura_medico.fecha_pago",
         "factura_medico.fecha_emision",
-        "factura_medico.precio_dolar"
+        // "factura_medico.precio_dolar"
     );
 
     //Método index (vista principal)
@@ -155,9 +155,35 @@ class FacturaMedicoController extends Controller{
     public function listarFacturaMedico(){
 
         $_facturaMedicoModel = new FacturaMedicoModel();
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_facturaMedicoModel->limit([$primer_registro, $size]);
+            }
+
+            if (strlen($_GET['search']['value']) > 0) {
+                $_facturaMedicoModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            }
+        }
+
         $inners = $_facturaMedicoModel->listInner($this->arrayInner);
         $id = $_facturaMedicoModel->innerJoin($this->arraySelect, $inners, "factura_medico");
-        FacturaMedicoHelpers::retornarMensaje($id);
+
+        $_facturaMedicoModel->resetValues();
+
+        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+            $_facturaMedicoModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        } else {
+            $_facturaMedicoModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_facturaMedicoModel->where('estatus_fac', '=', '1')->getAll();
+        
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $id);
     }
 
     public function listarFacturaMedicoPorId($factura_medico_id){

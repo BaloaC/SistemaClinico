@@ -1,5 +1,6 @@
 <?php
 
+include_once './services/Helpers.php';
 include_once './services/consulta/consultaService.php';
 include_once './services/consulta/consultaValidaciones.php';
 include_once './services/consulta/consultaHelpers.php';
@@ -98,7 +99,26 @@ class ConsultaController extends Controller {
 
     public function listarConsultas() {
         $_consultaModel = new ConsultaModel();
-        $consultaList = $_consultaModel->where('estatus_con', '=', 1)->getAll();
+        $consultaList = $_consultaModel->where('estatus_con', '=', 1);
+        
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_consultaModel->limit([$primer_registro, $size]);
+            }
+
+            if (strlen($_GET['search']['value']) > 0) {
+                $_consultaModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            }
+        }
+
+        $consultaList =  $_consultaModel->getAll();
+        $_consultaModel->resetValues();
+
         $consultas = [];
         
         foreach ($consultaList as $consulta) {
@@ -108,11 +128,20 @@ class ConsultaController extends Controller {
                 $consultas[] = array_merge( (Array) ConsultaService::obtenerConsultaNormal($consulta), (Array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id) ) ;
             }
         }
-        
-        $mensaje = (count($consultas) > 0);
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($consultas);
-        return $respuesta->json(200);
+
+        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+            $_consultaModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        } else {
+            $_consultaModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_consultaModel->where('estatus_con', '=', '1')->getAll();
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $consultas);
+
+        // $mensaje = (count($consultas) > 0);
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        // $respuesta->setData($consultas);
+        // return $respuesta->json(200);
     }
 
     public function listarConsultasPorPaciente($paciente_id) {
