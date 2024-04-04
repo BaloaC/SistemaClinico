@@ -183,7 +183,7 @@ class BaseModel{
             $this->table = $table;
             $inners = $listInner;
 
-            $this->sql = "SELECT $inner_join FROM $this->table"." $inners $this->wheres";
+            $this->sql = "SELECT $inner_join FROM $this->table"." $inners $this->wheres {$this->limits}";
             
             $query = $this->connection->prepare($this->sql);
             $query->execute();

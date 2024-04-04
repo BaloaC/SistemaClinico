@@ -113,6 +113,7 @@ class MedicamentoController extends Controller{
 
         $inners = $_medicamentoModel->listInner($this->arrayInner);
         $lista = $_medicamentoModel->where('medicamento.estatus_med', '=', '1')->innerJoin($this->arraySelect, $inners, "medicamento");
+        
         $_medicamentoModel->resetValues();
 
         if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
