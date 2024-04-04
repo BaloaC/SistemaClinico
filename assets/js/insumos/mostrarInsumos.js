@@ -29,6 +29,8 @@ addEventListener("DOMContentLoaded", () => {
     createDataTable({
         id: "#insumos",
         url: `/${path[1]}/insumos/consulta/`,
-        columns: insumosColumns
+        columns: insumosColumns,
+        processing: true,
+        serverSide: true
     });
 });

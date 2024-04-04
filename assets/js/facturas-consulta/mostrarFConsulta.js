@@ -181,6 +181,8 @@ addEventListener("DOMContentLoaded", e => {
         format,
         formatDataCustom: true,
         formatDataCustomUrl: "factura/consulta",
-        formatDataCustomId: "factura_consulta_id"
+        formatDataCustomId: "factura_consulta_id",
+        processing: true,
+        serverSide: true
     });
 });

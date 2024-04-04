@@ -102,7 +102,9 @@ addEventListener("DOMContentLoaded", e => {
         columnDefs: columnDefsFMedico,
         searchPanes: searchPanesFMedico,
         order,
-        dom: "Plfrtip"
+        dom: "Plfrtip",
+        processing: true,
+        serverSide: true
     })
 
 });

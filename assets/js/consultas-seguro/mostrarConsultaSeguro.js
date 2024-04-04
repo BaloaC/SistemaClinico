@@ -443,7 +443,9 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
         scrollCollapse: true,
         formatDataCustom: true,
         formatDataCustomUrl: "factura/consultaSeguro",
-        formatDataCustomId: "consulta_seguro_id"
+        formatDataCustomId: "consulta_seguro_id",
+        processing: true,
+        serverSide: true
     });
 }
 

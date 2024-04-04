@@ -72,6 +72,8 @@ addEventListener("DOMContentLoaded", e => {
         url: `/${path[1]}/factura/mensajeria/consulta/`,
         columns: fMensajeriaColumns,
         columnDefs: columnDefsFMensajeria,
-        order
+        order,
+        processing: true,
+        serverSide: true
     });
 });
