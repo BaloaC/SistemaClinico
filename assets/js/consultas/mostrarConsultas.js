@@ -604,7 +604,8 @@ addEventListener("DOMContentLoaded", async e => {
         formatDataCustomUrl: "consultas",
         formatDataCustomId: "consulta_id",
         dom: "Plfrtip",
+        serverSide: true,
         processing: true,
-        serverSide: true
+        
     });
 });
