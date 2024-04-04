@@ -160,7 +160,7 @@ addEventListener("DOMContentLoaded", async e => {
 
     createDataTable({
         id: "#fSeguros",
-        data: dataFSeguro,
+        url: `/${path[1]}/factura/seguro/${id[0]}`,
         columns: fSeguroColumns,
         order,
         format,
