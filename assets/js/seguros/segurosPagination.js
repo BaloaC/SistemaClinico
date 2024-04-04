@@ -63,7 +63,7 @@ export async function segurosPagination(registros) {
           <ul class="list-group list-group-flush">
             <li class="list-group-item"><span class="mb-0">Rif</span> <b class="text-muted">\${rif}</b></li>
             <li class="list-group-item"><span class="mb-0">Seguro</span> <b class="text-muted">\${telefono}</b></li>
-            <li class="list-group-item"><span class="mb-0">Cantidad de exámenes</span> <b class="text-muted">\${examenes}</b></li>
+            <li class="list-group-item"><span class="mb-0">Cantidad de exámenes</span> <b class="text-muted">\${cantidad_examenes}</b></li>
           </ul>
         </div>
       `;

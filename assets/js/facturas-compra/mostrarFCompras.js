@@ -151,6 +151,8 @@ addEventListener("DOMContentLoaded", (e) => {
         dom: "Plfrtip",
         formatDataCustom: true,
         formatDataCustomUrl: "factura/compra",
-        formatDataCustomId: "factura_compra_id"
+        formatDataCustomId: "factura_compra_id",
+        processing: true,
+        serverSide: true
     });
 });

@@ -259,7 +259,9 @@ addEventListener("DOMContentLoaded", e => {
         dom: "Plfrtip",
         columnDefs: columnDefsPacientes,
         searchPanes: searchPanesPacientes,
-        format
+        format,
+        processing: true,
+        serverSide: true
     });
 
     

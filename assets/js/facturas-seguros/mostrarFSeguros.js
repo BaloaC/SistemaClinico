@@ -166,6 +166,8 @@ addEventListener("DOMContentLoaded", async e => {
         format,
         columnDefs: columnDefsFSeguro,
         searchPanes: searchPanesFSeguro,
-        dom: "Plfrtip"
+        dom: "Plfrtip",
+        processing: true,
+        serverSide: true
     });
 });
