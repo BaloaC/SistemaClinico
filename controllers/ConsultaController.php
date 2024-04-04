@@ -123,9 +123,9 @@ class ConsultaController extends Controller {
         
         foreach ($consultaList as $consulta) {
             if ($consulta->es_emergencia) {
-                $consultas[] = ConsultaService::obtenerConsultaEmergencia($consulta);
+                $consultas[] = ConsultaService::obtenerConsultaEmergencia($consulta, false);
             } else {
-                $consultas[] = array_merge( (Array) ConsultaService::obtenerConsultaNormal($consulta), (Array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id) ) ;
+                $consultas[] = ConsultaService::obtenerConsultaNormal($consulta);
             }
         }
 
@@ -137,11 +137,6 @@ class ConsultaController extends Controller {
 
         $total_registros = $_consultaModel->where('estatus_con', '=', '1')->getAll();
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $consultas);
-
-        // $mensaje = (count($consultas) > 0);
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        // $respuesta->setData($consultas);
-        // return $respuesta->json(200);
     }
 
     public function listarConsultasPorPaciente($paciente_id) {

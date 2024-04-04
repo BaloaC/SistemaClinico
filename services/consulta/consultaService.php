@@ -246,7 +246,7 @@ class ConsultaService {
         }
     }
 
-    public static function obtenerConsultaEmergencia($consulta) {
+    public static function obtenerConsultaEmergencia($consulta, $obtenerRelaciones = true) {
         
         $selectInner = array(
             "medico.medico_id",
@@ -283,7 +283,9 @@ class ConsultaService {
         $consultas->titular = $paciente;
         $consultas->beneficiado = $beneficiado;
 
-        $relaciones = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
+        if ($obtenerRelaciones) {
+            $relaciones = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
+        }
 
         $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
         $consultas->factura->consultas_medicas_bs = round( $consultas->factura->consultas_medicas * $valorDivisa, 2);
