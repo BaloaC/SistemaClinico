@@ -6,6 +6,7 @@ import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import { patterns } from "../global/patternsValidation.js";
 import scrollTo from "../global/scrollTo.js";
+import showDefaultModalAct from "../global/showDefaultModalAct.js";
 import updateModule from "../global/updateModule.js";
 import { listadoMedicosPagination, medicosPagination } from "./medicosPagination.js";
 
@@ -117,10 +118,10 @@ async function confirmUpdate() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        if (!(patterns.name.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        if (!(patterns.name.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
         if (data.nombre.length < 3) throw { message: "El nombre debe tener al menos 3 caracteres" };
         if (data.apellidos.length < 3) throw { message: "El apellido debe tener al menos 3 caracteres" };
+        if (!(patterns.name.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(patterns.name.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
         if (!(patterns.dni.test(data.cedula))) throw { message: "La cédula no es válida" };
         if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
         if (isNaN(data.telefono) || data.telefono.length != 7) throw { message: "El número ingresado no es válido" };
@@ -176,17 +177,21 @@ async function confirmUpdate() {
 
         if (horario && horario.length > 0) { parseData.horario = horario; }
 
-        // ! Para evitar error del endpoint
-        if (!Object.entries(parseData).length == 0) {
+        // Validamos que se envie al menos una propiedad para hacer la petición
+        if (Object.values(parseData)?.length > 1) {
+
+            await updateModule(parseData, "medico_id", "medicos", "act-medico", "Médico actualizado correctamente!");
+            const listadoMedico = await getAll("medicos/consulta");
+            medicosPagination(listadoMedico);
+            listadoMedicosPagination.registros = listadoMedico;
+        } else {
+
+            showDefaultModalAct({form: $form, successMessage: "Médico actualizado correctamente!"});
         }
 
-        await updateModule(parseData, "medico_id", "medicos", "act-medico", "Medico actualizado correctamente!");
-        const listadoMedico = await getAll("medicos/consulta");
         deleteElementByClass("newInput");
         cleanValdiation("act-medico");
         cleanValdiation("info-medico");
-        medicosPagination(listadoMedico);
-        listadoMedicosPagination.registros = listadoMedico;
 
     } catch (error) {
         console.log(error);

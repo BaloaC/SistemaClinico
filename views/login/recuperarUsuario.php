@@ -8,7 +8,7 @@
     <?php include PATH_VIEWS . '/partials/header.php'; ?>
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/bootstrap/bootstrap.min.css'); ?>" />
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/registro.css'); ?>" />
-    <title>Login</title>
+    <title>Proyecto 4 | Recuperación de usuario</title>
 </head>
 
 <body>

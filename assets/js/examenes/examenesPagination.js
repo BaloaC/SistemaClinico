@@ -1,6 +1,8 @@
 import concatItems from "../global/concatItems.js";
 import getAll from "../global/getAll.js";
 import { removeAddAccountant, removeAddAnalist, removeAddMD } from "../global/validateRol.js";
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
+
 
 export const listadoExamenesPagination = { registros: await getAll("examenes/consulta") };
 let registrosExm = listadoExamenesPagination.registros != typeof Array ? listadoExamenesPagination.registros : undefined;
@@ -43,9 +45,7 @@ export function examenesPagination(registros) {
                 if (separadores[p1] || Array.isArray(registro[p1])) {
                     return concatItems(registro[p1], separadores[p1].propiedad, separadores[p1].mensajeVacio);
                 } else {
-                    if (p1 === "hecho_aqui") {
-                        return registro[p1] === 1 ? "Sí" : "No";
-                    } else if (p1 === "tipo") {
+                    if (p1 === "tipo") {
                         switch (registro[p1]) {
                             case "1": return "Ecografía";
                             case "2": return "Laboratorio";
@@ -70,9 +70,8 @@ export function examenesPagination(registros) {
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item"><span class="mb-0">Tipo</span> <b class="text-muted">\${tipo}</b></li>
-            <li class="list-group-item"><span class="mb-0">¿Se realiza aquí?</span> <b class="text-muted">\${hecho_aqui}</b></li>
             <li class="list-group-item"><span class="mb-0">Precio del exámen</span> <b class="text-muted">\${precio_examen}</b></li>
-            <li class="list-group-item"><span class="mb-0"><button type="button" id="btn-actualizar" class="btn btn-primary" onclick="updateExamen(\${examen_id})" data-bs-toggle="modal" data-bs-target="#modalAct">Actualizar</button></span><button id="btn-eliminar" class="btn btn-danger" onclick="deleteExamen(\${examen_id})"  data-bs-toggle="modal" data-bs-target="#modalDelete">Eliminar</button></li>
+            <li class="list-group-item"><span class="mb-0"><button type="button" id="btn-actualizar" class="btn btn-primary ${Cookies.get("rol") == 5 ? "d-none" : ""}" onclick="updateExamen(\${examen_id})" data-bs-toggle="modal" data-bs-target="#modalAct">Actualizar</button></span><button id="btn-eliminar" class="btn btn-danger ${Cookies.get("rol") == 5 ? "d-none" : ""}" onclick="deleteExamen(\${examen_id})"  data-bs-toggle="modal" data-bs-target="#modalDelete">Eliminar</button></li>
           </ul>
         </div>
       `;

@@ -10,8 +10,15 @@ import { updateConsultaSeguroSelect } from "../consultas-seguro/registrarConsult
 
 async function addConsulta() {
 
+    let defaultAlert = ".alert";
+
+    // Validamos si se hace desde el historial-medico o desde el módulo de consultas
+    if(document.querySelector(".alertHistorialMedicoConsulta") !== null){
+        defaultAlert = ".alertHistorialMedicoConsulta";
+    }
+
     const $form = document.getElementById("info-consulta"),
-        $alert = document.querySelector(".alert");
+        $alert = document.querySelector(defaultAlert);
 
     try {
         const formData = new FormData($form),
@@ -104,7 +111,7 @@ async function addConsulta() {
 
         if (data.total_insumos > 0 && !("insumos" in data)) throw { message: "Debe especificar los insumos utilizados" }
 
-        const registroExitoso = await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!", "#modalReg", ".alert", {success: false, error: true});
+        const registroExitoso = await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!", "#modalReg", defaultAlert, {success: false, error: true});
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
@@ -149,7 +156,10 @@ async function addConsulta() {
         hideModalHandler({ registroFacturaExitoso });
 
         $('#consultas').DataTable().ajax.reload();
-        await updateConsultaSeguroSelect("#modalRegAsegurada");
+
+        // Si el registro se hace por el módulo de consultas actualizar el select de las consultas aseguradas
+        if(defaultAlert === ".alert") await updateConsultaSeguroSelect("#modalRegAsegurada");
+        
 
     } catch (error) {
         console.log(error);

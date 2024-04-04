@@ -104,6 +104,7 @@ class UsuarioController extends Controller{
                 }
             default: 
             $data = $validarUsuario->dataScape($_POST);
+            $data["clave"] = password_hash($data["clave"], PASSWORD_DEFAULT);
 
             $_usuarioModel = new UsuarioModel();
 

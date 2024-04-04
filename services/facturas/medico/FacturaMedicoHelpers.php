@@ -139,7 +139,7 @@ class FacturaMedicoHelpers {
         }
         
         $calculosConCitas = FacturaMedicoHelpers::calculosConsultas($facturas_consultas_citas);
-        echo '<pre>'; var_dump($facturas_consultas_citas);
+        // echo '<pre>'; var_dump($facturas_consultas_citas);
         $_medicoModel = new MedicoModel();
         $medico = $_medicoModel->where('medico_id', '=', $form['medico_id'])->getFirst();
 

@@ -15,8 +15,8 @@ const module = "citas",
     modalInfo = new bootstrap.Modal("#modalInfo"),
     formReg = document.getElementById("info-cita");
 
-const calendarEl = document.getElementById("calendar"),
-    citas = async () => parseCitas(await getAll(`${module}/consulta`));
+const calendarEl = document.getElementById("calendar");
+const citas = async () => parseCitas(await getAll(`${module}/consulta`));
 
 export const calendar = new FullCalendar.Calendar(calendarEl, {
     locale: "es",
@@ -161,35 +161,31 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             }
         })
 
+        // Validamos que ya se encuentre inicializado y con datos el select2
+        if(!document.getElementById("s-medico").value){
+            select2OnClick({
+                selectSelector: "#s-medico",
+                selectValue: "medico_id",
+                selectNames: ["cedula", "nombre-apellidos"],
+                module: "medicos/consulta",
+                parentModal: "#modalReg",
+                placeholder: "Seleccione un médico"
+            });
+        }
 
-        // TODO: Colocar en la vista los horarios disponible de este medico
-        select2OnClick({
-            selectSelector: "#s-medico",
-            selectValue: "medico_id",
-            selectNames: ["cedula", "nombre-apellidos"],
-            module: "medicos/consulta",
-            parentModal: "#modalReg",
-            placeholder: "Seleccione un médico"
-        });
+        // Validamos que ya se encuentre inicializado y con datos el select2
+        if(!especialidadSelect.value){
 
-        emptySelect2({
-            selectSelector: especialidadSelect,
-            placeholder: "Debe seleccionar un médico",
-            parentModal: "#modalReg"
-        })
+            emptySelect2({
+                selectSelector: especialidadSelect,
+                placeholder: "Debe seleccionar un médico",
+                parentModal: "#modalReg"
+            })
+            
+            especialidadSelect.disabled = true;
+        }
 
-        // select2OnClick({
-        //     selectSelector: "#s-seguro",
-        //     selectValue: "seguro_id",
-        //     selectNames: ["rif", "nombre"],
-        //     module: "seguros/consulta",
-        //     parentModal: "#modalReg",
-        //     placeholder: "Seleccione un seguro"
-        // });
-
-        // $('#s-seguro').next('.select2-container').fadeOut('slow');
-        // seguroSelect.disabled = true;
-        especialidadSelect.disabled = true;
+        
 
         $("#s-medico").on("change", async function (e) {
 
@@ -239,16 +235,6 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                 behavior: 'smooth'
             });
         })
-
-        // dinamicSelect2({
-        //     obj: [{ id: 1, text: "Normal" }, { id: 2, text: "Asegurada" }],
-        //     selectNames: ["text"],
-        //     selectValue: "id",
-        //     selectSelector: "#s-tipo_cita",
-        //     placeholder: "Seleccione el tipo de cita",
-        //     parentModal: "#modalReg",
-        //     staticSelect: true
-        // });
 
         $("#s-tipo_cita").on("change", function (e) {
 
@@ -318,7 +304,8 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         document.getElementById("fechaCita").value = cita.fecha_cita;
         document.getElementById("motivoCita").textContent = cita.motivo_cita;
         document.getElementById("claveCita").textContent = claveCita;
-        document.getElementById("btn-actualizar").disabled = (cita.estatus_cit == 1) ? true : false;
+        console.log(cita.estatus_cit);
+        document.getElementById("btn-actualizar").disabled = (cita.estatus_cit == 1 || cita.estatus_cit == 4) ? true : false;
         document.getElementById("btn-reprogramar").disabled = (cita.estatus_cit == 1 || cita.estatus_cit == 3) ? false : true;
         document.getElementById("export-cita").setAttribute("onclick", `openPopup('pdf/cita/${cita.cita_id}')`);
         (cita.estatus_cit == 1) ? null : document.getElementById("btn-actualizar").setAttribute("onclick", `updateCita(${cita.cita_id})`);
@@ -334,13 +321,5 @@ calendar.render();
 const horaEntradaInput = document.getElementById('hora_entrada');
 const horaSalidaInput = document.getElementById('hora_salida');
 
-horaEntradaInput.addEventListener("click", () => formattedHour(horaEntradaInput));
-horaSalidaInput.addEventListener("click", () => formattedHour(horaSalidaInput));
-
-// ! Para actualizar
-// let newOption = new Option("Hola", 1, true, true);
-// $('#s-paciente').append(newOption).trigger('change');
-
-
-
-
+horaEntradaInput.addEventListener("click", (event) => event.target.value === "" ? formattedHour(horaEntradaInput) : null);
+horaSalidaInput.addEventListener("click", (event) => event.target.value === "" ? formattedHour(horaSalidaInput) : null);

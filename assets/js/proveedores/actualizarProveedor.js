@@ -5,6 +5,7 @@ import getAll from "../global/getAll.js";
 import { listadoProveedoresPagination, proveedoresPagination } from "./proveedoresPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { patterns } from "../global/patternsValidation.js";
+import showDefaultModalAct from "../global/showDefaultModalAct.js";
 
 async function updateProveedor(id) {
 
@@ -20,7 +21,7 @@ async function updateProveedor(id) {
         $form.ubicacion.value = json.ubicacion;
         $form.ubicacion.dataset.secondValue = json.ubicacion;
 
-        
+
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
@@ -53,12 +54,23 @@ async function confirmUpdate() {
 
         const parseData = deleteSecondValue("#act-proveedor input, #act-proveedor select", data);
 
-        await updateModule(parseData, "proveedor_id", "proveedores", "act-proveedor", "Proveedor actualizado correctamente!");
-        const listadoProveedores = await getAll("proveedores/consulta");
+        // Validamos que se envie al menos una propiedad para hacer la petición
+        if (Object.values(parseData)?.length > 1) {
+
+            await updateModule(parseData, "proveedor_id", "proveedores", "act-proveedor", "Proveedor actualizado correctamente!");
+            const listadoProveedores = await getAll("proveedores/consulta");
+            proveedoresPagination(listadoProveedores);
+            listadoProveedoresPagination.registros = listadoProveedores;
+
+        } else {
+            showDefaultModalAct({form: $form, successMessage: "Proveedor actualizado correctamente!"});
+        }
+
+        // await updateModule(parseData, "proveedor_id", "proveedores", "act-proveedor", "Proveedor actualizado correctamente!");
+        // const listadoProveedores = await getAll("proveedores/consulta");
         cleanValdiation("act-proveedor");
         cleanValdiation("info-proveedor");
-        proveedoresPagination(listadoProveedores);
-        listadoProveedoresPagination.registros = listadoProveedores;
+
 
     } catch (error) {
         console.log(error);

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/consultaSeguro.css'); ?>">
-    <title>Proyecto 4 | Consultar Usuarios</title>
+    <title>Proyecto 4 | Seguros</title>
 
 </head>
 
@@ -42,7 +42,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer d-flex justify-content-between">
-                                        <a data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="fas fa-trash cursor-pointer"></i></a>
+                                        <a data-bs-toggle="modal" id="btn-delete" data-bs-target="#modalDelete"><i class="fas fa-trash cursor-pointer"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -51,67 +51,70 @@
                 </div>
             </div>
 
+            <div class="resumen-mensual">
 
-            <!-- Cabezera -->
-            <div class="row">
-                <h4 class="pt-5 pb-2 text-grey">Resumen mensual de cobros del seguro</h4>
-                <div class="col-md-6 d-flex flex-column align-items-end justify-content-end">
 
-                    <!-- <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> consulta seguro</button> -->
-                </div>
-            </div>
-            <div class="row d-flex justify-content-end">
-                <div class="col-6 date-filter-container d-flex flex-column align-items-end justify-content-end">
-                    <h6>Seleccione una fecha para obtener su resumen mensual</h6>
-                    <div class="date-filter justify-content-end">
-                        <input type="month" id="month-year-input" class="form-control border-right-none w-75">
-                        <button id="search-button" class="form-control input-search-icon btn-add" onclick="getConsultasSegurosMesByClick()"><i class="fas fa-search"></i></button>
+                <!-- Cabezera -->
+                <div class="row">
+                    <h4 class="pt-5 pb-2 text-grey">Resumen mensual de cobros del seguro</h4>
+                    <div class="col-md-6 d-flex flex-column align-items-end justify-content-end">
+
+                        <!-- <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> consulta seguro</button> -->
                     </div>
                 </div>
-            </div>
-            <hr class="border-white">
-            <!-- Empresas -->
-            <div class="row">
-                <h4 id="factura-doesnt-exist" class="text-center my-5" style="display: none;">No hay factura disponible actualmente para este mes</h4>
-                <div class="col-12 seg-container">
-                    <div class="card">
-                        <div class="card-header factura-header" style="display: none;">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <h4 class="card-title text-dark m-1"><b>Recibo N-<span id="factura_id"></span></b></h4>
-                                    <h5>Mes: <span id="mes-factura"></span></h5>
-                                    <h5>Fecha ocurrencia: <span id="fecha-ocurrencia"></span></h5>
-                                    <h5>Fecha vencimiento: <span id="fecha-vencimiento"></span></h5>
-                                    <a id="btn-cintillo-pdf" class="btn btn-sm btn-add" style="display: none;" href="#"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a>
-                                </div>
+                <div class="row d-flex justify-content-end">
+                    <div class="col-6 date-filter-container d-flex flex-column align-items-end justify-content-end">
+                        <h6>Seleccione una fecha para obtener su resumen mensual</h6>
+                        <div class="date-filter justify-content-end">
+                            <input type="month" id="month-year-input" class="form-control border-right-none w-75">
+                            <button id="search-button" class="form-control input-search-icon btn-add" onclick="getConsultasSegurosMesByClick()"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="border-white">
+                <!-- Empresas -->
+                <div class="row">
+                    <h4 id="factura-doesnt-exist" class="text-center my-5" style="display: none;">No hay recibo disponible actualmente para este mes</h4>
+                    <div class="col-12 seg-container">
+                        <div class="card">
+                            <div class="card-header factura-header" style="display: none;">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h4 class="card-title text-dark m-1"><b>Recibo N-<span id="factura_id"></span></b></h4>
+                                        <h5>Mes: <span id="mes-factura"></span></h5>
+                                        <h5>Fecha ocurrencia: <span id="fecha-ocurrencia"></span></h5>
+                                        <h5>Fecha vencimiento: <span id="fecha-vencimiento"></span></h5>
+                                        <a id="btn-cintillo-pdf" class="btn btn-sm btn-add" style="display: none;" href="#"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a>
+                                    </div>
 
-                                <div class="col-lg-6 text-lg-end">
-                                    <h4 class="card-title text-dark m-1"><b>Estatus:<span id="factura-estatus"></span></b></h4>
+                                    <div class="col-lg-6 text-lg-end">
+                                        <h4 class="card-title text-dark m-1"><b>Estatus:<span id="factura-estatus"></span></b></h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body" style="display: none;">
+                                <div class="table-responsive">
+                                    <table id="consultaSeguro" class="table table-compact">
+                                        <thead>
+                                            <tr>
+                                                <th>Detalles</th>
+                                                <th>Cédula Paciente</th>
+                                                <th>Especialidad</th>
+                                                <th>Tipo de servicio</th>
+                                                <th>Fecha Ocurrencia</th>
+                                                <th>Monto</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body" style="display: none;">
-                            <div class="table-responsive">
-                                <table id="consultaSeguro" class="table table-compact">
-                                    <thead>
-                                        <tr>
-                                            <th>Detalles</th>
-                                            <th>Cédula Paciente</th>
-                                            <th>Especialidad</th>
-                                            <th>Tipo de servicio</th>
-                                            <th>Fecha Ocurrencia</th>
-                                            <th>Monto</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="total-amount" style="display: none;">
+                            <h5 class="card total-amount-price"><b>Monto Total:</b> <span id="total-price"></span></h5>
                         </div>
-                    </div>
-                    <div class="total-amount" style="display: none;">
-                        <h5 class="card total-amount-price"><b>Monto Total:</b> <span id="total-price"></span></h5>
                     </div>
                 </div>
             </div>

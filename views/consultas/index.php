@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/custom-datatables.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
-    <title>Proyecto 4 | Consultar Usuarios</title>
+    <title>Proyecto 4 | Consultas</title>
 </head>
 
 <body>
@@ -42,7 +42,7 @@
                                             <th>Especialidad</th>
                                             <th>Cédula Titular</th>
                                             <th>Fecha Consulta</th>
-                                            <th>Acciones</th>
+                                            <!-- <th>Acciones</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -224,7 +224,7 @@
                             </div>
                             <div class="row mt-4 info-pago-medico" style="display: none;">
                                 <h5>Pago médico</h5>
-                                <div class="row align-items-center">
+                                <div class="row align-items-start">
                                     <div class="col-12 col-md-5">
                                         <label for="medico">Médico</label>
                                         <select id="s-medico-pago" class="form-control medico-pago-id" data-active="0" disabled>
@@ -232,7 +232,7 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-md-5">
-                                        <label for="monto" class="p-0">Monto</label>
+                                        <label for="monto">Monto</label>
                                         <input type="number" name="monto_pago" step="any" class="form-control monto-pago" data-validate="true" data-type="price" disabled>
                                         <small class="form-text">No se permiten números negativos</small>
                                     </div>
@@ -245,7 +245,7 @@
 
                             <div class="row mt-4">
                                 <h5>Insumos utilizados en la Consulta (Opcional)</h5>
-                                <div class="row align-items-center">
+                                <div class="row align-items-start">
                                     <div class="col-12 col-md-5">
                                         <label for="insumo">Insumo</label>
                                         <select id="s-insumo" class="form-control insumo-id" data-active="0">
@@ -253,7 +253,7 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-md-5">
-                                        <label for="cantidad" class="p-0">Cantidad utilizada</label>
+                                        <label for="cantidad">Cantidad utilizada</label>
                                         <input type="number" step="any" data-validate="true" data-type="number" class="form-control insumo-cant">
                                         <small class="form-text col-12">Solo se permiten números</small>
                                     </div>
@@ -267,7 +267,7 @@
 
                             <div class="row mt-4">
                                 <h5>Recipes otorgados en la Consulta (Opcional)</h5>
-                                <div class="row align-items-center">
+                                <div class="row align-items-start">
                                     <div class="col-12 col-md-5">
                                         <label for="medicamento">Medicamento</label>
                                         <select id="s-medicamento" class="form-control medicamento-id" data-active="0">
@@ -275,7 +275,7 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-md-5">
-                                        <label for="uso" class="p-0">Uso</label>
+                                        <label for="uso">Uso</label>
                                         <input type="text" data-validate="true" data-type="address" class="form-control uso-medicamento">
                                         <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                                     </div>
@@ -288,9 +288,9 @@
 
                             <div class="row mt-4">
                                 <h5>Indicaciones mencionadas en la Consulta (Opcional)</h5>
-                                <div class="row align-items-center">
+                                <div class="row align-items-start">
                                     <div class="col-12 col-md-5">
-                                        <label for="indicacion" class="p-0">Indicación</label>
+                                        <label for="indicacion">Indicación</label>
                                         <input type="text" data-validate="true" data-type="address" class="form-control indicaciones">
                                         <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                                     </div>
@@ -553,7 +553,7 @@
                                 <option></option>
                             </select>
                             <label for="monto">Monto</label>
-                            <input type="number" name="monto" id="monto" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <input type="number" name="monto_consulta_usd" id="monto" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El precio de ser mayor o igual a 0</small>
                         </form>
                     </div>

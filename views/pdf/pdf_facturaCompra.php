@@ -17,6 +17,9 @@
             text-align: start;
         }
 
+        h3, header p {
+            text-align: center;
+        }
 
         header h1 {
             margin: 0;
@@ -47,6 +50,8 @@
         .cuadro {
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .cuadro th, .insumo td{
@@ -56,7 +61,7 @@
         }
 
         .tabla {
-            width: 950px;
+            width: 850px;
             padding: 2rem;
         }
 
@@ -80,6 +85,10 @@
             align-items: center;
             justify-content: space-between;
             text-align: center;
+        }
+
+        .firma > div {
+            margin: 0 1rem;
         }
     </style>
 </head>

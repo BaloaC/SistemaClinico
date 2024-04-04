@@ -22,6 +22,10 @@
             margin: 0;
         }
 
+        h3, header p {
+            text-align: center;
+        }
+
         header p {
             margin: 0;
             font-size: 18px;
@@ -44,6 +48,8 @@
         .cuadro {
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .cuadro th {
@@ -104,7 +110,7 @@
         <table class="tabla">
             <thead>
                 <tr>
-                    <th colspan="2" id="title">Factura de pago de consulta médica por seguro</th>
+                    <th colspan="2" id="title">Recibo de pago de consulta médica por seguro</th>
                 </tr>
                 <tr>
                     <th colspan="2" id="title">Recibo de pago correspondiente a la fecha de la consulta: <span id="fecha">2023-02-18</span></th>

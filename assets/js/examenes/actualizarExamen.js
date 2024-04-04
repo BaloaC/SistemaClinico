@@ -5,6 +5,7 @@ import getAll from "../global/getAll.js";
 import { examenesPagination, listadoExamenesPagination } from "./examenesPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { patterns } from "../global/patternsValidation.js";
+import showDefaultModalAct from "../global/showDefaultModalAct.js";
 
 async function updateExamen(id) {
 
@@ -19,18 +20,9 @@ async function updateExamen(id) {
         $form.nombre.dataset.secondValue = json.nombre;
         $form.tipo.value = json.tipo;
         $form.tipo.dataset.secondValue = json.tipo;
-        $form.hecho_aqui_value.value = json.hecho_aqui;
         $form.precio_examen.dataset.secondValue = json.precio_examen;
         $form.precio_examen.value = json.precio_examen;
-
-        if (json.hecho_aqui === 1) {
-            document.getElementById("hecho_aqui_si").checked = true;
-        } else {
-            document.getElementById("hecho_aqui_no").checked = true;
-        };
-
         
-
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
         $inputId.value = id;
@@ -62,20 +54,20 @@ async function confirmUpdate() {
 
         const parseData = deleteSecondValue("#act-examen input, #act-examen select", data);
 
-        // Verificamos que el valor en la actualización sea distinto, de ser iguales no lo mandamos en la pteición
-        if ($form.hecho_aqui_value.value == data.hecho_aqui) {
-            delete data.hecho_aqui;
+        // Validamos que se envie al menos una propiedad para hacer la petición
+        if (Object.values(parseData)?.length > 1) {
+
+            await updateModule(parseData, "examen_id", "examenes", "act-examen", "Examen actualizado correctamente!");
+            const listadoExamenes = await getAll("examenes/consulta");
+            examenesPagination(listadoExamenes);
+            listadoExamenesPagination.registros = listadoExamenes;
+        } else {
+
+            showDefaultModalAct({form: $form, successMessage: "Examen actualizado correctamente!"});
         }
 
-        delete data.hecho_aqui_value;
-
-
-        await updateModule(parseData, "examen_id", "examenes", "act-examen", "Examen actualizado correctamente!");
-        const listadoExamenes = await getAll("examenes/consulta");
         cleanValdiation("act-examen");
         cleanValdiation("info-examen");
-        examenesPagination(listadoExamenes);
-        listadoExamenesPagination.registros = listadoExamenes;
 
     } catch (error) {
         console.log(error);

@@ -1,5 +1,6 @@
 import getAll from "../global/getAll.js";
 import concatItems from "../global/concatItems.js";
+import formatToRealDate from "../global/formatToRealDate.js";
 
 
 const id = location.pathname.split("/")[4];
@@ -14,7 +15,7 @@ document.getElementById("cedula").textContent = consultasPacientes[0].cedula_pac
 
 consultasPacientes.forEach(e => {
     template.getElementById("consulta_id").textContent = e.consulta_id;
-    template.getElementById("fecha").textContent = e.fecha_consulta;
+    template.getElementById("fecha").textContent = formatToRealDate(e.fecha_consulta);
     template.getElementById("nombre_medico").textContent = `${e.nombre_medico} ${e.apellidos_medico}`;
     template.getElementById("especialidad").textContent = e.nombre_especialidad;
     template.getElementById("examen").textContent = concatItems(e.examenes, "nombre", "No se realizó ningún exámen");

@@ -49,7 +49,7 @@ class AuditoriaController extends Controller{
 
             // ** Enrique
             $inners = $_auditoriaModel->listInner($this->arrayInner);
-            $id = $_auditoriaModel->whereDate('auditoria.fecha_creacion',$_POST['fecha_inicio'],$_POST['fecha_fin'])->innerJoin($this->arraySelect, $inners, "auditoria");
+            $id = $_auditoriaModel->whereDate('DATE(auditoria.fecha_creacion)',$_POST['fecha_inicio'],$_POST['fecha_fin'])->innerJoin($this->arraySelect, $inners, "auditoria");
             
             return $this->retornarMensaje($id);
         }        

@@ -3,10 +3,15 @@ import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import concatItems from "../global/concatItems.js";
+import formatToRealDate from "../global/formatToRealDate.js";
+import { removeActAnalist, removeDeleteAnalist } from "../global/validateRol.js";
+import createDataTable from "../global/createDataTable.js";
 
 const path = location.pathname.split('/');
 export let infoSeguro;
 export let examenesSeguroListAll;
+removeActAnalist();
+removeDeleteAnalist();
 
 export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" } = {}) {
 
@@ -28,11 +33,11 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     rifSeguro.textContent = infoSeguro.rif;
     telSeguro.textContent = infoSeguro.telefono;
     direcSeguro.textContent = infoSeguro.direccion;
-    porcentajeSeguro.textContent = infoSeguro.porcentaje;
-    costoSeguro.textContent = infoSeguro.costo_consulta;
+    porcentajeSeguro.textContent = `${infoSeguro.porcentaje}%`;
+    costoSeguro.textContent = `$${infoSeguro.costo_consulta}`;
     btnDelete.setAttribute("onclick", `deleteSeguro(${infoSeguro.seguro_id})`);
     seguroPrecioInput.value = infoSeguro.seguro_id;
-    
+
     let examenesList = "";
     precioExamanes.replaceChildren();
 
@@ -59,7 +64,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     });
 
     // Si no hay exámenes por añadir, mostramos una alerta que diga ya no hay más exámenes por añadir
-    if(examenesSeguroListAll.length == infoSeguro?.examenes.length || examenesSeguroListAll.length == 0) {
+    if (examenesSeguroListAll.length == infoSeguro?.examenes.length || examenesSeguroListAll.length == 0) {
 
         const alertMessage = document.getElementById("alertMessage");
         alertMessage.textContent = "No hay exámenes por registrar disponibles o el seguro ya posee el precio de todos los exámenes registrados";
@@ -71,7 +76,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     }
 
     // Si el seguro tiene precio de exámenes lo mostramos, de lo contrario mostramos una alerta de que no posee
-    if(examenesList !== ""){
+    if (examenesList !== "") {
         precioExamanes.innerHTML = examenesList;
     } else {
         precioExamanes.innerHTML = `<div class="alert alert-warning" role="alert">Este seguro no cuenta con ningún exámen registrado</div>`;
@@ -91,19 +96,19 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     const fechaOcurrencia = document.getElementById("fecha-ocurrencia");
     const fechaVencimiento = document.getElementById("fecha-vencimiento");
     const estatusFactura = document.getElementById("factura-estatus");
-    const btnCintillo  = document.getElementById("btn-cintillo-pdf");
+    const btnCintillo = document.getElementById("btn-cintillo-pdf");
 
     if (listConsultas?.factura?.length > 0) {
-       
+
         idRecibo.textContent = listConsultas.factura[0].factura_seguro_id;
         mesRecibo.textContent = listConsultas.factura[0].mes;
-        fechaOcurrencia.textContent = listConsultas.factura[0].fecha_ocurrencia.split(" ")[0];
-        fechaVencimiento.textContent = listConsultas.factura[0].fecha_vencimiento;
+        fechaOcurrencia.textContent = formatToRealDate(listConsultas.factura[0].fecha_ocurrencia.split(" ")[0]);
+        fechaVencimiento.textContent = formatToRealDate(listConsultas.factura[0].fecha_vencimiento);
         montoTotal.textContent = `$${listConsultas.factura[0].monto_usd}`;
 
         // Si hay consultas disponibles mostrar el boton del pdf
-        if(listConsultas.consultas?.length > 0){
-            btnCintillo.setAttribute("onclick",`openPopup('pdf/cintillo/${seguro}-${anio}-${mes}')`)
+        if (listConsultas.consultas?.length > 0) {
+            btnCintillo.setAttribute("onclick", `openPopup('pdf/cintillo/${seguro}-${anio}-${mes}')`)
             $("#btn-cintillo-pdf").fadeIn("slow");
         } else {
             $("#btn-cintillo-pdf").fadeOut("slow");
@@ -137,133 +142,97 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     $('#consultaSeguro').DataTable().clear();
     $('#consultaSeguro').DataTable().destroy();
 
-    let consultaSeguro = $('#consultaSeguro').DataTable({
+    // Para permitir que se filtre con la fecha formateada
+    $.fn.dataTable.moment('DD-MM-YYYY');
 
-        bAutoWidth: false,
-        paging: false,
-        info: false,
-        scrollX: true,
-        scrollY: 350,
-        scrollCollapse: true,
-        language: {
-            url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
+    const consultaSeguroColumns = [
+        {
+            "className": 'dt-control',
+            "orderable": false,
+            "data": null,
+            "defaultContent": ''
         },
-        data: listConsultas.consultas ?? [],
-        columns: [
-            {
-                "className": 'dt-control',
-                "orderable": false,
-                "data": null,
-                "defaultContent": ''
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-                    console.log(data);
-                    if (data.beneficiado && data.beneficiado.cedula) {
-                        return data.beneficiado.cedula;
-                    } else {
-                        return 'Desconocido';
-                    }
-                }
-            },
-            {
-                data: null,
-                render: function (data, type, row) {
-
-                    if (data.especialidad && data.especialidad.nombre) {
-                        return data.especialidad.nombre;
-                    } else if (data?.medico[0]?.nombre_especialidad){
-                        return data?.medico[0]?.nombre_especialidad
-                    } else {
-                        return 'Desconocido';
-                    }
-                }
-            },
-            { data: "tipo_servicio" },
-            { data: "fecha_ocurrencia" },
-
-            {  
-                data: null,
-                render: function (data, type, row) {
-
-                    if(data.monto_consulta_usd != undefined){
-                        return  `$${data.monto_consulta_usd}`;
-                    } else {
-                        return "Desconocido";
-                    }
-                }
-            },
-            // {
-            //     data: "factura_seguro_id",
-            //     render: function (data, type, row) {
-            //         // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-            //         if (row.estatus_con == 1) {
-            //             return `
-            //                 <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFSeguro(${data})"><i class="fas fa-trash del-consulta"></i></a>
-            //             `
-            //         } else {
-            //             return `-`;
-            //         }
-            //     }
-            // }
-
-        ],
-        // ! Alinear con text-end los montos
-        columnDefs: [
-            {
-                targets: 5,
-                createdCell: function (cell, cellData, rowData, rowIndex, colIndex) {
-                    // Añadir una clase al td
-                    $(cell).addClass('text-end');
+        {
+            data: null,
+            render: function (data, type, row) {
+                console.log(data);
+                if (data.beneficiado && data.beneficiado.cedula) {
+                    return data.beneficiado.cedula;
+                } else if (data.paciente_beneficiado && data.paciente_beneficiado.cedula) {
+                    return data.paciente_beneficiado.cedula;
+                } else {
+                    return 'Desconocido';
                 }
             }
-        ],
-        order: [[4, 'desc']],
-        // ! Ocultar los paneles por defecto 
-        // columnDefs: [{
-        //     searchPanes: {
-        //         show: false,
-        //     },
-        //     targets: [0, 1, 2, 3, 4, 5, 6, 7],
-        // }],
-        // ! rowData (Devuelve toda la fila)
-        // searchPanes: {
-        //     controls: false,
-        //     hideCount: true,
-        //     collapse: true,
-        //     initCollapsed: true,
-        //     panes: [
-        //         {
-        //             header: 'Filtrar por estatus de la consulta:',
-        //             options: [
-        //                 {
-        //                     label: 'Pagada',
-        //                     value: function (rowData, rowIdx) {
-        //                         console.log(rowData.estatus_con);
-        //                         return rowData.estatus_con == "1";
-        //                     },
-        //                     className: 'consulta-pagada'
-        //                 },
-        //                 {
-        //                     label: 'Anulada',
-        //                     value: function (rowData, rowIdx) {
-        //                         return rowData.estatus_con == "2";
-        //                     },
-        //                     className: 'consulta-anulada'
-        //                 },
-        //             ],
-        //             dtOpts: {
-        //                 searching: false,
-        //                 order: [[1, 'desc']]
-        //             }
-        //         }
-        //     ]
-        // },
-        // dom: 'Plfrtip'
-    });
+        },
+        {
+            data: null,
+            render: function (data, type, row) {
 
-    function format(data) {
+                if (data.especialidad && data.especialidad.nombre) {
+                    return data.especialidad.nombre;
+                } else if (data?.medico[0]?.nombre_especialidad) {
+                    return data?.medico[0]?.nombre_especialidad
+                } else {
+                    return 'Desconocido';
+                }
+            }
+        },
+        { data: "tipo_servicio" },
+        {
+            data: "fecha_ocurrencia",
+            render: function (data, type, row) {
+                return formatToRealDate(data);
+            }
+        },
+
+        {
+            data: null,
+            render: function (data, type, row) {
+
+                if (data.monto_consulta_usd != undefined) {
+                    return `$${data.monto_consulta_usd}`;
+                } else {
+                    return "Desconocido";
+                }
+            }
+        },
+        // {
+        //     data: "factura_seguro_id",
+        //     render: function (data, type, row) {
+        //         // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
+        //         if (row.estatus_con == 1) {
+        //             return `
+        //                 <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFSeguro(${data})"><i class="fas fa-trash del-consulta"></i></a>
+        //             `
+        //         } else {
+        //             return `-`;
+        //         }
+        //     }
+        // }
+
+    ];
+
+    const dataConsultaSeguro = listConsultas.consultas ?? [];
+
+    const columnDefsConsultaSeguro = [
+        {
+            targets: 5,
+            createdCell: function (cell, cellData, rowData, rowIndex, colIndex) {
+                // Añadir una clase al td
+                $(cell).addClass('text-end');
+            },
+
+        },
+        {
+            type: 'datetime-moment',
+            targets: 4
+        }
+    ];
+
+    const order = [[4, 'desc']];
+
+    const format = (data) => {
 
         console.log(data);
 
@@ -273,7 +242,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
             info.data = data;
 
-            if (data.clave == null ||   data.clave == undefined) data.clave = "No aplica";
+            if (data.clave == null || data.clave == undefined) data.clave = "No aplica";
             info.tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
 
             info.examenes = data.examenes !== undefined ? concatItems(data.examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen";
@@ -394,7 +363,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                     <td>Apellidos: <br><b>${data.paciente_beneficiado.apellidos}</b></td>
                 </tr>
                 <tr>
-                    <td>Fecha de nacimiento: <br><b>${data.paciente_beneficiado.fecha_nacimiento}</b></td>
+                    <td>Fecha de nacimiento: <br><b>${formatToRealDate(data.paciente_beneficiado.fecha_nacimiento)}</b></td>
                     <td>Edad: <br><b>${data.paciente_beneficiado.edad}</b></td>
                 </tr>
             `;
@@ -414,12 +383,12 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
                 info.medico += `
                 <tr>
-                    <td>Cédula: <br><b>${data?.medico[0]?.cedula}</b></td>
-                    <td>Nombres: <br><b>${data?.medico[0]?.nombre_medico}</b></td>
-                    <td>Apellidos: <br><b>${data?.medico[0]?.apellidos_medico}</b></td>
+                    <td>Cédula: <br><b>${data?.medico[0]?.cedula ?? data?.medico?.cedula}</b></td>
+                    <td>Nombres: <br><b>${data?.medico[0]?.nombre_medico ?? data?.medico?.cedula}</b></td>
+                    <td>Apellidos: <br><b>${data?.medico[0]?.apellidos_medico ?? data?.medico?.cedula}</b></td>
                 </tr>
                 <tr>
-                    <td>Especialidad: <br><b>${data?.medico[0]?.nombre_especialidad ?? "Desconocida"}</b></td>
+                    <td>Especialidad: <br><b>${data?.medico[0]?.nombre_especialidad ?? data?.especialidad.nombre}</b></td>
                 </tr>
 
                 <tr><td><br></td></tr>
@@ -429,6 +398,8 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
         }
 
 
+        console.log(info);
+
 
         return `
         <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
@@ -437,8 +408,8 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             </tr>
             <tr>
                 <td>Peso: <br><b>${data.peso ? data?.peso + " " + "kg" : "No especificado"} </b></td>
-                <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m": "No especificado"}</b></td>
-                <td>Fecha Cita: <br><b>${info.data?.cita?.fecha_cita ?? "No aplica"}</b></td>
+                <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m" : "No especificado"}</b></td>
+                <td>Fecha Cita: <br><b>${formatToRealDate(info.data?.cita?.fecha_cita) ?? "No aplica"}</b></td>
                 <td>Motivo cita: <br><b>${info.data?.cita?.motivo_cita ?? "No aplica"}</b></td>
             </tr>
             <tr class="blue-td">
@@ -451,38 +422,28 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             ${info.factura}
             <tr><td><br></td></tr>
             <tr>
-                <td><a class="btn btn-sm btn-add" href="#" onclick="openPopup('pdf/consultaemergencia/${info.data?.consulta_seguro_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
+                <td><a class="btn btn-sm btn-add" href="#" onclick="${info?.data?.consulta?.es_emergencia == 1 ? "openPopup('pdf/consultaemergencia/" + info?.data?.consulta_seguro_id + "')" : "openPopup('pdf/consultaseguro/" + info?.data?.consulta_seguro_id + "')"}"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
             </tr>
         </table>
     `
 
     }
 
-    // if (info && info.data && info.data.cita) {
-    //      fecha_cita = info.data.cita.fecha_cita;
-    //   } else {
-    //      fecha_cita = 'valor predeterminado';
-    //   }
-
-
-
-
-
-
-    $('#consultaSeguro').on('click', 'td.dt-control', function () {
-        let tr = $(this).closest('tr');
-        let row = consultaSeguro.row(tr);
-
-        if (row.child.isShown()) {
-
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-
-            row.child(format(row.data())).show();
-            tr.addClass('shown');
-        }
+    let consultaSeguroDatatable = createDataTable({
+        id: "#consultaSeguro",
+        data: dataConsultaSeguro,
+        columnDefs: columnDefsConsultaSeguro,
+        columns: consultaSeguroColumns,
+        order,
+        format,
+        paging: false,
+        info: false,
+        scrollX: true,
+        scrollY: 350,
+        scrollCollapse: true,
+        formatDataCustom: true,
+        formatDataCustomUrl: "factura/consultaSeguro",
+        formatDataCustomId: "consulta_seguro_id"
     });
 }
 
@@ -490,12 +451,14 @@ addEventListener("DOMContentLoaded", async e => {
 
     const urlParams = new URLSearchParams(window.location.search);
     const seguro_id = urlParams.get('seguro');
+    const anio = urlParams.get('anio');
+    const mes = urlParams.get('mes');
 
     const btnActualizar = document.getElementById("btn-actualizar");
 
     btnActualizar.setAttribute("onclick", `updateSeguro(${seguro_id})`);
 
-    getConsultasSegurosMes({ seguro: seguro_id });
+    getConsultasSegurosMes({ seguro: seguro_id, anio: anio ?? null, mes: mes ?? null });
 });
 
 function getConsultasSegurosMesByClick() {
@@ -517,5 +480,3 @@ window.getConsultasSegurosMesByClick = getConsultasSegurosMesByClick;
 document.getElementById("search-button").addEventListener("click", async e => {
 
 })
-
-

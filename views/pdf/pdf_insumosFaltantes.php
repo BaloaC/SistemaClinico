@@ -17,6 +17,9 @@
             text-align: start;
         }
 
+        h3, header p {
+            text-align: center;
+        }
 
         header h1 {
             margin: 0;
@@ -44,6 +47,8 @@
         .cuadro {
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .cuadro th {

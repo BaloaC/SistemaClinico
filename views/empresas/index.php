@@ -5,7 +5,7 @@
     <?php include constant('PATH_VIEWS') . '/partials/header.php'; ?>
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/seguro.css'); ?>">
 
-    <title>Proyecto 4 | Welcome</title>
+    <title>Proyecto 4 | Empresas</title>
 </head>
 
 <body>

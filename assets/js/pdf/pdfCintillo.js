@@ -1,3 +1,4 @@
+import formatToRealDate from "../global/formatToRealDate.js";
 import getAll from "../global/getAll.js";
 
 const data = location.pathname.split("/")[4].split("-");
@@ -32,7 +33,7 @@ if (infoCintillo.consultas?.length > 0) {
         consultas += `
             <tr>
                 <td>${consulta.consulta_seguro_id}</td>
-                <td>${consulta.fecha_ocurrencia}</td>
+                <td>${formatToRealDate(consulta.fecha_ocurrencia)}</td>
                 <td>${especialidad}</td>
                 <td>${nombrePaciente}</td>
                 <td>${cedulaPaciente}</td>

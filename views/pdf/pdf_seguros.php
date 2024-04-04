@@ -57,6 +57,7 @@
             width: 900px;
             justify-content: center;
             flex-direction: column;
+            margin: auto;
         }
 
         .seguro {

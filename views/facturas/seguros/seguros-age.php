@@ -5,7 +5,7 @@
     <?php include constant('PATH_VIEWS') . '/partials/header.php'; ?>
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/seguro.css'); ?>">
 
-    <title>Proyecto 4 | Examenes</title>
+    <title>Proyecto 4 | Recibos Seguros Por Año</title>
 </head>
 
 <body>
@@ -16,7 +16,7 @@
             <!-- Cabezera -->
             <div class="row">
                 <div class="col-6">
-                    <h4 class="pt-5 pb-2 text-grey">Factura Seguro</h4>
+                    <h4 class="pt-5 pb-2 text-grey">Recibos Seguro</h4>
                 </div>
                 <!-- <div class="col-6 d-flex align-items-center justify-content-end">
                     <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> exámen</button>

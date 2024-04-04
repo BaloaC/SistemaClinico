@@ -1,5 +1,3 @@
-import getById from "../global/getById.js";
-
 async function reprogramationCita(id) {
     const $form = document.getElementById("reprogramacion-cita");
     try {

@@ -36,6 +36,7 @@ export default async function consultaEmergencia(inputRadio) {
         turnInput(".info-pago-medico",true);
         $("#addMedicoPago").fadeOut("slow");
         seguroSelect.disabled = true;
+        sinCitaSi.value = 1;
 
         if(sinCitaNo.checked){
             citaSelect.disabled = false
@@ -75,6 +76,7 @@ export default async function consultaEmergencia(inputRadio) {
        
         citaSelect.disabled = true;
         seguroSelect.disabled = true;
+        sinCitaSi.value = 0;
         
 
         if(sinCitaNo.checked){
@@ -84,6 +86,8 @@ export default async function consultaEmergencia(inputRadio) {
             medicoSelect.disabled = false;
             !especialidadSelect.value ? especialidadSelect.disabled = true : especialidadSelect.disabled = false;
         } 
+
+        if(pacienteSelect.value) seguroSelect.disabled = false;
                     
 
         $("#cedula_beneficiado-label").fadeIn("slow");

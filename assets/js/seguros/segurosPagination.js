@@ -1,9 +1,11 @@
 import concatItems from "../global/concatItems.js";
 import getAll from "../global/getAll.js";
+import { removeAddAnalist } from "../global/validateRol.js";
 
 export const listadoSegurosPagination = { registros: await getAll("seguros/consulta") }
 let registrosSeg = listadoSegurosPagination.registros != typeof Array ? listadoSegurosPagination.registros : undefined;
 
+removeAddAnalist();
 // Configurar la paginación
 const registrosPorPagina = 15;
 let paginaActual = 1;

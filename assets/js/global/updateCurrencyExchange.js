@@ -26,7 +26,7 @@ window.updateCurrencyExchange = updateCurrencyExchange;
 
 async function confirmUpdateCurrencyExchange() {
     const form = document.getElementById("act-cambioDivisa"),
-        alert = document.getElementById("actAlert");
+        alert = document.getElementById("actAlertDivisa");
 
     try {
         const formData = new FormData(form),
@@ -53,7 +53,8 @@ async function confirmUpdateCurrencyExchange() {
         const currentPrice = document.getElementById("currencyExchange").textContent.split(" ")[0];
 
         // Validamos que si el precio es igual, no hacer la petición
-        if (currentPrice != parseData.cambio_divisa){
+        console.log(currentPrice.toString().replace(",","."), Number(parseData.cambio_divisa));
+        if (currentPrice.toString().replace(",",".") != parseData.cambio_divisa){
         
             let response = await fetch(`/${path[1]}/cambioDivisa`, options)
             const json = await response.json();
@@ -62,6 +63,7 @@ async function confirmUpdateCurrencyExchange() {
         }
 
 
+        alert.classList.add("alert");
         alert.classList.remove("alert-danger");
         alert.classList.add("alert-success");
         alert.classList.remove("d-none");
@@ -70,16 +72,18 @@ async function confirmUpdateCurrencyExchange() {
         scrollTo("modalActBody");
 
         setTimeout(() => {
-            $("#modalAct").modal("hide");
+            $("#modalActCambioDivisa").modal("hide");
             alert.classList.add("d-none");
+            alert.classList.remove("alert");
         }, 750);
 
         cleanValdiation("act-cambioDivisa");
         await getGlobalValues();
-        $('#especialidades').DataTable().ajax.reload();
 
     } catch (error) {
         console.log(error);
+
+        alert.classList.add("alert");
         alert.classList.remove("d-none");
         alert.classList.add("alert-danger");
         let message = error.message || error.result.message;
@@ -87,6 +91,7 @@ async function confirmUpdateCurrencyExchange() {
 
         setTimeout(() => {
             alert.classList.add("d-none");
+            alert.classList.remove("alert");
         }, 3000)
     }
 }
@@ -95,4 +100,11 @@ window.confirmUpdateCurrencyExchange = confirmUpdateCurrencyExchange;
 document.getElementById("act-cambioDivisa").addEventListener('submit', (event) => {
     event.preventDefault();
     confirmUpdateCurrencyExchange();
+})
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (Cookies.get("rol") == 4 || Cookies.get("rol") == 5) {
+        document.getElementById("currencyExchangeNavLink").removeAttribute("data-bs-target");
+        document.getElementById("currencyExchangeNavLink").classList.remove("cursor-pointer");
+    }
 })

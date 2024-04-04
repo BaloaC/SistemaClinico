@@ -23,9 +23,13 @@
             margin: 0;
         }
 
+        h3, header p {
+            text-align: center;
+        }
+
         header p {
             margin: 0;
-            font-size: 18px;
+            font-size: 14px;
             text-align: center;
             line-height: 2.5;
         }
@@ -33,7 +37,7 @@
         /* Estilos para el cuerpo */
         body {
             font-family: Arial, sans-serif;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 1.5;
             margin: 0;
             padding: 20px;
@@ -44,7 +48,7 @@
 
         .paper {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             /* margin-top: 2rem; */
         }
 
@@ -70,6 +74,7 @@
 
         .contacto {
             margin-top: 3rem;
+            margin-right: 1rem;
             text-align: center;
         }
 

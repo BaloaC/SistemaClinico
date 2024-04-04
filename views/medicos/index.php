@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/select2/select2.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/select2/select2-bootstrap5-theme.css'); ?>">
 
-    <title>Proyecto 4 | Welcome</title>
+    <title>Proyecto 4 | Médicos</title>
 </head>
 
 <body>

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/custom-datatables.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
-    <title>Proyecto 4 | Consultar Usuarios</title>
+    <title>Proyecto 4 | Citas</title>
 </head>
 
 <body>
@@ -48,7 +48,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="modalRegBody">
-                        <div class="alert d-none" role="alert"></div>
+                        <div id="alertAddCita" class="alert d-none" role="alert"></div>
                         <form action="" id="info-cita" class="form-reg p-3 px-4">
                             <div class="row">
                                 <div class="row">
@@ -149,12 +149,12 @@
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-12 col-md-6">
-                                        <label for="hora_salida">Hora salida</label>
-                                        <input type="time" name="hora_salida" id="hora_salida" data-validate="true" data-type="timeAppointment" step="1" class="form-control mb-3">
-                                    </div>
-                                    <div class="col-12 col-md-6">
                                         <label for="hora_entrada">Hora entrada</label>
                                         <input type="time" name="hora_entrada" id="hora_entrada" data-validate="true" data-type="timeAppointment" step="1" class="form-control mb-3">
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="hora_salida">Hora salida</label>
+                                        <input type="time" name="hora_salida" id="hora_salida" data-validate="true" data-type="timeAppointment" step="1" class="form-control mb-3">
                                     </div>
                                 </div>
                             </div>

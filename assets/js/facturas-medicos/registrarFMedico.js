@@ -14,7 +14,6 @@ async function addFMedico() {
 
         formData.forEach((value, key) => (data[key] = value));
 
-        // TODO: Validar los inputs del paciente
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
 
         // Obtener la fecha actual en la zona horaria local
@@ -25,7 +24,7 @@ async function addFMedico() {
 
         const facturaMedico = await getAll(`facturaMedico/medico?fecha=${fechaFormateada}&medico=${data.medico_id}`);
 
-        const registroExitoso = await addModule("factura/medico", "info-fmedico", facturaMedico, "Factura medico registrada correctamente!");
+        const registroExitoso = await addModule("factura/medico", "info-fmedico", facturaMedico, "Factura médico registrada correctamente!");
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 

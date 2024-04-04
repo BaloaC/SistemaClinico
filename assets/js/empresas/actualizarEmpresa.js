@@ -6,6 +6,7 @@ import getAll from "../global/getAll.js";
 import { empresasPagination, listadoEmpresasPagination } from "./empresasPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { patterns } from "../global/patternsValidation.js";
+import showDefaultModalAct from "../global/showDefaultModalAct.js";
 
 async function updateEmpresa(id) {
 
@@ -81,12 +82,22 @@ async function confirmUpdate() {
 
         const parseData = deleteSecondValue("#act-empresa input, #act-empresa select", data);
 
-        await updateModule(parseData, "empresa_id", "empresas", "act-empresa", "Empresa actualizada correctamente!");
-        const listadoEmpresas = await getAll("empresas/consulta");
+        // Validamos que se envie al menos una propiedad para hacer la petición
+        if (Object.values(parseData)?.length > 1) {
+
+            await updateModule(parseData, "empresa_id", "empresas", "act-empresa", "Empresa actualizada correctamente!");
+            const listadoEmpresas = await getAll("empresas/consulta");
+            empresasPagination(listadoEmpresas);
+            listadoEmpresasPagination.registros = listadoEmpresas;
+
+        } else {
+            
+            showDefaultModalAct({form: $form, successMessage: "Empresa actualizada correctamente!"});
+        }
+       
         cleanValdiation("act-empresa");
         cleanValdiation("info-empresa");
-        empresasPagination(listadoEmpresas);
-        listadoEmpresasPagination.registros = listadoEmpresas;
+       
 
     } catch (error) {
         console.log(error);

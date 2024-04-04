@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/custom-datatables.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
-    <title>Proyecto 4 | Facturas Seguro</title>
+    <title>Proyecto 4 | Recibos Seguro</title>
 </head>
 
 <body>
@@ -19,10 +19,10 @@
             <!-- Cabezera -->
             <div class="row">
                 <div class="col-6">
-                    <h4 class="pt-5 pb-2 text-grey">Facturas Seguro</h4>
+                    <h4 class="pt-5 pb-2 text-grey">Recibos Seguro</h4>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
-                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalAct"><i class="fa-sm fas fa-reply-all"></i> Actualizar Facturas</button>
+                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalAct"><i class="fa-sm fas fa-reply-all"></i> Actualizar Recibos</button>
                 </div>
                 <hr class="border-white">
             </div>
@@ -46,7 +46,6 @@
                                             <th>Días para caducarse</th>
                                             <th>Días caducada</th>
                                             <th>Estatus</th>
-                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>

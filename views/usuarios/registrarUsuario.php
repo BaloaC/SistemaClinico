@@ -60,7 +60,7 @@
 
                                 <div id="form-preguntas" class="form-preguntas">
                                     <label>Pregunta de Seguridad 1</label>
-                                    <select class="form-select" name="pregunta1" required>
+                                    <select class="form-select preguntasSeguridad" name="pregunta1" id="pregunta1" required>
                                         <option value="">Seleccione una pregunta de seguridad</option>
                                         <option value="1">Cuál es tu color favorito</option>
                                         <option value="2">Nombre de tu mascota de la infancia</option>
@@ -74,7 +74,7 @@
                                     <input class="form-control mt-3" type="text" name="respuesta1" placeholder="Respuesta a la pregunta de Seguridad" required>
 
                                     <label>Pregunta de Seguridad 2</label>
-                                    <select class="form-select" name="pregunta2" required>
+                                    <select class="form-select preguntasSeguridad" name="pregunta2"  id="pregunta2" required>
                                         <option value="">Seleccione una pregunta de seguridad</option>
                                         <option value="1">Cuál es tu color favorito</option>
                                         <option value="2">Nombre de tu mascota de la infancia</option>
@@ -88,7 +88,7 @@
                                     <input class="form-control mt-3" type="text" name="respuesta2" placeholder="Respuesta a la pregunta de Seguridad" required>
 
                                     <label>Pregunta de Seguridad 3</label>
-                                    <select class="form-select" name="pregunta3" required>
+                                    <select class="form-select preguntasSeguridad" name="pregunta3"  id="pregunta3" required>
                                         <option value="">Seleccione una pregunta de seguridad</option>
                                         <option value="1">Cuál es tu color favorito</option>
                                         <option value="2">Nombre de tu mascota de la infancia</option>
@@ -113,6 +113,7 @@
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
     <script src="<?php echo Url::to('assets/js/usuarios/registrarUsuario.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/js/global/showPassword.js'); ?>"></script>
+    <script src="<?php echo Url::to('assets/js/global/filterOptionsVanillaSelect.js'); ?>"></script>
 </body>
 
 </html>

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
 
-    <title>Proyecto 4 | Facturas Médicos</title>
+    <title>Proyecto 4 | Recibos Médicos</title>
 </head>
 
 <body>
@@ -20,10 +20,10 @@
             <!-- Cabezera -->
             <div class="row">
                 <div class="col-6">
-                    <h4 class="pt-5 pb-2 text-grey">Facturas Médicos</h4>
+                    <h4 class="pt-5 pb-2 text-grey">Recibos Médicos</h4>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
-                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> factura</button>
+                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> recibo</button>
                 </div>
                 <hr class="border-white">
             </div>
@@ -62,7 +62,7 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalRegLabel">Registrar factura médico</h1>
+                        <h1 class="modal-title fs-3" id="modalRegLabel">Registrar recibo médico</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="modalRegBody">
@@ -88,12 +88,12 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar factura compra</h1>
+                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar recibo compra</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div id="delAlert" class="alert d-none" role="alert"></div>
-                        ¿Está seguro que desea eliminar esta factura?
+                        ¿Está seguro que desea eliminar esta recibo?
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="btn-confirmDelete" class="btn btn-danger">Eliminar</button>

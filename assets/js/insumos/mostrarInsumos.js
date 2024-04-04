@@ -1,46 +1,34 @@
-import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import createDataTable from "../global/createDataTable.js";
 
 const path = location.pathname.split('/');
 
-addEventListener("DOMContentLoaded", e => {
+addEventListener("DOMContentLoaded", () => {
 
-    let insumos = $('#insumos').DataTable({
-
-        bAutoWidth: false,
-        language: {
-            url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
-        },
-        ajax: {
-            url: `/${path[1]}/insumos/consulta/`,
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
-            },
-            error: function(xhr, error, thrown) {
-                // Manejo de errores de Ajax
-                console.log('Error de Ajax:', error);
-                console.log('Detalles:', thrown);
-
-                $('#insumos').DataTable().clear().draw();
+    const insumosColumns = [
+        { data: "insumo_id" },
+        { data: "nombre" },
+        { data: "cantidad" },
+        { data: "cantidad_min" },
+        {
+            data: "precio",
+            render: function (data, type, row) {
+                return `$${data}`;
             }
         },
-        columns: [
+        {
+            data: "insumo_id",
+            render: function (data, type, row) {
 
-            { data: "insumo_id" },
-            { data: "nombre" },
-            { data: "cantidad" },
-            { data: "cantidad_min" },
-            { data: "precio" },
-            {
-                data: "insumo_id",
-                render: function (data, type, row) {
-
-                    return `
+                return `
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-especialidad" onclick="deleteInsumo(${data})"><i class="fas fa-trash del-insumo"></i></a>
                     `
-                }
             }
+        }
+    ];
 
-        ]
+    createDataTable({
+        id: "#insumos",
+        url: `/${path[1]}/insumos/consulta/`,
+        columns: insumosColumns
     });
 });
-

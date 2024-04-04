@@ -84,6 +84,10 @@ input::-ms-reveal {
     width: 60%;
 }
 
+.pt-4-5 {
+    padding-top: 2.5rem;
+}
+
 .cursor-pointer {
     cursor: pointer !important;
 }

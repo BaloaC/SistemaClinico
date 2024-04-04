@@ -16,7 +16,7 @@
 </div>
 <!-- Nav -->
 <nav class="navbar navbar-expand-lg">
-    <div class="container">
+    <div class="container justify-content-center">
         <!-- Logo -->
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navBarGod" aria-controls="navBarGod" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -25,59 +25,53 @@
         <!-- Links -->
         <div class="collapse navbar-collapse" id="navBarGod">
             <ul class="list-nav navbar-nav align-items-center justify-content-center flex-wrap">
-                <li class="nav-item"><a class="nav-link rol-1 rol-2 rol-3 rol-4 rol-5 rol-0" href="<?php echo Url::base() . "/home" ?>"><i class="fas fa-home"></i> Inicio</a></li>
+                <li class="nav-item"><a class="nav-link rol-1 rol-2 rol-3 rol-4 rol-5 rol-0" href="<?php echo Url::base() . "/home" ?>"><i class="fas fa-home"></i></a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle rol-1 rol-2 rol-4 rol-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-stethoscope"></i>Personal
+                        <i class="fas fa-user-tie"></i>Salud
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/especialidades" ?>">Especialidades</a></li>
-                        <li><a class="dropdown-item rol-1 rol-2 rol-4" href="<?php echo Url::base() . "/medicos" ?>">Médicos</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle rol-1 rol-2 rol-4 rol-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user-tie"></i>Atención médica
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/consultas" ?>">Consultas</a>
+                        <li><a class="dropdown-item rol-1 rol-2 rol-5" href="<?php echo Url::base() . "/consultas" ?>">Consultas</a>
                         <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/citas" ?>">Citas</a></li>
+                        <li><a class="dropdown-item rol-1 rol-2 rol-5" href="<?php echo Url::base() . "/examenes" ?>">Exámenes</a></li>
+                        <li><a class="dropdown-item rol-1 rol-2 rol-5" href="<?php echo Url::base() . "/laboratorios" ?>">Laboratorios</a></li>
+                        <li><a class="dropdown-item rol-1 rol-2 rol-5" href="<?php echo Url::base() . "/medicamentos" ?>">Medicamentos</a></li>
                         <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/pacientes" ?>">Pacientes</a></li>
-                        <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/examenes" ?>">Exámenes</a></li>
-                        <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/laboratorios" ?>">Laboratorios</a></li>
-                        <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/medicamentos" ?>">Medicamentos</a></li>
+                        <li><a class="dropdown-item rol-1 rol-2" href="<?php echo Url::base() . "/medicos" ?>">Médicos</a></li>
+                        <li><a class="dropdown-item rol-1 rol-2" href="<?php echo Url::base() . "/especialidades" ?>">Especialidades</a></li>
                 </li>
             </ul>
             </li>
             <!-- <li class="nav-item"><a class="nav-link" href="<?php echo Url::base() . "/pacientes" ?>"></i>Pacientes</a></li> -->
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle rol-1 rol-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-building"></i>Gestión de seguros
+                <a class="nav-link dropdown-toggle rol-1 rol-2 rol-4" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-building"></i>Seguros
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item rol-1 rol-2" href="<?php echo Url::base() . "/empresas" ?>">Empresa</a></li>
-                    <li><a class="dropdown-item rol-1 rol-2" href="<?php echo Url::base() . "/seguros" ?>">Seguro</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-4" href="<?php echo Url::base() . "/empresas" ?>">Empresa</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-4" href="<?php echo Url::base() . "/seguros" ?>">Seguro</a></li>
                 </ul>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle rol-1 rol-2 rol-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-clipboard-check"></i>Facturación
+                    <i class="fas fa-clipboard-check"></i>Recibos
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/compra" ?>">Factura compra</a></li>
-                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/seguroAge" ?>">Factura seguro</a></li>
-                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/consulta" ?>">Factura consulta</a></li>
-                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/medico" ?>">Factura médico</a></li>
-                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/mensajeria" ?>">Factura mensajería</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/compra" ?>">Recibo compra</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/seguroAge" ?>">Recibo seguro</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/consulta" ?>">Recibo consulta</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/consultaSeguro" ?>">Recibo consulta seguro</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/medico" ?>">Recibo médico</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/mensajeria" ?>">Recibo mensajería</a></li>
                 </ul>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle rol-1 rol-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link dropdown-toggle rol-1 rol-2 rol-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-syringe"></i>Inventario
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item rol-1 rol-2" href="<?php echo Url::base() . "/proveedores" ?>">Proveedores</a></li>
-                    <li><a class="dropdown-item rol-1 rol-2" href="<?php echo Url::base() . "/insumos" ?>">Insumos</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/proveedores" ?>">Proveedores</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/insumos" ?>">Insumos</a></li>
                 </ul>
             </li>
             <li class="nav-item dropdown">
@@ -86,13 +80,15 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item rol-1" href="<?php echo Url::base() . "/auditoria" ?>">Auditoria</a></li>
+                    <li><a class="dropdown-item rol-1" href="<?php echo Url::base() . "/usuarios" ?>">Usuarios</a></li>
+                    <li><a class="dropdown-item rol-1" href="<?php echo Url::base() . "/estadisticas" ?>">Estadísticas</a></li>
                     <li><a class="dropdown-item rol-1 rol-2" onclick="openPopup('pdf/seguros')" href="#">Total de seguros</a></li>
                     <li><a class="dropdown-item rol-1 rol-2" onclick="openPopup('pdf/insumosfaltantes')" href="#">Insumos faltantes</a></li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link rol-1 rol-2 rol-3 rol-4 rol-5" data-bs-toggle="modal" data-bs-target="#modalAct" onclick="updateCurrencyExchange()">
-                    <i class="fas fa-hand-holding-usd"></i>Cambio de divisa: <span id="currencyExchange">0 Bs</span></a>
+                <a class="nav-link rol-1 rol-2 rol-3 rol-4 rol-5 cursor-pointer" id="currencyExchangeNavLink" data-bs-toggle="modal" data-bs-target="#modalActCambioDivisa" onclick="updateCurrencyExchange()">
+                    <i class="fas fa-hand-holding-usd"></i><span id="currencyExchange">0 Bs</span></a>
                 </a>
             </li>
             </ul>
@@ -102,7 +98,7 @@
 <!-- Fin Nav -->
 
 <!-- Modal Actualizar Precio Divisa -->
-<div class="modal fade" id="modalAct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
+<div class="modal fade" id="modalActCambioDivisa" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -110,7 +106,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="modalActBody">
-                <div id="actAlert" class="alert d-none" role="alert"></div>
+                <div id="actAlertDivisa" class="d-none" role="alert"></div>
                 <form action="" id="act-cambioDivisa" class="p-3 px-4">
                     <label for="nombre">Monto de cambio de divisa</label>
                     <input type="number" name="cambio_divisa" id="cambioDivisaInput" step="any" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="45" required>
