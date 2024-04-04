@@ -63,6 +63,9 @@
                         <!-- </div> -->
                         <button type="button" id="btn-registrar" class="btn btn-sm btn-add d-inline" onclick="filtrarAuditoria(event)"><i class="fas fa-sm fa-filter"></i> Filtrar</button>
                 </div>
+                <div class="col-6 d-flex justify-content-end align-items-center">
+                    <a href="./exportarBd" type="button" id="btn-registrar" class="btn btn-sm btn-add d-inline"><i class="fas fa-sm fa-file-export"></i>Exportar Base de Datos</a>
+                </div>
                 <hr class="border-white">
             </div>
             <!-- Empresas -->

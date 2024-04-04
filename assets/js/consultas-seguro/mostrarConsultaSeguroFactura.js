@@ -54,20 +54,6 @@ addEventListener("DOMContentLoaded", async e => {
             data: null,
             render: function (data, type, row) {
 
-                if ("nombre_medico" in data) {
-                    return `${data.nombre_medico} ${data.apellidos_medico}`;
-                } else if ("medico" in data) {
-                    return `${data.medico[0]?.nombre_medico ?? data.medico.nombre} ${data.medico[0]?.apellidos_medico ?? data.medico.apellidos}`;
-                }
-                else {
-                    return "Consulta por emergencia"
-                }
-            }
-        },
-        {
-            data: null,
-            render: function (data, type, row) {
-
                 if ("nombre_especialidad" in data) {
                     return data.nombre_especialidad;
                 } else if ("medico" in data && data.medico?.length > 0) {
@@ -115,11 +101,11 @@ addEventListener("DOMContentLoaded", async e => {
             searchPanes: {
                 show: false,
             },
-            targets: [0, 1, 2, 3, 4, 5, 6, 7],
+            targets: [0, 1, 2, 3, 4, 5, 6],
         },
         {
             type: 'datetime-moment',
-            targets: 7
+            targets: 6
         }
     ];
 
@@ -130,7 +116,7 @@ addEventListener("DOMContentLoaded", async e => {
         initCollapsed: true,
     };
 
-    const order = [[6, 'desc']];
+    const order = [[5, 'desc']];
 
     const format = (data) => {
 

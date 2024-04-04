@@ -38,7 +38,7 @@
                                             <th>Detalles</th>
                                             <th>Cédula Paciente</th>
                                             <th>Nombre Paciente</th>
-                                            <th>Nombre Médico</th>
+                                            <!-- <th>Nombre Médico</th> -->
                                             <th>Especialidad</th>
                                             <th>Cédula Titular</th>
                                             <th>Fecha Consulta</th>

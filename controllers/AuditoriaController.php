@@ -78,38 +78,36 @@ class AuditoriaController extends Controller {
         $fecha = date("Ymd---His");
 
         $db_host = 'localhost'; // Servidor
-
+        
         $usuario = 'root'; // Usuario de la base de datos
-
+        
         $password = ''; //Contraseña bd
-
+        
         $bd = 'shenque_db'; //Nombre de la base de datos
-
+        
         $salida_sql = $bd . '_' . $fecha . '.sql'; //Nombre del archivo .sql
-
+        
         $execute = "c:\\xampp\\mysql\\bin\\mysqldump.exe -u $usuario --password=$password --opt $bd > $salida_sql"; //Funciones para exportar la base de datos
-
+        
         system($execute, $resultado);
-
+        
         //Se construye el nombre del archivo ZIP ejemplo: mibase_20220101.zip
-
+        
         $zip = new ZipArchive(); // Objeto de la libreria interna ZipArchive
-
-        $salida_zip = $bd . '_' . $fecha . '.zip'; // Nombre del archivo ZIP
-
-        $ruta_salida_zip = '/respaldo/' . $salida_zip; // Ruta completa del archivo ZIP
-
-        if ($zip->open($ruta_salida_zip, ZIPARCHIVE::CREATE) === true) {
-
+        
+        $salida_zip = $bd. '_' .$fecha . '.zip'; // Nombre del archivo ZIP
+        
+        if($zip->open($salida_zip,ZIPARCHIVE::CREATE) === true){
+        
             //Creamos y abrimos el archivo ZIP
-
-            $zip->addFile($ruta_salida_zip, $salida_sql); //Agregamos el archivo SQL a ZIP
+        
+            $zip->addFile($salida_sql); //Agregamos el archivo SQL a ZIP
             $zip->close(); // Cerramos el ZIP
-
-            unlink($ruta_salida_zip); //Eliminamos el archivo temporal SQL
-            header("location: $ruta_salida_zip"); // Redireccionamos para descargar el archivo ZIP
-
-        } else {
+        
+            unlink($salida_sql); //Eliminamos el archivo temporal SQL
+            header("location: $salida_zip"); // Redireccionamos para descargar el archivo ZIP
+        
+        } else{
             echo 'Error'; // Enviamos el mensaje de error
         }
     }

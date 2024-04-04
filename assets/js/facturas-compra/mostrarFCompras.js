@@ -17,14 +17,6 @@ addEventListener("DOMContentLoaded", (e) => {
         },
         { data: "proveedor_nombre" },
         {
-            data: "insummos",
-            render: function (data) {
-                let totalInsumos = 0;
-                data.forEach((insumos) => (totalInsumos += insumos.unidades));
-                return totalInsumos;
-            },
-        },
-        {
             data: "monto_con_iva",
             render: function (data, type, row) {
                 return `$${data}`
@@ -78,12 +70,12 @@ addEventListener("DOMContentLoaded", (e) => {
             searchPanes: {
                 show: false,
             },
-            targets: [0, 1, 2, 3, 4, 5, 6, 7],
+            targets: [0, 1, 2, 3, 4, 5, 6],
         },
         // Para permitir el filtrado con la fecha filtrada
         {
             type: 'datetime-moment',
-            targets: 7
+            targets: 6
         },
     ];
 
@@ -119,7 +111,7 @@ addEventListener("DOMContentLoaded", (e) => {
         ]
     };
 
-    const order = [[7, 'desc'], [6, 'desc']];
+    const order = [[6, 'desc'], [5, 'desc']];
 
     const format = (data) => {
         let template = `<table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">`;
