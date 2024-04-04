@@ -19,6 +19,7 @@ Router::get('/auditoria/consulta', AuditoriaController::class . '@listarAuditori
 Router::post('/auditoria/fecha', AuditoriaController::class . '@listarAuditoriaPorFecha');
 Router::post('/auditoria/accion', AuditoriaController::class . '@listarAuditoriaPorAccion');
 Router::get('/auditoria/:id', AuditoriaController::class . '@listarAuditoriaPorUsuario');
+Router::get('/exportarBd', AuditoriaController::class . '@exportarBd');
 
 // //Auditoria - Vista
 Router::get("/auditoria", AuditoriaController::class . '@index');
