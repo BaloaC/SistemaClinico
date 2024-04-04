@@ -57,9 +57,35 @@ class InsumoController extends Controller{
     public function listarInsumo(){
 
         $_insumoModel = new InsumoModel();
-        $lista = $_insumoModel->where('estatus_ins', '=', '1')->getAll();
-        $mensaje = (count($lista) > 0);
-        Helpers::retornarMensaje($mensaje, $lista);
+        $_insumoModel->where('estatus_ins', '=', '1');
+
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_insumoModel->limit([$primer_registro, $size]);
+            }
+
+            if (strlen($_GET['search']['value']) > 0) {
+                $_insumoModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            }
+        }
+
+        $lista = $_insumoModel->getAll();
+        $_insumoModel->resetValues();
+
+        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+            $_insumoModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        } else {
+            $_insumoModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_insumoModel->where('estatus_ins', '=', '1')->getAll();
+        
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $lista);
     }
 
     public function listarInsumoPorId($insumo_id){

@@ -3,6 +3,7 @@
 include_once "./services/facturas/consulta seguro/ConsultaSeguroService.php";
 include_once "./services/facturas/seguro/FacturaSeguroService.php";
 include_once "./services/facturas/seguro/FacturaSeguroValidaciones.php";
+include_once './services/Helpers.php';
 
 class FacturaSeguroController extends Controller{
 
@@ -103,10 +104,34 @@ class FacturaSeguroController extends Controller{
     public function listarFacturaSeguro(){
 
         $_facturaSeguroModel = new FacturaSeguroModel();
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_facturaSeguroModel->limit([$primer_registro, $size]);
+            }
+
+            if (strlen($_GET['search']['value']) > 0) {
+                $_facturaSeguroModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            }
+        }
+
         $inners = $_facturaSeguroModel->listInner($this->arrayInner);
         $id = $_facturaSeguroModel->innerJoin($this->arraySelect, $inners, "factura_seguro");
+        $_facturaSeguroModel->resetValues();
+
+        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+            $_facturaSeguroModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        } else {
+            $_facturaSeguroModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_facturaSeguroModel->where('estatus_fac', '=', '1')->getAll();
         
-        return FacturaSeguroHelpers::retornarMensaje($id);
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $id);
     }
 
     public function listarFacturaSeguroPorSeguro($seguro_id){

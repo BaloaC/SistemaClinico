@@ -94,12 +94,37 @@ class MedicamentoController extends Controller{
     }
 
     public function listarMedicamentos(){
-
         $_medicamentoModel = new MedicamentoModel();
+
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_medicamentoModel->limit([$primer_registro, $size]);
+            }
+
+            if (strlen($_GET['search']['value']) > 0) {
+                $_medicamentoModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            }
+        }
+
         $inners = $_medicamentoModel->listInner($this->arrayInner);
         $lista = $_medicamentoModel->where('medicamento.estatus_med', '=', '1')->innerJoin($this->arraySelect, $inners, "medicamento");
-        $mensaje = (count($lista) > 0);
-        helpers::retornarMensaje($mensaje, $lista);
+        $_medicamentoModel->resetValues();
+
+        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+            $_medicamentoModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        } else {
+            $_medicamentoModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_medicamentoModel->where('estatus_med', '=', '1')->getAll();
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $lista);
+        // $mensaje = (count($lista) > 0);
+        // helpers::retornarMensaje($mensaje, $lista);
     }
 
     public function listarMedicamentosPorEspecialidad($especialidad_id){

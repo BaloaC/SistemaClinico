@@ -6,6 +6,7 @@ include_once "./services/facturas/consulta seguro/ConsultaSeguroValidaciones.php
 include_once "./services/facturas/consulta seguro/ConsultaSeguroService.php";
 include_once "./services/pacientes/paciente seguro/PacienteSeguroService.php";
 include_once "./services/globals/GlobalsHelpers.php";
+include_once './services/Helpers.php';
 
 class ConsultaSeguroController extends Controller{
 
@@ -98,13 +99,38 @@ class ConsultaSeguroController extends Controller{
     public function listarConsultaSeguro(){
 
         $consultasSeguros = ConsultaSeguroService::listarconsultasSeguros();
+        $_consultaSeguroModel = new ConsultaSeguroModel();
 
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_consultaSeguroModel->limit([$primer_registro, $size]);
+            }
+
+            if (strlen($_GET['search']['value']) > 0) {
+                $_consultaSeguroModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            }
+        }
+
+        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+            $_consultaSeguroModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        } else {
+            $_consultaSeguroModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_consultaSeguroModel->where('estatus_con', '=', '1')->getAll();
         // Comprobamos que haya una lista
         $hayResultados = count($consultasSeguros) > 0;
+        
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $consultasSeguros);
 
-        $respuesta = new Response($hayResultados ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($consultasSeguros);
-        return $respuesta->json(200);
+        // $respuesta = new Response($hayResultados ? 'CORRECTO' : 'ERROR');
+        // $respuesta->setData($consultasSeguros);
+        // return $respuesta->json(200);
     }
 
     public function listarConsultaSeguroPorId($consulta_seguro_id){

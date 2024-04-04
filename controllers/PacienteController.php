@@ -1,6 +1,7 @@
 <?php
 
 include_once './services/pacientes/paciente/PacienteService.php';
+include_once './services/Helpers.php';
 
 class PacienteController extends Controller{
 
@@ -72,7 +73,25 @@ class PacienteController extends Controller{
     public function listarPacientes(){
         
         $_pacienteModel = new PacienteModel();
-        $paciente = $_pacienteModel->where('estatus_pac', '=', '1')->getAll();
+        $_pacienteModel->where('estatus_pac', '=', '1');
+
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_pacienteModel->limit([$primer_registro, $size]);
+            }
+
+            if (strlen($_GET['search']['value']) > 0) {
+                $_pacienteModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            }
+        }
+
+        $paciente = $_pacienteModel->getAll();
+        $_pacienteModel->resetValues();
 
         if ($paciente) {
             $resultado = array();
@@ -86,7 +105,16 @@ class PacienteController extends Controller{
                 if ($pacienteSeguro) { $pacientes->seguro = $pacienteSeguro; }
                 $resultado[] = $pacientes;
             }
-            return $this->retornarMensaje($resultado);
+
+            if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                $_pacienteModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            } else {
+                $_pacienteModel->setSelect('COUNT(*) AS total');
+            }
+
+            $total_registros = $_pacienteModel->where('estatus_pac', '=', '1')->getAll();
+            Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $resultado);
+            // return $this->retornarMensaje($resultado);
 
         } else {
             $respuesta = new Response('NOT_FOUND');
