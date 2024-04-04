@@ -180,20 +180,21 @@ class CitaController extends Controller {
     public function listarCitas() {
 
         $_citaModel = new CitaModel();
-        $inners = $_citaModel->listInner($this->arrayInner);
-        $lista = $_citaModel->where('estatus_cit', '!=', '2')->innerJoin($this->arraySelect, $inners, "cita");
+        $lista = $_citaModel->where('estatus_cit', '!=', '2')->getAll();
+        // $inners = $_citaModel->listInner($this->arrayInner);
+        // $lista = $_citaModel->where('estatus_cit', '!=', '2')->innerJoin($this->arraySelect, $inners, "cita");
 
-        $lista_citas = [];
-        foreach ($lista as $cita) {
+        // $lista_citas = [];
+        // foreach ($lista as $cita) {
 
-            if ($cita->tipo_cita == 2) {
-                $lista_citas[] = CitasHelpers::innerCita($cita);
-            } else {
-                $lista_citas[] = $cita;
-            }
-        }
+        //     if ($cita->tipo_cita == 2) {
+        //         $lista_citas[] = CitasHelpers::innerCita($cita);
+        //     } else {
+        //         $lista_citas[] = $cita;
+        //     }
+        // }
 
-        Helpers::retornarMensajeListado($lista_citas);
+        Helpers::retornarMensajeListado($lista);
     }
 
     public function listarCitaPorId($cita_id) {

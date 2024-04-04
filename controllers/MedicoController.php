@@ -45,7 +45,7 @@ class MedicoController extends Controller {
             $resultado = array();
 
             foreach ($medico2 as $medicos) {
-                $resultado[] = MedicoHelpers::obtenerRelaciones($medicos);
+                $resultado[] = MedicoHelpers::obtenerRelaciones($medicos, false);
             }
 
             Helpers::retornarMensaje($resultado, $resultado);

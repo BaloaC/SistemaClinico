@@ -34,11 +34,19 @@ class SeguroController extends Controller{
     public function listarSeguros(){
 
         $_seguroModel = new SeguroModel();
-        $seguro = $_seguroModel->where('estatus_seg', '=', '1')->getAll();
-        $seguro_lista = array();   
+        $seguros = $_seguroModel->where('estatus_seg', '=', '1')->getAll();
+        $seguro_lista = array();
 
-        foreach ($seguro as $seguros) {
-            $seguro_lista[] = SeguroService::ListarTodos($seguros);
+        // foreach ($seguro as $seguros) {
+        //     $seguro_lista[] = SeguroService::ListarTodos($seguros);
+        // }
+
+        foreach ($seguros as $seguro) {
+            $_seguroExamenModel = new SeguroExamenModel();
+            $seguroExamen = $_seguroExamenModel->where('seguro_id', '=', $seguro->seguro_id)->getFirst();
+            $lista_examenes = explode(',', $seguroExamen->examenes);
+            $seguro->cantidad_examenes = count($lista_examenes);
+            $seguro_lista[] = $seguro;
         }
 
         $mensaje = ($seguro_lista != null);

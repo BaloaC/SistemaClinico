@@ -73,7 +73,7 @@ class EspecialidadController extends Controller{
         $especialidades =  $_especialidadModel->getAll();
         $_especialidadModel->resetValues();
 
-        if (strlen($_GET['search']['value']) > 0) {
+        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
             $_especialidadModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
         } else {
             $_especialidadModel->setSelect('COUNT(*) AS total');
@@ -81,7 +81,7 @@ class EspecialidadController extends Controller{
 
         $total_registros = $_especialidadModel->where('estatus_esp', '=', '1')->getAll();
         
-        Helpers::retornarGet(($_GET['draw'] ? $_GET['draw'] : 0), $total_registros[0]->total, $especialidades);
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $especialidades);
     }
 
     public function listarEspecialidadPorId($especialidad_id){
