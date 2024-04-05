@@ -84,13 +84,13 @@ export function examenesPagination(registros) {
                     const seguro = document.createElement("div");
                     seguro.classList.add("seguro-dropdown-link");
 
-                    const img = document.createElement("img");
-                    img.src = "https://cdn-icons-png.flaticon.com/64/4434/4434431.png";
+                    // const img = document.createElement("img");
+                    // img.src = "https://cdn-icons-png.flaticon.com/64/4434/4434431.png";
 
                     const p = document.createElement("p");
                     p.textContent = el.nombre;
 
-                    seguro.appendChild(img);
+                    // seguro.appendChild(img);
                     seguro.appendChild(p);
                     link.appendChild(seguro);
                     divCol.appendChild(link);

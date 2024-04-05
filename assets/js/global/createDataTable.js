@@ -14,6 +14,7 @@ export default function createDataTable({ id, columns, url = null, data = null, 
             // Manejo de errores de Ajax
             console.log('Error de Ajax:', error);
             console.log('Detalles:', thrown);
+            console.log(xhr?.responseText);
 
             $(id).DataTable().clear().draw();
         }

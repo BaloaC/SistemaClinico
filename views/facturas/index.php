@@ -38,7 +38,7 @@
                                         <tr>
                                             <th>Detalles</th>
                                             <th>Nombre Proveedor</th>
-                                            <th>Total Insumos</th>
+                                            <!-- <th>Total Insumos</th> -->
                                             <th>Monto con IVA</th>
                                             <th>Monto sin IVA</th>
                                             <th>Excento</th>
