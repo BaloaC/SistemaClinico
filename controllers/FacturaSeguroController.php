@@ -129,7 +129,7 @@ class FacturaSeguroController extends Controller{
             $_facturaSeguroModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_facturaSeguroModel->where('estatus_fac', '=', '1')->getAll();
+        $total_registros = $_facturaSeguroModel->getAll();
         
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $id);
     }
@@ -162,7 +162,7 @@ class FacturaSeguroController extends Controller{
             $_facturaSeguroModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_facturaSeguroModel->where('estatus_fac', '=', '1')->getAll();
+        $total_registros = $_facturaSeguroModel->where('factura_seguro.seguro_id', '=', $seguro_id)->getAll();
         
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $id);
         

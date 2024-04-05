@@ -78,7 +78,7 @@ class FacturaConsultaController extends Controller {
             $_facturaConsultaModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_facturaConsultaModel->where('estatus_fac', '=', '1')->getAll();
+        $total_registros = $_facturaConsultaModel->getAll();
         
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $consultaList);
     }

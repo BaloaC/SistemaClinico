@@ -117,7 +117,7 @@ class FacturaCompraController extends Controller
             $_compraInsumoModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_compraInsumoModel->where('estatus_fac', '=', '1')->getAll();
+        $total_registros = $_compraInsumoModel->getAll();
 
         if ($factura_compra) {
 
