@@ -99,10 +99,10 @@ addEventListener("DOMContentLoaded", e => {
         id: "#fMedicos",
         url: `/${path[1]}/factura/medico/consulta/`,
         columns: fMedicosColumns,
-        columnDefs: columnDefsFMedico,
-        searchPanes: searchPanesFMedico,
+        // columnDefs: columnDefsFMedico,
+        // searchPanes: searchPanesFMedico,
         order,
-        dom: "Plfrtip",
+        // dom: "Plfrtip",
         processing: true,
         serverSide: true
     })
