@@ -27,8 +27,10 @@ class UsuarioController extends Controller{
     } 
 
     public function insertarUsuario(/*Request $request*/){
-        global $isEnabledAudit;
-        $isEnabledAudit = 'usuarios';
+        if(isset(apache_request_headers()['Authorization'])) {
+            global $isEnabledAudit;
+            $isEnabledAudit = 'usuarios';
+        }
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         CuentaValidaciones::validarNuevoUsuario($_POST);
@@ -51,7 +53,6 @@ class UsuarioController extends Controller{
     }
 
     public function listarUsuarios(){
-
         $_usuarioModel = new UsuarioModel();
         
         $lista = $_usuarioModel->where('estatus_usu', '=', '1')->getAll();

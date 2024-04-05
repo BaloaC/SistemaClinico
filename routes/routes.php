@@ -2,8 +2,6 @@
 
 $AuthenticationMiddleware = new AuthenticationMiddleware();
 $AuthorizationMiddleware = new AuthorizationMiddleware();
-// $AuditMiddleware = new AuditMiddleware();
-// $auditCita = new AuditCita();
 
 $isEnabledAudit = false;
 global $isEnabledAudit;

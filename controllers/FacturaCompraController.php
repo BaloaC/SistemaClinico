@@ -117,7 +117,7 @@ class FacturaCompraController extends Controller
             $_compraInsumoModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_compraInsumoModel->where('estatus_fac', '=', '1')->getAll();
+        $total_registros = $_compraInsumoModel->getAll();
 
         if ($factura_compra) {
 
@@ -133,8 +133,8 @@ class FacturaCompraController extends Controller
                 }
 
                 // Codigo para recibir los insumos que fueron comprados con esa factura
-                $insumosFactura = FacturaInsumoHelpers::listarInsumoPorFactura($facturas->factura_compra_id);
-                $facturas->insummos = $insumosFactura;
+                // $insumosFactura = FacturaInsumoHelpers::listarInsumoPorFactura($facturas->factura_compra_id);
+                // $facturas->insummos = $insumosFactura;
 
                 if ( array_key_exists('date', $_GET) ) { // Si es el reporte por mes añadimos el total
                     $resultadoFactura['facturas'][] = $facturas;
