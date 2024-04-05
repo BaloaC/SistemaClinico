@@ -72,9 +72,9 @@ addEventListener("DOMContentLoaded", e => {
         id: "#medicamentos",
         columns: medicamentosColumns,
         url: `/${path[1]}/medicamento/consulta/`,
-        columnDefs: columnDefsMedicamentos,
-        searchPanes: searchPanesMedicamentos,
-        dom: "Plfrtip",
+        // columnDefs: columnDefsMedicamentos,
+        // searchPanes: searchPanesMedicamentos,
+        // dom: "Plfrtip",
         processing: true,
         serverSide: true
     });

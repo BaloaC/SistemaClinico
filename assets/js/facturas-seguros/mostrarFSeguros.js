@@ -164,9 +164,9 @@ addEventListener("DOMContentLoaded", async e => {
         columns: fSeguroColumns,
         order,
         format,
-        columnDefs: columnDefsFSeguro,
-        searchPanes: searchPanesFSeguro,
-        dom: "Plfrtip",
+        // columnDefs: columnDefsFSeguro,
+        // searchPanes: searchPanesFSeguro,
+        // dom: "Plfrtip",
         processing: true,
         serverSide: true
     });

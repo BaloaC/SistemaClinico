@@ -84,9 +84,9 @@ addEventListener("DOMContentLoaded", e => {
         url: `/${path[1]}/usuarios/consulta/`,
         columns: usuariosColumns,
         order,
-        columnDefs: columnDefsUsuarios,
-        searchPanes: searchPanesUsuarios,
-        dom: "Plfrtip"
+        // columnDefs: columnDefsUsuarios,
+        // searchPanes: searchPanesUsuarios,
+        // dom: "Plfrtip"
     });
 });
 

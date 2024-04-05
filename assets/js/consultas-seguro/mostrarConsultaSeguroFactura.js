@@ -96,25 +96,25 @@ addEventListener("DOMContentLoaded", async e => {
 
     ];
 
-    const columnDefsConsultaSeguro = [
-        {
-            searchPanes: {
-                show: false,
-            },
-            targets: [0, 1, 2, 3, 4, 5, 6],
-        },
-        {
-            type: 'datetime-moment',
-            targets: 6
-        }
-    ];
+    // const columnDefsConsultaSeguro = [
+    //     {
+    //         searchPanes: {
+    //             show: false,
+    //         },
+    //         targets: [0, 1, 2, 3, 4, 5, 6],
+    //     },
+    //     {
+    //         type: 'datetime-moment',
+    //         targets: 6
+    //     }
+    // ];
 
-    const searchPanesConsultaSeguro = {
-        controls: false,
-        hideCount: true,
-        collapse: true,
-        initCollapsed: true,
-    };
+    // const searchPanesConsultaSeguro = {
+    //     controls: false,
+    //     hideCount: true,
+    //     collapse: true,
+    //     initCollapsed: true,
+    // };
 
     const order = [[5, 'desc']];
 
@@ -259,8 +259,8 @@ addEventListener("DOMContentLoaded", async e => {
         id: "#consultas",
         url: `/${path[1]}/factura/consultaSeguro/consulta/`,
         columns: consultaSeguroColumns,
-        columnDefs: columnDefsConsultaSeguro,
-        searchPanes: searchPanesConsultaSeguro,
+        // columnDefs: columnDefsConsultaSeguro,
+        // searchPanes: searchPanesConsultaSeguro,
         order,
         format,
         dom: "Plfrtip",
