@@ -18,13 +18,13 @@ class ExamenValidaciones {
             exit();
         }
 
-        if ( $formulario['hecho_aqui'] != 1 && $formulario['hecho_aqui'] != 0 ) {
-            $respuesta = new Response(false, 'El campo hecho aqui solo permite valores booleanos');
-            echo $respuesta->json(400);
-            exit();
-        }
+        // if ( $formulario['hecho_aqui'] != 1 && $formulario['hecho_aqui'] != 0 ) {
+        //     $respuesta = new Response(false, 'El campo hecho aqui solo permite valores booleanos');
+        //     echo $respuesta->json(400);
+        //     exit();
+        // }
 
-        if ($formulario['hecho_aqui'] == 1 && empty($formulario['precio_examen'])) {
+        if (empty($formulario['precio_examen'])) {
             $respuesta = new Response(false, 'Los exámenes hechos en la clínica deben tener precio al momento de registrarlos');
             echo $respuesta->json(400);
             exit();

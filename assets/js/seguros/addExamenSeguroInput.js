@@ -18,7 +18,7 @@ const modalRegister = document.getElementById('modalReg');
 // Al abrir el modal cargar los select2
 modalRegister.addEventListener('show.bs.modal', async () => {
     if(modalOpened === false){
-        examenesSeguroList = await getAll("examenes/clinica");
+        examenesSeguroList = await getAll("examenes/consulta");
         dinamicSelect2({
             obj: examenesSeguroList,
             selectSelector: `#s-examen_id`,

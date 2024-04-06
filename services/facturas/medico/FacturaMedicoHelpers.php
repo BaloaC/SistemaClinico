@@ -205,7 +205,7 @@ class FacturaMedicoHelpers {
 
     public static function calcularMontosBs($factura) {
         $valor_divisa = GlobalsHelpers::obtenerValorDivisa();
-        $valor_multiplicar = $factura->precio_dolar == 0 ? $valor_divisa : $factura->precio_dolar;
+        $valor_multiplicar = (!isset($factura->precio_dolar) || $factura->precio_dolar == 0) ? $valor_divisa : $factura->precio_dolar;
         $factura_bs = array(
             "acumulado_seguro_total_bs" => round($factura->acumulado_seguro_total * $valor_multiplicar, 2),
             "acumulado_consulta_total_bs" => round($factura->acumulado_consulta_total * $valor_multiplicar, 2),

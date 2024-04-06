@@ -106,7 +106,7 @@
                                                     <input type="number" step="any" name="unidades" min="0" class="form-control insumo-unid" data-validate="true" data-type="price" oninput="calcularMonto(this)" required>
                                                     <small class="form-text">No se permiten números negativos</small>
                                                 </td>
-                                                <td><b class="monto-total-p">$0.00</b></td>
+                                                <td><b class="monto-total-p">0.00 Bs</b></td>
                                                 <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
                                                 <td><div class="visible d-none"><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></div></td>
                                             </tr>
@@ -116,10 +116,10 @@
                                 </div>
                                 <div class="col-4 offset-8">
                                     <p>Productos totales: <b id="productos-totales" class="float-end">0</b></p>
-                                    <p>Monto sin iva: <b id="monto-sin-iva" class="float-end">$0.00</b></p>
-                                    <p>IVA (16.00%): <b id="iva" class="float-end">$0.00</b></p>
+                                    <p>Monto sin iva: <b id="monto-sin-iva" class="float-end">0.00 Bs</b></p>
+                                    <p>IVA (16.00%): <b id="iva" class="float-end">0.00 Bs</b></p>
                                     <hr>
-                                    <p>Total: <b id="monto-total" class="float-end">$0.00</b></p>
+                                    <p>Total: <b id="monto-total" class="float-end">0.00 Bs</b></p>
                                 </div>
                             </div>
                         </form>

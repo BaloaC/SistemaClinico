@@ -27,7 +27,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
     const btnAddExamen = document.getElementById("btn-addExamen");
     const btnDelete = document.getElementById("btn-confirmDeleteSeguro");
     infoSeguro = await getById("seguros", seguro);
-    examenesSeguroListAll = await getAll("examenes/clinica");
+    examenesSeguroListAll = await getAll("examenes/consulta");
 
     nombreSeguro.textContent = infoSeguro.nombre;
     rifSeguro.textContent = infoSeguro.rif;

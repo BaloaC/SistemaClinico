@@ -60,13 +60,14 @@ class SeguroValidaciones {
         $limite = count($formulario['examenes']);
 
         for ($i = 0; $i < $limite; $i++) { 
-            if ( !$validarSeguro->isDuplicatedId('examen_id', 'hecho_aqui', $formulario['examenes'][$i], 1, 'examen') ) {
-                $respuesta = new Response(false, 'El examen no existe o no se realiza en la clínica');
-                $respuesta->setData('Error relacionando el examen_id '.$formulario['examenes'][$i]);
-                echo $respuesta->json(400);
-                exit();
+            // if ( !$validarSeguro->isDuplicatedId('examen_id', 'hecho_aqui', $formulario['examenes'][$i], 1, 'examen') ) {
+            //     $respuesta = new Response(false, 'El examen no existe o no se realiza en la clínica');
+            //     $respuesta->setData('Error relacionando el examen_id '.$formulario['examenes'][$i]);
+            //     echo $respuesta->json(400);
+            //     exit();
 
-            } else if ($formulario['costos'][$i] <= 0) {
+            // } else 
+            if ($formulario['costos'][$i] <= 0) {
                 $respuesta = new Response(false, 'El monto del examen es obligatorio');
                 $respuesta->setData('Error con el examen id '.$formulario['examenes'][$i].' asociandolo al monto '.$formulario['costos'][$i]);
                 echo $respuesta->json(400);

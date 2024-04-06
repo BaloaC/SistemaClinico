@@ -117,8 +117,12 @@ class PacienteController extends Controller{
             // return $this->retornarMensaje($resultado);
 
         } else {
-            $respuesta = new Response('NOT_FOUND');
-            return $respuesta->json(200);
+
+            Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), 0, 0);
+
+            // $respuesta = new Response('NOT_FOUND');
+            // $respuesta->setData([]);
+            // return $respuesta->json(200);
         }
     }
 

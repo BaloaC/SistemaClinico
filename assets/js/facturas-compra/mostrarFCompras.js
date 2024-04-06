@@ -19,19 +19,19 @@ addEventListener("DOMContentLoaded", (e) => {
         {
             data: "monto_con_iva",
             render: function (data, type, row) {
-                return `$${data}`
+                return `${data} Bs`
             }
         },
         {
             data: "monto_sin_iva",
             render: function (data, type, row) {
-                return `$${data}`
+                return `${data} Bs`
             }
         },
         {
             data: "excento",
             render: function (data, type, row) {
-                return data === null ? "Ninguno" : data;
+                return data === null || data === 0 ? "Ninguno" : `${data} Bs`;
             },
         },
         {
@@ -120,8 +120,8 @@ addEventListener("DOMContentLoaded", (e) => {
                 <tr>
                     <td>Nombre Insumo: ${e.insumo_nombre}</td>
                     <td>Unidades: ${e.unidades}</td>
-                    <td>Precio unitario: ${e.precio_unit_bs}</td>
-                    <td>Precio total: ${e.precio_total_bs}</td>
+                    <td>Precio unitario: ${e.precio_unit_bs} Bs</td>
+                    <td>Precio total: ${e.precio_total_bs} Bs</td>
                 </tr>
             `;
         });

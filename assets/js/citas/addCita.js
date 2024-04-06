@@ -39,8 +39,8 @@ async function addCita() {
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
-        cleanValdiation("info-cita");
         calendar.refetchEvents();
+        cleanValdiation("info-cita");
 
     } catch (error) {
         console.log(error);

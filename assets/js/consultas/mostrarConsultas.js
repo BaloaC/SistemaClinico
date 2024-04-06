@@ -110,12 +110,13 @@ const handleModalOpen = async () => {
         if (infoCitas.length > 0) {
             listCitas = infoCitas.filter(cita => cita.estatus_cit === "1");
         }
-
+        console.log(listCitas);
         dinamicSelect2({
             obj: listCitas ?? [],
             selectSelector: "#s-cita",
             selectValue: "cita_id",
-            selectNames: ["cita_id", "cedula_paciente", "nombre_paciente-apellido_paciente", "motivo_cita"],
+            // selectNames: ["cita_id", "cedula_paciente", "nombre_paciente-apellido_paciente", "motivo_cita"],
+            selectNames: ["cita_id", "cedula_titular", "motivo_cita"],
             parentModal: "#modalReg",
             placeholder: "Seleccione una cita"
         });
@@ -318,9 +319,9 @@ addEventListener("DOMContentLoaded", async e => {
         {
             data: null,
             render: function (data, type, row) {
-                if ("cedula_paciente" in data) return data.cedula_paciente;
                 if ("titular" in data) return data.titular.cedula;
                 if ("cedula_titular" in data) return data.cedula_titular;
+                if ("cedula_paciente" in data) return data.cedula_paciente;
             }
         },
         {

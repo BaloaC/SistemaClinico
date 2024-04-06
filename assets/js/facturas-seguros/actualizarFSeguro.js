@@ -19,16 +19,20 @@ async function actualizarFSeguro(infoSeguro) {
 
     let response = await fetch(`/${path[1]}/factura/seguro`, options)
 
-    const id = infoSeguro.split("-");
-    let listadoFacturas = await getById("factura/seguro", id[0]);
+    if (path[3] != "seguroAge") {
 
-    // Filtramos las facturas por el año que se consulta
-    listadoFacturas = listadoFacturas.filter(factura => factura.fecha_ocurrencia.slice(0, 4) === id[1]);
+        const id = infoSeguro.split("-");
+        let listadoFacturas = await getById("factura/seguro", id[0]);
 
-    let tablaSeguros = $('#fSeguros').DataTable();
+        // Filtramos las facturas por el año que se consulta
+        listadoFacturas = listadoFacturas.filter(factura => factura.fecha_ocurrencia.slice(0, 4) === id[1]);
 
-    // Para actualizar la tabla
-    tablaSeguros.clear().rows.add(listadoFacturas).draw();
+        let tablaSeguros = $('#fSeguros').DataTable();
+
+        // Para actualizar la tabla
+        tablaSeguros.clear().rows.add(listadoFacturas).draw();
+
+    }
 
     alert.classList.remove("d-none");
 
@@ -36,7 +40,8 @@ async function actualizarFSeguro(infoSeguro) {
         $("#modalAct").modal("hide");
         alert.classList.add("d-none");
     }, 500);
-    
+
+
 }
 
 window.actualizarFSeguro = actualizarFSeguro;

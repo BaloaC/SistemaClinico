@@ -82,6 +82,7 @@ async function addPaciente() {
         if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
 
 
+        console.log(data);
         const registroExitoso = await addModule("pacientes", "info-paciente", data, "Paciente registrado correctamente!");
         
         if (!registroExitoso.code) throw { result: registroExitoso.result };

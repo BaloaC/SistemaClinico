@@ -148,6 +148,10 @@ class Response{
                 $auditHorario = new AuditHorario();
                 $auditHorario->handleRequest();
 
+            } else if ($isEnabledAudit == 'medicamentos') {
+                $auditMedicamento = new AuditMedicamento();
+                $auditMedicamento->handleRequest();
+
             } else if ( count(explode(' ', $isEnabledAudit)) > 2) {
                 $auditFactura = new AuditFactura();
                 $auditFactura->handleRequest($this->data);

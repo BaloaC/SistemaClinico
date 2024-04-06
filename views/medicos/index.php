@@ -475,7 +475,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="delAlertSeguro" class="alert alert-warning" role="alert">No es posible dejar una empresa sin seguro asociado</div>
+                    <div id="delAlertSeguro" class="alert alert-warning" role="alert">No es posible dejar un médico sin especialidad asociada</div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="btn-confirmDeleteSeguro" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
