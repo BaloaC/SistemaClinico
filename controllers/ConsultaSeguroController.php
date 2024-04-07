@@ -80,7 +80,7 @@ class ConsultaSeguroController extends Controller{
             // $data['monto_consulta_bs'] = $data['monto_consulta_usd'] * $valorDivisa;
             $data['monto_consulta_bs'] = 0;
             $id = $_consultaSeguroModel->insert($data);
-            // $data['factura_id'];
+            $data['factura_id'] = $id;
             $mensaje = ($id > 0);
 
             if (!$mensaje) {
