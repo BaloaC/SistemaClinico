@@ -57,7 +57,7 @@ export default function createDataTable({ id, columns, url = null, data = null, 
     if (order !== null) config.order = order;
     if (scrollY !== null) config.scrollY = scrollY;
     if (scrollX !== null) config.scrollX = scrollX;
-    if (processing && document.getElementById(id.replace("#","")).dataset.codeFalseAjax == "falase") config.processing = processing;
+    if (processing && document.getElementById(id.replace("#","")).dataset.codeFalseAjax == "false") config.processing = processing;
     if (serverSide && document.getElementById(id.replace("#","")).dataset.codeFalseAjax == "false") config.serverSide = serverSide;
     if (scrollCollapse !== null) config.scrollCollapse = scrollCollapse;
     if (scrollCollapse !== null) config.scrollCollapse = scrollCollapse;
