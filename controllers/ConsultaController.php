@@ -123,7 +123,7 @@ class ConsultaController extends Controller {
         
         foreach ($consultaList as $consulta) {
             if ($consulta->es_emergencia) {
-                $consultas[] = ConsultaService::obtenerConsultaEmergencia($consulta, true);
+                $consultas[] = ConsultaService::obtenerConsultaEmergencia($consulta, false);
             } else {
                 $consultas[] = ConsultaService::obtenerConsultaNormal($consulta);
             }

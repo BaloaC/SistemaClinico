@@ -283,6 +283,7 @@ class ConsultaService {
         $consultas->titular = $paciente;
         $consultas->beneficiado = $beneficiado;
 
+        $relaciones = NULL;
         if ($obtenerRelaciones) {
             $relaciones = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
         }
@@ -296,8 +297,8 @@ class ConsultaService {
         $consultas->factura->total_insumos_bs = round( $consultas->factura->total_insumos * $valorDivisa, 2);
         $consultas->factura->total_examenes_bs = round( $consultas->factura->total_examenes * $valorDivisa, 2);
         $consultas->factura->total_consulta_bs = round( $consultas->factura->total_consulta * $valorDivisa, 2);
-
-        if (count((array) $relaciones) > 0) {
+        
+        if (!is_null($relaciones) && count((array) $relaciones) > 0) {
             return (object) array_merge((array) $consultas, (array) $relaciones);
         } else {
             return $consultas;
