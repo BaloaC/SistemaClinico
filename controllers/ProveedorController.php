@@ -1,5 +1,7 @@
 <?php
 
+include_once './services/Helpers.php';
+
 class ProveedorController extends Controller
 {
 
@@ -90,9 +92,38 @@ class ProveedorController extends Controller
     {
 
         $_proveedorModel = new ProveedorModel();
-        $lista = $_proveedorModel->where('estatus_pro', '=', '1')->getAll();
-        $mensaje = (count($lista) > 0);
-        return $this->retornarLista($mensaje, $lista);
+        $_proveedorModel->where('estatus_pro', '=', '1');
+        
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_proveedorModel->limit([$primer_registro, $size]);
+            }
+
+            if (strlen($_GET['search']['value']) > 0) {
+                $_proveedorModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            }
+        }
+
+        $lista = $_proveedorModel->getAll();
+        $_proveedorModel->resetValues();
+
+        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+            $_proveedorModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        } else {
+            $_proveedorModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_proveedorModel->where('estatus_pro', '=', '1')->getAll();
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $lista);
+
+        
+        // $mensaje = (count($lista) > 0);
+        // return $this->retornarLista($mensaje, $lista);
     }
 
     public function listarProveedorPorId($proveedor_id)
