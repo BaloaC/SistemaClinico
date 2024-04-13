@@ -4,6 +4,7 @@ import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js"
 import getAll from "../global/getAll.js";
 import formatToRealDate from "../global/formatToRealDate.js";
 import createDataTable from "../global/createDataTable.js";
+import getById from "../global/getById.js";
 removeAddAccountant();
 removeAddAnalist();
 const path = location.pathname.split('/');
@@ -39,10 +40,21 @@ const handleModalOpen = async (modalParent) => {
 
         $(seguroSelect).on("change", async function (e) {
 
-
+            // Obtenemos los valores seleccionados
             const segurosSeleccionadosValores = $(seguroSelect).val();
 
-            const segurosSeleccionados = segurosList.filter(seguro => segurosSeleccionadosValores.some(seguroSeleccionado => seguro.seguro_id == seguroSeleccionado));
+            const getSeguroById = async (id) => {
+                return await getById("seguros", id);
+            }
+
+
+            const filterSeguros = async (segurosSeleccionadosValores) => {
+                const promesas = segurosSeleccionadosValores.map(seguro => getSeguroById(seguro));
+                const resultados = await Promise.all(promesas);
+                return resultados;
+            };
+
+            const segurosSeleccionados = await filterSeguros(segurosSeleccionadosValores);
 
             // Obtener todas las empresas de los seguros seleccionados
             const todasLasEmpresas = segurosSeleccionados.flatMap(seguro => seguro?.empresas);
@@ -86,7 +98,7 @@ if (modalUpdate) modalUpdate.addEventListener('show.bs.modal', async () => await
 
 addEventListener("DOMContentLoaded", e => {
 
-    const rol = Cookies.get("rol");    
+    const rol = Cookies.get("rol");
 
     const pacientesColumns = [
         {
@@ -264,9 +276,9 @@ addEventListener("DOMContentLoaded", e => {
         serverSide: true
     });
 
-    
 
-    
+
+
 });
 
 

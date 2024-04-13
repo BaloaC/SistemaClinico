@@ -3,12 +3,24 @@ import getById from "./getById.js";
 
 const path = location.pathname.split('/');
 
-export default function createDataTable({ id, columns, url = null, data = null, columnDefs = null, searchPanes = null, dom = null, format = undefined, formatDataCustom = false, formatDataCustomUrl = null, formatDataCustomId = null, serverSide = false, processing = false, order = null, paging = true, info = true, scrollX = false, scrollY = null, scrollCollapse = false}) {
+export default function createDataTable({ id, columns, url = null, data = null, columnDefs = null, searchPanes = null, dom = null, format = undefined, formatDataCustom = false, formatDataCustomUrl = null, formatDataCustomId = null, serverSide = false, processing = false, order = null, paging = true, info = true, scrollX = false, scrollY = null, scrollCollapse = false }) {
+
+    const handlerCodeFalseAjax = (code) => document.getElementById(id.replace("#","")).dataset.codeFalseAjax = code;
+    handlerCodeFalseAjax(false);
 
     const ajax = (url !== null) ? {
         url,
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
+        },
+        success: function (data, textStatus, xhr) {
+
+            // Validamos de que si la petición es satistfactoria pero no tiene datos no cargamos el datatables
+            if (data?.code === false || data?.data?.length === 0) {
+                
+                handlerCodeFalseAjax(true);
+                $(id).DataTable().clear().draw();
+            }
         },
         error: function (xhr, error, thrown) {
             // Manejo de errores de Ajax
@@ -19,6 +31,9 @@ export default function createDataTable({ id, columns, url = null, data = null, 
             $(id).DataTable().clear().draw();
         }
     } : null;
+
+    // En caso de que la petición haya sido exitosa y con datos no hace falta pasar la propiedad success en el ajax
+    if(document.getElementById(id.replace("#","")).dataset.codeFalseAjax == "false") delete ajax.success;
 
     const config = {
 
@@ -33,8 +48,6 @@ export default function createDataTable({ id, columns, url = null, data = null, 
         columnDefs,
         // Para aplicar los filtros dentro de los datatables
         searchPanes,
-        processing,
-        serverSide,
         paging,
         info
     }
@@ -44,6 +57,9 @@ export default function createDataTable({ id, columns, url = null, data = null, 
     if (order !== null) config.order = order;
     if (scrollY !== null) config.scrollY = scrollY;
     if (scrollX !== null) config.scrollX = scrollX;
+    if (processing && document.getElementById(id.replace("#","")).dataset.codeFalseAjax == "false") config.processing = processing;
+    if (serverSide && document.getElementById(id.replace("#","")).dataset.codeFalseAjax == "false") config.serverSide = serverSide;
+    if (scrollCollapse !== null) config.scrollCollapse = scrollCollapse;
     if (scrollCollapse !== null) config.scrollCollapse = scrollCollapse;
 
     let dataTable = $(id).DataTable(config);
@@ -65,7 +81,7 @@ export default function createDataTable({ id, columns, url = null, data = null, 
                 // Se realiza una petición en caso de ser verdadero, para mostrar el detalle a través de la misma
                 if (formatDataCustom === true) {
                     formatData = await getById(formatDataCustomUrl, row.data()[formatDataCustomId]);
-                    if(formatData[0]) formatData = formatData[0];
+                    if (formatData[0]) formatData = formatData[0];
                 }
 
                 row.child(format(formatData)).show();
