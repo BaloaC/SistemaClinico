@@ -35,7 +35,7 @@
                                 <table id="fMensajeria" class="table table-compact">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>Item</th>
                                             <th>Rif</th>
                                             <th>Seguro</th>
                                             <th>Fecha</th>

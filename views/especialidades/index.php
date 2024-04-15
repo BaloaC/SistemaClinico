@@ -34,7 +34,7 @@
                                 <table id="especialidades" class="table table-compact">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>Item</th>
                                             <th>Nombre</th>
                                             <th>Acciones</th>
                                         </tr>

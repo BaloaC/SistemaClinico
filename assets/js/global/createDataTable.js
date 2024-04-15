@@ -33,7 +33,7 @@ export default function createDataTable({ id, columns, url = null, data = null, 
     } : null;
 
     // En caso de que la petición haya sido exitosa y con datos no hace falta pasar la propiedad success en el ajax
-    if(document.getElementById(id.replace("#","")).dataset.codeFalseAjax == "false") delete ajax.success;
+    if(document.getElementById(id.replace("#","")).dataset?.codeFalseAjax == "false") delete ajax?.success;
 
     const config = {
 
@@ -57,8 +57,8 @@ export default function createDataTable({ id, columns, url = null, data = null, 
     if (order !== null) config.order = order;
     if (scrollY !== null) config.scrollY = scrollY;
     if (scrollX !== null) config.scrollX = scrollX;
-    if (processing && document.getElementById(id.replace("#","")).dataset.codeFalseAjax == "false") config.processing = processing;
-    if (serverSide && document.getElementById(id.replace("#","")).dataset.codeFalseAjax == "false") config.serverSide = serverSide;
+    if (processing && document.getElementById(id.replace("#","")).dataset?.codeFalseAjax == "false") config.processing = processing;
+    if (serverSide && document.getElementById(id.replace("#","")).dataset?.codeFalseAjax == "false") config.serverSide = serverSide;
     if (scrollCollapse !== null) config.scrollCollapse = scrollCollapse;
     if (scrollCollapse !== null) config.scrollCollapse = scrollCollapse;
 

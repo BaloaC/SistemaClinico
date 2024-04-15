@@ -155,7 +155,6 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
         {
             data: null,
             render: function (data, type, row) {
-                console.log(data);
                 if (data.beneficiado && data.beneficiado.cedula) {
                     return data.beneficiado.cedula;
                 } else if (data.paciente_beneficiado && data.paciente_beneficiado.cedula) {

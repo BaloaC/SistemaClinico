@@ -308,7 +308,7 @@
                 </div>
                 <div id="cita1" class="collapse show" data-parent="#citaAccordion">
                     <div class="card-body">
-                        <p><b>ID:</b> <span id="cita_id"></span> <br>
+                        <p><b>Item:</b> <span id="cita_id"></span> <br>
                             <b>Nombre paciente:</b> <span id="nombre_paciente"></span> <br>
                             <b>Especialidad:</b> <span id="especialidad"></span> <br>
                             <b>Fecha cita:</b> <span id="fecha_cita"></span> <br>

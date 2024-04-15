@@ -123,7 +123,7 @@ export default async function mostrarPerfilMedico(id) {
                 estatus_cit.textContent = cita.estatus_cit === "3" ? "Pendiente" : "Asignada";
                 
 
-                dropdownLink.innerHTML = `<b>ID:</b> ${cita_id.textContent} - <b>Nombre médico:</b> ${nombre_medico.textContent} - <b>Especialidad:</b> ${especialidad.textContent} - <b>Fecha:</b> ${fecha_cita.textContent}`;
+                dropdownLink.innerHTML = `<b>Número de cita:</b> ${cita_id.textContent} - <b>Nombre médico:</b> ${nombre_medico.textContent} - <b>Especialidad:</b> ${especialidad.textContent} - <b>Fecha:</b> ${fecha_cita.textContent}`;
                 dropdownLink.setAttribute("data-bs-target", `#cita-${cita.cita_id}`);
                 dropdownLink.setAttribute("aria-controls", `#cita-${cita.cita_id}`);
                 citaContainer.setAttribute("id", `cita-${cita.cita_id}`);
