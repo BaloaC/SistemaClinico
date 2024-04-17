@@ -205,4 +205,18 @@ class FacturaSeguroController extends Controller{
         $respuesta = FacturaSeguroService::actualizarEstatus($factura_seguro_id);
         return $respuesta;
     }
+
+    public function agregarNroControl($factura_seguro_id) {
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        $_facturaSeguro = new FacturaSeguroModel();
+        $factura_seguro = $_facturaSeguro->where('factura_seguro_id', '=', $factura_seguro_id)->getFirst();
+
+        FacturaSeguroValidaciones::validarEstatusFactura($factura_seguro);
+
+        $actualizado = $_facturaSeguro->where('factura_seguro_id', '=', $factura_seguro_id)->update(['nro_control' => $_POST['nro_control']]);
+        
+        $isTrue = ($actualizado > 0);
+        $respuesta = new Response($isTrue ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+        return $respuesta->json($isTrue ? 200 : 400);
+    }
 }

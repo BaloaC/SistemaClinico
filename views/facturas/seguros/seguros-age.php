@@ -83,12 +83,12 @@
             </div>
         </div>
 
-        <!-- Modal Actaulizar-->
+        <!-- Modal Actualizar-->
         <div class="modal fade" id="modalAct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalActLabel">Actaulizar factura seguro</h1>
+                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar factura seguro</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">

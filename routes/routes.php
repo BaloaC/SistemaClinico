@@ -303,6 +303,7 @@ Router::get('/factura/seguro/fecha', FacturaSeguroController::class . '@listarFa
 Router::get('/factura/seguro/:id', FacturaSeguroController::class . '@listarFacturaSeguroPorSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::get('/factura/facturaSeguro/:id', FacturaSeguroController::class . '@listarFacturaPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::put('/factura/seguro/:id', FacturaSeguroController::class . '@actualizarFacturaSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+Router::put('/factura/seguro/control/:id', FacturaSeguroController::class . '@agregarNroControl', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::delete('/factura/seguro/:id', FacturaSeguroController::class . '@eliminarFacturaSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 
 // //Factura_Consulta - Vistas

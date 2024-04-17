@@ -6,6 +6,7 @@ class FacturaSeguroModel extends GenericModel {
 
     protected $factura_seguro_id;
     protected $seguro_id;
+    protected $nro_control;
     protected $mes;
     protected $monto_usd;
     protected $monto_bs;
@@ -20,6 +21,7 @@ class FacturaSeguroModel extends GenericModel {
     /* Getters */
     public function getConsultaId(){return $this->factura_seguro_id;}
     public function getSeguroId(){return $this->seguro_id;}
+    public function getNroControl(){return $this->nro_control;}
     public function getTipoServicio(){return $this->mes;}
     public function getMontoUsd(){return $this->monto_usd;}
     public function getMontoBs(){return $this->monto_bs;}
@@ -30,6 +32,7 @@ class FacturaSeguroModel extends GenericModel {
     /* Setters */
     public function setConsultaId($factura_seguro_id){return $this->factura_seguro_id = $factura_seguro_id;}
     public function setSeguroId($seguro_id){return $this->seguro_id = $seguro_id;}
+    public function setNroControl($nro_control){return $this->$nro_control = $nro_control;}
     public function setTipoServicioa($mes){return $this->mes = $mes;}
     public function setMontoUsd($monto_usd){return $this->monto_usd = $monto_usd;}
     public function setMontoBs($monto_bs){return $this->monto_bs = $monto_bs;}
