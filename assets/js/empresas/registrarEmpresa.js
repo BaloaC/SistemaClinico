@@ -2,7 +2,7 @@ import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import getAll from "../global/getAll.js";
 import { patterns } from "../global/patternsValidation.js";
-import { empresasPagination, listadoEmpresasPagination } from "./empresasPagination.js";
+import { empresasPagination, ssrEmpresaRequest } from "./empresasPagination.js";
 
 async function addEmpresa() {
     const $form = document.getElementById("info-empresa"),
@@ -37,11 +37,9 @@ async function addEmpresa() {
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
-        const listadoEmpresas = await getAll("empresas/consulta");
+        const listadoEmpresas = await ssrEmpresaRequest(1);
         cleanValdiation("info-empresa")
         empresasPagination(listadoEmpresas);
-        listadoEmpresasPagination.registros = listadoEmpresas;
-
 
     } catch (error) {
         console.log(error);

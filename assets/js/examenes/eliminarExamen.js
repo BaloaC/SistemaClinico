@@ -1,15 +1,16 @@
 import deleteModule from "../global/deleteModule.js";
 import getAll from "../global/getAll.js";
-import { empresasPagination, ssrEmpresaRequest } from "./empresasPagination.js";
+import { examenesPagination, listadoExamenesPagination } from "./examenesPagination.js";
 
 function deleteExamen(id) {
     document.getElementById("btn-confirmDelete").setAttribute("onclick", `confirmDelete(${id})`)
 }
 
 async function confirmDelete(id) {
-    await deleteModule("empresas", id, "Empresa eliminada exitosamente!");
-    const listadoEmpresas = await ssrEmpresaRequest(1);
-    empresasPagination(listadoEmpresas);
+    await deleteModule("examenes", id, "Exámen eliminado exitosamente!");
+    const listadoExamenes = await getAll("examenes/consulta");
+    examenesPagination(listadoExamenes);
+    listadoExamenesPagination.registros = listadoExamenes;
 }
 
 window.deleteExamen = deleteExamen;
