@@ -23,12 +23,45 @@ class AuditoriaController extends Controller {
 
     public function listarAuditoria() {
         $_auditoriaModel = new AuditoriaModel();
-
-        // ** Enrique
         $inners = $_auditoriaModel->listInner($this->arrayInner);
-        $lista = $_auditoriaModel->innerJoin($this->arraySelect, $inners, "auditoria");
 
-        return $this->retornarMensaje($lista);
+        if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
+            if (isset($_GET['start']) || isset($_GET['page'])) {
+                
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = isset($_GET['page']) ? $_GET['page'] : floor($_GET['start'] / $_GET['length']) + 1;
+                
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_auditoriaModel->limit([$primer_registro, $size]);
+            }
+            
+            if(isset($_GET['search'])) {
+                if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                    $_auditoriaModel->where('CONCAT(descripcion)', 'LIKE', "%{$_GET['search']['value']}%");
+                } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                    $_auditoriaModel->where('CONCAT(descripcion)', 'LIKE', "%{$_GET['search']}%");
+                }
+            }
+        }
+    
+        $lista = $_auditoriaModel->innerJoin($this->arraySelect, $inners, "auditoria");
+        $_auditoriaModel->resetValues();
+
+        if ( isset($_GET['search']) ) {
+            if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                $_auditoriaModel->setSelect('COUNT(*) AS total')->where('CONCAT(descripcion)', 'LIKE', "%{$_GET['search']}%");
+            } else if ( strlen($_GET['search']['value']) > 0) {
+                $_auditoriaModel->setSelect('COUNT(*) AS total')->where('CONCAT(descripcion)', 'LIKE', "%{$_GET['search']['value']}%");
+            } else {
+                $_auditoriaModel->setSelect('COUNT(*) AS total');
+            }
+        } else {
+            $_auditoriaModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_auditoriaModel->getAll();
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $lista);
     }
 
     public function listarAuditoriaPorFecha() {
