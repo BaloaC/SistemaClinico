@@ -86,13 +86,14 @@ class PacienteController extends Controller{
             }
 
             if (strlen($_GET['search']['value']) > 0) {
-                $_pacienteModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+                $_pacienteModel->where("CONCAT(nombre, ' ', apellidos, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
             }
         }
 
         $paciente = $_pacienteModel->getAll();
         $_pacienteModel->resetValues();
-
+        // echo '<pre>';
+        // var_dump($paciente);
         if ($paciente) {
             $resultado = array();
 
@@ -107,7 +108,7 @@ class PacienteController extends Controller{
             }
 
             if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
-                $_pacienteModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+                $_pacienteModel->setSelect('COUNT(*) AS total')->where("CONCAT(nombre, ' ', apellidos, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
             } else {
                 $_pacienteModel->setSelect('COUNT(*) AS total');
             }
