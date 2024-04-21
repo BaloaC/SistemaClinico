@@ -107,7 +107,7 @@
                 </tr>
                 <tr class="insumos-head">
                     <th colspan="3">Nombre del proveedor: <span id="proveedor">EMPRESAS TE QUIERO MUCHO C.A</span></th>
-                    <th colspan="3">Recibo de Compra ID: <span id="factura_id">13</spani></th>
+                    <th colspan="3">Nro. de Recibo de Compra: <span id="factura_id">13</spani></th>
                 </tr>
                 <tr class="insumos-head">
                     <th colspan="3">Monto total sin iva: <span id="monto_sin_iva">1111.23</span></th>

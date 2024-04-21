@@ -107,7 +107,7 @@
         <table class="tabla">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Nro. de Recibo</th>
                     <th>Fecha ocurrencia</th>
                     <th>Especialidad</th>
                     <th>Nombre paciente</th>

@@ -36,7 +36,7 @@
                                 <table id="insumos" class="table table-compact">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>Item</th>
                                             <th>Nombre</th>
                                             <th>Cantidad</th>
                                             <th>Cantidad Mínima</th>

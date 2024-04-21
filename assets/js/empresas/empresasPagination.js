@@ -1,15 +1,36 @@
 import concatItems from "../global/concatItems.js";
 import getAll from "../global/getAll.js";
 
-export const listadoEmpresasPagination = { registros: await getAll("empresas/consulta") };
-let registrosEmp = listadoEmpresasPagination.registros != typeof Array ? listadoEmpresasPagination.registros : undefined;
+let draw = 1;
+let start = 0;
+let timestamp = new Date().getTime();
 
 // Configurar la paginación
-const registrosPorPagina = 15;
+const registrosPorPagina = 5;
 let paginaActual = 1;
 let paginationInitializated = false;
 
-export function empresasPagination(registros) {
+const listadoEmpresas = await getAll(`empresas/consulta?draw=1&start=0&length=${registrosPorPagina}&search%5Bvalue%5D&search%5Bregex%5D=false&_=${timestamp}`, false);
+
+export const listadoEmpresasPagination = { registros: listadoEmpresas.data };
+export const buscarRegistrosObj = { valor: document.getElementById("inputSearch").value };
+
+let registrosEmp = listadoEmpresasPagination.registros != typeof Array ? { data: listadoEmpresasPagination.registros } : undefined;
+registrosEmp.recordsTotal = listadoEmpresas?.recordsTotal;
+registrosEmp.draw = listadoEmpresas?.draw;
+
+// Función para hacer las petición por SSR
+export async function ssrEmpresaRequest(numPage, search = "") {
+
+    draw++;
+    start = (numPage - 1) * registrosPorPagina;
+    const fetchRequest = await getAll(`empresas/consulta?draw=${draw}&start=${start}&length=${registrosPorPagina}&search%5Bvalue%5D${search}&search%5Bregex%5D=false&_=${timestamp}`, false);
+
+    return fetchRequest;
+}
+
+
+export function empresasPagination(registros, buscarRegistros = "") {
 
     if (registros?.length <= 0 || registros === undefined) {
 
@@ -69,7 +90,7 @@ export function empresasPagination(registros) {
         };
 
         // Función para mostrar los registros de la página actual
-        function mostrarRegistros() {
+        function mostrarRegistros(list) {
             // Obtener el número de registros a mostrar
             const inicio = (paginaActual - 1) * registrosPorPagina;
             const fin = inicio + registrosPorPagina;
@@ -78,8 +99,8 @@ export function empresasPagination(registros) {
             document.getElementById('card-container').innerHTML = '';
 
             // Mostrar los registros de la página actual
-            for (let i = inicio; i < fin && i < registrosEmp.length; i++) {
-                crearTarjeta(registrosEmp[i], plantilla, separadores);
+            for (let i = 0; i < fin && i < list.data.length; i++) {
+                crearTarjeta(list.data[i], plantilla, separadores);
             }
 
             // Actualizar los botones de paginación
@@ -88,7 +109,7 @@ export function empresasPagination(registros) {
 
         function crearBotones() {
             // Calcular el número de páginas
-            const numPaginas = Math.ceil(registrosEmp.length / registrosPorPagina);
+            const numPaginas = Math.ceil(registrosEmp.recordsTotal / registrosPorPagina);
 
             // Limpiar el contenedor de paginación
             document.getElementById('pagination-container').innerHTML = '';
@@ -150,9 +171,10 @@ export function empresasPagination(registros) {
             botonPagina.innerText = numeroPagina;
 
             // Agregar el evento de clic al botón de página
-            botonPagina.addEventListener('click', () => {
+            botonPagina.addEventListener('click', async () => {
+
                 paginaActual = numeroPagina;
-                mostrarRegistros();
+                mostrarRegistros(await ssrEmpresaRequest(paginaActual, `=${document.getElementById("inputSearch").value}`));
             });
 
             // Resaltar el botón de página actual
@@ -180,7 +202,7 @@ export function empresasPagination(registros) {
             }
 
             // Actualizar el botón de página siguiente
-            if (paginaActual === Math.ceil(registrosEmp.length / registrosPorPagina)) {
+            if (paginaActual === Math.ceil(registrosEmp.recordsTotal / registrosPorPagina)) {
                 botonPaginaSiguiente.setAttribute('disabled', 'disabled');
             } else {
                 botonPaginaSiguiente.removeAttribute('disabled');
@@ -199,20 +221,20 @@ export function empresasPagination(registros) {
         }
 
         // Mostrar los registros de la página actual
-        mostrarRegistros();
+        mostrarRegistros(registrosEmp, buscarRegistros);
         crearBotones();
 
-        // Seleccionar por defecto el primer botón
-        seleccionarPrimerBoton();
+        // Seleccinamos el primer botón para asegurarnos que siempre sea la primera pagina 
+        seleccionarPrimerBoton()
 
-        function botonAnteriorAction() {
+        async function botonAnteriorAction() {
             paginaActual--;
-            mostrarRegistros();
+            mostrarRegistros(await ssrEmpresaRequest(paginaActual, `=${document.getElementById("inputSearch").value}`));
         }
 
-        function botonSiguienteAction() {
+        async function botonSiguienteAction() {
             paginaActual++;
-            mostrarRegistros();
+            mostrarRegistros(await ssrEmpresaRequest(paginaActual, `=${document.getElementById("inputSearch").value}`));
         }
 
         if (paginationInitializated === false) {
@@ -242,4 +264,4 @@ export function empresasPagination(registros) {
     }
 }
 
-empresasPagination(registrosEmp);
+empresasPagination(registrosEmp, buscarRegistrosObj.valor);

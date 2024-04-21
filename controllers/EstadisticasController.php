@@ -12,6 +12,16 @@ class EstadisticasController extends Controller{
         return $this->view('estadisticas/index');
     }
 
+    public function pacientesByEdad() {
+        // $_pacienteModel = new PacienteModel();
+        // $paciente = $_pacienteModel->setSelect("SELECT SUM(CASE WHEN edad < 18 THEN 1 ELSE 0 END) AS menos18, SUM(CASE WHEN edad > 18 AND edad < 30 THEN 1 ELSE 0 END) AS mas18_30, SUM(CASE WHEN edad > 31 AND edad < 40 THEN 1 ELSE 0 END) AS mas31_40, SUM(CASE WHEN edad > 41 AND edad < 50 THEN 1 ELSE 0 END) AS mas41_50, SUM(CASE WHEN edad > 51 AND edad < 60 THEN 1 ELSE 0 END) AS mas51_60, SUM(CASE WHEN edad >= 60 THEN 1 ELSE 0 END) AS mayor60 FROM pacientes")->getAll();
+
+        // $respuesta = new Response('CORRECTO');
+        // $respuesta->setData($paciente);
+
+        // return $respuesta->json(200);
+    }
+
     public function allConsultas() { 
 
         $fechas = [];

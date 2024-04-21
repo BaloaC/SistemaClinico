@@ -6,8 +6,8 @@ async function updateCita(id) {
 
         const cita = await getById("citas", id);
 
-        $form.clave.value = cita.clave;
-        $form.clave.dataset.secondValue = cita.clave;
+        // $form.clave.value = cita.clave;
+        // $form.clave.dataset.secondValue = cita.clave;
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";

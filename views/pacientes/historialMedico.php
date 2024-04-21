@@ -451,7 +451,7 @@
                 </div>
                 <div id="cita1" class="collapse show" data-parent="#citaAccordion">
                     <div class="card-body">
-                        <p><b>ID:</b> <span id="cita_id"></span> <br>
+                        <p><b>Item:</b> <span id="cita_id"></span> <br>
                             <b>Nombre médico:</b> <span id="nombre_medico"></span> <br>
                             <b>Especialidad:</b> <span id="especialidad"></span> <br>
                             <b>Fecha cita:</b> <span id="fecha_cita"></span> <br>
@@ -476,7 +476,7 @@
                 </div>
                 <div id="consulta1" class="collapse show" data-parent="#consultaAccordion">
                     <div class="card-body">
-                        <p><b>ID:</b> <span id="consulta_id"></span> <br>
+                        <p><b>Item:</b> <span id="consulta_id"></span> <br>
                             <b>Nombre médico:</b> <span id="nombre_medico"></span> <br>
                             <b>Especialidad:</b> <span id="especialidad"></span> <br>
                             <b>Fecha consulta:</b> <span id="fecha_consulta"></span> <br>

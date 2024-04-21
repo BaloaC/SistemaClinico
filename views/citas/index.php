@@ -180,7 +180,7 @@
                         <form action="" id="act-cita" class="p-3 px-4">
                             <p class="text-secondary">Las citas se mantendrán como pendientes hasta que la clave otorgada por el seguro sea insertada</p>
                             <label for="clave">Clave</label>
-                            <input type="number" name="clave" id="clave" class="form-control">
+                            <input type="text" name="clave" id="clave" class="form-control">
 
                         </form>
                     </div>

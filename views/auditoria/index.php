@@ -77,7 +77,7 @@
                                 <table id="auditoria" class="table table-compact">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>Item</th>
                                             <th>Usuario</th>
                                             <th>Acción</th>
                                             <th>Descripción</th>

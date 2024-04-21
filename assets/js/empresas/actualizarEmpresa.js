@@ -3,7 +3,7 @@ import updateModule from "../global/updateModule.js";
 import getById from "../global/getById.js";
 import { select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
-import { empresasPagination, listadoEmpresasPagination } from "./empresasPagination.js";
+import { empresasPagination, ssrEmpresaRequest } from "./empresasPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { patterns } from "../global/patternsValidation.js";
 import showDefaultModalAct from "../global/showDefaultModalAct.js";
@@ -35,7 +35,7 @@ async function updateEmpresa(id) {
         $form.direccion.value = json.direccion;
         $form.direccion.dataset.secondValue = json.direccion;
 
-        
+
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
@@ -70,34 +70,39 @@ async function confirmUpdate() {
             seguro.push(seguro_id);
         })
 
-        if(seguro.length > 0) data.seguro = seguro;
+        if (seguro.length > 0) data.seguro = seguro;
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
         if (!isNaN(data.cod_rif) || data.cod_rif.length !== 1) throw { message: "El RIF ingresado es inválido" };
-        if (data.nombre.length < 6) throw { message: "El nombre de la empresa debe contener al menos 6 caracteres"};
+        if (data.nombre.length < 6) throw { message: "El nombre de la empresa debe contener al menos 6 caracteres" };
         if (!(patterns.nameCompany.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
 
+        const rif = { cod_rif: data.cod_rif, rif: data.rif };
 
         const parseData = deleteSecondValue("#act-empresa input, #act-empresa select", data);
+
+        if (parseData?.cod_rif || parseData?.rif) {
+            parseData.rif = `${rif.cod_rif}-${rif.rif}`;
+            delete parseData.cod_rif;
+        }
 
         // Validamos que se envie al menos una propiedad para hacer la petición
         if (Object.values(parseData)?.length > 1) {
 
             await updateModule(parseData, "empresa_id", "empresas", "act-empresa", "Empresa actualizada correctamente!");
-            const listadoEmpresas = await getAll("empresas/consulta");
+            const listadoEmpresas = await ssrEmpresaRequest(1);
             empresasPagination(listadoEmpresas);
-            listadoEmpresasPagination.registros = listadoEmpresas;
 
         } else {
-            
-            showDefaultModalAct({form: $form, successMessage: "Empresa actualizada correctamente!"});
+
+            showDefaultModalAct({ form: $form, successMessage: "Empresa actualizada correctamente!" });
         }
-       
+
         cleanValdiation("act-empresa");
         cleanValdiation("info-empresa");
-       
+
 
     } catch (error) {
         console.log(error);

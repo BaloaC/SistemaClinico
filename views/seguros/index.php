@@ -67,6 +67,7 @@
                                 <select name="cod_rif" id="cod-rif" class="me-2" >
                                     <option value="J">J</option>
                                     <option value="E">E</option>
+                                    <option value="G">G</option>
                                 </select>
                                 <input type="number" name="rif" class="form-control" data-validate="true" data-type="rif" data-max-length="9" >
                                 <small class="form-text col-12">El rif debe contener 9 digitos</small>
@@ -165,6 +166,7 @@
                                 <select name="cod_rif" id="cod-rif" class="me-2">
                                     <option value="J">J</option>
                                     <option value="E">E</option>
+                                    <option value="G">G</option>
                                 </select>
                                 <input type="text" name="rif" class="form-control" data-validate="true" data-type="rif" data-max-length="9" >
                                 <small class="form-text col-12">El rif debe contener 9 digitos</small>

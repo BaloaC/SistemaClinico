@@ -17,7 +17,7 @@
             <!-- Login container -->
             <div class="login-container col-12 col-md-10 d-flex align-items-center justify-content-center rounded">
                 <!-- Login content -->
-                <div class="row bg-light rounded-3 shadow w-75">
+                <div class="row bg-light rounded-3 shadow w-75 login-content">
                     <!--  Imagen lateral -->
                     <div class="col-4 col-md-6 border-end shadow-lg rounded-3 p-0">
                         <img class="w-100 h-100" src="<?php echo Url::to('assets/img/FONDO.jpg'); ?>" alt="Fondo">

@@ -1,4 +1,7 @@
 import getAll from "./getAll.js";
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
+
+const path = location.pathname.split('/');
 
 export function selectText(selectTexts, obj, defaultLabel = []) {
     let text = "";
@@ -14,7 +17,7 @@ export function selectText(selectTexts, obj, defaultLabel = []) {
     return text.slice(0, -3);
 }
 
-export default function dinamicSelect2({ obj = null, selectNames = null, selectValue = null, selectSelector = null, placeholder = null, parentModal = null, selectWidth = "45%", staticSelect = false, defaultLabel = [] }) {
+export default function dinamicSelect2({ obj = null, selectNames = null, selectValue = null, selectSelector = null, placeholder = null, parentModal = null, selectWidth = "45%", staticSelect = false, defaultLabel = [], ajax = false, ajaxUrl = "" }) {
     try {
         let selectObj = [];
 
@@ -25,13 +28,56 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
             }));
         }
 
+
+        let ajaxObj = {};
+
+        if (ajax && ajaxUrl) {
+            ajaxObj = {
+                url: `/${path[1]}/${ajaxUrl}`,
+                dataType: "json",
+                delay: 250,
+                headers: {
+                    "Content-type": "application/json; charset=utf-8",
+                    "Authorization": "Bearer " + Cookies.get("tokken")
+                },
+                data: function (params) {
+                    var query = {
+                        search: params.term,
+                        page: params.page || 1,
+                        select: true
+                    }
+
+                    // Query parameters will be ?search=[term]&page=[page]
+                    return query;
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    const data1 = data?.data.map(object => {
+                        const { especialidad_id: valorPropiedad1, nombre: valorPropiedad2 } = object;
+                        return { id: valorPropiedad1, text: valorPropiedad2 };
+                    });
+
+                    // Transforms the top-level key of the response object from 'data' to 'results'
+                    return {
+                        results: data1,
+                        pagination: {
+                            more: data1.length
+                        }
+                    };
+                }
+            }
+        }
+
         $(selectSelector).select2({
             width: selectWidth,
-            data: (selectObj.length === 0) ? obj : selectObj,
+            // data: (selectObj.length === 0) ? obj : selectObj,
             placeholder,
             theme: "bootstrap-5",
             language: "es",
-            dropdownParent: $(parentModal)
+            dropdownParent: $(parentModal),
+            ajax: ajaxObj
         })
 
         $(selectSelector).on("change", function () {

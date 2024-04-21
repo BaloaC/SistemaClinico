@@ -1,7 +1,7 @@
 const path = location.pathname.split('/');
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
-export default async function getAll(module) {
+export default async function getAll(module, data = true) {
     try {
 
         const options = {
@@ -16,7 +16,7 @@ export default async function getAll(module) {
 
         if (!json.code) throw { result: json };
 
-        return json.data;
+        return data === true ? json.data : json;
     } catch (error) {
         console.log(error);
         return [];
