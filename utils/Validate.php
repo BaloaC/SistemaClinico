@@ -153,7 +153,8 @@ class Validate extends BaseModel{
      * @return bool
      **/
     public function isToday($date, $bool, $format = 'Y-m-d') {
-
+        
+        date_default_timezone_set('America/Caracas');
         $hoy = date($format);
         $menor = $date < $hoy;
         
