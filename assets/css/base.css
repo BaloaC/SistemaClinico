@@ -28,11 +28,11 @@ h4 {
     font-size: 1.4rem !important;
 }
 
-form > input {
+form>input {
     width: 100%;
 }
 
-form > input[type="submit"] {
+form>input[type="submit"] {
     width: auto;
     display: block;
     margin: 25px auto;
@@ -69,7 +69,7 @@ i {
 
 input::-ms-clear,
 input::-ms-reveal {
-  display: none;
+    display: none;
 }
 
 .lt-spacing-1 {
@@ -82,6 +82,10 @@ input::-ms-reveal {
 
 .w-60 {
     width: 60%;
+}
+
+.object-fit-cover {
+    object-fit: cover !important;
 }
 
 .pt-4-5 {
@@ -266,19 +270,21 @@ span.select2.select2-container.select2-container--bootstrap-5 {
     padding: 0 !important;
 }
 
-.form-control.valid, .modal-body select:valid {
+.form-control.valid,
+.modal-body select:valid {
     border-color: green;
 }
 
-.form-control.invalid, .modal-body select:invalid {
+.form-control.invalid,
+.modal-body select:invalid {
     border-color: red;
 }
 
-.input-validation-error ~ .select2 .select2-selection {
+.input-validation-error~.select2 .select2-selection {
     border: 1px solid red;
-  }
+}
 
-.form-control + small {
+.form-control+small {
     color: red;
     opacity: 0;
     height: 0;
@@ -286,7 +292,7 @@ span.select2.select2-container.select2-container--bootstrap-5 {
     display: none;
 }
 
-.form-control.invalid + small {
+.form-control.invalid+small {
     opacity: 1;
     height: auto;
     /* margin-bottom: 20px; */
@@ -330,4 +336,15 @@ span.select2.select2-container.select2-container--bootstrap-5 {
 
 .btn:disabled {
     border-color: #00000000;
+}
+
+@media screen and (max-width: 576px) {
+    .fc-header-toolbar {
+        flex-direction: column;
+    }
+
+    .fc-toolbar-chunk {
+        margin-top: 1rem;
+    }
+
 }

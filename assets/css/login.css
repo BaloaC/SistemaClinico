@@ -97,7 +97,11 @@ img {
 
 @media screen and (max-width: 575px) {
     .login-container {
-        overflow: hidden;
-        height: 100%;
+        /* overflow: hidden; */
+        /* height: 100%; */
+    }
+
+    .login-content {
+        width: 100% !important;
     }
 }

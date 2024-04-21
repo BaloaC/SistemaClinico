@@ -2,31 +2,44 @@ import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import getAll from "../global/getAll.js";
 import { patterns } from "../global/patternsValidation.js";
-import { examenesPagination, listadoExamenesPagination } from "./examenesPagination.js";
+import { empresasPagination, ssrEmpresaRequest } from "./empresasPagination.js";
 
-async function addExamen() {
-    const $form = document.getElementById("info-examen"),
+async function addEmpresa() {
+    const $form = document.getElementById("info-empresa"),
         alert = document.querySelector(".alert")
 
     try {
         const formData = new FormData($form),
-            data = {};
+            data = {},
+            seguro = [];
 
         formData.forEach((value, key) => (data[key] = value));
 
-        if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        if (!data.nombre.length > 3) throw { message: "El nombre debe contener al menos 3 caracteres" };
-        if (!(patterns.nameExam.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        if (!(patterns.price.test(data.precio_examen))) throw { message: "El nombre ingresado no es válido" };
+        let seguros = formData.getAll("seguro[]");
+        seguros.forEach(e => {
+            const seguro_id = {
+                seguro_id: e
+            }
+            seguro.push(seguro_id);
+        })
 
-        const registroExitoso = await addModule("examenes", "info-examen", data, "Exámen registrado exitosamente!");
+        if (!$form.checkValidity()) { $form.reportValidity(); return; }
+        if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
+        if (!isNaN(data.cod_rif) || data.cod_rif.length !== 1) throw { message: "El RIF ingresado es inválido" };
+        if (data.nombre.length < 6) throw { message: "El nombre de la empresa debe contener al menos 6 caracteres"};
+        if (!(patterns.nameCompany.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
+
+        data.seguro = seguro;
+        data.rif = data.cod_rif + "-" + data.rif;
+
+        const registroExitoso = await addModule("empresas", "info-empresa", data, "Empresa registrada exitosamente!");
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
-        const listadoExamenes = await getAll("examenes/consulta");
-        cleanValdiation("info-examen");
-        examenesPagination(listadoExamenes);
-        listadoExamenesPagination.registros = listadoExamenes;
+        const listadoEmpresas = await ssrEmpresaRequest(1);
+        cleanValdiation("info-empresa")
+        empresasPagination(listadoEmpresas);
 
     } catch (error) {
         console.log(error);
@@ -36,10 +49,8 @@ async function addExamen() {
     }
 }
 
-window.addExamen = addExamen;
-document.getElementsByName('tipo')[0].addEventListener('keydown', (event) => {
-    if (event.key == 'Enter') {
-        event.preventDefault();
-        addExamen();
-    }
+window.addEmpresa = addEmpresa;
+document.getElementById("info-empresa").addEventListener('submit', event => {
+    event.preventDefault();
+    addEmpresa();
 })

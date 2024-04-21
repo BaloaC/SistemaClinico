@@ -1,21 +1,36 @@
 import concatItems from "../global/concatItems.js";
 import getAll from "../global/getAll.js";
-import { removeAddAccountant, removeAddAnalist, removeAddMD } from "../global/validateRol.js";
-import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
+let draw = 1;
+let start = 0;
+let timestamp = new Date().getTime();
 
-export const listadoExamenesPagination = { registros: await getAll("examenes/consulta") };
-let registrosExm = listadoExamenesPagination.registros != typeof Array ? listadoExamenesPagination.registros : undefined;
-removeAddAccountant();
-removeAddAnalist();
-removeAddMD();
 // Configurar la paginación
-const registrosPorPagina = 15;
+const registrosPorPagina = 5;
 let paginaActual = 1;
 let paginationInitializated = false;
 
+const listadoEmpresas = await getAll(`empresas/consulta?draw=1&start=0&length=${registrosPorPagina}&search%5Bvalue%5D&search%5Bregex%5D=false&_=${timestamp}`, false);
 
-export function examenesPagination(registros) {
+export const listadoEmpresasPagination = { registros: listadoEmpresas.data };
+export const buscarRegistrosObj = { valor: document.getElementById("inputSearch").value };
+
+let registrosEmp = listadoEmpresasPagination.registros != typeof Array ? { data: listadoEmpresasPagination.registros } : undefined;
+registrosEmp.recordsTotal = listadoEmpresas?.recordsTotal;
+registrosEmp.draw = listadoEmpresas?.draw;
+
+// Función para hacer las petición por SSR
+export async function ssrEmpresaRequest(numPage, search = "") {
+
+    draw++;
+    start = (numPage - 1) * registrosPorPagina;
+    const fetchRequest = await getAll(`empresas/consulta?draw=${draw}&start=${start}&length=${registrosPorPagina}&search%5Bvalue%5D${search}&search%5Bregex%5D=false&_=${timestamp}`, false);
+
+    return fetchRequest;
+}
+
+
+export function empresasPagination(registros, buscarRegistros = "") {
 
     if (registros?.length <= 0 || registros === undefined) {
 
@@ -26,7 +41,7 @@ export function examenesPagination(registros) {
         return;
     } else {
 
-        registrosExm = registros;
+        registrosEmp = registros;
 
         document.getElementById('boton-pagina-siguiente').classList.remove("d-none");
         document.getElementById('boton-pagina-anterior').classList.remove("d-none");
@@ -35,6 +50,7 @@ export function examenesPagination(registros) {
             // Crear el elemento de la tarjeta
             const tarjeta = document.createElement('div');
             tarjeta.classList.add('card-container', 'col-xl-4', 'col-lg-4', 'col-md-6', 'col-sm-12');
+            tarjeta.setAttribute("onclick", `getEmpresa(${registro.empresa_id})`);
             tarjeta.setAttribute("data-bs-toggle", "modal");
             tarjeta.setAttribute("data-bs-target", "#modalInfo");
 
@@ -45,16 +61,6 @@ export function examenesPagination(registros) {
                 if (separadores[p1] || Array.isArray(registro[p1])) {
                     return concatItems(registro[p1], separadores[p1].propiedad, separadores[p1].mensajeVacio);
                 } else {
-                    if (p1 === "tipo") {
-                        switch (registro[p1]) {
-                            case "1": return "Ecografía";
-                            case "2": return "Laboratorio";
-                            case "3": return "Ultrasonido";
-                            default: return "Desconocido";
-                        }
-                    } else if (p1 === "precio_examen") {
-                        return registro[p1] !== null ? registro[p1] : "No se ha agreagado el precio";
-                    }
                     return registro[p1];
                 }
             });
@@ -64,23 +70,27 @@ export function examenesPagination(registros) {
         }
 
         const plantilla = `
-        <div class="card overflow-hidden">
-          <div class="overlay-box">
-            <h3 class="mt-3 mb-0 text-white">\${nombre}</h3>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item"><span class="mb-0">Tipo</span> <b class="text-muted">\${tipo}</b></li>
-            <li class="list-group-item"><span class="mb-0">Precio del exámen</span> <b class="text-muted">\${precio_examen}</b></li>
-            <li class="list-group-item"><span class="mb-0"><button type="button" id="btn-actualizar" class="btn btn-primary ${Cookies.get("rol") == 5 ? "d-none" : ""}" onclick="updateExamen(\${examen_id})" data-bs-toggle="modal" data-bs-target="#modalAct">Actualizar</button></span><button id="btn-eliminar" class="btn btn-danger ${Cookies.get("rol") == 5 ? "d-none" : ""}" onclick="deleteExamen(\${examen_id})"  data-bs-toggle="modal" data-bs-target="#modalDelete">Eliminar</button></li>
-          </ul>
-        </div>
-      `;
+            <div class="card overflow-hidden">
+              <div class="overlay-box">
+                <h3 class="mt-3 mb-0 text-white">\${nombre}</h3>
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><span class="mb-0">Rif</span> <b class="text-muted">\${rif}</b></li>
+                <li class="list-group-item"><span class="mb-0">Seguro</span> <b class="text-muted">\${seguro}</b></li>
+              </ul>
+            </div>
+          `;
 
         // Objeto con los nombres de las propiedades y los separadores para la función `concatItems()`
-        const separadores = {};
+        const separadores = {
+            seguro: {
+                propiedad: 'nombre',
+                mensajeVacio: 'No posee ningún seguro'
+            }
+        };
 
         // Función para mostrar los registros de la página actual
-        function mostrarRegistros() {
+        function mostrarRegistros(list) {
             // Obtener el número de registros a mostrar
             const inicio = (paginaActual - 1) * registrosPorPagina;
             const fin = inicio + registrosPorPagina;
@@ -89,8 +99,8 @@ export function examenesPagination(registros) {
             document.getElementById('card-container').innerHTML = '';
 
             // Mostrar los registros de la página actual
-            for (let i = inicio; i < fin && i < registrosExm.length; i++) {
-                crearTarjeta(registrosExm[i], plantilla, separadores);
+            for (let i = 0; i < fin && i < list.data.length; i++) {
+                crearTarjeta(list.data[i], plantilla, separadores);
             }
 
             // Actualizar los botones de paginación
@@ -99,7 +109,7 @@ export function examenesPagination(registros) {
 
         function crearBotones() {
             // Calcular el número de páginas
-            const numPaginas = Math.ceil(registrosExm.length / registrosPorPagina);
+            const numPaginas = Math.ceil(registrosEmp.recordsTotal / registrosPorPagina);
 
             // Limpiar el contenedor de paginación
             document.getElementById('pagination-container').innerHTML = '';
@@ -161,9 +171,11 @@ export function examenesPagination(registros) {
             botonPagina.innerText = numeroPagina;
 
             // Agregar el evento de clic al botón de página
-            botonPagina.addEventListener('click', () => {
+            botonPagina.addEventListener('click', async () => {
                 paginaActual = numeroPagina;
-                mostrarRegistros();
+
+
+                mostrarRegistros(await ssrEmpresaRequest(paginaActual, `=${document.getElementById("inputSearch").value}`));
             });
 
             // Resaltar el botón de página actual
@@ -179,7 +191,6 @@ export function examenesPagination(registros) {
             // Verificar si los botones de página anterior y siguiente existen en la página
             const botonPaginaAnterior = document.getElementById('boton-pagina-anterior');
             const botonPaginaSiguiente = document.getElementById('boton-pagina-siguiente');
-
             if (!botonPaginaAnterior || !botonPaginaSiguiente) {
                 return;
             }
@@ -192,7 +203,7 @@ export function examenesPagination(registros) {
             }
 
             // Actualizar el botón de página siguiente
-            if (paginaActual === Math.ceil(registrosExm.length / registrosPorPagina)) {
+            if (paginaActual === Math.ceil(registrosEmp.recordsTotal / registrosPorPagina)) {
                 botonPaginaSiguiente.setAttribute('disabled', 'disabled');
             } else {
                 botonPaginaSiguiente.removeAttribute('disabled');
@@ -210,22 +221,21 @@ export function examenesPagination(registros) {
             }
         }
 
-
         // Mostrar los registros de la página actual
-        mostrarRegistros();
+        mostrarRegistros(registrosEmp, buscarRegistros);
         crearBotones();
 
-        // Seleccionar por defecto el primer botón
-        seleccionarPrimerBoton();
+        // Seleccinamos el primer botón para asegurarnos que siempre sea la primera pagina 
+        seleccionarPrimerBoton()
 
-        function botonAnteriorAction() {
+        async function botonAnteriorAction() {
             paginaActual--;
-            mostrarRegistros();
+            mostrarRegistros(await ssrEmpresaRequest(paginaActual, `=${document.getElementById("inputSearch").value}`));
         }
 
-        function botonSiguienteAction() {
+        async function botonSiguienteAction() {
             paginaActual++;
-            mostrarRegistros();
+            mostrarRegistros(await ssrEmpresaRequest(paginaActual, `=${document.getElementById("inputSearch").value}`));
         }
 
         if (paginationInitializated === false) {
@@ -255,4 +265,4 @@ export function examenesPagination(registros) {
     }
 }
 
-examenesPagination(registrosExm);
+empresasPagination(registrosEmp, buscarRegistrosObj.valor);

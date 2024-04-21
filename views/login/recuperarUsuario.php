@@ -17,10 +17,10 @@
             <!-- Login container -->
             <div class="login-container col-12 col-md-10 d-flex align-items-center justify-content-center rounded">
                 <!-- Login content -->
-                <div class="row bg-light rounded-3 shadow w-75">
+                <div class="row bg-light rounded-3 shadow w-75 login-content">
                     <!--  Imagen lateral -->
                     <div class="col-4 col-md-6 border-end shadow-lg rounded-3 p-0">
-                        <img class="w-100 h-100" src="<?php echo Url::to('assets/img/forgot-password.webp'); ?>" alt="Fondo">
+                        <img class="w-100 h-100 object-fit-cover" src="<?php echo Url::to('assets/img/forgot-password.webp'); ?>" alt="Fondo">
                     </div>
                     <!-- Login information -->
                     <div class="col-md-6 col-8">
@@ -38,13 +38,13 @@
                                 <form id="login-form" class="login-form row position-relative">
                                     <div id="form-user">
                                         <label>Introduzca su usuario</label>
-                                        <input class="form-control" type="text" name="usuario" id="usuario" data-validate="true" data-type="username" data-max-length="16" required>
+                                        <input class="form-control w-100" type="text" name="usuario" id="usuario" data-validate="true" data-type="username" data-max-length="16" required>
                                         <small class="form-text">El nombre de usuario es obligatorio</small>
                                         <div class="text-center"><input type="button" id="siguiente" class="btn btn-primary my-5" value="Siguiente"></div>
                                     </div>
                                     <div id="form-recovery">
                                         <label>Seleccione un método de recuperación</label>
-                                        <select name="metodo" id="select-metodo" required>
+                                        <select name="metodo" id="select-metodo" class="w-100" required>
                                             <option value="0">Seleccione una opción</option>
                                             <option value="1">Pin</option>
                                             <option value="2">Preguntas de Seguridad</option>

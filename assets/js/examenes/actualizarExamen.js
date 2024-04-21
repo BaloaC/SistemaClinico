@@ -1,32 +1,46 @@
 import deleteSecondValue from "../global/deleteSecondValue.js";
 import updateModule from "../global/updateModule.js";
 import getById from "../global/getById.js";
+import { select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
-import { examenesPagination, listadoExamenesPagination } from "./examenesPagination.js";
+import { empresasPagination, ssrEmpresaRequest } from "./empresasPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { patterns } from "../global/patternsValidation.js";
 import showDefaultModalAct from "../global/showDefaultModalAct.js";
 
-async function updateExamen(id) {
+async function updateEmpresa(id) {
 
-    const $form = document.getElementById("act-examen");
+    const $form = document.getElementById("act-empresa");
 
     try {
 
-        const json = await getById("examenes", id);
+        const json = await getById("empresas", id);
+
+        //Separar el rif
+        let $rif = json.rif.split('-');
+
+        //Recorrer las lista de opciones y seleccionar la que coincida (static select)
+        for (const option of $form.cod_rif.options) {
+            if (option.value === $rif[0]) {
+                option.defaultSelected = true;
+            }
+        }
 
         //Establecer el option con los datos del usuario
         $form.nombre.value = json.nombre;
         $form.nombre.dataset.secondValue = json.nombre;
-        $form.tipo.value = json.tipo;
-        $form.tipo.dataset.secondValue = json.tipo;
-        $form.precio_examen.dataset.secondValue = json.precio_examen;
-        $form.precio_examen.value = json.precio_examen;
+        $form.rif.value = $rif[1];
+        $form.rif.dataset.secondValue = $rif[1];
+        $form.cod_rif.dataset.secondValue = $rif[0];
+        $form.direccion.value = json.direccion;
+        $form.direccion.dataset.secondValue = json.direccion;
+
         
+
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
         $inputId.value = id;
-        $inputId.name = "examen_id";
+        $inputId.name = "empresa_id";
         $form.appendChild($inputId);
 
     } catch (error) {
@@ -35,46 +49,62 @@ async function updateExamen(id) {
     }
 }
 
-window.updateExamen = updateExamen;
+window.updateEmpresa = updateEmpresa;
 
 async function confirmUpdate() {
-    const $form = document.getElementById("act-examen"),
-        alert = document.getElementById("actAlert");
+    const $form = document.getElementById("act-empresa"),
+        $alert = document.getElementById("actAlert");
 
     try {
         const formData = new FormData($form),
+            seguro = [],
             data = {};
 
         formData.forEach((value, key) => (data[key] = value));
 
-        if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        if (!data.nombre.length > 3) throw { message: "El nombre debe contener al menos 3 caracteres"};
-        if (!(patterns.nameExam.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-        if (!(patterns.price.test(data.precio_examen))) throw { message: "El nombre ingresado no es válido" };
+        let seguros = formData.getAll("seguro[]");
+        seguros.forEach(e => {
+            const seguro_id = {
+                seguro_id: e
+            }
+            seguro.push(seguro_id);
+        })
 
-        const parseData = deleteSecondValue("#act-examen input, #act-examen select", data);
+        if(seguro.length > 0) data.seguro = seguro;
+
+        if (!$form.checkValidity()) { $form.reportValidity(); return; }
+        if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
+        if (!isNaN(data.cod_rif) || data.cod_rif.length !== 1) throw { message: "El RIF ingresado es inválido" };
+        if (data.nombre.length < 6) throw { message: "El nombre de la empresa debe contener al menos 6 caracteres"};
+        if (!(patterns.nameCompany.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
+
+        data.rif = data.cod_rif + "-" + data.rif;
+
+        const parseData = deleteSecondValue("#act-empresa input, #act-empresa select", data);
 
         // Validamos que se envie al menos una propiedad para hacer la petición
         if (Object.values(parseData)?.length > 1) {
 
-            await updateModule(parseData, "examen_id", "examenes", "act-examen", "Examen actualizado correctamente!");
-            const listadoExamenes = await getAll("examenes/consulta");
-            examenesPagination(listadoExamenes);
-            listadoExamenesPagination.registros = listadoExamenes;
+            await updateModule(parseData, "empresa_id", "empresas", "act-empresa", "Empresa actualizada correctamente!");
+            const listadoEmpresas = await ssrEmpresaRequest(1); 
+            empresasPagination(listadoEmpresas);
+
         } else {
 
-            showDefaultModalAct({form: $form, successMessage: "Examen actualizado correctamente!"});
+            showDefaultModalAct({form: $form, successMessage: "Empresa actualizada correctamente!"});
         }
-
-        cleanValdiation("act-examen");
-        cleanValdiation("info-examen");
+       
+        cleanValdiation("act-empresa");
+        cleanValdiation("info-empresa");
+       
 
     } catch (error) {
         console.log(error);
-        alert.classList.remove("d-none");
-        alert.classList.add("alert-danger");
+        $alert.classList.remove("d-none");
+        $alert.classList.add("alert-danger");
         let message = error.message || error.result.message;
-        alert.textContent = message;
+        $alert.textContent = message;
 
         setTimeout(() => {
             $alert.classList.add("d-none");
@@ -83,7 +113,18 @@ async function confirmUpdate() {
 }
 
 window.confirmUpdate = confirmUpdate;
-document.getElementById("act-examen").addEventListener('submit', (event) => {
+document.getElementById("act-empresa").addEventListener('submit', (event) => {
     event.preventDefault();
     confirmUpdate();
 })
+
+// select2OnClick({
+//     selectSelector: "#s-seguro-update",
+//     selectValue: "seguro_id",
+//     selectNames: ["nombre"],
+//     module: "seguros/consulta",
+//     parentModal: "#modalAct",
+//     placeholder: "Seleccione un seguro",
+//     selectWidth: "100%",
+//     multiple: true
+// });

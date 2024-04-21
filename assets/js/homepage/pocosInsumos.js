@@ -20,10 +20,10 @@ $(document).ready( async function() {
                 data: "nombre"
             },
             {
-                data: "cantidad"
+                data: "cantidad_min"
             },
             {
-                data: "cantidad_min"
+                data: "cantidad"
             }
         ],
         pageLength: 10,

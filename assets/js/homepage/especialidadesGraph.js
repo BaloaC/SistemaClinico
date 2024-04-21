@@ -59,7 +59,7 @@ cursor.lineY.set("visible", false);
 // Create axes
 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
 let xRenderer = am5xy.AxisRendererX.new(root, {
-    minGridDistance: 30,
+    minGridDistance: 0,
 });
 xRenderer.labels.template.setAll({
     rotation: -90,
@@ -73,6 +73,7 @@ export let xAxis = chart.xAxes.push(
         maxDeviation: 0.3,
         categoryField: "meses",
         renderer: xRenderer,
+        range: { maxAbove: 2 },
         tooltip: am5.Tooltip.new(root, {}),
     })
 );
@@ -80,6 +81,7 @@ export let xAxis = chart.xAxes.push(
 let yAxis = chart.yAxes.push(
     am5xy.ValueAxis.new(root, {
         maxDeviation: 0.3,
+        // range: { maxAbove: 2 },
         // min: 0,
         // strictMinMax: true,
         // maxPrecision: 0,
@@ -124,6 +126,7 @@ series.columns.template.adapters.add("stroke", function (stroke, target) {
     return chart.get("colors").getIndex(series.columns.indexOf(target));
 });
 
+
 export let title = chart.children.unshift(am5.Label.new(root, {
     text: "Consultas realizadas",
     fontSize: 25,
@@ -131,7 +134,7 @@ export let title = chart.children.unshift(am5.Label.new(root, {
     textAlign: "center",
     x: am5.percent(50),
     centerX: am5.percent(50),
-    paddingTop: 0,
+    paddingTop: -20,
     paddingBottom: 0,
     dy: 1,
     id: "titleChart"

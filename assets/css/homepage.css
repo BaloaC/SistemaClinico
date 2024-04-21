@@ -212,3 +212,31 @@ a:hover {
     color: #000;
     text-align: center;
 }
+
+@media screen and (max-width: 576px) {
+    header h2 {
+        font-size: 1.5rem !important;
+    }
+
+    header h1 {
+        font-size: 2rem;
+        letter-spacing: 1rem !important;
+    }
+
+    .welcome-text {
+        font-size: 2rem !important;
+        letter-spacing: 0.5rem;
+    }
+
+    .fc-header-toolbar {
+        flex-direction: column;
+    }
+
+    .fc-toolbar-chunk {
+        margin-top: 1rem;
+    }
+
+    .insumoHome-container {
+        margin-top: 3.5rem;
+    }
+}
