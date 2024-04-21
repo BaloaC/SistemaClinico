@@ -97,6 +97,8 @@ class MedicamentoController extends Controller{
         $_medicamentoModel = new MedicamentoModel();
 
         if (isset($_GET['start']) || isset($_GET['search'])) {
+            // echo '<pre>';
+            // var_dump($_GET['search']);
             if (isset($_GET['start'])) {
                 $size = isset($_GET['length']) ? $_GET['length'] : 10;
                 $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
@@ -107,17 +109,18 @@ class MedicamentoController extends Controller{
             }
 
             if (strlen($_GET['search']['value']) > 0) {
-                $_medicamentoModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+                $_medicamentoModel->where('CONCAT(medicamento.nombre_medicamento, especialidad.nombre)', 'LIKE', "%{$_GET['search']['value']}%");
             }
         }
 
         $inners = $_medicamentoModel->listInner($this->arrayInner);
         $lista = $_medicamentoModel->where('medicamento.estatus_med', '=', '1')->innerJoin($this->arraySelect, $inners, "medicamento");
-        
+        // echo '<pre>';
+        // var_dump($_medicamentoModel);
         $_medicamentoModel->resetValues();
 
         if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
-            $_medicamentoModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            $_medicamentoModel->setSelect('COUNT(*) AS total')->where("CONCAT(medicamento.nombre_medicamento, especialidad.nombre)", 'LIKE', "%{$_GET['search']['value']}%");
         } else {
             $_medicamentoModel->setSelect('COUNT(*) AS total');
         }

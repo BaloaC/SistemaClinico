@@ -180,7 +180,49 @@ class CitaController extends Controller {
     public function listarCitas() {
 
         $_citaModel = new CitaModel();
-        $lista = $_citaModel->where('estatus_cit', '!=', '2')->getAll();
+        $_citaModel->where('estatus_cit', '!=', '2');
+
+        if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
+            if (isset($_GET['start']) || isset($_GET['page'])) {
+                
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = isset($_GET['page']) ? $_GET['page'] : floor($_GET['start'] / $_GET['length']) + 1;
+                
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_citaModel->limit([$primer_registro, $size]);
+            }
+            
+            if(isset($_GET['search'])) {
+                if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                    $_citaModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+                } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                    $_citaModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+                }
+            }
+        }
+
+        $lista = $_citaModel->getAll();
+
+        $especialidades =  $_citaModel->getAll();
+        $_citaModel->resetValues();
+
+        if ( isset($_GET['search']) ) {
+            if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                $_citaModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+            } else if ( strlen($_GET['search']['value']) > 0) {
+                $_citaModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            } else {
+                $_citaModel->setSelect('COUNT(*) AS total');
+            }
+        } else {
+            $_citaModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_citaModel->where('estatus_esp', '=', '1')->getAll();
+                
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $especialidades);
+
         // $inners = $_citaModel->listInner($this->arrayInner);
         // $lista = $_citaModel->where('estatus_cit', '!=', '2')->innerJoin($this->arraySelect, $inners, "cita");
 
