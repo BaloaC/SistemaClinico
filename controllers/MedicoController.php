@@ -39,7 +39,32 @@ class MedicoController extends Controller {
     public function listarMedicos() {
 
         $_medicoModel = new MedicoModel();
-        $medico2 = $_medicoModel->where('estatus_med', '=', '1')->getAll();
+        $_medicoModel->where('estatus_med', '=', '1');
+        
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_medicoModel->limit([$primer_registro, $size]);
+            }
+
+            if (strlen($_GET['search']['value']) > 0) {
+                $_medicoModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            }
+        }
+
+        $medico2 = $_medicoModel->getAll();
+        $_medicoModel->resetValues();
+
+        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+            $_medicoModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        } else {
+            $_medicoModel->setSelect('COUNT(*) AS total');
+        }
+        $total_registros = $_medicoModel->where('estatus_med', '=', '1')->getAll();
 
         if ($medico2) {
             $resultado = array();
@@ -48,7 +73,8 @@ class MedicoController extends Controller {
                 $resultado[] = MedicoHelpers::obtenerRelaciones($medicos, false);
             }
 
-            Helpers::retornarMensaje($resultado, $resultado);
+            Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $resultado);
+            // Helpers::retornarMensaje($resultado, $resultado);
         } else {
             $respuesta = new Response('NOT_FOUND');
             return $respuesta->json(200);

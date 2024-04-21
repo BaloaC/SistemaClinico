@@ -1,6 +1,7 @@
 <?php
 
 include_once "./services/examen/ExamenValidaciones.php";
+include_once './services/Helpers.php';
 
 class ExamenController extends Controller{
 
@@ -42,13 +43,40 @@ class ExamenController extends Controller{
     public function listarExamen(){
 
         $_examenModel = new ExamenModel();
-        $lista = $_examenModel->where('estatus_exa', '=', '1')->getAll();
+        $_examenModel->where('estatus_exa', '=', '1');
 
-        $mensaje = (count($lista) > 0);     
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($lista);
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
 
-        return $respuesta->json(200);
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_examenModel->limit([$primer_registro, $size]);
+            }
+
+            if (strlen($_GET['search']['value']) > 0) {
+                $_examenModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            }
+        }
+
+        $lista = $_examenModel->getAll();
+        $_examenModel->resetValues();
+
+        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+            $_examenModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        } else {
+            $_examenModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_examenModel->where('estatus_exa', '=', '1')->getAll();
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $lista);
+
+        // $mensaje = (count($lista) > 0);     
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        // $respuesta->setData($lista);
+
+        // return $respuesta->json(200);
     }
 
     public function listarExamenPorId($examen_id){

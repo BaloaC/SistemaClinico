@@ -1,7 +1,6 @@
 <?php
 
 include_once './services/seguros/empresa/EmpresaValidaciones.php';
-
 include_once './services/seguros/empresa/EmpresaService.php';
 include_once './services/Helpers.php';
 
@@ -59,7 +58,24 @@ class EmpresaController extends Controller{
     public function listarEmpresas(){
 
         $_empresaModel = new EmpresaModel();
-        $empresa = $_empresaModel->where('estatus_emp','=','1')->getAll();
+        $_empresaModel->where('estatus_emp','=','1');
+        
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_empresaModel->limit([$primer_registro, $size]);
+            }
+
+            if (strlen($_GET['search']['value']) > 0) {
+                $_empresaModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            }
+        }
+        
+        $empresa = $_empresaModel->getAll();
         
         if ($empresa) {
             $resultado = array();
@@ -75,9 +91,20 @@ class EmpresaController extends Controller{
                 $resultado[] = $empresas;
             }
 
-            $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
-            $respuesta->setData($resultado);
-            return $respuesta->json($resultado ? 200 : 404);
+            $_empresaModel = new EmpresaModel();
+            $_empresaModel->resetValues();
+            if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                $_empresaModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            } else {
+                $_empresaModel->setSelect('COUNT(*) AS total');
+            }
+    
+            $total_registros = $_empresaModel->where('estatus_emp', '=', '1')->getAll();
+            Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $resultado);
+
+            // $respuesta = new Response($resultado ? 'CORRECTO' : 'NOT_FOUND');
+            // $respuesta->setData($resultado);
+            // return $respuesta->json($resultado ? 200 : 404);
 
         } else {
             $respuesta = new Response('NOT_FOUND');

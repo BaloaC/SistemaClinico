@@ -33,8 +33,6 @@ class AntecedenteMedicoController extends Controller {
         global $isEnabledAudit;
         $isEnabledAudit = 'antecedentes';
 
-        global $isEnabledAudit;
-        $isEnabledAudit = 'antecedente médico';
         $_POST = json_decode(file_get_contents('php://input'), true);
         $campoId = array("tipo_antecedente_id","paciente_id");
         $validarAntecedente = new Validate;

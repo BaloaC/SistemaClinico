@@ -689,6 +689,7 @@ CREATE TABLE  IF NOT EXISTS `factura_medico` (
     `sumatoria_consultas_naturales` FLOAT NOT NULL,
     `acumulado_medico` FLOAT NOT NULL,
     `pago_total` float DEFAULT NULL,
+    `factura_medico` FLOAT NOT NULL,
     `fecha_pago` date DEFAULT NULL,
     'fecha_emision' TIMESTAMP NOT NULL,
     `pacientes_seguro` int(11) DEFAULT NULL,
@@ -708,6 +709,7 @@ CREATE TABLE  IF NOT EXISTS `factura_medico` (
 CREATE TABLE  IF NOT EXISTS `factura_seguro` (
     `factura_seguro_id` int(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
     `seguro_id` int(11) NOT NULL,
+    `nro_control` int(11) NULL,
     `mes` varchar(10) NOT NULL,
     `fecha_ocurrencia` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
     `fecha_vencimiento` date NOT NULL,
