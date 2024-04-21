@@ -1,6 +1,7 @@
 import { select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import createDataTable from "../global/createDataTable.js";
 
 const path = location.pathname.split('/');
 
@@ -90,7 +91,6 @@ async function filtrarAuditoria(e) {
             { data: "descripcion" },
             { data: "fecha_creacion" }
         ],
-        order: [[4, 'desc']]
     });
 }
 
@@ -102,26 +102,21 @@ async function createAuditoria(onload = false) {
 
 addEventListener("DOMContentLoaded", e => {
 
-    let auditoria = $('#auditoria').DataTable({
+    const auditoriaColumns = [
+        { data: "auditoria_id" },
+        { data: "nombre_usuario" },
+        { data: "accion" },
+        { data: "descripcion" },
+        { data: "fecha_creacion" }
+    ];
 
-        bAutoWidth: false,
-        language: {
-            url: `/${path[1]}/assets/libs/datatables/dataTables.spanish.json`
-        },
-        ajax: {
-            url: `/${path[1]}/auditoria/consulta/`,
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
-            }
-        },
-        columns: [
-
-            { data: "auditoria_id" },
-            { data: "nombre_usuario" },
-            { data: "accion" },
-            { data: "descripcion" },
-            { data: "fecha_creacion" }
-        ]
+    createDataTable({
+        id: "#auditoria",
+        columns: auditoriaColumns,
+        url: `/${path[1]}/auditoria/consulta/`,
+        serverSide: true,
+        processing: true,
+        order: [[4, 'desc']]
     });
 
     select2OnClick({
