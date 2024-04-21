@@ -359,6 +359,7 @@ Router::get("/estadisticas", EstadisticasController::class . '@index');
 Router::get("/allConsultas", EstadisticasController::class . '@allConsultas');
 Router::get("/allConsultasMedicos", EstadisticasController::class . '@allConsultasMedicos');
 Router::get("/allConsultasEspecialidades", EstadisticasController::class . '@allConsultasEspecialidades');
+Router::get("/pacientesByEdad", EstadisticasController::class . '@pacientesByEdad');
 
 // Laboratorios - Vistas
 Router::get("/laboratorios", LaboratoriosController::class . '@index');

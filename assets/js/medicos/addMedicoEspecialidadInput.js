@@ -27,6 +27,8 @@ const handleModalOpen = async () => {
             selectNames: ["nombre"],
             parentModal: "#modalReg",
             placeholder: "Seleccione una especialidad",
+            ajax: true,
+            ajaxUrl: "especialidades/consulta"
         });
 
         $("#s-especialidad").on("change", () => { 
