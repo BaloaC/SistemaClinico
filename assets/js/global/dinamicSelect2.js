@@ -70,15 +70,23 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
             }
         }
 
-        $(selectSelector).select2({
+        const config = {
             width: selectWidth,
-            // data: (selectObj.length === 0) ? obj : selectObj,
+            data: (selectObj.length === 0) ? obj : selectObj,
             placeholder,
             theme: "bootstrap-5",
             language: "es",
             dropdownParent: $(parentModal),
             ajax: ajaxObj
-        })
+        }
+
+        if (!ajax) {
+            delete config.ajax;
+        } else {
+            delete config.data;
+        }
+
+        $(selectSelector).select2(config)
 
         $(selectSelector).on("change", function () {
 

@@ -27,7 +27,7 @@
                     <!-- Contenido de Bienvenida -->
                     <div class="col-12 col-lg-5 order-lg-first order-last flex-column p-5">
                         <div class="text-start">
-                            <h1 class="py-4 lt-spacing-1 fs-7">¡Bienvenido!</h1>
+                            <h1 class="py-4 lt-spacing-1 fs-7 welcome-text">¡Bienvenido!</h1>
                             <h2 class="mb-3 text-transparent">@usuario</h2>
                         </div>
                         <select class="w-60 form-select form-select-lg" id="s-especialidades" name="especialidades" data-active="0">
@@ -131,8 +131,8 @@
                                     <div class="bg-img mb-4">
                                         <img src="<?php echo Url::to('assets/img/factura.png') ?>" alt="facturacionAlt">
                                     </div>
-                                    <h2 class="text-light">Facturación</h2>
-                                    <p class="text-light text-lightblue">Acceso a los módulos de las facturas de <a href="<?php echo Url::base() . "/factura/compra" ?>">compra</a> ,
+                                    <h2 class="text-light">Recibos</h2>
+                                    <p class="text-light text-lightblue">Acceso a los módulos de los recibos de <a href="<?php echo Url::base() . "/factura/compra" ?>">compra</a> ,
                                         de <a href="<?php echo Url::base() . "/factura/seguro" ?>">seguro</a>, de <a href="<?php echo Url::base() . "/factura/consulta" ?>">consulta</a>
                                         y de <a href="<?php echo Url::base() . "/factura/medico" ?>">médicos</a></p>
                                     </a>
@@ -152,119 +152,6 @@
                 </div>
             </div>
         </footer>
-        <section class="service-style1-area">
-            <div class="round-shape wow slideInLeft animated" style="visibility: visible; animation-duration: 5500ms; animation-delay: 100ms; animation-name: slideInLeft;">
-                <img class="zoom-fade" src="assets/images/shape/shape-round.png" alt="">
-            </div>
-            <div class="container">
-                <div class="sec-title text-center">
-                    <h1 class="text-light py-5 mb-3">Todos nuestros servicios</h1>
-                </div>
-                <div class="row">
-                    <div class="col-xl-4 col-lg-6" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
-                        <div class="single-service-style1 text-center">
-                            <div class="icon-holder">
-                                <img src="<?php echo Url::to('assets/img/services1.jpg') ?>" alt="services1">
-                            </div>
-                            <div class="title-holder">
-                                <img src="<?php echo Url::to('assets/img/vendaje.png') ?>" alt="icon">
-                                <h3 class="service-title"><a>Especialidades</a></h3>
-                                <div class="inner-text">
-                                    <p>Consultas médicas generales, familiares e internas y atención personalizada en distintas especialidades.</p>
-                                    <div class="dropdown" style="display: inline-block;" data-bs-hover="dropdown">
-                                        <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Ver todas las especialidades
-                                        </a>
-                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="especialidadDropdown" style="background-color: #f5f5f5;">
-                                            <!-- <p class="dropdown-item">Cardiología - Psicología - Pediatría</p>
-                                            <p class="dropdown-item">Dermatología - Traumatología - Nefrología</p>
-                                            <p class="dropdown-item">Nefrología - Gastroenterología - Ginecología</p>
-                                            <p class="dropdown-item">Otorrinolanringología - Oncología - Urología</p>
-                                            <p class="dropdown-item">Neurocirugía - Nutricionista</p> -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-6" style="visibility: visible; animation-duration: 1500ms; animation-delay: 0ms; animation-name: fadeInUp;">
-                        <div class="single-service-style1 text-center">
-                            <div class="icon-holder">
-                                <img src="<?php echo Url::to('assets/img/services2.jpg') ?>" alt="services2">
-                            </div>
-                            <div class="title-holder">
-                                <img src="<?php echo Url::to('assets/img/bisturi.png') ?>" alt="icon">
-                                <h3 class="service-title"><a>Cirugía</a></h3>
-                                <div class="inner-text">
-                                    <p>Intervenciones quirúrgicas pediátrica y de manos realizadas por especialistas altamente capacitados.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4 col-lg-6">
-                        <div class="single-service-style1 text-center">
-                            <div class="icon-holder">
-                                <img src="<?php echo Url::to('assets/img/services3.jpg') ?>" alt="services3">
-                            </div>
-                            <div class="title-holder">
-                                <img src="<?php echo Url::to('assets/img/laboratorio.png') ?>" alt="icon">
-                                <h3 class="service-title"><a href="<?php echo Url::base() . "/laboratorios" ?>">Laboratorio</a></h3>
-                                <div class="inner-text">
-                                    <p>Análisis clínicos y pruebas diagnósticas para un enfoque integral en el cuidado de la salud de nuestros pacientes.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4 col-lg-6">
-                        <div class="single-service-style1 text-center">
-                            <div class="icon-holder">
-                                <img src="<?php echo Url::to('assets/img/services4.jpg') ?>" alt="services4">
-                            </div>
-                            <div class="title-holder">
-                                <img src="<?php echo Url::to('assets/img/rayos-x.png') ?>" alt="icon">
-                                <h3 class="service-title"><a>RX</a></h3>
-                                <div class="inner-text">
-                                    <p>Nuestro consultorio ofrece el servicio de RX para diagnosticar fracturas óseas y enfermedades pulmonares que ayuda a detectar diferentes condiciones médicas para un tratamiento efectivo.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4 col-lg-6">
-                        <div class="single-service-style1 text-center">
-                            <div class="icon-holder">
-                                <img src="<?php echo Url::to('assets/img/services5.jpg') ?>" alt="services5">
-                            </div>
-                            <div class="title-holder">
-                                <img src="<?php echo Url::to('assets/img/terapia-fisica.png') ?>" alt="icon">
-                                <h3 class="service-title"><a>Terapia</a></h3>
-                                <div class="inner-text">
-                                    <p>Ofrecemos servicios de terapia avanzada, como la Ozonoterapia, Hidroterapia en piscina y Cámara hiperbárica. Nuestras terapias están diseñadas para mejorar la calidad de vida y la salud de nuestros pacientes.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4 col-lg-6">
-                        <div class="single-service-style1 text-center">
-                            <div class="icon-holder">
-                                <img src="<?php echo Url::to('assets/img/services6.jpg') ?>" alt="services6">
-                            </div>
-                            <div class="title-holder">
-                                <img src="<?php echo Url::to('assets/img/ultrasonido.png') ?>" alt="icon">
-                                <h3 class="service-title"><a>Ecosonograma</a></h3>
-                                <div class="inner-text">
-                                    <p>Nuestro consultorio ofrece servicios de ecosonogramas especializados para diagnósticos precisos en diversas áreas del cuerpo. Contamos con tecnología de última generación para brindarle resultados de alta calidad a nuestros pacientes.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
     </main>
 
     <?php include constant('PATH_VIEWS') . '/partials/footer.php'; ?>
