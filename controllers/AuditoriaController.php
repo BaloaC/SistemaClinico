@@ -69,17 +69,17 @@ class AuditoriaController extends Controller {
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarAuditoria = new Validate;
 
-        if ($validarAuditoria->isDate($_POST['fecha_inicio']) || $validarAuditoria->isDate($_POST['fecha_fin'])) {
+        if ($validarAuditoria->isDate($_GET['fecha_inicio']) || $validarAuditoria->isDate($_GET['fecha_fin'])) {
             $respuesta = new Response('FECHA_INVALIDA');
             return $respuesta->json(400);
-        } else if ($_POST['fecha_inicio'] > $_POST['fecha_fin']) {
+        } else if ($_GET['fecha_inicio'] > $_GET['fecha_fin']) {
             $respuesta = new Response(false, 'La fecha de inicio no puede ser mayor a la fecha final');
             return $respuesta->json(400);
         } else {
 
             $_auditoriaModel = new AuditoriaModel();
             $inners = $_auditoriaModel->listInner($this->arrayInner);
-            $_auditoriaModel->whereDate('DATE(auditoria.fecha_creacion)', $_POST['fecha_inicio'], $_POST['fecha_fin']);
+            $_auditoriaModel->whereDate('DATE(auditoria.fecha_creacion)', $_GET['fecha_inicio'], $_GET['fecha_fin']);
 
             if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
                 if (isset($_GET['start']) || isset($_GET['page'])) {
@@ -127,7 +127,7 @@ class AuditoriaController extends Controller {
 
         // ** Enrique
         $inners = $_auditoriaModel->listInner($this->arrayInner);
-        $_auditoriaModel->where('auditoria.accion', '=', $_POST['accion']);
+        $_auditoriaModel->where('auditoria.accion', '=', $_GET['accion']);
         
         if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
             if (isset($_GET['start']) || isset($_GET['page'])) {
