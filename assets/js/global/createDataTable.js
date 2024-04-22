@@ -3,13 +3,15 @@ import getById from "./getById.js";
 
 const path = location.pathname.split('/');
 
-export default function createDataTable({ id, columns, url = null, data = null, columnDefs = null, searchPanes = null, dom = null, format = undefined, formatDataCustom = false, formatDataCustomUrl = null, formatDataCustomId = null, serverSide = false, processing = false, order = null, paging = true, info = true, scrollX = false, scrollY = null, scrollCollapse = false }) {
+export default function createDataTable({ id, columns, url = null, data = null, columnDefs = null, searchPanes = null, dom = null, format = undefined, formatDataCustom = false, formatDataCustomUrl = null, formatDataCustomId = null, serverSide = false, processing = false, order = null, paging = true, info = true, scrollX = false, scrollY = null, scrollCollapse = false, requestType = "GET", requestData = {} }) {
 
     const handlerCodeFalseAjax = (code) => document.getElementById(id.replace("#","")).dataset.codeFalseAjax = code;
     handlerCodeFalseAjax(false);
 
     const ajax = (url !== null) ? {
         url,
+        type: requestType,
+        data: requestData,
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + Cookies.get("tokken"));
         },

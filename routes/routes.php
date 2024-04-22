@@ -14,8 +14,8 @@ Router::get("/welcome", welcomeController::class . '@index');
 
 //Auditoria - API
 Router::get('/auditoria/consulta', AuditoriaController::class . '@listarAuditoria', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("1","2") )]);
-Router::post('/auditoria/fecha', AuditoriaController::class . '@listarAuditoriaPorFecha', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("1","2") )]);
-Router::post('/auditoria/accion', AuditoriaController::class . '@listarAuditoriaPorAccion', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("1","2") )]);
+Router::get('/auditoria/fecha', AuditoriaController::class . '@listarAuditoriaPorFecha', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("1","2") )]);
+Router::get('/auditoria/accion', AuditoriaController::class . '@listarAuditoriaPorAccion', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("1","2") )]);
 Router::get('/auditoria/:id', AuditoriaController::class . '@listarAuditoriaPorUsuario', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("1","2") )]);
 Router::get('/exportarBd', AuditoriaController::class . '@exportarBd');
 
