@@ -52,10 +52,10 @@ class ConsultaSeguroService {
         }
     }
 
-    public static function listarConsultasSeguros() {
+    public static function listarConsultasSeguros($consultasSeguros) {
 
-        $_consultaSeguroModel = new ConsultaSeguroModel();
-        $consultasSeguros = $_consultaSeguroModel->where('estatus_con', '!=', 2)->getAll();
+        // $_consultaSeguroModel = new ConsultaSeguroModel();
+        // $consultasSeguros = $_consultaSeguroModel->where('estatus_con', '!=', 2)->getAll();
         $listaConsultas = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultasSeguros);
         
         $consultas = [];

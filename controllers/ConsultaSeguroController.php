@@ -98,7 +98,6 @@ class ConsultaSeguroController extends Controller{
 
     public function listarConsultaSeguro(){
 
-        $consultasSeguros = ConsultaSeguroService::listarconsultasSeguros();
         $_consultaSeguroModel = new ConsultaSeguroModel();
 
         if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
@@ -114,22 +113,26 @@ class ConsultaSeguroController extends Controller{
 
             if(isset($_GET['search'])) {
                 if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
-                    $_consultaSeguroModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+                    $_consultaSeguroModel->where('CONCAT(consulta_id, consulta_seguro_id)', 'LIKE', "%{$_GET['search']['value']}%");
                 } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
-                    $_consultaSeguroModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+                    $_consultaSeguroModel->where('CONCAT(consulta_id, consulta_seguro_id)', 'LIKE', "%{$_GET['search']}%");
                 }
             }
 
             // if (strlen($_GET['search']['value']) > 0) {
-            //     $_consultaSeguroModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            //     $_consultaSeguroModel->where('CONCAT(consulta_id, consulta_seguro_id)', 'LIKE', "%{$_GET['search']['value']}%");
             // }
         }
 
+        $consultasSeguros = $_consultaSeguroModel->where('estatus_con', '!=', 2)->getAll();
+        $consultas_seguros = ConsultaSeguroService::listarconsultasSeguros($consultasSeguros);
+        $_consultaSeguroModel->resetValues();
+
         if ( isset($_GET['search']) ) {
             if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
-                $_consultaSeguroModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+                $_consultaSeguroModel->setSelect('COUNT(*) AS total')->where('CONCAT(consulta_id, consulta_seguro_id)', 'LIKE', "%{$_GET['search']}%");
             } else if ( strlen($_GET['search']['value']) > 0) {
-                $_consultaSeguroModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+                $_consultaSeguroModel->setSelect('COUNT(*) AS total')->where('CONCAT(consulta_id, consulta_seguro_id)', 'LIKE', "%{$_GET['search']['value']}%");
             } else {
                 $_consultaSeguroModel->setSelect('COUNT(*) AS total');
             }
@@ -143,7 +146,7 @@ class ConsultaSeguroController extends Controller{
         //     $_consultaSeguroModel->setSelect('COUNT(*) AS total');
         // }
 
-        $total_registros = $_consultaSeguroModel->where('estatus_con', '=', '1')->getAll();
+        $total_registros = $_consultaSeguroModel->where('estatus_con', '!=', '2')->getAll();
         // Comprobamos que haya una lista
         $hayResultados = count($consultasSeguros) > 0;
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $consultasSeguros);
