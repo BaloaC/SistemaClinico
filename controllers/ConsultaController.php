@@ -113,9 +113,9 @@ class ConsultaController extends Controller {
 
             if(isset($_GET['search'])) {
                 if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
-                    $_consultaModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+                    $_consultaModel->where("CONCAT(consulta_id, ' ',observaciones)", 'LIKE', "%{$_GET['search']['value']}%");
                 } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
-                    $_consultaModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+                    $_consultaModel->where("CONCAT(consulta_id, ' ',observaciones)", 'LIKE', "%{$_GET['search']}%");
                 }
             }
 
@@ -139,9 +139,9 @@ class ConsultaController extends Controller {
 
         if ( isset($_GET['search']) ) {
             if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
-                $_consultaModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+                $_consultaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta_id, ' ',observaciones)", 'LIKE', "%{$_GET['search']}%");
             } else if ( strlen($_GET['search']['value']) > 0) {
-                $_consultaModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+                $_consultaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta_id, ' ',observaciones)", 'LIKE', "%{$_GET['search']['value']}%");
             } else {
                 $_consultaModel->setSelect('COUNT(*) AS total');
             }
