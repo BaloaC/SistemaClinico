@@ -36,27 +36,31 @@ class SeguroController extends Controller{
         $_seguroModel = new SeguroModel();
         $_seguroModel->where('estatus_seg', '=', '1');
         
-        if (isset($_GET['start']) || isset($_GET['search'])) {
-            if (isset($_GET['start'])) {
+        if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
+            if (isset($_GET['start']) || isset($_GET['page'])) {
                 $size = isset($_GET['length']) ? $_GET['length'] : 10;
-                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+                $pagina_actual = isset($_GET['page']) ? $_GET['page'] : floor($_GET['start'] / $_GET['length']) + 1;
 
                 $ultimo_registro = $pagina_actual * $size;
                 $primer_registro = $ultimo_registro - $size;
                 $_seguroModel->limit([$primer_registro, $size]);
             }
 
-            if (strlen($_GET['search']['value']) > 0) {
-                $_seguroModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            if(isset($_GET['search'])) {
+                if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                    $_seguroModel->where("CONCAT(nombre, ' ', rif)", 'LIKE', "%{$_GET['search']['value']}%");
+                } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                    $_seguroModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+                }
             }
+
+            // if (strlen($_GET['search']['value']) > 0) {
+            //     $_seguroModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            // }
         }
 
         $seguros = $_seguroModel->getAll();
         $seguro_lista = array();
-
-        // foreach ($seguro as $seguros) {
-        //     $seguro_lista[] = SeguroService::ListarTodos($seguros);
-        // }
 
         foreach ($seguros as $seguro) {
             $_seguroExamenModel = new SeguroExamenModel();
@@ -69,16 +73,26 @@ class SeguroController extends Controller{
 
         $_seguroModel->resetValues();
 
-        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
-            $_seguroModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        if ( isset($_GET['search']) ) {
+            if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                $_seguroModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+            } else if ( strlen($_GET['search']['value']) > 0) {
+                $_seguroModel->setSelect('COUNT(*) AS total')->where("CONCAT(nombre, ' ', rif)", 'LIKE', "%{$_GET['search']['value']}%");
+            } else {
+                $_seguroModel->setSelect('COUNT(*) AS total');
+            }
         } else {
             $_seguroModel->setSelect('COUNT(*) AS total');
         }
 
+        // if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+        //     $_seguroModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        // } else {
+        //     $_seguroModel->setSelect('COUNT(*) AS total');
+        // }
+
         $total_registros = $_seguroModel->where('estatus_seg', '=', '1')->getAll();
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $seguro_lista);
-        // $mensaje = ($seguro_lista != null);
-        // SeguroHelpers::retornarMensaje($mensaje, $seguro_lista);
     }
 
     public function listarSeguroPorId($seguro_id){

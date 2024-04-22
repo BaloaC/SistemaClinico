@@ -45,7 +45,7 @@ class MedicoController extends Controller {
             if (isset($_GET['start'])  || isset($_GET['page'])) {
 
                 $size = isset($_GET['length']) ? $_GET['length'] : 10;
-                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+                $pagina_actual = isset($_GET['page']) ? $_GET['page'] : floor($_GET['start'] / $_GET['length']) + 1;
 
                 $ultimo_registro = $pagina_actual * $size;
                 $primer_registro = $ultimo_registro - $size;
