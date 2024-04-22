@@ -222,21 +222,7 @@ class CitaController extends Controller {
         $total_registros = $_citaModel->where('estatus_esp', '=', '1')->getAll();
                 
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $especialidades);
-
-        // $inners = $_citaModel->listInner($this->arrayInner);
-        // $lista = $_citaModel->where('estatus_cit', '!=', '2')->innerJoin($this->arraySelect, $inners, "cita");
-
-        // $lista_citas = [];
-        // foreach ($lista as $cita) {
-
-        //     if ($cita->tipo_cita == 2) {
-        //         $lista_citas[] = CitasHelpers::innerCita($cita);
-        //     } else {
-        //         $lista_citas[] = $cita;
-        //     }
-        // }
-
-        Helpers::retornarMensajeListado($lista);
+        // Helpers::retornarMensajeListado($lista);
     }
 
     public function listarCitaPorId($cita_id) {

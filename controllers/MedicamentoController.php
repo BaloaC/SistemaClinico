@@ -96,39 +96,44 @@ class MedicamentoController extends Controller{
     public function listarMedicamentos(){
         $_medicamentoModel = new MedicamentoModel();
 
-        if (isset($_GET['start']) || isset($_GET['search'])) {
-            // echo '<pre>';
-            // var_dump($_GET['search']);
-            if (isset($_GET['start'])) {
+        if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ) {
+            if (isset($_GET['start'])  || isset($_GET['page'])) {
+
                 $size = isset($_GET['length']) ? $_GET['length'] : 10;
-                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+                $pagina_actual = isset($_GET['page']) ? $_GET['page'] : floor($_GET['start'] / $_GET['length']) + 1;
 
                 $ultimo_registro = $pagina_actual * $size;
                 $primer_registro = $ultimo_registro - $size;
                 $_medicamentoModel->limit([$primer_registro, $size]);
             }
 
-            if (strlen($_GET['search']['value']) > 0) {
-                $_medicamentoModel->where('CONCAT(medicamento.nombre_medicamento, especialidad.nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            if(isset($_GET['search'])) {
+                if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                    $_medicamentoModel->where('CONCAT(medicamento.nombre_medicamento, especialidad.nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+                } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                    $_medicamentoModel->where('CONCAT(medicamento.nombre_medicamento)', 'LIKE', "%{$_GET['search']}%");
+                }
             }
         }
 
         $inners = $_medicamentoModel->listInner($this->arrayInner);
         $lista = $_medicamentoModel->where('medicamento.estatus_med', '=', '1')->innerJoin($this->arraySelect, $inners, "medicamento");
-        // echo '<pre>';
-        // var_dump($_medicamentoModel);
         $_medicamentoModel->resetValues();
 
-        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
-            $_medicamentoModel->setSelect('COUNT(*) AS total')->where("CONCAT(medicamento.nombre_medicamento, especialidad.nombre)", 'LIKE', "%{$_GET['search']['value']}%");
+        if ( isset($_GET['search']) ) {
+            if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                $_medicamentoModel->setSelect('COUNT(*) AS total')->where('CONCAT(medicamento.nombre_medicamento)', 'LIKE', "%{$_GET['search']}%");
+            } else if ( strlen($_GET['search']['value']) > 0) {
+                $_medicamentoModel->setSelect('COUNT(*) AS total')->where('CONCAT(medicamento.nombre_medicamento, especialidad.nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            } else {
+                $_medicamentoModel->setSelect('COUNT(*) AS total');
+            }
         } else {
             $_medicamentoModel->setSelect('COUNT(*) AS total');
         }
 
         $total_registros = $_medicamentoModel->where('estatus_med', '=', '1')->getAll();
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $lista);
-        // $mensaje = (count($lista) > 0);
-        // helpers::retornarMensaje($mensaje, $lista);
     }
 
     public function listarMedicamentosPorEspecialidad($especialidad_id){
