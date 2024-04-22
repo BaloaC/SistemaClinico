@@ -273,7 +273,7 @@ addEventListener("DOMContentLoaded", async e => {
             "orderable": false,
             "data": null,
             "defaultContent": ''
-        },
+        }, { data: "consulta_id" },
         {
             data: null,
             render: function (data, type, row) {
@@ -607,6 +607,6 @@ addEventListener("DOMContentLoaded", async e => {
         // dom: "Plfrtip",
         serverSide: true,
         processing: true,
-        
+
     });
 });

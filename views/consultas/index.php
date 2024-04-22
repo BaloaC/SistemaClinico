@@ -32,10 +32,11 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="consultas" class="table table-compact">
+                                <table id="consultas" data-code-false-ajax="null" class="table table-compact">
                                     <thead>
                                         <tr>
                                             <th>Detalles</th>
+                                            <th>Item</th>
                                             <th>Cédula Paciente</th>
                                             <th>Nombre Paciente</th>
                                             <th>Nombre Médico</th>
