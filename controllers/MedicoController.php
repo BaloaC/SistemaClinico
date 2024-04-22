@@ -41,8 +41,9 @@ class MedicoController extends Controller {
         $_medicoModel = new MedicoModel();
         $_medicoModel->where('estatus_med', '=', '1');
         
-        if (isset($_GET['start']) || isset($_GET['search'])) {
-            if (isset($_GET['start'])) {
+        if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
+            if (isset($_GET['start'])  || isset($_GET['page'])) {
+
                 $size = isset($_GET['length']) ? $_GET['length'] : 10;
                 $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
 
@@ -50,20 +51,40 @@ class MedicoController extends Controller {
                 $primer_registro = $ultimo_registro - $size;
                 $_medicoModel->limit([$primer_registro, $size]);
             }
-
-            if (strlen($_GET['search']['value']) > 0) {
-                $_medicoModel->where("CONCAT(nombre, ' ', apellidos, ' ', direccion, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
+            
+            if(isset($_GET['search'])) {
+                if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                    $_medicoModel->where("CONCAT(nombre, ' ', apellidos, ' ', direccion, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
+                } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                    $_medicoModel->where("CONCAT(nombre, ' ', apellidos)", 'LIKE', "%{$_GET['search']}%");
+                }
             }
+
+            // if (strlen($_GET['search']['value']) > 0) {
+            //     $_medicoModel->where("CONCAT(nombre, ' ', apellidos, ' ', direccion, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
+            // }
         }
 
         $medico2 = $_medicoModel->getAll();
         $_medicoModel->resetValues();
 
-        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
-            $_medicoModel->setSelect('COUNT(*) AS total')->where("CONCAT(nombre, ' ', apellidos, ' ', direccion, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
+        if ( isset($_GET['search']) ) {
+            if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                $_medicoModel->setSelect('COUNT(*) AS total')->where("CONCAT(nombre, ' ', apellidos)", 'LIKE', "%{$_GET['search']}%");
+            } else if ( strlen($_GET['search']['value']) > 0) {
+                $_medicoModel->setSelect('COUNT(*) AS total')->where("CONCAT(nombre, ' ', apellidos, ' ', direccion, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
+            } else {
+                $_medicoModel->setSelect('COUNT(*) AS total');
+            }
         } else {
             $_medicoModel->setSelect('COUNT(*) AS total');
         }
+
+        // if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+        //     $_medicoModel->setSelect('COUNT(*) AS total')->where("CONCAT(nombre, ' ', apellidos, ' ', direccion, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
+        // } else {
+        //     $_medicoModel->setSelect('COUNT(*) AS total');
+        // }
         $total_registros = $_medicoModel->where('estatus_med', '=', '1')->getAll();
 
         if ($medico2) {
@@ -74,7 +95,6 @@ class MedicoController extends Controller {
             }
 
             Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $resultado);
-            // Helpers::retornarMensaje($resultado, $resultado);
         } else {
             $respuesta = new Response('NOT_FOUND');
             return $respuesta->json(200);
