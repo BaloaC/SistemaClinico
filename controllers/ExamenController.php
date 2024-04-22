@@ -45,8 +45,8 @@ class ExamenController extends Controller{
         $_examenModel = new ExamenModel();
         $_examenModel->where('estatus_exa', '=', '1');
 
-        if (isset($_GET['start']) || isset($_GET['search'])) {
-            if (isset($_GET['start'])) {
+        if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
+            if (isset($_GET['start']) || isset($_GET['page'])) {
                 $size = isset($_GET['length']) ? $_GET['length'] : 10;
                 $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
 
@@ -55,19 +55,39 @@ class ExamenController extends Controller{
                 $_examenModel->limit([$primer_registro, $size]);
             }
 
-            if (strlen($_GET['search']['value']) > 0) {
-                $_examenModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            if(isset($_GET['search'])) {
+                if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                    $_examenModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+                } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                    $_examenModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+                }
             }
+
+            // if (strlen($_GET['search']['value']) > 0) {
+            //     $_examenModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            // }
         }
 
         $lista = $_examenModel->getAll();
         $_examenModel->resetValues();
 
-        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
-            $_examenModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        if ( isset($_GET['search']) ) {
+            if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                $_examenModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+            } else if ( strlen($_GET['search']['value']) > 0) {
+                $_examenModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            } else {
+                $_examenModel->setSelect('COUNT(*) AS total');
+            }
         } else {
             $_examenModel->setSelect('COUNT(*) AS total');
         }
+
+        // if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+        //     $_examenModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        // } else {
+        //     $_examenModel->setSelect('COUNT(*) AS total');
+        // }
 
         $total_registros = $_examenModel->where('estatus_exa', '=', '1')->getAll();
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $lista);

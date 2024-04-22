@@ -59,10 +59,6 @@ class MedicoController extends Controller {
                     $_medicoModel->where("CONCAT(nombre, ' ', apellidos)", 'LIKE', "%{$_GET['search']}%");
                 }
             }
-
-            // if (strlen($_GET['search']['value']) > 0) {
-            //     $_medicoModel->where("CONCAT(nombre, ' ', apellidos, ' ', direccion, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
-            // }
         }
 
         $medico2 = $_medicoModel->getAll();
@@ -80,11 +76,6 @@ class MedicoController extends Controller {
             $_medicoModel->setSelect('COUNT(*) AS total');
         }
 
-        // if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
-        //     $_medicoModel->setSelect('COUNT(*) AS total')->where("CONCAT(nombre, ' ', apellidos, ' ', direccion, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
-        // } else {
-        //     $_medicoModel->setSelect('COUNT(*) AS total');
-        // }
         $total_registros = $_medicoModel->where('estatus_med', '=', '1')->getAll();
 
         if ($medico2) {
