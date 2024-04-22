@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `auditoria` (
     `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
     `usuario_id` int(11) NOT NULL,
     `accion` varchar(45) NOT NULL,
-    `descripcion` varchar(45) NOT NULL,
+    `descripcion` varchar(255) NOT NULL,
     PRIMARY KEY (`auditoria_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
