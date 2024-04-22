@@ -118,6 +118,7 @@ class MedicamentoController extends Controller{
 
         $inners = $_medicamentoModel->listInner($this->arrayInner);
         $lista = $_medicamentoModel->where('medicamento.estatus_med', '=', '1')->innerJoin($this->arraySelect, $inners, "medicamento");
+        
         $_medicamentoModel->resetValues();
 
         if ( isset($_GET['search']) ) {
@@ -132,8 +133,11 @@ class MedicamentoController extends Controller{
             $_medicamentoModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_medicamentoModel->where('estatus_med', '=', '1')->getAll();
-        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $lista);
+        // $total_registros = $_medicamentoModel->where('medicamento.estatus_med', '=', '1')->getAll();
+        $total_registros = $_medicamentoModel->where('medicamento.estatus_med', '=', '1')->innerJoin($this->arraySelect, $inners, "medicamento");
+        
+        // var_dump($total_registros);
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($total_registros), $lista);
     }
 
     public function listarMedicamentosPorEspecialidad($especialidad_id){
