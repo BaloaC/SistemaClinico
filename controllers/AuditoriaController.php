@@ -44,10 +44,10 @@ class AuditoriaController extends Controller {
                 }
             }
         }
-    
+
         $lista = $_auditoriaModel->innerJoin($this->arraySelect, $inners, "auditoria");
         $_auditoriaModel->resetValues();
-
+        
         if ( isset($_GET['search']) ) {
             if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
                 $_auditoriaModel->setSelect('COUNT(*) AS total')->where('CONCAT(descripcion)', 'LIKE', "%{$_GET['search']}%");
@@ -104,6 +104,9 @@ class AuditoriaController extends Controller {
             $id = $_auditoriaModel->innerJoin($this->arraySelect, $inners, "auditoria");
             $_auditoriaModel->resetValues();
 
+            $inners = $_auditoriaModel->listInner($this->arrayInner);
+            $_auditoriaModel->whereDate('DATE(auditoria.fecha_creacion)', $_GET['fecha_inicio'], $_GET['fecha_fin']);
+
             if ( isset($_GET['search']) ) {
                 if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
                     $_auditoriaModel->setSelect('COUNT(*) AS total')->where('CONCAT(descripcion)', 'LIKE', "%{$_GET['search']}%");
@@ -115,9 +118,9 @@ class AuditoriaController extends Controller {
             } else {
                 $_auditoriaModel->setSelect('COUNT(*) AS total');
             }
-
-            $total_registros = $_auditoriaModel->getAll();
-            Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $id);
+            
+            $total_registros = $_auditoriaModel->innerJoin($this->arraySelect, $inners, "auditoria");
+            Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($total_registros), $id);
         }
     }
 
@@ -125,7 +128,6 @@ class AuditoriaController extends Controller {
         $_POST = json_decode(file_get_contents('php://input'), true);
         $_auditoriaModel = new AuditoriaModel();
 
-        // ** Enrique
         $inners = $_auditoriaModel->listInner($this->arrayInner);
         $_auditoriaModel->where('auditoria.accion', '=', $_GET['accion']);
         
@@ -152,6 +154,9 @@ class AuditoriaController extends Controller {
         $auditoria = $_auditoriaModel->innerJoin($this->arraySelect, $inners, "auditoria");
         $_auditoriaModel->resetValues();
 
+        $inners = $_auditoriaModel->listInner($this->arrayInner);
+        $_auditoriaModel->where('auditoria.accion', '=', $_GET['accion']);
+
         if ( isset($_GET['search']) ) {
             if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
                 $_auditoriaModel->setSelect('COUNT(*) AS total')->where('CONCAT(descripcion)', 'LIKE', "%{$_GET['search']}%");
@@ -164,15 +169,14 @@ class AuditoriaController extends Controller {
             $_auditoriaModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_auditoriaModel->getAll();
-        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $auditoria);
+        $total_registros = $_auditoriaModel->innerJoin($this->arraySelect, $inners, "auditoria");
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($total_registros), $auditoria);
     }
 
     public function listarAuditoriaPorUsuario($usuario_id) {
         $_POST = json_decode(file_get_contents('php://input'), true);
         $_auditoriaModel = new AuditoriaModel();
 
-        // ** Enrique
         $inners = $_auditoriaModel->listInner($this->arrayInner);
         $_auditoriaModel->where('auditoria.usuario_id', '=', $usuario_id);
 
@@ -199,6 +203,8 @@ class AuditoriaController extends Controller {
         $auditoria = $_auditoriaModel->innerJoin($this->arraySelect, $inners, "auditoria");
         $_auditoriaModel->resetValues();
 
+        $inners = $_auditoriaModel->listInner($this->arrayInner);
+        $_auditoriaModel->where('auditoria.usuario_id', '=', $usuario_id);
         if ( isset($_GET['search']) ) {
             if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
                 $_auditoriaModel->setSelect('COUNT(*) AS total')->where('CONCAT(descripcion)', 'LIKE', "%{$_GET['search']}%");
@@ -211,8 +217,8 @@ class AuditoriaController extends Controller {
             $_auditoriaModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_auditoriaModel->getAll();
-        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $auditoria);
+        $total_registros = $_auditoriaModel->innerJoin($this->arraySelect, $inners, "auditoria");
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($total_registros), $auditoria);
     }
 
     public function exportarBd() {

@@ -90,8 +90,7 @@ class EspecialidadController extends Controller{
             $_especialidadModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_especialidadModel->where('estatus_esp', '=', '1')->getAll();
-                
+        $total_registros = $_especialidadModel->where('estatus_esp', '=', '1')->getAll();       
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $especialidades);
     }
 

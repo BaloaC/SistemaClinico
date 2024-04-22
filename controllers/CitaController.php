@@ -195,9 +195,9 @@ class CitaController extends Controller {
             
             if(isset($_GET['search'])) {
                 if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
-                    $_citaModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+                    $_citaModel->where('CONCAT(motivo_cita)', 'LIKE', "%{$_GET['search']['value']}%");
                 } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
-                    $_citaModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+                    $_citaModel->where('CONCAT(motivo_cita)', 'LIKE', "%{$_GET['search']}%");
                 }
             }
         }
@@ -209,9 +209,9 @@ class CitaController extends Controller {
 
         if ( isset($_GET['search']) ) {
             if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
-                $_citaModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+                $_citaModel->setSelect('COUNT(*) AS total')->where('CONCAT(motivo_cita)', 'LIKE', "%{$_GET['search']}%");
             } else if ( strlen($_GET['search']['value']) > 0) {
-                $_citaModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+                $_citaModel->setSelect('COUNT(*) AS total')->where('CONCAT(motivo_cita)', 'LIKE', "%{$_GET['search']['value']}%");
             } else {
                 $_citaModel->setSelect('COUNT(*) AS total');
             }
@@ -219,7 +219,7 @@ class CitaController extends Controller {
             $_citaModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_citaModel->where('estatus_esp', '=', '1')->getAll();
+        $total_registros = $_citaModel->where('estatus_cit', '=', '1')->getAll();
                 
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $especialidades);
         // Helpers::retornarMensajeListado($lista);
