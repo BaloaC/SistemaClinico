@@ -2,7 +2,7 @@ import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import getAll from "../global/getAll.js";
 import { patterns } from "../global/patternsValidation.js";
-import { listadoProveedoresPagination, proveedoresPagination } from "./proveedoresPagination.js";
+import { listadoProveedoresPagination, pagination, proveedoresPagination, ssrProveedoresRequest } from "./proveedoresPagination.js";
 
 async function addProveedor() {
 
@@ -24,10 +24,11 @@ async function addProveedor() {
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
-        const listadoProveedores = await getAll("proveedores/consulta");
+        const listadoProveedores = await ssrProveedoresRequest(1);
+        pagination.initializated = false;
+        pagination.paginaActual = 1;
         cleanValdiation("info-proveedor");
         proveedoresPagination(listadoProveedores);
-        listadoProveedoresPagination.registros = listadoProveedores;
 
     } catch (error) {
         console.log(error);

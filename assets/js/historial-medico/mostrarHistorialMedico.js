@@ -23,6 +23,9 @@ export default async function mostrarHistorialMedico(id) {
         const templateSeguro = document.getElementById("template-seguro").content;
         const seguroFragment = document.createDocumentFragment();
         const antecedenteContainer = document.querySelector(".antecedente-container");
+        const beneficiadoContainer = document.querySelector(".beneficiado-container");
+        const templateBeneficiado = document.getElementById("template-beneficiado").content;
+        const beneficiadoFragment = document.createDocumentFragment();
         const templateAntecedente = document.getElementById("template-antecedente").content;
         const antecedenteFragment = document.createDocumentFragment();
         const citaContainer = document.getElementById("citaAccordion");
@@ -34,7 +37,7 @@ export default async function mostrarHistorialMedico(id) {
 
         const infoPaciente = await getById("pacientes", id);
         const infoConsultas = await getById("consultas/paciente", id);
-        const listCita = await getById("citas/paciente",id);
+        const listCita = await getById("citas/paciente", id);
 
         // ! Obtenemos las citas asigandas y las que están en espera. En caso de que se necesite mostrar más citas
         // const listCita = infoCitas.filter(cita => cita.estatus_cit === "1" || cita.estatus_cit === "3").sort((a,b) => b.cita_id - a.cita_id);
@@ -45,8 +48,8 @@ export default async function mostrarHistorialMedico(id) {
         nombre.textContent = `${infoPaciente.nombre || infoPaciente.nombre_paciente} ${infoPaciente.apellidos}`;
         fecha.textContent = `${formatToRealDate(infoPaciente.fecha_nacimiento)}`;
         edad.textContent = `${infoPaciente.edad}`;
-    
-        switch(infoPaciente.tipo_paciente){
+
+        switch (infoPaciente.tipo_paciente) {
             case "1": tipo_paciente.textContent = "Natural"; break;
             case "2": tipo_paciente.textContent = "Representante"; break;
             case "3": tipo_paciente.textContent = "Asegurado"; break;
@@ -56,7 +59,7 @@ export default async function mostrarHistorialMedico(id) {
 
 
         // ** Validamos si el paciente es asegurado y tiene seguros
-        if(infoPaciente.tipo_paciente === "3" && infoPaciente.seguro.length > 0){
+        if (infoPaciente.tipo_paciente === "3" && infoPaciente.seguro.length > 0) {
 
             infoPaciente.seguro.forEach(el => {
 
@@ -84,6 +87,49 @@ export default async function mostrarHistorialMedico(id) {
             seguroContainer.classList.add("invisible");
         }
 
+        // ** Validamos si el paciente es asegurado y tiene beneficiado
+        if (infoPaciente.tipo_paciente === "3" && infoPaciente?.beneficiados?.length > 0) {
+
+            const tipo_familiar = {
+                "1": "Padre/Madre",
+                "2": "Representante",
+                "3": "Primo/a",
+                "4": "Hermano/a",
+                "5": "Esposo/a",
+                "6": "Tío/a",
+                "7": "Sobrino/a",
+            }
+
+            infoPaciente.beneficiados.forEach(el => {
+
+                let nombre = templateBeneficiado.getElementById("nombre");
+                let cedula = templateBeneficiado.getElementById("cedula");
+                let edad = templateBeneficiado.getElementById("edad");
+                let relacion = templateBeneficiado.getElementById("relacion");
+
+                nombre.textContent = `${el.nombre} ${el.apellidos}`;
+                cedula.textContent = el.cedula;
+                edad.textContent = el.edad;
+                relacion.textContent = tipo_familiar[el.tipo_familiar];
+
+                let clone = document.importNode(templateBeneficiado, true);
+                beneficiadoFragment.appendChild(clone);
+            });
+
+            //Mostrarmos el label
+            const beneficiadoLabel = document.getElementById("beneficiadosLabel");
+            beneficiadoLabel.classList.remove("d-none");
+
+            // Actualizamos el contenedor e insertamos los datos
+            beneficiadoContainer.replaceChildren();
+            beneficiadoContainer.appendChild(beneficiadoFragment);
+        } else {
+
+            // Ocultamos el container
+            const beneficiadoContainer = document.getElementById("beneficiadosContainer");
+            beneficiadoContainer.classList.add("invisible");
+        }
+
         // ** Validamos si el paciente cuenta con antecedetes médicos
         if (infoConsultas?.antecedentes_medicos?.length > 0) {
 
@@ -95,14 +141,14 @@ export default async function mostrarHistorialMedico(id) {
                 let delLink = templateAntecedente.querySelector(".del-antecedente");
                 let actIcon = templateAntecedente.querySelector(".fa-edit");
                 let delIcon = templateAntecedente.querySelector(".fa-trash");
-                
-                if(rol === "1" || rol === "2" || rol === "5"){
+
+                if (rol === "1" || rol === "2" || rol === "5") {
 
                     actLink.setAttribute("onclick", `updateAntecedente(${el.antecedentes_medicos_id})`);
                     delLink.setAttribute("onclick", `deleteAntecedente(${el.antecedentes_medicos_id})`);
                 } else {
-                    actLink.setAttribute("data-bs-toggle","");
-                    delLink.setAttribute("data-bs-toggle","")
+                    actLink.setAttribute("data-bs-toggle", "");
+                    delLink.setAttribute("data-bs-toggle", "")
                     actIcon.classList.add("d-none");
                     delIcon.classList.add("d-none");
                 }
@@ -137,43 +183,43 @@ export default async function mostrarHistorialMedico(id) {
             // !! En caso de que se necesite mostrar más citas
             // listCitas.forEach((el, i) => {
 
-                let dropdownLink = templateCita.querySelector(".btn-link");
-                let citaContainer = templateCita.querySelector(".collapse");
-                let cita_id = templateCita.getElementById("cita_id");
-                let nombre_medico = templateCita.getElementById("nombre_medico");
-                let especialidad = templateCita.getElementById("especialidad");
-                let fecha_cita = templateCita.getElementById("fecha_cita");
-                let motivo_cita = templateCita.getElementById("motivo_cita");
-                let hora_entrada = templateCita.getElementById("hora_entrada");
-                let hora_salida = templateCita.getElementById("hora_salida");
-                let tipo_cita = templateCita.getElementById("tipo_cita");
-                let estatus_cit = templateCita.getElementById("estatus_cit");
+            let dropdownLink = templateCita.querySelector(".btn-link");
+            let citaContainer = templateCita.querySelector(".collapse");
+            let cita_id = templateCita.getElementById("cita_id");
+            let nombre_medico = templateCita.getElementById("nombre_medico");
+            let especialidad = templateCita.getElementById("especialidad");
+            let fecha_cita = templateCita.getElementById("fecha_cita");
+            let motivo_cita = templateCita.getElementById("motivo_cita");
+            let hora_entrada = templateCita.getElementById("hora_entrada");
+            let hora_salida = templateCita.getElementById("hora_salida");
+            let tipo_cita = templateCita.getElementById("tipo_cita");
+            let estatus_cit = templateCita.getElementById("estatus_cit");
 
-                // ! En caso de que se necesite mostrar más citas
-                // if (i === 0) {
-                    citaContainer.classList.add("show");
-                // } else {
-                //     citaContainer.classList.remove("show");
-                // }
+            // ! En caso de que se necesite mostrar más citas
+            // if (i === 0) {
+            citaContainer.classList.add("show");
+            // } else {
+            //     citaContainer.classList.remove("show");
+            // }
 
-                cita_id.textContent = listCita[0].cita_id;
-                nombre_medico.textContent = `${listCita[0].nombre_medico} ${listCita[0].apellido_medico}`;
-                especialidad.textContent = listCita[0].nombre_especialidad;
-                fecha_cita.textContent = formatToRealDate(listCita[0].fecha_cita);
-                motivo_cita.textContent = listCita[0].motivo_cita;
-                hora_entrada.textContent = listCita[0].hora_entrada;
-                hora_salida.textContent = listCita[0].hora_salida;
-                tipo_cita.textContent = listCita[0].tipo_cita === "2" ? "Asegurada" : "Natural";
-                estatus_cit.textContent = listCita[0].estatus_cit === "3" ? "Pendiente" : "Asignada";
-                
+            cita_id.textContent = listCita[0].cita_id;
+            nombre_medico.textContent = `${listCita[0].nombre_medico} ${listCita[0].apellido_medico}`;
+            especialidad.textContent = listCita[0].nombre_especialidad;
+            fecha_cita.textContent = formatToRealDate(listCita[0].fecha_cita);
+            motivo_cita.textContent = listCita[0].motivo_cita;
+            hora_entrada.textContent = listCita[0].hora_entrada;
+            hora_salida.textContent = listCita[0].hora_salida;
+            tipo_cita.textContent = listCita[0].tipo_cita === "2" ? "Asegurada" : "Natural";
+            estatus_cit.textContent = listCita[0].estatus_cit === "3" ? "Pendiente" : "Asignada";
 
-                dropdownLink.innerHTML = `<b>Especialidad:</b> ${especialidad.textContent} - <b>Fecha:</b> ${fecha_cita.textContent}`;
-                dropdownLink.setAttribute("data-bs-target", `#cita-${listCita[0].cita_id}`);
-                dropdownLink.setAttribute("aria-controls", `#cita-${listCita[0].cita_id}`);
-                citaContainer.setAttribute("id", `cita-${listCita[0].cita_id}`);
 
-                let clone = document.importNode(templateCita, true);
-                citaFragment.appendChild(clone);
+            dropdownLink.innerHTML = `<b>Especialidad:</b> ${especialidad.textContent} - <b>Fecha:</b> ${fecha_cita.textContent}`;
+            dropdownLink.setAttribute("data-bs-target", `#cita-${listCita[0].cita_id}`);
+            dropdownLink.setAttribute("aria-controls", `#cita-${listCita[0].cita_id}`);
+            citaContainer.setAttribute("id", `cita-${listCita[0].cita_id}`);
+
+            let clone = document.importNode(templateCita, true);
+            citaFragment.appendChild(clone);
             // });
 
             // Actualizamos el contenedor e insertamos los datos

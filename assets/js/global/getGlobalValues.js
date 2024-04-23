@@ -9,7 +9,13 @@ export default async function getGlobalValues() {
     const medicPercentage = document.getElementById("medicPercentage");
 
     if(currencyExchange !== null) {
-        currencyExchange.innerText = `${convertCurrencyToVES(globalValues[1]["value"])} Bs`;
+
+        fetch("https://pydolarvenezuela-api.vercel.app/api/v1/dollar?page=bcv")
+        .then(response => response.json())
+        .then(json => {
+            currencyExchange.innerText = `${convertCurrencyToVES(json.monitors.usd.price)} Bs`;
+        })
+        .catch(error => console.log(error))
     }
 
     if(medicPercentage !== null) {

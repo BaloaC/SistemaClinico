@@ -2,7 +2,7 @@ import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import getAll from "../global/getAll.js";
 import { patterns } from "../global/patternsValidation.js";
-import { examenesPagination, listadoExamenesPagination } from "./examenesPagination.js";
+import { examenesPagination, listadoExamenesPagination, pagination, ssrExamanesRequest } from "./examenesPagination.js";
 
 async function addExamen() {
     const $form = document.getElementById("info-examen"),
@@ -23,10 +23,12 @@ async function addExamen() {
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
-        const listadoExamenes = await getAll("examenes/consulta");
+        const listadoExamenes = await ssrExamanesRequest(1);
         cleanValdiation("info-examen");
+        pagination.initializated = false;
+        pagination.paginaActual = 1;
         examenesPagination(listadoExamenes);
-        listadoExamenesPagination.registros = listadoExamenes;
+        // listadoExamenesPagination.registros = listadoExamenes;
 
     } catch (error) {
         console.log(error);

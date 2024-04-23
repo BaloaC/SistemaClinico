@@ -3,7 +3,7 @@ import updateModule from "../global/updateModule.js";
 import getById from "../global/getById.js";
 import { select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
-import { empresasPagination, ssrEmpresaRequest } from "./empresasPagination.js";
+import { empresasPagination, pagination, ssrEmpresaRequest } from "./empresasPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { patterns } from "../global/patternsValidation.js";
 import showDefaultModalAct from "../global/showDefaultModalAct.js";
@@ -93,6 +93,8 @@ async function confirmUpdate() {
 
             await updateModule(parseData, "empresa_id", "empresas", "act-empresa", "Empresa actualizada correctamente!");
             const listadoEmpresas = await ssrEmpresaRequest(1);
+            pagination.initializated = false;
+            pagination.paginaActual = 1;
             empresasPagination(listadoEmpresas);
 
         } else {

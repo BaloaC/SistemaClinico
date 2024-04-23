@@ -1,12 +1,13 @@
-import { filterPaginationHandle } from "../global/filterPaginationHandle.js";
-import { examenesPagination, listadoExamenesPagination } from "./examenesPagination.js";
+import { buscarRegistrosObj, examenesPagination, ssrExamanesRequest } from "./examenesPagination.js";
 
 
 async function filtrarExamenes() {
-    const filtro = document.getElementById("inputSearch");
-    const filtrado = listadoExamenesPagination.registros.filter(examen => filterPaginationHandle(filtro, examen, ["nombre"]));
 
-    examenesPagination(filtrado);
+    const filtro = document.getElementById("inputSearch");
+    const listadoExamanes = await ssrExamanesRequest(1, `=${filtro.value}`);
+    buscarRegistrosObj.valor = `=${filtro.value}`;
+    
+    examenesPagination(listadoExamanes, `=${filtro.value}`);
 }
 
 window.filtrarExamenes = filtrarExamenes;

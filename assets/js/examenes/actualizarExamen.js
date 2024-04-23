@@ -2,7 +2,7 @@ import deleteSecondValue from "../global/deleteSecondValue.js";
 import updateModule from "../global/updateModule.js";
 import getById from "../global/getById.js";
 import getAll from "../global/getAll.js";
-import { examenesPagination, listadoExamenesPagination } from "./examenesPagination.js";
+import { examenesPagination, listadoExamenesPagination, pagination, ssrExamanesRequest } from "./examenesPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { patterns } from "../global/patternsValidation.js";
 import showDefaultModalAct from "../global/showDefaultModalAct.js";
@@ -58,7 +58,9 @@ async function confirmUpdate() {
         if (Object.values(parseData)?.length > 1) {
 
             await updateModule(parseData, "examen_id", "examenes", "act-examen", "Examen actualizado correctamente!");
-            const listadoExamenes = await getAll("examenes/consulta");
+            const listadoExamenes = await ssrExamanesRequest(1);
+            pagination.initializated = false;
+            pagination.paginaActual = 1;
             examenesPagination(listadoExamenes);
             listadoExamenesPagination.registros = listadoExamenes;
         } else {
@@ -77,7 +79,7 @@ async function confirmUpdate() {
         alert.textContent = message;
 
         setTimeout(() => {
-            $alert.classList.add("d-none");
+            alert.classList.add("d-none");
         }, 3000)
     }
 }
