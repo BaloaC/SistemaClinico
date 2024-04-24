@@ -163,11 +163,12 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
         // Validamos que ya se encuentre inicializado y con datos el select2
         if(!document.getElementById("s-medico").value){
-            select2OnClick({
+            dinamicSelect2({
                 selectSelector: "#s-medico",
                 selectValue: "medico_id",
                 selectNames: ["cedula", "nombre-apellidos"],
-                module: "medicos/consulta",
+                ajax: true,
+                ajaxUrl: "medicos/consulta",
                 parentModal: "#modalReg",
                 placeholder: "Seleccione un médico"
             });

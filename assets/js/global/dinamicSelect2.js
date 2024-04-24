@@ -21,7 +21,7 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
     try {
         let selectObj = [];
 
-        if (!staticSelect) {
+        if (!staticSelect && obj) {
             selectObj = obj.map(el => ({
                 id: el[selectValue],
                 text: selectText(selectNames, el, defaultLabel)
@@ -55,8 +55,8 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
                     params.page = params.page || 1;
 
                     const data1 = data?.data.map(object => {
-                        const { especialidad_id: valorPropiedad1, nombre: valorPropiedad2 } = object;
-                        return { id: valorPropiedad1, text: valorPropiedad2 };
+                        const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico } = object;
+                        return { id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} - ${apellidoMedico}` };
                     });
 
                     // Transforms the top-level key of the response object from 'data' to 'results'
