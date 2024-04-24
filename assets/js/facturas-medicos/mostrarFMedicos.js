@@ -1,17 +1,35 @@
-import { select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
 import formatToRealDate from "../global/formatToRealDate.js";
 import createDataTable from "../global/createDataTable.js";
 
 const path = location.pathname.split('/');
 
-select2OnClick({
+dinamicSelect2({
     selectSelector: "#s-medico",
     selectValue: "medico_id",
     selectNames: ["cedula", "nombre-apellidos"],
-    module: "medicos/consulta",
     parentModal: "#modalReg",
     placeholder: "Seleccione un médico",
-    selectWidth: "100%"
+    selectWidth: "100%",
+    ajax: true,
+    ajaxUrl: "medicos/consulta",
+    processResultsAjax: function (data, params) {
+
+        params.page = params.page || 1;
+
+        const data1 = data?.data.map(object => {
+            const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico } = object;
+            return { id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` };
+        });
+
+        // Transforms the top-level key of the response object from 'data' to 'results'
+        return {
+            results: data1,
+            pagination: {
+                more: data1.length
+            }
+        };
+    }
 });
 
 addEventListener("DOMContentLoaded", e => {

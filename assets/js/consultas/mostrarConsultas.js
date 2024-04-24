@@ -115,23 +115,60 @@ const handleModalOpen = async () => {
             obj: listCitas ?? [],
             selectSelector: "#s-cita",
             selectValue: "cita_id",
-            // selectNames: ["cita_id", "cedula_paciente", "nombre_paciente-apellido_paciente", "motivo_cita"],
             selectNames: ["cita_id", "cedula_titular", "motivo_cita"],
             parentModal: "#modalReg",
-            placeholder: "Seleccione una cita"
+            placeholder: "Seleccione una cita",
+            ajax: true,
+            ajaxUrl: "citas/consulta",
+            processResultsAjax: function (data, params) {
+
+                params.page = params.page || 1;
+
+                const data1 = data?.data.map(object => {
+                    const { cita_id: valorPropiedad1, cedula_titular: cedulaTitular, motivo_cita: motivoCita } = object;
+                    return { id: valorPropiedad1, text: `${cedulaTitular} - ${motivoCita}` };
+                });
+
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return {
+                    results: data1,
+                    pagination: {
+                        more: data1.length
+                    }
+                };
+            }
         });
 
         $("#s-cita").val([]).trigger("change")
         document.getElementById("s-cita").classList.remove("is-valid");
 
         dinamicSelect2({
-            obj: examenesList,
+            // obj: examenesList,
             selectSelector: "#s-examen",
             selectValue: "examen_id",
             selectNames: ["nombre"],
             parentModal: "#modalReg",
             placeholder: "Seleccione los exámenes",
-            multiple: true
+            multiple: true,
+            ajax: true,
+            ajaxUrl: "examenes/consulta",
+            processResultsAjax: function (data, params) {
+
+                params.page = params.page || 1;
+
+                const data1 = data?.data.map(object => {
+                    const { examen_id: valorPropiedad1, nombre: nombreExamen} = object;
+                    return { id: valorPropiedad1, text: nombreExamen };
+                });
+
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return {
+                    results: data1,
+                    pagination: {
+                        more: data1.length
+                    }
+                };
+            }
         });
 
         dinamicSelect2({
@@ -147,12 +184,31 @@ const handleModalOpen = async () => {
         document.getElementById("s-paciente").classList.remove("is-valid");
 
         dinamicSelect2({
-            obj: medicosList,
+            // obj: medicosList,
             selectSelector: "#s-medico",
             selectValue: "medico_id",
             selectNames: ["cedula", "nombre-apellidos"],
             parentModal: "#modalReg",
-            placeholder: "Seleccione un médico"
+            placeholder: "Seleccione un médico",
+            ajax: true,
+            ajaxUrl: "medicos/consulta",
+            processResultsAjax: function (data, params) {
+
+                params.page = params.page || 1;
+
+                const data1 = data?.data.map(object => {
+                    const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico } = object;
+                    return { id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` };
+                });
+
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return {
+                    results: data1,
+                    pagination: {
+                        more: data1.length
+                    }
+                };
+            }
         });
 
         $("#s-medico").val([]).trigger("change")

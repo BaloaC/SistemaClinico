@@ -22,12 +22,31 @@ const handleModalOpen = async (parentModal) => {
         insumosList = await getAll("insumos/consulta");    
         
         dinamicSelect2({
-            obj: insumosList,
+            // obj: insumosList,
             selectSelector: `#s-insumo`,
             selectValue: "insumo_id",
             selectNames: ["nombre"],
             parentModal: parentModal,
-            placeholder: "Seleccione el insumo"
+            placeholder: "Seleccione el insumo",
+            ajax: true,
+            ajaxUrl: "insumos/consulta",
+            processResultsAjax: function (data, params) {
+
+                params.page = params.page || 1;
+
+                const data1 = data?.data.map(object => {
+                    const { insumo_id: valorPropiedad1, nombre: nombreInsumo } = object;
+                    return { id: valorPropiedad1, text: nombreInsumo };
+                });
+
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return {
+                    results: data1,
+                    pagination: {
+                        more: data1.length
+                    }
+                };
+            }
         });
 
         $("#s-insumo").on("change", () => {
