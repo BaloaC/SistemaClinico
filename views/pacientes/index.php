@@ -96,12 +96,12 @@
                                     <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
                                     <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
 
+                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                                    <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control mb-3" onchange="pacienteMenorDeEdad(this)" required>
+
                                     <label for="cedula">Cédula</label>
                                     <input type="number" name="cedula" id="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
                                     <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
-
-                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                                    <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control mb-3" onchange="pacienteMenorDeEdad(this)" required>
                                 </div>
                                 <div class="col-12 col-md-6 mt-4">
                                     <label for="tipo_paciente">Tipo de paciente</label>
@@ -252,6 +252,37 @@
                                     <label for="apellidos">Apellidos</label>
                                     <input type="text" name="apellidos" class="form-control mb-3" data-validate="true" data-type="name" data-max-length="45" required>
                                     <small class="form-text">El apellido debe contener al menos 3 letras sin números o caracteres</small>
+                                    <label for="telefono">Teléfono</label>
+                                    <div class="input-group">
+                                        <select name="cod_tel" id="cod-tel-act" class="me-2">
+                                            <option value="0412">0412</option>
+                                            <option value="0414">0414</option>
+                                            <option value="0424">0424</option>
+                                            <option value="0416">0416</option>
+                                            <option value="0426">0426</option>
+                                            <option value="0243">0243</option>
+                                        </select>
+                                        <input type="text" name="telefono" id="telefono-act" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
+                                        <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
+                                    </div>
+                                    <label for="tipo_paciente" class="mt-3">Tipo de paciente</label>
+                                    <select name="tipo_paciente" id="tipo_paciente" class="form-control mb-3" onchange="actualizarTipoPaciente(this.value)" requried>
+                                        <option value="1">Natural</option>
+                                        <option value="2">Representante</option>
+                                        <option value="3">Asegurado</option>
+                                        <option value="4">Beneficiado</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-6">
+
+                                    <label for="direccion">Dirección</label>
+                                    <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                                    <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+
+                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3" data-validate="true" data-type="date" onchange="pacienteMenorDeEdadUpdate(this)" required>
+
+                                        
                                     <label for="cedula">Cédula</label>
                                     <input type="number" name="cedula" id="cedula-act" class="form-control" data-validate="true" data-type="dni" data-max-length="8" required>
                                     <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
@@ -266,36 +297,6 @@
                                             <label class="form-check-label" for="">No</label>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3" data-validate="true" data-type="date" onchange="pacienteMenorDeEdadUpdate(this)" required>
-
-                                    <label for="telefono">Teléfono</label>
-                                    <div class="input-group">
-                                        <select name="cod_tel" id="cod-tel-act" class="me-2">
-                                            <option value="0412">0412</option>
-                                            <option value="0414">0414</option>
-                                            <option value="0424">0424</option>
-                                            <option value="0416">0416</option>
-                                            <option value="0426">0426</option>
-                                            <option value="0243">0243</option>
-                                        </select>
-                                        <input type="text" name="telefono" id="telefono-act" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
-                                        <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
-                                    </div>
-
-                                    <label for="direccion">Dirección</label>
-                                    <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
-                                    <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
-
-                                    <label for="tipo_paciente" class="mt-3">Tipo de paciente</label>
-                                    <select name="tipo_paciente" id="tipo_paciente" class="form-control mb-3" onchange="actualizarTipoPaciente(this.value)" requried>
-                                        <option value="1">Natural</option>
-                                        <option value="2">Representante</option>
-                                        <option value="3">Asegurado</option>
-                                        <option value="4">Beneficiado</option>
-                                    </select>
 
                                 </div>
 
