@@ -52,7 +52,10 @@
                         </div>
                     </div>
                 </div>
-
+            </div>
+        </section>
+        <section>
+            <div class="container">
                 <h3 class="mt-5">Consultas</h3>
                 <div class="row especialidad-container mt-5">
                     <!-- Gráfica Consultas Aseguradas-->

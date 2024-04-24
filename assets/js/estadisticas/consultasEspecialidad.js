@@ -107,13 +107,13 @@ if (allConsultasEspecialidades?.length === 0) {
     });
 
     let title = chart.children.unshift(am5.Label.new(root, {
-        text: "Consultas por especialidad (Mensual)",
-        fontSize: 25,
+        text: "Consultas por especialidad (Semanal)",
+        fontSize: window.innerWidth < 576 ? 20 : 25,
         fontWeight: "500",
         textAlign: "center",
         x: am5.percent(50),
         centerX: am5.percent(50),
-        paddingTop: 0,
+        paddingTop: -20,
         paddingBottom: 0,
         dy: 1,
         id: "consultasEspecialidad"
