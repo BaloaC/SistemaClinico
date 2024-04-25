@@ -17,11 +17,11 @@ export function selectText(selectTexts, obj, defaultLabel = []) {
     return text.slice(0, -3);
 }
 
-export default function dinamicSelect2({ obj = null, selectNames = null, selectValue = null, selectSelector = null, placeholder = null, parentModal = null, selectWidth = "45%", staticSelect = false, defaultLabel = [], ajax = false, ajaxUrl = "" }) {
+export default function dinamicSelect2({ obj = null, selectNames = null, selectValue = null, selectSelector = null, placeholder = null, parentModal = null, selectWidth = "45%", staticSelect = false, defaultLabel = [], ajax = false, ajaxUrl = "", processResultsAjax = null, queryPage = true }) {
     try {
         let selectObj = [];
 
-        if (!staticSelect) {
+        if (!staticSelect && obj) {
             selectObj = obj.map(el => ({
                 id: el[selectValue],
                 text: selectText(selectNames, el, defaultLabel)
@@ -41,33 +41,19 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
                     "Authorization": "Bearer " + Cookies.get("tokken")
                 },
                 data: function (params) {
-                    var query = {
+                    const query = {
                         search: params.term,
-                        page: params.page || 1,
                         select: true
                     }
 
+                    if(queryPage === true) query.page = params.page || 1;
+
                     // Query parameters will be ?search=[term]&page=[page]
                     return query;
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-
-                    const data1 = data?.data.map(object => {
-                        const { especialidad_id: valorPropiedad1, nombre: valorPropiedad2 } = object;
-                        return { id: valorPropiedad1, text: valorPropiedad2 };
-                    });
-
-                    // Transforms the top-level key of the response object from 'data' to 'results'
-                    return {
-                        results: data1,
-                        pagination: {
-                            more: data1.length
-                        }
-                    };
                 }
             }
+
+            ajaxObj.processResults = processResultsAjax;
         }
 
         const config = {

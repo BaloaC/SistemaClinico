@@ -60,21 +60,28 @@
                                 <div class="card-body">
                                     <p id="seguroLabel" class="d-none"><b>Seguros:</b></p>
                                     <div class="seguro-container">
+                                    </div>
                                 </div>
                             </div>
 
+                            <div class="card" id="beneficiadosContainer">
+                                <div class="card-body">
+                                    <p id="beneficiadosLabel" class="d-none"><b>Benecifiado:</b></p>
+                                    <div class="beneficiado-container">
+                                    </div>
+                                </div>
                             </div>
-                            
+
                         </div>
-                        <div class="col-12 col-md-8 paciente-consulta">                            
+                        <div class="col-12 col-md-8 paciente-consulta">
                             <h5 class="pt-5 pb-2 text-grey d-none" id="citasLabel">Citas pendientes</h4>
-                            <div class="accordion citas-accordion" id="citaAccordion">
+                                <div class="accordion citas-accordion" id="citaAccordion">
 
-                            </div>
-                            <h5 class="pt-5 pb-2 text-grey">Consultas vistas</h5>
-                            <div class="accordion consulta-accordion" id="consultaAccordion">
+                                </div>
+                                <h5 class="pt-5 pb-2 text-grey">Consultas vistas</h5>
+                                <div class="accordion consulta-accordion" id="consultaAccordion">
 
-                            </div>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -333,7 +340,7 @@
 
                                 </div>
                                 <div class="col-12 col-md-6">
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4 info-pago-medico" style="display: none;">
@@ -438,6 +445,15 @@
             <div class="seguro">
                 <p><b>Nombre de la empresa:</b> <span id="nombre_empresa"></span></p>
                 <p><b>Nombre del seguro:</b> <span id="nombre_seguro"></span></p>
+            </div>
+        </template>
+
+        <template id="template-beneficiado">
+            <div class="seguro">
+                <p><b>Nombres:</b> <span id="nombre"></span></p>
+                <p><b>Cédula:</b> <span id="cedula"></span></p>
+                <p><b>Edad:</b> <span id="edad"></span></p>
+                <p><b>Relación:</b> <span id="relacion"></span></p>
             </div>
         </template>
 

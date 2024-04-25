@@ -22,12 +22,31 @@ const handleModalOpen = async (parentModal) => {
         medicosList = await getAll("medicos/consulta");
 
         dinamicSelect2({
-            obj: medicosList,
+            // obj: medicosList,
             selectSelector: `#s-medico-pago`,
             selectValue: "medico_id",
             selectNames: ["cedula", "nombre-apellidos"],
             parentModal: parentModal,
-            placeholder: "Seleccione un médico"
+            ajax: true,
+            ajaxUrl: "medicos/consulta",
+            placeholder: "Seleccione un médico",
+            processResultsAjax: function (data, params) {
+
+                params.page = params.page || 1;
+
+                const data1 = data?.data.map(object => {
+                    const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico } = object;
+                    return { id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` };
+                });
+
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return {
+                    results: data1,
+                    pagination: {
+                        more: data1.length
+                    }
+                };
+            }
         });
 
         $("#s-medico-pago").on("change", () => {

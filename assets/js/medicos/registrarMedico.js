@@ -4,7 +4,7 @@ import deleteElementByClass from "../global/deleteElementByClass.js";
 import getAll from "../global/getAll.js";
 import { patterns } from "../global/patternsValidation.js";
 import scrollTo from "../global/scrollTo.js";
-import { listadoMedicosPagination, medicosPagination } from "./medicosPagination.js";
+import { listadoMedicosPagination, medicosPagination, pagination, ssrMedicosPagination } from "./medicosPagination.js";
 
 async function addMedico() {
     const $form = document.getElementById("info-medico"),
@@ -71,7 +71,9 @@ async function addMedico() {
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
-        const listadoMedico = await getAll("medicos/consulta");
+        const listadoMedico = await ssrMedicosPagination(1);
+        pagination.initializated = false;
+        pagination.paginaActual = 1;
         medicosPagination(listadoMedico);
         cleanValdiation("info-medico");
         deleteElementByClass("newInput");

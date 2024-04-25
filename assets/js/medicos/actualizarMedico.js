@@ -8,7 +8,7 @@ import { patterns } from "../global/patternsValidation.js";
 import scrollTo from "../global/scrollTo.js";
 import showDefaultModalAct from "../global/showDefaultModalAct.js";
 import updateModule from "../global/updateModule.js";
-import { listadoMedicosPagination, medicosPagination } from "./medicosPagination.js";
+import { listadoMedicosPagination, medicosPagination, pagination, ssrMedicosPagination } from "./medicosPagination.js";
 
 async function updateMedico(id) {
 
@@ -181,7 +181,9 @@ async function confirmUpdate() {
         if (Object.values(parseData)?.length > 1) {
 
             await updateModule(parseData, "medico_id", "medicos", "act-medico", "Médico actualizado correctamente!");
-            const listadoMedico = await getAll("medicos/consulta");
+            const listadoMedico = await ssrMedicosPagination(1);
+            pagination.initializated = false;
+            pagination.paginaActual = 1;
             medicosPagination(listadoMedico);
             listadoMedicosPagination.registros = listadoMedico;
         } else {

@@ -31,7 +31,7 @@ if (consultasList?.consultas_aseguradas === 0 && consultasList?.consultas_normal
   }));
 
    let title = chart.children.unshift(am5.Label.new(root, {
-    text: "Consultas aseguradas (Mensual)",
+    text: "Consultas aseguradas (Semanal)",
     fontSize: 25,
     fontWeight: "500",
     textAlign: "center",

@@ -1,10 +1,12 @@
 import deleteModule from "../global/deleteModule.js";
 import getAll from "../global/getAll.js";
-import { empresasPagination, ssrEmpresaRequest } from "./empresasPagination.js";
+import { empresasPagination, pagination, ssrEmpresaRequest } from "./empresasPagination.js";
 
 async function deleteEmpresa(id) {
     await deleteModule("empresas", id, "Empresa eliminada exitosamente!");
     const listadoEmpresas = await ssrEmpresaRequest(1);
+    pagination.initializated = false;
+    pagination.paginaActual = 1;
     empresasPagination(listadoEmpresas);
 }
 

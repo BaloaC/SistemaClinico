@@ -110,14 +110,14 @@
                                 <div class="row mt-4">
                                     <h5>Información del médico</h2>
                                         <div class="col-12 col-md-6">
-                                            <label for="medico_id">Médico</label>
-                                            <select name="medico_id" id="s-medico" class="form-control" data-active="0">
+                                            <label for="especialidad_id">Especialidad</label>
+                                            <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
                                                 <option></option>
                                             </select>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label for="especialidad_id">Especialidad</label>
-                                            <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
+                                            <label for="medico_id">Médico</label>
+                                            <select name="medico_id" id="s-medico" class="form-control" data-active="0">
                                                 <option></option>
                                             </select>
                                         </div>

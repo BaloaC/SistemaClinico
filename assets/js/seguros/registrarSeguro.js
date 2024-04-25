@@ -4,7 +4,7 @@ import deleteElementByClass from "../global/deleteElementByClass.js";
 import getAll from "../global/getAll.js";
 import { patterns } from "../global/patternsValidation.js";
 import scrollTo from "../global/scrollTo.js";
-import { listadoSegurosPagination, segurosPagination } from "./segurosPagination.js";
+import { listadoSegurosPagination, pagination, segurosPagination, ssrSegurosRequest } from "./segurosPagination.js";
 
 async function addSeguro() {
     const $form = document.getElementById("info-seguro"),
@@ -48,7 +48,9 @@ async function addSeguro() {
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
         scrollTo("modalRegBody");
-        const listadoSeguros = await getAll("seguros/consulta");
+        const listadoSeguros = await ssrSegurosRequest(1);
+        pagination.initializated = false;
+        pagination.paginaActual = 1;
         cleanValdiation("info-seguro");
         deleteElementByClass("newInput");
         segurosPagination(listadoSeguros);

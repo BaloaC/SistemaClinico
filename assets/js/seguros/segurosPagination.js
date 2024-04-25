@@ -2,16 +2,36 @@ import concatItems from "../global/concatItems.js";
 import getAll from "../global/getAll.js";
 import { removeAddAnalist } from "../global/validateRol.js";
 
-export const listadoSegurosPagination = { registros: await getAll("seguros/consulta") }
-let registrosSeg = listadoSegurosPagination.registros != typeof Array ? listadoSegurosPagination.registros : undefined;
+let draw = 1;
+let start = 0;
+let timestamp = new Date().getTime();
 
-removeAddAnalist();
 // Configurar la paginación
 const registrosPorPagina = 15;
-let paginaActual = 1;
-let paginationInitializated = false;
+export let pagination = { initializated: false, paginaActual: 1 };
 
-export async function segurosPagination(registros) {
+const listadoSeguros = await getAll(`seguros/consulta?draw=1&start=0&length=${registrosPorPagina}&search%5Bvalue%5D&search%5Bregex%5D=false&_=${timestamp}`, false);
+
+export const listadoSegurosPagination = { registros: listadoSeguros.data }
+export const buscarRegistrosObj = { valor: document.getElementById("inputSearch").value };
+
+let registrosSeg = listadoSegurosPagination.registros != typeof Array ? { data: listadoSegurosPagination.registros } : undefined;
+registrosSeg.recordsTotal = listadoSeguros?.recordsTotal;
+registrosSeg.draw = listadoSeguros?.draw;
+
+removeAddAnalist();
+
+// Función para hacer las petición por SSR
+export async function ssrSegurosRequest(numPage, search = "") {
+
+    draw++;
+    start = (numPage - 1) * registrosPorPagina;
+    const fetchRequest = await getAll(`seguros/consulta?draw=${draw}&start=${start}&length=${registrosPorPagina}&search%5Bvalue%5D${search}&search%5Bregex%5D=false&_=${timestamp}`, false);
+
+    return fetchRequest;
+}
+
+export async function segurosPagination(registros, buscarRegistros = "") {
 
     if (registros?.length === 0 || registros === undefined) {
 
@@ -69,17 +89,17 @@ export async function segurosPagination(registros) {
       `;
 
         // Función para mostrar los registros de la página actual
-        function mostrarRegistros() {
+        function mostrarRegistros(list) {
             // Obtener el número de registros a mostrar
-            const inicio = (paginaActual - 1) * registrosPorPagina;
+            const inicio = (pagination.paginaActual - 1) * registrosPorPagina;
             const fin = inicio + registrosPorPagina;
 
             // Limpiar el contenedor de tarjetas
             document.getElementById('card-container').innerHTML = '';
 
             // Mostrar los registros de la página actual
-            for (let i = inicio; i < fin && i < registrosSeg.length; i++) {
-                crearTarjeta(registrosSeg[i], plantilla, separadores);
+            for (let i = 0; i < fin && i < list.data.length; i++) {
+                crearTarjeta(list.data[i], plantilla, separadores);
             }
 
             // Actualizar los botones de paginación
@@ -88,7 +108,7 @@ export async function segurosPagination(registros) {
 
         function crearBotones() {
             // Calcular el número de páginas
-            const numPaginas = Math.ceil(registrosSeg.length / registrosPorPagina);
+            const numPaginas = Math.ceil(registrosSeg.recordsTotal / registrosPorPagina);
 
             // Limpiar el contenedor de paginación
             document.getElementById('pagination-container').innerHTML = '';
@@ -103,13 +123,13 @@ export async function segurosPagination(registros) {
             let inicio = 0;
             let fin = numPaginas;
             if (numPaginas > 6) {
-                if (paginaActual < 4) {
+                if (pagination.paginaActual < 4) {
                     fin = 6;
-                } else if (paginaActual > numPaginas - 3) {
+                } else if (pagination.paginaActual > numPaginas - 3) {
                     inicio = numPaginas - 6;
                 } else {
-                    inicio = paginaActual - 4;
-                    fin = paginaActual + 3;
+                    inicio = pagination.paginaActual - 4;
+                    fin = pagination.paginaActual + 3;
                 }
 
                 // Agregar el botón de primera página si no se muestra
@@ -150,13 +170,13 @@ export async function segurosPagination(registros) {
             botonPagina.innerText = numeroPagina;
 
             // Agregar el evento de clic al botón de página
-            botonPagina.addEventListener('click', () => {
-                paginaActual = numeroPagina;
-                mostrarRegistros();
+            botonPagina.addEventListener('click', async () => {
+                pagination.paginaActual = numeroPagina;
+                mostrarRegistros(await ssrSegurosRequest(pagination.paginaActual, `=${document.getElementById("inputSearch").value}`));
             });
 
             // Resaltar el botón de página actual
-            if (numeroPagina === paginaActual) {
+            if (numeroPagina === pagination.paginaActual) {
                 botonPagina.classList.add('active');
             }
 
@@ -173,14 +193,14 @@ export async function segurosPagination(registros) {
             }
 
             // Actualizar el botón de página anterior
-            if (paginaActual === 1) {
+            if (pagination.paginaActual === 1) {
                 botonPaginaAnterior.setAttribute('disabled', 'disabled');
             } else {
                 botonPaginaAnterior.removeAttribute('disabled');
             }
 
             // Actualizar el botón de página siguiente
-            if (paginaActual === Math.ceil(registrosSeg.length / registrosPorPagina)) {
+            if (pagination.paginaActual === Math.ceil(registrosSeg.recordsTotal / registrosPorPagina)) {
                 botonPaginaSiguiente.setAttribute('disabled', 'disabled');
             } else {
                 botonPaginaSiguiente.removeAttribute('disabled');
@@ -194,28 +214,28 @@ export async function segurosPagination(registros) {
             const primerBoton = document.querySelector('.btn.page-item.page-link');
             if (primerBoton) {
                 primerBoton.click();
-                paginaActual = 1;
+                pagination.paginaActual = 1;
             }
         }
 
         // Mostrar los registros de la página actual
-        mostrarRegistros();
+        mostrarRegistros(registrosSeg, buscarRegistros);
         crearBotones();
 
         // Seleccionar por defecto el primer botón
-        seleccionarPrimerBoton();
+        if (pagination.initializated === true) seleccionarPrimerBoton();
 
-        function botonAnteriorAction() {
-            paginaActual--;
-            mostrarRegistros();
+        async function botonAnteriorAction() {
+            pagination.paginaActual--;
+            mostrarRegistros(await ssrSegurosRequest(pagination.paginaActual, `=${document.getElementById("inputSearch").value}`));
         }
 
-        function botonSiguienteAction() {
-            paginaActual++;
-            mostrarRegistros();
+        async function botonSiguienteAction() {
+            pagination.paginaActual++;
+            mostrarRegistros(await ssrSegurosRequest(pagination.paginaActual, `=${document.getElementById("inputSearch").value}`));
         }
 
-        if (paginationInitializated === false) {
+        if (pagination.initializated === false) {
 
             // Agregar el evento de clic al botón de página anterior
             const botonPaginaAnterior = document.getElementById('boton-pagina-anterior');
@@ -237,9 +257,9 @@ export async function segurosPagination(registros) {
                 actualizarBotonesPaginacion();
             });
 
-            paginationInitializated = true;
+            pagination.initializated = true;
         }
     }
 }
 
-segurosPagination(registrosSeg);
+segurosPagination(registrosSeg, buscarRegistrosObj.valor);

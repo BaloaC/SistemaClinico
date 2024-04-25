@@ -22,12 +22,31 @@ const handleModalOpen = async (parentModal) => {
         medicamentosList = await getAll("medicamento/consulta");
 
         dinamicSelect2({
-            obj: medicamentosList,
+            // obj: medicamentosList,
             selectSelector: `#s-medicamento`,
             selectValue: "medicamento_id",
             selectNames: ["nombre_medicamento"],
             parentModal: parentModal,
-            placeholder: "Seleccione el medicamento"
+            placeholder: "Seleccione el medicamento",
+            ajax: true,
+            ajaxUrl: "medicamento/consulta",
+            processResultsAjax: function (data, params) {
+
+                params.page = params.page || 1;
+
+                const data1 = data?.data.map(object => {
+                    const { medicamento_id: valorPropiedad1, nombre_medicamento: nombre_medicamento } = object;
+                    return { id: valorPropiedad1, text: nombre_medicamento };
+                });
+
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return {
+                    results: data1,
+                    pagination: {
+                        more: data1.length
+                    }
+                };
+            }
         });
 
         $("#s-medicamento").on("change", () => {

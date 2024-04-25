@@ -1,10 +1,10 @@
-import { filterPaginationHandle } from "../global/filterPaginationHandle.js";
-import { listadoSegurosPagination, segurosPagination } from "./segurosPagination.js";
+import { buscarRegistrosObj, segurosPagination, ssrSegurosRequest } from "./segurosPagination.js";
 
 async function filtrarSeguros() {
     const filtro = document.getElementById("inputSearch");
-    const filtrado = listadoSegurosPagination.registros.filter(seguro => filterPaginationHandle(filtro, seguro, ["nombre"]));
-    segurosPagination(filtrado);
+    const listadoSeguros = await ssrSegurosRequest(1, `=${filtro.value}`);
+    buscarRegistrosObj.valor = `=${filtro.value}`;
+    segurosPagination(listadoSeguros, `=${filtro.value}`);
 }
 
 window.filtrarSeguros = filtrarSeguros;

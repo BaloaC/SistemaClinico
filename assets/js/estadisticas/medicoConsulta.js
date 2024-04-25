@@ -105,13 +105,13 @@ if (medicosConsultas?.length === 0) {
     });
 
     let title = chart.children.unshift(am5.Label.new(root, {
-        text: "Médicos con más consultas (Mensual)",
-        fontSize: 25,
+        text: "Médicos con más consultas (Semanal)",
+        fontSize: window.innerWidth < 576 ? 18 : 25,
         fontWeight: "500",
         textAlign: "center",
         x: am5.percent(50),
         centerX: am5.percent(50),
-        paddingTop: 0,
+        paddingTop: -20,
         paddingBottom: 0,
         dy: 1,
         id: "medicoConsulta"

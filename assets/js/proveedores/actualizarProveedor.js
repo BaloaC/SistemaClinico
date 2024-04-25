@@ -2,7 +2,7 @@ import deleteSecondValue from "../global/deleteSecondValue.js";
 import updateModule from "../global/updateModule.js";
 import getById from "../global/getById.js";
 import getAll from "../global/getAll.js";
-import { listadoProveedoresPagination, proveedoresPagination } from "./proveedoresPagination.js";
+import { listadoProveedoresPagination, pagination, proveedoresPagination, ssrProveedoresRequest } from "./proveedoresPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { patterns } from "../global/patternsValidation.js";
 import showDefaultModalAct from "../global/showDefaultModalAct.js";
@@ -58,16 +58,15 @@ async function confirmUpdate() {
         if (Object.values(parseData)?.length > 1) {
 
             await updateModule(parseData, "proveedor_id", "proveedores", "act-proveedor", "Proveedor actualizado correctamente!");
-            const listadoProveedores = await getAll("proveedores/consulta");
+            const listadoProveedores = await ssrProveedoresRequest(1);
+            pagination.initializated = false;
+            pagination.paginaActual = 1;
             proveedoresPagination(listadoProveedores);
-            listadoProveedoresPagination.registros = listadoProveedores;
 
         } else {
             showDefaultModalAct({form: $form, successMessage: "Proveedor actualizado correctamente!"});
         }
 
-        // await updateModule(parseData, "proveedor_id", "proveedores", "act-proveedor", "Proveedor actualizado correctamente!");
-        // const listadoProveedores = await getAll("proveedores/consulta");
         cleanValdiation("act-proveedor");
         cleanValdiation("info-proveedor");
 

@@ -138,7 +138,6 @@
         </div>
     </main>
 
-    <script type="module" src="<?php echo Url::to('assets/js/examenes/mostrarExamenes.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/examenes/examenesPagination.js'); ?>"></script>
     <?php include constant('PATH_VIEWS') . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/login/validarSesion.js'); ?>"></script>

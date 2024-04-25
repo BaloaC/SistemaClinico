@@ -3,43 +3,92 @@
 include_once "./services/facturas/medico/FacturaMedicoHelpers.php";
 include_once "./services/facturas/consulta/FacturaConsultaHelpers.php";
 include_once "./services/facturas/consulta seguro/ConsultaSeguroHelpers.php";
+include_once './services/consulta/consultaService.php';
 
-class EstadisticasController extends Controller{
+class EstadisticasController extends Controller
+{
 
     //Método index (vista principal)
-    public function index() { 
+    public function index()
+    {
 
         return $this->view('estadisticas/index');
     }
 
-    public function pacientesByEdad() {
-        // $_pacienteModel = new PacienteModel();
-        // $paciente = $_pacienteModel->setSelect("SELECT SUM(CASE WHEN edad < 18 THEN 1 ELSE 0 END) AS menos18, SUM(CASE WHEN edad > 18 AND edad < 30 THEN 1 ELSE 0 END) AS mas18_30, SUM(CASE WHEN edad > 31 AND edad < 40 THEN 1 ELSE 0 END) AS mas31_40, SUM(CASE WHEN edad > 41 AND edad < 50 THEN 1 ELSE 0 END) AS mas41_50, SUM(CASE WHEN edad > 51 AND edad < 60 THEN 1 ELSE 0 END) AS mas51_60, SUM(CASE WHEN edad >= 60 THEN 1 ELSE 0 END) AS mayor60 FROM pacientes")->getAll();
+    public function pacientesByAge()
+    {
 
-        // $respuesta = new Response('CORRECTO');
-        // $respuesta->setData($paciente);
+        $_pacienteModel = new PacienteModel();
+        $paciente = $_pacienteModel->setSelect("
+        SUM(CASE WHEN edad < 18 THEN 1 ELSE 0 END) AS menos18, 
+        SUM(CASE WHEN edad > 18 AND edad < 30 THEN 1 ELSE 0 END) AS mas18_30, 
+        SUM(CASE WHEN edad > 31 AND edad < 40 THEN 1 ELSE 0 END) AS mas31_40, 
+        SUM(CASE WHEN edad > 41 AND edad < 50 THEN 1 ELSE 0 END) AS mas41_50, 
+        SUM(CASE WHEN edad > 51 AND edad < 60 THEN 1 ELSE 0 END) AS mas51_60, 
+        SUM(CASE WHEN edad >= 60 THEN 1 ELSE 0 END) AS mayor60")->getAll();
 
-        // return $respuesta->json(200);
+        $respuesta = new Response('CORRECTO');
+        $respuesta->setData($paciente);
+
+        return $respuesta->json(200);
     }
 
-    public function allConsultas() { 
+    public function pacientesByType()
+    {
 
-        $fechas = [];
+        $_pacienteModel = new PacienteModel();
+        $paciente = $_pacienteModel->setSelect("
+        SUM(CASE WHEN tipo_paciente = 1 THEN 1 END) AS paciente_natural,
+        SUM(CASE WHEN tipo_paciente = 2 THEN 1 END) AS paciente_representante,
+        SUM(CASE WHEN tipo_paciente = 3 THEN 1 END) AS paciente_asegurado,
+        SUM(CASE WHEN tipo_paciente = 4 THEN 1 END) AS paciente_beneficiado")->getAll();
 
-        // Obtenemos el primer y último día del mes
-        $fecha_mes = DateTime::createFromFormat('Y-m-d', date("Y-m") . "-01");
-        $fecha_mes->modify('first day of this month');
-        $fechas['fecha_inicio'] = $fecha_mes->format("Y-m-d");
+        $respuesta = new Response('CORRECTO');
+        $respuesta->setData($paciente);
 
-        $fecha_mes->modify('last day of this month');
-        $fechas['fecha_fin'] = $fecha_mes->format("Y-m-d");
+        return $respuesta->json(200);
+    }
 
-        $consultasAseguradas = FacturaMedicoHelpers::contabilizarFacturasAseguradasAll($fechas);
-        $consultasNormales = FacturaMedicoHelpers::contabilizarFacturasNormalesAll($fechas);
+    public function allConsultas()
+    {
+
+        // Obtener la fecha de hoy
+        $hoy = date('Y-m-d');
+
+        // Calcular la fecha del domingo anterior
+        $fechaInicio = date('Y-m-d', strtotime('last monday', strtotime($hoy)));
+
+        $_consultaModel = new ConsultaModel();
+        $consultaList = $_consultaModel->where('estatus_con', '=', 1);
+        $consultaList =  $_consultaModel->whereDate("fecha_consulta", $fechaInicio, $hoy)->getAll();
+        $_consultaModel->resetValues();
+
+        $consultasFiltradas = [];
+
+        foreach ($consultaList as $consulta) {
+            if ($consulta->es_emergencia) {
+                $consultasFiltradas[] = ConsultaService::obtenerConsultaEmergencia($consulta, false);
+            } else {
+                $consultasFiltradas[] = ConsultaService::obtenerConsultaNormal($consulta);
+            }
+        }
+
+        $consultaInfo = [];
+        $consultasAseguradas = [];
+
+        foreach ($consultasFiltradas as $consulta) {
+
+            // Consultas normales
+            if (isset($consulta->tipo_cita) && $consulta->tipo_cita = 1) {
+                $consultaInfo[] = $consulta;
+            } else {
+                $consultasAseguradas[] = $consulta;
+            }
+        }
 
         $consultas = [
             "consultas_aseguradas" => count($consultasAseguradas),
-            "consultas_normales" => count($consultasNormales)
+            "consultas_normales" => count($consultaInfo)
         ];
 
         $respuesta = new Response('CORRECTO');
@@ -48,52 +97,75 @@ class EstadisticasController extends Controller{
         return $respuesta->json(200);
     }
 
-    public function allConsultasMedicos() {
+    public function allConsultasMedicos()
+    {
 
         $fechas = [];
+        $conteos = [];
+        $conteosSeguro = [];
 
-        // Obtenemos el primer y último día del mes
-        $fecha_mes = DateTime::createFromFormat('Y-m-d', "2023-09" . "-01");
-        $fecha_mes->modify('first day of this month');
-        $fechas['fecha_inicio'] = $fecha_mes->format("Y-m-d");
+        // Obtener la fecha de hoy
+        $hoy = date('Y-m-d');
 
-        $fecha_mes->modify('last day of this month');
-        $fechas['fecha_fin'] = $fecha_mes->format("Y-m-d");
+        // Calcular la fecha del domingo anterior
+        $fechaInicio = date('Y-m-d', strtotime('last monday', strtotime($hoy)));
 
-        $consultasAseguradas = FacturaMedicoHelpers::contabilizarFacturasAseguradasAll($fechas);
-        $consultasNormales = FacturaMedicoHelpers::contabilizarFacturasNormalesAll($fechas);
+        $_consultaModel = new ConsultaModel();
+        $consultaList = $_consultaModel->where('estatus_con', '=', 1);
+        $consultaList =  $_consultaModel->whereDate("fecha_consulta", $fechaInicio, $hoy)->getAll();
+        $_consultaModel->resetValues();
+
+        $consultasFiltradas = [];
+
+        foreach ($consultaList as $consulta) {
+            if ($consulta->es_emergencia) {
+                $consultasFiltradas[] = ConsultaService::obtenerConsultaEmergencia($consulta, false);
+            } else {
+                $consultasFiltradas[] = ConsultaService::obtenerConsultaNormal($consulta);
+            }
+        }
 
         $consultaInfo = [];
-        $consultasAseguradas = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultasAseguradas);
+        $consultasAseguradas = [];
 
-        foreach ($consultasNormales as $consulta) {
-            $consultaInfo[] = FacturaConsultaHelpers::obtenerInformacion($consulta);
+        foreach ($consultasFiltradas as $consulta) {
+
+            // Consultas normales
+            if (isset($consulta->tipo_cita) && $consulta->tipo_cita = 1) {
+                $consultaInfo[] = $consulta;
+            } else {
+                $consultasAseguradas[] = $consulta;
+            }
         }
 
         foreach ($consultasAseguradas as $dato) {
-            $medicoId = $dato['medico_id'];
+
+            $medicoId = $dato->medico_id ?? ($dato->medico->medico_id ?? null);
+            if ($medicoId === null) continue;
+
             if (isset($conteosSeguro[$medicoId])) {
                 $conteosSeguro[$medicoId]['cantidad']++;
             } else {
                 $conteosSeguro[$medicoId] = [
                     'cantidad' => 1,
-                    'nombre_medico' => $dato["medico"]->nombre . " " . $dato["medico"]->apellidos,
-                    'nombre_especialidad' => $dato['especialidad']->nombre,
-                    'especialidad_id' => $dato['especialidad']->especialidad_id
+                    'nombre_medico' => $dato->nombre_medico . " " . $dato->apellidos_medico,
+                    'nombre_especialidad' => $dato->nombre_especialidad,
+                    'especialidad_id' => $dato->nombre_especialidad
                 ];
             }
         }
 
         foreach ($consultaInfo as $dato) {
-            $medicoId = $dato['medico_id'];
+            // var_dump($dato);
+            $medicoId = $dato->medico_id;
             if (isset($conteos[$medicoId])) {
                 $conteos[$medicoId]['cantidad']++;
             } else {
                 $conteos[$medicoId] = [
                     'cantidad' => 1,
-                    'nombre_medico' => $dato['nombre_medico'] . " " . $dato['apellidos_medico'],
-                    'nombre_especialidad' => $dato['nombre_especialidad'],
-                    'especialidad_id' => $dato['especialidad_id']
+                    'nombre_medico' => $dato->nombre_medico . " " . $dato->apellidos_medico,
+                    'nombre_especialidad' => $dato->nombre_especialidad,
+                    'especialidad_id' => $dato->especialidad_id
                 ];
             }
         }
@@ -116,7 +188,9 @@ class EstadisticasController extends Controller{
             return $finalArray;
         }, []));
 
-        usort($sumByMedico, function($a, $b) { return $b['cantidad'] - $a['cantidad']; });
+        usort($sumByMedico, function ($a, $b) {
+            return $b['cantidad'] - $a['cantidad'];
+        });
 
         $respuesta = new Response('CORRECTO');
         $respuesta->setData($sumByMedico);
@@ -124,50 +198,66 @@ class EstadisticasController extends Controller{
         return $respuesta->json(200);
     }
 
-    public function allConsultasEspecialidades() {
+    public function allConsultasEspecialidades()
+    {
 
-        $fechas = [];
+        // Obtener la fecha de hoy
+        $hoy = date('Y-m-d');
 
-        // Obtenemos el primer y último día del mes
-        $fecha_mes = DateTime::createFromFormat('Y-m-d', "2023-09" . "-01");
-        $fecha_mes->modify('first day of this month');
-        $fechas['fecha_inicio'] = $fecha_mes->format("Y-m-d");
+        // Calcular la fecha del domingo anterior
+        $fechaInicio = date('Y-m-d', strtotime('last monday', strtotime($hoy)));
 
-        $fecha_mes->modify('last day of this month');
-        $fechas['fecha_fin'] = $fecha_mes->format("Y-m-d");
+        $_consultaModel = new ConsultaModel();
+        $consultaList = $_consultaModel->where('estatus_con', '=', 1);
+        $consultaList =  $_consultaModel->whereDate("fecha_consulta", $fechaInicio, $hoy)->getAll();
+        $_consultaModel->resetValues();
 
-        $consultasAseguradas = FacturaMedicoHelpers::contabilizarFacturasAseguradasAll($fechas);
-        $consultasNormales = FacturaMedicoHelpers::contabilizarFacturasNormalesAll($fechas);
+        $consultasFiltradas = [];
+
+        foreach ($consultaList as $consulta) {
+            if ($consulta->es_emergencia) {
+                $consultasFiltradas[] = ConsultaService::obtenerConsultaEmergencia($consulta, false);
+            } else {
+                $consultasFiltradas[] = ConsultaService::obtenerConsultaNormal($consulta);
+            }
+        }
 
         $consultaInfo = [];
-        $consultasAseguradas = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultasAseguradas);
+        $consultasAseguradas = [];
 
-        foreach ($consultasNormales as $consulta) {
-            $consultaInfo[] = FacturaConsultaHelpers::obtenerInformacion($consulta);
+        foreach ($consultasFiltradas as $consulta) {
+
+            // Consultas normales
+            if (isset($consulta->tipo_cita) && $consulta->tipo_cita = 1) {
+                $consultaInfo[] = $consulta;
+            } else {
+                $consultasAseguradas[] = $consulta;
+            }
         }
 
         $conteosEspecialidades = [];
 
         foreach ($consultasAseguradas as $dato) {
-            $especialidadId = $dato['especialidad']->especialidad_id;
+
+            $especialidadId = $dato->medico[0]->especialidad_id;
             if (isset($conteosEspecialidades[$especialidadId])) {
                 $conteosEspecialidades[$especialidadId]['cantidad']++;
             } else {
                 $conteosEspecialidades[$especialidadId] = [
                     'cantidad' => 1,
-                    'nombre_especialidad' => $dato['especialidad']->nombre
+                    'nombre_especialidad' => $dato->medico[0]->nombre_especialidad
                 ];
             }
         }
 
         foreach ($consultaInfo as $dato) {
-            $especialidadId = $dato['especialidad_id'];
+            $especialidadId = $dato->especialidad_id;
             if (isset($conteosEspecialidades[$especialidadId])) {
                 $conteosEspecialidades[$especialidadId]['cantidad']++;
             } else {
                 $conteosEspecialidades[$especialidadId] = [
                     'cantidad' => 1,
-                    'nombre_especialidad' => $dato['nombre_especialidad']
+                    'nombre_especialidad' => $dato->nombre_especialidad
                 ];
             }
         }
@@ -188,7 +278,9 @@ class EstadisticasController extends Controller{
             return $finalArray;
         }, []));
 
-        usort($sumByEspecialidad, function($a, $b) { return $b['cantidad'] - $a['cantidad']; });
+        usort($sumByEspecialidad, function ($a, $b) {
+            return $b['cantidad'] - $a['cantidad'];
+        });
 
         $respuesta = new Response('CORRECTO');
         $respuesta->setData($sumByEspecialidad);

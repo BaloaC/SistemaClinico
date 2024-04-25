@@ -6,9 +6,8 @@ let start = 0;
 let timestamp = new Date().getTime();
 
 // Configurar la paginación
-const registrosPorPagina = 5;
-let paginaActual = 1;
-let paginationInitializated = false;
+const registrosPorPagina = 15;
+export let pagination = { initializated: false, paginaActual: 1 };
 
 const listadoEmpresas = await getAll(`empresas/consulta?draw=1&start=0&length=${registrosPorPagina}&search%5Bvalue%5D&search%5Bregex%5D=false&_=${timestamp}`, false);
 
@@ -92,7 +91,7 @@ export function empresasPagination(registros, buscarRegistros = "") {
         // Función para mostrar los registros de la página actual
         function mostrarRegistros(list) {
             // Obtener el número de registros a mostrar
-            const inicio = (paginaActual - 1) * registrosPorPagina;
+            const inicio = (pagination.paginaActual - 1) * registrosPorPagina;
             const fin = inicio + registrosPorPagina;
 
             // Limpiar el contenedor de tarjetas
@@ -124,13 +123,13 @@ export function empresasPagination(registros, buscarRegistros = "") {
             let inicio = 0;
             let fin = numPaginas;
             if (numPaginas > 6) {
-                if (paginaActual < 4) {
+                if (pagination.paginaActual < 4) {
                     fin = 6;
-                } else if (paginaActual > numPaginas - 3) {
+                } else if (pagination.paginaActual > numPaginas - 3) {
                     inicio = numPaginas - 6;
                 } else {
-                    inicio = paginaActual - 4;
-                    fin = paginaActual + 3;
+                    inicio = pagination.paginaActual - 4;
+                    fin = pagination.paginaActual + 3;
                 }
 
                 // Agregar el botón de primera página si no se muestra
@@ -173,12 +172,12 @@ export function empresasPagination(registros, buscarRegistros = "") {
             // Agregar el evento de clic al botón de página
             botonPagina.addEventListener('click', async () => {
 
-                paginaActual = numeroPagina;
-                mostrarRegistros(await ssrEmpresaRequest(paginaActual, `=${document.getElementById("inputSearch").value}`));
+                pagination.paginaActual = numeroPagina;
+                mostrarRegistros(await ssrEmpresaRequest(pagination.paginaActual, `=${document.getElementById("inputSearch").value}`));
             });
 
             // Resaltar el botón de página actual
-            if (numeroPagina === paginaActual) {
+            if (numeroPagina === pagination.paginaActual) {
                 botonPagina.classList.add('active');
             }
 
@@ -195,14 +194,14 @@ export function empresasPagination(registros, buscarRegistros = "") {
             }
 
             // Actualizar el botón de página anterior
-            if (paginaActual === 1) {
+            if (pagination.paginaActual === 1) {
                 botonPaginaAnterior.setAttribute('disabled', 'disabled');
             } else {
                 botonPaginaAnterior.removeAttribute('disabled');
             }
 
             // Actualizar el botón de página siguiente
-            if (paginaActual === Math.ceil(registrosEmp.recordsTotal / registrosPorPagina)) {
+            if (pagination.paginaActual === Math.ceil(registrosEmp.recordsTotal / registrosPorPagina)) {
                 botonPaginaSiguiente.setAttribute('disabled', 'disabled');
             } else {
                 botonPaginaSiguiente.removeAttribute('disabled');
@@ -216,7 +215,7 @@ export function empresasPagination(registros, buscarRegistros = "") {
             const primerBoton = document.querySelector('.btn.page-item.page-link');
             if (primerBoton) {
                 primerBoton.click();
-                paginaActual = 1;
+                pagination.paginaActual = 1;
             }
         }
 
@@ -224,20 +223,20 @@ export function empresasPagination(registros, buscarRegistros = "") {
         mostrarRegistros(registrosEmp, buscarRegistros);
         crearBotones();
 
-        // Seleccinamos el primer botón para asegurarnos que siempre sea la primera pagina 
-        seleccionarPrimerBoton()
+        // Seleccinamos el primer botón para asegurarnos que siempre sea la primera pagina cuando se ejecuten acciones
+        if (pagination.initializated === true) seleccionarPrimerBoton();
 
         async function botonAnteriorAction() {
-            paginaActual--;
-            mostrarRegistros(await ssrEmpresaRequest(paginaActual, `=${document.getElementById("inputSearch").value}`));
+            pagination.paginaActual--;
+            mostrarRegistros(await ssrEmpresaRequest(pagination.paginaActual, `=${document.getElementById("inputSearch").value}`));
         }
 
         async function botonSiguienteAction() {
-            paginaActual++;
-            mostrarRegistros(await ssrEmpresaRequest(paginaActual, `=${document.getElementById("inputSearch").value}`));
+            pagination.paginaActual++;
+            mostrarRegistros(await ssrEmpresaRequest(pagination.paginaActual, `=${document.getElementById("inputSearch").value}`));
         }
 
-        if (paginationInitializated === false) {
+        if (pagination.initializated === false) {
 
             // Agregar el evento de clic al botón de página anterior
             const botonPaginaAnterior = document.getElementById('boton-pagina-anterior');
@@ -259,7 +258,7 @@ export function empresasPagination(registros, buscarRegistros = "") {
                 actualizarBotonesPaginacion();
             });
 
-            paginationInitializated = true;
+            pagination.initializated = true;
         }
     }
 }

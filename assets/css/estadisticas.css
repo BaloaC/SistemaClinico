@@ -2,6 +2,14 @@
 @import url('nav.css');
 @import url('homepage.css');
 
+section {   
+    height: 60vh;
+}
+
+.w-75 {
+    margin-bottom: 3.5rem;
+}
+
 .main-home * {
     color: #010101 !important;
 }
@@ -9,6 +17,16 @@
 .chart {
     width: 100%;
     height: 365px;
+}
+
+@media screen and (max-width: 567px) {
+    .w-75 {
+        margin-bottom: 5.5rem;
+    }
+
+    section {
+        height: 85vh;
+    }
 }
 
 
