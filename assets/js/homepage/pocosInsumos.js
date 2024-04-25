@@ -3,10 +3,10 @@ import getAll from "../global/getAll.js";
 
 const path = location.pathname.split('/');
 
-$(document).ready( async function() {
+$(document).ready(async function () {
 
     const insumosList = await getAll("insumos/consulta");
-    
+
     // console.log(insumosList);
 
     const insumosPorAgotarse = (insumosList?.result && !insumosList?.result?.code) ? [] : insumosList.filter(insumos => insumos.cantidad < insumos.cantidad_min);
@@ -23,13 +23,21 @@ $(document).ready( async function() {
                 data: "cantidad_min"
             },
             {
-                data: "cantidad"
+                data: "cantidad",
+
+                render: function (data, type, row) {
+                    if (row.estatus_ins === "3") {
+                        return `<span class="badge light badge-success">Recién agregado</span>`;
+                    } else {
+                        return row.cantidad;
+                    }
+                },
             }
         ],
         pageLength: 10,
         lengthChange: false,
         searching: false,
-        order: [[2,"asc"]],
+        order: [[2, "asc"]],
         language: {
             "decimal": ",",
             "thousands": ".",

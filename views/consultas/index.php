@@ -152,7 +152,7 @@
                                         <small class="form-text">Solo puede contener letras</small>
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <label for="examenes">Exámenes llevados a la consulta</label>
+                                        <label for="examenes">Exámenes realizados en la consulta</label>
                                         <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple">
                                             <option></option>
                                         </select>
