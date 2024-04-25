@@ -122,6 +122,7 @@ Router::get('/medicos/perfilmedico', MedicoController::class . '@perfilMedico');
 Router::get('/medicos/consulta', MedicoController::class . '@listarmedicos', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3","4","5") )]);
 Router::get('/medicos/:id', MedicoController::class . '@listarMedicoPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3","4","5") )]);
 Router::get('/medicos/cedula/:ci', MedicoController::class . '@listarMedicoPorCI', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
+Router::get('/medicos/especialidad/:id', MedicoController::class . '@listarMedicoPorEspecialidad', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::post('/medicos', MedicoController::class . '@insertarMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::put('/medicos/:id', MedicoController::class . '@actualizarMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::delete('/medicos/:id', MedicoController::class . '@eliminarMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
