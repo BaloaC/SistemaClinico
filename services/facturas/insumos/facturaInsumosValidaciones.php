@@ -34,12 +34,23 @@ class FacturaInsumosValidaciones {
             exit();
         }
 
-        if ( $validarFactura->isToday($formulario['fecha_compra'], false) ) {
+        $format = 'Y-m-d';
+        date_default_timezone_set('America/Caracas');
+        $hoy = date($format);
+        $menor = $formulario['fecha_compra'] <= $hoy;
+
+        if (!$menor) {
             $respuesta = new Response(false, 'La fecha de la factura no puede ser posterior a la fecha actual');
             $respuesta->setData($formulario['fecha_compra']);
             echo $respuesta->json(400);
             exit();
         }
+        // if ( $validarFactura->isToday($formulario['fecha_compra'], false) ) {
+        //     $respuesta = new Response(false, 'La fecha de la factura no puede ser posterior a la fecha actual');
+        //     $respuesta->setData($formulario['fecha_compra']);
+        //     echo $respuesta->json(400);
+        //     exit();
+        // }
     }
 
     public static function validarInsumo($formulario) {

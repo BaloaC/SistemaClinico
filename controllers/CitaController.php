@@ -266,6 +266,18 @@ class CitaController extends Controller {
         }
     }
 
+    public function listarCitasPorFecha() {
+        CitasValidaciones::validarCitasPorFecha($_GET);
+        $_citaModel = new CitaModel();
+        $citas = $_citaModel->where('fecha_cita', '=', $_GET['fecha'])
+                            ->where('medico_id', '=', $_GET['medico'])
+                            ->getAll();
+
+        $response = new Response('CORRECTO');
+        $response->setData($citas);
+        return $response->json(200);
+    }
+
     public function actualizarCita($cita_id) {
         
         global $isEnabledAudit;

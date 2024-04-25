@@ -108,6 +108,48 @@ class MedicoController extends Controller {
         }
     }
 
+    public function listarMedicoPorEspecialidad($especialidad_id) {
+        $_medicoModel = new MedicoModel();
+        $inners = $_medicoModel->listInner(['medico' => 'medico_especialidad']);
+
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_medicoModel->limit([$primer_registro, $size]);
+            }
+
+            if(isset($_GET['search'])) {
+                if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                    $_medicoModel->where("CONCAT(medico.nombre, medico.apellidos, medico.cedula)", 'LIKE', "%{$_GET['search']['value']}%");
+                } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                    $_medicoModel->where("CONCAT(medico.nombre, medico.apellidos, medico.cedula)", 'LIKE', "%{$_GET['search']}%");
+                }
+            }
+        }
+
+        $medicos = $_medicoModel->where('medico_especialidad.especialidad_id', '=', $especialidad_id)
+                        ->where('medico_especialidad.estatus_med', '=', '1')
+                        ->innerJoin(array('medico.nombre', 'medico.apellidos', 'medico.cedula'), $inners, "medico_especialidad");
+
+        if ( isset($_GET['search']) ) {
+            if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                $_medicoModel->setSelect('COUNT(*) AS total')->where("CONCAT(medico.nombre, medico.apellidos, medico.cedula)", 'LIKE', "%{$_GET['search']}%");
+            } else if ( strlen($_GET['search']['value']) > 0) {
+                $_medicoModel->setSelect('COUNT(*) AS total')->where("CONCAT(medico.nombre, medico.apellidos, medico.cedula)", 'LIKE', "%{$_GET['search']['value']}%");
+            } else {
+                $_medicoModel->setSelect('COUNT(*) AS total');
+            }
+        } else {
+            $_medicoModel->setSelect('COUNT(*) AS total');
+        }
+
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($medicos), $medicos);
+    }
+
     public function actualizarMedico($medico_id) {
         global $isEnabledAudit;
         $isEnabledAudit = 'médicos';

@@ -156,6 +156,7 @@ class Validate extends BaseModel{
         
         date_default_timezone_set('America/Caracas');
         $hoy = date($format);
+        var_dump($date < $hoy);
         $menor = $date < $hoy;
         
         if ($bool == true) {

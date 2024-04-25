@@ -72,6 +72,28 @@ class CitasValidaciones {
         }
     }
 
+    public static function validarCitasPorFecha($get) {
+        $validarCita = new Validate;
+
+        if (!isset($get['fecha'])) {
+            $response = new Response(false, 'No se ha encontrado el valor de la fecha en la petición');
+            echo $response->json(400);
+            exit();
+        }
+
+        if (!isset($get['medico'])) {
+            $response = new Response(false, 'Debe enviar un médico en la petición');
+            echo $response->json(400);
+            exit();
+        }
+
+        if ( $validarCita->isDate($get['fecha']) ) {
+            $respuesta = new Response('FECHA_INVALIDA');
+            echo $respuesta->json(400);
+            exit();
+        }
+    }
+
     public static function validarFecha($formulario) {
         $validarCita = new Validate;
 

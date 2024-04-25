@@ -195,6 +195,7 @@ class PacienteController extends Controller{
                                                     ->getFirst();
 
                     $infoTitular->tipo_familiar = $titular->tipo_familiar;
+                    $infoTitular->tipo_relacion = $titular->tipo_relacion;
 
                     // Obtenemos los seguros del titular
                     $_pacienteSeguroModel = new PacienteSeguroModel();
