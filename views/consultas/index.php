@@ -123,14 +123,14 @@
                                 <div class="row mt-4 info-medico" style="display: none;">
                                     <h5>Información del médico</h2>
                                         <div class="col-12 col-md-6">
-                                            <label for="medico_id">Médico</label>
-                                            <select name="medico_id" id="s-medico" class="form-control" data-active="0">
+                                            <label for="especialidad_id">Especialidad</label>
+                                            <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
                                                 <option></option>
                                             </select>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label for="especialidad_id">Especialidad</label>
-                                            <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
+                                            <label for="medico_id">Médico</label>
+                                            <select name="medico_id" id="s-medico" class="form-control" data-active="0">
                                                 <option></option>
                                             </select>
                                         </div>
@@ -220,7 +220,7 @@
 
                                 </div>
                                 <div class="col-12 col-md-6">
-                                    
+
                                 </div>
                             </div>
                             <div class="row mt-4 info-pago-medico" style="display: none;">
@@ -504,7 +504,7 @@
                     <div class="modal-body" id="modalRegBody">
                         <div class="alertConsulta alert d-none" role="alert"></div>
                         <form action="" id="info-fconsulta" class="form-reg p-3 px-4">
-                        <h6>Nota: Al introducir el monto de la consulta el sistema calculará el total con los exámenes e insumos. Adicionalmente el monto debe ser ingresado en dólares. </h6>
+                            <h6>Nota: Al introducir el monto de la consulta el sistema calculará el total con los exámenes e insumos. Adicionalmente el monto debe ser ingresado en dólares. </h6>
                             <div class="row">
                                 <div class="col-12">
                                     <label for="paciente_id">Paciente</label>
@@ -544,7 +544,7 @@
                     <div class="modal-body">
                         <div class="alert alertConsultaSeguro d-none" role="alert"></div>
                         <form action="" id="info-fseguro" class="p-3 px-4">
-                        <h6>Nota: Al introducir el monto de la consulta el sistema calculará el total con los exámenes e insumos. Adicionalmente el monto debe ser ingresado en dólares. </h6>
+                            <h6>Nota: Al introducir el monto de la consulta el sistema calculará el total con los exámenes e insumos. Adicionalmente el monto debe ser ingresado en dólares. </h6>
                             <label for="consulta_id">Consulta</label>
                             <select name="consulta_id" id="s-consulta-seguro" class="form-control mb-3" data-active="0" required>
                                 <option></option>

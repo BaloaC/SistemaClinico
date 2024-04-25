@@ -17,7 +17,7 @@ export function selectText(selectTexts, obj, defaultLabel = []) {
     return text.slice(0, -3);
 }
 
-export default function dinamicSelect2({ obj = null, selectNames = null, selectValue = null, selectSelector = null, placeholder = null, parentModal = null, selectWidth = "45%", staticSelect = false, defaultLabel = [], ajax = false, ajaxUrl = "", processResultsAjax = null }) {
+export default function dinamicSelect2({ obj = null, selectNames = null, selectValue = null, selectSelector = null, placeholder = null, parentModal = null, selectWidth = "45%", staticSelect = false, defaultLabel = [], ajax = false, ajaxUrl = "", processResultsAjax = null, queryPage = true }) {
     try {
         let selectObj = [];
 
@@ -41,11 +41,12 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
                     "Authorization": "Bearer " + Cookies.get("tokken")
                 },
                 data: function (params) {
-                    var query = {
+                    const query = {
                         search: params.term,
-                        page: params.page || 1,
                         select: true
                     }
+
+                    if(queryPage === true) query.page = params.page || 1;
 
                     // Query parameters will be ?search=[term]&page=[page]
                     return query;

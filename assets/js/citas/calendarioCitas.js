@@ -40,6 +40,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         }
 
         const especialidadSelect = document.getElementById("s-especialidad");
+        const medicoSelect = document.getElementById("s-medico");
         const seguroSelect = document.getElementById("s-seguro");
         const pacientesSelect = document.getElementById("s-paciente");
 
@@ -162,22 +163,35 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         })
 
         // Validamos que ya se encuentre inicializado y con datos el select2
-        if(!document.getElementById("s-medico").value){
+        if (!medicoSelect.value) {
+      
+            emptySelect2({
+                selectSelector: medicoSelect,
+                placeholder: "Debe seleccionar un médico",
+                parentModal: "#modalReg"
+            })
+
+            medicoSelect.disabled = true;
+        }
+
+        // Validamos que ya se encuentre inicializado y con datos el select2
+        if (!especialidadSelect.value) {
+
             dinamicSelect2({
-                selectSelector: "#s-medico",
-                selectValue: "medico_id",
-                selectNames: ["cedula", "nombre-apellidos"],
-                ajax: true,
-                ajaxUrl: "medicos/consulta",
+                selectSelector: `#${especialidadSelect.id}`,
+                selectValue: "especialidad_id",
+                selectNames: ["nombre_especialidad"],
                 parentModal: "#modalReg",
-                placeholder: "Seleccione un médico",
+                placeholder: "Seleccione una especialidad",
+                ajax: true,
+                ajaxUrl: "especialidades/consulta",
                 processResultsAjax: function (data, params) {
 
                     params.page = params.page || 1;
 
                     const data1 = data?.data.map(object => {
-                        const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico } = object;
-                        return { id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` };
+                        const { especialidad_id: valorPropiedad1, nombre: valorPropiedad2 } = object;
+                        return { id: valorPropiedad1, text: valorPropiedad2 };
                     });
 
                     // Transforms the top-level key of the response object from 'data' to 'results'
@@ -191,44 +205,57 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             });
         }
 
-        // Validamos que ya se encuentre inicializado y con datos el select2
-        if(!especialidadSelect.value){
-
-            emptySelect2({
-                selectSelector: especialidadSelect,
-                placeholder: "Debe seleccionar un médico",
-                parentModal: "#modalReg"
-            })
-            
-            especialidadSelect.disabled = true;
-        }
-
-        
-
-        $("#s-medico").on("change", async function (e) {
+        $(especialidadSelect).on("change", async function (e) {
 
             $("#horarios-table").fadeOut("slow");
 
-            let medico_id = this.value;
-            const infoMedico = await getById("medicos", medico_id);
-            const modalReg = document.querySelector("#modalReg .modal-body");
-            const horariosTable = document.querySelector("#horarios-table tbody");
-
-            $(especialidadSelect).empty().select2();
+            let especialidad_id = this.value;
+            $(medicoSelect).empty().select2();
 
             dinamicSelect2({
-                obj: infoMedico[0]?.especialidad ?? [],
-                selectSelector: `#${especialidadSelect.id}`,
-                selectValue: "especialidad_id",
-                selectNames: ["nombre_especialidad"],
+                selectSelector: "#s-medico",
+                selectValue: "medico_id",
+                selectNames: ["cedula", "nombre-apellidos"],
+                ajax: true,
+                ajaxUrl: "medicos/consulta",
                 parentModal: "#modalReg",
-                placeholder: "Seleccione una especialidad"
+                placeholder: "Seleccione un médico",
+                queryPage: false,
+                processResultsAjax: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    const data1 = [];
+
+                    data?.data.map(object => {
+
+                        const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico, especialidad } = object;
+                        especialidad?.forEach(element => {
+
+                            // Si la especialidad conincide con la seleccionada mostrar el médico
+                            if (element.especialidad_id == especialidad_id) {
+                                data1.push({ id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` });
+                            }
+                        })
+                    });
+
+                    // Transforms the top-level key of the response object from 'data' to 'results'
+                    return {
+                        results: data1
+                    };
+                }
             });
 
-            especialidadSelect.disabled = false;
-            especialidadSelect.classList.add("is-valid");
+            medicoSelect.disabled = false;
+        });
 
+        $(medicoSelect).on("change", async function () {
 
+            $("#horarios-table").fadeOut("slow");
+
+            const infoMedico = await getById("medicos", this.value);
+            const modalReg = document.querySelector("#modalReg .modal-body");
+            const horariosTable = document.querySelector("#horarios-table tbody");
             const horariosOrdenados = sortScheduleByDay(infoMedico[0]?.horario);
 
             let listHorarios = "";
@@ -252,7 +279,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                 bottom: 0,
                 behavior: 'smooth'
             });
-        })
+        });
 
         $("#s-tipo_cita").on("change", function (e) {
 
