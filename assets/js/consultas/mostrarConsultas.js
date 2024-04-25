@@ -65,7 +65,7 @@ const handleModalOpen = async () => {
         document.getElementById("s-seguro-emergencia").disabled = true;
 
         const pacientesList = await getAll("pacientes/consulta");
- 
+
         dinamicSelect2({
 
             selectSelector: "#s-cita",
@@ -178,7 +178,7 @@ const handleModalOpen = async () => {
                 selectValue: "medico_id",
                 selectNames: ["cedula", "nombre-apellidos"],
                 ajax: true,
-                ajaxUrl: "medicos/consulta",
+                ajaxUrl: `/medicos/especialidad/${especialidad_id}`,
                 parentModal: "#modalReg",
                 placeholder: "Seleccione un médico",
                 queryPage: false,
@@ -189,15 +189,9 @@ const handleModalOpen = async () => {
                     const data1 = [];
 
                     data?.data.map(object => {
-
                         const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico, especialidad } = object;
-                        especialidad?.forEach(element => {
+                        data1.push({ id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` });
 
-                            // Si la especialidad conincide con la seleccionada mostrar el médico
-                            if (element.especialidad_id == especialidad_id) {
-                                data1.push({ id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` });
-                            }
-                        })
                     });
 
                     // Transforms the top-level key of the response object from 'data' to 'results'

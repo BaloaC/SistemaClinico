@@ -164,7 +164,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
         // Validamos que ya se encuentre inicializado y con datos el select2
         if (!medicoSelect.value) {
-      
+
             emptySelect2({
                 selectSelector: medicoSelect,
                 placeholder: "Debe seleccionar un médico",
@@ -217,7 +217,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                 selectValue: "medico_id",
                 selectNames: ["cedula", "nombre-apellidos"],
                 ajax: true,
-                ajaxUrl: "medicos/consulta",
+                ajaxUrl: `/medicos/especialidad/${especialidad_id}`,
                 parentModal: "#modalReg",
                 placeholder: "Seleccione un médico",
                 queryPage: false,
@@ -228,15 +228,9 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                     const data1 = [];
 
                     data?.data.map(object => {
-
                         const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico, especialidad } = object;
-                        especialidad?.forEach(element => {
+                        data1.push({ id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` });
 
-                            // Si la especialidad conincide con la seleccionada mostrar el médico
-                            if (element.especialidad_id == especialidad_id) {
-                                data1.push({ id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` });
-                            }
-                        })
                     });
 
                     // Transforms the top-level key of the response object from 'data' to 'results'
