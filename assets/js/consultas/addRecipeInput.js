@@ -3,8 +3,9 @@ import getAll from "../global/getAll.js";
 import validateExistingSelect2 from "../global/validateExistingSelect2.js";
 import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
 import validateInputs from "../global/validateInputs.js";
+import { especialidadId } from "./mostrarConsultas.js";
 
-export let medicamentosList = null;
+// export let medicamentosList = null;
 const select2Options = {
     selectValue: "medicamento_id",
     selectNames: ["nombre_medicamento"],
@@ -19,7 +20,7 @@ const modalRegister = document.getElementById("modalReg") ?? undefined;
 const handleModalOpen = async (parentModal) => {
     if (modalOpened === false) {
 
-        medicamentosList = await getAll("medicamento/consulta");
+        // medicamentosList = await getAll("medicamento/consulta");
 
         dinamicSelect2({
             // obj: medicamentosList,
@@ -29,7 +30,7 @@ const handleModalOpen = async (parentModal) => {
             parentModal: parentModal,
             placeholder: "Seleccione el medicamento",
             ajax: true,
-            ajaxUrl: "medicamento/consulta",
+            ajaxUrl: `medicamento/especialidad/${especialidadId.valor}`,
             queryPage: false,
             processResultsAjax: function (data, params) {
 
@@ -115,14 +116,14 @@ function addRecipeInput(parentModal = "#modalReg") {
     })
 
     dinamicSelect2({
-        obj: medicamentosList,
+        // obj: medicamentosList,
         selectSelector: selectSelector,
         selectValue: select2Options.selectValue,
         selectNames: select2Options.selectNames,
         parentModal,
         placeholder: select2Options.placeholder,
         ajax: true,
-        ajaxUrl: "medicamento/consulta",
+        ajaxUrl: `medicamento/especialidad/${especialidadId.valor}`,
         queryPage: false,
         processResultsAjax: function (data, params) {
 

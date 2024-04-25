@@ -10,6 +10,8 @@ import createDataTable from "../global/createDataTable.js";
 const path = location.pathname.split('/');
 const especialidadSelect = document.getElementById("s-especialidad");
 const medicoSelect = document.getElementById("s-medico");
+const medicamentoSelect = document.getElementById("s-medicamento");
+export let especialidadId = { valor: "" };
 
 let modalOpened = false;
 export const registerStatusConsulta = {
@@ -47,6 +49,12 @@ const handleModalOpen = async () => {
             parentModal: "#modalReg"
         });
 
+        emptyAllSelect2({
+            selectSelector: "#s-medicamento",
+            placeholder: "Debe seleccionar una especialidad",
+            parentModal: "#modalReg"
+        });
+
         emptySelect2({
             selectSelector: especialidadSelect,
             placeholder: "Debe seleccionar un médico",
@@ -62,6 +70,7 @@ const handleModalOpen = async () => {
 
         document.getElementById("s-paciente").disabled = true;
         medicoSelect.disabled = true;
+        // medicamentoSelect.disabled = true;
         document.getElementById("s-seguro-emergencia").disabled = true;
 
         const pacientesList = await getAll("pacientes/consulta");
@@ -168,11 +177,128 @@ const handleModalOpen = async () => {
         // $("#s-medico").val([]).trigger("change")
         document.getElementById("s-medico").classList.remove("is-valid");
 
+        $("#s-cita").on("change", async function (e) {
+
+            const cita = await getById("citas", this.value);
+
+            const medicamentosSelect = document.querySelectorAll(".medicamento-id");
+
+            // Reinicializar los select2 de los medicamentos para que se puedan actualizar según la especilidad
+            medicamentosSelect.forEach(select => {
+
+                $(select).empty().select2();
+
+                dinamicSelect2({
+                    // obj: medicamentosList,
+                    selectSelector: select,
+                    selectValue: "medicamento_id",
+                    selectNames: ["nombre_medicamento"],
+                    parentModal: "#modalReg",
+                    placeholder: "Seleccione el medicamento",
+                    ajax: true,
+                    ajaxUrl: `medicamento/especialidad/${cita?.especialidad_id}`,
+                    queryPage: false,
+                    processResultsAjax: function (data, params) {
+
+                        const existingSelects = document.querySelectorAll(`.medicamento-id`);
+
+                        let selectedOptions = [];
+
+                        // Recorremos los select que existen
+                        existingSelects.forEach(select2 => {
+                            if (document.getElementById(`${select.id}`).value != select2.value) {
+                                selectedOptions.push(select2.value);
+                            }
+                        })
+
+                        const data1 = [];
+
+                        data?.data.forEach(object => {
+                            const { medicamento_id: valorPropiedad1, nombre_medicamento: nombre_medicamento } = object;
+                            let isDuplicate = false;
+
+                            selectedOptions?.forEach(select => {
+                                if (select == object.medicamento_id) {
+                                    isDuplicate = true;
+                                    return; // Salir del bucle forEach si se encuentra una duplicación
+                                }
+                            });
+
+                            if (!isDuplicate) {
+                                data1.push({ id: valorPropiedad1, text: nombre_medicamento });
+                            }
+                        });
+
+                        // Transforms the top-level key of the response object from 'data' to 'results'
+                        return { results: data1 };
+                    }
+                });
+            });
+            
+        });
+
         $(especialidadSelect).on("change", async function (e) {
 
+            especialidadId.valor = this.value;
             let especialidad_id = this.value;
             $(medicoSelect).empty().select2();
 
+
+            const medicamentosSelect = document.querySelectorAll(".medicamento-id");
+
+            // Reinicializar los select2 de los medicamentos para que se puedan actualizar según la especilidad
+            medicamentosSelect.forEach(select => {
+
+                $(select).empty().select2();
+
+                dinamicSelect2({
+                    // obj: medicamentosList,
+                    selectSelector: select,
+                    selectValue: "medicamento_id",
+                    selectNames: ["nombre_medicamento"],
+                    parentModal: "#modalReg",
+                    placeholder: "Seleccione el medicamento",
+                    ajax: true,
+                    ajaxUrl: `medicamento/especialidad/${especialidadId.valor}`,
+                    queryPage: false,
+                    processResultsAjax: function (data, params) {
+
+                        const existingSelects = document.querySelectorAll(`.medicamento-id`);
+
+                        let selectedOptions = [];
+
+                        // Recorremos los select que existen
+                        existingSelects.forEach(select2 => {
+                            if (document.getElementById(`${select.id}`).value != select2.value) {
+                                selectedOptions.push(select2.value);
+                            }
+                        })
+
+                        const data1 = [];
+
+                        data?.data.forEach(object => {
+                            const { medicamento_id: valorPropiedad1, nombre_medicamento: nombre_medicamento } = object;
+                            let isDuplicate = false;
+
+                            selectedOptions?.forEach(select => {
+                                if (select == object.medicamento_id) {
+                                    isDuplicate = true;
+                                    return; // Salir del bucle forEach si se encuentra una duplicación
+                                }
+                            });
+
+                            if (!isDuplicate) {
+                                data1.push({ id: valorPropiedad1, text: nombre_medicamento });
+                            }
+                        });
+
+                        // Transforms the top-level key of the response object from 'data' to 'results'
+                        return { results: data1 };
+                    }
+                });
+            });
+
+            // Médico select
             dinamicSelect2({
                 selectSelector: "#s-medico",
                 selectValue: "medico_id",
