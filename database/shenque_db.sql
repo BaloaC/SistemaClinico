@@ -190,12 +190,12 @@ CREATE TABLE  IF NOT EXISTS `proveedor` (
 
 CREATE TABLE  IF NOT EXISTS `insumo` (
     `insumo_id` int(11) NOT NULL AUTO_INCREMENT,
-    `nombre` varchar(45) NOT NULL,
+    `nombre` varchar(45) NOT NULL DEFAULT '0',
     `cantidad` int(11) NOT NULL,
     `stock` int(10) UNSIGNED NOT NULL,
     `cantidad_min` int(11) NOT NULL,
     `precio` float NOT NULL,
-    `estatus_ins` enum('1','2') NOT NULL DEFAULT '1',
+    `estatus_ins` enum('1','2','3') NOT NULL DEFAULT '1',
     PRIMARY KEY (`insumo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

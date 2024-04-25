@@ -29,7 +29,7 @@ class FacturaInsumoHelpers {
                 $insumo = $_insumoModel->where('insumo_id', '=', $insumoNuevo['insumo_id'])->getFirst();
 
                 $unidadesPosts = $insumoNuevo['unidades'] + $insumo->cantidad;
-                $actualizar = array('cantidad' => $unidadesPosts);
+                $actualizar = array('cantidad' => $unidadesPosts, 'estatus_ins' => 1);
                 
                 // actualizando el stock del insumo
                 $_insumoModel = new InsumoModel();

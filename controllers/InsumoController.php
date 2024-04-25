@@ -57,7 +57,7 @@ class InsumoController extends Controller{
     public function listarInsumo(){
 
         $_insumoModel = new InsumoModel();
-        $_insumoModel->where('estatus_ins', '=', '1');
+        $_insumoModel->where('estatus_ins', '!=', '2');
 
         if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
             if (isset($_GET['start']) || isset($_GET['page'])) {
@@ -94,14 +94,14 @@ class InsumoController extends Controller{
             $_insumoModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_insumoModel->where('estatus_ins', '=', '1')->getAll();        
+        $total_registros = $_insumoModel->where('estatus_ins', '!=', '2')->getAll();        
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $lista);
     }
 
     public function listarInsumoPorId($insumo_id){
 
         $_insumoModel = new InsumoModel();
-        $insumo = $_insumoModel->where('estatus_ins', '=', '1')->where('insumo_id','=',$insumo_id)->getFirst();
+        $insumo = $_insumoModel->where('estatus_ins', '!=', '2')->where('insumo_id','=',$insumo_id)->getFirst();
         $mensaje = ($insumo != null);
         Helpers::retornarMensaje($mensaje, $insumo);
     }
