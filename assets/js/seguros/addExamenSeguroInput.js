@@ -17,27 +17,55 @@ const modalRegister = document.getElementById('modalReg');
 
 // Al abrir el modal cargar los select2
 modalRegister.addEventListener('show.bs.modal', async () => {
-    if(modalOpened === false){
-        examenesSeguroList = await getAll("examenes/consulta");
+
+    if (modalOpened === false) {
+
         dinamicSelect2({
-            obj: examenesSeguroList,
+            // obj: examenesSeguroList,
             selectSelector: `#s-examen_id`,
             selectValue: "examen_id",
             selectNames: ["nombre"],
             parentModal: "#modalReg",
-            placeholder: "Seleccione un exámen"
+            placeholder: "Seleccione un exámen",
+            ajax: true,
+            ajaxUrl: "examenes/consulta",
+            queryPage: false,
+            processResultsAjax: function (data, params) {
+
+                const existingSelects = document.querySelectorAll(`.examen`);
+
+                let selectedOptions = [];
+
+                // Recorremos los select que existen
+                existingSelects.forEach(select2 => {
+                    if (document.getElementById(`s-examen_id`)?.value != select2.value) {
+                        selectedOptions.push(select2.value);
+                    }
+                })
+
+                const data1 = [];
+
+                data?.data.forEach(object => {
+                    const { examen_id: valorPropiedad1, nombre: nombreExamen } = object;
+                    let isDuplicate = false;
+
+                    selectedOptions?.forEach(select => {
+                        if (select == object.examen_id) {
+                            isDuplicate = true;
+                            return; // Salir del bucle forEach si se encuentra una duplicación
+                        }
+                    });
+
+                    if (!isDuplicate) {
+                        data1.push({ id: valorPropiedad1, text: nombreExamen });
+                    }
+                });
+
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return { results: data1 };
+            }
         });
 
-        $("#s-examen_id").on("change", () => {
-            validateExistingSelect2OnChange({
-                parentModal: "#modalReg",
-                selectSelector: "#s-examen_id",
-                selectClass: "examen",
-                objList: examenesSeguroList,
-                select2Options,
-                optionId: "examen_id"
-            });
-        });
 
         modalOpened = true;
     }
@@ -84,29 +112,46 @@ async function addExamenSeguroInput() {
         selectValue: select2Options.selectValue,
         selectNames: select2Options.selectNames,
         parentModal: "#modalReg",
-        placeholder: select2Options.placeholder
-    });
+        placeholder: select2Options.placeholder,
+        ajax: true,
+        ajaxUrl: "examenes/consulta",
+        queryPage: false,
+        processResultsAjax: function (data, params) {
 
-    validateExistingSelect2({
-        parentModal: "#modalReg",
-        selectSelector,
-        selectClass: "examen",
-        addButtonId: "#addExamen",
-        objList: examenesSeguroList,
-        select2Options,
-        optionId: "examen_id"
-    });
+            const existingSelects = document.querySelectorAll(`.examen`);
 
-    validateExistingSelect2OnChange({
-        parentModal: "#modalReg",
-        selectSelector,
-        selectClass: "examen",
-        objList: examenesSeguroList,
-        select2Options,
-        optionId: "examen_id"
-    });
+            let selectedOptions = [];
 
-    $(selectSelector).on("change", () => { validateExistingSelect2OnChange({ parentModal: "#modalReg", selectSelector, selectClass: "examen", objList: examenesSeguroList, select2Options, optionId: "examen_id" }); });
+            // Recorremos los select que existen
+            existingSelects.forEach(select2 => {
+
+                if (document.getElementById(`s-examen_id${clicks}`)?.value != select2.value) {
+                    selectedOptions.push(select2.value);
+                }
+            })
+
+            const data1 = [];
+
+            data?.data.forEach(object => {
+                const { examen_id: valorPropiedad1, nombre: nombreExamen } = object;
+                let isDuplicate = false;
+
+                selectedOptions?.forEach(select => {
+                    if (select == object.examen_id) {
+                        isDuplicate = true;
+                        return; // Salir del bucle forEach si se encuentra una duplicación
+                    }
+                });
+
+                if (!isDuplicate) {
+                    data1.push({ id: valorPropiedad1, text: nombreExamen });
+                }
+            });
+
+            // Transforms the top-level key of the response object from 'data' to 'results'
+            return { results: data1 };
+        }
+    });
 
     validateInputs();
 }

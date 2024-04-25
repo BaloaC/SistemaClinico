@@ -1,11 +1,7 @@
 import dinamicSelect2, { emptyAllSelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
-import validateExistingSelect2 from "../global/validateExistingSelect2.js";
-import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
 import validateInputs from "../global/validateInputs.js";
 
-
-export let insumosList = null;
 const select2Options = {
     selectValue: "insumo_id",
     selectNames: ["nombre"],
@@ -20,7 +16,6 @@ const modalRegister = document.getElementById("modalReg");
 const handleModalOpen = async () => {
     if (modalOpened === false) {
 
-        insumosList = await getAll("insumos/consulta");
         const proveedoresList = await getAll("proveedores/consulta");
 
         dinamicSelect2({
@@ -34,24 +29,50 @@ const handleModalOpen = async () => {
         });
 
         dinamicSelect2({
-            obj: insumosList,
+            // obj: insumosList,
             selectSelector: "#s-insumo",
             selectValue: "insumo_id",
             selectNames: ["nombre"],
             parentModal: "#modalReg",
             placeholder: "Seleccione el insumo",
             selectWidth: "100%",
-        });
+            ajax: true,
+            ajaxUrl: "insumos/consulta",
+            queryPage: false,
+            processResultsAjax: function (data, params) {
 
-        $("#s-insumo").on("change", () => {
-            validateExistingSelect2OnChange({
-                parentModal: "#modalReg",
-                selectSelector: "#s-insumo",
-                selectClass: "insumo-id",
-                objList: insumosList,
-                select2Options,
-                optionId: "insumo_id"
-            });
+                const existingSelects = document.querySelectorAll(`.insumo-id`);
+
+                let selectedOptions = [];
+
+                // Recorremos los select que existen
+                existingSelects.forEach(select2 => {
+                    if (document.getElementById(`s-insumo`).value != select2.value) {
+                        selectedOptions.push(select2.value);
+                    }
+                })
+
+                const data1 = [];
+
+                data?.data.forEach(object => {
+                    const { insumo_id: valorPropiedad1, nombre: valorPropiedad2 } = object;
+                    let isDuplicate = false;
+
+                    selectedOptions?.forEach(select => {
+                        if (select == object.insumo_id) {
+                            isDuplicate = true;
+                            return; // Salir del bucle forEach si se encuentra una duplicación
+                        }
+                    });
+
+                    if (!isDuplicate) {
+                        data1.push({ id: valorPropiedad1, text: valorPropiedad2 });
+                    }
+                });
+
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return { results: data1 };
+            }
         });
 
         modalOpened = true;
@@ -93,35 +114,50 @@ function addInsumoInput() {
     document.getElementById("insumos-list").appendChild(clone);
 
     dinamicSelect2({
-        obj: insumosList,
         selectSelector,
         selectValue: select2Options.selectValue,
         selectNames: select2Options.selectNames,
         parentModal: "#modalReg",
         placeholder: select2Options.placeholder,
-        selectWidth: "100%"
-    });
+        selectWidth: "100%",
+        ajax: true,
+        ajaxUrl: "insumos/consulta",
+        queryPage: false,
+        processResultsAjax: function (data, params) {
 
-    validateExistingSelect2({
-        parentModal: "#modalReg",
-        selectSelector,
-        selectClass: "insumo-id",
-        addButtonId: "#addInsumoInputBtn",
-        objList: insumosList,
-        optionId: "insumo_id",
-        select2Options
-    });
+            const existingSelects = document.querySelectorAll(`.insumo-id`);
 
-    validateExistingSelect2OnChange({
-        parentModal: "#modalReg",
-        selectSelector,
-        selectClass: "insumo-id",
-        objList: insumosList,
-        optionId: "insumo_id",
-        select2Options
-    });
+            let selectedOptions = [];
 
-    $(selectSelector).on("change", () => { validateExistingSelect2OnChange({ parentModal: "#modalReg", selectSelector, selectClass: "insumo-id", objList: insumosList, optionId: "insumo_id", select2Options }); });
+            // Recorremos los select que existen
+            existingSelects.forEach(select2 => {
+                if (document.getElementById(`s-insumo${clicks}`).value != select2.value) {
+                    selectedOptions.push(select2.value);
+                }
+            })
+
+            const data1 = [];
+
+            data?.data.forEach(object => {
+                const { insumo_id: valorPropiedad1, nombre: valorPropiedad2 } = object;
+                let isDuplicate = false;
+
+                selectedOptions?.forEach(select => {
+                    if (select == object.insumo_id) {
+                        isDuplicate = true;
+                        return; // Salir del bucle forEach si se encuentra una duplicación
+                    }
+                });
+
+                if (!isDuplicate) {
+                    data1.push({ id: valorPropiedad1, text: valorPropiedad2 });
+                }
+            });
+
+            // Transforms the top-level key of the response object from 'data' to 'results'
+            return { results: data1 };
+        }
+    });
 
     validateInputs();
 }
