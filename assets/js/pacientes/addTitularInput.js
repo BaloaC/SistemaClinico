@@ -18,31 +18,67 @@ const modalUpdate = document.getElementById("modalAct");
 
 const handleModalOpen = async (parentModal) => {
 
-    if(modalOpened === false){
+    if (modalOpened === false) {
 
-        titularesList = await getTitulares();
-        
+        // titularesList = await getTitulares();
+
         let selectSelectorTitular = parentModal === "#modalReg" ? "#s-titular_id" : "#s-titular_id-act";
 
         dinamicSelect2({
-            obj: titularesList,
+            // obj: titularesList,
             selectSelector: selectSelectorTitular,
             selectValue: "paciente_id",
             selectNames: ["cedula", "nombre-apellidos"],
             parentModal: parentModal,
-            placeholder: "Seleccione un titular"
+            placeholder: "Seleccione un titular",
+            ajax: true,
+            ajaxUrl: "pacientes/consulta",
+            queryPage: false,
+            processResultsAjax: function (data, params) {
+
+                const data1 = [];
+
+                if (typeof data === "object" && data?.data !== 0) {
+
+                    const titulares = [];
+
+                    data?.data.filter(paciente => (paciente.tipo_paciente == 2 || paciente.tipo_paciente == 3) ? titulares.push(paciente) : null);
+
+                    titulares?.forEach(object => {
+                        const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
+
+                        const handleTipoPaciente = (tipo_paciente) => {
+                            if (tipo_paciente == 1) tipo_paciente = "Natural";
+                            else if (tipo_paciente == 2) tipo_paciente = "Representante";
+                            else if (tipo_paciente == 3) tipo_paciente = "Asegurado";
+                            else if (tipo_paciente == 4) tipo_paciente = "Beneficiado";
+
+                            return tipo_paciente
+                        }
+
+                        data1.push({ id: valorPropiedad1, text: `${cedula} - ${nombre} ${apellidos} - ${handleTipoPaciente(tipo_paciente)}` });
+                    });
+                }
+
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return {
+                    results: data1 ?? []
+                };
+            }
         });
 
-        $(selectSelectorTitular).on("change", () => {
-            validateExistingSelect2OnChange({
-                parentModal,
-                selectSelector: selectSelectorTitular,
-                selectClass: "titular",
-                objList: titularesList,
-                select2Options,
-                optionId: "paciente_id"
-            });
-        });
+
+
+        // $(selectSelectorTitular).on("change", () => {
+        //     validateExistingSelect2OnChange({
+        //         parentModal,
+        //         selectSelector: selectSelectorTitular,
+        //         selectClass: "titular",
+        //         objList: titularesList,
+        //         select2Options,
+        //         optionId: "paciente_id"
+        //     });
+        // });
 
         modalOpened = true;
     }
@@ -56,7 +92,7 @@ async function addTitularInput() {
     const inputTitulares = document.querySelectorAll(".titular");
 
     // Validamos que exista un solo titular para poder añadirle que se pueda eliminar
-    if(inputTitulares.length === 1){
+    if (inputTitulares.length === 1) {
         document.querySelectorAll(".titular")[0].parentElement.parentElement.querySelector("div").classList.remove("d-none");
     }
 
@@ -113,29 +149,61 @@ async function addTitularInput() {
         selectValue: select2Options.selectValue,
         selectNames: select2Options.selectNames,
         parentModal: "#modalReg",
-        placeholder: select2Options.placeholder
-    });
+        placeholder: select2Options.placeholder,
+        ajax: true,
+        ajaxUrl: "pacientes/consulta",
+        queryPage: false,
+        processResultsAjax: function (data, params) {
 
-    validateExistingSelect2({
-        parentModal: "#modalReg",
-        selectSelector,
-        selectClass: "titular",
-        addButtonId: "#addTitular",
-        objList: titularesList,
-        optionId: "paciente_id",
-        select2Options
-    });
-    
-    validateExistingSelect2OnChange({
-        parentModal: "#modalReg",
-        selectSelector,
-        selectClass: "titular",
-        objList: titularesList,
-        optionId: "paciente_id",
-        select2Options
-    });
+            const existingSelects = document.querySelectorAll(`.titular`);
 
-    $(selectSelector).on("change", () => { validateExistingSelect2OnChange({ parentModal: "#modalReg", selectSelector, selectClass: "titular",  objList: titularesList, optionId: "paciente_id", select2Options }); });
+            let selectedOptions = [];
+            const data1 = [];
+
+            // Recorremos los select que existen
+            existingSelects.forEach(select2 => {
+                if (document.getElementById(`s-titular_id${clicks}`).value != select2.value) {
+                    selectedOptions.push(select2.value);
+                }
+            })
+
+            const titulares = [];
+
+            data?.data.filter(paciente => (paciente.tipo_paciente == 2 || paciente.tipo_paciente == 3) ? titulares.push(paciente) : null);
+
+
+            titulares.forEach(object => {
+
+                const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
+                let isDuplicate = false;
+
+                selectedOptions?.forEach(select => {
+                    if (select == object.paciente_id) {
+                        isDuplicate = true;
+                        return; // Salir del bucle forEach si se encuentra una duplicación
+                    }
+                });
+
+                const handleTipoPaciente = (tipo_paciente) => {
+                    if (tipo_paciente == 1) tipo_paciente = "Natural";
+                    else if (tipo_paciente == 2) tipo_paciente = "Representante";
+                    else if (tipo_paciente == 3) tipo_paciente = "Asegurado";
+                    else if (tipo_paciente == 4) tipo_paciente = "Beneficiado";
+
+                    return tipo_paciente
+                }
+
+                if (!isDuplicate) {
+                    data1.push({ id: valorPropiedad1, text: `${cedula} - ${nombre} ${apellidos} - ${handleTipoPaciente(tipo_paciente)}` });
+                }
+            });
+
+            // Transforms the top-level key of the response object from 'data' to 'results'
+            return {
+                results: data1 ?? []
+            };
+        }
+    });
 
     defaultSelect();
 }

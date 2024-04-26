@@ -136,16 +136,50 @@ const handleModalOpen = async () => {
         });
 
         dinamicSelect2({
-            obj: pacientesList ?? [],
+            // obj: pacientesList ?? [],
             selectSelector: "#s-paciente",
             selectValue: "paciente_id",
             selectNames: ["cedula", "nombre-apellidos"],
             parentModal: "#modalReg",
             placeholder: "Seleccione un paciente",
+            ajax: true,
+            ajaxUrl: "pacientes/consulta",
+            processResultsAjax: function (data, params) {
+
+                const data1 = [];
+                
+
+                console.log(typeof data, data);
+
+                if(typeof data === "object" && data?.data !== 0){
+                    data?.data.forEach(object => {
+                        const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
+    
+                        const handleTipoPaciente = (tipo_paciente) => {
+                            if (tipo_paciente == 1) tipo_paciente = "Natural";
+                            else if (tipo_paciente == 2) tipo_paciente = "Representante";
+                            else if (tipo_paciente == 3) tipo_paciente = "Asegurado";
+                            else if (tipo_paciente == 4) tipo_paciente = "Beneficiado";
+    
+                            return tipo_paciente
+                        }
+    
+                        data1.push({ id: valorPropiedad1, text: `${cedula} - ${nombre} ${apellidos} - ${handleTipoPaciente(tipo_paciente)}` });
+                    });
+                }
+
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return {
+                    results: data1 ?? [],
+                    pagination: {
+                        more: data1.length
+                    }
+                };
+            }
         });
 
-        $("#s-paciente").val([]).trigger("change")
-        document.getElementById("s-paciente").classList.remove("is-valid");
+        // $("#s-paciente").val([]).trigger("change")
+        // document.getElementById("s-paciente").classList.remove("is-valid");
 
         dinamicSelect2({
             selectSelector: especialidadSelect,

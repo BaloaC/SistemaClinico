@@ -52,50 +52,49 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             disable: false
         });
 
-        // ** Para la función de dar click luego de 
-        $(pacientesSelect).on("select2:open", async function (e) {
-            if (document.querySelector("#s-paciente").dataset.active == 0) {
+        dinamicSelect2({
+            selectSelector: pacientesSelect,
+            selectValue: "paciente_id",
+            selectNames: ["cedula", "nombre-apellidos", "tipo_paciente"],
+            parentModal: "#modalReg",
+            placeholder: "Seleccione un paciente",
+            selectWidth: "100%",
+            ajax: true,
+            ajaxUrl: "pacientes/consulta",
+            processResultsAjax: function (data, params) {
 
-                const obj = await getAll("pacientes/consulta");
+                const data1 = [];
+                
 
-                obj.forEach(el => {
+                console.log(typeof data, data);
 
-                    if (el.tipo_paciente == 1) el.tipo_paciente = "Natural";
-                    else if (el.tipo_paciente == 2) el.tipo_paciente = "Representante";
-                    else if (el.tipo_paciente == 3) el.tipo_paciente = "Asegurado";
-                    else if (el.tipo_paciente == 4) el.tipo_paciente = "Beneficiado";
-
-                    if ($(pacientesSelect).find(`option[value="${el.paciente_id}"]`).length) {
-                        $(pacientesSelect).val(el.paciente_id);
-                    } else {
-                        let newOption = new Option(selectText(["cedula", "nombre-apellidos", "tipo_paciente"], el), el.paciente_id, false, false);
-                        $(pacientesSelect).append(newOption);
-                    }
-                });
-
-                $(pacientesSelect).val(0).trigger('change.select2');
-                $(pacientesSelect).select2("close");
-                document.querySelector("#s-paciente").dataset.active = 1;
-            }
-
-            $(pacientesSelect).on("change", function () {
-                if ($(pacientesSelect).val() != 0) {
-                    $(pacientesSelect).removeClass("is-invalid");
-                    $(pacientesSelect).addClass("is-valid");
-                } else {
-                    $(pacientesSelect).removeClass("is-valid");
-                    $(pacientesSelect).addClass("is-invalid");
+                if(typeof data === "object" && data?.data !== 0){
+                    data?.data.forEach(object => {
+                        const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
+    
+                        const handleTipoPaciente = (tipo_paciente) => {
+                            if (tipo_paciente == 1) tipo_paciente = "Natural";
+                            else if (tipo_paciente == 2) tipo_paciente = "Representante";
+                            else if (tipo_paciente == 3) tipo_paciente = "Asegurado";
+                            else if (tipo_paciente == 4) tipo_paciente = "Beneficiado";
+    
+                            return tipo_paciente
+                        }
+    
+                        data1.push({ id: valorPropiedad1, text: `${cedula} - ${nombre} ${apellidos} - ${handleTipoPaciente(tipo_paciente)}` });
+                    });
                 }
-            });
 
-            $(pacientesSelect).select2("open");
-        })
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return {
+                    results: data1 ?? [],
+                    pagination: {
+                        more: data1.length
+                    }
+                };
+            }
+        });
 
-        if ("#modalReg" !== null) {
-            document.querySelector("#modalReg").addEventListener("hidden.bs.modal", e => {
-                document.querySelector("#s-paciente").dataset.active = 0;
-            })
-        }
 
         $("#s-paciente").on("change", async function (e) {
 

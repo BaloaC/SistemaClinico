@@ -83,38 +83,7 @@ addEventListener("DOMContentLoaded", async e => {
                 return formatToRealDate(data);
             }
         },
-        {
-            data: "consulta_id",
-            render: function (data, type, row) {
-
-                // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-                return `
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteConsulta(${data})"><i class="fas fa-trash del-consulta"></i></a>
-                    `
-            }
-        }
-
     ];
-
-    // const columnDefsConsultaSeguro = [
-    //     {
-    //         searchPanes: {
-    //             show: false,
-    //         },
-    //         targets: [0, 1, 2, 3, 4, 5, 6],
-    //     },
-    //     {
-    //         type: 'datetime-moment',
-    //         targets: 6
-    //     }
-    // ];
-
-    // const searchPanesConsultaSeguro = {
-    //     controls: false,
-    //     hideCount: true,
-    //     collapse: true,
-    //     initCollapsed: true,
-    // };
 
     const order = [[5, 'desc']];
 
