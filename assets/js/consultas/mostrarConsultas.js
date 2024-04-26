@@ -184,9 +184,18 @@ const handleModalOpen = async () => {
             const medicamentosSelect = document.querySelectorAll(".medicamento-id");
 
             // Reinicializar los select2 de los medicamentos para que se puedan actualizar según la especilidad
-            medicamentosSelect.forEach(select => {
+            medicamentosSelect.forEach((select, key) => {
 
                 $(select).empty().select2();
+
+                // Seleccionamos la especialidad en los filtros para que carguen
+                const data = {
+                    id: cita.especialidad_id,
+                    text: cita.nombre_especialidad
+                };
+
+                const newOption = new Option(data.text, data.id, true, true);
+                $(`#s-especialidadm${key === 0 ? "" : key}`).append(newOption).trigger('change');
 
                 dinamicSelect2({
                     // obj: medicamentosList,
@@ -234,22 +243,31 @@ const handleModalOpen = async () => {
                     }
                 });
             });
-            
+
         });
 
         $(especialidadSelect).on("change", async function (e) {
 
-            especialidadId.valor = this.value;
             let especialidad_id = this.value;
             $(medicoSelect).empty().select2();
 
+            const especialidadSelected = await getById("especialidades", this.value);
 
             const medicamentosSelect = document.querySelectorAll(".medicamento-id");
 
             // Reinicializar los select2 de los medicamentos para que se puedan actualizar según la especilidad
-            medicamentosSelect.forEach(select => {
+            medicamentosSelect.forEach((select, key) => {
 
                 $(select).empty().select2();
+
+                // Seleccionamos la especialidad en los filtros para que carguen
+                const data = {
+                    id: especialidadSelected.especialidad_id,
+                    text: especialidadSelected.nombre
+                };
+
+                const newOption = new Option(data.text, data.id, true, true);
+                $(`#s-especialidadm${key === 0 ? "" : key}`).append(newOption).trigger('change');
 
                 dinamicSelect2({
                     // obj: medicamentosList,
@@ -259,7 +277,7 @@ const handleModalOpen = async () => {
                     parentModal: "#modalReg",
                     placeholder: "Seleccione el medicamento",
                     ajax: true,
-                    ajaxUrl: `medicamento/especialidad/${especialidadId.valor}`,
+                    ajaxUrl: `medicamento/especialidad/${especialidad_id}`,
                     queryPage: false,
                     processResultsAjax: function (data, params) {
 

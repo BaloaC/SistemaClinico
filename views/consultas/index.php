@@ -270,6 +270,12 @@
                                 <h5>Recipes otorgados en la Consulta (Opcional)</h5>
                                 <div class="row align-items-start">
                                     <div class="col-12 col-md-5">
+                                        <label for="medicamento">Filtrar por especialidad</label>
+                                        <select id="s-especialidadm" class="form-control especialidad-id" data-active="0">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-5">
                                         <label for="medicamento">Medicamento</label>
                                         <select id="s-medicamento" class="form-control medicamento-id" data-active="0">
                                             <option></option>
