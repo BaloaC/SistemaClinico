@@ -64,23 +64,23 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             processResultsAjax: function (data, params) {
 
                 const data1 = [];
-                
+
 
                 console.log(typeof data, data);
 
-                if(typeof data === "object" && data?.data !== 0){
+                if (typeof data === "object" && data?.data !== 0) {
                     data?.data.forEach(object => {
                         const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
-    
+
                         const handleTipoPaciente = (tipo_paciente) => {
                             if (tipo_paciente == 1) tipo_paciente = "Natural";
                             else if (tipo_paciente == 2) tipo_paciente = "Representante";
                             else if (tipo_paciente == 3) tipo_paciente = "Asegurado";
                             else if (tipo_paciente == 4) tipo_paciente = "Beneficiado";
-    
+
                             return tipo_paciente
                         }
-    
+
                         data1.push({ id: valorPropiedad1, text: `${cedula} - ${nombre} ${apellidos} - ${handleTipoPaciente(tipo_paciente)}` });
                     });
                 }
@@ -95,15 +95,39 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             }
         });
 
+        const radioTipoPacienteHandler = (infoPaciente) => {
+            const inputRadioBeneficiado = document.getElementById("tipoPacienteBeneficiado");
+            const inputTipoCita = document.getElementById("s-tipo_cita");
+
+            if (infoPaciente.edad >= 18 && infoPaciente.tipo_paciente == 4) {
+                if(inputRadioBeneficiado.checked) {
+                    alert("beneficiado");
+                    inputTipoCita.querySelector("option[value='2']").disable = false;
+                    inputTipoCita.querySelector("option[value='2']").selected = true;
+                    inputTipoCita.querySelector("option[value='1']").disabled = true;
+                } else {
+                    alert("titular");
+                    inputTipoCita.querySelector("option[value='1']").disable = false;
+                    inputTipoCita.querySelector("option[value='1']").selected = true;
+                    inputTipoCita.querySelector("option[value='2']").disabled = true;
+                }
+            }
+
+        }
+
 
         $("#s-paciente").on("change", async function (e) {
 
             let paciente_id = this.value;
             const infoPaciente = await getById("pacientes", paciente_id);
             const inputRadioBeneficiado = document.getElementById("tipoPacienteBeneficiado");
+            const inputRadioTitular = document.getElementById("tipoPacienteTitular");
             const inputTipoCita = document.getElementById("s-tipo_cita");
             const inputTipoCitaDefault = inputTipoCita.querySelector("option[value='default']");
 
+            inputRadioBeneficiado.addEventListener("change", () => {radioTipoPacienteHandler(infoPaciente)});
+            inputRadioTitular.addEventListener("change", () => {radioTipoPacienteHandler(infoPaciente)});
+            
             // ** Una vez se elija el paciente, permitir el cambio de tipo cita
             if (inputTipoCitaDefault !== null) {
                 inputTipoCita.removeChild(inputTipoCitaDefault);
@@ -121,6 +145,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                 inputTipoCita.querySelector("option[value='1']").selected = true;
                 $('#s-seguro').next('.select2-container').fadeOut('slow');
 
+
                 // ** Si esta selccionado como beneficiado
                 if (inputRadioBeneficiado.checked) {
                     $('#s-titular').next('.select2-container').fadeIn('slow');
@@ -130,6 +155,35 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                 } else {
                     $('#s-titular').next('.select2-container').fadeOut('slow');
                 }
+
+                // ** Si es beneficiado y menor de edad, siempre será benficiado por ende solo selccionamos directamente la opción en el input radio
+                if (infoPaciente.edad < 18 && infoPaciente.tipo_paciente == 4) {
+                    document.querySelector(".input-radios-container").classList.add("d-none");
+                    document.querySelector("label[for='input-radios-container'").classList.add("d-none");
+
+                    inputRadioBeneficiado.checked = true;
+
+                    $('#s-titular').next('.select2-container').fadeIn('slow');
+                    document.querySelector("label[for='titular_id'").classList.remove("d-none");
+                    document.querySelector("#s-titular").dataset.active = 0;
+                    tipoTitular(inputRadioBeneficiado);
+                }
+
+                if (infoPaciente.edad >= 18 && infoPaciente.tipo_paciente == 4) {
+                    if(inputRadioBeneficiado.checked) {
+                        alert("beneficiado1");
+                        inputTipoCita.querySelector("option[value='2']").disable = false;
+                        inputTipoCita.querySelector("option[value='2']").selected = true;
+                        inputTipoCita.querySelector("option[value='1']").disabled = true;
+                    } else {
+                        alert("titular1");
+                        inputTipoCita.querySelector("option[value='1']").disable = false;
+                        inputTipoCita.querySelector("option[value='1']").selected = true;
+                        inputTipoCita.querySelector("option[value='2']").disabled = true;
+                    }
+                }
+
+
 
                 // ** Si es asegurado
             } else if (infoPaciente.tipo_paciente == 3) {
