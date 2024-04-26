@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
                     <button class="btn btn-sm btn-add mx-1" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalRegAntecedentes"><i class="fa-sm fas fa-plus"></i> Antecedentes</button>
-                    <button class="btn btn-sm btn-add mx-1" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Consulta</button>
+                    <button class="btn btn-sm btn-add mx-1" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Agregar consulta</button>
                 </div>
                 <hr class="border-white">
             </div>

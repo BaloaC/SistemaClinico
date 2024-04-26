@@ -290,7 +290,7 @@
                                 <h5>Indicaciones mencionadas en la Consulta (Opcional)</h5>
                                 <div class="row align-items-start">
                                     <div class="col-12 col-md-5">
-                                        <label for="indicacion">Indicación</label>
+                                        <label for="indicacion">Descripción de la indicación médica</label>
                                         <input type="text" data-validate="true" data-type="address" class="form-control indicaciones">
                                         <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                                     </div>

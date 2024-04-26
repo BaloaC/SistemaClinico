@@ -265,7 +265,7 @@
                                         <button type="button" class="btn" disabled><i class="fas fa-times m-0"></i></button>
                                     </div>
                                     <div class="col-12 col-md-5">
-                                        <label for="indicacion" class="p-0">Indicación</label>
+                                        <label for="indicacion" class="p-0">Descripción de la indicación médica</label>
                                         <input type="text" class="form-control indicaciones">
                                     </div>
                                 </div>
