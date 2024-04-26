@@ -120,7 +120,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-primary mt-3 w-25" id="addMedicoEspecialidad" onclick="addMedicoEspecialidadInput('addMedicoEspecialidad')">Añadir otra especialidad</button>
+                                <div>
+                                    <button type="button" class="btn btn-primary mt-3" id="addMedicoEspecialidad" onclick="addMedicoEspecialidadInput('addMedicoEspecialidad')">Añadir otra especialidad</button>
+                                </div>
                                 <div class="col-12 col-check mt-4">
                                     <div class="py-3">Seleccione los horarios del doctor</div>
                                     <div class="row align-items-center">
@@ -312,7 +314,7 @@
                                 <div class="row mt-4 act-medico-especialidad">
                                     <h5>Especialidades</h5>
                                 </div>
-                                <button type="button" class="btn btn-primary mt-3 w-25" id="addMedicoEspecialidadAct" onclick="addMedicoEspecialidadInput('addMedicoEspecialidadAct', '#modalAct')">Añadir otra especialidad</button>
+                                <button type="button" class="btn btn-primary mt-3" id="addMedicoEspecialidadAct" onclick="addMedicoEspecialidadInput('addMedicoEspecialidadAct', '#modalAct')">Añadir otra especialidad</button>
                                 <div class="act-horarios">
                                 </div>
                             </div>

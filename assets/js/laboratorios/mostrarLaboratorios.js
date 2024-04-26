@@ -1,14 +1,54 @@
 import getAll from "../global/getAll.js";
 
-async function mostrarLaboratorios(inicial) {
-    
-    try {
+class VistaLaboratorio {
+    constructor() {
+        this.abecedarioContenedor = document.querySelector('[data-identifier="abecedarioLista"]');
+        this.examenesLista = "";
+        this.abecedarioLista = "";
 
-        let template = "";
+        this.obtenerExamenes();
+        
+        const observer = new MutationObserver(() => {
+            document.querySelectorAll('[data-action="mostrarLaboratorios"]').forEach(element => {
+                element.addEventListener('click', (e) => this.mostrarLaboratorios(element.getAttribute('data-abecedario')))
+            });
+        });
+        observer.observe(this.abecedarioContenedor, { characterData: true, subtree: true, childList: true });
+    }
+
+    async obtenerExamenes() {
+        this.examenesLista = await getAll("examenes/laboratorios");
+        const abecedario = this.examenesLista.map(function (examen) {
+            return examen.nombre.charAt(0);
+        });
+
+        this.abecedarioLista = [...new Set(abecedario)];
+        this.abecedarioLista.sort();
+
+        this.mostrarAbecedario();
+    }
+
+    async mostrarAbecedario() {
+        let letras = [];
+        this.abecedarioLista.forEach((abecedario) => {
+
+            let clase = this.abecedarioLista.indexOf(abecedario) == 0 ? 'active-word' : '';
+
+            letras.push(`<a class="${abecedario} ${clase}" data-action="mostrarLaboratorios" data-abecedario="${abecedario}">${abecedario.toUpperCase()}</a>`)
+            letras.push(` - `);
+        });
+
+        letras.pop();
+        this.abecedarioContenedor.innerHTML = letras.join('');
+        this.mostrarLaboratorios(this.abecedarioLista[0]);
+    }
+
+    async mostrarLaboratorios(inicial) {
+        let inicialMayuscula = inicial.toLowerCase();
+        const laboratoriosList = this.examenesLista.filter(examen => examen.nombre.toLowerCase().slice("0")[0] === inicialMayuscula);
+        console.log(laboratoriosList);
         const examenesContainer = document.querySelector(".examenes-list");
-        const examenesList = await getAll("examenes/laboratorios");
-
-        const laboratoriosList = examenesList.filter(examen => examen.nombre.toLowerCase().slice("0")[0] === inicial);
+        let template = "";
 
         // Seleccionar la letra activa
         const activeWord = document.querySelector(".active-word");
@@ -38,15 +78,10 @@ async function mostrarLaboratorios(inicial) {
             template += `<h5 class="mx-5">No se encontraron exámenes de laboratorio</h5>`;
             examenesContainer.innerHTML = template;
         }
-        
-    } catch (error) {
-
-        console.log(error);
     }
 }
 
-window.mostrarLaboratorios = mostrarLaboratorios;
-
 document.addEventListener("DOMContentLoaded", async () => {
-    mostrarLaboratorios("a");
+    new VistaLaboratorio();
+
 })

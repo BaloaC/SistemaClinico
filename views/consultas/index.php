@@ -22,7 +22,7 @@
                     <h4 class="pt-5 pb-2 text-grey">Consultas</h4>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
-                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> consulta</button>
+                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Consulta</button>
                 </div>
                 <hr class="border-white">
             </div>
@@ -201,6 +201,8 @@
                                         <select id="s-seguro-emergencia" name="seguro_id" class="form-control seguro-emergencia" data-active="0" disabled required>
                                             <option></option>
                                         </select>
+                                    </div>
+                                    <div class="col-12 col-md-6">
                                         <label for="forRegistrarPagoMedico" id="registrarPagoMedicoLabel">¿Desea registrar el pago de algún médico?</label>
                                         <div class="input-radios-container inputRadioPagoMedico">
                                             <div class="form-check form-check-inline">
@@ -297,7 +299,7 @@
                                 <h5>Indicaciones mencionadas en la Consulta (Opcional)</h5>
                                 <div class="row align-items-start">
                                     <div class="col-12 col-md-5">
-                                        <label for="indicacion">Indicación</label>
+                                        <label for="indicacion">Descripción de la indicación</label>
                                         <input type="text" data-validate="true" data-type="address" class="form-control indicaciones">
                                         <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                                     </div>

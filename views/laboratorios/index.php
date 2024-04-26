@@ -16,10 +16,11 @@
     <main class="main-home">
         <div class="container text-light">
             <div class="row">
-                <h4 class="pt-5 pb-2 text-grey">Gestion de Exámenes</h4>
+                <h4 class="pt-5 pb-2 text-grey">Exámenes de Laboratorio</h4>
             </div>
             <div class="row abc-container">
-                <div class="abc-elements">
+                <div data-identifier="abecedarioLista"></div>
+                <!-- <div class="abc-elements">
                     <a class="a active-word" onclick="mostrarLaboratorios('a')">A</a>
                     -
                     <a class="b" onclick="mostrarLaboratorios('b')">B</a>
@@ -71,7 +72,7 @@
                     <a class="y" onclick="mostrarLaboratorios('y')">Y</a> 
                     -
                     <a class="z" onclick="mostrarLaboratorios('z')">Z</a>
-                </div>
+                </div> -->
             </div>
             <div class="row examenes-list">
             </div>

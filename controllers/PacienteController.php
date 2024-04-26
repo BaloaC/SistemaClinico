@@ -75,25 +75,33 @@ class PacienteController extends Controller{
         $_pacienteModel = new PacienteModel();
         $_pacienteModel->where('estatus_pac', '=', '1');
 
-        if (isset($_GET['start']) || isset($_GET['search'])) {
-            if (isset($_GET['start'])) {
+        if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
+            if (isset($_GET['start']) || isset($_GET['page'])) {
+
                 $size = isset($_GET['length']) ? $_GET['length'] : 10;
-                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+                $pagina_actual = isset($_GET['page']) ? $_GET['page'] : floor($_GET['start'] / $_GET['length']) + 1;
 
                 $ultimo_registro = $pagina_actual * $size;
                 $primer_registro = $ultimo_registro - $size;
                 $_pacienteModel->limit([$primer_registro, $size]);
             }
 
-            if (strlen($_GET['search']['value']) > 0) {
-                $_pacienteModel->where("CONCAT(nombre, ' ', apellidos, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
+            // if (strlen($_GET['search']['value']) > 0) {
+            //     $_pacienteModel->where("CONCAT(nombre, ' ', apellidos, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
+            // }
+
+            if(isset($_GET['search'])) {
+                if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                    $_pacienteModel->where("CONCAT(nombre, ' ', apellidos, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
+                } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                    $_pacienteModel->where("CONCAT(nombre, ' ', apellidos, ' ', cedula)", 'LIKE', "%{$_GET['search']}%");
+                }
             }
         }
 
         $paciente = $_pacienteModel->getAll();
         $_pacienteModel->resetValues();
-        // echo '<pre>';
-        // var_dump($paciente);
+
         if ($paciente) {
             $resultado = array();
 
@@ -107,23 +115,24 @@ class PacienteController extends Controller{
                 $resultado[] = $pacientes;
             }
 
-            if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
-                $_pacienteModel->setSelect('COUNT(*) AS total')->where("CONCAT(nombre, ' ', apellidos, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
+            if ( isset($_GET['search']) ) {
+                if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                    $_pacienteModel->setSelect('COUNT(*) AS total')->where("CONCAT(nombre, ' ', apellidos, ' ', cedula)", 'LIKE', "%{$_GET['search']}%");
+                } else if ( strlen($_GET['search']['value']) > 0) {
+                    $_pacienteModel->setSelect('COUNT(*) AS total')->where("CONCAT(nombre, ' ', apellidos, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
+                } else {
+                    $_pacienteModel->setSelect('COUNT(*) AS total');
+                }
             } else {
                 $_pacienteModel->setSelect('COUNT(*) AS total');
             }
 
             $total_registros = $_pacienteModel->where('estatus_pac', '=', '1')->getAll();
             Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $resultado);
-            // return $this->retornarMensaje($resultado);
 
         } else {
 
             Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), 0, 0);
-
-            // $respuesta = new Response('NOT_FOUND');
-            // $respuesta->setData([]);
-            // return $respuesta->json(200);
         }
     }
 
