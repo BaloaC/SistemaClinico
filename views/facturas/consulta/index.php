@@ -83,7 +83,7 @@
                                         <option></option>
                                     </select>
                                     <label for="monto_sin_iva">Monto</label><br>
-                                    <small>(El valor ingresado es en dólares)</small>
+                                    <small class="text-secondary">(El valor ingresado es en dólares)</small>
                                     <input type="number" step="any" name="monto_consulta_usd" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
                                     <small class="form-text">No se permiten números negativos</small>
                                 </div>
