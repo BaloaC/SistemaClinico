@@ -63,7 +63,7 @@
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalRegLabel">Registrar recibo compra</h1>
+                        <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Recibo de Compra</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="modalRegBody">
@@ -179,6 +179,11 @@
     <script type="module" src="<?php echo Url::to('assets/js/facturas-compra/addInsumoInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-compra/deleteInsumoInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-compra/calcularInsumos.js'); ?>"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (e) => {
+            document.getElementsByName("fecha_compra")[0].max = new Date().toISOString().split('T')[0];
+        })
+    </script>
 </body>
 
 </html>
