@@ -35,7 +35,7 @@ class VistaLaboratorio {
             let clase = this.abecedarioLista.indexOf(abecedario) == 0 ? 'active-word' : '';
 
             letras.push(`<a class="${abecedario} ${clase}" data-action="mostrarLaboratorios" data-abecedario="${abecedario}">${abecedario.toUpperCase()}</a>`)
-            letras.push(`-`);
+            letras.push(` - `);
         });
 
         letras.pop();
