@@ -30,34 +30,41 @@ const handleModalOpen = async (parentModal) => {
             ajax: true,
             ajaxUrl: "medicos/consulta",
             placeholder: "Seleccione un médico",
+            queryPage: false,
             processResultsAjax: function (data, params) {
 
-                params.page = params.page || 1;
+                const existingSelects = document.querySelectorAll(`.medico-pago-id`);
 
-                const data1 = data?.data.map(object => {
+                let selectedOptions = [];
+
+                // Recorremos los select que existen
+                existingSelects.forEach(select2 => {
+                    if (document.getElementById(`s-medico-pago`).value != select2.value) {
+                        selectedOptions.push(select2.value);
+                    }
+                })
+
+                const data1 = [];
+
+                data?.data.forEach(object => {
                     const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico } = object;
-                    return { id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` };
+                    let isDuplicate = false;
+
+                    selectedOptions?.forEach(select => {
+                        if (select == object.medico_id) {
+                            isDuplicate = true;
+                            return; // Salir del bucle forEach si se encuentra una duplicación
+                        }
+                    });
+
+                    if (!isDuplicate) {
+                        data1.push({ id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` });
+                    }
                 });
 
                 // Transforms the top-level key of the response object from 'data' to 'results'
-                return {
-                    results: data1,
-                    pagination: {
-                        more: data1.length
-                    }
-                };
+                return { results: data1 };
             }
-        });
-
-        $("#s-medico-pago").on("change", () => {
-            validateExistingSelect2OnChange({
-                parentModal,
-                selectSelector: "#s-medico-pago",
-                selectClass: "medico-pago-id",
-                objList: medicosList,
-                select2Options,
-                optionId: "medico_id"
-            });
         });
 
         modalOpened = true;
@@ -109,29 +116,46 @@ function addMedicoPagoInput(parentModal = "#modalReg") {
         selectValue: select2Options.selectValue,
         selectNames: select2Options.selectNames,
         parentModal,
-        placeholder: select2Options.placeholder
-    });
+        placeholder: select2Options.placeholder,
+        ajax: true,
+        ajaxUrl: "medicos/consulta",
+        placeholder: "Seleccione un médico",
+        queryPage: false,
+        processResultsAjax: function (data, params) {
 
-    validateExistingSelect2({
-        parentModal,
-        selectSelector,
-        selectClass: "medico-pago-id",
-        addButtonId: "#addMedicoPago",
-        objList: medicosList,
-        select2Options,
-        optionId: "medico_id"
-    });
+            const existingSelects = document.querySelectorAll(`.medico-pago-id`);
 
-    validateExistingSelect2OnChange({
-        parentModal,
-        selectSelector,
-        selectClass: "medico-pago-id",
-        objList: medicosList,
-        select2Options,
-        optionId: "medico_id"
-    });
+            let selectedOptions = [];
 
-    $(selectSelector).on("change", () => { validateExistingSelect2OnChange({ parentModal, selectSelector, selectClass: "medico-pago-id", objList: medicosList, select2Options, optionId: "medico_id" }); });
+            // Recorremos los select que existen
+            existingSelects.forEach(select2 => {
+                if (document.getElementById(`s-medico-pago${clicks}`).value != select2.value) {
+                    selectedOptions.push(select2.value);
+                }
+            })
+
+            const data1 = [];
+
+            data?.data.forEach(object => {
+                const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico } = object;
+                let isDuplicate = false;
+
+                selectedOptions?.forEach(select => {
+                    if (select == object.medico_id) {
+                        isDuplicate = true;
+                        return; // Salir del bucle forEach si se encuentra una duplicación
+                    }
+                });
+
+                if (!isDuplicate) {
+                    data1.push({ id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` });
+                }
+            });
+
+            // Transforms the top-level key of the response object from 'data' to 'results'
+            return { results: data1 };
+        }
+    });
 
     validateInputs();
 }

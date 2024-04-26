@@ -1,7 +1,7 @@
 import validateExistingSelect2OnDelete from "../global/validateExistingSelect2OnDelete.js";
 import { insumosList } from "./addInsumoInput.js";
 import { medicosList } from "./addMedicoPagoInput.js";
-import { medicamentosList } from "./addRecipeInput.js";
+// import { medicamentosList } from "./addRecipeInput.js";
 
 
 

@@ -18,10 +18,10 @@ const modalUpdate = document.getElementById("modalAct");
 
 const handleModalOpen = async () => {
     if (modalOpened === false) {
-        especialidadesList = await getAll("especialidades/consulta");
+        // especialidadesList = await getAll("especialidades/consulta");
 
         dinamicSelect2({
-            obj: especialidadesList,
+            // obj: especialidadesList,
             selectSelector: "#s-especialidad",
             selectValue: "especialidad_id",
             selectNames: ["nombre"],
@@ -29,34 +29,41 @@ const handleModalOpen = async () => {
             placeholder: "Seleccione una especialidad",
             ajax: true,
             ajaxUrl: "especialidades/consulta",
+            queryPage: false,
             processResultsAjax: function (data, params) {
 
-                params.page = params.page || 1;
+                const existingSelects = document.querySelectorAll(`.medico-especialidad-id`);
 
-                const data1 = data?.data.map(object => {
+                let selectedOptions = [];
+
+                // Recorremos los select que existen
+                existingSelects.forEach(select2 => {
+                    if (document.getElementById(`s-especialidad`).value != select2.value) {
+                        selectedOptions.push(select2.value);
+                    }
+                })
+
+                const data1 = [];
+
+                data?.data.forEach(object => {
                     const { especialidad_id: valorPropiedad1, nombre: valorPropiedad2 } = object;
-                    return { id: valorPropiedad1, text: valorPropiedad2 };
+                    let isDuplicate = false;
+
+                    selectedOptions?.forEach(select => {
+                        if (select == object.especialidad_id) {
+                            isDuplicate = true;
+                            return; // Salir del bucle forEach si se encuentra una duplicación
+                        }
+                    });
+
+                    if (!isDuplicate) {
+                        data1.push({ id: valorPropiedad1, text: valorPropiedad2 });
+                    }
                 });
 
                 // Transforms the top-level key of the response object from 'data' to 'results'
-                return {
-                    results: data1,
-                    pagination: {
-                        more: data1.length
-                    }
-                };
+                return { results: data1 };
             }
-        });
-
-        $("#s-especialidad").on("change", () => { 
-            validateExistingSelect2OnChange({
-                parentModal: "#modalReg", 
-                selectSelector: "#s-especialidad",
-                selectClass: "medico-especialidad-id",
-                objList: especialidadesList,
-                select2Options,
-                optionId: "especialidad_id"
-            }); 
         });
 
         modalOpened = true;
@@ -126,34 +133,54 @@ async function addMedicoEspecialidadInput(button, parentModal = "#modalReg") {
 
     // Se inserta la nueva información
     dinamicSelect2({
-        obj: especialidadesList,
+        // obj: especialidadesList,
         selectSelector,
         selectValue: select2Options.selectValue,
         selectNames: select2Options.selectNames,
         parentModal: parentModal,
-        placeholder: select2Options.placeholder
-    });
+        placeholder: select2Options.placeholder,
+        ajax: true,
+        ajaxUrl: "especialidades/consulta",
+        queryPage: false,
+        processResultsAjax: function (data, params) {
 
-    validateExistingSelect2({
-        parentModal,
-        selectSelector,
-        selectClass,
-        addButtonId,
-        objList: especialidadesList,
-        optionId: "especialidad_id",
-        select2Options
-    });
+            const existingSelects = document.querySelectorAll(`.medico-especialidad-id`);
 
-    validateExistingSelect2OnChange({
-        parentModal,
-        selectSelector,
-        selectClass,
-        objList: especialidadesList,
-        optionId: "especialidad_id",
-        select2Options,
-    });
+            if (data?.data.length <= existingSelects.length) {
+                $(addButtonId).fadeOut("slow");
+            }
 
-    $(selectSelector).on("change", () => { validateExistingSelect2OnChange({ parentModal, selectSelector, selectClass, objList: especialidadesList, select2Options, optionId: "especialidad_id", }); });
+            let selectedOptions = [];
+
+            // Recorremos los select que existen
+            existingSelects.forEach(select2 => {
+                if (document.getElementById(`s-especialidad${clicks}`).value != select2.value) {
+                    selectedOptions.push(select2.value);
+                }
+            })
+
+            const data1 = [];
+
+            data?.data.forEach(object => {
+                const { especialidad_id: valorPropiedad1, nombre: valorPropiedad2 } = object;
+                let isDuplicate = false;
+
+                selectedOptions?.forEach(select => {
+                    if (select == object.especialidad_id) {
+                        isDuplicate = true;
+                        return; // Salir del bucle forEach si se encuentra una duplicación
+                    }
+                });
+
+                if (!isDuplicate) {
+                    data1.push({ id: valorPropiedad1, text: valorPropiedad2 });
+                }
+            });
+
+            // Transforms the top-level key of the response object from 'data' to 'results'
+            return { results: data1 };
+        }
+    });
 
     validateInputs();
 }

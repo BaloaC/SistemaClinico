@@ -68,13 +68,11 @@
                             <label for="nombre">Nombre</label>
                             <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameExam" data-max-length="45" required>
                             <small class="form-text">El nombre solo debe contener al menos 3 letras sin caracteres especiales</small>
-                            <label for="cantidad">Cantidad</label>
-                            <input type="number" step="any" name="cantidad" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
-                            <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <label for="nombre">Cantidad mínima</label>
                             <input type="number" step="any" name="cantidad_min" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small>
-                            <label for="nombre">Precio</label>
+                            <label for="nombre">Precio</label><br>
+                            <small>(El valor ingresado es en dólares)</small>
                             <input type="number" step="any" name="precio" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El precio de ser mayor o igual a 0</small>
                         </form>

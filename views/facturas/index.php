@@ -20,7 +20,7 @@
             <!-- Cabezera -->
             <div class="row">
                 <div class="col-6">
-                    <h4 class="pt-5 pb-2 text-grey">Recibos Compra</h4>
+                    <h4 class="pt-5 pb-2 text-grey">Recibos de Compra</h4>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
                     <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Recibo</button>
@@ -145,7 +145,7 @@
                     <input type="number" step="any" name="unidades" min="0" class="form-control insumo-unid" data-validate="true" data-type="price" oninput="calcularMonto(this)" required>
                     <small class="form-text">No se permiten números negativos</small>
                 </td>
-                <td><b class="monto-total-p">$0.00</b></td>
+                <td><b class="monto-total-p">0.00 Bs</b></td>
                 <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
                 <td><div class="visible"><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></div></td>
             </tr>

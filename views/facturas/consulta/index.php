@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/custom-datatables.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
-    <title>Proyecto 4 | Recibos Consulta</title>
+    <title>Proyecto 4 | Recibos de Consulta</title>
 </head>
 
 <body>
@@ -58,7 +58,7 @@
 
         <!-- Modal Registro-->
         <div class="modal fade" id="modalRegNormal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegNormalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-3" id="modalRegNormalLabel">Generar recibo consulta</h1>
@@ -82,7 +82,8 @@
                                     <select name="metodo_pago" id="s-metodo-pago" class="form-control" data-active="0" required>
                                         <option></option>
                                     </select>
-                                    <label for="monto_sin_iva">Monto</label>
+                                    <label for="monto_sin_iva">Monto</label><br>
+                                    <small>(El valor ingresado es en dólares)</small>
                                     <input type="number" step="any" name="monto_consulta_usd" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
                                     <small class="form-text">No se permiten números negativos</small>
                                 </div>

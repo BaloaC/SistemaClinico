@@ -133,7 +133,8 @@ class MedicoController extends Controller {
 
         $medicos = $_medicoModel->where('medico_especialidad.especialidad_id', '=', $especialidad_id)
                         ->where('medico_especialidad.estatus_med', '=', '1')
-                        ->innerJoin(array('medico.nombre', 'medico.apellidos', 'medico.cedula'), $inners, "medico_especialidad");
+                        ->where('medico.estatus_med', '=', '1')
+                        ->innerJoin(array('medico.nombre', 'medico.apellidos', 'medico.cedula', 'medico.medico_id'), $inners, "medico_especialidad");
 
         if ( isset($_GET['search']) ) {
             if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {

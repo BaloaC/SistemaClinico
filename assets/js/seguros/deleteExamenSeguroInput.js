@@ -14,7 +14,7 @@ function deleteExamenSeguroInput(input) {
     const deleteExamenSeguroInput = input.parentElement.parentElement;
     deleteExamenSeguroInput.remove();
     
-    validateExistingSelect2OnDelete({ parentModal: "#modalReg" , selectClass: "examen", addButtonId: "#addExamen", objList: examenesSeguroList, select2Options, optionId: "examen_id" });
+    // validateExistingSelect2OnDelete({ parentModal: "#modalReg" , selectClass: "examen", addButtonId: "#addExamen", objList: examenesSeguroList, select2Options, optionId: "examen_id" });
 
     // // Si se elimina el segundo titular ocultarle el icono de eliminar
     // if (titulares.length === 2) {

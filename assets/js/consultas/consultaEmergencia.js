@@ -84,7 +84,7 @@ export default async function consultaEmergencia(inputRadio) {
             $(".info-medico").fadeIn("slow");
             pacienteSelect.disabled = false;
             medicoSelect.disabled = false;
-            !especialidadSelect.value ? especialidadSelect.disabled = true : especialidadSelect.disabled = false;
+            especialidadSelect.disabled = false;
         } 
 
         if(pacienteSelect.value) seguroSelect.disabled = false;

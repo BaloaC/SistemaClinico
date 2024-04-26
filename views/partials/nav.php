@@ -57,12 +57,12 @@
                     <i class="fas fa-clipboard-check"></i>Recibos
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/compra" ?>">Recibo compra</a></li>
-                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/seguroAge" ?>">Recibo seguro</a></li>
-                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/consulta" ?>">Recibo consulta</a></li>
-                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/consultaSeguro" ?>">Recibo consulta seguro</a></li>
-                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/medico" ?>">Recibo médico</a></li>
-                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/mensajeria" ?>">Recibo mensajería</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/compra" ?>">Recibo de compra</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/seguroAge" ?>">Recibo de seguro</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/consulta" ?>">Recibo de consulta</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/consultaSeguro" ?>">Recibo de consulta seguro</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/medico" ?>">Recibo de médico</a></li>
+                    <li><a class="dropdown-item rol-1 rol-2 rol-3" href="<?php echo Url::base() . "/factura/mensajeria" ?>">Recibo de mensajería</a></li>
                 </ul>
             </li>
             <li class="nav-item dropdown">

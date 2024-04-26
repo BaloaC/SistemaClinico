@@ -17,10 +17,10 @@ const modalRegConsulta = document.getElementById("modalRegConsulta") ?? undefine
 const modalRegister = document.getElementById("modalReg") ?? undefined;
 
 const handleModalOpen = async (parentModal) => {
-    if(modalOpened === false){
+    if (modalOpened === false) {
 
-        insumosList = await getAll("insumos/consulta");    
-        
+        insumosList = await getAll("insumos/consulta");
+
         dinamicSelect2({
             // obj: insumosList,
             selectSelector: `#s-insumo`,
@@ -30,34 +30,43 @@ const handleModalOpen = async (parentModal) => {
             placeholder: "Seleccione el insumo",
             ajax: true,
             ajaxUrl: "insumos/consulta",
+            ajax: true,
+            ajaxUrl: "insumos/consulta",
+            queryPage: false,
             processResultsAjax: function (data, params) {
 
-                params.page = params.page || 1;
+                const existingSelects = document.querySelectorAll(`.insumo-id`);
 
-                const data1 = data?.data.map(object => {
-                    const { insumo_id: valorPropiedad1, nombre: nombreInsumo } = object;
-                    return { id: valorPropiedad1, text: nombreInsumo };
+                let selectedOptions = [];
+
+                // Recorremos los select que existen
+                existingSelects.forEach(select2 => {
+                    if (document.getElementById(`s-insumo`).value != select2.value) {
+                        selectedOptions.push(select2.value);
+                    }
+                })
+
+                const data1 = [];
+
+                data?.data.forEach(object => {
+                    const { insumo_id: valorPropiedad1, nombre: valorPropiedad2 } = object;
+                    let isDuplicate = false;
+
+                    selectedOptions?.forEach(select => {
+                        if (select == object.insumo_id) {
+                            isDuplicate = true;
+                            return; // Salir del bucle forEach si se encuentra una duplicación
+                        }
+                    });
+
+                    if (!isDuplicate) {
+                        data1.push({ id: valorPropiedad1, text: valorPropiedad2 });
+                    }
                 });
 
                 // Transforms the top-level key of the response object from 'data' to 'results'
-                return {
-                    results: data1,
-                    pagination: {
-                        more: data1.length
-                    }
-                };
+                return { results: data1 };
             }
-        });
-
-        $("#s-insumo").on("change", () => {
-            validateExistingSelect2OnChange({
-                parentModal,
-                selectSelector: "#s-insumo",
-                selectClass: "insumo-id",
-                objList: insumosList,
-                select2Options,
-                optionId: "insumo_id"
-            });
         });
 
         modalOpened = true;
@@ -65,8 +74,8 @@ const handleModalOpen = async (parentModal) => {
 }
 
 // Al abrir el modal cargar los select2
-if(modalRegister) modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalReg")); 
-if(modalRegConsulta) modalRegConsulta.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalRegConsulta"));
+if (modalRegister) modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalReg"));
+if (modalRegConsulta) modalRegConsulta.addEventListener('show.bs.modal', async () => await handleModalOpen("#modalRegConsulta"));
 
 function addInsumoInput(parentModal = "#modalReg") {
 
@@ -115,29 +124,46 @@ function addInsumoInput(parentModal = "#modalReg") {
         selectValue: select2Options.selectValue,
         selectNames: select2Options.selectNames,
         parentModal,
-        placeholder: select2Options.placeholder
+        placeholder: select2Options.placeholder,
+        ajax: true,
+        ajaxUrl: "insumos/consulta",
+        queryPage: false,
+        processResultsAjax: function (data, params) {
+
+            const existingSelects = document.querySelectorAll(`.insumo-id`);
+
+            let selectedOptions = [];
+
+            // Recorremos los select que existen
+            existingSelects.forEach(select2 => {
+                if (document.getElementById(`s-insumo${clicks}`).value != select2.value) {
+                    selectedOptions.push(select2.value);
+                }
+            })
+
+            const data1 = [];
+
+            data?.data.forEach(object => {
+                const { insumo_id: valorPropiedad1, nombre: valorPropiedad2 } = object;
+                let isDuplicate = false;
+
+                selectedOptions?.forEach(select => {
+                    if (select == object.insumo_id) {
+                        isDuplicate = true;
+                        return; // Salir del bucle forEach si se encuentra una duplicación
+                    }
+                });
+
+                if (!isDuplicate) {
+                    data1.push({ id: valorPropiedad1, text: valorPropiedad2 });
+                }
+            });
+
+            // Transforms the top-level key of the response object from 'data' to 'results'
+            return { results: data1 };
+        }
     });
 
-    validateExistingSelect2({
-        parentModal,
-        selectSelector,
-        selectClass: "insumo-id",
-        addButtonId: "#addInsumo",
-        objList: insumosList,
-        select2Options,
-        optionId: "insumo_id"
-    });
-
-    validateExistingSelect2OnChange({
-        parentModal,
-        selectSelector,
-        selectClass: "insumo-id",
-        objList: insumosList,
-        select2Options,
-        optionId: "insumo_id"
-    });
-    
-    $(selectSelector).on("change", () => { validateExistingSelect2OnChange({ parentModal, selectSelector, selectClass: "insumo-id", objList: insumosList, select2Options, optionId: "insumo_id" }); });
 
     validateInputs();
 }
