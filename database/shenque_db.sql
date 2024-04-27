@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS `global` (
 
 INSERT INTO `global` (`global_id`, `key`, `value`) VALUES
 (1, 'porcentaje_medico', '60'),
-(2, 'cambio_divisa', '32.59');
+(2, 'cambio_divisa', '32.59'),
+(3, 'porcentaje_insumo', '5');
 
 -- --------------------------------------------------------
 

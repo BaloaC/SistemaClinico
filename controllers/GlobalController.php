@@ -2,21 +2,6 @@
 
 class GlobalController extends Controller{
 
-    //Método index (vista principal)
-    // public function index(){
-
-    //     return $this->view('facturas/index');
-    // }
-
-    // public function formRegistrarFacturas(){
-
-    //     return $this->view('facturas/registrarFacturas');
-    // }
-
-    // public function formActualizarFactura($idFactura){
-        
-    //     return $this->view('facturas/actualizarFacturas', ['idFactura' => $idFactura]);
-    // } 
     public function obtenerGlobals() {
         $_globalModel = new GlobalModel();
         $global_lista = $_globalModel->getAll();
@@ -53,6 +38,23 @@ class GlobalController extends Controller{
 
         $_globalModel = new GlobalModel();
         $fueActualizado = $_globalModel->where('global.key', '=', "cambio_divisa")->update(array("value" => $_POST['cambio_divisa']));
+        
+        $bool = ($fueActualizado > 0);
+
+        $respuesta = new Response($bool ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+        return $respuesta->json($bool ? 200 : 400);
+    }
+
+    public function actualivarPorcentajeInsumo() {
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        
+        if (!is_numeric($_POST['porcentaje_insumo'])) {
+            $respuesta = new Response(false, 'El valor debe ser numérico');
+            return $respuesta->json(400);
+        }
+
+        $_globalModel = new GlobalModel();
+        $fueActualizado = $_globalModel->where('global.key', '=', "porcentaje_insumo")->update(array("value" => $_POST['porcentaje_insumo']));
         
         $bool = ($fueActualizado > 0);
 

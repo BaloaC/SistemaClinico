@@ -342,6 +342,7 @@ Router::delete('/factura/medico/:id', FacturaMedicoController::class . '@elimina
 // //Global
 Router::get('/globals', GlobalController::class . '@obtenerGlobals', [$AuthenticationMiddleware]);
 Router::put('/porcentajeMedico', GlobalController::class . '@actualizarPorcentaje', [$AuthenticationMiddleware]);
+Router::put('/porcentajeInsumo', GlobalController::class . '@actualivarPorcentajeInsumo', [$AuthenticationMiddleware]);
 Router::put('/cambioDivisa', GlobalController::class . '@actualizarValorDivisa', [$AuthenticationMiddleware]);
 
 // //Factura_Medico - Vistas
