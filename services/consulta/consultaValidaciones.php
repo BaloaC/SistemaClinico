@@ -156,9 +156,9 @@ class ConsultaValidaciones {
                     $_insumoModel = new InsumoModel();
                     $insumoExistente = $_insumoModel->where('insumo_id', '=', $insumo['insumo_id'])->getFirst();
                     
-                    if ($insumo['cantidad'] > $insumoExistente->cantidad) {
+                    if ($insumo['cantidad'] > $insumoExistente->cantidad_capacidad) {
                         $respuesta = new Response(false, 'Cantidad de insumos mayor a la que hay en existencia');
-                        $respuesta->setData('La cantidad disponible de insumos es de '.$insumoExistente->cantidad);
+                        $respuesta->setData('La cantidad disponible de insumos es de '.$insumoExistente->cantidad_capacidad);
                         echo $respuesta->json(400);
                         exit();
                     }
