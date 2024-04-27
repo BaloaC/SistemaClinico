@@ -100,7 +100,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             const inputTipoCita = document.getElementById("s-tipo_cita");
 
             if (infoPaciente.edad >= 18 && infoPaciente.tipo_paciente == 4) {
-                if(inputRadioBeneficiado.checked) {
+                if (inputRadioBeneficiado.checked) {
                     alert("beneficiado");
                     inputTipoCita.querySelector("option[value='2']").disable = false;
                     inputTipoCita.querySelector("option[value='2']").selected = true;
@@ -125,9 +125,9 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             const inputTipoCita = document.getElementById("s-tipo_cita");
             const inputTipoCitaDefault = inputTipoCita.querySelector("option[value='default']");
 
-            inputRadioBeneficiado.addEventListener("change", () => {radioTipoPacienteHandler(infoPaciente)});
-            inputRadioTitular.addEventListener("change", () => {radioTipoPacienteHandler(infoPaciente)});
-            
+            inputRadioBeneficiado.addEventListener("change", () => { radioTipoPacienteHandler(infoPaciente) });
+            inputRadioTitular.addEventListener("change", () => { radioTipoPacienteHandler(infoPaciente) });
+
             // ** Una vez se elija el paciente, permitir el cambio de tipo cita
             if (inputTipoCitaDefault !== null) {
                 inputTipoCita.removeChild(inputTipoCitaDefault);
@@ -170,7 +170,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                 }
 
                 if (infoPaciente.edad >= 18 && infoPaciente.tipo_paciente == 4) {
-                    if(inputRadioBeneficiado.checked) {
+                    if (inputRadioBeneficiado.checked) {
                         alert("beneficiado1");
                         inputTipoCita.querySelector("option[value='2']").disable = false;
                         inputTipoCita.querySelector("option[value='2']").selected = true;
@@ -304,6 +304,77 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             const modalReg = document.querySelector("#modalReg .modal-body");
             const horariosTable = document.querySelector("#horarios-table tbody");
             const horariosOrdenados = sortScheduleByDay(infoMedico[0]?.horario);
+
+
+            const inputDateHandler = (schedule) => {
+
+                const daysOfWeek = {
+                    lunes: 1,
+                    martes: 2,
+                    miercoles: 3,
+                    jueves: 4,
+                    viernes: 5,
+                    sabado: 6,
+                    domingo: 0
+                }
+
+                const availableDays = [];
+
+                schedule.map(scheduleOfTheDay => {
+                    availableDays.push(daysOfWeek[scheduleOfTheDay.dias_semana]);
+                })
+
+
+                flatpickr("#fecha_cita", {
+                    locale: "es",
+                    onDayCreate: function (dObj, dStr, fp, dayElem) {
+
+
+                        // Utilize dayElem.dateObj, which is the corresponding Date
+                        // console.log(dayElem);
+                        // dummy logic
+
+                        const dateTime = new Date();
+
+                        if (dateTime.getTime() <= dayElem.dateObj.getTime()) {
+
+                            if (availableDays.includes(dayElem.dateObj.getDay())) {
+                                dayElem.innerHTML += "<span class='event'></span>";
+                            } else {
+                                dayElem.innerHTML += `<span class='event ${(dayElem.dateObj.getDay() === 0 || dayElem.dateObj.getDay() === 6) ? "disabled" : "busy"}'></span>`;
+                            }
+                        }
+
+
+                        // if(){
+                        //     dayElem.innerHTML += "<span class='event disabled'></span>";
+                        // }
+
+
+
+                        // if (Math.random() < 0.15)
+                        //     dayElem.innerHTML += "<span class='event'></span>";
+
+                        // else if (Math.random() > 0.85)
+                        //     dayElem.innerHTML += "<span class='event busy'></span>";
+                    },
+                    "disable": [
+                        function (date) {
+                            // return true to disable
+                            return (date.getDay() === 0 || date.getDay() === 6);
+
+                        }
+                    ],
+                    // disable: function (date) {
+                    //     // Lógica para deshabilitar fechas
+                    //     // Devuelve true si la fecha debe estar deshabilitada, de lo contrario, devuelve false
+                    //     return date.getDay() === 0 || date.getDay() === 6; // Deshabilitar los fines de semana
+                    // }
+                });
+
+            }
+
+            inputDateHandler(horariosOrdenados);
 
             let listHorarios = "";
             horariosOrdenados.forEach(horario => {
