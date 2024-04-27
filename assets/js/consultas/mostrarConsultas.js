@@ -188,7 +188,7 @@ const handleModalOpen = async () => {
             parentModal: "#modalReg",
             placeholder: "Seleccione una especialidad",
             ajax: true,
-            ajaxUrl: "especialidades/consulta",
+            ajaxUrl: "especialidades/medicos",
             processResultsAjax: function (data, params) {
 
                 params.page = params.page || 1;

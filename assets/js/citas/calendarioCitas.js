@@ -237,7 +237,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                 parentModal: "#modalReg",
                 placeholder: "Seleccione una especialidad",
                 ajax: true,
-                ajaxUrl: "especialidades/consulta",
+                ajaxUrl: "especialidades/medicos",
                 processResultsAjax: function (data, params) {
 
                     params.page = params.page || 1;

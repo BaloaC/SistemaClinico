@@ -17,7 +17,7 @@ export function selectText(selectTexts, obj, defaultLabel = []) {
     return text.slice(0, -3);
 }
 
-export default function dinamicSelect2({ obj = null, selectNames = null, selectValue = null, selectSelector = null, placeholder = null, parentModal = null, selectWidth = "45%", staticSelect = false, defaultLabel = [], ajax = false, ajaxUrl = "", processResultsAjax = null, queryPage = true }) {
+export default function dinamicSelect2({ obj = null, selectNames = null, selectValue = null, selectSelector = null, placeholder = null, parentModal = null, selectWidth = "45%", staticSelect = false, defaultLabel = [], ajax = false, ajaxUrl = "", processResultsAjax = null, queryPage = true, querys = null }) {
     try {
         let selectObj = [];
 
@@ -52,7 +52,17 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
                     return query;
                 }
             }
+            ajaxObj.data = querys ?? function (params) {
+                const query = {
+                    search: params.term,
+                    select: true
+                }
 
+                if(queryPage === true) query.page = params.page || 1;
+
+                // Query parameters will be ?search=[term]&page=[page]
+                return query;
+            }
             ajaxObj.processResults = processResultsAjax;
         }
 
