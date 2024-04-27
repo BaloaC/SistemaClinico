@@ -35,8 +35,9 @@ class FacturaInsumoHelpers {
                     $valorPorcentaje = GlobalsHelpers::obtenerPorcentajeInsumo();
                     $nuevoPrecio = ($insumoNuevo['precio_unit_usd'] * $valorPorcentaje) / 100;
                     $actualizar['precio'] = $nuevoPrecio;
-                    $actualizar['cantidad_capacidad'] = ($unidadesPosts * $insumo_factura->capacidad_unidad);
                 }
+                
+                $actualizar['cantidad_capacidad'] = ($unidadesPosts * $insumo_factura->capacidad_unidad);
 
                 // actualizando el stock del insumo
                 $_insumoModel = new InsumoModel();
