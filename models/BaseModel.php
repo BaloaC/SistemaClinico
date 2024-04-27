@@ -175,7 +175,7 @@ class BaseModel{
     }
 
     // Armar el inner join completo
-    public function innerJoin($obj, $listInner, $table) {
+    public function innerJoin($obj, $listInner, $table, $distint = false) {
 
         try {
             
@@ -183,7 +183,9 @@ class BaseModel{
             $this->table = $table;
             $inners = $listInner;
 
-            $this->sql = "SELECT $inner_join FROM $this->table"." $inners $this->wheres {$this->limits}";
+            $dist = $distint ? 'DISTINCT' : '';
+
+            $this->sql = "SELECT $dist $inner_join FROM $this->table"." $inners $this->wheres {$this->limits}";
             
             $query = $this->connection->prepare($this->sql);
             $query->execute();
