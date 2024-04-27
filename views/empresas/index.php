@@ -20,7 +20,7 @@
                     <p class="text-gray">Debe tener seguros registrados antes de registrar empresas</p>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
-                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> empresa</button>
+                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Empresa</button>
                 </div>
                 <hr class="border-white">
             </div>

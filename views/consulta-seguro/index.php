@@ -19,10 +19,10 @@
             <!-- Cabezera -->
             <div class="row">
                 <div class="col-6">
-                    <h4 class="pt-5 pb-2 text-grey">Consultas Seguros</h4>
+                    <h4 class="pt-5 pb-2 text-grey">Recibos de Consultas Aseguradas</h4>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
-                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalRegAsegurada"><i class="fa-sm fas fa-plus"></i> consulta</button>
+                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalRegAsegurada"><i class="fa-sm fas fa-plus"></i> Recibo</button>
                 </div>
                 <hr class="border-white">
             </div>

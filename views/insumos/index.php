@@ -72,7 +72,7 @@
                             <input type="number" step="any" name="cantidad_min" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <label for="nombre">Precio</label><br>
-                            <small>(El valor ingresado es en dólares)</small>
+                            <small class="text-secondary">(El valor ingresado es en dólares)</small>
                             <input type="number" step="any" name="precio" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El precio de ser mayor o igual a 0</small>
                         </form>

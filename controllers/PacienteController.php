@@ -75,6 +75,10 @@ class PacienteController extends Controller{
         $_pacienteModel = new PacienteModel();
         $_pacienteModel->where('estatus_pac', '=', '1');
 
+        if (isset($_GET['tipo_paciente'])) {
+            $_pacienteModel->where('tipo_paciente', '=', $_GET['tipo_paciente']);
+        }
+
         if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
             if (isset($_GET['start']) || isset($_GET['page'])) {
 
@@ -85,10 +89,6 @@ class PacienteController extends Controller{
                 $primer_registro = $ultimo_registro - $size;
                 $_pacienteModel->limit([$primer_registro, $size]);
             }
-
-            // if (strlen($_GET['search']['value']) > 0) {
-            //     $_pacienteModel->where("CONCAT(nombre, ' ', apellidos, ' ', cedula)", 'LIKE', "%{$_GET['search']['value']}%");
-            // }
 
             if(isset($_GET['search'])) {
                 if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
@@ -125,6 +125,10 @@ class PacienteController extends Controller{
                 }
             } else {
                 $_pacienteModel->setSelect('COUNT(*) AS total');
+            }
+
+            if (isset($_GET['tipo_paciente'])) {
+                $_pacienteModel->where('tipo_paciente', '=', $_GET['tipo_paciente']);
             }
 
             $total_registros = $_pacienteModel->where('estatus_pac', '=', '1')->getAll();

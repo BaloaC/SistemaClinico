@@ -138,6 +138,7 @@ Router::get('/especialidades/actualizar/:id', EspecialidadController::class . '@
 // //Especialidad - API
 Router::get('/especialidades/consulta', EspecialidadController::class . '@listarEspecialidades', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::get('/especialidades/:id', EspecialidadController::class . '@listarEspecialidadPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
+Router::get('/especialidades/medicos', EspecialidadController::class . '@listarEspecialidadesConMedicos', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::post('/especialidades', EspecialidadController::class . '@insertarEspecialidad', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )] );
 Router::put('/especialidades/:id', EspecialidadController::class . '@actualizarEspecialidad', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::delete('/especialidades/:id', EspecialidadController::class . '@eliminarEspecialidad', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);

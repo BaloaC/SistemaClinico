@@ -52,6 +52,7 @@ class EspecialidadController extends Controller{
     }
 
     public function listarEspecialidades(){
+
         $_especialidadModel = new EspecialidadModel();
         $_especialidadModel->where('estatus_esp', '=', '1');
 
@@ -92,6 +93,35 @@ class EspecialidadController extends Controller{
 
         $total_registros = $_especialidadModel->where('estatus_esp', '=', '1')->getAll();       
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $especialidades);
+    }
+
+    public function listarEspecialidadesConMedicos() {
+        $_medicoEspecialidad = new MedicoEspecialidadModel();
+        $_medicoEspecialidad->where('estatus_med', '!=', '2');
+
+        if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
+            if (isset($_GET['start']) || isset($_GET['page'])) {
+                
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = isset($_GET['page']) ? $_GET['page'] : floor($_GET['start'] / $_GET['length']) + 1;
+                
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_medicoEspecialidad->limit([$primer_registro, $size]);
+            }
+            
+            if(isset($_GET['search'])) {
+                if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                    $_medicoEspecialidad->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+                } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                    $_medicoEspecialidad->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+                }
+            }
+        }
+
+        $inners = $_medicoEspecialidad->listInner(["especialidad" => "medico_especialidad"]);
+        $especialidades = $_medicoEspecialidad->innerJoin(['especialidad.especialidad_id, especialidad.nombre, especialidad.estatus_esp'], $inners, "medico_especialidad", true);
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($especialidades), $especialidades);
     }
 
     public function listarEspecialidadPorId($especialidad_id){

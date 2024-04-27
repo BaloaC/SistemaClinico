@@ -70,7 +70,7 @@ export async function proveedoresPagination(registros, buscarRegistros = "") {
                 <h3 class="mt-3 mb-0 text-white">\${nombre}</h3>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item"><span class="mb-0">Tipo</span> <b class="text-muted">\${ubicacion}</b></li>
+                <li class="list-group-item"><span class="mb-0">Ubicación</span> <b class="text-muted">\${ubicacion}</b></li>
                 <li class="list-group-item"><span class="mb-0"><button type="button" id="btn-actualizar" class="btn btn-primary" onclick="updateProveedor(\${proveedor_id})" data-bs-toggle="modal" data-bs-target="#modalAct">Actualizar</button></span><button id="btn-eliminar" class="btn btn-danger" onclick="deleteProveedor(\${proveedor_id})"  data-bs-toggle="modal" data-bs-target="#modalDelete">Eliminar</button></li>
             </ul>
             </div>

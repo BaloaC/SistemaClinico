@@ -5,9 +5,14 @@ require_once 'GenericModel.php';
 class InsumoModel extends GenericModel {
 
     protected $nombre;
-    protected $cantidad;
-    protected $stock;
     protected $cantidad_min;
+    
+    protected $cantidad_unidad;
+    protected $capacidad_unidad;
+    protected $cantidad_capacidad;
+    protected $es_cobrado;
+    protected $tipo_medida;
+
     protected $precio;
     protected $fecha_Insumo;
     protected $estatus_ins;
@@ -18,17 +23,28 @@ class InsumoModel extends GenericModel {
 
     /* Getters */
     public function getNombre(){return $this->nombre;}
-    public function getCantidad(){return $this->cantidad;}
-    public function getStock(){return $this->stock;}
     public function getCantidadMin(){return $this->cantidad_min;}
+
+    public function getCantidadUnidad(){return $this->cantidad_unidad;}
+    public function getCapacidadUnidad(){return $this->capacidad_unidad;}
+    public function getCantidadCapacidad(){return $this->cantidad_capacidad;}
+    public function getEsCobrado(){return $this->es_cobrado;}
+    public function getTipoMedida(){return $this->tipo_medida;}    
+    
     public function getPrecio(){return $this->precio;}
     public function getEstatusIns(){return $this->estatus_ins;}
 
     /* Setters */
     public function setNombre($nombre){return $this->nombre = $nombre;}
-    public function setCantidad($cantidad){return $this->cantidad = $cantidad;}
-    public function setStock($stock){return $this->stock = $stock;}
     public function setCantidadMin($cantidad_min){return $this->cantidad_min = $cantidad_min;}
+
+    public function setCantidadUnidad($cantidad_unidad){return $this->cantidad_unidad = $cantidad_unidad;}
+    public function setCapacidadUnidad($capacidad_unidad){return $this->capacidad_unidad = $capacidad_unidad;}
+    public function setCantidadCapacidad($cantidad_capacidad){return $this->cantidad_capacidad = $cantidad_capacidad;}
+    public function setEsCobrado($es_cobrado){return $this->es_cobrado = $es_cobrado;}
+    public function setTipoMedida($tipo_medida){return $this->tipo_medida = $tipo_medida;}
+    
+    
     public function setPrecio($precio){return $this->precio = $precio;}
     public function setEstatusIns($estatus_ins){return $this->estatus_ins = $estatus_ins;}
 }

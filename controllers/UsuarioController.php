@@ -3,6 +3,7 @@
 include_once './services/cuenta/CuentaValidaciones.php';
 include_once './services/cuenta/CuentaHelpers.php';
 include_once './services/cuenta/CuentaService.php';
+include_once './services/Helpers.php';
 
 class UsuarioController extends Controller{
 
@@ -54,14 +55,52 @@ class UsuarioController extends Controller{
 
     public function listarUsuarios(){
         $_usuarioModel = new UsuarioModel();
-        
-        $lista = $_usuarioModel->where('estatus_usu', '=', '1')->getAll();
-        $mensaje = (count($lista) > 0);
+        $_usuarioModel->where('estatus_usu', '=', '1');
 
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-        $respuesta->setData($lista);
+        if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
+            if (isset($_GET['start']) || isset($_GET['page'])) {
+                
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = isset($_GET['page']) ? $_GET['page'] : floor($_GET['start'] / $_GET['length']) + 1;
+                
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_usuarioModel->limit([$primer_registro, $size]);
+            }
+            
+            if(isset($_GET['search'])) {
+                if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                    $_usuarioModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+                } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                    $_usuarioModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+                }
+            }
+        }
 
-        return $respuesta->json(200);
+        $lista = $_usuarioModel->getAll();
+        $_usuarioModel->resetValues();
+
+        if ( isset($_GET['search']) ) {
+            if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                $_usuarioModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
+            } else if ( strlen($_GET['search']['value']) > 0) {
+                $_usuarioModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+            } else {
+                $_usuarioModel->setSelect('COUNT(*) AS total');
+            }
+        } else {
+            $_usuarioModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_usuarioModel->where('estatus_usu', '=', '1')->getAll();
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $lista);
+
+        // $mensaje = (count($lista) > 0);
+
+        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+        // $respuesta->setData($lista);
+
+        // return $respuesta->json(200);
     }
 
     public function listarUsuarioPorId($usuario_id){

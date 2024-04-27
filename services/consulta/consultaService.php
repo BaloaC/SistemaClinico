@@ -96,10 +96,10 @@ class ConsultaService {
             ConsultaService::actualizarAcumuladoMedico($consultaEmergencia['pagos']);
         }
         
-        // if (isset($formulario['examenes'])) {
-            //     $formulario['consulta_id'] = $consulta_id;
-        //     ConsultaHelper::insertarExamenesEmergencia($formulario);
-        // }
+        if (isset($formulario['examenes'])) {
+                $formulario['consulta_id'] = $consulta_id;
+            ConsultaHelper::insertarExamenesEmergencia($formulario);
+        }
 
         if (isset($formulario['insumos'])) {
             ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_id, true);
@@ -134,9 +134,9 @@ class ConsultaService {
             ConsultaHelper::insertarExamen($formulario['examenes'], $consulta_separada[0]['consulta_id']);
         }
         
-        if (array_key_exists('insumos', $formulario)) {
-            ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], false);
-        }
+        // if (array_key_exists('insumos', $formulario)) {
+        //     ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], false);
+        // }
 
         if (array_key_exists('indicaciones', $formulario)) {
             ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_separada[0]['consulta_id']);
@@ -171,24 +171,21 @@ class ConsultaService {
             ConsultaHelper::insertarExamenesSeguro($formulario['examenes'], $consulta_separada[0]['consulta_id']);
         }
 
-        if (array_key_exists('insumos', $formulario)) {
-        // if ($formulario['insumos']) {
-            if ($cita_previa->tipo_cita == 1) {
-                ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], false);
-            }
+        // if (array_key_exists('insumos', $formulario)) {
+        //     if ($cita_previa->tipo_cita == 1) {
+        //         ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], false);
+        //     }
 
-            if ($cita_previa->tipo_cita == 2) {
-                ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], true);
-            }
-        }
+        //     if ($cita_previa->tipo_cita == 2) {
+        //         ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], true);
+        //     }
+        // }
 
         if (array_key_exists('recipes', $formulario)) {
-        // if ($formulario['recipes']) {
             ConsultaHelper::insertarRecipe($formulario['recipes'], $consulta_separada[0]['consulta_id']);
         }
 
         if (array_key_exists('indicaciones', $formulario)) {
-        // if ($formulario['indicaciones']) {
             ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_separada[0]['consulta_id']);
         }
 

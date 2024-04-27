@@ -439,8 +439,11 @@ class ConsultaHelper {
                 $_insumoModel = new InsumoModel();
                 $insumoExistente = $_insumoModel->where('insumo_id', '=', $insumo['insumo_id'])->getFirst();
 
-                $unidadesPosts = $insumoExistente->cantidad - $insumo['cantidad'];
-                $actualizar = array('cantidad' => $unidadesPosts);
+                $capacidad_nueva = $insumoExistente->cantidad_capacidad - $insumo['cantidad'];
+                $cantidad_nueva = $capacidad_nueva / $insumoExistente->capacidad_unidad;
+                $actualizar = ['cantidad_capacidad' => $capacidad_nueva, 'cantidad_unidad' => $cantidad_nueva];
+                // $unidadesPosts = $insumoExistente->cantidad - $insumo['cantidad'];
+                // $actualizar = array('cantidad' => $unidadesPosts);
 
                 // actualizando el stock del insumo
                 $actualizado = $_insumoModel->where('insumo_id', '=', $insumo['insumo_id'])->update($actualizar);
