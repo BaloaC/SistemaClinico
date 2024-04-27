@@ -13,4 +13,10 @@ class GlobalsHelpers {
         $porcentajeMedico = $_globalModel->whereSentence('key', '=', 'porcentaje_medico')->getFirst();
         return $porcentajeMedico->value;
     }
+
+    public static function obtenerPorcentajeInsumo() {
+        $_globalModel = new GlobalModel();
+        $porcentajeInsumo = $_globalModel->whereSentence('key', '=', 'porcentaje_insumo')->getFirst();
+        return $porcentajeInsumo->value;
+    }
 }

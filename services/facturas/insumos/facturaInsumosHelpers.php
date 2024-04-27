@@ -26,11 +26,18 @@ class FacturaInsumoHelpers {
 
                 // Sumando la cantidad de la factura al stock del inventario
                 $_insumoModel = new InsumoModel();
-                $insumo = $_insumoModel->where('insumo_id', '=', $insumoNuevo['insumo_id'])->getFirst();
+                $insumo_factura = $_insumoModel->where('insumo_id', '=', $insumoNuevo['insumo_id'])->getFirst();
 
-                $unidadesPosts = $insumoNuevo['unidades'] + $insumo->cantidad;
-                $actualizar = array('cantidad' => $unidadesPosts, 'estatus_ins' => 1);
+                $unidadesPosts = $insumoNuevo['unidades'] + $insumo_factura->cantidad_unidad;
+                $actualizar = array('cantidad_unidad' => $unidadesPosts, 'estatus_ins' => 1);
                 
+                if (isset($insumo['actualizar_precio']) && $insumo['actualizar_precio']) {
+                    $valorPorcentaje = GlobalsHelpers::obtenerPorcentajeInsumo();
+                    $nuevoPrecio = ($insumoNuevo['precio_unit_usd'] * $valorPorcentaje) / 100;
+                    $actualizar['precio'] = $nuevoPrecio;
+                    $actualizar['cantidad_capacidad'] = ($unidadesPosts * $insumo_factura->capacidad_unidad);
+                }
+
                 // actualizando el stock del insumo
                 $_insumoModel = new InsumoModel();
                 $actualizado = $_insumoModel->where('insumo_id', '=', $insumoNuevo['insumo_id'])->update($actualizar);
