@@ -118,10 +118,6 @@ class ConsultaSeguroController extends Controller{
                     $_consultaSeguroModel->where('CONCAT(consulta_id, consulta_seguro_id)', 'LIKE', "%{$_GET['search']}%");
                 }
             }
-
-            // if (strlen($_GET['search']['value']) > 0) {
-            //     $_consultaSeguroModel->where('CONCAT(consulta_id, consulta_seguro_id)', 'LIKE', "%{$_GET['search']['value']}%");
-            // }
         }
 
         $consultasSeguros = $_consultaSeguroModel->where('estatus_con', '!=', 2)->getAll();
