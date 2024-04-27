@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/custom-datatables.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <title>Proyecto 4 | Citas</title>
 </head>
 
@@ -271,6 +272,93 @@
 
     </main>
 
+    <style>
+        .event {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            /* position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 150px;
+            bottom: 3px;
+            left: calc(50% - 1.5px);
+            content: " ";
+            display: block;*/
+            background: #3d8eb924;
+        }
+
+        .event.busy {
+            background: #f6474736;
+        }
+
+        .event.disabled {
+            background-color: #00000012;
+        }
+
+        .flatpickr-day.selected:has(.event.busy) {
+            background-color: #ff0000b0;
+        }
+
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+    <script>
+        // flatpickr("input[type='date']");
+
+
+        
+
+        // flatpickr("#fecha_cita", {
+        //     locale: "es",
+        //     onDayCreate: function(dObj, dStr, fp, dayElem) {
+
+
+        //         // Utilize dayElem.dateObj, which is the corresponding Date
+        //         // console.log(dayElem);
+        //         // dummy logic
+        //         if(dayElem.dateObj.getDay() === 0 || dayElem.dateObj.getDay() === 6){
+        //             dayElem.innerHTML += "<span class='event disabled'></span>";
+        //         }
+
+        //         if (Math.random() < 0.15)
+        //             dayElem.innerHTML += "<span class='event'></span>";
+
+        //         else if (Math.random() > 0.85)
+        //             dayElem.innerHTML += "<span class='event busy'></span>";
+        //     },
+        //     // "disable": [
+        //     //     function(date) {
+        //     //         // return true to disable
+        //     //         return (date.getDay() === 0 || date.getDay() === 6);
+
+        //     //     }
+        //     // ],
+        //     // disable: function (date) {
+        //     //     // Lógica para deshabilitar fechas
+        //     //     // Devuelve true si la fecha debe estar deshabilitada, de lo contrario, devuelve false
+        //     //     return date.getDay() === 0 || date.getDay() === 6; // Deshabilitar los fines de semana
+        //     // }
+        // });
+
+        // flatpickr("input[type='date']", {
+        //     // Configuración de Flatpickr
+        //     onDayCreate: function(dObj, dStr, fp, dayElem) {
+        //         // Verificar si la fecha está en el array de fechas disponibles
+        //         if (availableDates.includes(dStr)) {
+        //             // Establecer el color de fondo personalizado para las fechas disponibles
+        //             dayElem.style.backgroundColor = "green";
+        //             dayElem.style.color = "white";
+        //         }
+        //     },
+        // });
+    </script>
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
     <script src="<?php echo Url::to('assets/libs/fullcalendar/index.global.min.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/fullcalendar/es.global.min.js'); ?>"></script>

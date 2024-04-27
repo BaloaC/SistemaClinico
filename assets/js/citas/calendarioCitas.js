@@ -52,58 +52,81 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             disable: false
         });
 
-        // ** Para la función de dar click luego de 
-        $(pacientesSelect).on("select2:open", async function (e) {
-            if (document.querySelector("#s-paciente").dataset.active == 0) {
+        dinamicSelect2({
+            selectSelector: pacientesSelect,
+            selectValue: "paciente_id",
+            selectNames: ["cedula", "nombre-apellidos", "tipo_paciente"],
+            parentModal: "#modalReg",
+            placeholder: "Seleccione un paciente",
+            selectWidth: "100%",
+            ajax: true,
+            ajaxUrl: "pacientes/consulta",
+            processResultsAjax: function (data, params) {
 
-                const obj = await getAll("pacientes/consulta");
+                const data1 = [];
 
-                obj.forEach(el => {
 
-                    if (el.tipo_paciente == 1) el.tipo_paciente = "Natural";
-                    else if (el.tipo_paciente == 2) el.tipo_paciente = "Representante";
-                    else if (el.tipo_paciente == 3) el.tipo_paciente = "Asegurado";
-                    else if (el.tipo_paciente == 4) el.tipo_paciente = "Beneficiado";
+                console.log(typeof data, data);
 
-                    if ($(pacientesSelect).find(`option[value="${el.paciente_id}"]`).length) {
-                        $(pacientesSelect).val(el.paciente_id);
-                    } else {
-                        let newOption = new Option(selectText(["cedula", "nombre-apellidos", "tipo_paciente"], el), el.paciente_id, false, false);
-                        $(pacientesSelect).append(newOption);
+                if (typeof data === "object" && data?.data !== 0) {
+                    data?.data.forEach(object => {
+                        const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
+
+                        const handleTipoPaciente = (tipo_paciente) => {
+                            if (tipo_paciente == 1) tipo_paciente = "Natural";
+                            else if (tipo_paciente == 2) tipo_paciente = "Representante";
+                            else if (tipo_paciente == 3) tipo_paciente = "Asegurado";
+                            else if (tipo_paciente == 4) tipo_paciente = "Beneficiado";
+
+                            return tipo_paciente
+                        }
+
+                        data1.push({ id: valorPropiedad1, text: `${cedula} - ${nombre} ${apellidos} - ${handleTipoPaciente(tipo_paciente)}` });
+                    });
+                }
+
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return {
+                    results: data1 ?? [],
+                    pagination: {
+                        more: data1.length
                     }
-                });
+                };
+            }
+        });
 
-                $(pacientesSelect).val(0).trigger('change.select2');
-                $(pacientesSelect).select2("close");
-                document.querySelector("#s-paciente").dataset.active = 1;
+        const radioTipoPacienteHandler = (infoPaciente) => {
+            const inputRadioBeneficiado = document.getElementById("tipoPacienteBeneficiado");
+            const inputTipoCita = document.getElementById("s-tipo_cita");
+
+            if (infoPaciente.edad >= 18 && infoPaciente.tipo_paciente == 4) {
+                if (inputRadioBeneficiado.checked) {
+                    alert("beneficiado");
+                    inputTipoCita.querySelector("option[value='2']").disable = false;
+                    inputTipoCita.querySelector("option[value='2']").selected = true;
+                    inputTipoCita.querySelector("option[value='1']").disabled = true;
+                } else {
+                    alert("titular");
+                    inputTipoCita.querySelector("option[value='1']").disable = false;
+                    inputTipoCita.querySelector("option[value='1']").selected = true;
+                    inputTipoCita.querySelector("option[value='2']").disabled = true;
+                }
             }
 
-            $(pacientesSelect).on("change", function () {
-                if ($(pacientesSelect).val() != 0) {
-                    $(pacientesSelect).removeClass("is-invalid");
-                    $(pacientesSelect).addClass("is-valid");
-                } else {
-                    $(pacientesSelect).removeClass("is-valid");
-                    $(pacientesSelect).addClass("is-invalid");
-                }
-            });
-
-            $(pacientesSelect).select2("open");
-        })
-
-        if ("#modalReg" !== null) {
-            document.querySelector("#modalReg").addEventListener("hidden.bs.modal", e => {
-                document.querySelector("#s-paciente").dataset.active = 0;
-            })
         }
+
 
         $("#s-paciente").on("change", async function (e) {
 
             let paciente_id = this.value;
             const infoPaciente = await getById("pacientes", paciente_id);
             const inputRadioBeneficiado = document.getElementById("tipoPacienteBeneficiado");
+            const inputRadioTitular = document.getElementById("tipoPacienteTitular");
             const inputTipoCita = document.getElementById("s-tipo_cita");
             const inputTipoCitaDefault = inputTipoCita.querySelector("option[value='default']");
+
+            inputRadioBeneficiado.addEventListener("change", () => { radioTipoPacienteHandler(infoPaciente) });
+            inputRadioTitular.addEventListener("change", () => { radioTipoPacienteHandler(infoPaciente) });
 
             // ** Una vez se elija el paciente, permitir el cambio de tipo cita
             if (inputTipoCitaDefault !== null) {
@@ -122,6 +145,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                 inputTipoCita.querySelector("option[value='1']").selected = true;
                 $('#s-seguro').next('.select2-container').fadeOut('slow');
 
+
                 // ** Si esta selccionado como beneficiado
                 if (inputRadioBeneficiado.checked) {
                     $('#s-titular').next('.select2-container').fadeIn('slow');
@@ -131,6 +155,35 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                 } else {
                     $('#s-titular').next('.select2-container').fadeOut('slow');
                 }
+
+                // ** Si es beneficiado y menor de edad, siempre será benficiado por ende solo selccionamos directamente la opción en el input radio
+                if (infoPaciente.edad < 18 && infoPaciente.tipo_paciente == 4) {
+                    document.querySelector(".input-radios-container").classList.add("d-none");
+                    document.querySelector("label[for='input-radios-container'").classList.add("d-none");
+
+                    inputRadioBeneficiado.checked = true;
+
+                    $('#s-titular').next('.select2-container').fadeIn('slow');
+                    document.querySelector("label[for='titular_id'").classList.remove("d-none");
+                    document.querySelector("#s-titular").dataset.active = 0;
+                    tipoTitular(inputRadioBeneficiado);
+                }
+
+                if (infoPaciente.edad >= 18 && infoPaciente.tipo_paciente == 4) {
+                    if (inputRadioBeneficiado.checked) {
+                        alert("beneficiado1");
+                        inputTipoCita.querySelector("option[value='2']").disable = false;
+                        inputTipoCita.querySelector("option[value='2']").selected = true;
+                        inputTipoCita.querySelector("option[value='1']").disabled = true;
+                    } else {
+                        alert("titular1");
+                        inputTipoCita.querySelector("option[value='1']").disable = false;
+                        inputTipoCita.querySelector("option[value='1']").selected = true;
+                        inputTipoCita.querySelector("option[value='2']").disabled = true;
+                    }
+                }
+
+
 
                 // ** Si es asegurado
             } else if (infoPaciente.tipo_paciente == 3) {
@@ -184,7 +237,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                 parentModal: "#modalReg",
                 placeholder: "Seleccione una especialidad",
                 ajax: true,
-                ajaxUrl: "especialidades/consulta",
+                ajaxUrl: "especialidades/medicos",
                 processResultsAjax: function (data, params) {
 
                     params.page = params.page || 1;
@@ -251,6 +304,77 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             const modalReg = document.querySelector("#modalReg .modal-body");
             const horariosTable = document.querySelector("#horarios-table tbody");
             const horariosOrdenados = sortScheduleByDay(infoMedico[0]?.horario);
+
+
+            const inputDateHandler = (schedule) => {
+
+                const daysOfWeek = {
+                    lunes: 1,
+                    martes: 2,
+                    miercoles: 3,
+                    jueves: 4,
+                    viernes: 5,
+                    sabado: 6,
+                    domingo: 0
+                }
+
+                const availableDays = [];
+
+                schedule.map(scheduleOfTheDay => {
+                    availableDays.push(daysOfWeek[scheduleOfTheDay.dias_semana]);
+                })
+
+
+                flatpickr("#fecha_cita", {
+                    locale: "es",
+                    onDayCreate: function (dObj, dStr, fp, dayElem) {
+
+
+                        // Utilize dayElem.dateObj, which is the corresponding Date
+                        // console.log(dayElem);
+                        // dummy logic
+
+                        const dateTime = new Date();
+
+                        if (dateTime.getTime() <= dayElem.dateObj.getTime()) {
+
+                            if (availableDays.includes(dayElem.dateObj.getDay())) {
+                                dayElem.innerHTML += "<span class='event'></span>";
+                            } else {
+                                dayElem.innerHTML += `<span class='event ${(dayElem.dateObj.getDay() === 0 || dayElem.dateObj.getDay() === 6) ? "disabled" : "busy"}'></span>`;
+                            }
+                        }
+
+
+                        // if(){
+                        //     dayElem.innerHTML += "<span class='event disabled'></span>";
+                        // }
+
+
+
+                        // if (Math.random() < 0.15)
+                        //     dayElem.innerHTML += "<span class='event'></span>";
+
+                        // else if (Math.random() > 0.85)
+                        //     dayElem.innerHTML += "<span class='event busy'></span>";
+                    },
+                    "disable": [
+                        function (date) {
+                            // return true to disable
+                            return (date.getDay() === 0 || date.getDay() === 6);
+
+                        }
+                    ],
+                    // disable: function (date) {
+                    //     // Lógica para deshabilitar fechas
+                    //     // Devuelve true si la fecha debe estar deshabilitada, de lo contrario, devuelve false
+                    //     return date.getDay() === 0 || date.getDay() === 6; // Deshabilitar los fines de semana
+                    // }
+                });
+
+            }
+
+            inputDateHandler(horariosOrdenados);
 
             let listHorarios = "";
             horariosOrdenados.forEach(horario => {

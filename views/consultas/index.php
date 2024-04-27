@@ -272,6 +272,12 @@
                                 <h5>Recipes otorgados en la Consulta (Opcional)</h5>
                                 <div class="row align-items-start">
                                     <div class="col-12 col-md-5">
+                                        <label for="medicamento">Filtrar por especialidad</label>
+                                        <select id="s-especialidadm" class="form-control especialidad-id" data-active="0">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-5">
                                         <label for="medicamento">Medicamento</label>
                                         <select id="s-medicamento" class="form-control medicamento-id" data-active="0">
                                             <option></option>
@@ -297,9 +303,9 @@
                                         <input type="text" data-validate="true" data-type="address" class="form-control indicaciones">
                                         <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
                                     </div>
-                                    <div class="col-3 col-md-1 d-none">
+                                    <!-- <div class="col-3 col-md-1 pt-4-5 d-none">
                                         <button type="button" class="btn" onclick="deleteInput(this,'.indicaciones')"><i class="fas fa-times m-0"></i></button>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <button type="button" class="btn btn-primary mt-3" id="addIndicacion" onclick="addIndicacionInput()">Añadir otra indicación</button>

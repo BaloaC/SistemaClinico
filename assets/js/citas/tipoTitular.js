@@ -96,7 +96,7 @@ export default async function tipoTitular(inputRadio) {
         const inputTipoCita = document.getElementById("s-tipo_cita");
 
         // ** Si no es asegurado deshabilitarle el tipo de cita asegurada, en caso de que no, habilitarle el tipo de cita asegurada y crearle el select2
-        if(infoPaciente.tipo_paciente != 3){
+        if(infoPaciente.tipo_paciente != 3 && infoPaciente.tipo_paciente != 4){
             inputTipoCita.querySelector("option[value='2']").disabled = true;
             inputTipoCita.querySelector("option[value='1']").selected = true;
         } else{

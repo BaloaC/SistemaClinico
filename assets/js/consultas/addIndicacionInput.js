@@ -7,9 +7,9 @@ function addIndicacionInput() {
     const inputIndicaciones = document.querySelectorAll(".indicaciones");
 
     // Validamos que exista un solo insumo para poder añadirle que se pueda eliminar
-    if (inputIndicaciones.length === 1) {
-        document.querySelectorAll(".indicaciones")[0].parentElement.parentElement.querySelector("div:nth-child(2)").classList.remove("d-none");
-    }
+    // if (inputIndicaciones.length === 1) {
+    //     document.querySelectorAll(".indicaciones")[0].parentElement.parentElement.querySelector("div:nth-child(2)").classList.remove("d-none");
+    // }
 
     clicks += 1;
     let template = `

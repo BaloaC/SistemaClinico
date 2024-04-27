@@ -38,11 +38,9 @@
                                             <th>Detalles</th>
                                             <th>Cédula Paciente</th>
                                             <th>Nombre Paciente</th>
-                                            <!-- <th>Nombre Médico</th> -->
                                             <th>Especialidad</th>
                                             <th>Cédula Titular</th>
                                             <th>Fecha Consulta</th>
-                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -567,15 +565,8 @@
     </main>
 
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
-    <!-- <script type="module" src="<?php echo Url::to('assets/js/consultas/mostrarConsultas.js'); ?>"></script> -->
     <script type="module" src="<?php echo Url::to('assets/js/consultas-seguro/mostrarConsultaSeguroFactura.js'); ?>"></script>
-    <!-- <script type="module" src="<?php echo Url::to('assets/js/consultas/registrarConsulta.js'); ?>"></script> -->
-    <script type="module" src="<?php echo Url::to('assets/js/consultas/eliminarConsulta.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/consultas/addInsumoInput.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/consultas/addIndicacionInput.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/consultas/addRecipeInput.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/consultas/addMedicoPagoInput.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/consultas/deleteInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas-seguro/eliminarConsultaSeguro.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/registrarFConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/mostrarFCOnsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas-seguro/registrarConsultaSeguro.js'); ?>"></script>

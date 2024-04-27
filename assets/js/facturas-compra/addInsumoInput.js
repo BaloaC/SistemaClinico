@@ -16,16 +16,35 @@ const modalRegister = document.getElementById("modalReg");
 const handleModalOpen = async () => {
     if (modalOpened === false) {
 
-        const proveedoresList = await getAll("proveedores/consulta");
+        // const proveedoresList = await getAll("proveedores/consulta");
 
         dinamicSelect2({
-            obj: proveedoresList,
+            // obj: proveedoresList,
             selectSelector: "#s-proveedor",
             selectValue: "proveedor_id",
             selectNames: ["proveedor_id", "nombre"],
             parentModal: "#modalReg",
             placeholder: "Seleccione un proveedor",
             selectWidth: "100%",
+            ajax: true,
+            ajaxUrl: "proveedores/consulta",
+            processResultsAjax: function (data, params) {
+
+                const data1 = [];
+
+                data?.data.forEach(object => {
+                    const { proveedor_id: valorPropiedad1, nombre: valorPropiedad2 } = object;
+                    data1.push({ id: valorPropiedad1, text: valorPropiedad2 });
+                });
+
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return {
+                    results: data1,
+                    pagination: {
+                        more: data1.length
+                    }
+                };
+            }
         });
 
         dinamicSelect2({
