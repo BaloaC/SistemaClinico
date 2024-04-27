@@ -96,10 +96,6 @@ class EspecialidadController extends Controller{
     }
 
     public function listarEspecialidadesConMedicos() {
-        // SELECT especialidad.*
-        // FROM medico_especialidad
-        // INNER JOIN especialidad on especialidad.especialidad_id = medico_especialidad.especialidad_id
-
         $_medicoEspecialidad = new MedicoEspecialidadModel();
         $_medicoEspecialidad->where('estatus_med', '!=', '2');
 
@@ -125,22 +121,6 @@ class EspecialidadController extends Controller{
 
         $inners = $_medicoEspecialidad->listInner(["especialidad" => "medico_especialidad"]);
         $especialidades = $_medicoEspecialidad->innerJoin(['especialidad.especialidad_id, especialidad.nombre, especialidad.estatus_esp'], $inners, "medico_especialidad", true);
-        // $especialidadesLista = array_unique((Array) $especialidades);
-        $_medicoEspecialidad->resetValues();
-
-        // if ( isset($_GET['search']) ) {
-        //     if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
-        //         $_medicoEspecialidad->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
-        //     } else if ( strlen($_GET['search']['value']) > 0) {
-        //         $_medicoEspecialidad->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
-        //     } else {
-        //         $_medicoEspecialidad->setSelect('COUNT(*) AS total');
-        //     }
-        // } else {
-        //     $_medicoEspecialidad->setSelect('COUNT(*) AS total');
-        // }
-
-        $total_registros = $_medicoEspecialidad->where('estatus_esp', '=', '1')->getAll();       
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($especialidades), $especialidades);
     }
 
