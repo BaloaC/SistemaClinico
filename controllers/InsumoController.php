@@ -26,7 +26,7 @@ class InsumoController extends Controller{
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         
-        $camposNumericos = array("precio");
+        $camposNumericos = array("precio", "cantidad_unidad", "capacidad_unidad", "cantidad_capacidad");
         $validarInsumo = new Validate;
         
         switch($validarInsumo) {
@@ -45,6 +45,12 @@ class InsumoController extends Controller{
             default:
                 
                 $data = $validarInsumo->dataScape($_POST);
+                $data['cantidad_capacidad'] = $data['cantidad_unidad'] * $data['capacidad_unidad'];
+
+                if (!$data['es_cobrado']) {
+                    $data['precio'] = 0;
+                }
+                
                 $_insumoModel = new InsumoModel();
                 $id = $_insumoModel->insert($data);
                 $mensaje = ($id > 0);

@@ -191,10 +191,13 @@ CREATE TABLE  IF NOT EXISTS `proveedor` (
 CREATE TABLE  IF NOT EXISTS `insumo` (
     `insumo_id` int(11) NOT NULL AUTO_INCREMENT,
     `nombre` varchar(45) NOT NULL DEFAULT '0',
-    `cantidad` int(11) NOT NULL,
-    `stock` int(10) UNSIGNED NOT NULL,
     `cantidad_min` int(11) NOT NULL,
-    `precio` float NOT NULL,
+    `cantidad_unidad` INT NOT NULL DEFAULT '0',
+    `capacidad_unidad` INT NOT NULL,
+    `cantidad_capacidad` INT NOT NULL,
+    `precio` float NOT NULL DEFAULT '0',
+    `tipo_medida` ENUM('1','2','3','4') NOT NULL,
+    `es_cobrado` ENUM('0','1') NOT NULL
     `estatus_ins` enum('1','2','3') NOT NULL DEFAULT '1',
     PRIMARY KEY (`insumo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
