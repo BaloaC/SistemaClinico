@@ -59,6 +59,10 @@ class InsumoController extends Controller{
         $_insumoModel = new InsumoModel();
         $_insumoModel->where('estatus_ins', '!=', '2');
 
+        if (isset($_GET['agotado']) && $_GET['agotado'] == 'false') {
+            $_insumoModel->where('cantidad', '!=', '0');
+        }
+
         if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
             if (isset($_GET['start']) || isset($_GET['page'])) {
                 
