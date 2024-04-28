@@ -30,7 +30,7 @@ const handleModalOpen = async (parentModal) => {
             parentModal: parentModal,
             placeholder: "Seleccione una especialidad",
             ajax: true,
-            ajaxUrl: `especialidades/consulta`,
+            ajaxUrl: `especialidades/medicamentos`,
             processResultsAjax: function (data, params) {
 
                 const existingSelects = document.querySelectorAll(`.especialidadm-id`);
@@ -240,7 +240,7 @@ function addRecipeInput(parentModal = "#modalReg") {
         parentModal: parentModal,
         placeholder: "Seleccione una especialidad",
         ajax: true,
-        ajaxUrl: `especialidades/consulta`,
+        ajaxUrl: `especialidades/medicamentos`,
         processResultsAjax: function (data, params) {
 
             const data1 = [];
