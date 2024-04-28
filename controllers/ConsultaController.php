@@ -128,7 +128,6 @@ class ConsultaController extends Controller {
         $_consultaModel->resetValues();
 
         $consultas = [];
-        
         foreach ($consultaList as $consulta) {
             if ($consulta->es_emergencia) {
                 $consultas[] = ConsultaService::obtenerConsultaEmergencia($consulta, false);

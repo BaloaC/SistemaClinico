@@ -96,13 +96,15 @@ class ConsultaService {
             ConsultaService::actualizarAcumuladoMedico($consultaEmergencia['pagos']);
         }
         
-        if (isset($formulario['examenes'])) {
-                $formulario['consulta_id'] = $consulta_id;
-            ConsultaHelper::insertarExamenesEmergencia($formulario);
-        }
-
+        // if (isset($formulario['examenes'])) {
+        //     $formulario['consulta_id'] = $consulta_id;
+        //     ConsultaHelper::insertarExamenesEmergencia($formulario);
+        // }
+        $total_insumos = 0;
         if (isset($formulario['insumos'])) {
-            ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_id, true);
+            $total_insumos = ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_id, true);
+            echo 'insertarConsultaEMEGERNCIA';
+            var_dump($total_insumos);
         }
         
         if (isset($formulario['recipes'])) {
@@ -112,6 +114,7 @@ class ConsultaService {
         if (isset($formulario['indicaciones'])) {
             ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_id);
         }
+        $consultaEmergencia['total_insumos'] = $total_insumos;
         ConsultaHelper::insertarConsultaEmergencia($consultaEmergencia);
 
         return $consulta_id;
