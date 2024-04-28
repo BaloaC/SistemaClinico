@@ -167,15 +167,17 @@ class CitasValidaciones {
                 array_push($horarioMedico, $horario);
                 
                 if ($formulario['hora_entrada'] < $horario->hora_entrada || $formulario['hora_entrada'] > $horario->hora_salida || $formulario['hora_salida'] > $horario->hora_salida || $formulario['hora_salida'] < $horario->hora_entrada ) {
-                    $respuesta = new Response(false, 'El médico indicado no está disponible a esa hora');
-                    $respuesta->setData("Ocurrió un problema intentando asignar la cita, el médico se encuentra disponible ese día de ".$horario->hora_entrada." a ".$horario->hora_salida);
-                    echo $respuesta->json(400);
-                    exit();
+                    if (!isset($formulario['forzar_hora'])) {
+                        $respuesta = new Response(false, 'El médico indicado no está disponible a esa hora');
+                        $respuesta->setData("Ocurrió un problema intentando asignar la cita, el médico se encuentra disponible ese día de ".$horario->hora_entrada." a ".$horario->hora_salida);
+                        echo $respuesta->json(400);
+                        exit();
+                    }
                 } 
             }
         }
         
-        if ( count($horarioMedico) <= 0 ) {
+        if ( count($horarioMedico) <= 0 && !isset($formulario['forzar_hora'])) {
             $respuesta = new Response(false, 'El médico indicado no está disponible ese día');
             echo $respuesta->json(400);
             exit();
