@@ -9,6 +9,145 @@ import parseCitas from "./parseCitas.js";
 import tipoAsegurado from "./tipoAsegurado.js";
 import tipoTitular from "./tipoTitular.js";
 
+class CitasManager {
+    constructor(schedule, idMedic) {
+        this.idMedic = idMedic;
+        this.schedule = schedule;
+    }
+
+    async obtenerCitasPorFecha(dateDayElem) {
+        const citasByDate = await getAll(`/citas/fecha?fecha=${dateDayElem}&medico=${this.idMedic}`);
+        return citasByDate;
+    }
+
+    async obtenerCitas() {
+
+        const daysOfWeek = {
+            lunes: 1,
+            martes: 2,
+            miercoles: 3,
+            jueves: 4,
+            viernes: 5,
+            sabado: 6,
+            domingo: 0
+        }
+
+        const availableDays = [];
+
+        this.schedule.map(scheduleOfTheDay => {
+            availableDays.push(daysOfWeek[scheduleOfTheDay.dias_semana]);
+        })
+
+        console.log(this.busyHours);
+
+        const flatpickrPromise = new Promise((resolve, reject) => {
+            flatpickr("#fecha_cita", {
+                locale: "es",
+                minDate: "today",
+                dateFormat: "Y-m-d",
+                altFormat: "d-m-Y",
+                altInput: true,
+                onDayCreate: async (dObj, dStr, fp, dayElem) => {
+                    const dateDayElem = dayElem.dateObj.toISOString().split('T')[0];
+                    const listCitasByDate = await this.obtenerCitasPorFecha(dateDayElem);
+
+                    const dateTime = new Date();
+
+                    if (dateTime.getTime() <= dayElem.dateObj.getTime()) {
+
+                        if (availableDays.includes(dayElem.dateObj.getDay())) {
+                            dayElem.innerHTML += `<span class='event ${listCitasByDate.length > 0 ? "hasDate" : ""}'></span>`;
+                        } else {
+                            dayElem.innerHTML += `<span class='event ${(dayElem.dateObj.getDay() === 0 || dayElem.dateObj.getDay() === 6) ? "disabled" : "noWorking"}'></span>`;
+                            // console.log(dObj, dStr, fp, dayElem);
+                        }
+                    }
+                },
+                "disable": [
+                    function (date) {
+                        return (date.getDay() === 0 || date.getDay() === 6);
+                    }
+                ],
+                onReady: resolve,
+                onChange: async (selectedDates, dateStr, instance) => {
+
+                    let listCitas = "";
+                    const listCitasByDate = await this.obtenerCitasPorFecha(dateStr);
+
+                    const dias = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+
+                    console.log(this.schedule);
+
+                    console.log(dias[new Date(dateStr).getDay() + 1])
+
+                    const horarioDelDia = this.schedule.filter(scheduleOfTheDay => {
+                        return scheduleOfTheDay.dias_semana == dias[new Date(dateStr).getDay() + 1];
+                    })
+
+                    const citasTable = document.querySelector("#citas-table tbody")
+                    const modalReg = document.querySelector("#modalReg .modal-body");
+
+                    listCitasByDate.forEach(horario => {
+                        listCitas += `
+                        <tr>
+                            <td>${to12HourFormat(horario.hora_entrada)}</td>
+                            <td>${to12HourFormat(horario.hora_salida)}</td>
+                        </tr>
+                    `;
+                    });
+
+                    console.log(listCitasByDate);
+
+                    citasTable.innerHTML = listCitas;
+    
+                    $("#citas-table").fadeIn("slow");
+
+                    // Subir el scroll hasta inicio para visualizar mejor el mensaje de error
+                    modalReg.scrollTo({
+                        top: modalReg.scrollHeight,
+                        bottom: 0,
+                        behavior: 'smooth'
+                    });                            
+
+                    flatpickr("#hora_entrada", {
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "H:i:s",
+                        minTime: horarioDelDia[0].hora_entrada.substring(0, 5),
+                        maxTime: horarioDelDia[0].hora_salida.substring(0, 5),
+                        time_24hr: false,
+                        minuteIncrement: 30,
+                        altFormat: "h:i K",
+                        altInput: true
+                    });
+
+                    flatpickr("#hora_salida", {
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "H:i:s",
+                        time_24hr: false,
+                        minTime: horarioDelDia[0].hora_entrada.substring(0, 5),
+                        maxTime: horarioDelDia[0].hora_salida.substring(0, 5),
+                        minuteIncrement: 30,
+                        altFormat: "h:i K",
+                        altInput: true
+                    });
+                }
+            });
+        });
+
+        await flatpickrPromise;
+
+        // this.mostrarCitas(); // Llamar a mostrarCitas() después de completar obtenerCitas()
+
+        // console.log(this._busyHours);
+    }
+
+    mostrarCitas() {
+        // console.log(this.busyHours);
+    }
+}
+
 const module = "citas",
     modalReg = new bootstrap.Modal("#modalReg"),
     modalAlert = new bootstrap.Modal("#modalAlert"),
@@ -299,6 +438,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         $(medicoSelect).on("change", async function () {
 
             $("#horarios-table").fadeOut("slow");
+            $("#citas-table").fadeOut("slow");
 
             const infoMedico = await getById("medicos", this.value);
             const modalReg = document.querySelector("#modalReg .modal-body");
@@ -306,75 +446,90 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             const horariosOrdenados = sortScheduleByDay(infoMedico[0]?.horario);
 
 
-            const inputDateHandler = (schedule) => {
+            // const inputDateHandler = (schedule, idMedic) => {
 
-                const daysOfWeek = {
-                    lunes: 1,
-                    martes: 2,
-                    miercoles: 3,
-                    jueves: 4,
-                    viernes: 5,
-                    sabado: 6,
-                    domingo: 0
-                }
+            //     const daysOfWeek = {
+            //         lunes: 1,
+            //         martes: 2,
+            //         miercoles: 3,
+            //         jueves: 4,
+            //         viernes: 5,
+            //         sabado: 6,
+            //         domingo: 0
+            //     }
 
-                const availableDays = [];
+            //     const availableDays = [];
 
-                schedule.map(scheduleOfTheDay => {
-                    availableDays.push(daysOfWeek[scheduleOfTheDay.dias_semana]);
-                })
+            //     schedule.map(scheduleOfTheDay => {
+            //         availableDays.push(daysOfWeek[scheduleOfTheDay.dias_semana]);
+            //     })
 
+            //     const busyHours = [];
 
-                flatpickr("#fecha_cita", {
-                    locale: "es",
-                    onDayCreate: function (dObj, dStr, fp, dayElem) {
+            //     flatpickr("#fecha_cita", {
+            //         locale: "es",
+            //         onDayCreate: async function (dObj, dStr, fp, dayElem) {
 
+            //             let dateDayElem = dayElem.dateObj.toISOString().split('T')[0];
+            //             const citasByDate = await getAll(`/citas/fecha?fecha=${dateDayElem}&medico=${idMedic}`);
 
-                        // Utilize dayElem.dateObj, which is the corresponding Date
-                        // console.log(dayElem);
-                        // dummy logic
+            //             if (citasByDate.length > 0) {
 
-                        const dateTime = new Date();
+            //                 const busyHour = [];
+            //                 citasByDate.map(cita => {
+            //                     busyHour.push({
+            //                         hora_entrada: cita.hora_entrada,
+            //                         hora_salida: cita.hora_salida
+            //                     })
+            //                 });
 
-                        if (dateTime.getTime() <= dayElem.dateObj.getTime()) {
+            //                 busyHours.push({ [dateDayElem]: busyHour })
 
-                            if (availableDays.includes(dayElem.dateObj.getDay())) {
-                                dayElem.innerHTML += "<span class='event'></span>";
-                            } else {
-                                dayElem.innerHTML += `<span class='event ${(dayElem.dateObj.getDay() === 0 || dayElem.dateObj.getDay() === 6) ? "disabled" : "busy"}'></span>`;
-                            }
-                        }
+            //                 console.log(busyHours);
+            //             }
+            //         },
+            //         "disable": [
+            //             function (date) {
 
+            //                 // disable weekend days
+            //                 // return true to disable
+            //                 return (date.getDay() === 0 || date.getDay() === 6);
 
-                        // if(){
-                        //     dayElem.innerHTML += "<span class='event disabled'></span>";
-                        // }
+            //             }
+            //         ],
+            //     });
 
+            //     console.log(busyHours);
 
+            //     const limit = [
+            //         ["13:00", "14:00"],
+            //         ["16:00", "17:30"],
+            //         ["18:00", "20:30"]
+            //     ];
 
-                        // if (Math.random() < 0.15)
-                        //     dayElem.innerHTML += "<span class='event'></span>";
+            //     // document.querySelector("hora_entrada").addEventListener("change", function () {
+            //     //     // obtenemos el valor introducido por el usuario
+            //     //     const user = this.value.split(":");
 
-                        // else if (Math.random() > 0.85)
-                        //     dayElem.innerHTML += "<span class='event busy'></span>";
-                    },
-                    "disable": [
-                        function (date) {
-                            // return true to disable
-                            return (date.getDay() === 0 || date.getDay() === 6);
+            //     //     // recorremos todas las fechas limite
+            //     //     // Si devuelve true, esta entre algunas de las fechas
+            //     //     const result = limit.some(el => {
+            //     //         let start = el[0].split(":");
+            //     //         let end = el[1].split(":");
 
-                        }
-                    ],
-                    // disable: function (date) {
-                    //     // Lógica para deshabilitar fechas
-                    //     // Devuelve true si la fecha debe estar deshabilitada, de lo contrario, devuelve false
-                    //     return date.getDay() === 0 || date.getDay() === 6; // Deshabilitar los fines de semana
-                    // }
-                });
+            //     //         // comprobamos que este entre las fechas limite
+            //     //         return (start[0] < user[0] || (start[0] == user[0] && start[1] <= user[1])) && (end[0] > user[0] || (end[0] == user[0] && end[1] >= user[1]))
+            //     //     });
 
-            }
+            //     //     document.getElementById("info").innerHTML = result ? "Correcto" : "Error";
+            //     // });
 
-            inputDateHandler(horariosOrdenados);
+            // }
+
+            // inputDateHandler(horariosOrdenados, this.value);
+            // 
+            const citasManager = new CitasManager(horariosOrdenados, this.value);
+            citasManager.obtenerCitas().then(() => { console.log(citasManager.busyHours) });
 
             let listHorarios = "";
             horariosOrdenados.forEach(horario => {
