@@ -96,22 +96,29 @@ class ConsultaService {
             ConsultaService::actualizarAcumuladoMedico($consultaEmergencia['pagos']);
         }
         
-        if (isset($formulario['examenes'])) {
-                $formulario['consulta_id'] = $consulta_id;
-            ConsultaHelper::insertarExamenesEmergencia($formulario);
-        }
-
+        // if (isset($formulario['examenes'])) {
+        //     $formulario['consulta_id'] = $consulta_id;
+        //     ConsultaHelper::insertarExamenesEmergencia($formulario);
+        // }
+        $total_insumos = 0;
         if (isset($formulario['insumos'])) {
-            ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_id, true);
+            $total_insumos = ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_id, true);
+            echo 'insertarConsultaEMEGERNCIA';
+            var_dump($total_insumos);
         }
         
         if (isset($formulario['recipes'])) {
             ConsultaHelper::insertarRecipe($formulario['recipes'], $consulta_id);
         }
 
+        if (isset($formulario['referidos'])) {
+            ConsultaHelper::insertarReferidos($formulario['referidos'], $consulta_id);
+        }
+
         if (isset($formulario['indicaciones'])) {
             ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_id);
         }
+        $consultaEmergencia['total_insumos'] = $total_insumos;
         ConsultaHelper::insertarConsultaEmergencia($consultaEmergencia);
 
         return $consulta_id;
@@ -140,6 +147,10 @@ class ConsultaService {
 
         if (array_key_exists('indicaciones', $formulario)) {
             ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_separada[0]['consulta_id']);
+        }
+
+        if (array_key_exists('referidos', $formulario)) {
+            ConsultaHelper::insertarReferidos($formulario['referidos'], $consulta_separada[0]['consulta_id']);
         }
 
         if (array_key_exists('recipes', $formulario)) {
@@ -180,6 +191,9 @@ class ConsultaService {
         //         ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], true);
         //     }
         // }
+        if (array_key_exists('referidos', $formulario)) {
+            ConsultaHelper::insertarReferidos($formulario['referidos'], $consulta_separada[0]['consulta_id']);
+        }
 
         if (array_key_exists('recipes', $formulario)) {
             ConsultaHelper::insertarRecipe($formulario['recipes'], $consulta_separada[0]['consulta_id']);

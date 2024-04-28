@@ -139,6 +139,7 @@ Router::get('/especialidades/actualizar/:id', EspecialidadController::class . '@
 Router::get('/especialidades/consulta', EspecialidadController::class . '@listarEspecialidades', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::get('/especialidades/:id', EspecialidadController::class . '@listarEspecialidadPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::get('/especialidades/medicos', EspecialidadController::class . '@listarEspecialidadesConMedicos', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
+Router::get('/especialidades/medicamentos', EspecialidadController::class . '@listarEspecialidadesConMedicamentos', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::post('/especialidades', EspecialidadController::class . '@insertarEspecialidad', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )] );
 Router::put('/especialidades/:id', EspecialidadController::class . '@actualizarEspecialidad', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::delete('/especialidades/:id', EspecialidadController::class . '@eliminarEspecialidad', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
@@ -342,6 +343,7 @@ Router::delete('/factura/medico/:id', FacturaMedicoController::class . '@elimina
 // //Global
 Router::get('/globals', GlobalController::class . '@obtenerGlobals', [$AuthenticationMiddleware]);
 Router::put('/porcentajeMedico', GlobalController::class . '@actualizarPorcentaje', [$AuthenticationMiddleware]);
+Router::put('/porcentajeInsumo', GlobalController::class . '@actualivarPorcentajeInsumo', [$AuthenticationMiddleware]);
 Router::put('/cambioDivisa', GlobalController::class . '@actualizarValorDivisa', [$AuthenticationMiddleware]);
 
 // //Factura_Medico - Vistas

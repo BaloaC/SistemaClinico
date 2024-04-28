@@ -186,7 +186,7 @@ class ConsultaHelper {
 
     public static function insertarConsultaEmergencia($formulario) {
         $_consultaEmergencia = new ConsultaEmergenciaModel();
-
+        
         $formulario['total_examenes'] = 0;
         $formulario['total_examenes_bs'] = 0;
                 
@@ -194,7 +194,7 @@ class ConsultaHelper {
             $precios_examenes = ConsultaHelper::insertarExamenesEmergencia($formulario);
             $formulario['total_examenes'] = $precios_examenes['total_examenes'];
         }
-
+        
         $total_consulta = $formulario['consultas_medicas'] + $formulario['laboratorios'] 
                         + $formulario['medicamentos'] + $formulario['area_observacion'] 
                         + $formulario['enfermeria'] + $formulario['total_insumos'] 
@@ -211,7 +211,7 @@ class ConsultaHelper {
         $formulario['total_consulta_bs'] = 0;
         
         $fueInsertado = $_consultaEmergencia->insert($formulario); 
-
+        
         if ($fueInsertado <= 0) {
             $respuesta = new Response('INSERCION_FALLIDA');
             $respuesta->setData($formulario);
@@ -314,6 +314,21 @@ class ConsultaHelper {
         
     }
 
+    public static function insertarReferidos($referidos, $consulta_id) {
+        foreach ($referidos as $referido) {
+            $_consultaReferido = new ConsultaReferidoModel();
+            $referido['consulta_id'] = $consulta_id;
+            $fueInsertado = $_consultaReferido->insert($referido);
+            
+            if (!$fueInsertado) {
+                $respuesta = new Response(false, 'Ocurrió un error insertando el referido');
+                $respuesta->setData("Ha ocurrido un error insertando el referido de la especialidad ".$fueInsertado['especialidad_id']);
+                echo $respuesta->json(400);
+                exit();
+            }
+        }
+    }
+
     public static function insertarRecipe($recipes, $consulta_id) {
 
         foreach ($recipes as $recipe) {
@@ -413,6 +428,7 @@ class ConsultaHelper {
     }
 
     public static function insertarInsumo($insumos, $consulta_id, $es_asegurada) {
+        $insumo_total = 0;
         foreach ($insumos as $insumo) {
             
             $insumo['consulta_id'] = $consulta_id;
@@ -422,7 +438,8 @@ class ConsultaHelper {
 
             $_insumoModel = new InsumoModel();
             $insumoUtilizado = $_insumoModel->where('insumo_id', '=', $data['insumo_id'])->getFirst();
-            $data['precio_insumo_usd'] = $insumoUtilizado->precio;
+            $data['precio_insumo_usd'] = $insumoUtilizado->es_cobrado == 1 ? $insumoUtilizado->precio : 0;
+            $insumo_total += $data['precio_insumo_usd'] * $insumo['cantidad'];
 
             $_globalModel = new GlobalModel();
             $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
@@ -461,6 +478,8 @@ class ConsultaHelper {
                 exit();
             }
         }
+
+        return $insumo_total;
     }
 
     public static function actualizarPrecioEmergencia($consulta) {

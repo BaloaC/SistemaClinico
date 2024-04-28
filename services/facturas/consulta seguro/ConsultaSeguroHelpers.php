@@ -81,6 +81,7 @@ class ConsultaSeguroHelpers {
                 }
 
                 $consultaInsumos = FacturaConsultaHelpers::obtenerInsumos($consulta);
+
                 $consultaExamenes = FacturaConsultaHelpers::obtenerExamenes($consulta);
                 $listaConsultas[] = array_merge((Array) $consulta, (Array) $consultaInsumos, (Array) $consultaExamenes);
             }

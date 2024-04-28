@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS `global` (
 
 INSERT INTO `global` (`global_id`, `key`, `value`) VALUES
 (1, 'porcentaje_medico', '60'),
-(2, 'cambio_divisa', '32.59');
+(2, 'cambio_divisa', '32.59'),
+(3, 'porcentaje_insumo', '5');
 
 -- --------------------------------------------------------
 
@@ -634,6 +635,22 @@ CREATE TABLE  IF NOT EXISTS `consulta_sin_cita` (
     FOREIGN KEY (`especialidad_id`) REFERENCES `especialidad` (`especialidad_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY (`medico_id`) REFERENCES `medico` (`medico_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY (`paciente_id`) REFERENCES `paciente` (`paciente_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `consulta_seguro`
+--
+
+CREATE TABLE  IF NOT EXISTS `consulta_referidos` (
+    `consulta_referidos_id` int(9) NOT NULL AUTO_INCREMENT,
+    `consulta_id` int(11) NOT NULL,
+    `especialidad_id` int(11) NOT NULL,
+    `estatus_con` enum('1','2') NOT NULL DEFAULT '1',
+    PRIMARY KEY (`consulta_referidos_id`),
+    FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    FOREIGN KEY (`especialidad_id`) REFERENCES `especialidad` (`especialidad_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

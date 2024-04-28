@@ -591,6 +591,11 @@
     <script type="module" src="<?php echo Url::to('assets/js/consultas/consultaSinCita.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/pagoMedicosInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/pagarConsulta.js'); ?>"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (e) => {
+            document.getElementsByName("fecha_consulta")[0].max = new Date().toISOString().split('T')[0];
+        })
+    </script>
 </body>
 
 </html>

@@ -68,6 +68,10 @@
                     </div>
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-info-circle"></i>
+                            <p class="mb-0 ms-2">Los montos deben ser introducidos en bolívares</p>
+                        </div>
                         <form action="" id="info-fcompra" class="form-reg p-3 px-4">
                             <div class="row">
                                 <div class="col-6">
