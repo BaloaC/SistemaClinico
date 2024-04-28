@@ -49,6 +49,11 @@ class ConsultaController extends Controller {
             ConsultaValidaciones::validarInsumos($insumos);
         }
 
+        $referidos = isset($_POST['referidos']) ? $_POST['referidos'] : false;
+        if ($referidos) { 
+            ConsultaValidaciones::validarReferidos($referidos);
+        }
+
         $es_emergencia = isset($_POST['es_emergencia']); // Validamos que el atributo emergencia sea booleano
 
         if ( $es_emergencia ) {

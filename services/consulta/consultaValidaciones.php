@@ -167,6 +167,20 @@ class ConsultaValidaciones {
         }
     }
 
+    public static function validarReferidos($referidos) {
+        $camposNumericos = array("especialidad_id");
+
+        foreach ($referidos as $referido) {
+            $validarConsultaReferido = new Validate;
+
+            if (!$validarConsultaReferido->existsInDB($referido, $camposNumericos)) {
+                $respuesta = new Response(false, 'No se encontraron resultados de los datos indicados en la base de datos');
+                echo $respuesta->json(404);
+                exit();
+            }
+        }
+    }
+
     /**
      * Validaciones de los insumos
      */

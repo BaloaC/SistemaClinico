@@ -314,6 +314,21 @@ class ConsultaHelper {
         
     }
 
+    public static function insertarReferidos($referidos, $consulta_id) {
+        foreach ($referidos as $referido) {
+            $_consultaReferido = new ConsultaReferidoModel();
+            $referido['consulta_id'] = $consulta_id;
+            $fueInsertado = $_consultaReferido->insert($referido);
+            
+            if (!$fueInsertado) {
+                $respuesta = new Response(false, 'Ocurrió un error insertando el referido');
+                $respuesta->setData("Ha ocurrido un error insertando el referido de la especialidad ".$fueInsertado['especialidad_id']);
+                echo $respuesta->json(400);
+                exit();
+            }
+        }
+    }
+
     public static function insertarRecipe($recipes, $consulta_id) {
 
         foreach ($recipes as $recipe) {
