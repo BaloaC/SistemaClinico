@@ -186,8 +186,31 @@ class FacturaCompraController extends Controller
         );
 
         $eliminado = $_compraInsumoController->where('factura_compra_id', '=', $factura_compra_id)->update($data);
-        $isTrue = ($eliminado > 0);
-        $respuesta = new Response($isTrue ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        return $respuesta->json($isTrue ? 200 : 400);
+
+        if ($eliminado > 0) {
+            $_comprasInsumo = new CompraInsumoModel();
+            $compra_insumo_lista = $_comprasInsumo->where('factura_compra_id', '=', $factura_compra_id)->getAll();
+
+            foreach ($compra_insumo_lista as $compra_insumo) {
+                
+                $_insumoModel = new InsumoModel();
+                $insumo = $_insumoModel->where('insumo_id', '=', $compra_insumo->insumo_id)->getFirst();
+
+                $nueva_cantidad = $insumo->cantidad_unidad - $compra_insumo->unidades;
+                $insumo_actualizado = [
+                    "cantidad_unidad" => $nueva_cantidad,
+                    "cantidad_capacidad" =>  $nueva_cantidad * $insumo->capacidad_unidad
+                ];
+
+                $_insumoModel->update($insumo_actualizado);
+            }
+
+            $respuesta = new Response('ACTUALIZACION_EXITOSA');
+            return $respuesta->json(200);
+
+        } else {
+            $respuesta = new Response('ACTUALIZACION_FALLIDA');
+            return $respuesta->json(400);
+        }
     }
 }
