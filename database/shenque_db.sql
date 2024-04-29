@@ -198,7 +198,8 @@ CREATE TABLE  IF NOT EXISTS `insumo` (
     `cantidad_capacidad` INT NOT NULL,
     `precio` float NOT NULL DEFAULT '0',
     `tipo_medida` ENUM('1','2','3','4') NOT NULL,
-    `es_cobrado` ENUM('0','1') NOT NULL
+    `es_cobrado` ENUM('0','1') NOT NULL,
+    `tipo_insumo` ENUM('1','2') NULL DEFAULT '1',
     `estatus_ins` enum('1','2','3') NOT NULL DEFAULT '1',
     PRIMARY KEY (`insumo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -218,6 +219,7 @@ CREATE TABLE  IF NOT EXISTS `factura_compra` (
     `monto_sin_iva` float NOT NULL,
     `monto_usd` float NOT NULL,
     `excento` float DEFAULT NULL,
+    `motivo_cancelacion` TEXT NULL;
     `estatus_fac` enum('1','2','3') NOT NULL DEFAULT '1',
     PRIMARY KEY (`factura_compra_id`),
     FOREIGN KEY (`proveedor_id`) REFERENCES `proveedor` (`proveedor_id`) ON DELETE NO ACTION ON UPDATE NO ACTION

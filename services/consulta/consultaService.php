@@ -103,8 +103,6 @@ class ConsultaService {
         $total_insumos = 0;
         if (isset($formulario['insumos'])) {
             $total_insumos = ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_id, true);
-            echo 'insertarConsultaEMEGERNCIA';
-            var_dump($total_insumos);
         }
         
         if (isset($formulario['recipes'])) {

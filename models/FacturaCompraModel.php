@@ -6,13 +6,12 @@ class FacturaCompraModel extends GenericModel {
 
     protected $proveedor_id;
     protected $fecha_compra;
-    // protected $monto_total;
     protected $monto_con_iva;
     protected $monto_sin_iva;
     protected $monto_usd;
-    // protected $Iva;
     protected $total_productos;
     protected $excento;
+    protected $motivo_cancelacion;
     protected $estatus_fac;
 
     public function __construct($propiedades = null) {
@@ -26,7 +25,8 @@ class FacturaCompraModel extends GenericModel {
     public function getMontoSinIva(){return $this->monto_sin_iva;}
     public function getMontoUsd(){return $this->monto_usd;}
     public function getTotalProductos(){return $this->total_productos;}
-    public function getExcento(){return $this->excento;}   
+    public function getExcento(){return $this->excento;}
+    public function getMotivoCancelacion(){return $this->motivo_cancelacion;}
     public function getEstatusFac(){return $this->estatus_fac;} 
 
     /* Setters */
@@ -37,6 +37,7 @@ class FacturaCompraModel extends GenericModel {
     public function setMontoUsd($monto_usd){return $this->monto_usd = $monto_usd;}
     public function setTotalProductos($total_productos){return $this->total_productos = $total_productos;}
     public function setExcento($excento){return $this->excento = $excento;}
+    public function setMotivoCancelacion($motivo_cancelacion){return $this->motivo_cancelacion = $motivo_cancelacion;}
     public function setEstatusFac($estatus_fac){return $this->estatus_fac = $estatus_fac;}
 }
 
