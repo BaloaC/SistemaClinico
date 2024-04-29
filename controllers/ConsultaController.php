@@ -276,8 +276,12 @@ class ConsultaController extends Controller {
 
     public function listarConsultasAseguradas() {
         $_consultaCitaModel = new ConsultaCitaModel();
-        $_consultaCitaModel->where('consulta.estatus_con', '=', 1);
+        $_consultaCitaModel->where('consulta.estatus_con', '!=', 2);
         
+        if (isset($_GET['estatus'])) {
+            $_consultaCitaModel->where('consulta.estatus_con', '=', $_GET['estatus']);
+        }
+
         if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
             if (isset($_GET['start']) || isset($_GET['page'])) {
                 $size = isset($_GET['length']) ? $_GET['length'] : 10;
@@ -314,7 +318,13 @@ class ConsultaController extends Controller {
             $_consultaCitaModel->setSelect('COUNT(*) AS total');
         }
 
-        $lista_count = $_consultaCitaModel->where('cita.tipo_cita', '=', '2')->where('consulta.estatus_con', '=', 1)->innerJoin($select, $inners, "consulta_cita");
+        $_consultaCitaModel->where('cita.tipo_cita', '=', '2')->where('consulta.estatus_con', '!=', 2);
+
+        if (isset($_GET['estatus'])) {
+            $_consultaCitaModel->where('consulta.estatus_con', '=', $_GET['estatus']);
+        }
+        
+        $lista_count = $_consultaCitaModel->innerJoin($select, $inners, "consulta_cita");
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($lista_count), $lista);
     }
 }
