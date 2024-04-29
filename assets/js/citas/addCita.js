@@ -34,6 +34,9 @@ async function addCita() {
             data.paciente_titular_id = infoTitular.paciente_id;
         }
 
+        data.hora_entrada = `${data.hora_entrada}:00`;
+        data.hora_salida = `${data.hora_salida}:00`;
+
 
         const registroExitoso = await addModule("citas", "info-cita", data, "Cita agendada exitosamente!");
 

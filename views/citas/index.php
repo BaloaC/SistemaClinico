@@ -127,10 +127,23 @@
                                     <h5>Horario de la cita</h2>
                                         <div class="col-12 col-md-6">
                                             <label for="fecha_cita">Fecha cita</label>
-                                            <input type="date" name="fecha_cita" id="fecha_cita" data-validate="true" data-type="date" class="form-control mb-3">
+                                            <input type="date" name="fecha_cita" id="fecha_cita" data-validate="true" data-type="date" disabled class="form-control mb-3 flatpickr-input-readonly fecha_cita">
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="input-radios-container">Permitir citas fuera del horario del médico</label>
+                                            <div class="input-radios-container">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_si" value="true">
+                                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_no" value="false">
+                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                </div>
+                                            </div>
                                         </div>
                                         <table id="horarios-table" class="table table-borderless" style="display: none;">
-                                            <h6 class="my-3 fw-bolder">Horario del médico</h6>
+                                            <h6 class="my-3 fw-bolder medicoScheduleLabel" style="display: none;">Horario del médico</h6>
                                             <thead>
                                                 <tr>
                                                     <th>Día</th>
@@ -150,15 +163,16 @@
                                 <div class="row mt-4">
                                     <div class="col-12 col-md-6">
                                         <label for="hora_entrada">Hora entrada</label>
-                                        <input type="time" name="hora_entrada" id="hora_entrada" data-validate="true" data-type="timeAppointment" step="1" class="form-control mb-3">
+                                        <input type="time" name="hora_entrada" id="hora_entrada" step="1" disabled class="form-control hora_entrada flatpickr-input-readonly mb-3">
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <label for="hora_salida">Hora salida</label>
-                                        <input type="time" name="hora_salida" id="hora_salida" data-validate="true" data-type="timeAppointment" step="1" class="form-control mb-3">
+                                        <input type="time" name="hora_salida" id="hora_salida" step="1" disabled class="form-control hora_salida flatpickr-input-readonly mb-3">
                                     </div>
                                     <div class="col-12">
+                                        <h6 class="my-3 fw-bolder citaScheduleLabel" style="display: none;">Citas asigandas del día</h6>
+                                        <h6 class="withoutCitas" style="display: none;">No hay citas asiganadas para este día</h6>
                                         <table id="citas-table" class="table table-borderless" style="display: none;">
-                                            <h6 class="my-3 fw-bolder">Citas asigandas del día</h6>
                                             <thead>
                                                 <tr>
                                                     <th>Hora Entrada</th>
@@ -166,7 +180,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -309,6 +323,7 @@
         .event.noWorking {
             background-color: #0000000f;
         }
+
         .event.busy {
             background: #f6474736;
         }
@@ -320,8 +335,8 @@
         .event.hasDate {
             background-color: #ff000042;
         }
-        
-        .flatpickr-day { 
+
+        .flatpickr-day {
             border-radius: 0;
         }
 
@@ -344,14 +359,20 @@
         }
 
         .flatpickr-day.selected:has(.event.busy) {
-            background-color: #3f3f3f;
+            background: #0000000f;
+            border-color: #3f3f3f;
+            color: #000;
+        }
+
+        .flatpickr-input-readonly {
+            background-color: #fff !important;
         }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
     <script>
-   
+
     </script>
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
     <script src="<?php echo Url::to('assets/libs/fullcalendar/index.global.min.js'); ?>"></script>
