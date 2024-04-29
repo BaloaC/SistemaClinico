@@ -4,8 +4,8 @@ import formatToRealDate from "../global/formatToRealDate.js";
 
 
 const id = location.pathname.split("/")[4];
-const infoConsultas = await getAll("consultas/consulta");
-const consultasPacientes = infoConsultas.filter(consulta => consulta.paciente_id == id);
+const infoConsultas = await getAll(`consultas/paciente/${id}`);
+const consultasPacientes = infoConsultas.consultas;
 const template = document.getElementById("consulta-template").content;
 const fragment = document.createDocumentFragment();
 

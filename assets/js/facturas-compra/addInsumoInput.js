@@ -130,6 +130,9 @@ function addInsumoInput() {
     optionVacio.value = "";
     select.insertBefore(optionVacio, select.firstChild)
     clone.querySelector("tr").classList.add("newInput");
+    clone.querySelector("#antiguoPrecio").name = `actualizar_precio${clicks}`;
+    clone.querySelector("#nuevoPrecio").name = `actualizar_precio${clicks}`;
+    clone.querySelector("tr").classList.add("newInput");
     document.getElementById("insumos-list").appendChild(clone);
 
     dinamicSelect2({

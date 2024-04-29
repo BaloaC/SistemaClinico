@@ -99,7 +99,7 @@
                                         </thead>
                                         <tbody id="insumos-list">
                                             <tr>
-                                                <td><select name="insumo_id" id="s-insumo" class="form-control insumo-id" data-active="0" required>
+                                                <td><select name="insumo_id" id="s-insumo" onchange="calcularPreciosAnteriores(this)" class="form-control insumo-id" data-active="0" required>
                                                         <option></option>
                                                     </select></td>
                                                 <td>
@@ -112,7 +112,15 @@
                                                 </td>
                                                 <td><b class="monto-total-p">0.00 Bs</b></td>
                                                 <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
-                                                <td><div class="visible d-none"><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></div></td>
+                                                <td>
+                                                    <div>
+                                                        <input type="radio" name="actualizar_precio" value="0" id="antiguoPrecio"><label id="precioAnteriorLabel" class="d-inline mx-1">Mantener precio anterior ($0.00)</label> <br>
+                                                        <input type="radio" class="actualizarPrecioInsumo" name="actualizar_precio" value="1" id="nuevoPrecio"><label id="precioNuevoLabel" class="d-inline mx-1">Actualizar nuevo precio ($0.00)</label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="visible d-none"><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></div>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -138,7 +146,7 @@
         <!-- Insumos template -->
         <template id="insumo-template">
             <tr>
-                <td><select name="insumo_id" id="s-insumo" class="form-control insumo-id" data-active="0" required>
+                <td><select name="insumo_id" id="s-insumo" onchange="calcularPreciosAnteriores(this)" class="form-control insumo-id" data-active="0" required>
                         <option></option>
                     </select></td>
                 <td>
@@ -151,7 +159,15 @@
                 </td>
                 <td><b class="monto-total-p">0.00 Bs</b></td>
                 <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
-                <td><div class="visible"><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></div></td>
+                <td>
+                    <div>
+                        <input type="radio" value="0" id="antiguoPrecio"><label id="precioAnteriorLabel" class="d-inline mx-1">Mantener precio anterior ($0.00)</label> <br>
+                        <input type="radio" class="actualizarPrecioInsumo" value="1" id="nuevoPrecio"><label id="precioNuevoLabel" class="d-inline mx-1">Actualizar nuevo precio ($0.00)</label>
+                    </div>
+                </td>
+                <td>
+                    <div class="visible"><button type="button" class="btn" onclick="deleteInsumoInput(this)"><i class="fas fa-times m-0"></i></button></div>
+                </td>
             </tr>
         </template>
 
@@ -183,6 +199,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/facturas-compra/addInsumoInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-compra/deleteInsumoInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-compra/calcularInsumos.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/facturas-compra/calcularPreciosAnteriores.js'); ?>"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (e) => {
             document.getElementsByName("fecha_compra")[0].max = new Date().toISOString().split('T')[0];

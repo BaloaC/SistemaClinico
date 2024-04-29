@@ -54,7 +54,25 @@ addEventListener("DOMContentLoaded", (e) => {
             data: "factura_compra_id",
             render: function (data, type, row) {
                 // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-                if (row.estatus_fac == 1) {
+
+                const  estaDentroDeLos3DiasAnteriores = (fechaObjetivo) => {
+    
+                    const fechaActual = new Date();
+                    // Calcular la fecha límite (3 días antes de la fecha actual)
+                    const fechaLimite = new Date();
+                    fechaLimite.setDate(fechaActual.getDate() - 3);
+                  
+                    // Convertir las fechas a milisegundos
+                    const fechaObjetivoMilisegundos = fechaObjetivo.getTime();
+                    const fechaLimiteMilisegundos = fechaLimite.getTime();
+                    const fechaActualMilisegundos = fechaActual.getTime();
+                  
+                    // Verificar si la fecha objetivo está dentro del rango de 3 días anteriores
+                    return fechaObjetivoMilisegundos >= fechaLimiteMilisegundos && fechaObjetivoMilisegundos < fechaActualMilisegundos;
+                  }
+
+                if (row.estatus_fac == 1 && estaDentroDeLos3DiasAnteriores(new Date(row.fecha_compra))) {
+                    
                     return `
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFCompra(${data})"><i class="fas fa-trash del-consulta"></i></a>
                         `;
