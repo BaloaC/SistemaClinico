@@ -429,6 +429,7 @@ class ConsultaHelper {
 
     public static function insertarInsumo($insumos, $consulta_id, $es_asegurada) {
         $insumo_total = 0;
+        $medicamento_total = 0;
         foreach ($insumos as $insumo) {
             
             $insumo['consulta_id'] = $consulta_id;

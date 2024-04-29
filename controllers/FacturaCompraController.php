@@ -179,10 +179,18 @@ class FacturaCompraController extends Controller
     public function eliminarFacturaCompra($factura_compra_id) {
         global $isEnabledAudit;
         $isEnabledAudit = 'orden de compra';
+        $_POST = json_decode(file_get_contents('php://input'), true);
         
+        if (!isset($_POST['motivo_cancelacion'])) {
+            $respuesta = new Response(false, 'Debe insertar el motivo de la cancelación de la factura');
+            echo $respuesta->json(400);
+            exit();
+        }
+
         $_compraInsumoController = new FacturaCompraModel();
         $data = array(
-            'estatus_fac' => '2'
+            'estatus_fac' => '2',
+            'motivo_cancelacion' => $_POST['motivo_cancelacion']
         );
 
         $eliminado = $_compraInsumoController->where('factura_compra_id', '=', $factura_compra_id)->update($data);
