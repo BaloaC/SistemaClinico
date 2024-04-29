@@ -17,16 +17,35 @@ export const updateConsultaSeguroSelect = async (modalParent) => {
 
     document.getElementById("s-consulta-seguro").classList.remove("is-valid");
 
-    const infoConsultas = await getAll("consultas/consulta");
+    // const infoConsultas = await getAll("consultas/consulta");
 
     dinamicSelect2({
-        obj: infoConsultas ?? [],
+        // obj: infoConsultas ?? [],
         selectSelector: `#s-consulta-seguro`,
         selectValue: "consulta_id",
         selectNames: ["consulta_id", "motivo_cita"],
         parentModal: "#modalRegAsegurada",
         placeholder: "Seleccione una consulta",
-        defaultLabel: ["Consulta por emergencia"]
+        defaultLabel: ["Consulta por emergencia"],
+        ajax: true,
+        ajaxUrl: "consultas/aseguradas?estatus=1",
+        processResultsAjax: function (data, params) {
+
+            const data1 = [];
+
+            data?.data.forEach(object => {
+                const { consulta_id: valorPropiedad1, observaciones, nombre, apellidos } = object;
+                data1.push({ id: valorPropiedad1, text: `${nombre} ${apellidos} - ${observaciones ?? "Sin observaciones."}` });
+            });
+
+            // Transforms the top-level key of the response object from 'data' to 'results'
+            return {
+                results: data1,
+                pagination: {
+                    more: data1.length
+                }
+            };
+        }
     });
 
     $("#s-consulta-seguro").val([]).trigger("change")
@@ -35,7 +54,7 @@ export const updateConsultaSeguroSelect = async (modalParent) => {
 
 const handleModalOpen = async (modalParent) => {
 
-    if(modalOpened === false){
+    if (modalOpened === false) {
 
         dinamicSelect2({
             obj: [{ id: "consulta", text: "Consulta" }, { id: "laboratorio", text: "Laboratorio" }],
@@ -47,7 +66,7 @@ const handleModalOpen = async (modalParent) => {
             staticSelect: true,
             selectWidth: "100%"
         });
-    
+
         await updateConsultaSeguroSelect(modalParent);
 
         modalOpened = true;
