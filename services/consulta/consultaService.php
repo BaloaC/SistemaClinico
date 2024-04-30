@@ -116,8 +116,11 @@ class ConsultaService {
         if (isset($formulario['indicaciones'])) {
             ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_id);
         }
-        $consultaEmergencia['total_insumos'] = $total['insumo_total'];
-        $consultaEmergencia['medicamentos'] = $total['medicamento_total'];
+
+        if ($total != 0) {
+            $consultaEmergencia['total_insumos'] = $total['insumo_total'];
+            $consultaEmergencia['medicamentos'] = $total['medicamento_total'];
+        }
         ConsultaHelper::insertarConsultaEmergencia($consultaEmergencia);
 
         return $consulta_id;
