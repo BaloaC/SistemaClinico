@@ -100,9 +100,9 @@ class ConsultaService {
         //     $formulario['consulta_id'] = $consulta_id;
         //     ConsultaHelper::insertarExamenesEmergencia($formulario);
         // }
-        $total_insumos = 0;
+        $total = 0;
         if (isset($formulario['insumos'])) {
-            $total_insumos = ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_id, true);
+            $total = ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_id, true);
         }
         
         if (isset($formulario['recipes'])) {
@@ -116,7 +116,8 @@ class ConsultaService {
         if (isset($formulario['indicaciones'])) {
             ConsultaHelper::insertarIndicaciones($formulario['indicaciones'], $consulta_id);
         }
-        $consultaEmergencia['total_insumos'] = $total_insumos;
+        $consultaEmergencia['total_insumos'] = $total['insumo_total'];
+        $consultaEmergencia['medicamentos'] = $total['medicamento_total'];
         ConsultaHelper::insertarConsultaEmergencia($consultaEmergencia);
 
         return $consulta_id;

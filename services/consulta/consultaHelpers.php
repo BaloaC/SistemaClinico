@@ -440,7 +440,12 @@ class ConsultaHelper {
             $_insumoModel = new InsumoModel();
             $insumoUtilizado = $_insumoModel->where('insumo_id', '=', $data['insumo_id'])->getFirst();
             $data['precio_insumo_usd'] = $insumoUtilizado->es_cobrado == 1 ? $insumoUtilizado->precio : 0;
-            $insumo_total += $data['precio_insumo_usd'] * $insumo['cantidad'];
+
+            if ($insumoUtilizado->tipo_insumo == 1) {
+                $insumo_total += $data['precio_insumo_usd'] * $insumo['cantidad'];
+            } else if ($insumoUtilizado->tipo_insumo == 2) {
+                $medicamento_total += $data['precio_insumo_usd'] * $insumo['cantidad'];
+            }
 
             $_globalModel = new GlobalModel();
             $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
@@ -480,7 +485,8 @@ class ConsultaHelper {
             }
         }
 
-        return $insumo_total;
+        $total = ["insumo_total" => $insumo_total, "medicamento_total" => $medicamento_total];
+        return $total;
     }
 
     public static function actualizarPrecioEmergencia($consulta) {
