@@ -84,6 +84,8 @@ addEventListener("DOMContentLoaded", e => {
         url: `/${path[1]}/usuarios/consulta/`,
         columns: usuariosColumns,
         order,
+        processing: true,
+        serverSide: true
         // columnDefs: columnDefsUsuarios,
         // searchPanes: searchPanesUsuarios,
         // dom: "Plfrtip"

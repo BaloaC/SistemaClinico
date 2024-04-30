@@ -88,23 +88,23 @@
         <p><b>Historial del paciente<b></p>
         <table>
             <thead>
-                <th>Nombres: <span id="nombres">Enrique Miguel</span></th>
-                <th>Apellidos: <span id="apellidos">Chacón Almerida</span></th>
-                <th>Cédula de identidad: <span id="cedula">29527505</span></th>
+                <th>Nombres: <span id="nombres">Cargando</span></th>
+                <th>Apellidos: <span id="apellidos">Cargando</span></th>
+                <th>Cédula de identidad: <span id="cedula">Cargando</span></th>
             </thead>
         </table>
     </div>
     <template id="consulta-template">
         <div class="consulta">
-            <p>Consulta: N-<span id="consulta_id">12</span></p>
-            <p>Fecha: <span id="fecha">2022-03-12</span></p>
+            <p>Consulta: N-<span id="consulta_id"></span></p>
+            <p>Fecha: <span id="fecha"></span></p>
             <br>
             <br>
-            <p>Especialitas a cargo: <span id="nombre_medico">Francis Mayini Baloa Coronado</span></p>
-            <p>Especialidad: <span id="especialidad">Traumatología</p>
-            <p>Exámenes: <span id="examen">No se realizó ningún exámen</span></p>
-            <p>Insumos utilizados: <span id="insumo">No se realizó ningún exámen</span></p>
-            <p>Observaciones: <span id="observaciones">El paciente manisfetó dolores musculares</span></p>
+            <p>Especialitas a cargo: <span id="nombre_medico"></span></p>
+            <p>Especialidad: <span id="especialidad"></p>
+            <p>Exámenes: <span id="examen"></span></p>
+            <p>Insumos utilizados: <span id="insumo"></span></p>
+            <p>Observaciones: <span id="observaciones"></span></p>
         </div>
     </template>
 

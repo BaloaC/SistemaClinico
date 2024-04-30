@@ -171,6 +171,18 @@ function addInsumoInput(parentModal = "#modalReg") {
 
             // Transforms the top-level key of the response object from 'data' to 'results'
             return { results: data1 };
+        },
+        querys: function (params) {
+            const query = {
+                search: params.term,
+                select: true,
+                agotado: false
+            }
+
+            // if(queryPage === true) query.page = params.page || 1;
+
+            // Query parameters will be ?search=[term]&page=[page]
+            return query;
         }
     });
 

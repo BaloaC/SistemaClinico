@@ -122,40 +122,67 @@
                                                 <option></option>
                                             </select>
                                         </div>
-                                        <div class="col-12">
-                                            <table id="horarios-table" class="table table-borderless" style="display: none;">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Día</th>
-                                                        <th>Hora Entrada</th>
-                                                        <th>Hora Salida</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Día</td>
-                                                        <td>Hora Entrada</td>
-                                                        <td>Hora Salida</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
                                 </div>
                                 <div class="row mt-4">
                                     <h5>Horario de la cita</h2>
                                         <div class="col-12 col-md-6">
                                             <label for="fecha_cita">Fecha cita</label>
-                                            <input type="date" name="fecha_cita" id="fecha_cita" data-validate="true" data-type="date" class="form-control mb-3">
+                                            <input type="date" name="fecha_cita" id="fecha_cita" data-validate="true" data-type="date" disabled class="form-control mb-3 flatpickr-input-readonly fecha_cita">
                                         </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="input-radios-container">Permitir citas fuera del horario del médico</label>
+                                            <div class="input-radios-container">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_si" value="true">
+                                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_no" value="false">
+                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table id="horarios-table" class="table table-borderless" style="display: none;">
+                                            <h6 class="my-3 fw-bolder medicoScheduleLabel" style="display: none;">Horario del médico</h6>
+                                            <thead>
+                                                <tr>
+                                                    <th>Día</th>
+                                                    <th>Hora Entrada</th>
+                                                    <th>Hora Salida</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Día</td>
+                                                    <td>Hora Entrada</td>
+                                                    <td>Hora Salida</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-12 col-md-6">
                                         <label for="hora_entrada">Hora entrada</label>
-                                        <input type="time" name="hora_entrada" id="hora_entrada" data-validate="true" data-type="timeAppointment" step="1" class="form-control mb-3">
+                                        <input type="time" name="hora_entrada" id="hora_entrada" step="1" disabled class="form-control hora_entrada flatpickr-input-readonly mb-3">
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <label for="hora_salida">Hora salida</label>
-                                        <input type="time" name="hora_salida" id="hora_salida" data-validate="true" data-type="timeAppointment" step="1" class="form-control mb-3">
+                                        <input type="time" name="hora_salida" id="hora_salida" step="1" disabled class="form-control hora_salida flatpickr-input-readonly mb-3">
+                                    </div>
+                                    <div class="col-12">
+                                        <h6 class="my-3 fw-bolder citaScheduleLabel" style="display: none;">Citas asigandas del día</h6>
+                                        <h6 class="withoutCitas" style="display: none;">No hay citas asiganadas para este día</h6>
+                                        <table id="citas-table" class="table table-borderless" style="display: none;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Hora Entrada</th>
+                                                    <th>Hora Salida</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -277,7 +304,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border-radius: 50%;
+            /* border-radius: 50%; */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -290,7 +317,11 @@
             left: calc(50% - 1.5px);
             content: " ";
             display: block;*/
-            background: #3d8eb924;
+            background: #07ff0030;
+        }
+
+        .event.noWorking {
+            background-color: #0000000f;
         }
 
         .event.busy {
@@ -298,66 +329,50 @@
         }
 
         .event.disabled {
-            background-color: #00000012;
+            background-color: #ffffff30;
+        }
+
+        .event.hasDate {
+            background-color: #ff000042;
+        }
+
+        .flatpickr-day {
+            border-radius: 0;
+        }
+
+        .flatpickr-day.selected:has(.event) {
+            background: #07ff0030;
+            border-color: #3f3f3f;
+            color: #000;
+        }
+
+        .flatpickr-day.selected:has(.event.noWorking) {
+            background: #0000000f;
+            border-color: #3f3f3f;
+            color: #000;
+        }
+
+        .flatpickr-day.selected:has(.event.hasDate) {
+            background: #ff000042;
+            border-color: #3f3f3f;
+            color: #000;
         }
 
         .flatpickr-day.selected:has(.event.busy) {
-            background-color: #ff0000b0;
+            background: #0000000f;
+            border-color: #3f3f3f;
+            color: #000;
         }
 
+        .flatpickr-input-readonly {
+            background-color: #fff !important;
+        }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
     <script>
-        // flatpickr("input[type='date']");
 
-
-        
-
-        // flatpickr("#fecha_cita", {
-        //     locale: "es",
-        //     onDayCreate: function(dObj, dStr, fp, dayElem) {
-
-
-        //         // Utilize dayElem.dateObj, which is the corresponding Date
-        //         // console.log(dayElem);
-        //         // dummy logic
-        //         if(dayElem.dateObj.getDay() === 0 || dayElem.dateObj.getDay() === 6){
-        //             dayElem.innerHTML += "<span class='event disabled'></span>";
-        //         }
-
-        //         if (Math.random() < 0.15)
-        //             dayElem.innerHTML += "<span class='event'></span>";
-
-        //         else if (Math.random() > 0.85)
-        //             dayElem.innerHTML += "<span class='event busy'></span>";
-        //     },
-        //     // "disable": [
-        //     //     function(date) {
-        //     //         // return true to disable
-        //     //         return (date.getDay() === 0 || date.getDay() === 6);
-
-        //     //     }
-        //     // ],
-        //     // disable: function (date) {
-        //     //     // Lógica para deshabilitar fechas
-        //     //     // Devuelve true si la fecha debe estar deshabilitada, de lo contrario, devuelve false
-        //     //     return date.getDay() === 0 || date.getDay() === 6; // Deshabilitar los fines de semana
-        //     // }
-        // });
-
-        // flatpickr("input[type='date']", {
-        //     // Configuración de Flatpickr
-        //     onDayCreate: function(dObj, dStr, fp, dayElem) {
-        //         // Verificar si la fecha está en el array de fechas disponibles
-        //         if (availableDates.includes(dStr)) {
-        //             // Establecer el color de fondo personalizado para las fechas disponibles
-        //             dayElem.style.backgroundColor = "green";
-        //             dayElem.style.color = "white";
-        //         }
-        //     },
-        // });
     </script>
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
     <script src="<?php echo Url::to('assets/libs/fullcalendar/index.global.min.js'); ?>"></script>
