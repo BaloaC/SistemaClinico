@@ -108,15 +108,30 @@
                                 <div class="row mt-4 info-paciente" style="display: none;">
                                     <h5>Información del Paciente</h5>
                                     <div class="col-12 col-md-6">
-                                        <label for="nombres">Paciente</label>
+                                        <label for="nombres">Paciente Titular</label>
                                         <select name="paciente_id" id="s-paciente" class="form-control" data-active="0" required>
                                             <option></option>
                                         </select>
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <label for="cedula" id="cedula_beneficiado-label" style="display: none;">Cédula beneificado</label>
-                                        <input type="number" name="cedula_beneficiado" id="cedula_beneficiado" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" style="display: none;" data-bs-toggle="popover" disabled required>
-                                        <small class="form-text" id="cedulaBeneficiadoSmall">La cédula debe contener entre 6 o 8 números</small>
+
+                                        <label for="forRegistrarFactura">¿La consulta es para un paciente beneficiado?</label>
+                                        <div class="input-radios-container">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="pacienteBeneficiadoEmergencia" id="pacienteBeneficiadoEmergenciaSi" value="1" required disabled>
+                                                <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="pacienteBeneficiadoEmergencia" id="pacienteBeneficiadoEmergenciaNo" value="0" checked required disabled>
+                                                <label class="form-check-label" for="inlineRadio2">No</label>
+                                            </div>
+                                        </div>
+
+                                        <label for="cedula" id="cedula_beneficiado-label" style="display: none;">Cédula beneficiado</label>
+                                        <select name="cedula_beneficiado" id="cedula_beneficiado" class="form-control mb-3" style="display: none;" disabled required>
+                                            <option></option>
+                                        </select>
+                                        <!-- <input type="number" name="cedula_beneficiado" id="cedula_beneficiado" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" style="display: none;" data-bs-toggle="popover" disabled required> -->
                                     </div>
                                 </div>
 
@@ -169,12 +184,12 @@
                                         <label for="monto-consulta">Enfermería</label>
                                         <input type="number" step="any" name="enfermeria" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
                                         <small class="form-text">No se permiten números negativos</small>
-                                        <label for="monto-consulta">Laboratorio</label>
-                                        <input type="number" step="any" name="laboratorios" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
-                                        <small class="form-text">No se permiten números negativos</small>
-                                        <label for="monto-consulta">Medicamentos</label>
-                                        <input type="number" step="any" name="medicamentos" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
-                                        <small class="form-text">No se permiten números negativos</small>
+                                        <!-- <label for="monto-consulta">Laboratorio</label> -->
+                                        <!-- <input type="number" step="any" name="laboratorios" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
+                                        <small class="form-text">No se permiten números negativos</small> -->
+                                        <!-- <label for="monto-consulta">Medicamentos</label>
+                                        <input type="number" step="any" name="medicamentos" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required> -->
+                                        <!-- <small class="form-text">No se permiten números negativos</small> -->
                                         <label for="monto-consulta">Monto consulta</label>
                                         <input type="number" step="any" name="consultas_medicas" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
                                         <small class="form-text">No se permiten números negativos</small>
