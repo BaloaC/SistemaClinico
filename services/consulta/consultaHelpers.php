@@ -189,10 +189,14 @@ class ConsultaHelper {
         
         $formulario['total_examenes'] = 0;
         $formulario['total_examenes_bs'] = 0;
+        $formulario['laboratorios'] = 0;
+        $formulario['cantidad_laboratorios'] = 0;
                 
         if ( isset($formulario['examenes']) ) {
             $precios_examenes = ConsultaHelper::insertarExamenesEmergencia($formulario);
             $formulario['total_examenes'] = $precios_examenes['total_examenes'];
+            $formulario['laboratorios'] = $precios_examenes['laboratorios'];
+            $formulario['cantidad_laboratorios'] = $precios_examenes['cantidad_laboratorios'];
         }
         
         $total_consulta = $formulario['consultas_medicas'] + $formulario['laboratorios'] 
@@ -228,39 +232,79 @@ class ConsultaHelper {
         $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
         $consulta_examen = [];
 
+        $total_examenes = 0;
+        $total_laboratorios = 0;
+        $cantidad_laboratorios = 0;
+
         foreach ($formulario['examenes'] as $examen) {
 
             if (is_null($seguro_examen)) {
-                $consulta_examen[] = ConsultaHelper::obtenerPrecioExamenNormal($examen, $formulario['consulta_id']);
+                $consulta = ConsultaHelper::obtenerPrecioExamenNormal($examen, $formulario['consulta_id']);
+                $consulta_examen[] = $consulta;
+
+                $_examenModel = new ExamenModel();
+                $examen = $_examenModel->where('examen_id', '=', $consulta['examen_id'])->getFirst();
+
+                if ($examen->tipo == 2) {
+                    $total_laboratorios += $consulta['precio_examen_usd'];
+                    $cantidad_laboratorios += 1;
+                } else {
+                    $total_examenes += $consulta['precio_examen_usd'];
+                }
+
             } else {
 
                 $indice = array_search( $examen['examen_id'], explode(',', $seguro_examen->examenes));
 
                 if (!$indice) {
-                    $consulta_examen[] = ConsultaHelper::obtenerPrecioExamenNormal($examen, $formulario['consulta_id']);
+                    $consulta = ConsultaHelper::obtenerPrecioExamenNormal($examen, $formulario['consulta_id']);
+                    $consulta_examen[] = $consulta;
+
+                    $_examenModel = new ExamenModel();
+
+                    $examen = $_examenModel->where('examen_id', '=', $consulta['examen_id'])->getFirst();
+
+                    if ($examen->tipo == 2) {
+                        $total_laboratorios += $consulta['precio_examen_usd'];
+                        $cantidad_laboratorios += 1;
+                    } else {
+                        $total_examenes += $consulta['precio_examen_usd'];
+                    }
 
                 } else {
 
                     $costos = explode(',', $seguro_examen->costos);
-                    $consulta_examen[] = [
+                    $consulta = [
                         'consulta_id' => $formulario['consulta_id'],
                         'examen_id' => $examen['examen_id'],
                         'precio_examen_usd' => $costos[$indice],
                         'precio_examen_bs' => 0,
                         // 'precio_examen_bs' => round($costos[$indice] * $valorDivisa, 2),
                     ];
+
+                    $consulta_examen[] = $consulta;
+
+                    $_examenModel = new ExamenModel();
+                    $examen = $_examenModel->where('examen_id', '=', $consulta['examen_id'])->getFirst();
+
+                    if ($examen->tipo == 2) {
+                        $total_laboratorios += $consulta['precio_examen_usd'];
+                        $cantidad_laboratorios += 1;
+                    } else {
+                        $total_examenes += $consulta['precio_examen_usd'];
+                    }
                 }
             }
         }
 
-        $total_examenes = 0;
-
         foreach ($consulta_examen as $consulta) {
-            $total_examenes += $consulta['precio_examen_usd'];
+            // $total_examenes += $consulta['precio_examen_usd'];
             $_consultaExamenModel = new ConsultaExamenModel();
             $_consultaExamenModel->insert($consulta);
         }
         
+        $formulario['laboratorios'] = $total_laboratorios;
+        $formulario['cantidad_laboratorios'] = $cantidad_laboratorios;
         $formulario['total_examenes'] = $total_examenes;
         $formulario['total_examenes_bs'] = 0;
         // $formulario['total_examenes_bs'] = $formulario['total_examenes'] * $valorDivisa;
@@ -440,7 +484,12 @@ class ConsultaHelper {
             $_insumoModel = new InsumoModel();
             $insumoUtilizado = $_insumoModel->where('insumo_id', '=', $data['insumo_id'])->getFirst();
             $data['precio_insumo_usd'] = $insumoUtilizado->es_cobrado == 1 ? $insumoUtilizado->precio : 0;
-            $insumo_total += $data['precio_insumo_usd'] * $insumo['cantidad'];
+
+            if ($insumoUtilizado->tipo_insumo == 1) {
+                $insumo_total += $data['precio_insumo_usd'] * $insumo['cantidad'];
+            } else if ($insumoUtilizado->tipo_insumo == 2) {
+                $medicamento_total += $data['precio_insumo_usd'] * $insumo['cantidad'];
+            }
 
             $_globalModel = new GlobalModel();
             $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
@@ -480,7 +529,8 @@ class ConsultaHelper {
             }
         }
 
-        return $insumo_total;
+        $total = ["insumo_total" => $insumo_total, "medicamento_total" => $medicamento_total];
+        return $total;
     }
 
     public static function actualizarPrecioEmergencia($consulta) {
