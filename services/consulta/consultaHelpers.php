@@ -191,6 +191,10 @@ class ConsultaHelper {
         $formulario['total_examenes_bs'] = 0;
         $formulario['laboratorios'] = 0;
         $formulario['cantidad_laboratorios'] = 0;
+
+        if (!isset($formulario['medicamentos'])) {
+            $formulario['medicamentos'] = 0;
+        }
                 
         if ( isset($formulario['examenes']) ) {
             $precios_examenes = ConsultaHelper::insertarExamenesEmergencia($formulario);
