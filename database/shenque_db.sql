@@ -464,6 +464,24 @@ CREATE TABLE  IF NOT EXISTS `cita_seguro` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `cita_examen`
+--
+
+CREATE TABLE  IF NOT EXISTS `cita_examen` (
+    `cita_examen_id` int(11) NOT NULL AUTO_INCREMENT,
+    `cita_id` int(11) NOT NULL,
+    `examen_id` int(11) NOT NULL,
+    `precio_examen_bs` float NOT NULL,
+    `precio_examen_usd` float NOT NULL,
+    `estatus_con` enum('1','2') NOT NULL DEFAULT '1',
+    PRIMARY KEY (`cita_examen_id`),
+    FOREIGN KEY (`cita_id`) REFERENCES `cita` (`cita_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    FOREIGN KEY (`examen_id`) REFERENCES `examen` (`examen_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `consulta_cita`
 --
 

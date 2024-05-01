@@ -96,10 +96,10 @@ class ConsultaService {
             ConsultaService::actualizarAcumuladoMedico($consultaEmergencia['pagos']);
         }
         
-        // if (isset($formulario['examenes'])) {
-        //     $formulario['consulta_id'] = $consulta_id;
-        //     ConsultaHelper::insertarExamenesEmergencia($formulario);
-        // }
+        if (isset($formulario['examenes'])) {
+            $formulario['consulta_id'] = $consulta_id;
+            ConsultaHelper::insertarExamenesEmergencia($formulario);
+        }
         $total = 0;
         if (isset($formulario['insumos'])) {
             $total = ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_id, true);
