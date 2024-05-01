@@ -72,10 +72,7 @@ addEventListener("DOMContentLoaded", (e) => {
                   }
 
                 if (row.estatus_fac == 1 && estaDentroDeLos3DiasAnteriores(new Date(row.fecha_compra))) {
-                    
-
-                    console.log(row);
-
+                
                     return `
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-facturaCompra" onclick="deleteFCompra(${Number(row.factura_compra_id)})"><i class="fas fa-trash del-facturaCompra"></i></a>
                         `;
