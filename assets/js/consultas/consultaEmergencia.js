@@ -34,6 +34,7 @@ export default async function consultaEmergencia(inputRadio) {
         turnInput(".info-consulta-emergencia", true);
         $(".info-pago-medico").fadeOut("slow");
         turnInput(".info-pago-medico", true);
+        turnInput(".inputPacienteBeneficiadoEmergencia", true);
         $("#addMedicoPago").fadeOut("slow");
         seguroSelect.disabled = true;
         sinCitaSi.value = 1;
@@ -162,20 +163,19 @@ export default async function consultaEmergencia(inputRadio) {
             }
         });
 
-        emptySelect2({
-            selectSelector: "#cedula-beneficiado",
+        emptyAllSelect2({
+            selectSelector: "#cedula_beneficiado",
             placeholder: "Seleccione un paciente",
             parentModal: "#modalReg"
         })
-
 
         $("#s-paciente").on("change", function (){ 
 
             let paciente_id = this.value;
             
-            console.log("it change");
-
             if(inputRadio.value === "1"){
+
+                $("#cedula_beneficiado").empty().select2();
 
                 dinamicSelect2({
                     // obj: pacientesList ?? [],
@@ -207,7 +207,7 @@ export default async function consultaEmergencia(inputRadio) {
                                     return tipo_paciente
                                 }
         
-                                data1.push({ id: valorPropiedad1, text: `${cedula} - ${nombre} ${apellidos} - ${handleTipoPaciente(tipo_paciente)}` });
+                                data1.push({ id: cedula, text: `${cedula} - ${nombre} ${apellidos} - ${handleTipoPaciente(tipo_paciente)}` });
         
         
                             });
@@ -242,6 +242,9 @@ export default async function consultaEmergencia(inputRadio) {
         if (pacienteSelect.value) seguroSelect.disabled = false;
 
 
+        turnInput(".inputPacienteBeneficiadoEmergencia", false);
+        $(".inputPacienteBeneficiadoEmergencia").fadeIn("slow");
+        $("#pacienteBeneficiadoEmergenciaLabel").fadeIn("slow");
         $("#cedula_beneficiado-label").fadeIn("slow");
         $("#cedula_beneficiado").fadeIn("slow");
         $("#cedulaBeneficiadoSmall").fadeIn("slow");

@@ -69,10 +69,13 @@ export default async function consultaSinCita(inputRadio) {
         medicoSelect.disabled = false;
         especialidadSelect.disabled = false;
         citaSelect.disabled = true;
+        $("#cedulaBeneficiadoSmall").fadeOut("slow");
+        $(".inputPacienteBeneficiadoEmergencia").fadeOut("slow");
+        $("#pacienteBeneficiadoEmergenciaLabel").fadeOut("slow");
+        $("#cedulaBeneficiadoSmall").fadeOut("slow");
         $(".info-cita").fadeOut("slow");
         $(".info-paciente").fadeIn("slow");
         $(".info-medico").fadeIn("slow");
-        $("#cedulaBeneficiadoSmall").fadeOut("slow");
     }
 
 }

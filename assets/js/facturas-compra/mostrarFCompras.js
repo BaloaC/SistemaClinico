@@ -55,7 +55,7 @@ addEventListener("DOMContentLoaded", (e) => {
             render: function (data, type, row) {
                 // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
 
-                const  estaDentroDeLos3DiasAnteriores = (fechaObjetivo) => {
+                const estaDentroDeLos3DiasAnteriores = (fechaObjetivo) => {
     
                     const fechaActual = new Date();
                     // Calcular la fecha límite (3 días antes de la fecha actual)
@@ -73,8 +73,11 @@ addEventListener("DOMContentLoaded", (e) => {
 
                 if (row.estatus_fac == 1 && estaDentroDeLos3DiasAnteriores(new Date(row.fecha_compra))) {
                     
+
+                    console.log(row);
+
                     return `
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFCompra(${data})"><i class="fas fa-trash del-consulta"></i></a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-facturaCompra" onclick="deleteFCompra(${Number(row.factura_compra_id)})"><i class="fas fa-trash del-facturaCompra"></i></a>
                         `;
                 } else {
                     return `-`;

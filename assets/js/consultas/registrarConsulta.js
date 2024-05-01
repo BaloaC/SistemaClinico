@@ -24,7 +24,8 @@ async function addConsulta() {
         const formData = new FormData($form),
 
             data = {},
-            examenes = [];
+            examenes = [],
+            referidos = [];
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
@@ -55,6 +56,16 @@ async function addConsulta() {
         })
 
         if (examenes.length != 0) { data.examenes = examenes; }
+
+        let referido = formData.getAll("referidos[]");
+        referido.forEach(e => {
+            const especialidad_id = {
+                especialidad_id: e,
+            }
+            referidos.push(especialidad_id);
+        })
+
+        if (referido.length != 0) { data.referidos = referidos; }
 
         const medicosPago = document.querySelectorAll(".medico-pago-id"),
             montoPago = document.querySelectorAll(".monto-pago"),
