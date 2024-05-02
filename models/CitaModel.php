@@ -12,7 +12,9 @@ class CitaModel extends GenericModel {
     protected $hora_salida;
     protected $motivo_cita;
     protected $tipo_cita;
+    protected $tipo_servicio;
     protected $cedula_titular;
+    protected $monto_aprobado;
     protected $estatus_cit;
 
     public function __construct($propiedades = null) {
@@ -28,7 +30,9 @@ class CitaModel extends GenericModel {
     public function getHoraSalida(){return $this->hora_salida;}
     public function getMotivoCita(){return $this->motivo_cita;}
     public function getTipoCita(){return $this->tipo_cita;}
+    public function getTipoServicio(){return $this->tipo_servicio;}
     public function getCedulaTitular(){return $this->cedula_titular;}
+    public function getMontoAprobado(){return $this->monto_aprobado;}
     public function getEstatusCit(){return $this->estatus_cit;}
 
     /* Setters */
@@ -40,7 +44,9 @@ class CitaModel extends GenericModel {
     public function setHoraSalida($hora_salida){return $this->hora_salida = $hora_salida;}
     public function setMotivoCita($motivo_cita){return $this->motivo_cita = $motivo_cita;}
     public function setTipoCita($tipo_cita){return $this->tipo_cita = $tipo_cita;}
+    public function setTipoServicio($tipo_servicio){return $this->tipo_servicio =$tipo_servicio;}
     public function setCedulaTitular($cedula_titular){return $this->cedula_titular = $cedula_titular;}
+    public function setMontoAprobado($monto_aprobado){return $this->monto_aprobado = $monto_aprobado;}
     public function setEstatusCit($estatus_cit){return $this->estatus_cit = $estatus_cit;}
 }
 
