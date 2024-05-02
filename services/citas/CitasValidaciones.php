@@ -6,7 +6,7 @@ class CitasValidaciones {
 
         $validarCita = new Validate;
         $camposString = array("motivo_cita");
-        $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id");
+        $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id", "examen_id");
         $exclude = array("seguro_id");
 
         if ( $validarCita->isEmpty($formulario, $exclude) ) {
@@ -57,6 +57,12 @@ class CitasValidaciones {
 
         if ( !$validarCita->isDuplicatedId('cita_id', 'estatus_cit', $cita_id, 3, 'cita') ) {
             $respuesta = new Response(false, 'La cita seleccionada ya se encuentra asignada');
+            echo $respuesta->json(400);
+            exit();
+        }
+
+        if ($formulario['monto_aprobado'] <= 0) {
+            $respuesta = new Response(false, 'El monto de cobertura de la cita debe ser mayor a 0');
             echo $respuesta->json(400);
             exit();
         }
@@ -198,6 +204,32 @@ class CitasValidaciones {
             $respuesta->setData("Ya existe una cita el día ".$cita->fecha_cita);
             echo $respuesta->json(400);
             exit();
+        }
+    }
+
+    public static function validarCitaExamen($examenes) {
+        $validarConsultaExamen= new Validate();
+        $camposNumericos = array("examen_id");
+
+        foreach ($examenes as $examen) {
+            
+            if ($validarConsultaExamen->isEmpty($examen)) {
+                $respuesta = new Response(false, 'Los datos de los exámenes están vacíos');
+                echo $respuesta->json(400);
+                exit();
+            }
+    
+            if ( $validarConsultaExamen->isNumber($examen, $camposNumericos) ) {
+                $respuesta = new Response(false, 'Los datos de los exámenes no son inválidos');
+                echo $respuesta->json(400);
+                exit();
+            }
+    
+            if ( !$validarConsultaExamen->existsInDB($examen, $camposNumericos) ) {
+                $respuesta = new Response(false, 'No se encontraron resultados de los datos indicados en la base de datos');         
+                echo $respuesta->json(404);
+                exit();
+            }
         }
     }
 };

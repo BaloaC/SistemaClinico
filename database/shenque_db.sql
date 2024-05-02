@@ -403,6 +403,21 @@ CREATE TABLE  IF NOT EXISTS `examen` (
     PRIMARY KEY (`examen_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `examen`
+--
+
+CREATE TABLE  IF NOT EXISTS `examen_especialidad` (
+    `examen_especialidad_id` int(11) NOT NULL AUTO_INCREMENT,
+    `examen_id` int(11) NOT NULL,
+    `especialidad_id` int(11) NOT NULL,
+    `estatus_exa` enum('1','2') NOT NULL DEFAULT '1',
+    PRIMARY KEY (`examen_especialidad_id`),
+    FOREIGN KEY (`examen_id`) REFERENCES `examen` (`examen_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    FOREIGN KEY (`especialidad_id`) REFERENCES `especialidad` (`especialidad_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -417,7 +432,7 @@ CREATE TABLE  IF NOT EXISTS `consulta` (
     `observaciones` varchar(255) DEFAULT NULL,
     `fecha_consulta` date NOT NULL,
     `es_emergencia` tinyint(1) NOT NULL DEFAULT 0,
-    `estatus_con` enum('1','2','3') NOT NULL DEFAULT '1',
+    `estatus_con` enum('1','2','3', '4') NOT NULL DEFAULT '1',
     PRIMARY KEY (`consulta_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -437,7 +452,9 @@ CREATE TABLE  IF NOT EXISTS `cita` (
     `hora_entrada` time NOT NULL,
     `motivo_cita` varchar(45) NOT NULL,
     `cedula_titular` int(11) NOT NULL,
+    `monto_aprobado` FLOAT NOT NULL,
     `tipo_cita` enum('1','2') NOT NULL,
+    `tipo_servicio` ENUM('1','2') NULL DEFAULT '1',
     `estatus_cit` enum('1','2','3','4',' 5') NOT NULL,
     PRIMARY KEY (`cita_id`),
     FOREIGN KEY (`especialidad_id`) REFERENCES `especialidad` (`especialidad_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -631,6 +648,7 @@ CREATE TABLE  IF NOT EXISTS `consulta_seguro` (
     `monto_consulta_usd` float NOT NULL,
     `estatus_con` enum('1','2') NOT NULL DEFAULT '1',
     `monto_consulta_bs` float NOT NULL,
+    `cobertura_seguro` FLOAT NOT NULL,
     PRIMARY KEY (`consulta_seguro_id`),
     FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY (`seguro_id`) REFERENCES `seguro` (`seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION

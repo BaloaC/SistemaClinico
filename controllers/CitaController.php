@@ -67,6 +67,10 @@ class CitaController extends Controller {
         CitasValidaciones::validarHorario($_POST);
         CitasValidaciones::validarFecha($_POST);
 
+        if (array_key_exists('examenes', $_POST)) {
+            CitasValidaciones::validarCitaExamen($_POST['examenes']);
+        }
+
         $validarCita = new Validate;
 
         $data = $validarCita->dataScape($_POST);
@@ -141,6 +145,10 @@ class CitaController extends Controller {
         $_citaModel = new CitaModel();
         $id = $_citaModel->insert($data);
         $mensaje = ($id > 0);
+
+        if ($mensaje && array_key_exists('examenes', $_POST)) {
+            CitasHelpers::insertarCitaExamen($_POST['examenes'], $id);
+        }
 
         // Insertamos cita_seguro si es asegurada
         if ($mensaje && $data['tipo_cita'] == 2) {
@@ -292,6 +300,7 @@ class CitaController extends Controller {
         $data = $validarCita->dataScape($_POST);
         $newStatus['estatus_cit'] = 1;
         $newArray['clave'] = $data['clave'];
+        $newArray['monto_aprobado'] = $data['monto_aprobado'];
 
         $_citaSeguroModel = new CitaSeguroModel();
         $actualizado = $_citaSeguroModel->where('cita_id', '=', $cita_id)->update($newArray);

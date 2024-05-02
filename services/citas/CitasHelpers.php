@@ -48,4 +48,19 @@ class CitasHelpers {
 
         return $lista;
     }
+
+    public static function insertarCitaExamen($examenes, $cita_id) {
+        foreach ($examenes as $examen) {
+            $examen['cita_id'] = $cita_id;
+            $_citaExamenModel = new CitaExamenModel();
+            $fue_insertado = $_citaExamenModel->insert($examen);
+
+            if (!$fue_insertado) {
+                $respuesta = new Response(false, 'Error insertando el examen en la cita');
+                $respuesta->setData('Error insertando el examen_id '.$examen['examen_id']);
+                echo $respuesta->json(400);
+                exit();
+            }
+        }
+    }
 }
