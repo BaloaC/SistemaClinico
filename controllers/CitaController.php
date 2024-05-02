@@ -57,7 +57,10 @@ class CitaController extends Controller {
     }
 
     public function insertarCita(/*Request $request*/) {
-        
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        CitasHelpers::insertarCitaExamen($_POST);
+        exit();
+        echo 'esto no se debe tubipapaya';
         global $isEnabledAudit;
         $isEnabledAudit = 'citas';
 
@@ -147,7 +150,7 @@ class CitaController extends Controller {
         $mensaje = ($id > 0);
 
         if ($mensaje && array_key_exists('examenes', $_POST)) {
-            CitasHelpers::insertarCitaExamen($_POST['examenes'], $id);
+            CitasHelpers::insertarCitaExamen($data, $id);
         }
 
         // Insertamos cita_seguro si es asegurada
@@ -244,9 +247,11 @@ class CitaController extends Controller {
             
             if ($lista[0]->tipo_cita == 2) {
                 $lista_citas = CitasHelpers::innerCita($lista[0]);
+                $lista_citas->examenes = CitasHelpers::obtenerExamenes($cita_id);
                 
             } else {
                 $lista_citas = $lista[0];
+                $lista_citas->examenes = CitasHelpers::obtenerExamenes($cita_id);
             }
 
             Helpers::retornarMensajeListado($lista_citas);

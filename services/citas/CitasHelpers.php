@@ -1,5 +1,7 @@
 <?php
 
+include_once './services/seguros/seguro/SeguroHelpers.php';
+
 class CitasHelpers {
 
     protected static $arraySelect = array(
@@ -45,13 +47,30 @@ class CitasHelpers {
         $inners = $_citaSeguroModel->listInner(CitasHelpers::$seguroInner);
         $citaSeguro = $_citaSeguroModel->where('cita_id', '=', $lista->cita_id)->innerJoin(CitasHelpers::$seguroSelect, $inners, "cita_seguro");
         $lista->cita_seguro = $citaSeguro;
-
         return $lista;
     }
 
-    public static function insertarCitaExamen($examenes, $cita_id) {
-        foreach ($examenes as $examen) {
+    public static function insertarCitaExamen($formulario, $cita_id) {
+        foreach ($formulario['examenes'] as $examen) {
             $examen['cita_id'] = $cita_id;
+            $examen['precio_examen_usd'] = 0;
+            
+            if (array_key_exists('seguro_id', $formulario)) {
+                
+                $_seguroExamenModel = new SeguroExamenModel();
+                $seguro_examenes = $_seguroExamenModel->where('seguro_id', '=', $formulario['seguro_id'])->getFirst();    
+                $examenes = explode(',', $seguro_examenes->examenes);
+                $costos = explode(',', $seguro_examenes->costos);
+                
+                $costo_examen = $costos[array_search($examen['examen_id'], $examenes)];
+                $examen['precio_examen_usd'] = $costo_examen;
+            } else {
+
+                $_examenModel = new ExamenModel();
+                $examen = $_examenModel->where('examen_id', '=', $examen['examen_id'])->getFirst();
+                $examen['precio_examen_usd'] = $examen->precio_examen;
+            }
+
             $_citaExamenModel = new CitaExamenModel();
             $fue_insertado = $_citaExamenModel->insert($examen);
 
@@ -62,5 +81,14 @@ class CitasHelpers {
                 exit();
             }
         }
+    }
+
+    public static function obtenerExamenes($cita_id) {
+        $_citaExamenModel = new CitaExamenModel();
+        $inners = $_citaExamenModel->listInner(['examen' => 'cita_examen']);
+        $select = ['cita_examen.cita_examen_id', 'cita_examen.precio_examen_bs', 'cita_examen.precio_examen_usd', 'examen.nombre'];
+        $lista_examenes = $_citaExamenModel->where('cita_id', '=', $cita_id)->innerJoin($select, $inners, 'cita_examen');
+
+        return $lista_examenes;
     }
 }
