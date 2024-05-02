@@ -2,7 +2,7 @@
 
 class FacturaInsumoHelpers {
 
-    public static function insertarCompraInsumo($formulario, $factura_id) {
+    public static function insertarCompraInsumo($formulario, $factura_id, $actualizar_precio = false) {
         
         $validarFactura = new Validate;
         
@@ -31,10 +31,10 @@ class FacturaInsumoHelpers {
                 $unidadesPosts = $insumoNuevo['unidades'] + $insumo_factura->cantidad_unidad;
                 $actualizar = array('cantidad_unidad' => $unidadesPosts, 'estatus_ins' => 1);
                 
-                if (isset($insumo['actualizar_precio']) && $insumo['actualizar_precio']) {
+                if ($actualizar_precio) {
                     $valorPorcentaje = GlobalsHelpers::obtenerPorcentajeInsumo();
                     $nuevoPrecio = ($insumoNuevo['precio_unit_usd'] * $valorPorcentaje) / 100;
-                    $actualizar['precio'] = $insumoNuevo['precio_unit_usd'] + $nuevoPrecio;
+                    $actualizar['precio'] = round($insumoNuevo['precio_unit_usd'] + $nuevoPrecio, 2);
                 }
                 
                 $actualizar['cantidad_capacidad'] = ($unidadesPosts * $insumo_factura->capacidad_unidad);

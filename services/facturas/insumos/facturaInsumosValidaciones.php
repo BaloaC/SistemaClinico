@@ -6,8 +6,9 @@ class FacturaInsumosValidaciones {
         
         $validarFactura = new Validate;
         $camposNumericos = array('proveedor_id', 'total_productos', 'monto_con_iva', 'monto_sin_iva', 'excento');
+        $exclude = ['actualizar_precio'];
 
-        if ( ($validarFactura->isEmpty($formulario)) ) {
+        if ( ($validarFactura->isEmpty($formulario, $exclude)) ) {
             $respuesta = new Response('DATOS_VACIOS');
             echo $respuesta->json(400);
             exit();
