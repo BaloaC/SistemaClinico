@@ -86,15 +86,17 @@
                                                 <option value="2">Asegurada</option>
                                             </select>
 
+                                            <label for="seguro" class="d-none">Seguro</label>
+                                            <select name="seguro_id" id="s-seguro" class="form-control mb-3 d-none" data-active="0" data-create="0">
+                                                <option></option>
+                                            </select>
+
                                             <label for="titular_id" class="d-none">Titular</label>
                                             <select name="titular_id" id="s-titular" class="form-control d-none" data-active="0" data-create="0">
                                                 <option></option>
                                             </select>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <!-- <label for="cedula_titular">Cédula Titular</label>
-                                    <input type="number" name="cedula_titular" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required> -->
-                                            <!-- <small class="form-text">La cédula debe contener entre 6 o 8 números</small> -->
                                             <label for="motivo_cita">Motivo cita</label>
                                             <input type="text" name="motivo_cita" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="45">
                                             <small class="form-text">Solo se permiten letras y números</small>
@@ -103,10 +105,25 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 col-md-6">
-                                        <label for="seguro" class="d-none">Seguro</label>
-                                        <select name="seguro_id" id="s-seguro" class="form-control mb-3 d-none" data-active="0" data-create="0">
-                                            <option></option>
-                                        </select>
+                                        <label for="input-radios-container" class="">Tipo de servicio</label>
+                                        <div class="input-radios-container">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioExamen" onchange="tipoServicio(this)" value="1" required>
+                                                <label class="form-check-label" for="inlineRadio1">Exámenes</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioConsulta" onchange="tipoServicio(this)" value="2" checked required>
+                                                <label class="form-check-label" for="inlineRadio2">Consulta</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="examenInput" style="display: none;">
+                                            <label for="examenes">Exámenes a realizar</label>
+                                            <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple" disabled required>
+                                                <option></option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row mt-4">
@@ -209,8 +226,10 @@
                         <form action="" id="act-cita" class="p-3 px-4">
                             <p class="text-secondary">Las citas se mantendrán como pendientes hasta que la clave otorgada por el seguro sea insertada</p>
                             <label for="clave">Clave</label>
-                            <input type="text" name="clave" id="clave" class="form-control">
-
+                            <input type="text" name="clave" id="clave" class="form-control mb-3">
+                            <label for="monto" class="">Monto aprobado</label>
+                            <input type="number" step="any" name="monto_aprobado" data-validate="true" data-type="price" class="form-control" required>
+                            <small class="form-text">No se permiten números negativos</small>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -312,7 +331,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/citas/reprogramationCita.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/confirmReprogramation.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/calendarioCitas.js'); ?>"></script>
-
+    <script type="module" src="<?php echo Url::to('assets/js/citas/tipoServicio.js'); ?>"></script>
 </body>
 
 </html>

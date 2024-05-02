@@ -54,6 +54,7 @@ export function examenesPagination(registros, buscarRegistros = "") {
             // Crear el elemento de la tarjeta
             const tarjeta = document.createElement('div');
             tarjeta.classList.add('card-container', 'col-xl-4', 'col-lg-4', 'col-md-6', 'col-sm-12');
+            tarjeta.setAttribute("onclick", `getExamen(${registro.examen_id})`);
             tarjeta.setAttribute("data-bs-toggle", "modal");
             tarjeta.setAttribute("data-bs-target", "#modalInfo");
 
