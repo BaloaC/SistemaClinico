@@ -115,6 +115,21 @@ class ExamenController extends Controller{
         return $respuesta->json(200);
     }
 
+    public function listarExamenesPorEspecialidad($especialidad_id) {
+        $_examenEspecialidadModel = new ExamenEspecialidadModel();
+        $inners = $_examenEspecialidadModel->listInner(["examen" => "examen_especialidad"]);
+        $lista = $_examenEspecialidadModel->where('examen.estatus_exa', '!=', 2)
+                                        ->where('examen_especialidad.estatus_exa', '!=', 2)
+                                        ->where('examen_especialidad.especialidad_id', '=', $especialidad_id)
+                                        ->innerJoin(['examen.examen_id', 'examen.nombre', 'examen.precio_examen', 'examen.tipo'], $inners, "examen_especialidad");
+
+        $mensaje = (count($lista) > 0);
+        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+        $respuesta->setData($lista);
+
+        return $respuesta->json(200);
+    }
+
     public function listarExamenRealizados(){
         $_examenModel = new ExamenModel();
         $lista = $_examenModel->where('estatus_exa', '=', '1')->where('hecho_aqui', '=', '1')->getAll();
