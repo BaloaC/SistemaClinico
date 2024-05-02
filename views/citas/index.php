@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/custom-datatables.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="<?php echo Url::to('assets/libs/flatpickr/flatpickr.min.css'); ?>">
+    <link rel="stylesheet" href="<?php echo Url::to('assets/css/flatpickr-custom.css'); ?>">
     <title>Proyecto 4 | Citas</title>
 </head>
 
@@ -299,82 +300,9 @@
 
     </main>
 
-    <style>
-        .event {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            /* border-radius: 50%; */
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-            /* position: absolute;
-            width: 3px;
-            height: 3px;
-            border-radius: 150px;
-            bottom: 3px;
-            left: calc(50% - 1.5px);
-            content: " ";
-            display: block;*/
-            background: #07ff0030;
-        }
-
-        .event.noWorking {
-            background-color: #0000000f;
-        }
-
-        .event.busy {
-            background: #f6474736;
-        }
-
-        .event.disabled {
-            background-color: #ffffff30;
-        }
-
-        .event.hasDate {
-            background-color: #ff000042;
-        }
-
-        .flatpickr-day {
-            border-radius: 0;
-        }
-
-        .flatpickr-day.selected:has(.event) {
-            background: #07ff0030;
-            border-color: #3f3f3f;
-            color: #000;
-        }
-
-        .flatpickr-day.selected:has(.event.noWorking) {
-            background: #0000000f;
-            border-color: #3f3f3f;
-            color: #000;
-        }
-
-        .flatpickr-day.selected:has(.event.hasDate) {
-            background: #ff000042;
-            border-color: #3f3f3f;
-            color: #000;
-        }
-
-        .flatpickr-day.selected:has(.event.busy) {
-            background: #0000000f;
-            border-color: #3f3f3f;
-            color: #000;
-        }
-
-        .flatpickr-input-readonly {
-            background-color: #fff !important;
-        }
-    </style>
-
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
-    <script>
-
-    </script>
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
+    <script src="<?php echo Url::to('assets/libs/flatpickr/flatpickr.js'); ?>"></script>
+    <script src="<?php echo Url::to('assets/libs/flatpickr/es.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/fullcalendar/index.global.min.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/fullcalendar/es.global.min.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/calendarioCitas.js'); ?>"></script>

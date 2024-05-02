@@ -248,7 +248,7 @@ export default async function consultaEmergencia(inputRadio) {
         $("#cedula_beneficiado-label").fadeIn("slow");
         $("#cedula_beneficiado").fadeIn("slow");
         $("#cedulaBeneficiadoSmall").fadeIn("slow");
-        pacienteBeneficiado.disabled = false;
+        // pacienteBeneficiado.disabled = false;
     }
 
 }

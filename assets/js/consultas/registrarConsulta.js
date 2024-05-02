@@ -43,6 +43,13 @@ async function addConsulta() {
             data.es_emergencia = true;
         }
 
+        // En caso de que sea de emergencia y titular únicamente
+        if(data.pacienteBeneficiadoEmergencia === "0" && data.es_emergencia){
+
+            const infoPaciente = await getById("pacientes", data.paciente_id);
+            data.cedula_beneficiado = infoPaciente.cedula;
+        }
+
         // Eliminamos la propiedad para que evitar la validación de datos vacíos en back
         delete data.consultaPorEmergencia;
         delete data.consultaSinCitaPrevia;
