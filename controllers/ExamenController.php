@@ -132,37 +132,38 @@ class ExamenController extends Controller{
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $exclude = array('hecho_aqui');
-        $validarExamen = new Validate;
 
-        switch ($validarExamen) {
-            case $validarExamen->isEmpty($_POST, $exclude):
-                $respuesta = new Response('DATOS_VACIOS');
-                return $respuesta->json(400);
-            
-            case !($validarExamen->isDuplicated('examen', 'examen_id', $examen_id)):
-                $respuesta = new Response('DATOS_DUPLICADOS');
-                return $respuesta->json(400);
-
-            case ($validarExamen->isDuplicated('examen', 'nombre', isset($_POST['nombre']))):
-                $respuesta = new Response('DATOS_DUPLICADOS');
-                return $respuesta->json(400);
-
-            default:
-                $data = $validarExamen->dataScape($_POST);    
-
-                if ( array_key_exists("hecho_aqui", $data) && $data["hecho_aqui"] != 0 && $data["hecho_aqui"] != 1) {
-                    $respuesta = new Response(false, 'El campo hecho aqui solo permite valores booleanos');
-                    return $respuesta->json(400);
-                }
-
-                $_examenModel = new ExamenModel();
-                $id = $_examenModel->where('examen_id', '=', $examen_id)->update($data);
-                $mensaje = ($id > 0);
-        
-                $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-        
-                return $respuesta->json($mensaje ? 200 : 400);
+        $validarExamen = new Validate();
+        ExamenValidaciones::actualizarExamen($_POST);
+        if (array_key_exists('especialidades', $_POST)) {
+            ExamenValidaciones::validarEspecialidad($_POST['especialidades']);
         }
+
+        $data = $validarExamen->dataScape($_POST);    
+
+        if ( array_key_exists("hecho_aqui", $data) && $data["hecho_aqui"] != 0 && $data["hecho_aqui"] != 1) {
+            $respuesta = new Response(false, 'El campo hecho aqui solo permite valores booleanos');
+            return $respuesta->json(400);
+        }
+
+        if (array_key_exists('especialidades', $_POST)) {
+            ExamenHelpers::insertarEspecialidad($_POST['especialidades'], $examen_id);
+            unset($_POST['especialidades']);
+        }
+        
+        if ( count($_POST) > 0) {
+            $_examenModel = new ExamenModel();
+            $id = $_examenModel->where('examen_id', '=', $examen_id)->update($data);
+            
+            if ($id <= 0) {
+                $respuesta = new Response('ACTUALIZACION_FALLIDA');
+                return $respuesta->json(400);
+            }
+
+        }
+
+        $respuesta = new Response('ACTUALIZACION_EXITOSA');
+        return $respuesta->json(200);
     }
 
     public function eliminarExamen($examen_id){
@@ -175,6 +176,21 @@ class ExamenController extends Controller{
         );
 
         $eliminado = $_examenModel->where('examen_id','=',$examen_id)->update($data);
+        $mensaje = ($eliminado > 0);
+
+        $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');
+        $respuesta->setData($eliminado);
+
+        return $respuesta->json($mensaje ? 200 : 400);
+    }
+
+    public function eliminarExamenEspecialidad($examen_especialidad_id) {
+        $_examenEspecialidadModel = new ExamenEspecialidadModel();
+        $data = array (
+            "estatus_exa" => "2"
+        );
+
+        $eliminado = $_examenEspecialidadModel->where('examen_especialidad_id','=',$examen_especialidad_id)->update($data);
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'ELIMINACION_FALLIDA');

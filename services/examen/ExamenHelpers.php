@@ -5,9 +5,8 @@ use LDAP\Result;
 class ExamenHelpers {
     
     public static function insertarEspecialidad($especialidades, $examen_id) {
-        $_examenEspecialidad = new ExamenEspecialidadModel();
-
         foreach ($especialidades as $especialidad) {
+            $_examenEspecialidad = new ExamenEspecialidadModel();
             $especialidad['examen_id'] = $examen_id;
             $fue_insertado = $_examenEspecialidad->insert($especialidad);
 

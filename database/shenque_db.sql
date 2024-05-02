@@ -410,10 +410,13 @@ CREATE TABLE  IF NOT EXISTS `examen` (
 --
 
 CREATE TABLE  IF NOT EXISTS `examen_especialidad` (
-    `examen_id` int(11) NOT NULL AUTO_INCREMENT,
+    `examen_especialidad_id` int(11) NOT NULL AUTO_INCREMENT,
+    `examen_id` int(11) NOT NULL,
     `especialidad_id` int(11) NOT NULL,
     `estatus_exa` enum('1','2') NOT NULL DEFAULT '1',
-    PRIMARY KEY (`examen_id`)
+    PRIMARY KEY (`examen_especialidad_id`),
+    FOREIGN KEY (`examen_id`) REFERENCES `examen` (`examen_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    FOREIGN KEY (`especialidad_id`) REFERENCES `especialidad` (`especialidad_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

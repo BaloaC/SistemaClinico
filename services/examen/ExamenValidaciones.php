@@ -3,7 +3,7 @@
 class ExamenValidaciones {
 
     public static function validarExamen($formulario) {
-        $exclude = array('hecho_aqui', 'precio_examen');
+        $exclude = array('precio_examen');
         $validarExamen = new Validate;
         
         if ( $validarExamen->isEmpty($formulario, $exclude) ) {
@@ -28,6 +28,26 @@ class ExamenValidaciones {
             $respuesta = new Response(false, 'El campo precio_examen solo permite valores numéricos');
             echo $respuesta->json(400);
             exit();
+        }
+    }
+
+    public static function actualizarExamen($formulario) {
+        $validarExamen = new Validate;
+
+        if (array_key_exists('nombre', $formulario)) {
+            if ( ($validarExamen->isDuplicated('examen', 'nombre', $formulario['nombre'])) ) {
+                $respuesta = new Response('DATOS_DUPLICADOS');
+                echo $respuesta->json(400);
+                exit();
+            }
+        }
+
+        if (array_key_exists('precio_examen', $formulario)) {
+            if ( !empty($formulario['precio_examen']) && !is_numeric($formulario['precio_examen']) ) {
+                $respuesta = new Response(false, 'El campo precio_examen solo permite valores numéricos');
+                echo $respuesta->json(400);
+                exit();
+            }
         }
     }
 

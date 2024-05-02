@@ -239,6 +239,7 @@ Router::get('/examenes/clinica', ExamenController::class . '@listarExamenRealiza
 Router::post('/examenes', ExamenController::class . '@insertarExamen',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::put('/examenes/:id', ExamenController::class . '@actualizarExamen',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::delete('/examenes/:id', ExamenController::class . '@eliminarExamen',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
+Router::delete('/examenes/especialidad/:id', ExamenController::class . '@eliminarExamenEspecialidad',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 
 // //Proveedor - Vistas
 Router::get('/proveedores', ProveedorController::class . '@index');
