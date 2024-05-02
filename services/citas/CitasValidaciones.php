@@ -60,6 +60,12 @@ class CitasValidaciones {
             echo $respuesta->json(400);
             exit();
         }
+
+        if ($formulario['monto_aprobado'] <= 0) {
+            $respuesta = new Response(false, 'El monto de cobertura de la cita debe ser mayor a 0');
+            echo $respuesta->json(400);
+            exit();
+        }
     }
 
     public static function validarCitaId($cita_id) {

@@ -300,6 +300,7 @@ class CitaController extends Controller {
         $data = $validarCita->dataScape($_POST);
         $newStatus['estatus_cit'] = 1;
         $newArray['clave'] = $data['clave'];
+        $newArray['monto_aprobado'] = $data['monto_aprobado'];
 
         $_citaSeguroModel = new CitaSeguroModel();
         $actualizado = $_citaSeguroModel->where('cita_id', '=', $cita_id)->update($newArray);

@@ -403,6 +403,18 @@ CREATE TABLE  IF NOT EXISTS `examen` (
     PRIMARY KEY (`examen_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `examen`
+--
+
+CREATE TABLE  IF NOT EXISTS `examen_especialidad` (
+    `examen_id` int(11) NOT NULL AUTO_INCREMENT,
+    `especialidad_id` int(11) NOT NULL,
+    `estatus_exa` enum('1','2') NOT NULL DEFAULT '1',
+    PRIMARY KEY (`examen_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 

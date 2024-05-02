@@ -18,12 +18,6 @@ class ExamenValidaciones {
             exit();
         }
 
-        // if ( $formulario['hecho_aqui'] != 1 && $formulario['hecho_aqui'] != 0 ) {
-        //     $respuesta = new Response(false, 'El campo hecho aqui solo permite valores booleanos');
-        //     echo $respuesta->json(400);
-        //     exit();
-        // }
-
         if (empty($formulario['precio_examen'])) {
             $respuesta = new Response(false, 'Los exámenes hechos en la clínica deben tener precio al momento de registrarlos');
             echo $respuesta->json(400);
@@ -34,6 +28,18 @@ class ExamenValidaciones {
             $respuesta = new Response(false, 'El campo precio_examen solo permite valores numéricos');
             echo $respuesta->json(400);
             exit();
+        }
+    }
+
+    public static function validarEspecialidad($especialidades) {
+        $validarExamen = new Validate;
+
+        foreach ($especialidades as $especialidad) {
+            if ( !($validarExamen->isDuplicated('especialidad', 'especialidad_id', $especialidad['especialidad_id'])) ) {
+                $respuesta = new Response(false, 'Las especialidades indicadas no se encuentran registradas en la base de datos');
+                echo $respuesta->json(400);
+                exit();
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 include_once "./services/examen/ExamenValidaciones.php";
+include_once "./services/examen/ExamenHelpers.php";
 include_once './services/Helpers.php';
 
 class ExamenController extends Controller{
@@ -30,11 +31,19 @@ class ExamenController extends Controller{
         $validarExamen = new Validate;
         ExamenValidaciones::validarExamen($_POST);
 
+        if (array_key_exists('especialidades', $_POST)) {
+            ExamenValidaciones::validarEspecialidad($_POST['especialidades']);
+        }
+
         $data = $validarExamen->dataScape($_POST);    
 
         $_examenModel = new ExamenModel();
         $id = $_examenModel->insert($data);
         $mensaje = ($id > 0);
+
+        if (array_key_exists('especialidades', $_POST) && $mensaje) {
+            ExamenHelpers::insertarEspecialidad($_POST['especialidades'], $id);
+        }
 
         $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
         return $respuesta->json($mensaje ? 201 : 400);
@@ -62,10 +71,6 @@ class ExamenController extends Controller{
                     $_examenModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
                 }
             }
-
-            // if (strlen($_GET['search']['value']) > 0) {
-            //     $_examenModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
-            // }
         }
 
         $lista = $_examenModel->getAll();
@@ -83,20 +88,8 @@ class ExamenController extends Controller{
             $_examenModel->setSelect('COUNT(*) AS total');
         }
 
-        // if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
-        //     $_examenModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
-        // } else {
-        //     $_examenModel->setSelect('COUNT(*) AS total');
-        // }
-
         $total_registros = $_examenModel->where('estatus_exa', '=', '1')->getAll();
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $lista);
-
-        // $mensaje = (count($lista) > 0);     
-        // $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        // $respuesta->setData($lista);
-
-        // return $respuesta->json(200);
     }
 
     public function listarExamenPorId($examen_id){
