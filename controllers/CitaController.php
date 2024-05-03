@@ -57,10 +57,6 @@ class CitaController extends Controller {
     }
 
     public function insertarCita(/*Request $request*/) {
-        $_POST = json_decode(file_get_contents('php://input'), true);
-        CitasHelpers::insertarCitaExamen($_POST);
-        exit();
-        echo 'esto no se debe tubipapaya';
         global $isEnabledAudit;
         $isEnabledAudit = 'citas';
 
@@ -80,23 +76,6 @@ class CitaController extends Controller {
 
         // verificaciones si la cita es asegurada
         if ($data['tipo_cita'] == 2) {
-
-            // verificamos que pueda solicitar cita asegurada
-            /*** Estas líneas fueron comentadas porque aparentemente no hacían nada ***/
-            // $siEsTitular = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '3', 'paciente');
-            // $siEsBeneficiario = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], '4', 'paciente');
-            // $siSeguroAsociado = $validarCita->isDuplicatedId('paciente_id', 'seguro_id', $_POST['paciente_titular_id'], $_POST['seguro_id'], 'paciente_seguro');
-
-            // if (!$siEsTitular && !$siEsBeneficiario) {
-            //     $respuesta = new Response(false, 'El paciente ingresado no está registrado como asegurado');
-            //     return $respuesta->json(400);
-            // }
-
-            // if (!$siSeguroAsociado) {
-            //     $respuesta = new Response(false, 'Ese seguro no se encuentra asociado con el paciente indicado');
-            //     return $respuesta->json(400);
-            // }
-            /*** Estas líneas fueron comentadas porque aparentemente no hacían nada ***/
 
             // verificamos que el titular pueda ser titular
             $esTitular = $validarCita->isDuplicatedId('cedula', 'tipo_paciente', $data['cedula_titular'], 3, 'paciente');

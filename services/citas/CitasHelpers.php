@@ -51,6 +51,7 @@ class CitasHelpers {
     }
 
     public static function insertarCitaExamen($formulario, $cita_id) {
+        
         foreach ($formulario['examenes'] as $examen) {
             $examen['cita_id'] = $cita_id;
             $examen['precio_examen_usd'] = 0;
@@ -62,15 +63,24 @@ class CitasHelpers {
                 $examenes = explode(',', $seguro_examenes->examenes);
                 $costos = explode(',', $seguro_examenes->costos);
                 
-                $costo_examen = $costos[array_search($examen['examen_id'], $examenes)];
-                $examen['precio_examen_usd'] = $costo_examen;
+                $indice_examen = array_search($examen['examen_id'], $examenes);
+                
+                if ($indice_examen === false) {
+                    $_examenModel = new ExamenModel();
+                    $cita_examen = $_examenModel->where('examen_id', '=', $examen['examen_id'])->getFirst();
+                    $examen['precio_examen_usd'] = $cita_examen->precio_examen;
+
+                } else {
+                    $costo_examen = $costos[$indice_examen];
+                    $examen['precio_examen_usd'] = $costo_examen;
+                }
             } else {
 
                 $_examenModel = new ExamenModel();
-                $examen = $_examenModel->where('examen_id', '=', $examen['examen_id'])->getFirst();
-                $examen['precio_examen_usd'] = $examen->precio_examen;
+                $cita_examen = $_examenModel->where('examen_id', '=', $examen['examen_id'])->getFirst();
+                $examen['precio_examen_usd'] = $cita_examen->precio_examen;
             }
-
+            
             $_citaExamenModel = new CitaExamenModel();
             $fue_insertado = $_citaExamenModel->insert($examen);
 
