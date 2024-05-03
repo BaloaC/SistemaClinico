@@ -161,7 +161,7 @@
                 </tr>
                 <tr>
                     <th colspan="1">Teléfono:</th>
-                    <th colspan="2" class="underline" id="telefono">0412-2941454</th>
+                    <th colspan="2" class="underline" id="telefono"></th>
                 </tr>
                 <tr>
                     <th colspan="1">Seguro:</th>
@@ -169,11 +169,11 @@
                 </tr>
                 <tr>
                     <th colspan="1">Especialidad:</th>
-                    <th colspan="2" class="underline" id="especialidad">Gastroenterologia</th>
+                    <th colspan="2" class="underline" id="especialidad"></th>
                 </tr>
                 <tr>
                     <th colspan="1">Medico Tratante:</th>
-                    <th colspan="2" class="underline" id="nombreMedico">Enrique Chacón</th>
+                    <th colspan="2" class="underline" id="nombreMedico"></th>
                 </tr>
                 <tr>
                     <th colspan="1">DXM:</th>

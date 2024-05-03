@@ -24,7 +24,8 @@ async function addConsulta() {
         const formData = new FormData($form),
 
             data = {},
-            examenes = [];
+            examenes = [],
+            referidos = [];
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
@@ -42,6 +43,13 @@ async function addConsulta() {
             data.es_emergencia = true;
         }
 
+        // En caso de que sea de emergencia y titular únicamente
+        if(data.pacienteBeneficiadoEmergencia === "0" && data.es_emergencia){
+
+            const infoPaciente = await getById("pacientes", data.paciente_id);
+            data.cedula_beneficiado = infoPaciente.cedula;
+        }
+
         // Eliminamos la propiedad para que evitar la validación de datos vacíos en back
         delete data.consultaPorEmergencia;
         delete data.consultaSinCitaPrevia;
@@ -55,6 +63,16 @@ async function addConsulta() {
         })
 
         if (examenes.length != 0) { data.examenes = examenes; }
+
+        let referido = formData.getAll("referidos[]");
+        referido.forEach(e => {
+            const especialidad_id = {
+                especialidad_id: e,
+            }
+            referidos.push(especialidad_id);
+        })
+
+        if (referido.length != 0) { data.referidos = referidos; }
 
         const medicosPago = document.querySelectorAll(".medico-pago-id"),
             montoPago = document.querySelectorAll(".monto-pago"),

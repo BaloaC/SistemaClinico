@@ -73,6 +73,10 @@
                                 <option value="2">Laboratorio</option>
                                 <option value="3">Ultrasonido</option>
                             </select>
+                            <label for="especialidades">Especialidades asociadas</label>
+                            <select name="especialidades[]" id="s-especialidad" class="form-control mb-3" data-active="0" multiple="multiple" required>
+                                <option></option>
+                            </select>
                             <label for="nombre" id="precioExamenLabel">Precio exámen</label>
                             <input type="number" step="any" name="precio_examen" id="precioExamen" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">No se permiten números negativos</small>
@@ -80,6 +84,35 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addExamen()">Registrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Info-->
+        <div class="modal fade" id="modalInfo" data-bs-keyboard="true" tabindex="-1" aria-labelledby="modalInfoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- <h1 class="modal-title fs-5" id="modalInfoLabel">Ver médico</h1> -->
+                        <h1 class="modal-title fs-5" id="nombreMedico"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <p><span class="fw-bold" id="cedulaMedico"></span></p>
+                            <p><span>Datos médico:</span></p>
+                            <p>Nombres: <span id="nombresMedico"></span></p>
+                            <p>Apellidos: <span id="apellidosMedico"></span></p>
+                            <p>Teléfono: <span id="tlfMedico"></span></p>
+                            <p>Dirección: <span id="direcMedico"></span></p>
+                            <p>Especialidad: <span id="especialidadMedico"></span></p>
+                            <p>Horario: <span id="horarioMessage">Este médico no posee horarios</span></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <a type="button" id="btn-eliminar" class="float-right" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="fas fa-trash"></i></a>
+                        <button type="button" id="btn-actualizar" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAct">Actualizar</button>
                     </div>
                 </div>
             </div>
@@ -105,6 +138,10 @@
                                 <option value="1">Ecografía</option>
                                 <option value="2">Laboratorio</option>
                                 <option value="3">Ultrasonido</option>
+                            </select>
+                            <label for="especialidades">Especialidades asociadas</label>
+                            <select name="especialidades[]" id="s-especialidad-act" class="form-control mb-3" data-active="0" multiple="multiple">
+                                <option></option>
                             </select>
                             <label for="nombre" id="precioExamenLabelAct">Precio exámen</label>
                             <input type="number" step="any" name="precio_examen" id="precioExamenAct" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>

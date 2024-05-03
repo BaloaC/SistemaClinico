@@ -108,15 +108,31 @@
                                 <div class="row mt-4 info-paciente" style="display: none;">
                                     <h5>Información del Paciente</h5>
                                     <div class="col-12 col-md-6">
-                                        <label for="nombres">Paciente</label>
+                                        <label for="nombres">Paciente Titular</label>
                                         <select name="paciente_id" id="s-paciente" class="form-control" data-active="0" required>
                                             <option></option>
                                         </select>
+
+                                        <div class="inputCedulaBeneficiado" style="display: none;">
+                                            <label for="cedula" id="cedula_beneficiado-label" style="display: none;">Cédula beneficiado</label>
+                                            <select name="cedula_beneficiado" id="cedula_beneficiado" class="form-control mb-3" style="display: none;" disabled required>
+                                                <option></option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <label for="cedula" id="cedula_beneficiado-label" style="display: none;">Cédula beneificado</label>
-                                        <input type="number" name="cedula_beneficiado" id="cedula_beneficiado" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" style="display: none;" data-bs-toggle="popover" disabled required>
-                                        <small class="form-text" id="cedulaBeneficiadoSmall">La cédula debe contener entre 6 o 8 números</small>
+
+                                        <label for="forRegistrarFactura" id="pacienteBeneficiadoEmergenciaLabel">¿La consulta es para un paciente beneficiado?</label>
+                                        <div class="input-radios-container inputPacienteBeneficiadoEmergencia">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="pacienteBeneficiadoEmergencia" id="pacienteBeneficiadoEmergenciaSi" value="1" onchange="pacienteBeneficiadoEmergenciaInput(this.value)" required disabled>
+                                                <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="pacienteBeneficiadoEmergencia" id="pacienteBeneficiadoEmergenciaNo" value="0" onchange="pacienteBeneficiadoEmergenciaInput(this.value)" checked required disabled>
+                                                <label class="form-check-label" for="inlineRadio2">No</label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -168,12 +184,6 @@
                                     <div class="col-12 col-md-6">
                                         <label for="monto-consulta">Enfermería</label>
                                         <input type="number" step="any" name="enfermeria" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
-                                        <small class="form-text">No se permiten números negativos</small>
-                                        <label for="monto-consulta">Laboratorio</label>
-                                        <input type="number" step="any" name="laboratorios" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
-                                        <small class="form-text">No se permiten números negativos</small>
-                                        <label for="monto-consulta">Medicamentos</label>
-                                        <input type="number" step="any" name="medicamentos" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
                                         <small class="form-text">No se permiten números negativos</small>
                                         <label for="monto-consulta">Monto consulta</label>
                                         <input type="number" step="any" name="consultas_medicas" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
@@ -294,6 +304,18 @@
                                 </div>
                             </div>
                             <button type="button" class="btn btn-primary mt-3" id="addRecipe" onclick="addRecipeInput()">Añadir otro medicamento</button>
+
+                            <div class="row mt-4">
+                                <h5>Referir a otra especialidad (Opcional)</h5>
+                                <div class="row align-items-start">
+                                    <div class="col-12 col-md-5">
+                                        <label for="referidos">Especialidad</label>
+                                        <select id="s-referidos" name="referidos[]" multiple="multiple" class="form-control" data-active="0">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="row mt-4">
                                 <h5>Indicaciones mencionadas en la Consulta (Opcional)</h5>
@@ -590,6 +612,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/consultas/consultaEmergencia.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/consultaSinCita.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/pagoMedicosInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/pacienteBeneficiadoEmergenciaInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/pagarConsulta.js'); ?>"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (e) => {

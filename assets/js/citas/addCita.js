@@ -11,11 +11,22 @@ async function addCita() {
 
     try {
         const formData = new FormData($form),
-            data = {};
+            data = {},
+            examenes = [];
         let infoTitular;
 
         formData.forEach((value, key) => (data[key] = value));
 
+
+        let examen = formData.getAll("examenes[]");
+        examen.forEach(e => {
+            const examen_id = {
+                examen_id: e,
+            }
+            examenes.push(examen_id);
+        })
+
+        if (examenes.length != 0) { data.examenes = examenes; }
 
         if (data.tipoPacienteRadio === "beneficiado") {
             infoTitular = await getById("pacientes", data.titular_id);
@@ -34,6 +45,7 @@ async function addCita() {
             data.paciente_titular_id = infoTitular.paciente_id;
         }
 
+        // Formatear la hora para evitar errores
         data.hora_entrada = `${data.hora_entrada}:00`;
         data.hora_salida = `${data.hora_salida}:00`;
 

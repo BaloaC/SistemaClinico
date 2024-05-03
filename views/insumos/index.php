@@ -100,6 +100,14 @@
                                 <option value="3">Caja</option>
                                 <option value="4">Unidad</option>
                             </select>
+
+                            <label for="tipo_medida">Tipo de insumo</label>
+                            <select name="tipoMedida" class="form-control mb-3" id="tipo_insumo" required>
+                                <option value="" selected disabled>Seleccione un tipo de insumo</option>
+                                <option value="2">Medicamento</option>
+                                <option value="1">Insumo</option>
+                            </select>
+                            
                             <label for="nombre">Precio</label><br>
                             <small class="text-secondary">(El valor ingresado es en dólares)</small>
                             <input type="number" step="any" name="precio" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>

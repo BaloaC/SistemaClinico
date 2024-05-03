@@ -1,8 +1,46 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
+import dinamicSelect2, { emptySelect2 } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
 import { patterns } from "../global/patternsValidation.js";
 import { examenesPagination, listadoExamenesPagination, pagination, ssrExamanesRequest } from "./examenesPagination.js";
+
+const especialidadSelect = document.getElementById("s-especialidad");
+
+emptySelect2({
+    selectSelector: especialidadSelect,
+    placeholder: "Cargando",
+    parentModal: "#modalReg",
+});
+
+dinamicSelect2({
+    // obj: examenesList,
+    selectSelector: especialidadSelect,
+    selectValue: "especialidad_id",
+    selectNames: ["nombre"],
+    parentModal: "#modalReg",
+    placeholder: "Seleccione las especialidades",
+    multiple: true,
+    ajax: true,
+    ajaxUrl: "especialidades/consulta",
+    processResultsAjax: function (data, params) {
+
+        params.page = params.page || 1;
+
+        const data1 = data?.data.map(object => {
+            const { especialidad_id: valorPropiedad1, nombre: nombreExamen } = object;
+            return { id: valorPropiedad1, text: nombreExamen };
+        });
+
+        // Transforms the top-level key of the response object from 'data' to 'results'
+        return {
+            results: data1,
+            pagination: {
+                more: data1.length
+            }
+        };
+    }
+});
 
 async function addExamen() {
     const $form = document.getElementById("info-examen"),
@@ -10,7 +48,8 @@ async function addExamen() {
 
     try {
         const formData = new FormData($form),
-            data = {};
+            data = {},
+            especialidades = [];
 
         formData.forEach((value, key) => (data[key] = value));
 
@@ -18,6 +57,16 @@ async function addExamen() {
         if (!data.nombre.length > 3) throw { message: "El nombre debe contener al menos 3 caracteres" };
         if (!(patterns.nameExam.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         if (!(patterns.price.test(data.precio_examen))) throw { message: "El nombre ingresado no es válido" };
+
+        let especialidad = formData.getAll("especialidades[]");
+        especialidad.forEach(e => {
+            const especialidad_id = {
+                especialidad_id: e,
+            }
+            especialidades.push(especialidad_id);
+        })
+
+        if (especialidades.length != 0) { data.especialidades = especialidades; }
 
         const registroExitoso = await addModule("examenes", "info-examen", data, "Exámen registrado exitosamente!");
 

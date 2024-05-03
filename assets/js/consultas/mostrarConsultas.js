@@ -108,6 +108,35 @@ const handleModalOpen = async () => {
 
         dinamicSelect2({
             // obj: examenesList,
+            selectSelector: "#s-referidos",
+            selectValue: "especialidad_id",
+            selectNames: ["nombre"],
+            parentModal: "#modalReg",
+            placeholder: "Seleccione los exámenes",
+            multiple: true,
+            ajax: true,
+            ajaxUrl: "especialidades/consulta",
+            processResultsAjax: function (data, params) {
+
+                params.page = params.page || 1;
+
+                const data1 = data?.data.map(object => {
+                    const { especialidad_id: valorPropiedad1, nombre: nombreExamen } = object;
+                    return { id: valorPropiedad1, text: nombreExamen };
+                });
+
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return {
+                    results: data1,
+                    pagination: {
+                        more: data1.length
+                    }
+                };
+            }
+        });
+
+        dinamicSelect2({
+            // obj: examenesList,
             selectSelector: "#s-examen",
             selectValue: "examen_id",
             selectNames: ["nombre"],
@@ -771,11 +800,15 @@ addEventListener("DOMContentLoaded", async e => {
                 <tr>
                     <td>Peso: <br><b>${data.peso ? data.peso + " " + "kg" : "No especificado"} </b></td>
                     <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m" : "No especificado"}</b></td>
-                    <td>Fecha Cita: <br><b>${formatToRealDate(data.fecha_cita) ?? "No aplica"}</b></td>
-                    <td>Motivo cita: <br><b>${data.motivo_cita ?? "No aplica"}</b></td>
+                    ${
+                        data.es_emergencia != 1 && data?.fecha_cita
+                        ? `<td>Fecha Cita: <br><b>${formatToRealDate(data.fecha_cita) ?? "No aplica"}</b></td>
+                        <td>Motivo cita: <br><b>${data.motivo_cita ?? "No aplica"}</b></td>
+                        <td>Clave: <br><b>${data.clave}</b></td>`
+                        : ""
+                    }
                 </tr>
                 <tr class="blue-td">
-                    <td>Clave: <br><b>${data.clave}</b></td>
                     <td>Exámenes realizados: <br><b>${examenes}</b></td>
                     <td>Insumos utilizados: <br><b>${insumos}</b></td>
                 </tr>
@@ -790,7 +823,7 @@ addEventListener("DOMContentLoaded", async e => {
                 ${factura}
                 <tr><td><br></td></tr>
                 <tr>
-                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="openPopup('pdf/consulta/${data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> <br> <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg${tipo_cita}" onclick="pagarConsulta(${JSON.stringify({ citaType: tipo_cita, consulta_id: data.consulta_id, paciente_id: data.paciente_id }).replaceAll("\"", "'")})"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button></td>
+                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="openPopup('${data.es_emergencia == 0 ? "pdf/consulta/" + data.consulta_id : "pdf/consultaseguro/" + data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> <br> <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg${tipo_cita}" onclick="pagarConsulta(${JSON.stringify({ citaType: tipo_cita, consulta_id: data.consulta_id, paciente_id: data.paciente_id }).replaceAll("\"", "'")})"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button></td>
                 </tr>
             </table>
         `

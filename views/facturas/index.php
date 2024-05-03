@@ -176,15 +176,18 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar factura compra</h1>
+                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Anular recibo de compra</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body text-center m-auto">
                         <div id="delAlert" class="alert d-none" role="alert"></div>
-                        ¿Está seguro que desea eliminar esta factura?
+                        ¿Está seguro que desea anular este recibo?
+
+                        <label for="fecha_compra">Motivo de anulación</label>
+                        <input type="text" name="motivo_cancelacion" id="motivo_cancelacion" class="form-control mb-3 m-auto w-50" required>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn-confirmDelete" class="btn btn-danger">Eliminar</button>
+                        <button type="button" id="btn-confirmDelete" class="btn btn-danger">Anular</button>
                     </div>
                 </div>
             </div>
