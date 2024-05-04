@@ -14,6 +14,7 @@
 
     <main class="main-home">
         <div class="container text-light">
+            <button onclick="getPacientesByType()">CLICK </button>
             <h1 class="py-4 fs-7 mt-5">Panel de estadisticas</h1>
             <h5 class="w-75">En esta sección del sistema, podrá visualizar a través de gráficas la información registrada en el mismo a nivel general o mensual.</h5>
         </div>
@@ -25,14 +26,14 @@
                     <div class="col-12 col-lg-6 order-lg-first order-last flex-column">
                         <div class="card card-home shadow-dark position-relative">
                             <div id="pacienteEdad" class="chart"></div>
-                            <p class="pacienteEdad text-no-graph d-none">Todavía no hay pacientes registrados</p>
+                            <p class="pacienteEdad text-no-graph no-data d-none">Todavía no hay pacientes registrados</p>
                         </div>
                     </div>
                     <!-- Gráfica PAciente por tipo-->
                     <div class="col-12 col-lg-6 order-lg-last order-first">
                         <div class="card card-home shadow-dark position-relative">
                             <div id="pacienteTipo" class="chart"></div>
-                            <p class="pacienteTipo text-no-graph d-none">Todavía no hay pacientes registrados</p>
+                            <p class="pacienteTipo text-no-graph no-data d-none">Todavía no hay pacientes registrados</p>
                         </div>
                     </div>
                 </div>
@@ -48,7 +49,7 @@
                     <div class="col-12 col-lg-6 order-lg-first order-last flex-column">
                         <div class="card card-home shadow-dark position-relative">
                             <div id="medicoConsulta" class="chart"></div>
-                            <p class="medicoConsulta text-no-graph d-none">Todavía no hay médicos con consultas registradas</p>
+                            <p class="medicoConsulta text-no-graph no-data d-none">Todavía no hay médicos con consultas registradas</p>
                         </div>
                     </div>
                 </div>
@@ -62,14 +63,14 @@
                     <div class="col-12 col-lg-6 order-lg-first order-last flex-column">
                         <div class="card card-home shadow-dark position-relative">
                             <div id="consultasAseguradas" class="chart"></div>
-                            <p class="consultasAseguradas text-no-graph d-none">Todavía no hay consultas aseguradas registradas este mes</p>
+                            <p class="consultasAseguradas text-no-graph no-data d-none">Todavía no hay consultas aseguradas registradas este mes</p>
                         </div>
                     </div>
                     <!-- Gráfica Consultas por especialidad-->
                     <div class="col-12 col-lg-6 order-lg-last order-first">
                         <div class="card card-home shadow-dark position-relative">
                             <div id="consultasEspecialidad" class="chart"></div>
-                            <p class="consultasEspecialidad text-no-graph d-none">Todavía no hay consultas registradas este mes</p>
+                            <p class="consultasEspecialidad text-no-graph no-data d-none">Todavía no hay consultas registradas este mes</p>
                         </div>
                     </div>
                 </div>

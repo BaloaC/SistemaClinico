@@ -19,6 +19,15 @@ section {
     height: 365px;
 }
 
+.no-data {
+    background: white;
+    top: 0%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
 @media screen and (max-width: 567px) {
     .w-75 {
         margin-bottom: 5.5rem;

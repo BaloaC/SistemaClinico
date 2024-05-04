@@ -1,72 +1,80 @@
 import getAll from "../global/getAll.js";
 
-const pacientesList = await getAll("pacientes/consulta");
-let [asegurado, natural, representante, beneficiado] = [0, 0, 0, 0];
+let root = null;
+let chart = null;
+let series = null;
 
-if (pacientesList?.length === 0) {
+async function getPacientesByType() {
 
-  let mensajeVacio = document.querySelector(".pacienteTipo");
-  if (mensajeVacio.classList.contains('d-none')) {
-    mensajeVacio.classList.remove('d-none')
-  }
+    const pacientesList = await getAll("pacientesByType");
 
-} else {
+    if (pacientesList?.length === 0) {
 
-  pacientesList.forEach(paciente => {
+        let mensajeVacio = document.querySelector(".pacienteTipo");
+        if (mensajeVacio.classList.contains('d-none')) {
+            mensajeVacio.classList.remove('d-none')
+        }
 
-    switch (true) {
-      case (paciente.tipo_paciente == 1): natural++; break;
-      case (paciente.tipo_paciente == 2): representante++; break;
-      case (paciente.tipo_paciente == 3): asegurado++; break;
-      case (paciente.tipo_paciente == 4): beneficiado++; break;
+    } else {
+
+
+        const allPacientes = [
+            { value: Number(pacientesList[0].paciente_natural), tipo: "Natural" },
+            { value: Number(pacientesList[0].paciente_representante), tipo: "Representante" },
+            { value: Number(pacientesList[0].paciente_asegurado), tipo: "Asegurado" },
+            { value: Number(pacientesList[0].paciente_beneficiado), tipo: "Beneficiado" },
+        ];
+
+        if (!root) {
+            
+            root = am5.Root.new("pacienteTipo");
+
+            // Set themes
+            root.setThemes([
+                am5themes_Animated.new(root)
+            ]);
+
+            if (chart) {
+                chart.dispose();
+            }
+
+            // Create chart
+            chart = root.container.children.push(am5percent.PieChart.new(root, {
+                layout: root.verticalLayout
+            }));
+
+
+            // Create series
+            series = chart.series.push(am5percent.PieSeries.new(root, {
+                valueField: "value",
+                categoryField: "tipo"
+            }));
+
+            let title = chart.children.unshift(am5.Label.new(root, {
+                text: "Tipos de pacientes",
+                fontSize: 25,
+                fontWeight: "500",
+                textAlign: "center",
+                x: am5.percent(50),
+                centerX: am5.percent(50),
+                paddingTop: 0,
+                paddingBottom: 0,
+                dy: 1,
+                id: "titleChartTipo"
+            }));
+
+        }
+
+        // Set data
+        series.data.setAll(allPacientes);
+
+        // Play initial series animation
+        series.appear(1000, 100);
     }
-  })
-
-  const allPacientes = [
-    { value: natural, tipo: "Natural" },
-    { value: representante, tipo: "Representante" },
-    { value: asegurado, tipo: "Asegurado" },
-    { value: beneficiado, tipo: "Beneficiado" },
-  ];
-
-
-  let root = am5.Root.new("pacienteTipo");
-
-
-  // Set themes
-  root.setThemes([
-    am5themes_Animated.new(root)
-  ]);
-
-
-  // Create chart
-  let chart = root.container.children.push(am5percent.PieChart.new(root, {
-    layout: root.verticalLayout
-  }));
-
-
-  // Create series
-  let series = chart.series.push(am5percent.PieSeries.new(root, {
-    valueField: "value",
-    categoryField: "tipo"
-  }));
-
-  let title = chart.children.unshift(am5.Label.new(root, {
-    text: "Tipos de pacientes",
-    fontSize: 25,
-    fontWeight: "500",
-    textAlign: "center",
-    x: am5.percent(50),
-    centerX: am5.percent(50),
-    paddingTop: 0,
-    paddingBottom: 0,
-    dy: 1,
-    id: "titleChartTipo"
-  }));
-
-  // Set data
-  series.data.setAll(allPacientes);
-
-  // Play initial series animation
-  series.appear(1000, 100);
 }
+
+window.getPacientesByType = getPacientesByType;
+
+document.addEventListener("DOMContentLoaded", async () => {
+    await getPacientesByType();
+});
