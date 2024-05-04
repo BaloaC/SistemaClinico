@@ -262,6 +262,17 @@ class ConsultaController extends Controller {
             $relaciones = ConsultaHelper::obtenerRelaciones($informacion_consulta->consulta_id);
             $consulta_completa = array_merge((array) $informacion_consulta, (array) $relaciones);
 
+            if (array_key_exists('cita_id', $consulta_completa)) {
+                $_citaExamenModel = new CitaExamenModel();
+                $innersExa = $_citaExamenModel->listInner(["examen" => "cita_examen"]);
+                $examenes = $_citaExamenModel->where('cita_examen.cita_id', '=', $consulta_completa['cita_id'])
+                                            ->where('cita_examen.estatus_cit', '=', 1)
+                                            ->innerJoin(["examen.nombre", "examen.tipo", "cita_examen.precio_examen_bs", "cita_examen.precio_examen_usd"], $innersExa, "cita_examen");
+                if ($examenes && count($examenes) > 0) {
+                    $consulta_completa['cita_examenes'] = $examenes;
+                }
+            }
+            
             $mensaje = (count( $consulta_completa ) > 0);
             $respuesta = new Response('CORRECTO');
             $respuesta->setData( [ $consulta_completa ]);
