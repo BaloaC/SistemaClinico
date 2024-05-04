@@ -108,19 +108,19 @@
                                         <label for="input-radios-container" class="">Tipo de servicio</label>
                                         <div class="input-radios-container">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioExamen" onchange="tipoServicio(this)" value="1" required>
+                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioExamen" value="1" required>
                                                 <label class="form-check-label" for="inlineRadio1">Exámenes</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioConsulta" onchange="tipoServicio(this)" value="2" checked required>
+                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioConsulta" value="2" checked required>
                                                 <label class="form-check-label" for="inlineRadio2">Consulta</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <div class="examenInput" style="display: none;">
-                                            <label for="examenes">Exámenes a realizar</label>
-                                            <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple" disabled required>
+                                        <div class="examenInput">
+                                            <label for="examenes">Exámenes a realizar (Opcional)</label>
+                                            <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple">
                                                 <option></option>
                                             </select>
                                         </div>
