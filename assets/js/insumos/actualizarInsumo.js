@@ -10,7 +10,7 @@ const d = document,
     path = location.pathname.split('/');
 
 
-async function updateEspecialidad(id) {
+async function updateInsumo(id) {
 
     const $form = d.getElementById("act-insumo");
 
@@ -36,10 +36,10 @@ async function updateEspecialidad(id) {
     }
 }
 
-window.updateEspecialidad = updateEspecialidad;
+window.updateInsumo = updateInsumo;
 
 async function confirmUpdate() {
-    const $form = d.getElementById("act-especialidad"),
+    const $form = d.getElementById("act-insumo"),
         $alert = d.getElementById("actAlert");
 
     try {
@@ -59,15 +59,16 @@ async function confirmUpdate() {
         if (Object.values(parseData)?.length > 1) {
 
             await updateModule(parseData, "especialidad_id","especialidades","act-especialidad","Especialidad actualizada exitosamente!");
-            $('#especialidades').DataTable().ajax.reload();
+            $('#insumos').DataTable().ajax.reload();
 
         } else {
 
-            showDefaultModalAct({form: $form, successMessage: "Especialidad actualizada correctamente!"});
+            showDefaultModalAct({form: $form, successMessage: "Insumo actualizada correctamente!"});
         }
 
-        cleanValdiation("act-especialidad");
-        cleanValdiation("info-especialidad");
+        cleanValdiation("info-insumo");
+        cleanValdiation("act-insumo");
+        $('#insumos').DataTable().ajax.reload();
 
     } catch (error) {
         console.log(error);

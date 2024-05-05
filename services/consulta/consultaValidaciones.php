@@ -136,6 +136,8 @@ class ConsultaValidaciones {
             $camposNumericos = array("insumo_id");
             $validarConsultaInsumo = new Validate;
 
+            var_dump($insumo);
+
             switch ($validarConsultaInsumo) {
                 case ($validarConsultaInsumo->isEmpty($insumo)):
                     $respuesta = new Response(false, 'Los datos de los insumos están vacíos');

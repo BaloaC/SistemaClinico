@@ -5,24 +5,35 @@ include_once "./services/facturas/consulta/FacturaConsultaHelpers.php";
 include_once "./services/facturas/consulta seguro/ConsultaSeguroHelpers.php";
 include_once './services/consulta/consultaService.php';
 
-class EstadisticasController extends Controller {
+class EstadisticasController extends Controller
+{
 
     //Método index (vista principal)
-    public function index() {
+    public function index()
+    {
 
         return $this->view('estadisticas/index');
     }
 
-    public function pacientesByAge() {
+    public function pacientesByAge()
+    {
 
-        $_pacienteModel = new PacienteModel();
-        $paciente = $_pacienteModel->setSelect("
+        $defaultQuery = "
         SUM(CASE WHEN edad < 18 THEN 1 ELSE 0 END) AS menos18, 
         SUM(CASE WHEN edad > 18 AND edad < 30 THEN 1 ELSE 0 END) AS mas18_30, 
         SUM(CASE WHEN edad > 31 AND edad < 40 THEN 1 ELSE 0 END) AS mas31_40, 
         SUM(CASE WHEN edad > 41 AND edad < 50 THEN 1 ELSE 0 END) AS mas41_50, 
         SUM(CASE WHEN edad > 51 AND edad < 60 THEN 1 ELSE 0 END) AS mas51_60, 
-        SUM(CASE WHEN edad >= 60 THEN 1 ELSE 0 END) AS mayor60")->getAll();
+        SUM(CASE WHEN edad >= 60 THEN 1 ELSE 0 END) AS mayor60";
+
+        $filterQuery = null;
+
+        if (isset($_GET["inicio_rango"]) && isset($_GET["fin_rango"])) {
+            $filterQuery = "SUM(CASE WHEN edad > {$_GET["inicio_rango"]} AND edad < {$_GET["fin_rango"]} THEN 1 ELSE 0 END) AS filterRange";
+        }
+
+        $_pacienteModel = new PacienteModel();
+        $paciente = $_pacienteModel->setSelect($filterQuery ?? $defaultQuery)->getAll();
 
         $respuesta = new Response('CORRECTO');
         $respuesta->setData($paciente);
@@ -30,14 +41,15 @@ class EstadisticasController extends Controller {
         return $respuesta->json(200);
     }
 
-    public function pacientesByType() {
+    public function pacientesByType()
+    {
 
         $_pacienteModel = new PacienteModel();
         $paciente = $_pacienteModel->setSelect("
         SUM(CASE WHEN tipo_paciente = 1 THEN 1 END) AS paciente_natural,
         SUM(CASE WHEN tipo_paciente = 2 THEN 1 END) AS paciente_representante,
         SUM(CASE WHEN tipo_paciente = 3 THEN 1 END) AS paciente_asegurado,
-        SUM(CASE WHEN tipo_paciente = 4 THEN 1 END) AS paciente_beneficiado")->getAll();
+        SUM(CASE WHEN tipo_paciente = 4 THEN 1 END) AS paciente_beneficiado")->whereDate("edad", $_GET["inicio_rango"] ?? 1, $_GET["fin_rango"] ?? 200)->getAll();
 
         $respuesta = new Response('CORRECTO');
         $respuesta->setData($paciente);
@@ -45,7 +57,8 @@ class EstadisticasController extends Controller {
         return $respuesta->json(200);
     }
 
-    public function allConsultas() {
+    public function allConsultas()
+    {
 
         // Obtener la fecha de hoy
         $hoy = date('Y-m-d');
@@ -55,7 +68,7 @@ class EstadisticasController extends Controller {
 
         $_consultaModel = new ConsultaModel();
         $consultaList = $_consultaModel->where('estatus_con', '=', 1);
-        $consultaList =  $_consultaModel->whereDate("fecha_consulta", $fechaInicio, $hoy)->getAll();
+        $consultaList =  $_consultaModel->whereDate("fecha_consulta", $_GET["fecha_inicio"] ?? $fechaInicio, $_GET["fecha_final"] ?? $hoy)->getAll();
         $_consultaModel->resetValues();
 
         $consultasFiltradas = [];
@@ -92,7 +105,8 @@ class EstadisticasController extends Controller {
         return $respuesta->json(200);
     }
 
-    public function allConsultasMedicos() {
+    public function allConsultasMedicos()
+    {
 
         $fechas = [];
         $conteos = [];
@@ -106,7 +120,7 @@ class EstadisticasController extends Controller {
 
         $_consultaModel = new ConsultaModel();
         $consultaList = $_consultaModel->where('estatus_con', '=', 1);
-        $consultaList =  $_consultaModel->whereDate("fecha_consulta", "2024-01-01", $hoy)->getAll();
+        $consultaList =  $_consultaModel->whereDate("fecha_consulta", $_GET["fecha_inicio"] ?? $fechaInicio, $_GET["fecha_final"] ?? $hoy)->getAll();
         $_consultaModel->resetValues();
 
         $consultasFiltradas = [];
@@ -192,7 +206,8 @@ class EstadisticasController extends Controller {
         return $respuesta->json(200);
     }
 
-    public function allConsultasEspecialidades() {
+    public function allConsultasEspecialidades()
+    {
 
         // Obtener la fecha de hoy
         $hoy = date('Y-m-d');
@@ -202,7 +217,7 @@ class EstadisticasController extends Controller {
 
         $_consultaModel = new ConsultaModel();
         $consultaList = $_consultaModel->where('estatus_con', '=', 1);
-        $consultaList =  $_consultaModel->whereDate("fecha_consulta", "2024-03-01", $hoy)->getAll();
+        $consultaList =  $_consultaModel->whereDate("fecha_consulta", $_GET["fecha_inicio"] ?? $fechaInicio, $_GET["fecha_final"] ?? $hoy)->getAll();
         $_consultaModel->resetValues();
 
         $consultasFiltradas = [];

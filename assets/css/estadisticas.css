@@ -3,7 +3,7 @@
 @import url('homepage.css');
 
 section {   
-    height: 60vh;
+    height: 100vh;
 }
 
 .w-75 {
@@ -12,6 +12,10 @@ section {
 
 .main-home * {
     color: #010101 !important;
+}
+
+.home {
+    margin-bottom: 2.5%;
 }
 
 .chart {
@@ -29,6 +33,11 @@ section {
 }
 
 @media screen and (max-width: 567px) {
+
+    .home {
+        margin-bottom: 30%;
+    }
+
     .w-75 {
         margin-bottom: 5.5rem;
     }

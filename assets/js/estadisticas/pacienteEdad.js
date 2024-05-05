@@ -6,9 +6,43 @@ let series = null;
 let title = null;
 let xAxis = null;
 
-async function getPacientesByAge() {
+export async function getPacientesByAge(startRange = null, endRange = null) {
 
-    const pacientesList = await getAll("pacientesByAge");
+
+    let allPacientes = [];
+    let pacientesList = [];
+    const loadingMessage = document.querySelector(".pacienteEdad.loading");
+    loadingMessage.classList.remove("d-none");
+
+    if(startRange !== null && endRange !== null){
+
+        pacientesList = await getAll(`pacientesByAge?inicio_rango=${startRange}&fin_rango=${endRange}`);
+
+        console.log(pacientesList, "pacientes");
+        
+        allPacientes = [
+            { value: Number(pacientesList[0].filterRange), edades: `Entre ${startRange} de ${endRange}` },
+        ];
+
+        console.log(allPacientes, "AllPacientes");
+
+    } else {
+
+        pacientesList = await getAll("pacientesByAge");
+
+        allPacientes = [
+            { value: Number(pacientesList[0].menos18), edades: "Menores de 18" },
+            { value: Number(pacientesList[0].mas18_30), edades: "Entre 18 y 30" },
+            { value: Number(pacientesList[0].mas31_40), edades: "Entre 31 y 40" },
+            { value: Number(pacientesList[0].mas41_50), edades: "Entre 41 y 50" },
+            { value: Number(pacientesList[0].mas51_60), edades: "Entre 51 y 60" },
+            { value: Number(pacientesList[0].mayor60), edades: "Mayores de 60" },
+        ];
+
+    }
+
+    loadingMessage.classList.add("d-none");
+
 
     if (pacientesList?.length === 0) {
 
@@ -18,15 +52,6 @@ async function getPacientesByAge() {
         }
 
     } else {
-
-        const allPacientes = [
-            { value: Number(pacientesList[0].menos18), edades: "Menores de 18" },
-            { value: Number(pacientesList[0].mas18_30), edades: "Entre 18 y 30" },
-            { value: Number(pacientesList[0].mas31_40), edades: "Entre 31 y 40" },
-            { value: Number(pacientesList[0].mas41_50), edades: "Entre 41 y 50" },
-            { value: Number(pacientesList[0].mas51_60), edades: "Entre 51 y 60" },
-            { value: Number(pacientesList[0].mayor60), edades: "Mayores de 60" },
-        ];
 
         if (!root) {
             root = am5.Root.new("pacienteEdad");
