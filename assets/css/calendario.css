@@ -48,3 +48,31 @@
     color: #fff !important;
     background-color: #222fb9 !important;
 }
+
+ul.leyenda li:nth-child(1)::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #07ff0030;
+    margin-right: 5px; /* Alinear con el margen izquierdo de la lista */
+}
+
+ul.leyenda li:nth-child(2)::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #ff000042;
+    margin-right: 5px; /* Alinear con el margen izquierdo de la lista */
+}
+
+ul.leyenda li:nth-child(3)::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #0000000f;
+    margin-right: 5px; /* Alinear con el margen izquierdo de la lista */
+}
+

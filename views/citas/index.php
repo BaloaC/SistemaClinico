@@ -108,21 +108,13 @@
                                         <label for="input-radios-container" class="">Tipo de servicio</label>
                                         <div class="input-radios-container">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioExamen" onchange="tipoServicio(this)" value="1" required>
+                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioExamen" value="1" required>
                                                 <label class="form-check-label" for="inlineRadio1">Exámenes</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioConsulta" onchange="tipoServicio(this)" value="2" checked required>
+                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioConsulta" value="2" checked required>
                                                 <label class="form-check-label" for="inlineRadio2">Consulta</label>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <div class="examenInput" style="display: none;">
-                                            <label for="examenes">Exámenes a realizar</label>
-                                            <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple" disabled required>
-                                                <option></option>
-                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -133,6 +125,12 @@
                                             <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
                                                 <option></option>
                                             </select>
+                                            <div class="examenInput">
+                                                <label for="examenes">Exámenes a realizar (Opcional)</label>
+                                                <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple" disabled>
+                                                    <option></option>
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <label for="medico_id">Médico</label>
@@ -148,6 +146,14 @@
                                             <input type="date" name="fecha_cita" id="fecha_cita" data-validate="true" data-type="date" disabled class="form-control mb-3 flatpickr-input-readonly fecha_cita">
                                         </div>
                                         <div class="col-12 col-md-6">
+                                            <p style="padding-top: 10px">Leyenda:</p>
+                                            <ul class="leyenda">
+                                                <li>Horario del médico disponible</li>
+                                                <li>Horario del médico ocupado</li>
+                                                <li>Días fueras del horario del médico</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-12 col-md-6">
                                             <label for="input-radios-container">Permitir citas fuera del horario del médico</label>
                                             <div class="input-radios-container">
                                                 <div class="form-check form-check-inline">
@@ -155,7 +161,7 @@
                                                     <label class="form-check-label" for="inlineRadio1">Sí</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_no" value="false">
+                                                    <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_no" value="false" checked>
                                                     <label class="form-check-label" for="inlineRadio2">No</label>
                                                 </div>
                                             </div>

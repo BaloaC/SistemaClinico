@@ -5,18 +5,15 @@ include_once "./services/facturas/consulta/FacturaConsultaHelpers.php";
 include_once "./services/facturas/consulta seguro/ConsultaSeguroHelpers.php";
 include_once './services/consulta/consultaService.php';
 
-class EstadisticasController extends Controller
-{
+class EstadisticasController extends Controller {
 
     //Método index (vista principal)
-    public function index()
-    {
+    public function index() {
 
         return $this->view('estadisticas/index');
     }
 
-    public function pacientesByAge()
-    {
+    public function pacientesByAge() {
 
         $_pacienteModel = new PacienteModel();
         $paciente = $_pacienteModel->setSelect("
@@ -33,8 +30,7 @@ class EstadisticasController extends Controller
         return $respuesta->json(200);
     }
 
-    public function pacientesByType()
-    {
+    public function pacientesByType() {
 
         $_pacienteModel = new PacienteModel();
         $paciente = $_pacienteModel->setSelect("
@@ -49,8 +45,7 @@ class EstadisticasController extends Controller
         return $respuesta->json(200);
     }
 
-    public function allConsultas()
-    {
+    public function allConsultas() {
 
         // Obtener la fecha de hoy
         $hoy = date('Y-m-d');
@@ -97,8 +92,7 @@ class EstadisticasController extends Controller
         return $respuesta->json(200);
     }
 
-    public function allConsultasMedicos()
-    {
+    public function allConsultasMedicos() {
 
         $fechas = [];
         $conteos = [];
@@ -112,7 +106,7 @@ class EstadisticasController extends Controller
 
         $_consultaModel = new ConsultaModel();
         $consultaList = $_consultaModel->where('estatus_con', '=', 1);
-        $consultaList =  $_consultaModel->whereDate("fecha_consulta", $fechaInicio, $hoy)->getAll();
+        $consultaList =  $_consultaModel->whereDate("fecha_consulta", "2024-01-01", $hoy)->getAll();
         $_consultaModel->resetValues();
 
         $consultasFiltradas = [];
@@ -198,8 +192,7 @@ class EstadisticasController extends Controller
         return $respuesta->json(200);
     }
 
-    public function allConsultasEspecialidades()
-    {
+    public function allConsultasEspecialidades() {
 
         // Obtener la fecha de hoy
         $hoy = date('Y-m-d');
@@ -209,7 +202,7 @@ class EstadisticasController extends Controller
 
         $_consultaModel = new ConsultaModel();
         $consultaList = $_consultaModel->where('estatus_con', '=', 1);
-        $consultaList =  $_consultaModel->whereDate("fecha_consulta", $fechaInicio, $hoy)->getAll();
+        $consultaList =  $_consultaModel->whereDate("fecha_consulta", "2024-03-01", $hoy)->getAll();
         $_consultaModel->resetValues();
 
         $consultasFiltradas = [];
@@ -239,13 +232,14 @@ class EstadisticasController extends Controller
 
         foreach ($consultasAseguradas as $dato) {
 
-            $especialidadId = $dato->medico[0]->especialidad_id;
+            $especialidadId = $dato->medico[0]->especialidad_id ?? $dato->especialidad_id ?? null;
+
             if (isset($conteosEspecialidades[$especialidadId])) {
                 $conteosEspecialidades[$especialidadId]['cantidad']++;
             } else {
                 $conteosEspecialidades[$especialidadId] = [
                     'cantidad' => 1,
-                    'nombre_especialidad' => $dato->medico[0]->nombre_especialidad
+                    'nombre_especialidad' => $dato->medico[0]->nombre_especialidad ?? $dato->nombre_especialidad ?? "Sin especialidad."
                 ];
             }
         }
