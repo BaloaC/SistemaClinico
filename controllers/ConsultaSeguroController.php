@@ -67,32 +67,58 @@ class ConsultaSeguroController extends Controller{
             $citaSeguro = $_citaSeguro->where('cita_id', '=', $consulta->cita_id)->getFirst();
             $data['seguro_id'] = $citaSeguro->seguro_id;
 
-            $_pacienteSeguro = new PacienteSeguroModel();
-            $pacienteSeguro = $_pacienteSeguro->where('paciente_id', '=', $paciente->paciente_id)->where('seguro_id', '=', $citaSeguro->seguro_id)->getFirst();
+            // $_pacienteSeguro = new PacienteSeguroModel();
+            // $pacienteSeguro = $_pacienteSeguro->where('paciente_id', '=', $paciente->paciente_id)->where('seguro_id', '=', $citaSeguro->seguro_id)->getFirst();
             
-            if ($data['monto_consulta_usd'] > $pacienteSeguro->saldo_disponible) {
-                $respuesta = new Response(false, 'Saldo insuficiente para cubrir la consulta');
-                $respuesta->setData("Error al procesar al paciente id $pacienteSeguro->paciente_id con saldo $pacienteSeguro->saldo_disponible");
-                return $respuesta->json(400);
-            }
+            // if ($data['monto_consulta_usd'] > $pacienteSeguro->saldo_disponible) {
+            //     $respuesta = new Response(false, 'Saldo insuficiente para cubrir la consulta');
+            //     $respuesta->setData("Error al procesar al paciente id $pacienteSeguro->paciente_id con saldo $pacienteSeguro->saldo_disponible");
+            //     return $respuesta->json(400);
+            // }
 
-            $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-            // $data['monto_consulta_bs'] = $data['monto_consulta_usd'] * $valorDivisa;
             $data['monto_consulta_bs'] = 0;
-            $id = $_consultaSeguroModel->insert($data);
-            $data['factura_id'] = $id;
-            $mensaje = ($id > 0);
+            // $id = $_consultaSeguroModel->insert($data);
+            // $data['factura_id'] = $id;
+            // $mensaje = ($id > 0);
 
-            if (!$mensaje) {
-                $respuesta = new Response(false, 'Error insertando la factura de la consulta');
-                return $respuesta->json(400);
-            }
+            // if (!$mensaje) {
+            //     $respuesta = new Response(false, 'Error insertando la factura de la consulta');
+            //     return $respuesta->json(400);
+            // }
 
             // ya insertada la factura, modificamos el estatus de la consulta a pagada
-            ConsultaSeguroService::actualizarEstatusConsulta($data['consulta_id']);
+            echo '<pre>';
+            $Consulta = new stdClass();
+            $Consulta->consulta_id = $data['consulta_id'];
+            $lista_test = array("consultas" => [$Consulta] );
+// var_dump($lista_test);
+            $consulta = ConsultaSeguroHelpers::obtenerInformacionCompleta($lista_test);
+            if ( isset( $consulta['consulta_emergencia'] ) ) {
+                $consulta[0] = $consulta[0];
 
-            $montoActualizado = $pacienteSeguro->saldo_disponible - $data['monto_consulta_usd'];
-            PacienteSeguroService::actualizarSaldoPaciente($montoActualizado, $_pacienteSeguro);
+            } else {
+                $consulta[0] = array_merge($consulta[0], FacturaConsultaHelpers::obtenerMontoTotal($consulta[0]));
+            }
+
+            $_consultaCitaModel = new ConsultaCitaModel();
+            $consulta_cita = $_consultaCitaModel->where('consulta_id', '=', $consulta['consulta_id'])->getFirst();
+            if ($consulta_cita != 0) {
+                $_citaModel = new CitaModel();
+                $cita = $_citaModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
+
+                if ($cita) {
+                    $estatus = $consulta['total_consulta'] > $cita->monto_aprobado ? 5 : 3;
+                }
+            } else {
+                $estatus = 3;
+            }
+            
+            var_dump($consulta);
+
+            ConsultaSeguroService::actualizarEstatusConsulta($data['consulta_id'], $estatus);
+
+            // $montoActualizado = $pacienteSeguro->saldo_disponible - $data['monto_consulta_usd'];
+            // PacienteSeguroService::actualizarSaldoPaciente($montoActualizado, $_pacienteSeguro);
         }
     }
 

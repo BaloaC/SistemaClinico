@@ -97,6 +97,13 @@ class ExamenController extends Controller{
         $_examenModel = new ExamenModel();
         $lista = $_examenModel->where('examen_id', '=', $examen_id)->where('estatus_exa', '=', '1')->getFirst();
 
+        $_examenEspecialidadModel = new ExamenEspecialidadModel();
+        $inners = $_examenEspecialidadModel->listInner(["especialidad" => "examen_especialidad"]);
+        $select = ['especialidad.especialidad_id', 'especialidad.nombre'];
+        $lista->especialidades = $_examenEspecialidadModel->where('examen_especialidad.examen_id', '=', $examen_id)
+                                                            ->where('especialidad.estatus_esp', '!=', 2)
+                                                            ->innerJoin($select, $inners, 'examen_especialidad');
+
         $mensaje = ($lista != null);
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($lista);

@@ -9,9 +9,9 @@ class ConsultaSeguroService {
     /**
      * Función para colocar como pagada una consulta
      */
-    public static function actualizarEstatusConsulta ($consulta_id) {
+    public static function actualizarEstatusConsulta ($consulta_id, $estatus) {
         $_consulta = new ConsultaModel();
-        $update = $_consulta->where('consulta_id', '=', $consulta_id )->update(['estatus_con' => 3]);
+        $update = $_consulta->where('consulta_id', '=', $consulta_id )->update(['estatus_con' => $estatus]);
         $isUpdate = ($update > 0);
 
         // Si hubo un error cambiando el estatus de la consulta, borramos la factura relacionada a ella

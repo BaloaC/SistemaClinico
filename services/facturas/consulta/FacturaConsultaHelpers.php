@@ -94,7 +94,7 @@ class FacturaConsultaHelpers {
                     $consulta_insumo->monto_total_bs = round($consulta_insumo->cantidad * $consulta_insumo->precio_insumo_bs, 2);
                 }
 
-                $consulta_insumo->monto_total_usd = $consulta_insumo->cantidad * $consulta_insumo->precio_insumo_usd;
+                $consulta_insumo->monto_total_usd = round($consulta_insumo->cantidad * $consulta_insumo->precio_insumo_usd);
             }
             
             $consulta['insumos'] = $consultaInsumos;
@@ -176,10 +176,20 @@ class FacturaConsultaHelpers {
                 }
             }
             // echo '<pre>'; var_dump(isset($consulta['consulta_emergencia']));
-            // if ( isset($consulta['consulta_emergencia']) ) {
-                $consulta['monto_total_usd'] = $montoUsd + $consulta['monto_consulta_usd'];
-                $consulta['monto_total_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
-                $consulta['monto_consulta_bs'] = round($consulta['monto_consulta_usd'] * $valorDivisa, 2);
+            // if ( isset($consulta[consulta_emergencia']) ) {
+            $_consultaCitaModel = new ConsultaCitaModel();
+            $consulta_cita = $_consultaCitaModel->where('consulta_id', '=', $consulta['consulta_id'])->getFirst();
+            if ($consulta_cita != 0) {
+                $_citaModel = new CitaModel();
+                $cita = $_citaModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
+
+                if ($cita != 0 && $cita->tipo_servicio == 2) {
+                    $consulta['monto_total_usd'] = $montoUsd + $consulta['monto_consulta_usd'];
+                    $consulta['monto_total_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
+                    $consulta['monto_consulta_bs'] = round($consulta['monto_consulta_usd'] * $valorDivisa, 2);
+                }
+            }
+                
             // }
             
 

@@ -68,7 +68,7 @@ class ConsultaSeguroHelpers {
 
         if (count($consultasSeguros) > 0) {
             foreach ($consultasSeguros as $consulta) {
-            
+                var_dump($consulta);
                 $_consultaCita = new ConsultaCitaModel();
                 $consulta_cita = $_consultaCita->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
                 $consulta;
