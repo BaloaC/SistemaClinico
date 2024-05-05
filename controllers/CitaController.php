@@ -282,9 +282,12 @@ class CitaController extends Controller {
         CitasValidaciones::validarCitaId($cita_id);
 
         $data = $validarCita->dataScape($_POST);
-        $newStatus['estatus_cit'] = 1;
         $newArray['clave'] = $data['clave'];
-        $newArray['monto_aprobado'] = $data['monto_aprobado'];
+
+        $cita = Array(
+            'monto_aprobado' => $data['monto_aprobado'],
+            'estatus_cit' => 1
+        );
 
         $_citaSeguroModel = new CitaSeguroModel();
         $actualizado = $_citaSeguroModel->where('cita_id', '=', $cita_id)->update($newArray);
@@ -292,7 +295,7 @@ class CitaController extends Controller {
         
         if ($actualizado > 0) {
             $_cita = new CitaModel();
-            $esActualizado = $_cita->where('cita_id', '=', $cita_id)->update($newStatus);
+            $esActualizado = $_cita->where('cita_id', '=', $cita_id)->update($cita);
         }
 
         $mensaje = ($esActualizado > 0);

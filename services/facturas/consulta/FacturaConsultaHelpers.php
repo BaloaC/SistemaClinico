@@ -141,61 +141,56 @@ class FacturaConsultaHelpers {
     }
 
     public static function obtenerMontoTotal($consulta) {
-        // $facturas = [];
         
-        // foreach ($facturaList as $consulta) {
-            $montoBs = 0; $montoUsd = 0;
-            $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+        $montoBs = 0; $montoUsd = 0;
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
 
-            if (isset($consulta['insumos'])) {
-                foreach ($consulta['insumos'] as $insumos) {
-                    
-                    $montoUsd += $insumos->monto_total_usd;
-
-                    if ( $insumos->monto_total_bs == 0 ) {
-                        $montoBs += round( $insumos->monto_total_usd * $valorDivisa, 2);
-
-                    } else {
-                        $montoBs += $insumos->monto_total_bs;
-                    }
-                }
-            }
-            
-            if (isset($consulta['examenes'])) {
-                foreach ($consulta['examenes'] as $examenes) {
-                    // var_dump($consulta['examenes']);
-                    // var_dump($examenes);
-                    $montoUsd += $examenes->precio_examen_usd;
-                    
-                    if ( $examenes->precio_examen_bs == 0 ) {
-                        $montoBs += round( $examenes->precio_examen_usd * $valorDivisa, 2);
-
-                    } else {
-                        $montoBs += $examenes->precio_examen_bs;
-                    }
-                }
-            }
-            // echo '<pre>'; var_dump(isset($consulta['consulta_emergencia']));
-            // if ( isset($consulta[consulta_emergencia']) ) {
-            $_consultaCitaModel = new ConsultaCitaModel();
-            $consulta_cita = $_consultaCitaModel->where('consulta_id', '=', $consulta['consulta_id'])->getFirst();
-            if ($consulta_cita != 0) {
-                $_citaModel = new CitaModel();
-                $cita = $_citaModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
-
-                if ($cita != 0 && $cita->tipo_servicio == 2) {
-                    $consulta['monto_total_usd'] = $montoUsd + $consulta['monto_consulta_usd'];
-                    $consulta['monto_total_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
-                    $consulta['monto_consulta_bs'] = round($consulta['monto_consulta_usd'] * $valorDivisa, 2);
-                }
-            }
+        if (isset($consulta['insumos'])) {
+            foreach ($consulta['insumos'] as $insumos) {
                 
-            // }
-            
+                $montoUsd += $insumos->monto_total_usd;
 
-            // $facturas[] = $consulta;
-        // }
+                if ( $insumos->monto_total_bs == 0 ) {
+                    $montoBs += round( $insumos->monto_total_usd * $valorDivisa, 2);
+
+                } else {
+                    $montoBs += $insumos->monto_total_bs;
+                }
+            }
+        }
         
+        if (isset($consulta['examenes'])) {
+            foreach ($consulta['examenes'] as $examenes) {
+                
+                $montoUsd += $examenes->precio_examen_usd;
+                
+                if ( $examenes->precio_examen_bs == 0 ) {
+                    $montoBs += round( $examenes->precio_examen_usd * $valorDivisa, 2);
+
+                } else {
+                    $montoBs += $examenes->precio_examen_bs;
+                }
+            }
+        }
+        
+        $_consultaCitaModel = new ConsultaCitaModel();
+        $consulta_cita = $_consultaCitaModel->where('consulta_id', '=', $consulta['consulta_id'])->getFirst();
+        
+        if ( !is_null($consulta_cita) ) {
+            $_citaModel = new CitaModel();
+            $cita = $_citaModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
+
+            if ( !is_null($cita) && $cita->tipo_servicio == 2 || is_null($cita)) {
+                $consulta['monto_total_usd'] = $montoUsd + $consulta['monto_consulta_usd'];
+                $consulta['monto_total_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
+                $consulta['monto_consulta_bs'] = round($consulta['monto_consulta_usd'] * $valorDivisa, 2);
+
+            } else if ( !is_null($cita) && $cita->tipo_servicio == 1) {
+                $consulta['monto_total_usd'] = $montoUsd;
+                $consulta['monto_total_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
+            }
+        }
+
         return $consulta;
     }
 

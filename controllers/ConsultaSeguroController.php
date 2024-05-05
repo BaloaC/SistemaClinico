@@ -37,7 +37,7 @@ class ConsultaSeguroController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         ConsultaSeguroValidaciones::validarConsultaSeguro($_POST);
         ConsultaSeguroValidaciones::validarConsultaAsegurada($_POST);
-        
+
         $validarConsulta = new Validate;
         $data = $validarConsulta->dataScape($_POST);
         $_consultaSeguroModel = new ConsultaSeguroModel();
@@ -62,14 +62,14 @@ class ConsultaSeguroController extends Controller{
 
             $_paciente = new PacienteModel();
             $paciente = $_paciente->where('cedula', '=', $cita->cedula_titular)->getFirst();
-            
+
             $_citaSeguro = new CitaSeguroModel();
             $citaSeguro = $_citaSeguro->where('cita_id', '=', $consulta->cita_id)->getFirst();
             $data['seguro_id'] = $citaSeguro->seguro_id;
 
             // $_pacienteSeguro = new PacienteSeguroModel();
             // $pacienteSeguro = $_pacienteSeguro->where('paciente_id', '=', $paciente->paciente_id)->where('seguro_id', '=', $citaSeguro->seguro_id)->getFirst();
-            
+
             // if ($data['monto_consulta_usd'] > $pacienteSeguro->saldo_disponible) {
             //     $respuesta = new Response(false, 'Saldo insuficiente para cubrir la consulta');
             //     $respuesta->setData("Error al procesar al paciente id $pacienteSeguro->paciente_id con saldo $pacienteSeguro->saldo_disponible");
@@ -77,45 +77,51 @@ class ConsultaSeguroController extends Controller{
             // }
 
             $data['monto_consulta_bs'] = 0;
-            // $id = $_consultaSeguroModel->insert($data);
-            // $data['factura_id'] = $id;
-            // $mensaje = ($id > 0);
+            if ($cita->tipo_servicio == 1) {
+                $data['monto_consulta_usd'] = 0;
+            }
 
-            // if (!$mensaje) {
-            //     $respuesta = new Response(false, 'Error insertando la factura de la consulta');
-            //     return $respuesta->json(400);
-            // }
+            $id = $_consultaSeguroModel->insert($data);
+            $data['factura_id'] = $id;
+            $mensaje = ($id > 0);
+
+            if (!$mensaje) {
+                $respuesta = new Response(false, 'Error insertando la factura de la consulta');
+                return $respuesta->json(400);
+            }
 
             // ya insertada la factura, modificamos el estatus de la consulta a pagada
-            echo '<pre>';
             $Consulta = new stdClass();
             $Consulta->consulta_id = $data['consulta_id'];
-            $lista_test = array("consultas" => [$Consulta] );
-// var_dump($lista_test);
+            $lista_test = array( $Consulta );
+
             $consulta = ConsultaSeguroHelpers::obtenerInformacionCompleta($lista_test);
             if ( isset( $consulta['consulta_emergencia'] ) ) {
-                $consulta[0] = $consulta[0];
+                $consulta = $consulta[0];
 
             } else {
-                $consulta[0] = array_merge($consulta[0], FacturaConsultaHelpers::obtenerMontoTotal($consulta[0]));
+                $consulta[0]['monto_consulta_usd'] = $_POST['monto_consulta_usd'];
+                $consulta = array_merge($consulta[0], FacturaConsultaHelpers::obtenerMontoTotal($consulta[0]));
             }
 
             $_consultaCitaModel = new ConsultaCitaModel();
+
             $consulta_cita = $_consultaCitaModel->where('consulta_id', '=', $consulta['consulta_id'])->getFirst();
-            if ($consulta_cita != 0) {
+            if ( !is_null($consulta_cita) ) {
                 $_citaModel = new CitaModel();
                 $cita = $_citaModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
 
-                if ($cita) {
-                    $estatus = $consulta['total_consulta'] > $cita->monto_aprobado ? 5 : 3;
+                if ( !is_null($cita) ) {
+                    $estatus = $consulta['monto_total_usd'] > $cita->monto_aprobado ? 5 : 3;
                 }
             } else {
                 $estatus = 3;
             }
-            
-            var_dump($consulta);
 
             ConsultaSeguroService::actualizarEstatusConsulta($data['consulta_id'], $estatus);
+            $respuesta = new Response('CORRECTO');
+            $respuesta->setData($data);
+            return $respuesta->json(200);
 
             // $montoActualizado = $pacienteSeguro->saldo_disponible - $data['monto_consulta_usd'];
             // PacienteSeguroService::actualizarSaldoPaciente($montoActualizado, $_pacienteSeguro);
