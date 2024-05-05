@@ -4,9 +4,20 @@ let root = null;
 let chart = null;
 let series = null;
 
-async function getConsultasAseguradas() {
+export async function getConsultasAseguradas(startDate = null, endDate = null) {
 
-    const consultasList = await getAll("allConsultas");
+    let consultasList = [];
+    const loadingMessage = document.querySelector(".consultasAseguradas.loading");
+    loadingMessage.classList.remove("d-none");
+
+    if(startDate !== null && endDate !== null){
+        consultasList = await getAll(`allConsultas?fecha_inicio=${startDate}&fecha_final=${endDate}`);
+    } else {
+        consultasList = await getAll("allConsultas");
+
+    }
+
+    loadingMessage.classList.add("d-none");
 
     if (consultasList?.consultas_aseguradas === 0 && consultasList?.consultas_normales === 0) {
         let mensajeVacio = document.querySelector(".consultasAseguradas");

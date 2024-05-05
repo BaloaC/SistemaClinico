@@ -287,6 +287,7 @@
                             <p>Médico: <span id="nombreMedico"></span></p>
                             <p>Especialidad: <span id="nombreEspecialidad"></span></p>
                             <p>Tipo de cita: <span id="tipoCita"></span></p>
+                            <p>Exámenes: <span id="examenesCita"></span></p>
                             <p>Estatus: <span id="estatusCita"></span></p>
                             <p>Clave cita: <span id="claveCita"></span></p>
                             <p>Fecha cita: <input type="date" id="fechaCita" class="form-control w-50" disabled></p>

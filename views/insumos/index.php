@@ -132,7 +132,7 @@
                     <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-insumo" class="p-3 px-4">
-                            <label for="nombre">Nombre</label>
+                            <!-- <label for="nombre">Nombre</label>
                             <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameExam" data-max-length="45" required>
                             <small class="form-text">El nombre solo debe contener al menos 3 letras sin caracteres especiales</small>
                             <label for="cantidad">Cantidad</label>
@@ -142,6 +142,49 @@
                             <input type="number" step="any" name="cantidad_min" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small>
                             <label for="nombre">Precio</label>
+                            <input type="number" step="any" name="precio" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <small class="form-text">El precio de ser mayor o igual a 0</small> -->
+                            <label for="nombre">Nombre</label>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameExam" data-max-length="45" required>
+                            <small class="form-text">El nombre solo debe contener al menos 3 letras sin caracteres especiales</small>
+                           
+                            <label for="nombre">Cantidad mínima</label>
+                            <input type="number" step="any" name="cantidad_min" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <small class="form-text">El campo de ser mayor o igual a 0</small>
+
+                            <label for="nombre">Cantidad por unidad</label>
+                            <input type="number" step="any" name="cantidad_unidad" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <small class="form-text">El campo de ser mayor o igual a 0</small>
+
+                            <label for="nombre">Capacidad por unidad</label>
+                            <input type="number" step="any" name="capacidad_unidad" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <small class="form-text">El campo de ser mayor o igual a 0</small>
+
+                            <label for="tipo_medida">Es cobrado</label>
+                            <select name="es_cobrado" class="form-control mb-3" id="es_cobrado" required>
+                                <option value="" selected disabled>Seleccione si ya fue cobrado</option>
+                                <option value="1">Sí</option>
+                                <option value="0">No</option>
+                            </select>
+
+                            <label for="tipo_medida">Tipo de medida</label>
+                            <select name="tipoMedida" class="form-control mb-3" id="tipo_medida" required>
+                                <option value="" selected disabled>Seleccione un tipo de medida</option>
+                                <option value="1">Rollo</option>
+                                <option value="2">Botella</option>
+                                <option value="3">Caja</option>
+                                <option value="4">Unidad</option>
+                            </select>
+
+                            <label for="tipo_medida">Tipo de insumo</label>
+                            <select name="tipoMedida" class="form-control mb-3" id="tipo_insumo" required>
+                                <option value="" selected disabled>Seleccione un tipo de insumo</option>
+                                <option value="2">Medicamento</option>
+                                <option value="1">Insumo</option>
+                            </select>
+                            
+                            <label for="nombre">Precio</label><br>
+                            <small class="text-secondary">(El valor ingresado es en dólares)</small>
                             <input type="number" step="any" name="precio" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El precio de ser mayor o igual a 0</small>
                         </form>

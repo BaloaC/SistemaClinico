@@ -6,9 +6,19 @@ let series = null;
 let title = null;
 let xAxis = null;
 
-async function getMedicoConsulta() {
+export async function getMedicoConsulta(startDate = null, endDate = null) {
 
-    const medicosConsultas = await getAll("allConsultasMedicos");
+    let medicosConsultas = [];
+    const loadingMessage = document.querySelector(".medicoConsulta.loading");
+    loadingMessage.classList.remove("d-none");
+
+    if(startDate !== null && endDate !== null){
+        medicosConsultas = await getAll(`allConsultasMedicos?fecha_inicio=${startDate}&fecha_final=${endDate}`);
+    } else {
+        medicosConsultas = await getAll("allConsultasMedicos");
+    }
+
+    loadingMessage.classList.add("d-none");
 
     if (medicosConsultas?.length === 0) {
 

@@ -4,9 +4,19 @@ let root = null;
 let chart = null;
 let series = null;
 
-async function getPacientesByType() {
+export async function getPacientesByType(startRange = null, endRange = null) {
 
-    const pacientesList = await getAll("pacientesByType");
+    let pacientesList = [];
+    const loadingMessage = document.querySelector(".pacienteTipo.loading");
+    loadingMessage.classList.remove("d-none");
+
+    if(startRange !== null && endRange !== null){
+        pacientesList = await getAll(`pacientesByType?inicio_rango=${startRange}&fin_rango=${endRange}`);
+    } else{
+        pacientesList = await getAll("pacientesByType");
+    }
+
+    loadingMessage.classList.add("d-none");
 
     if (pacientesList?.length === 0) {
 

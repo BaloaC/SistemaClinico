@@ -6,9 +6,20 @@ let series = null;
 let title = null;
 let xAxis = null;
 
-async function getAllConsultasEspecialidades() {
-    const allConsultasEspecialidades = await getAll("allConsultasEspecialidades");
+export async function getAllConsultasEspecialidades(startDate = null, endDate = null) {
 
+    let allConsultasEspecialidades = [];
+    const loadingMessage = document.querySelector(".consultasEspecialidad.loading");
+    loadingMessage.classList.remove("d-none");
+    
+    if(startDate !== null && endDate !== null){
+        allConsultasEspecialidades = await getAll(`allConsultasEspecialidades?fecha_inicio=${startDate}&fecha_final=${endDate}`);
+    } else {
+        allConsultasEspecialidades = await getAll("allConsultasEspecialidades");
+    }
+    
+    loadingMessage.classList.add("d-none");
+    
     if (allConsultasEspecialidades?.length === 0) {
         let mensajeVacio = document.querySelector(".consultasEspecialidad");
         if (mensajeVacio.classList.contains("d-none")) {
@@ -130,6 +141,8 @@ async function getAllConsultasEspecialidades() {
 
 
 
+        console.log(allConsultasEspecialidades);
+            
         // Set initial data
         xAxis.data.setAll(allConsultasEspecialidades.slice(0, 5));
         series.data.setAll(allConsultasEspecialidades.slice(0, 5));
