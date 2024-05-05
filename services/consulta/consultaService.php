@@ -176,23 +176,19 @@ class ConsultaService {
         $_citaModel = new CitaModel;
         $cita_previa = $_citaModel->where('cita_id', '=', $formulario['cita_id'])->getFirst();
 
-        if ($cita_previa->tipo_cita == 1 && array_key_exists('examenes', $formulario)) {
-            ConsultaHelper::insertarExamen($formulario['examenes'], $consulta_separada[0]['consulta_id']);
+        // obtenemos los exámenes que no estén registrados en cita_examen
+        $examenes_filtrados = ConsultaHelper::obtenerExamenesFiltrados($formulario['cita_id'], $formulario['examenes']);
+
+        if (count($examenes_filtrados) > 0) {
+            if ($cita_previa->tipo_cita == 1 && array_key_exists('examenes', $formulario)) {
+                ConsultaHelper::insertarExamen($examenes_filtrados, $consulta_separada[0]['consulta_id']);
+            }
+    
+            if ($cita_previa->tipo_cita == 2 && array_key_exists('examenes', $formulario)) {
+                ConsultaHelper::insertarExamenesSeguro($examenes_filtrados, $consulta_separada[0]['consulta_id']);
+            }
         }
-
-        if ($cita_previa->tipo_cita == 2 && array_key_exists('examenes', $formulario)) {
-            ConsultaHelper::insertarExamenesSeguro($formulario['examenes'], $consulta_separada[0]['consulta_id']);
-        }
-
-        // if (array_key_exists('insumos', $formulario)) {
-        //     if ($cita_previa->tipo_cita == 1) {
-        //         ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], false);
-        //     }
-
-        //     if ($cita_previa->tipo_cita == 2) {
-        //         ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_separada[0]['consulta_id'], true);
-        //     }
-        // }
+        
         if (array_key_exists('referidos', $formulario)) {
             ConsultaHelper::insertarReferidos($formulario['referidos'], $consulta_separada[0]['consulta_id']);
         }

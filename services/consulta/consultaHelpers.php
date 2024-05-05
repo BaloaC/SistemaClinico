@@ -121,6 +121,15 @@ class ConsultaHelper {
             $consultas->recipes = $consulta_recipes;
         }
 
+        $_consultaReferidos = new ConsultaReferidoModel();
+        $innersRef = $_consultaReferidos->listInner(["especialidad" => "consulta_referidos"]);
+        $consulta_referidos = $_consultaReferidos->where('consulta_referidos.consulta_id', '=', $consulta_id)
+                                                ->innerJoin(["especialidad.nombre", "especialidad.especialidad_id"], $innersRef, "consulta_referidos");
+
+        if($consulta_referidos){
+            $consultas->referidos = $consulta_referidos;
+        }
+
         $_consultaModel = new ConsultaModel();
         $innersRec = $_consultaModel->listInner(ConsultaHelper::$arrayInnerRec);
         $recipesList = $_consultaModel->where('consulta_recipe.consulta_id', '=', $consulta_id)
@@ -157,6 +166,21 @@ class ConsultaHelper {
         ];
 
         return $consulta_examen;
+    }
+
+    public static function obtenerExamenesFiltrados($cita_id, $examenes) {
+        $examenes_filtrados = [];
+
+        foreach ($examenes as $examen) {
+            $_citaExamenModel = new CitaExamenModel();
+            $cita_examenes = $_citaExamenModel->where('cita_id', '=', $cita_id)->where('examen_id', '=', $examen['examen_id'])->getFirst();    
+
+            if (!$cita_examenes) {
+                $examenes_filtrados[] = $examen;
+            }
+        }
+        
+        return $examenes_filtrados;
     }
 
     public static function insertarConsulta($formulario, $separar) {
