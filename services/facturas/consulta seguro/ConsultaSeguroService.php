@@ -77,6 +77,13 @@ class ConsultaSeguroService {
 
         $_consultaSeguroModel = new ConsultaSeguroModel();
         $consultaSeguro[] = $_consultaSeguroModel->where('consulta_seguro_id', '=', $consulta_id)->getFirst();
+        
+        if (is_null($consultaSeguro[0])) {
+            $respuesta = new Response(false, 'Esa consulta por seguro no se encuentra registrda');
+            echo $respuesta->json(400);
+            exit();
+        }
+
         $consulta = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultaSeguro);
         
         if ( isset( $consulta['consulta_emergencia'] ) ) { // Si es por emergencia

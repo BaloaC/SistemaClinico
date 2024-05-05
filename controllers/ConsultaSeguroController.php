@@ -81,6 +81,8 @@ class ConsultaSeguroController extends Controller{
                 $data['monto_consulta_usd'] = 0;
             }
 
+            $data['cobertura_seguro'] = $cita->monto_aprobado;
+
             $id = $_consultaSeguroModel->insert($data);
             $data['factura_id'] = $id;
             $mensaje = ($id > 0);
@@ -112,7 +114,7 @@ class ConsultaSeguroController extends Controller{
                 $cita = $_citaModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
 
                 if ( !is_null($cita) ) {
-                    $estatus = $consulta['monto_total_usd'] > $cita->monto_aprobado ? 5 : 3;
+                    $estatus = $consulta['monto_total_usd'] > $cita->monto_aprobado ? 4 : 3;
                 }
             } else {
                 $estatus = 3;
