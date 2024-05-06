@@ -292,6 +292,7 @@ Router::get('/factura/consultaSeguro/consulta', ConsultaSeguroController::class 
 Router::get('/factura/consultaSeguro/:id', ConsultaSeguroController::class . '@listarConsultaSeguroPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::get('/factura/consultaSeguro/seguro/:id', ConsultaSeguroController::class . '@listarConsultaSeguroPorSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::get('/factura/consultaSeguro/paciente/:id', ConsultaSeguroController::class . '@listarConsultaSeguroPorPaciente', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+Router::get('/factura/consultaSeguro/consulta/:id', ConsultaSeguroController::class . '@listarConsultaSeguroPorConsulta', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::post('/factura/consultaSeguro', ConsultaSeguroController::class . '@insertarConsultaSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::put('/factura/consultaSeguro/:id', ConsultaSeguroController::class . '@actualizarConsultaSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::delete('/factura/consultaSeguro/:id', ConsultaSeguroController::class . '@eliminarConsultaSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);

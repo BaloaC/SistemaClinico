@@ -726,6 +726,7 @@ CREATE TABLE  IF NOT EXISTS `factura_consulta` (
     `monto_consulta_bs` float NOT NULL,
     `estatus_fac` enum('1','2') NOT NULL DEFAULT '1',
     `monto_consulta_usd` float NOT NULL,
+    `tipo_consulta` ENUM('1','2') NOT NULL,
     PRIMARY KEY (`factura_consulta_id`),
     FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY (`paciente_id`) REFERENCES `paciente` (`paciente_id`) ON DELETE NO ACTION ON UPDATE NO ACTION

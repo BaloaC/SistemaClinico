@@ -7,6 +7,7 @@ class FacturaConsultaService {
         $selectConsulta = array(
             "factura_consulta.factura_consulta_id",
             "factura_consulta.consulta_id",
+            "factura_consulta.tipo_consulta",
             "factura_consulta.metodo_pago",
             "factura_consulta.monto_consulta_bs",
             "factura_consulta.monto_consulta_usd",
@@ -41,9 +42,7 @@ class FacturaConsultaService {
         $monto_total_consultas_usd = 0;
         
         foreach ($facturasList as $factura) {
-            
             if ( array_key_exists('date', $_GET) ) {
-                
                 $informacion_consulta = FacturaConsultaHelpers::obtenerInformacion($factura); 
                 // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
 
@@ -60,8 +59,17 @@ class FacturaConsultaService {
             } else {
                 $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura);
                 // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
-                $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
 
+                if (!isset($consulta_info['nombre_paciente'])) {
+                    $_consultaCitaModel = new ConsultaCitaModel();
+                    $inners = $_consultaCitaModel->listInner(['cita' => 'consulta_cita', 'paciente' => 'cita']);
+                    $informacion_paciente = $_consultaCitaModel->where('consulta_cita.consulta_id', '=', $factura->consulta_id)
+                                                    ->innerJoin(['paciente.nombre AS nombre_paciente', 'paciente.apellidos'], $inners, 'consulta_cita');
+                    
+                    $consulta_info = array_merge($consulta_info, (array) $informacion_paciente[0]);
+                }
+
+                $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
                 $consultaList[] = array_merge($consulta_info, $examenes_consulta);
             }
         }

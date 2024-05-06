@@ -97,6 +97,30 @@ class ConsultaSeguroService {
         return $consulta;
     }
 
+    public static function listarConsultaSeguroPorConsultaId($consulta_id) {
+
+        $_consultaSeguroModel = new ConsultaSeguroModel();
+        $consultaSeguro[] = $_consultaSeguroModel->where('consulta_id', '=', $consulta_id)->getFirst();
+        
+        if (is_null($consultaSeguro[0])) {
+            $respuesta = new Response(false, 'Esa consulta por seguro no se encuentra registrda');
+            echo $respuesta->json(400);
+            exit();
+        }
+
+        $consulta = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultaSeguro);
+        
+        if ( isset( $consulta['consulta_emergencia'] ) ) { // Si es por emergencia
+            $consulta[0] = $consulta[0];
+            // $consultas[] = ConsultaSeguroHelpers::calcularConsultaEmergencia($consulta);
+
+        } else { // Si no es consulta por emergencia
+            $consulta[0] = array_merge($consulta[0], FacturaConsultaHelpers::obtenerMontoTotal($consulta[0]));
+        }
+        
+        return $consulta;
+    }
+
     public static function listarConsultasSeguroPorSeguro($seguro_id) {
 
         $_consultaSeguroModel = new ConsultaSeguroModel();
