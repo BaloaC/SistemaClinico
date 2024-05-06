@@ -314,6 +314,114 @@ class ConsultaService {
         }
     }
 
+    public static function obtenerConsultasAseguradas($params) {
+        $_consultaCitaModel = new ConsultaCitaModel();
+        $_consultaCitaModel->where('consulta.estatus_con', '!=', 2);
+        
+        if (isset($params['estatus'])) {
+            $_consultaCitaModel->where('consulta.estatus_con', '=', $params['estatus']);
+        }
+
+        if (isset($params['start']) || isset($params['search']) || isset($params['page']) ){
+            if (isset($params['start']) || isset($params['page'])) {
+                $size = isset($params['length']) ? $params['length'] : 10;
+                $pagina_actual = isset($params['page']) ? $params['page'] : floor($params['start'] / $params['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_consultaCitaModel->limit([$primer_registro, $size]);
+            }
+
+            if(isset($params['search'])) {
+                if (is_array($params['search']) && strlen($params['search']['value']) > 0) {
+                    $_consultaCitaModel->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']['value']}%");
+                } else if (!is_array($params['search']) && strlen($params['search']) > 0 && $params['select']) {
+                    $_consultaCitaModel->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
+                }
+            }
+        }
+
+        $inners = $_consultaCitaModel->listInner(["consulta" => "consulta_cita", "cita" => "consulta_cita", "paciente" => "cita"]);
+        $select = ["consulta.consulta_id", "consulta.observaciones", "paciente.nombre", "paciente.apellidos"];
+        $lista = $_consultaCitaModel->where('cita.tipo_cita', '=', '2')->innerJoin($select, $inners, "consulta_cita");
+        $_consultaCitaModel->resetValues();
+
+        if ( isset($params['search']) ) {
+            if (!is_array($params['search']) && strlen($params['search']) > 0 && $params['select']) {
+                $_consultaCitaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
+            } else if ( strlen($params['search']['value']) > 0) {
+                $_consultaCitaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']['value']}%");
+            } else {
+                $_consultaCitaModel->setSelect('COUNT(*) AS total');
+            }
+        } else {
+            $_consultaCitaModel->setSelect('COUNT(*) AS total');
+        }
+
+        $_consultaCitaModel->where('cita.tipo_cita', '=', '2')->where('consulta.estatus_con', '!=', 2);
+
+        if (isset($params['estatus'])) {
+            $_consultaCitaModel->where('consulta.estatus_con', '=', $params['estatus']);
+        }
+        
+        $lista_count = $_consultaCitaModel->innerJoin($select, $inners, "consulta_cita");
+        return ['lista_count' => $lista_count, 'lista' => $lista];
+    }
+
+    public static function obtenerConsultasPorEmergencia($params) {
+        $_consultaSinCitaModel = new ConsultaSinCitaModel();
+        $_consultaSinCitaModel->where('consulta.estatus_con', '!=', 2);
+        
+        if (isset($params['estatus'])) {
+            $_consultaSinCitaModel->where('consulta.estatus_con', '=', $params['estatus']);
+        }
+
+        if (isset($params['start']) || isset($params['search']) || isset($params['page']) ){
+            if (isset($params['start']) || isset($params['page'])) {
+                $size = isset($params['length']) ? $params['length'] : 10;
+                $pagina_actual = isset($params['page']) ? $params['page'] : floor($params['start'] / $params['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_consultaSinCitaModel->limit([$primer_registro, $size]);
+            }
+
+            if(isset($params['search'])) {
+                if (is_array($params['search']) && strlen($params['search']['value']) > 0) {
+                    $_consultaSinCitaModel->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']['value']}%");
+                } else if (!is_array($params['search']) && strlen($params['search']) > 0 && $params['select']) {
+                    $_consultaSinCitaModel->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
+                }
+            }
+        }
+
+        $inners = $_consultaSinCitaModel->listInner(["consulta" => "consulta_sin_cita", "paciente" => "consulta_sin_cita"]);
+        $select = ["consulta.consulta_id", "consulta.observaciones", "paciente.nombre", "paciente.apellidos"];
+        $lista = $_consultaSinCitaModel->innerJoin($select, $inners, "consulta_sin_cita");
+        $_consultaSinCitaModel->resetValues();
+
+        if ( isset($params['search']) ) {
+            if (!is_array($params['search']) && strlen($params['search']) > 0 && $params['select']) {
+                $_consultaSinCitaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
+            } else if ( strlen($params['search']['value']) > 0) {
+                $_consultaSinCitaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']['value']}%");
+            } else {
+                $_consultaSinCitaModel->setSelect('COUNT(*) AS total');
+            }
+        } else {
+            $_consultaSinCitaModel->setSelect('COUNT(*) AS total');
+        }
+
+        $_consultaSinCitaModel->where('consulta.estatus_con', '!=', 2);
+
+        if (isset($params['estatus'])) {
+            $_consultaSinCitaModel->where('consulta.estatus_con', '=', $params['estatus']);
+        }
+        
+        $lista_count = $_consultaSinCitaModel->innerJoin($select, $inners, "consulta_sin_cita");
+        return ['lista_count' => $lista_count, 'lista' => $lista];
+    }
+
     public static function obtenerConsultaPorCita($paciente_id) {
         $_citaModel = new CitaModel();
         $innersCita = $_citaModel->listInner(ConsultaService::$innerConsultaCita);

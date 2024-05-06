@@ -544,6 +544,7 @@ CREATE TABLE  IF NOT EXISTS `consulta_emergencia` (
     `total_examenes_bs` float NOT NULL,
     `total_consulta` float NOT NULL,
     `total_consulta_bs` float NOT NULL,
+    `monto_aprobado` float NOT NULL DEFAULT '0',
     PRIMARY KEY (`consulta_emergencia_id`),
     FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY (`paciente_id`) REFERENCES `paciente` (`paciente_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,

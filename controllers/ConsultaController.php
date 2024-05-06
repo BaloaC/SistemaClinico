@@ -287,56 +287,10 @@ class ConsultaController extends Controller {
     }
 
     public function listarConsultasAseguradas() {
-        $_consultaCitaModel = new ConsultaCitaModel();
-        $_consultaCitaModel->where('consulta.estatus_con', '!=', 2);
-        
-        if (isset($_GET['estatus'])) {
-            $_consultaCitaModel->where('consulta.estatus_con', '=', $_GET['estatus']);
-        }
+        $consultas_aseguradas = ConsultaService::obtenerConsultasAseguradas($_GET);
+        $consultas_por_emergencia = ConsultaService::obtenerConsultasPorEmergencia($_GET);
+        $cantidad_registros = count($consultas_aseguradas['lista_count']) + count($consultas_por_emergencia['lista_count']);
 
-        if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
-            if (isset($_GET['start']) || isset($_GET['page'])) {
-                $size = isset($_GET['length']) ? $_GET['length'] : 10;
-                $pagina_actual = isset($_GET['page']) ? $_GET['page'] : floor($_GET['start'] / $_GET['length']) + 1;
-
-                $ultimo_registro = $pagina_actual * $size;
-                $primer_registro = $ultimo_registro - $size;
-                $_consultaCitaModel->limit([$primer_registro, $size]);
-            }
-
-            if(isset($_GET['search'])) {
-                if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
-                    $_consultaCitaModel->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$_GET['search']['value']}%");
-                } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
-                    $_consultaCitaModel->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$_GET['search']}%");
-                }
-            }
-        }
-
-        $inners = $_consultaCitaModel->listInner(["consulta" => "consulta_cita", "cita" => "consulta_cita", "paciente" => "cita"]);
-        $select = ["consulta.consulta_id", "consulta.observaciones", "paciente.nombre", "paciente.apellidos"];
-        $lista = $_consultaCitaModel->where('cita.tipo_cita', '=', '2')->innerJoin($select, $inners, "consulta_cita");
-        $_consultaCitaModel->resetValues();
-
-        if ( isset($_GET['search']) ) {
-            if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
-                $_consultaCitaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$_GET['search']}%");
-            } else if ( strlen($_GET['search']['value']) > 0) {
-                $_consultaCitaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$_GET['search']['value']}%");
-            } else {
-                $_consultaCitaModel->setSelect('COUNT(*) AS total');
-            }
-        } else {
-            $_consultaCitaModel->setSelect('COUNT(*) AS total');
-        }
-
-        $_consultaCitaModel->where('cita.tipo_cita', '=', '2')->where('consulta.estatus_con', '!=', 2);
-
-        if (isset($_GET['estatus'])) {
-            $_consultaCitaModel->where('consulta.estatus_con', '=', $_GET['estatus']);
-        }
-        
-        $lista_count = $_consultaCitaModel->innerJoin($select, $inners, "consulta_cita");
-        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($lista_count), $lista);
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $cantidad_registros, array_merge($consultas_aseguradas['lista'], $consultas_por_emergencia['lista']));
     }
 }

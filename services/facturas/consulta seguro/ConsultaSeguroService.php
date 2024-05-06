@@ -34,6 +34,13 @@ class ConsultaSeguroService {
 
         $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
         $consultaEmergencia = $_consultaEmergenciaModel->where('consulta_id', '=', $formulario['consulta_id'])->getFirst();
+        $_consultaModel = new ConsultaModel();
+
+        if ($consultaEmergencia->monto_aprobado < $consultaEmergencia->total_consulta) {    
+            $consulta = $_consultaModel->where('consulta_id', '=', $formulario['consulta_id'])->update(['estatus_con' => 4]);
+        } else {
+            $consulta = $_consultaModel->where('consulta_id', '=', $formulario['consulta_id'])->update(['estatus_con' => 3]);
+        }
 
         $formulario['seguro_id'] = $consultaEmergencia->seguro_id;
         $formulario['monto_consulta_usd'] = $consultaEmergencia->total_consulta;
