@@ -204,7 +204,7 @@ class ConsultaSeguroController extends Controller{
         $_citaModel = new CitaModel();
         $citas = $_citaModel->where('paciente_id', '=', $paciente_id)->where('estatus_cit','!=', 2)->where('tipo_cita', '=', 2)->getAll();
         $consultas_citas = [];
-        echo '<pre>';
+        
         foreach ($citas as $cita) {
             
             $_consultaCitaModel = new ConsultaCitaModel();
