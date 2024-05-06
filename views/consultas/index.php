@@ -256,27 +256,27 @@
                                 <button type="button" class="btn btn-primary mt-3 w-25" style="display: none;" id="addMedicoPago" onclick="addMedicoPagoInput()">Añadir otro médico</button>
                             </div>
 
-                            <div class="row mt-4">
+                            <div class="row mt-4 info-insumos-emergencia" style="display: none;">
                                 <h5>Insumos utilizados en la Consulta (Opcional)</h5>
                                 <div class="row align-items-start">
                                     <div class="col-12 col-md-5">
                                         <label for="insumo">Insumo</label>
-                                        <select id="s-insumo" class="form-control insumo-id" data-active="0">
+                                        <select id="s-insumo" class="form-control insumo-id" data-active="0" disabled>
                                             <option></option>
                                         </select>
                                     </div>
                                     <div class="col-12 col-md-5">
                                         <label for="cantidad">Cantidad utilizada</label>
-                                        <input type="number" step="any" data-validate="true" data-type="number" class="form-control insumo-cant">
+                                        <input type="number" step="any" data-validate="true" data-type="number" class="form-control insumo-cant" disabled>
                                         <small class="form-text col-12">Solo se permiten números</small>
                                     </div>
                                     <div class="col-3 col-md-1 d-none">
                                         <button type="button" class="btn" onclick="deleteInput(this,'.insumo-id')"><i class="fas fa-times m-0"></i></button>
                                     </div>
                                 </div>
+                                <button type="button" class="btn btn-primary mt-3 w-25" style="display: none;" id="addInsumo" onclick="addInsumoInput()">Añadir otro insumo</button>
                             </div>
 
-                            <button type="button" class="btn btn-primary mt-3" id="addInsumo" onclick="addInsumoInput()">Añadir otro insumo</button>
 
                             <div class="row mt-4">
                                 <h5>Recipes otorgados en la Consulta (Opcional)</h5>
