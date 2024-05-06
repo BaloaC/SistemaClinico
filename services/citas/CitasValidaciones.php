@@ -232,4 +232,24 @@ class CitasValidaciones {
             }
         }
     }
+
+    public static function validarExamenesCitaAsegurada($formulario) {
+        $_seguroExamen = new SeguroExamenModel();
+        $seguro_examen = $_seguroExamen->where('seguro_id', '=', $formulario['seguro_id'])->getFirst();
+
+        $examenes = explode(',', $seguro_examen->examenes);
+        $hay_examenes_asegurados = 0;
+        
+        foreach ($formulario['examenes'] as $examen) {
+            if (array_search($examen['examen_id'], $examenes)) {
+                $hay_examenes_asegurados += 1;
+            }
+        }
+
+        if ($hay_examenes_asegurados == 0) {
+            $respuesta = new Response(false, 'Ninguno de los exámenes son cubiertos por el seguro, por favor registre una cita natural');         
+            echo $respuesta->json(400);
+            exit();
+        }
+    }
 };

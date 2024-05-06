@@ -68,6 +68,10 @@ class CitaController extends Controller {
 
         if (array_key_exists('examenes', $_POST)) {
             CitasValidaciones::validarCitaExamen($_POST['examenes']);
+
+            if ($_POST['tipo_cita'] == 2) {
+                CitasValidaciones::validarExamenesCitaAsegurada($_POST);
+            }
         }
 
         $validarCita = new Validate;
