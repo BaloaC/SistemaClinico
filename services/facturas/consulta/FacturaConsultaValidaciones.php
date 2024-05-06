@@ -32,12 +32,6 @@ class FacturaConsultaValidaciones {
             exit();
         }
 
-        // if !$validarFactura->isDuplicatedId('paciente_id', 'consulta_id', $formulario['consulta_id'], $formulario['paciente_id'], 'consulta') {
-        //     $respuesta = new Response(false, 'La consulta indicada no coincide con el paciente ingresado');
-        //     echo $respuesta->json(400);
-        //exit();
-        // }
-
         if ( $validarFactura->isDuplicated('factura_consulta', 'consulta_id', $formulario['consulta_id']) ) {
             $respuesta = new Response('DATOS_DUPLICADOS');
             echo $respuesta->json(400);
@@ -52,8 +46,11 @@ class FacturaConsultaValidaciones {
         if (!is_null($consulta)) {
             $_citaModel = new CitaModel();
             $cita = $_citaModel->where('cita_id', '=', $consulta->cita_id)->getFirst();
+            
+            $_consultaModel = new ConsultaModel();
+            $consulta_normal = $_consultaModel->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
 
-            if ($cita->tipo_cita == 2) {
+            if ($cita->tipo_cita == 2 && $consulta_normal->estatus_con != 4) {
                 $respuesta = new Response(false, 'Por este medio solo puedes insertar facturas de consultas naturales');
                 echo $respuesta->json(400);
                 exit();

@@ -154,7 +154,7 @@ class ConsultaController extends Controller {
     }
 
     public function listarConsultasPorPaciente($paciente_id) {
-        $params = isset($_GET['estatus']) ? $_GET['estatus'] : null;
+        // $params = isset($_GET['estatus']) ? $_GET['estatus'] : null;
         $lista_consultas = [];
         
         $consultaEmergenciaModel = new ConsultaEmergenciaModel();
@@ -165,8 +165,8 @@ class ConsultaController extends Controller {
                 $consultasModel = new ConsultaModel();
                 $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
 
-                if (!is_null($params)) {
-                    $consultasModel->where('estatus_con', '=', $params);
+                if (isset($_GET['status'])) {
+                    $consultasModel->where('estatus_con', '=', $_GET['status']);
                 }
                 
                 $consulta_normal = $consultasModel->getFirst();
@@ -182,12 +182,11 @@ class ConsultaController extends Controller {
         $consultasSinCitas = $consultasSinCitaModel->where('paciente_id', '=', $paciente_id)->getAll();
         if ($consultasSinCitas != 0 && count($consultasSinCitas) > 0) {
             foreach ($consultasSinCitas as $consulta) {
-
                 $consultasModel = new ConsultaModel();
                 $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
                 
-                if (!is_null($params)) {
-                    $consultasModel->where('estatus_con', '=', $params);
+                if (isset($_GET['status'])) {
+                    $consultasModel->where('estatus_con', '=', $_GET['status']);
                     
                 }
 
@@ -202,18 +201,20 @@ class ConsultaController extends Controller {
         $consultasCitas = ConsultaService::obtenerConsultaPorCita($paciente_id);
         if ($consultasCitas != 0 && count($consultasCitas) > 0) {
             foreach ($consultasCitas as $consulta) {
-                
-                $consultasModel = new ConsultaModel();
-                $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
-
-                if (!is_null($params)) {
-                    $consultasModel->where('estatus_con', '=', $params);
-                }
-
-                $consulta_normal = $consultasModel->getFirst();
-                if (!is_null($consulta_normal)) {
-                    $consulta = array_merge((array) $consulta, (array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id));
-                    $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+                if (isset($_GET['tipo_cita']) && $consulta->tipo_cita == $_GET['tipo_cita'] || !isset($_GET['tipo_cita'])) {
+                    
+                    $consultasModel = new ConsultaModel();
+                    $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
+    
+                    if (isset($_GET['status'])) {
+                        $consultasModel->where('estatus_con', '=', $_GET['status']);
+                    }
+    
+                    $consulta_normal = $consultasModel->getFirst();
+                    if (!is_null($consulta_normal)) {
+                        $consulta = array_merge((array) $consulta, (array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id));
+                        $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+                    }
                 }
             }
         }
@@ -231,7 +232,7 @@ class ConsultaController extends Controller {
 
         $inners = $_antecedenteModel->listInner($innerAntecedentes);
         $antecedentList = $_antecedenteModel->where('antecedentes_medicos.paciente_id', '=', $paciente_id)
-                                            ->where('estatus_ant', ($params ? '=' : '!='), ($params ? $params : '2'))
+                                            ->where('estatus_ant', '!=', 2)
                                             ->innerJoin($selectAntecedentes, $inners, "antecedentes_medicos");
 
         if (count($antecedentList) > 0) {

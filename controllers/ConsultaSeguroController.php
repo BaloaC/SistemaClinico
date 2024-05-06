@@ -199,6 +199,32 @@ class ConsultaSeguroController extends Controller{
         return $respuesta->json(200);
     }
 
+    public function listarConsultaSeguroPorPaciente($paciente_id) {
+
+        $_citaModel = new CitaModel();
+        $citas = $_citaModel->where('paciente_id', '=', $paciente_id)->where('estatus_cit','!=', 2)->where('tipo_cita', '=', 2)->getAll();
+        $consultas_citas = [];
+        echo '<pre>';
+        foreach ($citas as $cita) {
+            
+            $_consultaCitaModel = new ConsultaCitaModel();
+            $inners = $_consultaCitaModel->listInner(['consulta' => 'consulta_cita'], ['consulta_seguro', 'consulta', 'consulta'], false);
+            $select = ['consulta.consulta_id', 'consulta_seguro.consulta_seguro_id'];
+            $consulta_cita = $_consultaCitaModel->where('consulta_cita.cita_id', '=', $cita->cita_id)
+                                                ->where('consulta.estatus_con', '=', 4)
+                                                ->innerJoin($select, $inners, 'consulta_cita');
+                                                
+            if (!is_null($consulta_cita) && count($consulta_cita) > 0) {
+                $consultas_citas[] = $consulta_cita[0];
+            }
+        }
+        
+        $consultas_seguros = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultas_citas);
+        $factura = FacturaConsultaHelpers::obtenerMontoTotal($consultas_seguros[0]);
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($consultas_seguros), $factura);
+
+    }
+
     public function eliminarConsultaSeguro($consulta_seguro_id){
 
         $validarConsulta = new Validate;
