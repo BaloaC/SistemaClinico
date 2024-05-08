@@ -219,15 +219,25 @@ class ConsultaSeguroController extends Controller{
                     $consultas_citas[] = $consulta_cita[0];
                 }
             }
-
+            
             $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
             $consultas_emergencias = $_consultaEmergenciaModel->where('paciente_id', '=', $paciente_id)->getAll();
-            $consultas_citas = array_merge($consultas_emergencias, $consultas_citas);
+            $consultas_pacientes = [];
+
+            if (count($consultas_citas) > 0 && count($consultas_emergencias) > 0) {
+                $consultas_pacientes = array_merge($consultas_citas, $consultas_emergencias);
+            } else {
+                $consultas_pacientes = ($consultas_emergencias || $consultas_citas);
+            }
             
-            if (count($consultas_citas) > 0) {
-                $consultas_seguros = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultas_citas);
-                $factura = FacturaConsultaHelpers::obtenerMontoTotal($consultas_seguros[0]);
-                Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($consultas_seguros), $factura);
+            if (count($consultas_pacientes) > 0) {
+                $consultas_seguros = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultas_pacientes);
+                $facturas = [];
+
+                foreach ($consultas_seguros as $consulta) {
+                    $facturas[] = FacturaConsultaHelpers::obtenerMontoTotal($consultas_seguros[0]);
+                }
+                Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($facturas), $facturas);
             } else {
 
                 $respuesta = new Response(false, 'El paciente seleccionado no tiene consultas aseguradas facturadas');
