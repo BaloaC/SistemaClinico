@@ -432,6 +432,7 @@ CREATE TABLE  IF NOT EXISTS `consulta` (
     `observaciones` varchar(255) DEFAULT NULL,
     `fecha_consulta` date NOT NULL,
     `es_emergencia` tinyint(1) NOT NULL DEFAULT 0,
+    `tipo_servicio` enum('1','2') NOT NULL DEFAULT '1',
     `estatus_con` enum('1','2','3', '4') NOT NULL DEFAULT '1',
     PRIMARY KEY (`consulta_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -725,9 +726,9 @@ CREATE TABLE  IF NOT EXISTS `factura_consulta` (
     `paciente_id` int(11) NOT NULL,
     `metodo_pago` varchar(20) NOT NULL,
     `monto_consulta_bs` float NOT NULL,
-    `estatus_fac` enum('1','2') NOT NULL DEFAULT '1',
     `monto_consulta_usd` float NOT NULL,
     `tipo_consulta` ENUM('1','2') NOT NULL,
+    `estatus_fac` enum('1','2') NOT NULL DEFAULT '1',
     PRIMARY KEY (`factura_consulta_id`),
     FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY (`paciente_id`) REFERENCES `paciente` (`paciente_id`) ON DELETE NO ACTION ON UPDATE NO ACTION

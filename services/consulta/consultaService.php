@@ -177,7 +177,10 @@ class ConsultaService {
         $cita_previa = $_citaModel->where('cita_id', '=', $formulario['cita_id'])->getFirst();
 
         // obtenemos los exámenes que no estén registrados en cita_examen
-        $examenes_filtrados = ConsultaHelper::obtenerExamenesFiltrados($formulario['cita_id'], $formulario['examenes']);
+        $examenes_filtrados = [];
+        if (array_key_exists('examenes', $formulario)) {
+            $examenes_filtrados = ConsultaHelper::obtenerExamenesFiltrados($formulario['cita_id'], $formulario['examenes']);
+        }
 
         if (count($examenes_filtrados) > 0) {
             if ($cita_previa->tipo_cita == 1 && array_key_exists('examenes', $formulario)) {
