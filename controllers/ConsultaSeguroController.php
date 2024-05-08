@@ -205,24 +205,37 @@ class ConsultaSeguroController extends Controller{
         $citas = $_citaModel->where('paciente_id', '=', $paciente_id)->where('estatus_cit','!=', 2)->where('tipo_cita', '=', 2)->getAll();
         $consultas_citas = [];
         
-        foreach ($citas as $cita) {
-            
-            $_consultaCitaModel = new ConsultaCitaModel();
-            $inners = $_consultaCitaModel->listInner(['consulta' => 'consulta_cita'], ['consulta_seguro', 'consulta', 'consulta'], false);
-            $select = ['consulta.consulta_id', 'consulta_seguro.consulta_seguro_id'];
-            $consulta_cita = $_consultaCitaModel->where('consulta_cita.cita_id', '=', $cita->cita_id)
-                                                ->where('consulta.estatus_con', '=', 4)
-                                                ->innerJoin($select, $inners, 'consulta_cita');
-                                                
-            if (!is_null($consulta_cita) && count($consulta_cita) > 0) {
-                $consultas_citas[] = $consulta_cita[0];
+        if (!is_null($citas)) {
+            foreach ($citas as $cita) {
+                
+                $_consultaCitaModel = new ConsultaCitaModel();
+                $inners = $_consultaCitaModel->listInner(['consulta' => 'consulta_cita'], ['consulta_seguro', 'consulta', 'consulta'], false);
+                $select = ['consulta.consulta_id', 'consulta_seguro.consulta_seguro_id'];
+                $consulta_cita = $_consultaCitaModel->where('consulta_cita.cita_id', '=', $cita->cita_id)
+                                                    ->where('consulta.estatus_con', '=', 4)
+                                                    ->innerJoin($select, $inners, 'consulta_cita');
+                                                    
+                if (!is_null($consulta_cita) && count($consulta_cita) > 0) {
+                    $consultas_citas[] = $consulta_cita[0];
+                }
             }
-        }
-        
-        $consultas_seguros = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultas_citas);
-        $factura = FacturaConsultaHelpers::obtenerMontoTotal($consultas_seguros[0]);
-        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($consultas_seguros), $factura);
+            
+            if (count($consultas_citas) > 0) {
+                $consultas_seguros = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultas_citas);
+                $factura = FacturaConsultaHelpers::obtenerMontoTotal($consultas_seguros[0]);
+                Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($consultas_seguros), $factura);
+            } else {
 
+                $respuesta = new Response(false, 'El paciente seleccionado no tiene consultas aseguradas facturadas');
+                echo $respuesta->json(400);
+                exit();    
+            }
+
+        } else {
+            $respuesta = new Response(false, 'El paciente seleccionado no tiene consultas aseguradas facturadas');
+            echo $respuesta->json(400);
+            exit();
+        }
     }
 
     public function listarConsultaSeguroPorConsulta($consulta_id) {
