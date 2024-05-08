@@ -219,6 +219,10 @@ class ConsultaSeguroController extends Controller{
                     $consultas_citas[] = $consulta_cita[0];
                 }
             }
+
+            $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
+            $consultas_emergencias = $_consultaEmergenciaModel->where('paciente_id', '=', $paciente_id)->getAll();
+            $consultas_citas = array_merge($consultas_emergencias, $consultas_citas);
             
             if (count($consultas_citas) > 0) {
                 $consultas_seguros = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultas_citas);
