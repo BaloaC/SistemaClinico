@@ -4,7 +4,7 @@ import { defaultSelect } from "./defaultSelect.js";
 import scrollTo from "./scrollTo.js";
 import select2DefaultValue from "./select2DefaultValue.js";
 
-export default async function addModule(module, form, data, successMessage, modal = "#modalReg", alert = ".alert", autoCloseModal = { success: true, error: true }) {
+export default async function addModule(module, form, data, successMessage, modal = "#modalReg", alert = ".alert", autoCloseModal = { success: true, error: true }, modalBody = "modalRegBody") {
 
     const $form = document.getElementById(form),
         $alert = document.querySelector(alert),
@@ -36,7 +36,7 @@ export default async function addModule(module, form, data, successMessage, moda
         defaultSelect();
         select2DefaultValue();
 
-        scrollTo("modalRegBody");
+        scrollTo(modalBody);
 
         if (autoCloseModal.success) {
             setTimeout(() => {
@@ -54,7 +54,7 @@ export default async function addModule(module, form, data, successMessage, moda
         $alert.classList.add("alert-danger");
         $alert.textContent = error.message || error.result.message;
 
-        scrollTo("modalRegBody");
+        scrollTo(modalBody);
 
         if (autoCloseModal.error) {
             setTimeout(() => {

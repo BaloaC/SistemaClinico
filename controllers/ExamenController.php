@@ -99,8 +99,9 @@ class ExamenController extends Controller{
 
         $_examenEspecialidadModel = new ExamenEspecialidadModel();
         $inners = $_examenEspecialidadModel->listInner(["especialidad" => "examen_especialidad"]);
-        $select = ['especialidad.especialidad_id', 'especialidad.nombre'];
+        $select = ['examen_especialidad.examen_especialidad_id','especialidad.especialidad_id', 'especialidad.nombre'];
         $lista->especialidades = $_examenEspecialidadModel->where('examen_especialidad.examen_id', '=', $examen_id)
+                                                            ->where('examen_especialidad.estatus_exa', '!=', 2)
                                                             ->where('especialidad.estatus_esp', '!=', 2)
                                                             ->innerJoin($select, $inners, 'examen_especialidad');
 

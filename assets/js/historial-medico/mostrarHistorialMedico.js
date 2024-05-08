@@ -43,7 +43,7 @@ export default async function mostrarHistorialMedico(id) {
         // const listCita = infoCitas.filter(cita => cita.estatus_cit === "1" || cita.estatus_cit === "3").sort((a,b) => b.cita_id - a.cita_id);
 
         // Obtenemos las consultas por id de manera descendente
-        const listConsultas = infoConsultas.consultas.sort((a, b) => b.consulta_id - a.consulta_id);
+        const listConsultas = infoConsultas.consultas;
 
         nombre.textContent = `${infoPaciente.nombre || infoPaciente.nombre_paciente} ${infoPaciente.apellidos}`;
         fecha.textContent = `${formatToRealDate(infoPaciente.fecha_nacimiento)}`;
@@ -254,11 +254,11 @@ export default async function mostrarHistorialMedico(id) {
                 }
 
                 consulta_id.textContent = el.consulta_id;
-                nombre_medico.textContent = `${el.nombre_medico} ${el.apellidos_medico}`;
-                especialidad.textContent = el.nombre_especialidad;
+                nombre_medico.textContent = `${el.nombre_medico ?? el?.medico[0]?.nombre_medico} ${el.apellidos_medico ?? el?.medico[0]?.apellidos_medico}`;
+                especialidad.textContent = el.nombre_especialidad ?? el?.medico[0]?.nombre_especialidad;
                 fecha_consulta.textContent = formatToRealDate(el.fecha_consulta);
                 observaciones.textContent = el.observaciones || "Sin observaciones";
-                motivo_cita.textContent = el.motivo_cita;
+                motivo_cita.textContent = el.motivo_cita ?? "La consulta es de emergencia";
                 indicaciones.textContent = el.indicaciones !== undefined ? concatItems(el.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación";
 
                 dropdownLink.innerHTML = `<b>Especialidad:</b> ${especialidad.textContent} <br> <b>Fecha:</b> ${fecha_consulta.textContent}`;

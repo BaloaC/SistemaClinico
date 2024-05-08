@@ -115,6 +115,16 @@
             justify-content: space-between;
             text-align: center;
         }
+
+
+        .advertenciaSeguro p{
+            margin: 0;
+        }
+
+        .advertenciaSeguro {
+            border: 1px solid #000;
+            padding: 0.5rem;
+        }
     </style>
 </head>
 
@@ -128,12 +138,20 @@
         <table class="tabla">
             <thead>
                 <tr>
-                    <th colspan="3"></th>
-                    <th colspan="1" id="title">Recibo: <span id="recibo_id"></span></th>
+                    <th colspan="3">
+
+                    <div class="advertenciaSeguro">
+            <p>El monto del siguiente recibo <br> fue constitido por:</p>
+            <p>Seguro: ${monto_seguro}</p>
+            <p>Paciente: ${monto_paciente}</p>
+        </div>
+                    </th>
+                    <th colspan="1" id="title">Recibo: <span id="recibo_id"></span> <br><br> Fecha: <span id="fecha"></span>
+                </th>
                 </tr>
                 <tr>
+                    <th colspan="1" id="title"></th>
                     <th colspan="3" id="title"></th>
-                    <th colspan="1" id="title">Fecha: <span id="fecha"></span></th>
                 </tr>
                 <tr>
                     <th colspan="4" class="separator-section-top">Razón Social: <span id="nombre_seguro"></span></th>
@@ -155,7 +173,7 @@
                     <th>Insumos</th>
                     <th></th>
                     <th>-</th>
-                    <th id="total_insumos">Enrique Chacón</th>
+                    <th id="total_insumos"></th>
                 </tr>
                 <tr class="insumos-head">
                     <th>Exámenes</th>

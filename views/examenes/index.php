@@ -95,24 +95,17 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <!-- <h1 class="modal-title fs-5" id="modalInfoLabel">Ver médico</h1> -->
-                        <h1 class="modal-title fs-5" id="nombreMedico"></h1>
+                        <h1 class="modal-title fs-5" id="nombreExamen"></h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="container">
-                            <p><span class="fw-bold" id="cedulaMedico"></span></p>
-                            <p><span>Datos médico:</span></p>
-                            <p>Nombres: <span id="nombresMedico"></span></p>
-                            <p>Apellidos: <span id="apellidosMedico"></span></p>
-                            <p>Teléfono: <span id="tlfMedico"></span></p>
-                            <p>Dirección: <span id="direcMedico"></span></p>
-                            <p>Especialidad: <span id="especialidadMedico"></span></p>
-                            <p>Horario: <span id="horarioMessage">Este médico no posee horarios</span></p>
+                            <p>Especialidad: <span id="especialidadExamen"></span></p>
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
-                        <a type="button" id="btn-eliminar" class="float-right" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="fas fa-trash"></i></a>
-                        <button type="button" id="btn-actualizar" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAct">Actualizar</button>
+                        <!-- <a type="button" id="btn-eliminar" class="float-right" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="fas fa-trash"></i></a> -->
+                        <!-- <button type="button" id="btn-actualizar" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAct">Actualizar</button> -->
                     </div>
                 </div>
             </div>
@@ -173,6 +166,26 @@
                 </div>
             </div>
         </div>
+
+
+        <!-- Modal Confirmar Eliminar-->
+        <div class="modal fade" id="modalDeleteRelacion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabelRelacion" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalDeleteLabelRelacion">Eliminar relación con seguro</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="delAlertRelacion" class="alert d-none" role="alert"></div>
+                        ¿Estás seguro que deseas eliminar esta relación?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-confirmDeleteRelacion" class="btn btn-danger">Eliminar relación</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script type="module" src="<?php echo Url::to('assets/js/examenes/examenesPagination.js'); ?>"></script>
@@ -183,6 +196,8 @@
     <script type="module" src="<?php echo Url::to('assets/js/examenes/eliminarExamen.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/examenes/filtrarExamenes.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/examenes/examenHechoAqui.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/examenes/mostrarExamenes.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/examenes/eliminarExamenEspecialidad.js'); ?>"></script>
 </body>
 
 </html>

@@ -73,7 +73,7 @@ export function examenesPagination(registros, buscarRegistros = "") {
                             default: return "Desconocido";
                         }
                     } else if (p1 === "precio_examen") {
-                        return registro[p1] !== null ? registro[p1] : "No se ha agreagado el precio";
+                        return registro[p1] !== null ? `$${registro[p1]}` : "No se ha agreagado el precio";
                     }
                     return registro[p1];
                 }

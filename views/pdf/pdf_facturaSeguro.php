@@ -121,7 +121,7 @@
                 </tr>
                 <tr class="insumos-head light">
                     <th>Nombre Paciente</th>
-                    <th id="nombre_paciente">Enrique Chacón</th>
+                    <th id="nombre_paciente"></th>
                 </tr>
                 <tr class="insumos-head">
                     <th>Cédula Paciente</th>

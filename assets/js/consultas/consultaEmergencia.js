@@ -34,8 +34,11 @@ export default async function consultaEmergencia(inputRadio) {
         turnInput(".info-consulta-emergencia", true);
         $(".info-pago-medico").fadeOut("slow");
         turnInput(".info-pago-medico", true);
+        $(".info-insumos-emergencia").fadeOut("slow");
+        turnInput(".info-insumos-emergencia", true);
         turnInput(".inputPacienteBeneficiadoEmergencia", true);
         $("#addMedicoPago").fadeOut("slow");
+        $("#addInsumo").fadeOut("slow");
         seguroSelect.disabled = true;
         sinCitaSi.value = 1;
 
@@ -110,9 +113,12 @@ export default async function consultaEmergencia(inputRadio) {
         $(".info-consulta-emergencia").fadeIn("slow");
         turnInput(".info-consulta-emergencia", false);
         turnInput(".info-pago-medico", false);
+        turnInput(".info-insumos-emergencia", false);
         $(".info-cita").fadeOut("slow");
         $("#registrarPagoMedicoLabel").fadeIn("slow");
         $(".inputRadioPagoMedico").fadeIn("slow");
+        $(".info-insumos-emergencia").fadeIn("slow");
+        $("#addInsumo").fadeIn("slow");
 
         const pagoMedicosChecked = document.getElementById("RegistrarPagoMedicoSi");
         pagoMedicosChecked.checked ? pagoMedicosInput("1") : pagoMedicosInput("0");
@@ -130,8 +136,6 @@ export default async function consultaEmergencia(inputRadio) {
             processResultsAjax: function (data, params) {
 
                 const data1 = [];
-
-                console.log(typeof data, data);
 
                 if (typeof data === "object" && data?.data !== 0) {
                     data?.data.forEach(object => {

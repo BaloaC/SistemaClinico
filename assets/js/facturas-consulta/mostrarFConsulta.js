@@ -74,18 +74,48 @@ const handleModalOpen = async (modalParent) => {
         $("#s-paciente-consulta").on("change", async function () {
 
             let paciente_id = this.value;
-            const infoConsultas = await getById("consultas/paciente", paciente_id);
+            const consultasAseguradas = await getAll(`consultas/paciente/${paciente_id}?tipo_cita=2`);
 
             $("#s-consulta-normal").empty().select2();
-
+            
             dinamicSelect2({
-                obj: infoConsultas?.consultas ?? [],
+                // obj: infoConsultas?.consultas ?? [],
                 selectSelector: `#s-consulta-normal`,
                 selectValue: "consulta_id",
                 selectNames: ["consulta_id", "motivo_cita"],
                 parentModal: "#modalRegNormal",
                 placeholder: "Seleccione una consulta",
-                defaultLabel: ["Consulta por emergencia"]
+                defaultLabel: ["Consulta por emergencia"],
+                ajax: true,
+                ajaxUrl: `consultas/paciente/${paciente_id}?tipo_cita=1`,
+                processResultsAjax: function (data, params) { 
+
+                    const data1 = [];
+
+                    if (typeof data === "object" && data?.data?.consultas !== 0) {
+                        data?.data?.consultas?.forEach(object => {
+                            
+                            const { consulta_id: valorPropiedad1, motivo_cita } = object;
+                            
+                            data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${motivo_cita}` });
+                        });
+                    }
+
+                    if (typeof consultasAseguradas === "object" && consultasAseguradas?.consultas.length !== 0) {
+                        consultasAseguradas?.consultas?.forEach(object => {
+                            
+                            const { consulta_id: valorPropiedad1, motivo_cita, es_emergencia } = object;
+                            let consultaText = es_emergencia == 1 ? "Consulta por emergencia" : (motivo_cita ?? "Consulta asegurada");
+
+                            data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${consultaText}` });
+                        });
+                    }
+
+                    // Transforms the top-level key of the response object from 'data' to 'results'
+                    return {
+                        results: data1 ?? []
+                    };
+                }
             });
 
 
@@ -136,12 +166,12 @@ addEventListener("DOMContentLoaded", e => {
         },
         {
             data: function (row) {
-                return `${convertCurrencyToVES(row.monto_total_bs)} Bs`;
+                return `${convertCurrencyToVES(row.monto_total_bs ?? 0)} Bs`;
             }
         },
         {
             data: function (row) {
-                return `$${row.monto_total_usd}`;
+                return `$${row.monto_total_usd ?? 0}`;
             }
         },
         {
