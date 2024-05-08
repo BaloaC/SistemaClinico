@@ -156,24 +156,33 @@ class ConsultaController extends Controller {
     public function listarConsultasPorPaciente($paciente_id) {
         // $params = isset($_GET['estatus']) ? $_GET['estatus'] : null;
         $lista_consultas = [];
+
+        $condicional_emergencia = "";
+        if (isset($_GET['emergencia'])) {
+            $condicional_emergencia = $_GET['emergencia'];
+        } else {
+            $condicional_emergencia = true;
+        }
         
-        $consultaEmergenciaModel = new ConsultaEmergenciaModel();
-        $consultasEmergencia = $consultaEmergenciaModel->where('paciente_id', '=', $paciente_id)->getAll();
-        if ($consultasEmergencia != 0 && count($consultasEmergencia) > 0) {
-            foreach ($consultasEmergencia as $consulta) {
-
-                $consultasModel = new ConsultaModel();
-                $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
-
-                if (isset($_GET['status'])) {
-                    $consultasModel->where('estatus_con', '=', $_GET['status']);
-                }
-                
-                $consulta_normal = $consultasModel->getFirst();
-                
-                if (!is_null($consulta_normal)) {
-                    $consulta = ConsultaService::obtenerConsultaEmergencia($consulta);
-                    $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+        if ($condicional_emergencia) {
+            $consultaEmergenciaModel = new ConsultaEmergenciaModel();
+            $consultasEmergencia = $consultaEmergenciaModel->where('paciente_id', '=', $paciente_id)->getAll();
+            if ($consultasEmergencia != 0 && count($consultasEmergencia) > 0) {
+                foreach ($consultasEmergencia as $consulta) {
+    
+                    $consultasModel = new ConsultaModel();
+                    $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
+    
+                    if (isset($_GET['status'])) {
+                        $consultasModel->where('estatus_con', '=', $_GET['status']);
+                    }
+                    
+                    $consulta_normal = $consultasModel->getFirst();
+                    
+                    if (!is_null($consulta_normal)) {
+                        $consulta = ConsultaService::obtenerConsultaEmergencia($consulta);
+                        $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+                    }
                 }
             }
         }
@@ -198,23 +207,20 @@ class ConsultaController extends Controller {
             }
         }
         
-        $consultasCitas = ConsultaService::obtenerConsultaPorCita($paciente_id);
+        $consultasCitas = ConsultaService::obtenerConsultaPorCita($paciente_id, isset($_GET['tipo_cita']) ? $_GET['tipo_cita'] : null);
         if ($consultasCitas != 0 && count($consultasCitas) > 0) {
-            foreach ($consultasCitas as $consulta) {
-                if (isset($_GET['tipo_cita']) && $consulta->tipo_cita == $_GET['tipo_cita'] || !isset($_GET['tipo_cita'])) {
-                    
-                    $consultasModel = new ConsultaModel();
-                    $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
-    
-                    if (isset($_GET['status'])) {
-                        $consultasModel->where('estatus_con', '=', $_GET['status']);
-                    }
-    
-                    $consulta_normal = $consultasModel->getFirst();
-                    if (!is_null($consulta_normal)) {
-                        $consulta = array_merge((array) $consulta, (array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id));
-                        $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
-                    }
+            foreach ($consultasCitas as $consulta) {    
+                $consultasModel = new ConsultaModel();
+                $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
+
+                if (isset($_GET['status'])) {
+                    $consultasModel->where('estatus_con', '=', $_GET['status']);
+                }
+
+                $consulta_normal = $consultasModel->getFirst();
+                if (!is_null($consulta_normal)) {
+                    $consulta = array_merge((array) $consulta, (array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id));
+                    $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
                 }
             }
         }

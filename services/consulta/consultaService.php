@@ -422,12 +422,17 @@ class ConsultaService {
         return ['lista_count' => $lista_count, 'lista' => $lista];
     }
 
-    public static function obtenerConsultaPorCita($paciente_id) {
+    public static function obtenerConsultaPorCita($paciente_id, $tipo_cita = null) {
         $_citaModel = new CitaModel();
         $innersCita = $_citaModel->listInner(ConsultaService::$innerConsultaCita);
-        $cita = $_citaModel->where('cita.paciente_id', '=', $paciente_id)
-                                ->where('consulta.estatus_con','!=',2)
-                                ->innerJoin(ConsultaService::$selectConsultaCita, $innersCita, "consulta_cita");
+        $_citaModel->where('cita.paciente_id', '=', $paciente_id)
+                                ->where('consulta.estatus_con','!=',2);
+
+        if (!is_null($tipo_cita)) {
+            $_citaModel->where('cita.tipo_cita', '=', $tipo_cita);
+        }
+
+        $cita = $_citaModel->innerJoin(ConsultaService::$selectConsultaCita, $innersCita, "consulta_cita");
 
         return $cita;
     }
