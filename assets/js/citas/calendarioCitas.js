@@ -28,6 +28,12 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         center: "title",
         right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek"
     },
+    eventTimeFormat: {
+        hour: 'numeric',
+        minute: '2-digit',
+        meridiem: 'short',
+        hour12: true
+    },
     events: citas,
     dateClick: async info => {
 
