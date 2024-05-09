@@ -116,12 +116,27 @@ const handleModalOpen = async (modalParent) => {
                         results: data1 ?? []
                     };
                 }
+
+                
             });
 
 
             const consultaSelect = document.getElementById("s-consulta-normal");
             consultaSelect.disabled = false;
             consultaSelect.classList.add("is-valid");
+
+            $("#s-consulta-normal").on("change", async function(){
+
+
+                const infoConsultaAsegurada = await getAll(`factura/consultaSeguro/consulta/${this.value}`);
+
+                console.log(infoConsultaAsegurada);
+
+                if(infoConsultaAsegurada !== null){
+                    document.getElementById("monto_consulta_usd_consulta").value = parseFloat(infoConsultaAsegurada.monto_total_usd) - parseFloat(infoConsultaAsegurada.cobertura_seguro);
+                }
+
+            })
         });
 
         dinamicSelect2({

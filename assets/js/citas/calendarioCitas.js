@@ -19,7 +19,7 @@ const module = "citas",
     formReg = document.getElementById("info-cita");
 
 const calendarEl = document.getElementById("calendar");
-const citas = async () => parseCitas(await getAll(`${module}/consulta`));
+const citas = async () => await parseCitas(await getAll(`${module}/consulta`));
 
 export const calendar = new FullCalendar.Calendar(calendarEl, {
     locale: "es",
@@ -364,86 +364,10 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             const horariosOrdenados = sortScheduleByDay(infoMedico[0]?.horario);
             const forzarCitaSi = document.getElementById("forzar_cita_si");
             const forzarCitaNo = document.getElementById("forzar_cita_no");
+            const numeroTelefonicoCita = document.getElementById("numeroTelefonicoMedico");
 
-            //         lunes: 1,
-            //         martes: 2,
-            //         miercoles: 3,
-            //         jueves: 4,
-            //         viernes: 5,
-            //         sabado: 6,
-            //         domingo: 0
-            //     }
+            numeroTelefonicoCita.innerText = infoMedico[0].telefono;
 
-            //     const availableDays = [];
-
-            //     schedule.map(scheduleOfTheDay => {
-            //         availableDays.push(daysOfWeek[scheduleOfTheDay.dias_semana]);
-            //     })
-
-            //     const busyHours = [];
-
-            //     flatpickr("#fecha_cita", {
-            //         locale: "es",
-            //         onDayCreate: async function (dObj, dStr, fp, dayElem) {
-
-            //             let dateDayElem = dayElem.dateObj.toISOString().split('T')[0];
-            //             const citasByDate = await getAll(`/citas/fecha?fecha=${dateDayElem}&medico=${idMedic}`);
-
-            //             if (citasByDate.length > 0) {
-
-            //                 const busyHour = [];
-            //                 citasByDate.map(cita => {
-            //                     busyHour.push({
-            //                         hora_entrada: cita.hora_entrada,
-            //                         hora_salida: cita.hora_salida
-            //                     })
-            //                 });
-
-            //                 busyHours.push({ [dateDayElem]: busyHour })
-
-            //                 console.log(busyHours);
-            //             }
-            //         },
-            //         "disable": [
-            //             function (date) {
-
-            //                 // disable weekend days
-            //                 // return true to disable
-            //                 return (date.getDay() === 0 || date.getDay() === 6);
-
-            //             }
-            //         ],
-            //     });
-
-            //     console.log(busyHours);
-
-            //     const limit = [
-            //         ["13:00", "14:00"],
-            //         ["16:00", "17:30"],
-            //         ["18:00", "20:30"]
-            //     ];
-
-            //     // document.querySelector("hora_entrada").addEventListener("change", function () {
-            //     //     // obtenemos el valor introducido por el usuario
-            //     //     const user = this.value.split(":");
-
-            //     //     // recorremos todas las fechas limite
-            //     //     // Si devuelve true, esta entre algunas de las fechas
-            //     //     const result = limit.some(el => {
-            //     //         let start = el[0].split(":");
-            //     //         let end = el[1].split(":");
-
-            //     //         // comprobamos que este entre las fechas limite
-            //     //         return (start[0] < user[0] || (start[0] == user[0] && start[1] <= user[1])) && (end[0] > user[0] || (end[0] == user[0] && end[1] >= user[1]))
-            //     //     });
-
-            //     //     document.getElementById("info").innerHTML = result ? "Correcto" : "Error";
-            //     // });
-
-            // }
-
-            // inputDateHandler(horariosOrdenados, this.value);
-            // 
             const citasManager = new CitasManager(horariosOrdenados, this.value);
             citasManager.obtenerCitas();
 

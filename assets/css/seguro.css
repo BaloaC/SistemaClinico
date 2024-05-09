@@ -63,6 +63,13 @@
     color: initial;
 }
 
+.align-cards {
+    display: flex;
+    width: 100%;
+    justify-content: end;
+    background: #084298;
+}
+
 .list-group-item {
     justify-content: space-between;
 }

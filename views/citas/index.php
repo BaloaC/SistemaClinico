@@ -154,7 +154,8 @@
                                             </ul>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label for="input-radios-container">Permitir citas fuera del horario del médico</label>
+                                            <p>Para asignar citas fuera del horario del médico puede comunicarse con él a través del siguiente número telefónico: <br> <b id="numeroTelefonicoMedico">Seleccione el médico para mostrar su número de contacto</b></p>
+                                            <label for="input-radios-container">¿El médico autorizó la asignación de la cita fuera de su horario establecido?</label>
                                             <div class="input-radios-container">
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_si" value="true">
