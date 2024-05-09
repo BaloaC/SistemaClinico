@@ -104,7 +104,12 @@ class ConsultaController extends Controller {
 
     public function listarConsultas() {
         $_consultaModel = new ConsultaModel();
-        $consultaList = $_consultaModel->where('estatus_con', '=', 1);
+
+        if (isset($_GET['status'])) {
+            $_consultaModel->where('estatus_con', '=', $_GET['status']);
+        } else {
+            $_consultaModel->where('estatus_con', '=', 1);
+        }
         
         if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
             if (isset($_GET['start']) || isset($_GET['page'])) {
@@ -149,7 +154,13 @@ class ConsultaController extends Controller {
             $_consultaModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_consultaModel->where('estatus_con', '=', '1')->getAll();
+        if (isset($_GET['status'])) {
+            $_consultaModel->where('estatus_con', '=', $_GET['status']);
+        } else {
+            $_consultaModel->where('estatus_con', '=', 1);
+        }
+
+        $total_registros = $_consultaModel->getAll();
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $consultas);
     }
 
@@ -257,9 +268,15 @@ class ConsultaController extends Controller {
     public function listarConsultaPorId($consulta_id) {
 
         $_consultaModel = new ConsultaModel();
-        $consultaList = $_consultaModel->where('estatus_con', '=', 1)
-                                        ->where('consulta_id', '=', $consulta_id)
-                                        ->getFirst();
+        $_consultaModel->where('consulta_id', '=', $consulta_id);
+
+        if (isset($_GET['status'])) {
+            $_consultaModel->where('estatus_con', '=', $_GET['status']);
+        } else {
+            $_consultaModel->where('estatus_con', '=', 1);
+        }
+        
+        $consultaList = $_consultaModel->getFirst();
         $consultas = [];
         
         if ($consultaList != null) {

@@ -183,13 +183,13 @@ class ConsultaService {
         }
 
         if (count($examenes_filtrados) > 0) {
-            if ($cita_previa->tipo_cita == 1 && array_key_exists('examenes', $formulario)) {
+            if (array_key_exists('examenes', $formulario)) {
                 ConsultaHelper::insertarExamen($examenes_filtrados, $consulta_separada[0]['consulta_id']);
             }
     
-            if ($cita_previa->tipo_cita == 2 && array_key_exists('examenes', $formulario)) {
-                ConsultaHelper::insertarExamenesSeguro($examenes_filtrados, $consulta_separada[0]['consulta_id']);
-            }
+            // if ($cita_previa->tipo_cita == 2 && array_key_exists('examenes', $formulario)) {
+            //     ConsultaHelper::insertarExamenesSeguro($examenes_filtrados, $consulta_separada[0]['consulta_id']);
+            // }
         }
         
         if (array_key_exists('referidos', $formulario)) {
@@ -225,9 +225,16 @@ class ConsultaService {
     public static function obtenerConsultaNormal($consulta) {
         $_consultaCita = new ConsultaCitaModel();
         $innersCita = $_consultaCita->listInner(ConsultaService::$innerConsultaCita);
-        $es_citada = $_consultaCita->where('consulta_cita.consulta_id', '=', $consulta->consulta_id)
-                                ->where('consulta.estatus_con','=',1)
-                                ->innerJoin(ConsultaService::$selectConsultaCita, $innersCita, "consulta_cita");
+        $_consultaCita->where('consulta_cita.consulta_id', '=', $consulta->consulta_id);
+                                
+
+        if (isset($_GET['status'])) {
+            $_consultaCita->where('consulta.estatus_con','=',$_GET['status']);
+        } else {
+            $_consultaCita->where('consulta.estatus_con','=',1);
+        }
+
+        $es_citada = $_consultaCita->innerJoin(ConsultaService::$selectConsultaCita, $innersCita, "consulta_cita");
         
         if (is_null($es_citada) || count($es_citada) == 0 ) { // Si no es por cita, extraemos la información de consulta_sin_cita
 
