@@ -41,36 +41,38 @@ class FacturaConsultaService {
         $monto_total_consultas_bs = 0;
         $monto_total_consultas_usd = 0;
         
-        foreach ($facturasList as $factura) {
-            if ( array_key_exists('date', $_GET) ) {
-                $informacion_consulta = FacturaConsultaHelpers::obtenerInformacion($factura); 
-                // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
-
-                // verificar para que sirve este codigo
-                // $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
-                // verificar para que sirve este codigo
-                
-                // $factura_consulta = array_merge($informacion_consulta, $insumos_consulta);
-
-                $consultaList['facturas'][] = $informacion_consulta;
-                $monto_total_consultas_bs += $informacion_consulta['monto_consulta_bs'];
-                $monto_total_consultas_usd += $informacion_consulta['monto_consulta_usd'];
-
-            } else {
-                $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura);
-                // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
-
-                if (!isset($consulta_info['nombre_paciente'])) {
-                    $_consultaCitaModel = new ConsultaCitaModel();
-                    $inners = $_consultaCitaModel->listInner(['cita' => 'consulta_cita', 'paciente' => 'cita']);
-                    $informacion_paciente = $_consultaCitaModel->where('consulta_cita.consulta_id', '=', $factura->consulta_id)
-                                                    ->innerJoin(['paciente.nombre AS nombre_paciente', 'paciente.apellidos'], $inners, 'consulta_cita');
+        if (!is_null($facturasList) && count($facturasList)) {
+            foreach ($facturasList as $factura) {
+                if ( array_key_exists('date', $_GET) ) {
+                    $informacion_consulta = FacturaConsultaHelpers::obtenerInformacion($factura); 
+                    // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
+    
+                    // verificar para que sirve este codigo
+                    // $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
+                    // verificar para que sirve este codigo
                     
-                    $consulta_info = array_merge($consulta_info, (array) $informacion_paciente[0]);
+                    // $factura_consulta = array_merge($informacion_consulta, $insumos_consulta);
+    
+                    $consultaList['facturas'][] = $informacion_consulta;
+                    $monto_total_consultas_bs += $informacion_consulta['monto_consulta_bs'];
+                    $monto_total_consultas_usd += $informacion_consulta['monto_consulta_usd'];
+    
+                } else {
+                    $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura);
+                    // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
+    
+                    if (!isset($consulta_info['nombre_paciente'])) {
+                        $_consultaCitaModel = new ConsultaCitaModel();
+                        $inners = $_consultaCitaModel->listInner(['cita' => 'consulta_cita', 'paciente' => 'cita']);
+                        $informacion_paciente = $_consultaCitaModel->where('consulta_cita.consulta_id', '=', $factura->consulta_id)
+                                                        ->innerJoin(['paciente.nombre AS nombre_paciente', 'paciente.apellidos'], $inners, 'consulta_cita');
+                        
+                        $consulta_info = array_merge($consulta_info, (array) $informacion_paciente[0]);
+                    }
+    
+                    $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
+                    $consultaList[] = array_merge($consulta_info, $examenes_consulta);
                 }
-
-                $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
-                $consultaList[] = array_merge($consulta_info, $examenes_consulta);
             }
         }
         

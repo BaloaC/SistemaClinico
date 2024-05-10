@@ -147,6 +147,25 @@ class CitasValidaciones {
         }
     }
 
+    public static function validarDisponibilidadReprogramacion($cita) {
+        $_citaModel = new CitaModel();
+        $cita_actual = $_citaModel->where('cita_id', '=', $cita['cita_id'])->getFirst();
+        // Validamos que no haya otra cita a esa hora
+        $_citasDelDía = new CitaModel();
+        $isDuplicated = $_citasDelDía->where('fecha_cita', '=', $cita['fecha_cita'])->where('hora_entrada', '>=', $cita['hora_entrada'])->where('hora_entrada', '<=', $cita['hora_salida'])->where('medico_id ', '=', $cita_actual->medico_id)
+                ->orWhere('fecha_cita', '=', $cita['fecha_cita'])->where('hora_entrada', '<=', $cita['hora_entrada'])->where('hora_salida', '>=', $cita['hora_salida'])->where('medico_id ', '=', $cita_actual->medico_id)
+                ->orWhere('fecha_cita', '=', $cita['fecha_cita'])->where('hora_entrada', '<=', $cita['hora_entrada'])->where('hora_salida', '>=', $cita['hora_entrada'])->where('medico_id ', '=', $cita_actual->medico_id)
+                ->orWhere('fecha_cita', '=', $cita['fecha_cita'])->where('hora_entrada', '>=', $cita['hora_entrada'])->where('hora_salida', '<=', $cita['hora_entrada'])->where('medico_id ', '=', $cita_actual->medico_id)
+                ->getAll();
+        
+        
+        if ( count($isDuplicated) > 0 ) {
+            $respuesta = new Response('DUPLICATE_APPOINTMENT');
+            echo $respuesta->json(400);
+            exit();
+        }
+    }
+
     public static function validarHorario($formulario) {
 
         // Obtenemos el día según la fecha de la cita
@@ -198,13 +217,13 @@ class CitasValidaciones {
             $respuesta->setData("Ocurrió un error reprogramando la cita con estatus ".$cita->estatus_cit);
             echo $respuesta->json(400);
             exit();
-
-        } else if ( $validarCita->isDuplicatedId('medico_id', 'fecha_cita', $cita->medico_id, $_POST['fecha_cita'], 'cita') ) {
-            $respuesta = new Response('DUPLICATE_APPOINTMENT');
-            $respuesta->setData("Ya existe una cita el día ".$cita->fecha_cita);
-            echo $respuesta->json(400);
-            exit();
         }
+        //  else if ( $validarCita->isDuplicatedId('medico_id', 'fecha_cita', $cita->medico_id, $_POST['fecha_cita'], 'cita') ) {
+        //     $respuesta = new Response('DUPLICATE_APPOINTMENT');
+        //     $respuesta->setData("Ya existe una cita el día ".$cita->fecha_cita);
+        //     echo $respuesta->json(400);
+        //     exit();
+        // }
     }
 
     public static function validarCitaExamen($examenes) {
@@ -230,6 +249,26 @@ class CitasValidaciones {
                 echo $respuesta->json(404);
                 exit();
             }
+        }
+    }
+
+    public static function validarExamenesCitaAsegurada($formulario) {
+        $_seguroExamen = new SeguroExamenModel();
+        $seguro_examen = $_seguroExamen->where('seguro_id', '=', $formulario['seguro_id'])->getFirst();
+
+        $examenes = explode(',', $seguro_examen->examenes);
+        $hay_examenes_asegurados = 0;
+        
+        foreach ($formulario['examenes'] as $examen) {
+            if (array_search($examen['examen_id'], $examenes)) {
+                $hay_examenes_asegurados += 1;
+            }
+        }
+
+        if ($hay_examenes_asegurados == 0) {
+            $respuesta = new Response(false, 'Ninguno de los exámenes son cubiertos por el seguro, por favor registre una cita natural');         
+            echo $respuesta->json(400);
+            exit();
         }
     }
 };

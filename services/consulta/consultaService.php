@@ -177,16 +177,19 @@ class ConsultaService {
         $cita_previa = $_citaModel->where('cita_id', '=', $formulario['cita_id'])->getFirst();
 
         // obtenemos los exámenes que no estén registrados en cita_examen
-        $examenes_filtrados = ConsultaHelper::obtenerExamenesFiltrados($formulario['cita_id'], $formulario['examenes']);
+        $examenes_filtrados = [];
+        if (array_key_exists('examenes', $formulario)) {
+            $examenes_filtrados = ConsultaHelper::obtenerExamenesFiltrados($formulario['cita_id'], $formulario['examenes']);
+        }
 
         if (count($examenes_filtrados) > 0) {
-            if ($cita_previa->tipo_cita == 1 && array_key_exists('examenes', $formulario)) {
+            if (array_key_exists('examenes', $formulario)) {
                 ConsultaHelper::insertarExamen($examenes_filtrados, $consulta_separada[0]['consulta_id']);
             }
     
-            if ($cita_previa->tipo_cita == 2 && array_key_exists('examenes', $formulario)) {
-                ConsultaHelper::insertarExamenesSeguro($examenes_filtrados, $consulta_separada[0]['consulta_id']);
-            }
+            // if ($cita_previa->tipo_cita == 2 && array_key_exists('examenes', $formulario)) {
+            //     ConsultaHelper::insertarExamenesSeguro($examenes_filtrados, $consulta_separada[0]['consulta_id']);
+            // }
         }
         
         if (array_key_exists('referidos', $formulario)) {
@@ -222,9 +225,16 @@ class ConsultaService {
     public static function obtenerConsultaNormal($consulta) {
         $_consultaCita = new ConsultaCitaModel();
         $innersCita = $_consultaCita->listInner(ConsultaService::$innerConsultaCita);
-        $es_citada = $_consultaCita->where('consulta_cita.consulta_id', '=', $consulta->consulta_id)
-                                ->where('consulta.estatus_con','=',1)
-                                ->innerJoin(ConsultaService::$selectConsultaCita, $innersCita, "consulta_cita");
+        $_consultaCita->where('consulta_cita.consulta_id', '=', $consulta->consulta_id);
+                                
+
+        if (isset($_GET['status'])) {
+            $_consultaCita->where('consulta.estatus_con','=',$_GET['status']);
+        } else {
+            $_consultaCita->where('consulta.estatus_con','=',1);
+        }
+
+        $es_citada = $_consultaCita->innerJoin(ConsultaService::$selectConsultaCita, $innersCita, "consulta_cita");
         
         if (is_null($es_citada) || count($es_citada) == 0 ) { // Si no es por cita, extraemos la información de consulta_sin_cita
 
@@ -422,12 +432,17 @@ class ConsultaService {
         return ['lista_count' => $lista_count, 'lista' => $lista];
     }
 
-    public static function obtenerConsultaPorCita($paciente_id) {
+    public static function obtenerConsultaPorCita($paciente_id, $tipo_cita = null) {
         $_citaModel = new CitaModel();
         $innersCita = $_citaModel->listInner(ConsultaService::$innerConsultaCita);
-        $cita = $_citaModel->where('cita.paciente_id', '=', $paciente_id)
-                                ->where('consulta.estatus_con','!=',2)
-                                ->innerJoin(ConsultaService::$selectConsultaCita, $innersCita, "consulta_cita");
+        $_citaModel->where('cita.paciente_id', '=', $paciente_id)
+                                ->where('consulta.estatus_con','!=',2);
+
+        if (!is_null($tipo_cita)) {
+            $_citaModel->where('cita.tipo_cita', '=', $tipo_cita);
+        }
+
+        $cita = $_citaModel->innerJoin(ConsultaService::$selectConsultaCita, $innersCita, "consulta_cita");
 
         return $cita;
     }

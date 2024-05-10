@@ -162,6 +162,7 @@ class ConsultaHelper {
             'examen_id' => $examen['examen_id'],
             'precio_examen_usd' => $examenSeguro->precio_examen,
             'precio_examen_bs' => 0,
+            'cubierto_por' => 1
             // 'precio_examen_bs' => round($examenSeguro->precio_examen * $valorDivisa, 2),
         ];
 
@@ -307,6 +308,7 @@ class ConsultaHelper {
                         'examen_id' => $examen['examen_id'],
                         'precio_examen_usd' => $costos[$indice],
                         'precio_examen_bs' => 0,
+                        'cubierto_por' => 2,
                         // 'precio_examen_bs' => round($costos[$indice] * $valorDivisa, 2),
                     ];
 
@@ -373,6 +375,7 @@ class ConsultaHelper {
                         'examen_id' => $examen['examen_id'],
                         'precio_examen_usd' => $costos[$indice],
                         'precio_examen_bs' => 0,
+                        'cubierto_por' => 2
                         // 'precio_examen_bs' => round($costos[$indice] * $valorDivisa, 2),
                     ];
                 }
@@ -478,6 +481,7 @@ class ConsultaHelper {
             $examen = $_examenModel->where('examen_id', '=', $examen['examen_id'])->getFirst();
             $examen->precio_examen_usd = $examen->precio_examen;
             $examen->consulta_id = $consulta_id;
+            $examen->cubierto_por = 1;
 
             $_globalModel = new GlobalModel();
             $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();

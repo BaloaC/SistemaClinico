@@ -104,7 +104,12 @@ class ConsultaController extends Controller {
 
     public function listarConsultas() {
         $_consultaModel = new ConsultaModel();
-        $consultaList = $_consultaModel->where('estatus_con', '=', 1);
+
+        if (isset($_GET['status'])) {
+            $_consultaModel->where('estatus_con', '=', $_GET['status']);
+        } else {
+            $_consultaModel->where('estatus_con', '=', 1);
+        }
         
         if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
             if (isset($_GET['start']) || isset($_GET['page'])) {
@@ -149,31 +154,46 @@ class ConsultaController extends Controller {
             $_consultaModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_consultaModel->where('estatus_con', '=', '1')->getAll();
+        if (isset($_GET['status'])) {
+            $_consultaModel->where('estatus_con', '=', $_GET['status']);
+        } else {
+            $_consultaModel->where('estatus_con', '=', 1);
+        }
+
+        $total_registros = $_consultaModel->getAll();
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $consultas);
     }
 
     public function listarConsultasPorPaciente($paciente_id) {
         // $params = isset($_GET['estatus']) ? $_GET['estatus'] : null;
         $lista_consultas = [];
+
+        $condicional_emergencia = "";
+        if (isset($_GET['emergencia'])) {
+            $condicional_emergencia = $_GET['emergencia'];
+        } else {
+            $condicional_emergencia = true;
+        }
         
-        $consultaEmergenciaModel = new ConsultaEmergenciaModel();
-        $consultasEmergencia = $consultaEmergenciaModel->where('paciente_id', '=', $paciente_id)->getAll();
-        if ($consultasEmergencia != 0 && count($consultasEmergencia) > 0) {
-            foreach ($consultasEmergencia as $consulta) {
-
-                $consultasModel = new ConsultaModel();
-                $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
-
-                if (isset($_GET['status'])) {
-                    $consultasModel->where('estatus_con', '=', $_GET['status']);
-                }
-                
-                $consulta_normal = $consultasModel->getFirst();
-                
-                if (!is_null($consulta_normal)) {
-                    $consulta = ConsultaService::obtenerConsultaEmergencia($consulta);
-                    $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+        if ($condicional_emergencia) {
+            $consultaEmergenciaModel = new ConsultaEmergenciaModel();
+            $consultasEmergencia = $consultaEmergenciaModel->where('paciente_id', '=', $paciente_id)->getAll();
+            if ($consultasEmergencia != 0 && count($consultasEmergencia) > 0) {
+                foreach ($consultasEmergencia as $consulta) {
+    
+                    $consultasModel = new ConsultaModel();
+                    $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
+    
+                    if (isset($_GET['status'])) {
+                        $consultasModel->where('estatus_con', '=', $_GET['status']);
+                    }
+                    
+                    $consulta_normal = $consultasModel->getFirst();
+                    
+                    if (!is_null($consulta_normal)) {
+                        $consulta = ConsultaService::obtenerConsultaEmergencia($consulta);
+                        $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+                    }
                 }
             }
         }
@@ -198,23 +218,20 @@ class ConsultaController extends Controller {
             }
         }
         
-        $consultasCitas = ConsultaService::obtenerConsultaPorCita($paciente_id);
+        $consultasCitas = ConsultaService::obtenerConsultaPorCita($paciente_id, isset($_GET['tipo_cita']) ? $_GET['tipo_cita'] : null);
         if ($consultasCitas != 0 && count($consultasCitas) > 0) {
-            foreach ($consultasCitas as $consulta) {
-                if (isset($_GET['tipo_cita']) && $consulta->tipo_cita == $_GET['tipo_cita'] || !isset($_GET['tipo_cita'])) {
-                    
-                    $consultasModel = new ConsultaModel();
-                    $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
-    
-                    if (isset($_GET['status'])) {
-                        $consultasModel->where('estatus_con', '=', $_GET['status']);
-                    }
-    
-                    $consulta_normal = $consultasModel->getFirst();
-                    if (!is_null($consulta_normal)) {
-                        $consulta = array_merge((array) $consulta, (array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id));
-                        $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
-                    }
+            foreach ($consultasCitas as $consulta) {    
+                $consultasModel = new ConsultaModel();
+                $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
+
+                if (isset($_GET['status'])) {
+                    $consultasModel->where('estatus_con', '=', $_GET['status']);
+                }
+
+                $consulta_normal = $consultasModel->getFirst();
+                if (!is_null($consulta_normal)) {
+                    $consulta = array_merge((array) $consulta, (array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id));
+                    $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
                 }
             }
         }
@@ -251,9 +268,15 @@ class ConsultaController extends Controller {
     public function listarConsultaPorId($consulta_id) {
 
         $_consultaModel = new ConsultaModel();
-        $consultaList = $_consultaModel->where('estatus_con', '=', 1)
-                                        ->where('consulta_id', '=', $consulta_id)
-                                        ->getFirst();
+        $_consultaModel->where('consulta_id', '=', $consulta_id);
+
+        if (isset($_GET['status'])) {
+            $_consultaModel->where('estatus_con', '=', $_GET['status']);
+        } else {
+            $_consultaModel->where('estatus_con', '=', 1);
+        }
+        
+        $consultaList = $_consultaModel->getFirst();
         $consultas = [];
         
         if ($consultaList != null) {
