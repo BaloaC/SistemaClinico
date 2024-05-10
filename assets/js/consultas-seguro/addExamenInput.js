@@ -17,29 +17,6 @@ let clicks = 0;
 let modalOpened = false;
 const modalAddExamenSeguro = document.getElementById("modalAddPrecioExamen");
 
-// let myVariable = 0;
-
-// const handleChange = (newValue) => {
-//   console.log('La variable ha cambiado:', newValue);
-//   // Realizar acciones adicionales aquí
-// };
-
-// const variableProxy = new Proxy({ value: myVariable }, {
-//   set(target, prop, value) {
-//     target[prop] = value;
-
-//     if (prop === 'value') {
-//       handleChange(value);
-//     }
-
-//     return true;
-//   }
-// });
-
-// // Prueba cambiando el valor de la variable
-// variableProxy.value = 42;
-// variableProxy.value = 'Hola mundo';
-
 const handleModalOpen = async () => {
     if(modalOpened === false){
 

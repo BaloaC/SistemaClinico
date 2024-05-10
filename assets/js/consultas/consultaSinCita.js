@@ -8,6 +8,9 @@ export default async function consultaSinCita(inputRadio) {
     const medicoSelect = document.getElementById("s-medico");
     const especialidadSelect = document.getElementById("s-especialidad");
     const citaSelect = document.getElementById("s-cita");
+    const inputDateConsulta = document.querySelector("input[name='fecha_consulta']");
+    const inputDateConsultaLabel = document.querySelector("label[for='fecha_consulta']");
+    const inputDateConsultaHidden = document.getElementById("fecha_consulta_cita");
     
     const consultaCita = document.querySelector(".input[name='consultaPorEmergencia']:checked");
     
@@ -20,6 +23,11 @@ export default async function consultaSinCita(inputRadio) {
         $(".info-cita").fadeIn("slow");
         $(".info-paciente").fadeOut("slow");
         $(".info-medico").fadeOut("slow");
+        $(inputDateConsulta).fadeOut("slow");
+        inputDateConsulta.disabled = true;
+        $(inputDateConsultaLabel).fadeOut("slow");
+        inputDateConsultaHidden.disabled = false;
+
     } else{
 
         dinamicSelect2({
@@ -34,9 +42,6 @@ export default async function consultaSinCita(inputRadio) {
             processResultsAjax: function (data, params) {
 
                 const data1 = [];
-                
-
-                console.log(typeof data, data);
 
                 if(typeof data === "object" && data?.data !== 0){
                     data?.data.forEach(object => {
@@ -76,6 +81,10 @@ export default async function consultaSinCita(inputRadio) {
         $(".info-cita").fadeOut("slow");
         $(".info-paciente").fadeIn("slow");
         $(".info-medico").fadeIn("slow");
+        $(inputDateConsulta).fadeIn("slow");
+        inputDateConsulta.disabled = false;
+        $(inputDateConsultaLabel).fadeIn("slow");
+        inputDateConsultaHidden.disabled = true;
     }
 
 }

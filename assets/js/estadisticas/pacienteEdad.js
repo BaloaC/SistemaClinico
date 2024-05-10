@@ -18,13 +18,9 @@ export async function getPacientesByAge(startRange = null, endRange = null) {
 
         pacientesList = await getAll(`pacientesByAge?inicio_rango=${startRange}&fin_rango=${endRange}`);
 
-        console.log(pacientesList, "pacientes");
-        
         allPacientes = [
             { value: Number(pacientesList[0].filterRange), edades: `Entre ${startRange} de ${endRange}` },
         ];
-
-        console.log(allPacientes, "AllPacientes");
 
     } else {
 

@@ -46,7 +46,6 @@ class VistaLaboratorio {
     async mostrarLaboratorios(inicial) {
         let inicialMayuscula = inicial.toLowerCase();
         const laboratoriosList = this.examenesLista.filter(examen => examen.nombre.toLowerCase().slice("0")[0] === inicialMayuscula);
-        console.log(laboratoriosList);
         const examenesContainer = document.querySelector(".examenes-list");
         let template = "";
 

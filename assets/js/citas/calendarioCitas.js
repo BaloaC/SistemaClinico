@@ -83,9 +83,6 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
                 const data1 = [];
 
-
-                console.log(typeof data, data);
-
                 if (typeof data === "object" && data?.data !== 0) {
                     data?.data.forEach(object => {
                         const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;

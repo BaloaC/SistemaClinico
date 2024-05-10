@@ -34,7 +34,6 @@ function calcularMonto(input) {
         montoTotalProducto += iva;
     }
 
-    console.log(montoTotalProducto, montoTotalProducto.toFixed(2));
     monto.textContent = (montoTotalProducto == NaN) ? "0.00 Bs" : `${montoTotalProducto.toFixed(2)} Bs`;
     monto.dataset.iva = iva;
     monto.dataset.montoSinIva = montoTotalProductoSinIva;

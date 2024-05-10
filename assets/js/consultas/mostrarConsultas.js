@@ -73,8 +73,6 @@ const handleModalOpen = async () => {
         // medicamentoSelect.disabled = true;
         document.getElementById("s-seguro-emergencia").disabled = true;
 
-        const pacientesList = await getAll("pacientes/consulta");
-
         dinamicSelect2({
 
             selectSelector: "#s-cita",
@@ -135,34 +133,34 @@ const handleModalOpen = async () => {
             }
         });
 
-        dinamicSelect2({
-            // obj: examenesList,
-            selectSelector: "#s-examen",
-            selectValue: "examen_id",
-            selectNames: ["nombre"],
-            parentModal: "#modalReg",
-            placeholder: "Seleccione los exámenes",
-            multiple: true,
-            ajax: true,
-            ajaxUrl: "examenes/consulta",
-            processResultsAjax: function (data, params) {
+        // dinamicSelect2({
+        //     // obj: examenesList,
+        //     selectSelector: "#s-examen",
+        //     selectValue: "examen_id",
+        //     selectNames: ["nombre"],
+        //     parentModal: "#modalReg",
+        //     placeholder: "Seleccione los exámenes",
+        //     multiple: true,
+        //     ajax: true,
+        //     ajaxUrl: "examenes/consulta",
+        //     processResultsAjax: function (data, params) {
 
-                params.page = params.page || 1;
+        //         params.page = params.page || 1;
 
-                const data1 = data?.data.map(object => {
-                    const { examen_id: valorPropiedad1, nombre: nombreExamen } = object;
-                    return { id: valorPropiedad1, text: nombreExamen };
-                });
+        //         const data1 = data?.data.map(object => {
+        //             const { examen_id: valorPropiedad1, nombre: nombreExamen } = object;
+        //             return { id: valorPropiedad1, text: nombreExamen };
+        //         });
 
-                // Transforms the top-level key of the response object from 'data' to 'results'
-                return {
-                    results: data1,
-                    pagination: {
-                        more: data1.length
-                    }
-                };
-            }
-        });
+        //         // Transforms the top-level key of the response object from 'data' to 'results'
+        //         return {
+        //             results: data1,
+        //             pagination: {
+        //                 more: data1.length
+        //             }
+        //         };
+        //     }
+        // });
 
         dinamicSelect2({
             // obj: pacientesList ?? [],
@@ -176,9 +174,6 @@ const handleModalOpen = async () => {
             processResultsAjax: function (data, params) {
 
                 const data1 = [];
-
-
-                console.log(typeof data, data);
 
                 if (typeof data === "object" && data?.data !== 0) {
                     data?.data.forEach(object => {
@@ -243,6 +238,42 @@ const handleModalOpen = async () => {
         $("#s-cita").on("change", async function (e) {
 
             const cita = await getById("citas", this.value);
+
+            // Si se selecciona una cita, se toma la fecha de la cita
+            document.getElementById("fecha_consulta_cita").value = cita.fecha_cita;
+
+            // Lógica para manejar el select de examenes según una cita sea seleccionada
+            $("#s-examen").empty().select2();
+
+            dinamicSelect2({
+                selectSelector: "#s-examen",
+                selectValue: "examen_id",
+                selectNames: ["nombre"],
+                parentModal: "#modalReg",
+                placeholder: "Seleccione los exámenes",
+                multiple: true,
+                ajax: true,
+                ajaxUrl: `examenes/especialidad/${cita.especialidad_id}`,
+                processResultsAjax: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    const data1 = data?.data.map(object => {
+                        const { examen_id: valorPropiedad1, nombre: nombreExamen } = object;
+                        return { id: valorPropiedad1, text: nombreExamen };
+                    });
+
+                    // Filtramos los examenes colocados en las citas, para que no puedan ser introducidos nuevamente por consulta
+                    const filteredData = data1.filter(item => {
+                        return !cita?.examenes.some(examen => examen.examen_id === item.id);
+                    });
+
+                    // Transforms the top-level key of the response object from 'data' to 'results'
+                    return { results: filteredData };
+                }
+            });
+
+            // Lógica para manejar el select2 de los médicos
 
             const medicamentosSelect = document.querySelectorAll(".medicamento-id");
 
@@ -312,10 +343,70 @@ const handleModalOpen = async () => {
         $(especialidadSelect).on("change", async function (e) {
 
             let especialidad_id = this.value;
+            
+            // Exámenes por especialidad select2
+
+            $("#s-examen").empty().select2();
+
+            dinamicSelect2({
+                // obj: examenesList,
+                selectSelector: "#s-examen",
+                selectValue: "examen_id",
+                selectNames: ["nombre"],
+                parentModal: "#modalReg",
+                placeholder: "Seleccione los exámenes",
+                multiple: true,
+                ajax: true,
+                ajaxUrl: `examenes/especialidad/${especialidad_id}`,
+                processResultsAjax: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    const data1 = data?.data.map(object => {
+                        const { examen_id: valorPropiedad1, nombre: nombreExamen } = object;
+                        return { id: valorPropiedad1, text: nombreExamen };
+                    });
+
+                    // Transforms the top-level key of the response object from 'data' to 'results'
+                    return { results: data1 };
+                }
+            });
+
+            // Médico select
             $(medicoSelect).empty().select2();
 
-            const especialidadSelected = await getById("especialidades", this.value);
+            dinamicSelect2({
+                selectSelector: "#s-medico",
+                selectValue: "medico_id",
+                selectNames: ["cedula", "nombre-apellidos"],
+                ajax: true,
+                ajaxUrl: `/medicos/especialidad/${especialidad_id}`,
+                parentModal: "#modalReg",
+                placeholder: "Seleccione un médico",
+                queryPage: false,
+                processResultsAjax: function (data, params) {
 
+                    params.page = params.page || 1;
+
+                    const data1 = [];
+
+                    data?.data.map(object => {
+                        const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico, especialidad } = object;
+                        data1.push({ id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` });
+
+                    });
+
+                    // Transforms the top-level key of the response object from 'data' to 'results'
+                    return {
+                        results: data1
+                    };
+                }
+            });
+
+            medicoSelect.disabled = false;
+
+            // Logica para el select2 de los medicamentos
+            const especialidadSelected = await getById("especialidades", this.value);
             const medicamentosSelect = document.querySelectorAll(".medicamento-id");
 
             // Reinicializar los select2 de los medicamentos para que se puedan actualizar según la especilidad
@@ -378,37 +469,6 @@ const handleModalOpen = async () => {
                     }
                 });
             });
-
-            // Médico select
-            dinamicSelect2({
-                selectSelector: "#s-medico",
-                selectValue: "medico_id",
-                selectNames: ["cedula", "nombre-apellidos"],
-                ajax: true,
-                ajaxUrl: `/medicos/especialidad/${especialidad_id}`,
-                parentModal: "#modalReg",
-                placeholder: "Seleccione un médico",
-                queryPage: false,
-                processResultsAjax: function (data, params) {
-
-                    params.page = params.page || 1;
-
-                    const data1 = [];
-
-                    data?.data.map(object => {
-                        const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico, especialidad } = object;
-                        data1.push({ id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` });
-
-                    });
-
-                    // Transforms the top-level key of the response object from 'data' to 'results'
-                    return {
-                        results: data1
-                    };
-                }
-            });
-
-            medicoSelect.disabled = false;
         });
 
         $("#s-paciente").on("change", async function (e) {
@@ -517,7 +577,6 @@ addEventListener("DOMContentLoaded", async e => {
         {
             data: null,
             render: function (data, type, row) {
-                // console.log(data);
                 if ("nombre_paciente" in data) return `${data.nombre_paciente} ${data.apellido_paciente}`;
                 if ("beneficiado" in data) return `${data.beneficiado.nombre} ${data.beneficiado.apellidos}`;
             }
@@ -691,8 +750,6 @@ addEventListener("DOMContentLoaded", async e => {
 
     const format = (data) => {
 
-        console.log(data);
-
         if (data.clave == null) data.clave = "No aplica";
         let tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
         if (data.es_emergencia === 1) tipo_cita = "Asegurada";
@@ -711,8 +768,6 @@ addEventListener("DOMContentLoaded", async e => {
         if (data.recipes) {
 
             data.recipes.forEach(el => {
-
-                console.log(el);
 
                 let tipo_medicamento = "";
 
