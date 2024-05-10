@@ -83,8 +83,8 @@ const handleModalOpen = async () => {
             parentModal: "#modalReg",
             placeholder: "Seleccione una cita",
             ajax: true,
-            ajaxUrl: "citas/consulta",
-            queryPage: false,
+            ajaxUrl: "citas/consulta?estatus=1",
+            // queryPage: false,
             processResultsAjax: function (data, params) {
 
                 const data1 = [];
@@ -93,13 +93,13 @@ const handleModalOpen = async () => {
 
                     const { cita_id: valorPropiedad1, cedula_titular: cedulaTitular, motivo_cita: motivoCita } = object;
 
-                    if (object.estatus_cit == "1") {
-                        data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${cedulaTitular} - ${motivoCita}` });
-                    }
+                    // if (object.estatus_cit == "1") {
+                    data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${cedulaTitular} - ${motivoCita}` });
+                    // }
                 });
 
                 // Transforms the top-level key of the response object from 'data' to 'results'
-                return { results: data1 };
+                return { results: data1, pagination: { more: data1.length } };
             }
         });
 
@@ -176,23 +176,23 @@ const handleModalOpen = async () => {
             processResultsAjax: function (data, params) {
 
                 const data1 = [];
-                
+
 
                 console.log(typeof data, data);
 
-                if(typeof data === "object" && data?.data !== 0){
+                if (typeof data === "object" && data?.data !== 0) {
                     data?.data.forEach(object => {
                         const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
-    
+
                         const handleTipoPaciente = (tipo_paciente) => {
                             if (tipo_paciente == 1) tipo_paciente = "Natural";
                             else if (tipo_paciente == 2) tipo_paciente = "Representante";
                             else if (tipo_paciente == 3) tipo_paciente = "Asegurado";
                             else if (tipo_paciente == 4) tipo_paciente = "Beneficiado";
-    
+
                             return tipo_paciente
                         }
-    
+
                         data1.push({ id: valorPropiedad1, text: `${cedula} - ${nombre} ${apellidos} - ${handleTipoPaciente(tipo_paciente)}` });
                     });
                 }
@@ -800,13 +800,12 @@ addEventListener("DOMContentLoaded", async e => {
                 <tr>
                     <td>Peso: <br><b>${data.peso ? data.peso + " " + "kg" : "No especificado"} </b></td>
                     <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m" : "No especificado"}</b></td>
-                    ${
-                        data.es_emergencia != 1 && data?.fecha_cita
-                        ? `<td>Fecha Cita: <br><b>${formatToRealDate(data.fecha_cita) ?? "No aplica"}</b></td>
+                    ${data.es_emergencia != 1 && data?.fecha_cita
+                ? `<td>Fecha Cita: <br><b>${formatToRealDate(data.fecha_cita) ?? "No aplica"}</b></td>
                         <td>Motivo cita: <br><b>${data.motivo_cita ?? "No aplica"}</b></td>
                         <td>Clave: <br><b>${data.clave}</b></td>`
-                        : ""
-                    }
+                : ""
+            }
                 </tr>
                 <tr class="blue-td">
                     <td>Exámenes realizados: <br><b>${examenes}</b></td>
