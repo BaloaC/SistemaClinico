@@ -15,7 +15,11 @@ async function confirmReprogramation() {
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
 
-        const reprogramacionExitosa = await addModule(`citas/${data.cita_id}`,"reprogramacion-cita",data,"Cita reprogamada exitosamente!","#modalReprogramar",".reprogramacionAlert");
+        // Formatear la hora para evitar errores
+        data.hora_entrada = `${data.hora_entrada}:00`;
+        data.hora_salida = `${data.hora_salida}:00`;
+
+        const reprogramacionExitosa = await addModule(`citas/${data.cita_id}`,"reprogramacion-cita",data,"Cita reprogamada exitosamente!","#modalReprogramar",".reprogramacionAlert",undefined, "modalRegBodyReprogramar");
        
         if (!reprogramacionExitosa.code) throw { result: reprogramacionExitosa.result };
 

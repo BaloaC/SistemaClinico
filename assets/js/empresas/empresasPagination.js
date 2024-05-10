@@ -48,7 +48,7 @@ export function empresasPagination(registros, buscarRegistros = "") {
         function crearTarjeta(registro, plantilla, separadores = {}) {
             // Crear el elemento de la tarjeta
             const tarjeta = document.createElement('div');
-            tarjeta.classList.add('card-container', 'col-xl-4', 'col-lg-4', 'col-md-6', 'col-sm-12');
+            tarjeta.classList.add('card-container', 'col-xl-4', 'col-lg-4', 'col-md-6', 'col-sm-12', 'd-flex');
             tarjeta.setAttribute("onclick", `getEmpresa(${registro.empresa_id})`);
             tarjeta.setAttribute("data-bs-toggle", "modal");
             tarjeta.setAttribute("data-bs-target", "#modalInfo");
@@ -69,9 +69,9 @@ export function empresasPagination(registros, buscarRegistros = "") {
         }
 
         const plantilla = `
-            <div class="card overflow-hidden">
+            <div class="card overflow-hidden align-cards">
               <div class="overlay-box">
-                <h3 class="mt-3 mb-0 text-white">\${nombre}</h3>
+                <h3 class="text-white">\${nombre}</h3>
               </div>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><span class="mb-0">Rif</span> <b class="text-muted">\${rif}</b></li>

@@ -108,12 +108,12 @@
                                         <label for="input-radios-container" class="">Tipo de servicio</label>
                                         <div class="input-radios-container">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioExamen" value="1" required>
-                                                <label class="form-check-label" for="inlineRadio1">Exámenes</label>
+                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioExamen" onchange="tipoServicio(this)" value="1" required>
+                                                <label class="form-check-label" for="inlineRadio1">Consulta con exámenes</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioConsulta" value="2" checked required>
-                                                <label class="form-check-label" for="inlineRadio2">Consulta</label>
+                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioConsulta" onchange="tipoServicio(this)" value="2" checked required>
+                                                <label class="form-check-label" for="inlineRadio2">Consulta sola sin exámenes</label>
                                             </div>
                                         </div>
                                     </div>
@@ -125,7 +125,7 @@
                                             <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
                                                 <option></option>
                                             </select>
-                                            <div class="examenInput">
+                                            <div class="examenInput" style="display: none;">
                                                 <label for="examenes">Exámenes a realizar (Opcional)</label>
                                                 <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple" disabled>
                                                     <option></option>
@@ -154,7 +154,8 @@
                                             </ul>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label for="input-radios-container">Permitir citas fuera del horario del médico</label>
+                                            <p>Para asignar citas fuera del horario del médico puede comunicarse con él a través del siguiente número telefónico: <br> <b id="numeroTelefonicoMedico">Seleccione el médico para mostrar su número de contacto</b></p>
+                                            <label for="input-radios-container">¿El médico autorizó la asignación de la cita fuera de su horario establecido?</label>
                                             <div class="input-radios-container">
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_si" value="true">
@@ -253,16 +254,52 @@
                         <h1 class="modal-title fs-3" id="modalReprogramarLabel">Reprogramación de citas</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" id="modalRegBodyReprogramar">
                         <div id="reprogramacionAlert" class="alert reprogramacionAlert d-none" role="alert"></div>
                         <form action="" id="reprogramacion-cita" class="p-3 px-4">
                             <p class="text-secondary">Las citas se mantendrán como pendientes hasta que la clave otorgada por el seguro sea insertada</p>
                             <label for="clave">Nueva fecha</label>
-                            <input type="date" name="fecha_cita" id="fecha_cita_reprogramada" data-validate="true" data-type="date" class="form-control" required>
-                            <label for="hora_salida">Hora salida</label>
-                            <input type="time" name="hora_salida" id="hora_salida2" data-validate="true" data-type="timeAppointment" step="1" class="form-control mb-3">
+                            <input type="date" name="fecha_cita" id="fecha_cita_reprogramada" data-validate="true" data-type="date" class="form-control fecha_cita_reprogramada mb-3 flatpickr-input-readonly" required>
+                            <p style="padding-top: 10px">Leyenda:</p>
+                            <ul class="leyenda">
+                                <li>Horario del médico disponible</li>
+                                <li>Horario del médico ocupado</li>
+                                <li>Días fueras del horario del médico</li>
+                            </ul>
+                            <table id="horarios-table-reschedule" class="table table-borderless" style="display: none;">
+                                <h6 class="my-3 fw-bolder medicoRescheduleLabel" style="display: none;">Horario del médico</h6>
+                                <thead>
+                                    <tr>
+                                        <th>Día</th>
+                                        <th>Hora Entrada</th>
+                                        <th>Hora Salida</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Día</td>
+                                        <td>Hora Entrada</td>
+                                        <td>Hora Salida</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                             <label for="hora_entrada">Hora entrada</label>
-                            <input type="time" name="hora_entrada" id="hora_entrada2" data-validate="true" data-type="timeAppointment" step="1" class="form-control mb-3">
+                            <input type="time" name="hora_entrada" id="hora_entrada2" data-type="timeAppointment" step="1" class="form-control hora_entrada2 flatpickr-input-readonly mb-3" disabled>
+                            <label for="hora_salida">Hora salida</label>
+                            <input type="time" name="hora_salida" id="hora_salida2" data-type="timeAppointment" step="1" class="form-control hora_salida2 flatpickr-input-readonly mb-3" disabled>
+                            <h6 class="my-3 fw-bolder citaRescheduleLabel">Citas asigandas del día</h6>
+                            <h6 class="withoutCitasReschedule" style="display: none;">No hay citas asiganadas para este día</h6>
+                            <table id="citas-table-reschedule" class="table table-borderless" style="display: none;">
+                                <thead>
+                                    <tr>
+                                        <th>Hora Entrada</th>
+                                        <th>Hora Salida</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
                         </form>
                     </div>
                     <div class="modal-footer">

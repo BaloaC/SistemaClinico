@@ -109,6 +109,7 @@
                                                 <td>
                                                     <input type="number" step="any" name="unidades" min="0" class="form-control insumo-unid" data-validate="true" data-type="price" oninput="calcularMonto(this)" required>
                                                     <small class="form-text">No se permiten números negativos</small>
+                                                    <small class="text-warning-insumo" style="display: none;">Advertencia: al ingresar una cantidad en decimales, indica que la siguiente unidad estará incompleta</small>
                                                 </td>
                                                 <td><b class="monto-total-p">0.00 Bs</b></td>
                                                 <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
@@ -156,6 +157,7 @@
                 <td>
                     <input type="number" step="any" name="unidades" min="0" class="form-control insumo-unid" data-validate="true" data-type="price" oninput="calcularMonto(this)" required>
                     <small class="form-text">No se permiten números negativos</small>
+                    <small class="text-warning-insumo" style="display: none;">Advertencia: al ingresar una cantidad en decimales, indica que la siguiente unidad estará incompleta</small>
                 </td>
                 <td><b class="monto-total-p">0.00 Bs</b></td>
                 <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>

@@ -94,6 +94,15 @@ const handleModalOpen = async () => {
             }
         });
 
+        const warningMessage = document.querySelector(".text-warning-insumo");
+
+        // Mostrar mensaje de advertencia en caso de que el input de cantidad
+        document.querySelector(".insumo-unid").addEventListener("input", async function () {
+
+            let monto = this.value;
+            Number.isInteger(Number(monto)) ? $(warningMessage).fadeOut("slow") : $(warningMessage).fadeIn("slow");
+        })
+
         modalOpened = true;
     }
 }
@@ -124,7 +133,16 @@ function addInsumoInput() {
     })
 
     const select = clone.getElementById("s-insumo");
+    const warningMessage = clone.querySelector(".text-warning-insumo");
     const optionVacio = document.createElement("option");
+
+    // Mostrar mensaje de advertencia en caso de que el input de cantidad
+    clone.querySelector(".insumo-unid").addEventListener("input", async function () {
+
+        let monto = this.value;
+        Number.isInteger(Number(monto)) ? $(warningMessage).fadeOut("slow") : $(warningMessage).fadeIn("slow");
+    })
+
 
     select.id = `s-insumo${clicks}`;
     optionVacio.value = "";

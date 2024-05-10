@@ -6,276 +6,11 @@ import getById from "../global/getById.js";
 import isBeforeToday from "../global/isBeforeToday.js";
 import sortScheduleByDay from "../global/sortScheduleByDay.js";
 import to12HourFormat from "../global/to12HoursFormat.js";
+import CitasManager from "./citasManager.js";
 import parseCitas from "./parseCitas.js";
 import tipoAsegurado from "./tipoAsegurado.js";
 import tipoTitular from "./tipoTitular.js";
 
-class CitasManager {
-    constructor(schedule = null, idMedic = null) {
-        this.idMedic = idMedic;
-        this.schedule = schedule;
-    }
-
-    async obtenerCitasPorFecha(dateDayElem) {
-        const citasByDate = await getAll(`/citas/fecha?fecha=${dateDayElem}&medico=${this.idMedic}`);
-        return citasByDate;
-    }
-
-    inputCitasHandler(disabled, inicializated) {
-
-        const fechaCita = document.getElementById("fecha_cita");
-        const horaEntradaInput = document.getElementById("hora_entrada");
-        const horaSalidaInput = document.getElementById("hora_salida");
-
-        // Si no están inicializados se puede acceder mendiante el html normal, sino debe ser por el input que se crea 
-        if (!inicializated) {
-
-            fechaCita.disabled = disabled;
-            horaEntradaInput.disabled = disabled;
-            horaSalidaInput.disabled = disabled;
-        } else {
-
-            document.querySelectorAll(".fecha_cita").forEach(element => element.disabled = disabled)
-            document.querySelectorAll(".hora_entrada").forEach(element => element.disabled = disabled)
-            document.querySelectorAll(".hora_salida").forEach(element => element.disabled = disabled)
-        }
-    }
-
-    async obtenerCitas() {
-
-        const daysOfWeek = { lunes: 1, martes: 2, miercoles: 3, jueves: 4, viernes: 5, sabado: 6, domingo: 0 }
-        const availableDays = [];
-
-        this.schedule.map(scheduleOfTheDay => {
-            availableDays.push(daysOfWeek[scheduleOfTheDay.dias_semana]);
-        })
-
-        this.inputCitasHandler(false, false);
-        $(".medicoScheduleLabel").fadeIn("slow");
-        $(".citaScheduleLabel").fadeIn("slow");
-
-        const flatpickrPromise = new Promise((resolve, reject) => {
-
-            flatpickr("#fecha_cita", {
-                locale: "es",
-                minDate: "today",
-                dateFormat: "Y-m-d",
-                altFormat: "d-m-Y",
-                altInput: true,
-                onChange: async (selectedDates, dateStr, instance) => {
-
-                    const listCitasByDate = await this.obtenerCitasPorFecha(dateStr);
-                    const horarioDelDia = this.obtenerHorarioDelDiaPorMedico(dateStr);
-
-                    this.mostrarCitasDelDia(listCitasByDate);
-                    this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) });
-                    this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) });
-                },
-                onDayCreate: async (dObj, dStr, fp, dayElem) => {
-
-                    const dateDayElem = dayElem.dateObj.toISOString().split('T')[0];
-                    const listCitasByDate = await this.obtenerCitasPorFecha(dateDayElem);
-                    const horarioDelDia = this.obtenerHorarioDelDiaPorMedico(dateDayElem);
-                    const dateTime = new Date();
-
-                    if (document.getElementById("fecha_cita").value === dateDayElem) {
-
-                        this.mostrarCitasDelDia(listCitasByDate);
-                        this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
-                        this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
-                    };
-
-
-                    if (dateTime.getTime() <= dayElem.dateObj.getTime()) {
-
-                        if (availableDays.includes(dayElem.dateObj.getDay())) {
-
-                            let horasDisponibles = this.calcularHorasDisponiblesDelDia(horarioDelDia[0]?.hora_entrada.substring(0, 5), horarioDelDia[0]?.hora_salida.substring(0, 5), listCitasByDate)
-                            dayElem.innerHTML += `<span class='event ${listCitasByDate.length > 0 && horasDisponibles <= 30 ? "busy" : ""}'></span>`;
-
-                        } else {
-                            dayElem.innerHTML += `<span class='event ${(dayElem.dateObj.getDay() === 0 || dayElem.dateObj.getDay() === 6) ? "disabled" : "noWorking"}'></span>`;
-                        }
-                    }
-                },
-                "disable": [
-                    function (date) { return (date.getDay() === 0 || date.getDay() === 6); }
-                ],
-                onReady: resolve
-            });
-        });
-
-        await flatpickrPromise;
-    }
-
-    // Método para convertir hora a minutos
-    convertirAHoras(hora) {
-        const partes = hora.split(":");
-        const horas = partes[0];
-        const minutos = partes[1];
-
-        return parseInt(horas) * 60 + parseInt(minutos);
-    }
-
-    calcularHorasDisponiblesDelDia(minLimit, maxLimit, horariosOcupados) {
-
-        // Rango total
-        const rangoInicio = minLimit;
-        const rangoFin = maxLimit;
-
-        const inicioRangoMin = this.convertirAHoras(rangoInicio);
-        const finRangoMin = this.convertirAHoras(rangoFin);
-        const rangosOcupados = horariosOcupados.map(horario => { return { inicio: this.convertirAHoras(horario.hora_entrada), fin: this.convertirAHoras(horario.hora_salida) }; });
-
-        // Calculo disponibilidad
-        let disponible = finRangoMin - inicioRangoMin;
-        rangosOcupados.forEach(rango => { disponible -= rango.fin - rango.inicio; });
-
-        return disponible;
-    }
-
-    mostrarCitasDelDia(listCitasByDate) {
-
-        let listCitas = "";
-        const citasTable = document.querySelector("#citas-table tbody");
-        const withoutCitas = document.querySelector(".withoutCitas");
-        const modalReg = document.querySelector("#modalReg .modal-body");
-
-        if (listCitasByDate.length > 0) {
-
-            $(withoutCitas).fadeOut("slow");
-
-            listCitasByDate.forEach(horario => {
-                listCitas += `
-                    <tr>
-                        <td>${to12HourFormat(horario.hora_entrada)}</td>
-                        <td>${to12HourFormat(horario.hora_salida)}</td>
-                    </tr>
-                `;
-            });
-
-            citasTable.innerHTML = listCitas;
-            $("#citas-table").fadeIn("slow");
-        } else {
-            $("#citas-table").fadeOut("slow");
-            $(withoutCitas).fadeIn("slow");
-        }
-
-        // Subir el scroll hasta inicio para visualizar mejor el mensaje de error
-        modalReg.scrollTo({
-            top: modalReg.scrollHeight,
-            bottom: 0,
-            behavior: 'smooth'
-        });
-    }
-
-    inputHoraEntraCita(horario) {
-
-        const config = {
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "H:i",
-            time_24hr: false,
-            minuteIncrement: 5,
-            altFormat: "h:i K",
-            altInput: true,
-            onChange: async (selectedDates, dateStr, instance) => { this.inputHoraSalidaCita(horario, dateStr); }
-        }
-
-        if (typeof horario === "object" && horario?.hora_entrada && horario?.hora_salida) {
-
-            config.maxTime = this.aumentarDecrementar30Minutos(horario?.hora_salida, false);
-            config.minTime = horario.hora_entrada;
-            config.defaultDate = horario.hora_entrada;
-        } else {
-
-            config.defaultDate = "00:00";
-            delete config.minTime;
-            delete config.maxTime;
-        }
-
-        flatpickr("#hora_entrada", config);
-    }
-
-    inputHoraSalidaCita(horario, dateStr = null) {
-
-        const config = { enableTime: true, noCalendar: true, dateFormat: "H:i", time_24hr: false, minuteIncrement: 5, altFormat: "h:i K", altInput: true }
-
-        if (typeof horario === "object" && horario?.hora_entrada && horario?.hora_salida) {
-
-            config.minTime = this.aumentarDecrementar30Minutos(dateStr ?? horario?.hora_entrada, true);
-            config.maxTime = horario?.hora_salida;
-            config.defaultDate = this.aumentarDecrementar30Minutos(dateStr ?? horario?.hora_entrada, true);
-        } else {
-
-            config.defaultDate = "00:00";
-            config.minTime = this.aumentarDecrementar30Minutos(dateStr ?? horario?.hora_entrada, true);
-            delete config.maxTime;
-        }
-
-        flatpickr("#hora_salida", config);
-    }
-
-    obtenerHorarioDelDiaPorMedico(dateStr) {
-
-        const dias = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
-
-        const horarioDelDia = this.schedule.filter(scheduleOfTheDay => {
-            return scheduleOfTheDay.dias_semana == dias[new Date(dateStr).getDay() + 1];
-        })
-
-        return horarioDelDia
-    }
-
-    aumentarDecrementar30Minutos(hora, aumento) {
-
-        if (hora === undefined) return "00:00";
-
-        // Separar las horas y los minutos
-        const [horas, minutos] = hora.split(":").map(Number);
-
-        // Crear un nuevo objeto Date con la fecha dada
-        const nuevaFecha = new Date();
-        nuevaFecha.setHours(horas); // Establecer las horas
-        nuevaFecha.setMinutes(minutos); // Establecer los minutos
-
-        if (aumento) {
-            // Sumar 30 minutos
-            nuevaFecha.setMinutes(nuevaFecha.getMinutes() + 30);
-        } else {
-            // Restar 30 minutos
-            nuevaFecha.setMinutes(nuevaFecha.getMinutes() - 30);
-        }
-
-        // Obtener las nuevas horas y minutos
-        const nuevasHoras = nuevaFecha.getHours();
-        const nuevosMinutos = nuevaFecha.getMinutes();
-
-        // Formatear la nueva fecha
-        const nuevaFechaFormateada = `${nuevasHoras.toString().padStart(2, "0")}:${nuevosMinutos.toString().padStart(2, "0")}`;
-
-        return nuevaFechaFormateada;
-    }
-
-    resetInputHoras() {
-        const forzarCitaSi = document.getElementById("forzar_cita_si");
-
-
-        console.log(forzarCitaSi);
-
-        if (forzarCitaSi.checked) {
-
-            this.inputHoraEntraCita(null);
-            this.inputHoraSalidaCita(null);
-        } else {
-
-            const horarioDelDia = this.obtenerHorarioDelDiaPorMedico(document.getElementById("fecha_cita").value);
-            this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
-            this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
-        }
-
-    }
-}
 
 const module = "citas",
     modalReg = new bootstrap.Modal("#modalReg"),
@@ -284,7 +19,7 @@ const module = "citas",
     formReg = document.getElementById("info-cita");
 
 const calendarEl = document.getElementById("calendar");
-const citas = async () => parseCitas(await getAll(`${module}/consulta`));
+const citas = async () => await parseCitas(await getAll(`${module}/consulta`));
 
 export const calendar = new FullCalendar.Calendar(calendarEl, {
     locale: "es",
@@ -292,6 +27,12 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         left: "prev,next today",
         center: "title",
         right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek"
+    },
+    eventTimeFormat: {
+        hour: 'numeric',
+        minute: '2-digit',
+        meridiem: 'short',
+        hour12: true
     },
     events: citas,
     dateClick: async info => {
@@ -623,86 +364,10 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             const horariosOrdenados = sortScheduleByDay(infoMedico[0]?.horario);
             const forzarCitaSi = document.getElementById("forzar_cita_si");
             const forzarCitaNo = document.getElementById("forzar_cita_no");
+            const numeroTelefonicoCita = document.getElementById("numeroTelefonicoMedico");
 
-            //         lunes: 1,
-            //         martes: 2,
-            //         miercoles: 3,
-            //         jueves: 4,
-            //         viernes: 5,
-            //         sabado: 6,
-            //         domingo: 0
-            //     }
+            numeroTelefonicoCita.innerText = infoMedico[0].telefono;
 
-            //     const availableDays = [];
-
-            //     schedule.map(scheduleOfTheDay => {
-            //         availableDays.push(daysOfWeek[scheduleOfTheDay.dias_semana]);
-            //     })
-
-            //     const busyHours = [];
-
-            //     flatpickr("#fecha_cita", {
-            //         locale: "es",
-            //         onDayCreate: async function (dObj, dStr, fp, dayElem) {
-
-            //             let dateDayElem = dayElem.dateObj.toISOString().split('T')[0];
-            //             const citasByDate = await getAll(`/citas/fecha?fecha=${dateDayElem}&medico=${idMedic}`);
-
-            //             if (citasByDate.length > 0) {
-
-            //                 const busyHour = [];
-            //                 citasByDate.map(cita => {
-            //                     busyHour.push({
-            //                         hora_entrada: cita.hora_entrada,
-            //                         hora_salida: cita.hora_salida
-            //                     })
-            //                 });
-
-            //                 busyHours.push({ [dateDayElem]: busyHour })
-
-            //                 console.log(busyHours);
-            //             }
-            //         },
-            //         "disable": [
-            //             function (date) {
-
-            //                 // disable weekend days
-            //                 // return true to disable
-            //                 return (date.getDay() === 0 || date.getDay() === 6);
-
-            //             }
-            //         ],
-            //     });
-
-            //     console.log(busyHours);
-
-            //     const limit = [
-            //         ["13:00", "14:00"],
-            //         ["16:00", "17:30"],
-            //         ["18:00", "20:30"]
-            //     ];
-
-            //     // document.querySelector("hora_entrada").addEventListener("change", function () {
-            //     //     // obtenemos el valor introducido por el usuario
-            //     //     const user = this.value.split(":");
-
-            //     //     // recorremos todas las fechas limite
-            //     //     // Si devuelve true, esta entre algunas de las fechas
-            //     //     const result = limit.some(el => {
-            //     //         let start = el[0].split(":");
-            //     //         let end = el[1].split(":");
-
-            //     //         // comprobamos que este entre las fechas limite
-            //     //         return (start[0] < user[0] || (start[0] == user[0] && start[1] <= user[1])) && (end[0] > user[0] || (end[0] == user[0] && end[1] >= user[1]))
-            //     //     });
-
-            //     //     document.getElementById("info").innerHTML = result ? "Correcto" : "Error";
-            //     // });
-
-            // }
-
-            // inputDateHandler(horariosOrdenados, this.value);
-            // 
             const citasManager = new CitasManager(horariosOrdenados, this.value);
             citasManager.obtenerCitas();
 

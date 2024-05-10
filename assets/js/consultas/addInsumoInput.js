@@ -1,5 +1,6 @@
 import dinamicSelect2, { emptyAllSelect2, select2OnClick } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
+import getById from "../global/getById.js";
 import validateExistingSelect2 from "../global/validateExistingSelect2.js";
 import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
 import validateInputs from "../global/validateInputs.js";
@@ -79,6 +80,24 @@ const handleModalOpen = async (parentModal) => {
             }
         });
 
+        $("#s-insumo").on("change", async function() {
+
+            let insumo_id = this.value;
+            const insumo = await getById("insumos",insumo_id);
+    
+            let mensaje = "";
+            
+            switch(insumo.tipo_medida){
+                case "1": mensaje = "La capacidad es por metro"; break;
+                case "2": mensaje = "La capacidad es por mililitro"; break;
+                case "3": mensaje = "La capacidad de la caja son unidades"; break;
+                case "4": mensaje = "La capacidad es por unidades"; break;
+            }
+    
+            document.querySelector(`.mensaje-medida`).innerText = mensaje;
+        });
+    
+
         modalOpened = true;
     }
 }
@@ -110,6 +129,7 @@ function addInsumoInput(parentModal = "#modalReg") {
                 <label for="cantidad">Cantidad utilizada</label>
                 <input type="number" step="any" name="cantidad" data-validate="true" data-type="number" class="form-control insumo-cant">
                 <small class="form-text col-12">Solo se permiten números</small>
+                <small class="text-secondary mensaje-medida${clicks}"></small>
             </div>
             <div class="col-3 col-md-1 pt-4-5">
                 <button type="button" class="btn" onclick="deleteInput(this,'.insumo-id', '${parentModal}')"><i class="fas fa-times m-0"></i></button>
@@ -184,6 +204,24 @@ function addInsumoInput(parentModal = "#modalReg") {
             // Query parameters will be ?search=[term]&page=[page]
             return query;
         }
+    });
+
+    // Al cambiar de insumo que muestre su tipo de capacidad
+    $(selectSelector).on("change", async function() {
+
+        let insumo_id = this.value;
+        const insumo = await getById("insumos",insumo_id);
+
+        let mensaje = "";
+        
+        switch(insumo.tipo_medida){
+            case "1": mensaje = "La capacidad es por metro"; break;
+            case "2": mensaje = "La capacidad es por mililitro"; break;
+            case "3": mensaje = "La capacidad de la caja son unidades"; break;
+            case "4": mensaje = "La capacidad es por unidades"; break;
+        }
+
+        document.querySelector(`.mensaje-medida${clicks}`).innerText = mensaje;
     });
 
 

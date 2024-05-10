@@ -15,12 +15,8 @@
 
         header img {
             text-align: start;
-            position: absolute;
         }
 
-        h3, header p {
-            text-align: center;
-        }
 
         header h1 {
             margin: 0;
@@ -36,7 +32,7 @@
         /* Estilos para el cuerpo */
         body {
             font-family: Arial, sans-serif;
-            font-size: 13px;
+            font-size: 15px;
             line-height: 1.5;
             margin: 0;
             padding: 20px;
@@ -56,15 +52,15 @@
             /* border: 1px solid black; */
             border-left: none;
             border-right: none;
-            padding: 0.5rem;
+            padding: 0.15rem;
             text-align: start;
         }
 
-        .light{
+        .light {
             background-color: #222fb938 !important;
         }
 
-        .dark{
+        .dark {
             background-color: #222fb9 !important;
             color: #f2f2f2;
         }
@@ -74,19 +70,20 @@
             padding: 2rem;
         }
 
-        #title, #recibo_id {
+        #title,
+        #recibo_id {
             text-align: right;
-            font-size: 13px;
+            font-size: 15px;
         }
 
 
         /* Tabla */
 
-        .separator-section-top{
+        .separator-section-top {
             border-top: 1px solid black;
         }
 
-        .separator-section-bottom{
+        .separator-section-bottom {
             border-bottom: 1px solid black;
         }
 
@@ -95,7 +92,7 @@
 
         }
 
-        .insumos-head>th:nth-child(4){
+        .insumos-head>th:nth-child(4) {
             /* text-align: end; */
         }
 
@@ -115,6 +112,16 @@
             justify-content: space-between;
             text-align: center;
         }
+
+
+        .advertenciaSeguro p {
+            margin: 0;
+        }
+
+        .advertenciaSeguro {
+            border: 1px solid #000;
+            padding: 0.5rem;
+        }
     </style>
 </head>
 
@@ -128,12 +135,16 @@
         <table class="tabla">
             <thead>
                 <tr>
-                    <th colspan="3"></th>
-                    <th colspan="1" id="title">Recibo: <span id="recibo_id"></span></th>
+                    <th colspan="1" id="title"></th>
+                    <th colspan="3" id="title">Recibo: <span id="recibo_id"></span></th>
                 </tr>
-                <tr>
+                <!-- <tr>
+                    <th colspan="1" id="title"></th>
                     <th colspan="3" id="title"></th>
-                    <th colspan="1" id="title">Fecha: <span id="fecha"></span></th>
+                </tr> -->
+                <tr>
+                    <th colspan="1" id="title"></th>
+                    <th colspan="3" id="title">Fecha: <span id="fecha"></span></th>
                 </tr>
                 <tr>
                     <th colspan="4" class="separator-section-top">Razón Social: <span id="nombre_seguro"></span></th>
@@ -144,7 +155,9 @@
                 <tr>
                     <th colspan="4" class="separator-section-bottom">Dirección: <span id="direccion"></span></th>
                 </tr>
-                <tr><td><br></td></tr>
+                <tr>
+                    <td><br></td>
+                </tr>
                 <tr>
                     <th colspan="2" class="separator-section-bottom">Descripción:</th>
                     <th colspan="1" class="separator-section-bottom">Cantidad:</th>
@@ -155,7 +168,7 @@
                     <th>Insumos</th>
                     <th></th>
                     <th>-</th>
-                    <th id="total_insumos">Enrique Chacón</th>
+                    <th id="total_insumos"></th>
                 </tr>
                 <tr class="insumos-head">
                     <th>Exámenes</th>
@@ -196,6 +209,26 @@
                 <tr>
                     <th class="separator-section-top"></th>
                     <th class="separator-section-top"></th>
+                    <th class="separator-section-top"></th>
+                    <th class="separator-section-top"></th>
+                </tr>
+                <tr>
+                    <th>Seguro</th>
+                    <th></th>
+                    <th id="">-</th>
+                    <th id="cobertura"></th>
+                </tr>
+
+                <tr>
+                    <th>Paciente</th>
+                    <th></th>
+                    <th id="">-</th>
+                    <th id="diferenciaPaciente"></th>
+                </tr>
+
+                <tr>
+                    <th class="separator-section-top"></th>
+                    <th class="separator-section-top"></th>
                     <th class="separator-section-top">Monto total:</th>
                     <th class="separator-section-top"><span id="monto_total_consulta"></span></th>
                 </tr>
@@ -205,7 +238,7 @@
 
     <script type="module" src="<?php echo Url::to('assets/js/pdf/pdfConsultaEmergencia.js'); ?>"></script>
     <script>
-        window.onafterprint = function () {
+        window.onafterprint = function() {
             window.close();
         }
     </script>

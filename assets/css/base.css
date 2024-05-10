@@ -136,6 +136,10 @@ input::-ms-reveal {
     color: #15f1ff !important;
 }
 
+.text-warning-insumo {
+    color: #ff7300 !important;
+}
+
 .btn-primary:hover {
     background-color: #0043ff !important;
 }
