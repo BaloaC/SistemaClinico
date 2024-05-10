@@ -140,6 +140,38 @@ class FacturaConsultaHelpers {
         return $consultaList[0];
     }
 
+    public static function obtenerCitasExamenes($factura) {
+
+        $_consultaCita = new ConsultaCitaModel();
+        $consulta_cita = $_consultaCita->where('consulta_id', '=', $factura->consulta_id)->getFirst();
+
+        if (!is_null($consulta_cita)) {
+            $_citaExamenModel = new CitaExamenModel();
+            $inners = $_citaExamenModel->listInner(['examen' => 'cita_examen']);
+            $array_select = Array('cita_examen.precio_examen_usd', 'cita_examen.precio_examen_bs', 'cita_examen.cita_examen_id', 'cita_examen.consulta_id', 'cita_examen.examen_id', 'cita_examen.estatus_con', 'examen.nombre');
+            $cita_examenes = $_citaExamenModel->where('cita_examen.cita_id', '=', $factura->consulta_id)->innerJoin($array_select, $inners, "cita_examen");
+
+            foreach ($cita_examenes as $examen) {
+                
+                $examen->precio_examen_usd = $examen->precio_examen_usd;
+
+                if (isset($factura->consulta_seguro_id) && $examen->precio_examen_bs == 0) {
+
+                    $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+                    $precio_examen_bs = $examen->precio_examen_usd * $valorDivisa;
+                    $examen->precio_examen_bs = round($precio_examen_bs, 2);
+
+                } else {
+                    $examen->precio_examen_bs = $examen->precio_examen_bs;
+                }
+                
+            }
+            $lista_examenes['cita_examenes'] = $cita_examenes;
+            $array_examen[] = $lista_examenes;
+            return $array_examen[0];
+        }
+    }
+
     public static function obtenerMontoTotal($consulta) {
         
         $montoBs = 0; $montoUsd = 0;
@@ -161,6 +193,20 @@ class FacturaConsultaHelpers {
         
         if (isset($consulta['examenes'])) {
             foreach ($consulta['examenes'] as $examenes) {
+                
+                $montoUsd += $examenes->precio_examen_usd;
+                
+                if ( $examenes->precio_examen_bs == 0 ) {
+                    $montoBs += round( $examenes->precio_examen_usd * $valorDivisa, 2);
+
+                } else {
+                    $montoBs += $examenes->precio_examen_bs;
+                }
+            }
+        }
+
+        if (isset($consulta['cita_examenes'])) {
+            foreach ($consulta['cita_examenes'] as $examenes) {
                 
                 $montoUsd += $examenes->precio_examen_usd;
                 

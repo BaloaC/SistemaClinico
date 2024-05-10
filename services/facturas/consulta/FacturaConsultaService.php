@@ -71,7 +71,8 @@ class FacturaConsultaService {
                     }
     
                     $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
-                    $consultaList[] = array_merge($consulta_info, $examenes_consulta);
+                    $examenes_cita = FacturaConsultaHelpers::obtenerExamenes($factura);
+                    $consultaList[] = array_merge($consulta_info, $examenes_consulta, $examenes_cita);
                 }
             }
         }
