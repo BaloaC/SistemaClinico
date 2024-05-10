@@ -153,7 +153,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             }
 
             // ** Si es representante o beneficiario
-            if (infoPaciente.tipo_paciente == 2 || infoPaciente.tipo_paciente == 4) {
+            if (infoPaciente.tipo_paciente == 4) {
                 document.querySelector(".input-radios-container").classList.remove("d-none");
                 document.querySelector("label[for='input-radios-container'").classList.remove("d-none");
                 document.getElementById("tipoPacienteBeneficiado").dataset.pacienteId = paciente_id;
