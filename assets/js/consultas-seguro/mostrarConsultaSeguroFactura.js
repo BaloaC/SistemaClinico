@@ -41,7 +41,7 @@ addEventListener("DOMContentLoaded", async e => {
         {
             data: null,
             render: function (data, type, row) {
-                // console.log(data);
+
                 if ("nombre_paciente" in data) return `${data.nombre_paciente} ${data.apellido_paciente}`;
                 else if ("beneficiado" in data) return `${data.beneficiado.nombre} ${data.beneficiado.apellidos}`;
                 else if ("paciente_beneficiado" in data) return `${data.paciente_beneficiado.nombre} ${data.paciente_beneficiado.apellidos}`;
@@ -89,8 +89,6 @@ addEventListener("DOMContentLoaded", async e => {
 
     const format = (data) => {
 
-        console.log(data);
-
         if (data.clave == null && data?.cita?.tipo_cita != 2) data.clave = "No aplica";
         if (data.clave == null && data?.cita?.tipo_cita == 2) data.clave = "Desconocida";
         let tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
@@ -110,9 +108,7 @@ addEventListener("DOMContentLoaded", async e => {
         if (data.recipes) {
 
             data.recipes.forEach(el => {
-
-                console.log(el);
-
+                
                 let tipo_medicamento = "";
 
                 if (el.tipo_medicamento == 1) {

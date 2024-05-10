@@ -173,8 +173,9 @@
                                             <option></option>
                                         </select>
 
-                                        <label for="fecha_consulta">Fecha consulta</label>
-                                        <input type="date" name="fecha_consulta" class="form-control mb-3" data-validate="true" data-type="date" required>
+                                        <label for="fecha_consulta" style="display: none;">Fecha consulta</label>
+                                        <input type="date" name="fecha_consulta" class="form-control mb-3" style="display: none;" data-validate="true" data-type="date" disabled required>
+                                        <input type="hidden" name="fecha_consulta" id="fecha_consulta_cita">
                                     </div>
                                 </div>
 

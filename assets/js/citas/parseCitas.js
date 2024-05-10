@@ -15,7 +15,7 @@ export default async function parseCitas(citas) {
 				start: `${el.fecha_cita}T${el.hora_entrada}`,
 				end: `${el.fecha_cita}T${el.hora_salida}`,
 				extendedProps: el,
-				title: `${citaInfo.cedula_paciente} - ${citaInfo.nombre_paciente} ${citaInfo.apellido_paciente} - ${citaInfo.nombre_especialidad} - ${citaInfo.motivo_cita}`
+				title: `${citaInfo.nombre_paciente} ${citaInfo.apellido_paciente} - ${citaInfo.nombre_especialidad}`
 			};
 			allCitas.push(cita);
 		}));

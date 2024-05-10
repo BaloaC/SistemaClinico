@@ -139,10 +139,6 @@ export async function getAllConsultasEspecialidades(startDate = null, endDate = 
             })
         );
 
-
-
-        console.log(allConsultasEspecialidades);
-            
         // Set initial data
         xAxis.data.setAll(allConsultasEspecialidades.slice(0, 5));
         series.data.setAll(allConsultasEspecialidades.slice(0, 5));

@@ -96,7 +96,7 @@ class CitasHelpers {
     public static function obtenerExamenes($cita_id) {
         $_citaExamenModel = new CitaExamenModel();
         $inners = $_citaExamenModel->listInner(['examen' => 'cita_examen']);
-        $select = ['cita_examen.cita_examen_id', 'cita_examen.precio_examen_bs', 'cita_examen.precio_examen_usd', 'examen.nombre'];
+        $select = ['cita_examen.cita_examen_id', 'cita_examen.examen_id', 'cita_examen.precio_examen_bs', 'cita_examen.precio_examen_usd', 'examen.nombre'];
         $lista_examenes = $_citaExamenModel->where('cita_id', '=', $cita_id)->innerJoin($select, $inners, 'cita_examen');
 
         return $lista_examenes;

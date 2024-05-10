@@ -74,8 +74,6 @@ const handleModalOpen = async (parentModal) => {
 
         $("#s-especialidadm").on("change", function () {
 
-            console.log(this.value);
-
             $("#s-medicamento").empty().select2();
 
             dinamicSelect2({

@@ -233,8 +233,6 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
     const format = (data) => {
 
-        console.log(data);
-
         const info = {};
 
         if (data !== undefined) {
@@ -395,10 +393,6 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             `;
             }
         }
-
-
-        console.log(info);
-
 
         return `
         <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">

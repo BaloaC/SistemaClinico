@@ -83,9 +83,6 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
                 const data1 = [];
 
-
-                console.log(typeof data, data);
-
                 if (typeof data === "object" && data?.data !== 0) {
                     data?.data.forEach(object => {
                         const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
@@ -153,7 +150,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             }
 
             // ** Si es representante o beneficiario
-            if (infoPaciente.tipo_paciente == 2 || infoPaciente.tipo_paciente == 4) {
+            if (infoPaciente.tipo_paciente == 4) {
                 document.querySelector(".input-radios-container").classList.remove("d-none");
                 document.querySelector("label[for='input-radios-container'").classList.remove("d-none");
                 document.getElementById("tipoPacienteBeneficiado").dataset.pacienteId = paciente_id;

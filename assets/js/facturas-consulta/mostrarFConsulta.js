@@ -127,10 +127,7 @@ const handleModalOpen = async (modalParent) => {
 
             $("#s-consulta-normal").on("change", async function(){
 
-
                 const infoConsultaAsegurada = await getAll(`factura/consultaSeguro/consulta/${this.value}`);
-
-                console.log(infoConsultaAsegurada);
 
                 if(infoConsultaAsegurada !== null){
                     document.getElementById("monto_consulta_usd_consulta").value = parseFloat(infoConsultaAsegurada.monto_total_usd) - parseFloat(infoConsultaAsegurada.cobertura_seguro);

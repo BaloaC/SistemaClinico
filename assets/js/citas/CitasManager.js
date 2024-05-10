@@ -200,8 +200,6 @@ export default class CitasManager {
 
     inputHoraSalidaCita(horario, dateStr = null, inputId = "#hora_salida") {
 
-        console.log(inputId);
-
         const config = { enableTime: true, noCalendar: true, dateFormat: "H:i", time_24hr: false, minuteIncrement: 5, altFormat: "h:i K", altInput: true }
 
         if (typeof horario === "object" && horario?.hora_entrada && horario?.hora_salida) {

@@ -1,4 +1,5 @@
 import dinamicSelect2, { emptyAllSelect2, emptySelect2, selectText } from "../global/dinamicSelect2.js";
+import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import pagoMedicosInput from "./pagoMedicosInput.js";
 
@@ -19,6 +20,9 @@ export default async function consultaEmergencia(inputRadio) {
     const medicoSelect = document.getElementById("s-medico");
     const especialidadSelect = document.getElementById("s-especialidad");
     const citaSelect = document.getElementById("s-cita");
+    const inputDateConsulta = document.querySelector("input[name='fecha_consulta']");
+    const inputDateConsultaLabel = document.querySelector("label[for='fecha_consulta']");
+    const inputDateConsultaHidden = document.getElementById("fecha_consulta_cita");
 
     const sinCitaSi = document.getElementById("consultaCitaSi");
     const sinCitaNo = document.getElementById("consultaCitaNo");
@@ -50,6 +54,11 @@ export default async function consultaEmergencia(inputRadio) {
             pacienteSelect.disabled = true;
             medicoSelect.disabled = true;
             especialidadSelect.disabled = true;
+
+            $(inputDateConsulta).fadeOut("slow");
+            inputDateConsulta.disabled = true;
+            $(inputDateConsultaLabel).fadeOut("slow");
+            inputDateConsultaHidden.disabled = false;
         } else {
             $(".info-paciente").fadeIn("slow");
             $(".info-medico").fadeIn("slow");
@@ -97,7 +106,10 @@ export default async function consultaEmergencia(inputRadio) {
             pacienteSelect.disabled = false;
             medicoSelect.disabled = false;
             especialidadSelect.disabled = false;
-
+            $(inputDateConsulta).fadeIn("slow");
+            inputDateConsulta.disabled = false;
+            $(inputDateConsultaLabel).fadeIn("slow");
+            inputDateConsultaHidden.disabled = true;
         };
 
 
@@ -173,9 +185,27 @@ export default async function consultaEmergencia(inputRadio) {
             parentModal: "#modalReg"
         })
 
-        $("#s-paciente").on("change", function (){ 
+        $("#s-paciente").on("change", async function (){ 
 
             let paciente_id = this.value;
+
+            const pacientesBeneficiados = await getAll(`titularesBeneficiado/${paciente_id}`);
+
+            if(pacientesBeneficiados?.length > 0){
+                $(".inputPacienteBeneficiadoEmergencia").fadeIn("slow");
+                $("#pacienteBeneficiadoEmergenciaLabel").fadeIn("slow");
+                
+            } else {
+                
+                $(".inputPacienteBeneficiadoEmergencia").fadeOut("slow");
+                $("#pacienteBeneficiadoEmergenciaLabel").fadeOut("slow");
+                const inputRadioPacienteBeneficiadoNo = document.getElementById("pacienteBeneficiadoEmergenciaNo");
+                inputRadioPacienteBeneficiadoNo.checked = true;
+
+                // Creamos un evento onchange para que no se muestre el select de los beneficiados
+                const changeEvent = new Event("change");
+                inputRadioPacienteBeneficiadoNo.dispatchEvent(changeEvent);
+            }
             
             if(inputRadio.value === "1"){
 
@@ -194,8 +224,6 @@ export default async function consultaEmergencia(inputRadio) {
                     processResultsAjax: function (data, params) {
         
                         const data1 = [];
-        
-                        console.log(typeof data, data);
         
                         if (typeof data === "object" && data?.data !== 0) {
                             data?.data.forEach(object => {
@@ -247,11 +275,15 @@ export default async function consultaEmergencia(inputRadio) {
 
 
         turnInput(".inputPacienteBeneficiadoEmergencia", false);
-        $(".inputPacienteBeneficiadoEmergencia").fadeIn("slow");
-        $("#pacienteBeneficiadoEmergenciaLabel").fadeIn("slow");
+        $(".inputPacienteBeneficiadoEmergencia").fadeOut("slow");
+        $("#pacienteBeneficiadoEmergenciaLabel").fadeOut("slow");
         $("#cedula_beneficiado-label").fadeIn("slow");
         $("#cedula_beneficiado").fadeIn("slow");
         $("#cedulaBeneficiadoSmall").fadeIn("slow");
+        $(inputDateConsulta).fadeIn("slow");
+        inputDateConsulta.disabled = false;
+        $(inputDateConsultaLabel).fadeIn("slow");
+        inputDateConsultaHidden.disabled = true;
         // pacienteBeneficiado.disabled = false;
     }
 
