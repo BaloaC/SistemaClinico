@@ -219,7 +219,7 @@ CREATE TABLE  IF NOT EXISTS `factura_compra` (
     `monto_sin_iva` float NOT NULL,
     `monto_usd` float NOT NULL,
     `excento` float DEFAULT NULL,
-    `motivo_cancelacion` TEXT NULL;
+    `motivo_cancelacion` TEXT NULL,
     `estatus_fac` enum('1','2','3') NOT NULL DEFAULT '1',
     PRIMARY KEY (`factura_compra_id`),
     FOREIGN KEY (`proveedor_id`) REFERENCES `proveedor` (`proveedor_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -752,7 +752,7 @@ CREATE TABLE  IF NOT EXISTS `factura_medico` (
     `pago_total` float DEFAULT NULL,
     `factura_medico` FLOAT NOT NULL,
     `fecha_pago` date DEFAULT NULL,
-    'fecha_emision' TIMESTAMP NOT NULL,
+    `fecha_emision` TIMESTAMP NOT NULL,
     `pacientes_seguro` int(11) DEFAULT NULL,
     `pacientes_consulta` int(11) DEFAULT NULL,
     `estatus_fac` enum('1','2','3') NOT NULL DEFAULT '1',

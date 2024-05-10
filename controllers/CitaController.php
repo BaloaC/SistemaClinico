@@ -174,7 +174,12 @@ class CitaController extends Controller {
     public function listarCitas() {
 
         $_citaModel = new CitaModel();
-        $_citaModel->where('estatus_cit', '!=', '2');
+
+        if (isset($_GET['estatus'])) {
+            $_citaModel->where('estatus_cit', '=', $_GET['estatus']);
+        } else {
+            $_citaModel->where('estatus_cit', '!=', 2);
+        }
 
         if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
             if (isset($_GET['start']) || isset($_GET['page'])) {
@@ -213,7 +218,13 @@ class CitaController extends Controller {
             $_citaModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_citaModel->where('estatus_cit', '=', '1')->getAll();
+        if (isset($_GET['estatus'])) {
+            $_citaModel->where('estatus_cit', '=', $_GET['estatus']);
+        } else {
+            $_citaModel->where('estatus_cit', '!=', 2);
+        }
+
+        $total_registros = $_citaModel->getAll();
                 
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $especialidades);
         // Helpers::retornarMensajeListado($lista);
@@ -314,6 +325,7 @@ class CitaController extends Controller {
         $_POST = json_decode(file_get_contents('php://input'), true);
         CitasValidaciones::validarCitaId($cita_id);
         CitasValidaciones::validarFecha($_POST);
+        CitasValidaciones::validarDisponibilidadReprogramacion($_POST);
 
         $_citaModel = new CitaModel();
         $cita = $_citaModel->where('cita_id', '=', $cita_id)->getFirst();
