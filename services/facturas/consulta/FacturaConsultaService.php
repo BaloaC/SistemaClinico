@@ -43,8 +43,13 @@ class FacturaConsultaService {
         
         if (!is_null($facturasList) && count($facturasList)) {
             foreach ($facturasList as $factura) {
+
+                $_consultaSeguro = new ConsultaSeguroModel();
+                $consulta_seguro = $_consultaSeguro->where('consulta_id', '=', $factura->consulta_id)->getFirst();
+                $es_asegurada = is_null($consulta_seguro) ? false : true;
+
                 if ( array_key_exists('date', $_GET) ) {
-                    $informacion_consulta = FacturaConsultaHelpers::obtenerInformacion($factura); 
+                    $informacion_consulta = FacturaConsultaHelpers::obtenerInformacion($factura, $es_asegurada); 
                     // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
     
                     // verificar para que sirve este codigo
@@ -58,7 +63,8 @@ class FacturaConsultaService {
                     $monto_total_consultas_usd += $informacion_consulta['monto_consulta_usd'];
     
                 } else {
-                    $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura);
+
+                    $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura, $es_asegurada);
                     // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
     
                     if (!isset($consulta_info['nombre_paciente'])) {
@@ -123,12 +129,16 @@ class FacturaConsultaService {
         }
         
         $factura = (object) $factura[0];
+        $_consultaSeguro = new ConsultaSeguroModel();
+        $consulta_seguro = $_consultaSeguro->where('consulta_id', '=', $factura->consulta_id)->getFirst();
+        $es_asegurada = is_null($consulta_seguro) ? false : true;
 
-        $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura);
+        $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura, $es_asegurada);
         // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
         $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
+        $examenes_cita = FacturaConsultaHelpers::obtenerCitasExamenes($factura);
 
-        $factura_consulta = array_merge($consulta_info, $examenes_consulta);
+        $factura_consulta = array_merge($consulta_info, $examenes_consulta, $examenes_cita);
         return FacturaConsultaHelpers::obtenerMontoTotal($factura_consulta);
 
         // return FacturaConsultaHelpers::obtenerMontoTotal( array ($factura_consulta));

@@ -132,9 +132,14 @@ class ConsultaSeguroHelpers {
         if ( !is_null($consulta_emergencia) ) {
             ConsultaHelper::actualizarPrecioEmergencia($consulta_emergencia);
         }
-        
-        $consultaExamenModel = new ConsultaExamenModel();
-        $consulta_examenes = $consultaExamenModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
+
+        $_consultaCita = new ConsultaCitaModel();
+        $consulta_cita = $_consultaCita->where('consulta_id', '=', $consulta_seguro->consulta_id)->getFirst();
+        $_citaExamenModel = new CitaExamenModel();
+        $cita_examenes = $_citaExamenModel->where('cita_id', '=', $consulta_cita->cita_id)->getAll();
+
+        $_citaExamenModel = new CitaExamenModel();
+        $consulta_examenes = $_citaExamenModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
 
         $consultaInsumoModel = new ConsultaInsumoModel();
         $consulta_insumos = $consultaInsumoModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
@@ -152,6 +157,20 @@ class ConsultaSeguroHelpers {
                 
                 $consultaExamenModel = new ConsultaExamenModel();
                 $isUpdate = $consultaExamenModel->where('consulta_examen_id', '=', $examen->consulta_examen_id)->update($examen_modificado);
+            }
+        }
+
+        if( !is_null($cita_examenes) ) {
+            foreach ($cita_examenes as $examen) {
+                
+                $examen_modificado = Array( 'precio_examen_bs' => 0 );
+
+                $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+                $examen_modificado['precio_examen_bs'] = round( $examen->precio_examen_usd * $valorDivisa ,2 );
+                $costo_examenes_bs += $examen_modificado['precio_examen_bs'];
+                
+                $_citaExamenModel = new CitaExamenModel();
+                $isUpdate = $_citaExamenModel->where('cita_examen_id', '=', $examen->cita_examen_id)->update($examen_modificado);
             }
         }
         

@@ -4,7 +4,7 @@ include_once './services/globals/GlobalsHelpers.php';
 
 class FacturaConsultaHelpers {
 
-    public static function obtenerInformacion($factura) {
+    public static function obtenerInformacion($factura, $es_asegurada) {
 
         $selectGeneral = array(
             "paciente.nombre AS nombre_paciente",
@@ -44,9 +44,15 @@ class FacturaConsultaHelpers {
 
         $_consultaCita = new ConsultaCitaModel();
         $innerConsultaCita = $_consultaCita->listInner( $innerConsultaCita );
-        $consulta = $_consultaCita->where('consulta_cita.consulta_id', '=',$factura->consulta_id)
-                                    ->where('cita.tipo_cita', '=', 1)                        
-                                    ->innerJoin( array_merge($selectConsultaCita, $selectGeneral), $innerConsultaCita, 'consulta_cita');
+        $_consultaCita->where('consulta_cita.consulta_id', '=',$factura->consulta_id);
+
+        if ($es_asegurada) {
+            $_consultaCita->where('cita.tipo_cita', '=', 2);
+        } else {
+            $_consultaCita->where('cita.tipo_cita', '=', 1);
+        }
+
+        $consulta = $_consultaCita->innerJoin( array_merge($selectConsultaCita, $selectGeneral), $innerConsultaCita, 'consulta_cita');
         
         // Si la consulta no es por cita, buscamos las que son sin cita
         if ( is_null($consulta) || count($consulta) <= 0 ) {
@@ -148,25 +154,24 @@ class FacturaConsultaHelpers {
         if (!is_null($consulta_cita)) {
             $_citaExamenModel = new CitaExamenModel();
             $inners = $_citaExamenModel->listInner(['examen' => 'cita_examen']);
-            $array_select = Array('cita_examen.precio_examen_usd', 'cita_examen.precio_examen_bs', 'cita_examen.cita_examen_id', 'cita_examen.consulta_id', 'cita_examen.examen_id', 'cita_examen.estatus_con', 'examen.nombre');
-            $cita_examenes = $_citaExamenModel->where('cita_examen.cita_id', '=', $factura->consulta_id)->innerJoin($array_select, $inners, "cita_examen");
+            $array_select = Array('cita_examen.precio_examen_usd', 'cita_examen.precio_examen_bs', 'cita_examen.cita_examen_id', 'cita_examen.cita_id', 'cita_examen.examen_id', 'cita_examen.estatus_cit', 'examen.nombre');
+            $cita_examenes = $_citaExamenModel->where('cita_examen.cita_id', '=', $consulta_cita->cita_id)->innerJoin($array_select, $inners, "cita_examen");
 
-            foreach ($cita_examenes as $examen) {
-                
-                $examen->precio_examen_usd = $examen->precio_examen_usd;
+            if (!is_null($cita_examenes)) {
+                foreach ($cita_examenes as $examen) {
+                    $examen->precio_examen_usd = $examen->precio_examen_usd;
 
-                if (isset($factura->consulta_seguro_id) && $examen->precio_examen_bs == 0) {
-
-                    $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-                    $precio_examen_bs = $examen->precio_examen_usd * $valorDivisa;
-                    $examen->precio_examen_bs = round($precio_examen_bs, 2);
-
-                } else {
-                    $examen->precio_examen_bs = $examen->precio_examen_bs;
+                    if (isset($factura->consulta_seguro_id) && $examen->precio_examen_bs == 0) {
+                        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+                        $precio_examen_bs = $examen->precio_examen_usd * $valorDivisa;
+                        $examen->precio_examen_bs = round($precio_examen_bs, 2);
+    
+                    } else {
+                        $examen->precio_examen_bs = $examen->precio_examen_bs;
+                    }
                 }
-                
+                $lista_examenes['cita_examenes'] = $cita_examenes;
             }
-            $lista_examenes['cita_examenes'] = $cita_examenes;
             $array_examen[] = $lista_examenes;
             return $array_examen[0];
         }

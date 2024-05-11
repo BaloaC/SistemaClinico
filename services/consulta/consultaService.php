@@ -373,7 +373,7 @@ class ConsultaService {
         if (isset($params['estatus'])) {
             $_consultaCitaModel->where('consulta.estatus_con', '=', $params['estatus']);
         }
-        
+
         $lista_count = $_consultaCitaModel->innerJoin($select, $inners, "consulta_cita");
         return ['lista_count' => $lista_count, 'lista' => $lista];
     }

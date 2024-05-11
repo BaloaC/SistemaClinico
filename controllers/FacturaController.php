@@ -36,7 +36,7 @@ class FacturaController extends Controller{
         $_facturaModel = new FacturaModel();
         $lista = $_facturaModel->getAll();
         $mensaje = (count($lista) > 0);
-     
+
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
         $respuesta->setData($lista);
 
