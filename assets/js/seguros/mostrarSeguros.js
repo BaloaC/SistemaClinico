@@ -1,7 +1,4 @@
-import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
-import listarSeguros, { listarSegurosPorId } from "./listarSeguros.js";
-
 
 async function getSeguro(id) {
     try {

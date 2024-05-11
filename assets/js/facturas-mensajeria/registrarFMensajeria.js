@@ -1,7 +1,6 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
-import dinamicSelect2, { emptyAllSelect2, emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
-import getAge from "../global/getAge.js";
+import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 
@@ -109,47 +108,6 @@ const handleModalOpen = async () => {
 }
 
 if (modalRegister) modalRegister.addEventListener('show.bs.modal', async () => await handleModalOpen());
-
-// select2OnClick({
-//     selectSelector: "#s-seguro",
-//     selectValue: "seguro_id",
-//     selectNames: ["rif", "nombre"],
-//     module: "seguros/consulta",
-//     parentModal: "#modalRegNormal",
-//     placeholder: "Seleccione un seguro"
-// });
-
-// select2OnClick({
-//     selectSelector: "#s-consultas",
-//     selectValue: "consulta_seguro_id",
-//     selectNames: ["consulta_seguro_id", "tipo_servicio", "fecha_ocurrencia"],
-//     module: "factura/consultaSeguro/consulta",
-//     parentModal: "#modalRegNormal",
-//     placeholder: "Seleccione alguna consulta",
-//     multiple: true
-// });
-
-
-
-// dinamicSelect2({
-//     obj: [{ id: "efectivo", text: "Efectivo" }, { id: "debito", text: "Debito" }],
-//     selectNames: ["text"],
-//     selectValue: "id",
-//     selectSelector: "#s-metodo-pago",
-//     placeholder: "Seleccione un método de pago",
-//     parentModal: "#modalRegNormal",
-//     staticSelect: true
-// });
-
-
-
-// function calcularIva(montoInput) {
-
-//     let montoTotal = (parseFloat(montoInput.value) * 0.16) + parseFloat(montoInput.value);
-//     document.getElementById("monto_con_iva").value = montoTotal.toFixed(2);
-// }
-
-// window.calcularIva = calcularIva;
 
 async function addFMensajeria() {
 

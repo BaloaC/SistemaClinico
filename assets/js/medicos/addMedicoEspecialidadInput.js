@@ -1,7 +1,4 @@
-import validateExistingSelect2 from "../global/validateExistingSelect2.js"
-import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js"
-import dinamicSelect2, { emptyAllSelect2, emptySelect2 } from "../global/dinamicSelect2.js";
-import getAll from "../global/getAll.js";
+import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
 import validateInputs from "../global/validateInputs.js";
 
 export let especialidadesList = null;
@@ -18,10 +15,8 @@ const modalUpdate = document.getElementById("modalAct");
 
 const handleModalOpen = async () => {
     if (modalOpened === false) {
-        // especialidadesList = await getAll("especialidades/consulta");
 
         dinamicSelect2({
-            // obj: especialidadesList,
             selectSelector: "#s-especialidad",
             selectValue: "especialidad_id",
             selectNames: ["nombre"],
@@ -133,7 +128,6 @@ async function addMedicoEspecialidadInput(button, parentModal = "#modalReg") {
 
     // Se inserta la nueva información
     dinamicSelect2({
-        // obj: especialidadesList,
         selectSelector,
         selectValue: select2Options.selectValue,
         selectNames: select2Options.selectNames,

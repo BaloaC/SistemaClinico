@@ -1,6 +1,5 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
-import getAge from "../global/getAge.js";
 
 async function addFSeguro() {
 

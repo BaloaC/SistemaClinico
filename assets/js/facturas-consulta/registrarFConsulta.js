@@ -1,7 +1,5 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
-import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
-import getAge from "../global/getAge.js";
 
 function calcularIva(montoInput) {
 
@@ -24,9 +22,6 @@ async function addFConsulta() {
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto_consulta_usd))) throw { message: "El monto ingresado en usd es inválido" };
-        // if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto_con_iva))) throw { message: "El monto con iva ingresado es inválido" };
-
-        // data.monto_con_iva = (parseFloat(data.monto_sin_iva) * 0.16) + parseFloat(data.monto_sin_iva)
 
         const registroExitoso = await addModule("factura/consulta","info-fconsulta",data,"La factura consulta ha generada correctamente!", "#modalRegNormal", ".alertConsulta");
 

@@ -1,9 +1,5 @@
-import dinamicSelect2, { emptyAllSelect2, emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
-import getAll from "../global/getAll.js";
-import validateExistingSelect2 from "../global/validateExistingSelect2.js";
-import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
+import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
 import validateInputs from "../global/validateInputs.js";
-import { especialidadId } from "./mostrarConsultas.js";
 
 // export let medicamentosList = null;
 const select2Options = {
@@ -20,10 +16,7 @@ const modalRegister = document.getElementById("modalReg") ?? undefined;
 const handleModalOpen = async (parentModal) => {
     if (modalOpened === false) {
 
-        // medicamentosList = await getAll("medicamento/consulta");
-
         dinamicSelect2({
-            // obj: medicamentosList,
             selectSelector: `#s-especialidadm`,
             selectValue: "especialidad_id",
             selectNames: ["nombre"],
@@ -77,7 +70,6 @@ const handleModalOpen = async (parentModal) => {
             $("#s-medicamento").empty().select2();
 
             dinamicSelect2({
-                // obj: medicamentosList,
                 selectSelector: `#s-medicamento`,
                 selectValue: "medicamento_id",
                 selectNames: ["nombre_medicamento"],

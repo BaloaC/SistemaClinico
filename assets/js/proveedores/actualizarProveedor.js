@@ -1,8 +1,7 @@
 import deleteSecondValue from "../global/deleteSecondValue.js";
 import updateModule from "../global/updateModule.js";
 import getById from "../global/getById.js";
-import getAll from "../global/getAll.js";
-import { listadoProveedoresPagination, pagination, proveedoresPagination, ssrProveedoresRequest } from "./proveedoresPagination.js";
+import { pagination, proveedoresPagination, ssrProveedoresRequest } from "./proveedoresPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { patterns } from "../global/patternsValidation.js";
 import showDefaultModalAct from "../global/showDefaultModalAct.js";

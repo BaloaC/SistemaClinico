@@ -43,11 +43,7 @@ addEventListener("DOMContentLoaded", e => {
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-medicamento" onclick="updateMedicamento(${data})"><i class="fas fa-edit act-medicamento"></i></a>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-medicamento" onclick="deleteMedicamento(${data})"><i class="fas fa-trash del-medicamento"></i></a>
                         `;
-
-                    // case "2": return `
-                    //     <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-medicamento" onclick="deleteMedicamento(${data})"><i class="fas fa-trash del-medicamento"></i></a>
-                    //     `;
-
+                        
                     default: return `-`;
                 }
             }

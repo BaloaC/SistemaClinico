@@ -1,16 +1,13 @@
 import concatItems from "../global/concatItems.js";
-import dinamicSelect2, { emptyAllSelect2, emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
-import getAll from "../global/getAll.js";
+import dinamicSelect2, { emptyAllSelect2, emptySelect2 } from "../global/dinamicSelect2.js";
 import getById from "../global/getById.js";
 import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
-import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import formatToRealDate from "../global/formatToRealDate.js";
 import createDataTable from "../global/createDataTable.js";
 
 const path = location.pathname.split('/');
 const especialidadSelect = document.getElementById("s-especialidad");
 const medicoSelect = document.getElementById("s-medico");
-const medicamentoSelect = document.getElementById("s-medicamento");
 export let especialidadId = { valor: "" };
 
 let modalOpened = false;
@@ -70,7 +67,6 @@ const handleModalOpen = async () => {
 
         document.getElementById("s-paciente").disabled = true;
         medicoSelect.disabled = true;
-        // medicamentoSelect.disabled = true;
         document.getElementById("s-seguro-emergencia").disabled = true;
 
         dinamicSelect2({
@@ -133,37 +129,7 @@ const handleModalOpen = async () => {
             }
         });
 
-        // dinamicSelect2({
-        //     // obj: examenesList,
-        //     selectSelector: "#s-examen",
-        //     selectValue: "examen_id",
-        //     selectNames: ["nombre"],
-        //     parentModal: "#modalReg",
-        //     placeholder: "Seleccione los exámenes",
-        //     multiple: true,
-        //     ajax: true,
-        //     ajaxUrl: "examenes/consulta",
-        //     processResultsAjax: function (data, params) {
-
-        //         params.page = params.page || 1;
-
-        //         const data1 = data?.data.map(object => {
-        //             const { examen_id: valorPropiedad1, nombre: nombreExamen } = object;
-        //             return { id: valorPropiedad1, text: nombreExamen };
-        //         });
-
-        //         // Transforms the top-level key of the response object from 'data' to 'results'
-        //         return {
-        //             results: data1,
-        //             pagination: {
-        //                 more: data1.length
-        //             }
-        //         };
-        //     }
-        // });
-
         dinamicSelect2({
-            // obj: pacientesList ?? [],
             selectSelector: "#s-paciente",
             selectValue: "paciente_id",
             selectNames: ["cedula", "nombre-apellidos"],
@@ -201,9 +167,6 @@ const handleModalOpen = async () => {
                 };
             }
         });
-
-        // $("#s-paciente").val([]).trigger("change")
-        // document.getElementById("s-paciente").classList.remove("is-valid");
 
         dinamicSelect2({
             selectSelector: especialidadSelect,
@@ -349,7 +312,6 @@ const handleModalOpen = async () => {
             $("#s-examen").empty().select2();
 
             dinamicSelect2({
-                // obj: examenesList,
                 selectSelector: "#s-examen",
                 selectValue: "examen_id",
                 selectNames: ["nombre"],
@@ -424,7 +386,6 @@ const handleModalOpen = async () => {
                 $(`#s-especialidadm${key === 0 ? "" : key}`).append(newOption).trigger('change');
 
                 dinamicSelect2({
-                    // obj: medicamentosList,
                     selectSelector: select,
                     selectValue: "medicamento_id",
                     selectNames: ["nombre_medicamento"],
@@ -621,17 +582,6 @@ addEventListener("DOMContentLoaded", async e => {
                 return formatToRealDate(data);
             },
         },
-        // {
-        //     data: "consulta_id",
-        //     render: function (data, type, row) {
-
-        //         // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-        //         return `
-        //             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteConsulta(${data})"><i class="fas fa-trash del-consulta"></i></a>
-        //         `
-        //     }
-        // }
-
     ];
 
     const columnDefsConsultas = [
@@ -750,13 +700,16 @@ addEventListener("DOMContentLoaded", async e => {
 
     const format = (data) => {
 
+        console.log(data);
+
         if (data.clave == null) data.clave = "No aplica";
         let tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
         if (data.es_emergencia === 1) tipo_cita = "Asegurada";
 
         let examenes = data.examenes !== undefined ? concatItems(data.examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen",
             insumos = data.insumos !== undefined ? concatItems(data.insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo",
-            indicaciones = data.indicaciones !== undefined ? concatItems(data.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación";
+            indicaciones = data.indicaciones !== undefined ? concatItems(data.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación",
+            referidos = data.referidos !== undefined ? concatItems(data.referidos, "nombre", "No se refirió a ningún médico", ".") : "No se refirió a ningún médico";
 
         let recipes = `
         <tr>
@@ -868,7 +821,8 @@ addEventListener("DOMContentLoaded", async e => {
                 </tr>
                 <tr><td><br></td></tr>
                 <tr>
-                    <td colspan="4">Indicaciones: <br><b>${indicaciones}</b></td>
+                    <td>Indicaciones: <br><b>${indicaciones}</b></td>
+                    <td>Referidos a otro médico: <br><b>${referidos}</b></td>
                 </tr>
                 <tr><td><br></td></tr>
                 ${recipes}

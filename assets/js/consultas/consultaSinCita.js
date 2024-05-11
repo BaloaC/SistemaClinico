@@ -1,5 +1,4 @@
-import dinamicSelect2, { emptySelect2, selectText } from "../global/dinamicSelect2.js";
-import getById from "../global/getById.js";
+import dinamicSelect2 from "../global/dinamicSelect2.js";
 
 
 export default async function consultaSinCita(inputRadio) {

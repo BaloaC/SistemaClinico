@@ -1,6 +1,4 @@
 import { select2OnClick } from "../global/dinamicSelect2.js";
-import getAll from "../global/getAll.js";
-import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import createDataTable from "../global/createDataTable.js";
 
 const path = location.pathname.split('/');

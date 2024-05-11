@@ -1,7 +1,6 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
-import getAll from "../global/getAll.js";
 import { patterns } from "../global/patternsValidation.js";
 import scrollTo from "../global/scrollTo.js";
 import { listadoSegurosPagination, pagination, segurosPagination, ssrSegurosRequest } from "./segurosPagination.js";

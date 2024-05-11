@@ -1,5 +1,4 @@
 import deleteModule from "../global/deleteModule.js";
-import getAll from "../global/getAll.js";
 import { empresasPagination, pagination, ssrEmpresaRequest } from "./empresasPagination.js";
 
 async function deleteEmpresa(id) {

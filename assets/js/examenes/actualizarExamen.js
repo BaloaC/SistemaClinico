@@ -1,7 +1,6 @@
 import deleteSecondValue from "../global/deleteSecondValue.js";
 import updateModule from "../global/updateModule.js";
 import getById from "../global/getById.js";
-import getAll from "../global/getAll.js";
 import { examenesPagination, listadoExamenesPagination, pagination, ssrExamanesRequest } from "./examenesPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { patterns } from "../global/patternsValidation.js";
@@ -17,7 +16,6 @@ emptySelect2({
 });
 
 dinamicSelect2({
-    // obj: examenesList,
     selectSelector: especialidadSelect,
     selectValue: "especialidad_id",
     selectNames: ["nombre"],

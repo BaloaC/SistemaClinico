@@ -1,7 +1,6 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
-import getAge from "../global/getAge.js";
 
 async function addFCompra() {
 

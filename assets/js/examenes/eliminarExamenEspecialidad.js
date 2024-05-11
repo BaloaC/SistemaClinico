@@ -1,5 +1,4 @@
 import deleteModule from "../global/deleteModule.js";
-import getAll from "../global/getAll.js";
 import { examenesPagination, listadoExamenesPagination, pagination, ssrExamanesRequest } from "./examenesPagination.js";
 
 function deleteEspecialidad(id) {

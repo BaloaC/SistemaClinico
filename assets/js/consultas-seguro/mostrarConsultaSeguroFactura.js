@@ -4,14 +4,10 @@ import formatToRealDate from "../global/formatToRealDate.js";
 import createDataTable from "../global/createDataTable.js";
 
 const path = location.pathname.split('/');
-const especialidadSelect = document.getElementById("s-especialidad");
 
-let modalOpened = false;
 export const registerStatusConsulta = {
     successfulConsulta: false,
 };
-const modalRegConsulta = document.getElementById("modalRegConsulta") ?? undefined;
-const modalRegister = document.getElementById("modalReg") ?? undefined;
 
 addEventListener("DOMContentLoaded", async e => {
 
@@ -139,10 +135,6 @@ addEventListener("DOMContentLoaded", async e => {
             `;
         }
 
-        // <td>Nombre del medicamento: <br><b>${el.nombre_medicamento}</b></td>
-        //         <td>Tipo de medicamento: <br><b>${tipo_medicamento}</b></td>
-        //         <td colspan"2">Uso: <br><b>${el.uso}</b></td>
-
         if (data.factura) {
 
             factura = `
@@ -224,8 +216,6 @@ addEventListener("DOMContentLoaded", async e => {
         id: "#consultas",
         url: `/${path[1]}/factura/consultaSeguro/consulta/`,
         columns: consultaSeguroColumns,
-        // columnDefs: columnDefsConsultaSeguro,
-        // searchPanes: searchPanesConsultaSeguro,
         order,
         format,
         dom: "Plfrtip",

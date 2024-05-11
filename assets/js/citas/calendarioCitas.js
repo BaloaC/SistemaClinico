@@ -1,5 +1,5 @@
 import concatItems from "../global/concatItems.js";
-import dinamicSelect2, { emptySelect2, select2OnClick, selectText } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { emptySelect2 } from "../global/dinamicSelect2.js";
 import formattedHour from "../global/formattedHour.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";

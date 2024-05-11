@@ -4,7 +4,6 @@ import { createOptionOrSelectInstead, select2OnClick } from "../global/dinamicSe
 import getById from "../global/getById.js";
 import { patterns } from "../global/patternsValidation.js";
 import updateModule from "../global/updateModule.js";
-import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
 
 async function updateMedicamento(id) {
 

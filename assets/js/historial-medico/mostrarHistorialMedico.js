@@ -1,6 +1,5 @@
 import concatItems from "../global/concatItems.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
-import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import { removeAddAccountant, removeAddAnalist } from "../global/validateRol.js";
 import formatToRealDate from "../global/formatToRealDate.js";

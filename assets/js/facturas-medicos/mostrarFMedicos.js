@@ -1,4 +1,4 @@
-import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2 from "../global/dinamicSelect2.js";
 import formatToRealDate from "../global/formatToRealDate.js";
 import createDataTable from "../global/createDataTable.js";
 
@@ -90,37 +90,13 @@ addEventListener("DOMContentLoaded", e => {
 
     ];
 
-    const columnDefsFMedico = [
-        {
-            searchPanes: {
-                show: false,
-            },
-            targets: [0, 1, 2, 3, 4, 5, 6, 7],
-        },
-        // Para permitir el filtrado con la fecha filtrada
-        {
-            type: 'datetime-moment',
-            targets: 7
-        },
-    ];
-
-    const searchPanesFMedico = {
-        controls: false,
-        hideCount: true,
-        collapse: true,
-        initCollapsed: true
-    };
-
     const order = [[6, 'desc']];
 
     createDataTable({
         id: "#fMedicos",
         url: `/${path[1]}/factura/medico/consulta/`,
         columns: fMedicosColumns,
-        // columnDefs: columnDefsFMedico,
-        // searchPanes: searchPanesFMedico,
         order,
-        // dom: "Plfrtip",
         processing: true,
         serverSide: true
     })

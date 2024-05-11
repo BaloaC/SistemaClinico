@@ -23,9 +23,6 @@ const listaSegurosPorAge = listadoFacturas.reduce((lista, factura) => {
     return lista;
 }, []);
 
-
-// const uniqueAges = [...new Set(listadoFacturas.filter(factura => factura.fecha_ocurrencia).map(factura => factura.fecha_ocurrencia.slice(0, 4)))].sort((a, b) => b - a);
-
 const registros = listaSegurosPorAge != typeof Array ? listaSegurosPorAge : undefined;
 
 removeAddAccountant();
@@ -83,9 +80,6 @@ export function examenesPagination(registros) {
 
                     const seguro = document.createElement("div");
                     seguro.classList.add("seguro-dropdown-link");
-
-                    // const img = document.createElement("img");
-                    // img.src = "https://cdn-icons-png.flaticon.com/64/4434/4434431.png";
 
                     const p = document.createElement("p");
                     p.textContent = el.nombre;

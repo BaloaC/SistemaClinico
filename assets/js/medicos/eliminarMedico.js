@@ -1,6 +1,5 @@
 import deleteModule from "../global/deleteModule.js";
-import { listadoMedicosPagination, medicosPagination, pagination, ssrMedicosPagination } from "./medicosPagination.js";
-import getAll from "../global/getAll.js";
+import { medicosPagination, pagination, ssrMedicosPagination } from "./medicosPagination.js";
 
 
 async function deleteMedico(id) {

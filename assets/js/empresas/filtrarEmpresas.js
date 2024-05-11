@@ -1,5 +1,4 @@
-import { filterPaginationHandle } from "../global/filterPaginationHandle.js";
-import { buscarRegistrosObj, empresasPagination, listadoEmpresasPagination, ssrEmpresaRequest } from "./empresasPagination.js";
+import { buscarRegistrosObj, empresasPagination, ssrEmpresaRequest } from "./empresasPagination.js";
 
 async function filtrarEmpresas() {
 

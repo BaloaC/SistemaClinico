@@ -28,18 +28,12 @@ async function updatePaciente(id) {
 
         //Establecer el option con los datos del usuario
         $form.nombres.value = json.nombres || json.nombre_paciente;
-        // $form.nombres.dataset.secondValue = json.nombres || json.nombre_paciente;
         $form.apellidos.value = json.apellidos;
-        // $form.apellidos.dataset.secondValue = json.apellidos;
         $form.cedula.value = json.cedula;
         $form.cedula.dataset.secondValue = json.cedula;
         $form.fecha_nacimiento.value = json.fecha_nacimiento;
-        // $form.fecha_nacimiento.dataset.secondValue = json.fecha_nacimiento;
         $form.direccion.value = json.direccion;
-        // $form.direccion.dataset.secondValue = json.direccion;
         $form.telefono.value = $tel[1];
-        // $form.telefono.dataset.secondValue = $tel[1];
-        // $form.cod_tel.dataset.secondValue = $telCod;
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";

@@ -1,6 +1,5 @@
 import deleteModule from "../global/deleteModule.js";
-import getAll from "../global/getAll.js";
-import { listadoProveedoresPagination, pagination, proveedoresPagination, ssrProveedoresRequest } from "./proveedoresPagination.js";
+import { pagination, proveedoresPagination, ssrProveedoresRequest } from "./proveedoresPagination.js";
 
 function deleteProveedor(id) {
     document.getElementById("btn-confirmDelete").setAttribute("onclick", `confirmDelete(${id})`)

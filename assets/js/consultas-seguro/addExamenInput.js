@@ -1,5 +1,4 @@
 import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
-import getAll from "../global/getAll.js";
 import validateExistingSelect2 from "../global/validateExistingSelect2.js";
 import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
 import validateInputs from "../global/validateInputs.js";
@@ -22,8 +21,6 @@ const handleModalOpen = async () => {
 
         
         examenesSeguroList = examenesSeguroListAll.filter(examenSeguro => !infoSeguro?.examenes.some(examen => examenSeguro.examen_id == examen.examen_id));
-
-        // variableProxy.value = "soy yo";
 
         dinamicSelect2({
             obj: examenesSeguroList,

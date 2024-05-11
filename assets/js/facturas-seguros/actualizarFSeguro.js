@@ -1,4 +1,3 @@
-import addModule from "../global/addModule.js";
 const path = location.pathname.split('/');
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import getById from "../global/getById.js";

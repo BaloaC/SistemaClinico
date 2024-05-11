@@ -1,6 +1,3 @@
-import { clicks } from "./addInsumoInput.js";
-
-let clicksCalculate = 0;
 function calcularMonto(input) {
 
     const insumoContainer = input.parentElement.parentElement;
@@ -13,14 +10,6 @@ function calcularMonto(input) {
         totalIva = document.getElementById("iva"),
         productosTotales = document.getElementById("productos-totales"),
         total = document.getElementById("monto-total");
-
-    // // let test = document.querySelector('.insumo-unid');
-    // precioUnitario.addEventListener('keydown', function (event) {
-    //     if (event.key === '-' || event.code === 'Slash') {
-    //         event.preventDefault();
-    //     }
-
-    // });
 
     let [montoTotalProducto, iva, montoTotalProductoSinIva] = [0, 0, 0];
 

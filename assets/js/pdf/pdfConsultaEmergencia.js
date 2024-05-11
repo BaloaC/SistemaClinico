@@ -25,14 +25,5 @@ document.getElementById("total_consultas").textContent = dataFactura.factura?.co
 document.getElementById("monto_total_consulta").textContent = dataFactura?.monto_consulta_bs ? `${convertCurrencyToVES(dataFactura?.monto_consulta_bs ?? 0)} Bs` : `${convertCurrencyToVES(dataFactura.monto_total_bs ?? 0)} Bs`;
 document.getElementById("cobertura").textContent = dataFactura?.cobertura_seguro;
 document.getElementById("diferenciaPaciente").textContent = parseFloat(dataFactura?.monto_consulta_usd) - parseFloat(dataFactura?.cobertura_seguro);
-// document.getElementById("nombre_paciente").textContent = `${dataConsulta[0].nombre_paciente} ${dataConsulta[0].apellido_paciente}`;
-// document.getElementById("cedula_paciente").textContent = dataConsulta[0].cedula_paciente;
-// document.getElementById("cedula_titular").textContent = dataConsulta[0].cedula_titular;
-// document.getElementById("nombre_medico").textContent = `${dataConsulta[0].nombre_medico} ${dataConsulta[0].apellido_medico}`;
-// document.getElementById("especialidad").textContent = dataConsulta[0].nombre_especialidad;
-// document.getElementById("fecha_ocurrencia").textContent = dataFactura.fecha_ocurrencia;
-// document.getElementById("fecha_pago_limite").textContent = dataFactura.fecha_pago_limite;
-// document.getElementById("pago_total").textContent = dataFactura.monto;
-
 
 window.print();

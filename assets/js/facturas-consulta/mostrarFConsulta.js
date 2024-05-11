@@ -1,6 +1,5 @@
 import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
-import getById from "../global/getById.js";
 import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
 import formatToRealDate from "../global/formatToRealDate.js";
 import createDataTable from "../global/createDataTable.js";
@@ -26,10 +25,7 @@ const handleModalOpen = async (modalParent) => {
             placeholder: "Debe seleccionar un paciente"
         })
 
-        // const pacientesList = await getAll("pacientes/consulta");
-
         dinamicSelect2({
-            // obj: pacientesList,
             selectSelector: "#s-paciente-consulta",
             selectValue: "paciente_id",
             selectNames: ["cedula", "nombre-apellidos"],
@@ -79,7 +75,6 @@ const handleModalOpen = async (modalParent) => {
             $("#s-consulta-normal").empty().select2();
             
             dinamicSelect2({
-                // obj: infoConsultas?.consultas ?? [],
                 selectSelector: `#s-consulta-normal`,
                 selectValue: "consulta_id",
                 selectNames: ["consulta_id", "motivo_cita"],
@@ -201,20 +196,6 @@ addEventListener("DOMContentLoaded", e => {
                 }
             },
         },
-        // {
-        //     data: null,
-        //     render: function (data, type, row) {
-        //         // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-        //         if (row.estatus_fac == 1) {
-        //             return `
-        //                 <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFConsulta(${row.estatus_fac})"><i class="fas fa-trash del-consulta"></i></a>
-        //             `
-        //         } else {
-        //             return `-`;
-        //         }
-        //     }
-        // }
-
     ];
 
     const columnDefsFConsulta = [{

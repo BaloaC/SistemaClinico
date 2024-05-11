@@ -4,11 +4,8 @@ import getById from "../global/getById.js";
 import { patterns } from "../global/patternsValidation.js";
 import showDefaultModalAct from "../global/showDefaultModalAct.js";
 import updateModule from "../global/updateModule.js";
-import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
 
-const d = document,
-    path = location.pathname.split('/');
-
+const d = document;
 
 async function updateEspecialidad(id) {
 
