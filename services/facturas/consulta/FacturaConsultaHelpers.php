@@ -204,7 +204,7 @@ class FacturaConsultaHelpers {
                 }
             }
         }
-
+        
         if (isset($consulta['cita_examenes'])) {
             foreach ($consulta['cita_examenes'] as $examenes) {
                 
@@ -235,6 +235,18 @@ class FacturaConsultaHelpers {
                 $consulta['monto_total_usd'] = $montoUsd;
                 $consulta['monto_total_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
             }
+        } else {
+
+            $_consultaModel = new ConsultaModel();
+            $consulta_actual = $_consultaModel->where('consulta_id', '=', $consulta['consulta_id'])->getFirst();
+
+            if ($consulta_actual->tipo_servicio == 1) {
+                $consulta['monto_total_usd'] = $consulta['monto_consulta_usd'];
+            } else if ($consulta_actual->tipo_servicio == 2) {
+                $consulta['monto_total_usd'] = $montoUsd + $consulta['monto_consulta_usd'];
+                $consulta['monto_total_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
+                $consulta['monto_consulta_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
+            }
         }
 
         return $consulta;
@@ -249,7 +261,7 @@ class FacturaConsultaHelpers {
         } else {
             $_consultaCita = new ConsultaCitaModel();
             $consulta_cita = $_consultaCita->where('consulta_id', '=', $consulta_id)->getFirst();
-
+            
             if (is_null($consulta_cita)) {
                 $_consultaSinCita = new ConsultaSinCitaModel();
                 $consulta_sin_cita = $_consultaSinCita->where('consulta_id', '=', $consulta_id)->getFirst();

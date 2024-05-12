@@ -168,8 +168,7 @@ class FacturaConsultaService {
         $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
         $examenes_cita = FacturaConsultaHelpers::obtenerCitasExamenes($factura);
         $examenes = "";
-        // echo '<pre>';
-        
+                
         if ( !is_null($examenes_consulta) && !is_null($examenes_cita)) {
             $examenes = array_merge($examenes_consulta, $examenes_cita);
         } else {
@@ -178,6 +177,8 @@ class FacturaConsultaService {
         
         if (!is_null($examenes)) {
             // $consultaList[] = array_merge($consulta_info, $examenes);
+            echo '<pre>';
+            // var_dump( ($examenes) );
             return FacturaConsultaHelpers::obtenerMontoTotal(array_merge($consulta_info, $examenes));
         } else {
             return FacturaConsultaHelpers::obtenerMontoTotal(array_merge($consulta_info));

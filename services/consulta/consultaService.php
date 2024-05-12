@@ -222,7 +222,7 @@ class ConsultaService {
         }
     }
 
-    public static function obtenerConsultaNormal($consulta) {
+    public static function obtenerConsultaNormal($consulta, $obtener_relaciones = true) {
         $_consultaCita = new ConsultaCitaModel();
         $innersCita = $_consultaCita->listInner(ConsultaService::$innerConsultaCita);
         $_consultaCita->where('consulta_cita.consulta_id', '=', $consulta->consulta_id);
@@ -243,13 +243,15 @@ class ConsultaService {
             $consultaCompleta = $_consultaSinCita->where('consulta_sin_cita.consulta_id', '=', $consulta->consulta_id)
                                                 ->innerJoin(ConsultaService::$selectConsultaSinCita, $innersConsulta, "consulta_sin_cita");
 
-            $relaciones = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
+            $relaciones = [];
+            if ($obtener_relaciones) {
+                $relaciones = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
+            }
             
             if (count((array) $relaciones) > 0) {
                 $consultaCompleta[0] = (object) array_merge((array) $consultaCompleta[0], (array) $relaciones);
             }
-                // echo '<pre>';
-                // var_dump($consulta);
+
             return $consultas[] = (object) array_merge((array) $consulta, (array) $consultaCompleta[0]);
             
         } else { // Si es por cita extraemos la información de consulta_cita
@@ -257,10 +259,13 @@ class ConsultaService {
             $innersCita = $_consultaCita->listInner(ConsultaService::$innerConsultaCita);
             $cita = $_cita->where('cita.cita_id', '=', $es_citada[0]->cita_id)->innerJoin(ConsultaService::$selectConsultaCita, $innersCita, "consulta_cita")[0];
 
-            $relaciones = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
-            if (count((array) $relaciones) > 0) {
-                $consultaCompleta = (object) array_merge((array) $consulta, (array) $relaciones);
+            if ($obtener_relaciones) {
+                $relaciones = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
+                if (count((array) $relaciones) > 0) {
+                    $consultaCompleta = (object) array_merge((array) $consulta, (array) $relaciones);
+                }
             }
+            
             return $consultas[] = (object) array_merge((array) $consulta, (array) $cita);
             
         }
@@ -286,7 +291,7 @@ class ConsultaService {
         $innersConsulta = $_consultaSinCita->listInner($inner);
         $consultaSinCita = $_consultaSinCita->where('consulta_sin_cita.consulta_id', '=', $consulta->consulta_id)
                                             ->innerJoin($selectInner, $innersConsulta, "consulta_sin_cita");
-
+        
         $_consultaEmergencia = new ConsultaEmergenciaModel();
         $consultaEmergencia = $_consultaEmergencia->where('consulta_id','=', $consulta->consulta_id)->getFirst();
         
