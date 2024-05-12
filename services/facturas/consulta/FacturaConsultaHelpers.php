@@ -241,29 +241,36 @@ class FacturaConsultaHelpers {
     }
 
     public static function obtenerPrecioConsulta($consulta_id) {
-        $_consultaCita = new ConsultaCitaModel();
-        $consulta_cita = $_consultaCita->where('consulta_id', '=', $consulta_id)->getFirst();
+        $_consultaModel = new ConsultaModel();
+        $consulta = $_consultaModel->where('consulta_id', '=', $consulta_id)->getFirst();
 
-        if (is_null($consulta_cita)) {
-            $_consultaSinCita = new ConsultaSinCitaModel();
-            $consulta_sin_cita = $_consultaSinCita->where('consulta_id', '=', $consulta_id)->getFirst();
-            
-            $_medicoEspecialidadModel = new MedicoEspecialidadModel();
-            $consulta_sin_cita = $_consultaSinCita->where('consulta_id', '=', $consulta_id)->getFirst();
-            $medico_especialidad = $_medicoEspecialidadModel->where('medico_id', '=', $consulta_sin_cita->medico_id)->getFirst();
+        if ($consulta->tipo_servicio == 1) {
+            return 0;
+        } else {
+            $_consultaCita = new ConsultaCitaModel();
+            $consulta_cita = $_consultaCita->where('consulta_id', '=', $consulta_id)->getFirst();
 
-            return $medico_especialidad->costo_especialidad;
-
-        } else if (!is_null($consulta_cita)) {
-            $_citaModel = new CitaModel();
-            $cita = $_citaModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
-
-            if ($cita->tipo_servicio == 2) {
+            if (is_null($consulta_cita)) {
+                $_consultaSinCita = new ConsultaSinCitaModel();
+                $consulta_sin_cita = $_consultaSinCita->where('consulta_id', '=', $consulta_id)->getFirst();
+                
                 $_medicoEspecialidadModel = new MedicoEspecialidadModel();
-                $medico_especialidad = $_medicoEspecialidadModel->where('medico_id', '=', $cita->medico_id)->getFirst();
+                $consulta_sin_cita = $_consultaSinCita->where('consulta_id', '=', $consulta_id)->getFirst();
+                $medico_especialidad = $_medicoEspecialidadModel->where('medico_id', '=', $consulta_sin_cita->medico_id)->getFirst();
+
                 return $medico_especialidad->costo_especialidad;
-            } else {
-                return 0;
+
+            } else if (!is_null($consulta_cita)) {
+                $_citaModel = new CitaModel();
+                $cita = $_citaModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
+
+                if ($cita->tipo_servicio == 2) {
+                    $_medicoEspecialidadModel = new MedicoEspecialidadModel();
+                    $medico_especialidad = $_medicoEspecialidadModel->where('medico_id', '=', $cita->medico_id)->getFirst();
+                    return $medico_especialidad->costo_especialidad;
+                } else {
+                    return 0;
+                }
             }
         }
     }
