@@ -4,7 +4,7 @@ include_once './services/globals/GlobalsHelpers.php';
 
 class FacturaConsultaHelpers {
 
-    public static function obtenerInformacion($factura) {
+    public static function obtenerInformacion($factura, $es_asegurada) {
 
         $selectGeneral = array(
             "paciente.nombre AS nombre_paciente",
@@ -44,16 +44,22 @@ class FacturaConsultaHelpers {
 
         $_consultaCita = new ConsultaCitaModel();
         $innerConsultaCita = $_consultaCita->listInner( $innerConsultaCita );
-        $consulta = $_consultaCita->where('consulta_cita.consulta_id', '=',$factura->consulta_id)
-                                    ->where('cita.tipo_cita', '=', 1)                        
-                                    ->innerJoin( array_merge($selectConsultaCita, $selectGeneral), $innerConsultaCita, 'consulta_cita');
+        $_consultaCita->where('consulta_cita.consulta_id', '=',$factura->consulta_id);
+
+        if ($es_asegurada) {
+            $_consultaCita->where('cita.tipo_cita', '=', 2);
+        } else {
+            $_consultaCita->where('cita.tipo_cita', '=', 1);
+        }
+
+        $consulta = $_consultaCita->innerJoin( array_merge($selectConsultaCita, $selectGeneral), $innerConsultaCita, 'consulta_cita');
         
         // Si la consulta no es por cita, buscamos las que son sin cita
         if ( is_null($consulta) || count($consulta) <= 0 ) {
             $_consultaSinCita = new ConsultaSinCitaModel();
             $innerConsultaSinCita = $_consultaSinCita->listInner( $innerConsultaSinCita );
             $consulta = $_consultaSinCita->where('consulta_id', '=',$factura->consulta_id)
-                                            ->innerJoin( array_merge($selectConsultaSinCita, $selectGeneral) , $innerConsultaSinCita, 'consulta_sin_cita');
+                                        ->innerJoin( array_merge($selectConsultaSinCita, $selectGeneral) , $innerConsultaSinCita, 'consulta_sin_cita');
         }
 
 
@@ -112,32 +118,58 @@ class FacturaConsultaHelpers {
                                                 ->where('consulta_examen.estatus_con', '!=', '2')
                                                 ->innerJoin($array_select, $inners, "consulta_examen");
         $consulta = [];
-
         // Revisamos si tienes insumos asociados
         if ( count($consultaExamenes) > 0 ) {
             // $monto = $factura->monto_consulta;
 
             foreach ($consultaExamenes as $consulta_examen) {
-                
                 $consulta_examen->precio_examen_usd = $consulta_examen->precio_examen_usd;
 
                 if (isset($factura->consulta_seguro_id) && $consulta_examen->precio_examen_bs == 0) {
-
                     $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
                     $precio_examen_bs = $consulta_examen->precio_examen_usd * $valorDivisa;
                     $consulta_examen->precio_examen_bs = round($precio_examen_bs, 2);
 
                 } else {
                     $consulta_examen->precio_examen_bs = $consulta_examen->precio_examen_bs;
-                }
-                
+                }       
             }
             
             $consulta['examenes'] = $consultaExamenes;
+            $consultaList[] = $consulta;
+            return $consultaList[0];
         }
+    }
 
-        $consultaList[] = $consulta;
-        return $consultaList[0];
+    public static function obtenerCitasExamenes($factura) {
+
+        $_consultaCita = new ConsultaCitaModel();
+        $consulta_cita = $_consultaCita->where('consulta_id', '=', $factura->consulta_id)->getFirst();
+
+        if (!is_null($consulta_cita)) {
+            $_citaExamenModel = new CitaExamenModel();
+            $inners = $_citaExamenModel->listInner(['examen' => 'cita_examen']);
+            $array_select = Array('cita_examen.precio_examen_usd', 'cita_examen.precio_examen_bs', 'cita_examen.cita_examen_id', 'cita_examen.cita_id', 'cita_examen.examen_id', 'cita_examen.estatus_cit', 'examen.nombre');
+            $cita_examenes = $_citaExamenModel->where('cita_examen.cita_id', '=', $consulta_cita->cita_id)->innerJoin($array_select, $inners, "cita_examen");
+
+            if (!is_null($cita_examenes)) {
+                foreach ($cita_examenes as $examen) {
+                    $examen->precio_examen_usd = $examen->precio_examen_usd;
+
+                    if (isset($factura->consulta_seguro_id) && $examen->precio_examen_bs == 0) {
+                        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+                        $precio_examen_bs = $examen->precio_examen_usd * $valorDivisa;
+                        $examen->precio_examen_bs = round($precio_examen_bs, 2);
+    
+                    } else {
+                        $examen->precio_examen_bs = $examen->precio_examen_bs;
+                    }
+                }
+                $lista_examenes['cita_examenes'] = $cita_examenes;
+            }
+            $array_examen[] = $lista_examenes;
+            return $array_examen[0];
+        }
     }
 
     public static function obtenerMontoTotal($consulta) {
@@ -172,6 +204,20 @@ class FacturaConsultaHelpers {
                 }
             }
         }
+
+        if (isset($consulta['cita_examenes'])) {
+            foreach ($consulta['cita_examenes'] as $examenes) {
+                
+                $montoUsd += $examenes->precio_examen_usd;
+                
+                if ( $examenes->precio_examen_bs == 0 ) {
+                    $montoBs += round( $examenes->precio_examen_usd * $valorDivisa, 2);
+
+                } else {
+                    $montoBs += $examenes->precio_examen_bs;
+                }
+            }
+        }
         
         $_consultaCitaModel = new ConsultaCitaModel();
         $consulta_cita = $_consultaCitaModel->where('consulta_id', '=', $consulta['consulta_id'])->getFirst();
@@ -194,6 +240,41 @@ class FacturaConsultaHelpers {
         return $consulta;
     }
 
+    public static function obtenerPrecioConsulta($consulta_id) {
+        $_consultaModel = new ConsultaModel();
+        $consulta = $_consultaModel->where('consulta_id', '=', $consulta_id)->getFirst();
+
+        if ($consulta->tipo_servicio == 1) {
+            return 0;
+        } else {
+            $_consultaCita = new ConsultaCitaModel();
+            $consulta_cita = $_consultaCita->where('consulta_id', '=', $consulta_id)->getFirst();
+
+            if (is_null($consulta_cita)) {
+                $_consultaSinCita = new ConsultaSinCitaModel();
+                $consulta_sin_cita = $_consultaSinCita->where('consulta_id', '=', $consulta_id)->getFirst();
+                
+                $_medicoEspecialidadModel = new MedicoEspecialidadModel();
+                $consulta_sin_cita = $_consultaSinCita->where('consulta_id', '=', $consulta_id)->getFirst();
+                $medico_especialidad = $_medicoEspecialidadModel->where('medico_id', '=', $consulta_sin_cita->medico_id)->getFirst();
+
+                return $medico_especialidad->costo_especialidad;
+
+            } else if (!is_null($consulta_cita)) {
+                $_citaModel = new CitaModel();
+                $cita = $_citaModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
+
+                if ($cita->tipo_servicio == 2) {
+                    $_medicoEspecialidadModel = new MedicoEspecialidadModel();
+                    $medico_especialidad = $_medicoEspecialidadModel->where('medico_id', '=', $cita->medico_id)->getFirst();
+                    return $medico_especialidad->costo_especialidad;
+                } else {
+                    return 0;
+                }
+            }
+        }
+    }
+
     public static function insertarPreciosFacturaNormal($consulta_id) {
         
         $_globalModel = new GlobalModel();
@@ -210,6 +291,22 @@ class FacturaConsultaHelpers {
             $actualizado = $consultaExamen->where('consulta_examen_id', '=', $examen->consulta_examen_id)->update(array('precio_examen_bs' => $precio_examen_bs));
         }
 
+        $_consultaCitaModel = new ConsultaCitaModel();
+        $consulta_cita = $_consultaCitaModel->where('consulta_id', '=', $consulta_id)->getFirst();
+
+        if (!is_null($consulta_cita)) {
+            $_citaExamenModel = new CitaExamenModel();
+            $examenes = $_citaExamenModel->where('cita_id', '=', $consulta_cita->cita_id)->getAll();
+
+            foreach ($examenes as $examen) {
+                $precio_examen_bs = $examen->precio_examen_usd * (float) $valorDivisa->value;
+                $precio_examen_bs = round($precio_examen_bs, 2);
+                
+                $_citaExamenModel = new CitaExamenModel();
+                $actualizado = $_citaExamenModel->where('cita_examen_id', '=', $examen->cita_examen_id)->update(array('precio_examen_bs' => $precio_examen_bs));
+            }
+        }
+        
         $_consultaInsumoModel = new ConsultaInsumoModel();
         $insumos = $_consultaInsumoModel->where('consulta_id', '=', $consulta_id)->getAll();
 

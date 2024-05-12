@@ -5,7 +5,7 @@ class FacturaConsultaValidaciones {
     public static function validacionesGenerales($formulario) {
 
         $validarFactura = new Validate;
-        $camposNumericos = array('monto_consulta_usd');
+        // $camposNumericos = array('monto_consulta_usd');
         $camposId = array('consulta_id', 'paciente_id');
 
         if ($validarFactura->isEmpty($formulario)) {
@@ -14,11 +14,11 @@ class FacturaConsultaValidaciones {
             exit();
         }
 
-        if ( $validarFactura->isNumber($formulario, $camposNumericos) ) {
-            $respuesta = new Response('DATOS_INVALIDOS');
-            echo $respuesta->json(400);
-            exit();
-        }
+        // if ( $validarFactura->isNumber($formulario, $camposNumericos) ) {
+        //     $respuesta = new Response('DATOS_INVALIDOS');
+        //     echo $respuesta->json(400);
+        //     exit();
+        // }
 
         if ( !$validarFactura->existsInDB($formulario, $camposId) ) {
             $respuesta = new Response('NOT_FOUND');

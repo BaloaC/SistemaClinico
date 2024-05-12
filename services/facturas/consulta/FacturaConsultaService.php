@@ -20,6 +20,26 @@ class FacturaConsultaService {
 
         // Obtenemos todas las facturas
         $_facturaConsulta = new FacturaConsultaModel();
+
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_facturaConsulta->limit([$primer_registro, $size]);
+            }
+
+            if(isset($_GET['search'])) {
+                if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                    $_facturaConsulta->where("CONCAT(factura_consulta.factura_consulta_id)", 'LIKE', "%{$_GET['search']['value']}%");
+                } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                    $_facturaConsulta->where("CONCAT(factura_consulta.factura_consulta_id)", 'LIKE', "%{$_GET['search']}%");
+                }
+            }
+        }
+
         $innersConsulta = $_facturaConsulta->listInner($innerConsulta);
 
         if ( array_key_exists('date', $_GET) ) {
@@ -43,8 +63,13 @@ class FacturaConsultaService {
         
         if (!is_null($facturasList) && count($facturasList)) {
             foreach ($facturasList as $factura) {
+
+                $_consultaSeguro = new ConsultaSeguroModel();
+                $consulta_seguro = $_consultaSeguro->where('consulta_id', '=', $factura->consulta_id)->getFirst();
+                $es_asegurada = is_null($consulta_seguro) ? false : true;
+
                 if ( array_key_exists('date', $_GET) ) {
-                    $informacion_consulta = FacturaConsultaHelpers::obtenerInformacion($factura); 
+                    $informacion_consulta = FacturaConsultaHelpers::obtenerInformacion($factura, $es_asegurada); 
                     // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
     
                     // verificar para que sirve este codigo
@@ -58,9 +83,10 @@ class FacturaConsultaService {
                     $monto_total_consultas_usd += $informacion_consulta['monto_consulta_usd'];
     
                 } else {
-                    $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura);
+
+                    $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura, $es_asegurada);
                     // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
-    
+                    
                     if (!isset($consulta_info['nombre_paciente'])) {
                         $_consultaCitaModel = new ConsultaCitaModel();
                         $inners = $_consultaCitaModel->listInner(['cita' => 'consulta_cita', 'paciente' => 'cita']);
@@ -71,7 +97,20 @@ class FacturaConsultaService {
                     }
     
                     $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
-                    $consultaList[] = array_merge($consulta_info, $examenes_consulta);
+                    $examenes_cita = FacturaConsultaHelpers::obtenerCitasExamenes($factura);
+                    $examenes = "";
+
+                    if ( !is_null($examenes_consulta) && !is_null($examenes_cita)) {
+                        $examenes = array_merge($examenes_consulta, $examenes_cita);
+                    } else {
+                        $examenes = $examenes_consulta ?? $examenes_cita;
+                    }
+                    
+                    if (!is_null($examenes)) {
+                        $consultaList[] = array_merge($consulta_info, $examenes);
+                    } else {
+                        $consultaList[] = $consulta_info;
+                    }
                 }
             }
         }
@@ -87,8 +126,6 @@ class FacturaConsultaService {
             // $montoRelaciones =  FacturaConsultaHelpers::obtenerMontoTotal($consulta);
 
             $facturas[] = FacturaConsultaHelpers::obtenerMontoTotal($consulta);
-
-
         }
 
         return $facturas;
@@ -122,12 +159,16 @@ class FacturaConsultaService {
         }
         
         $factura = (object) $factura[0];
+        $_consultaSeguro = new ConsultaSeguroModel();
+        $consulta_seguro = $_consultaSeguro->where('consulta_id', '=', $factura->consulta_id)->getFirst();
+        $es_asegurada = is_null($consulta_seguro) ? false : true;
 
-        $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura);
+        $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura, $es_asegurada);
         // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
         $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
+        $examenes_cita = FacturaConsultaHelpers::obtenerCitasExamenes($factura);
 
-        $factura_consulta = array_merge($consulta_info, $examenes_consulta);
+        $factura_consulta = array_merge($consulta_info, $examenes_consulta, $examenes_cita);
         return FacturaConsultaHelpers::obtenerMontoTotal($factura_consulta);
 
         // return FacturaConsultaHelpers::obtenerMontoTotal( array ($factura_consulta));

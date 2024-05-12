@@ -32,7 +32,22 @@ class FacturaConsultaController extends Controller {
 
         $_globalModel = new GlobalModel();
         $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
-        $_POST['monto_consulta_bs'] = $_POST['monto_consulta_usd'] * (float) $valorDivisa->value;
+
+        // verificamos si la factura consulta cubre una consulta completa o una incompleta
+        $_consultaSeguroModel = new ConsultaSeguroModel();
+        $consulta_seguro = $_consultaSeguroModel->where('consulta_id', '=', $_POST['consulta_id'])->getFirst();
+        $monto_consulta_usd = 0;
+
+        if (!is_null($consulta_seguro)) {
+            $factura = ConsultaSeguroService::listarConsultasSeguroId($consulta_seguro->consulta_seguro_id);
+            $monto_consulta_usd = $factura['monto_total_usd'] - $factura['cobertura_seguro'];
+            $_POST['diferencia_asegurada'] = true;
+
+        } else {
+            $monto_consulta_usd = FacturaConsultaHelpers::obtenerPrecioConsulta($_POST['consulta_id']);;
+        }
+
+        $_POST['monto_consulta_bs'] = $monto_consulta_usd * (float) $valorDivisa->value;
 
         $data = $validarFactura->dataScape($_POST);
         $_facturaConsultaModel = new FacturaConsultaModel();
@@ -54,23 +69,24 @@ class FacturaConsultaController extends Controller {
     }
 
     public function listarFacturaConsulta() {
+        
         $consultaList = FacturaConsultaService::listarFacturas();
         $_facturaConsultaModel = new FacturaConsultaModel();
 
-        if (isset($_GET['start']) || isset($_GET['search'])) {
-            if (isset($_GET['start'])) {
-                $size = isset($_GET['length']) ? $_GET['length'] : 10;
-                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+        // if (isset($_GET['start']) || isset($_GET['search'])) {
+        //     if (isset($_GET['start'])) {
+        //         $size = isset($_GET['length']) ? $_GET['length'] : 10;
+        //         $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
 
-                $ultimo_registro = $pagina_actual * $size;
-                $primer_registro = $ultimo_registro - $size;
-                $_facturaConsultaModel->limit([$primer_registro, $size]);
-            }
+        //         $ultimo_registro = $pagina_actual * $size;
+        //         $primer_registro = $ultimo_registro - $size;
+        //         $_facturaConsultaModel->limit([$primer_registro, $size]);
+        //     }
 
-            if (strlen($_GET['search']['value']) > 0) {
-                $_facturaConsultaModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
-            }
-        }
+        //     if (strlen($_GET['search']['value']) > 0) {
+        //         $_facturaConsultaModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        //     }
+        // }
 
         if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
             $_facturaConsultaModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");

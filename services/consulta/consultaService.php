@@ -96,10 +96,10 @@ class ConsultaService {
             ConsultaService::actualizarAcumuladoMedico($consultaEmergencia['pagos']);
         }
         
-        if (isset($formulario['examenes'])) {
-            $formulario['consulta_id'] = $consulta_id;
-            ConsultaHelper::insertarExamenesEmergencia($formulario);
-        }
+        // if (isset($formulario['examenes'])) {
+        //     $formulario['consulta_id'] = $consulta_id;
+        //     ConsultaHelper::insertarExamenesEmergencia($formulario);
+        // }
         $total = 0;
         if (isset($formulario['insumos'])) {
             $total = ConsultaHelper::insertarInsumo($formulario['insumos'], $consulta_id, true);
@@ -248,7 +248,8 @@ class ConsultaService {
             if (count((array) $relaciones) > 0) {
                 $consultaCompleta[0] = (object) array_merge((array) $consultaCompleta[0], (array) $relaciones);
             }
-            
+                // echo '<pre>';
+                // var_dump($consulta);
             return $consultas[] = (object) array_merge((array) $consulta, (array) $consultaCompleta[0]);
             
         } else { // Si es por cita extraemos la información de consulta_cita
@@ -373,7 +374,7 @@ class ConsultaService {
         if (isset($params['estatus'])) {
             $_consultaCitaModel->where('consulta.estatus_con', '=', $params['estatus']);
         }
-        
+
         $lista_count = $_consultaCitaModel->innerJoin($select, $inners, "consulta_cita");
         return ['lista_count' => $lista_count, 'lista' => $lista];
     }

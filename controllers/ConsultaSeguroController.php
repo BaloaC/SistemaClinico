@@ -79,6 +79,8 @@ class ConsultaSeguroController extends Controller{
             $data['monto_consulta_bs'] = 0;
             if ($cita->tipo_servicio == 1) {
                 $data['monto_consulta_usd'] = 0;
+            } else {
+                $data['monto_consulta_usd'] = FacturaConsultaHelpers::obtenerPrecioConsulta($_POST['consulta_id']);
             }
 
             $data['cobertura_seguro'] = $cita->monto_aprobado;
