@@ -66,7 +66,7 @@ class FacturaConsultaService {
 
                     $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura, $es_asegurada);
                     // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
-    
+                    
                     if (!isset($consulta_info['nombre_paciente'])) {
                         $_consultaCitaModel = new ConsultaCitaModel();
                         $inners = $_consultaCitaModel->listInner(['cita' => 'consulta_cita', 'paciente' => 'cita']);
@@ -77,8 +77,20 @@ class FacturaConsultaService {
                     }
     
                     $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
-                    $examenes_cita = FacturaConsultaHelpers::obtenerExamenes($factura);
-                    $consultaList[] = array_merge($consulta_info, $examenes_consulta, $examenes_cita);
+                    $examenes_cita = FacturaConsultaHelpers::obtenerCitasExamenes($factura);
+                    $examenes = "";
+
+                    if ( !is_null($examenes_consulta) && !is_null($examenes_cita)) {
+                        $examenes = array_merge($examenes_consulta, $examenes_cita);
+                    } else {
+                        $examenes = $examenes_consulta ?? $examenes_cita;
+                    }
+                    
+                    if (!is_null($examenes)) {
+                        $consultaList[] = array_merge($consulta_info, $examenes);
+                    } else {
+                        $consultaList[] = $consulta_info;
+                    }
                 }
             }
         }
@@ -94,8 +106,6 @@ class FacturaConsultaService {
             // $montoRelaciones =  FacturaConsultaHelpers::obtenerMontoTotal($consulta);
 
             $facturas[] = FacturaConsultaHelpers::obtenerMontoTotal($consulta);
-
-
         }
 
         return $facturas;

@@ -248,7 +248,8 @@ class ConsultaService {
             if (count((array) $relaciones) > 0) {
                 $consultaCompleta[0] = (object) array_merge((array) $consultaCompleta[0], (array) $relaciones);
             }
-            
+                // echo '<pre>';
+                // var_dump($consulta);
             return $consultas[] = (object) array_merge((array) $consulta, (array) $consultaCompleta[0]);
             
         } else { // Si es por cita extraemos la información de consulta_cita

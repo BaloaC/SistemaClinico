@@ -32,7 +32,10 @@ class FacturaConsultaController extends Controller {
 
         $_globalModel = new GlobalModel();
         $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
-        $_POST['monto_consulta_bs'] = $_POST['monto_consulta_usd'] * (float) $valorDivisa->value;
+
+        $monto_consulta_usd = FacturaConsultaHelpers::obtenerPrecioConsulta($_POST['consulta_id']);;
+
+        $_POST['monto_consulta_bs'] = $monto_consulta_usd * (float) $valorDivisa->value;
 
         $data = $validarFactura->dataScape($_POST);
         $_facturaConsultaModel = new FacturaConsultaModel();
@@ -54,6 +57,7 @@ class FacturaConsultaController extends Controller {
     }
 
     public function listarFacturaConsulta() {
+        
         $consultaList = FacturaConsultaService::listarFacturas();
         $_facturaConsultaModel = new FacturaConsultaModel();
 
