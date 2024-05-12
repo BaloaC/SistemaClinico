@@ -167,6 +167,24 @@
             </div>
         </div>
 
+        <!-- Modal Alerta-->
+        <div class="modal fade" id="modalAlert" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Alerta</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="delAlertSeguro" class="alert alert-warning" role="alert">No es posible dejar un exámen sin especialidad asociada</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-confirmDeleteSeguro" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Modal Confirmar Eliminar-->
         <div class="modal fade" id="modalDeleteRelacion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabelRelacion" aria-hidden="true">

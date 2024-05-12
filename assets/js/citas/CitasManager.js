@@ -163,11 +163,11 @@ export default class CitasManager {
         }
 
         // Subir el scroll hasta inicio para visualizar mejor el mensaje de error
-        modalReg.scrollTo({
-            top: modalReg.scrollHeight,
-            bottom: 0,
-            behavior: 'smooth'
-        });
+        // modalReg.scrollTo({
+        //     top: modalReg.scrollHeight,
+        //     bottom: 0,
+        //     behavior: 'smooth'
+        // });
     }
 
     inputHoraEntraCita(horario, inputId = "#hora_entrada") {

@@ -6,7 +6,7 @@ import getById from "../global/getById.js";
 import isBeforeToday from "../global/isBeforeToday.js";
 import sortScheduleByDay from "../global/sortScheduleByDay.js";
 import to12HourFormat from "../global/to12HoursFormat.js";
-import CitasManager from "./citasManager.js";
+import CitasManager from "./CitasManager.js";
 import parseCitas from "./parseCitas.js";
 import tipoAsegurado from "./tipoAsegurado.js";
 import tipoTitular from "./tipoTitular.js";
@@ -235,7 +235,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
             emptySelect2({
                 selectSelector: medicoSelect,
-                placeholder: "Debe seleccionar un médico",
+                placeholder: "Debe seleccionar una especialidad",
                 parentModal: "#modalReg"
             })
 
@@ -279,6 +279,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             $("#citas-table").fadeOut("slow");
             $(".medicoScheduleLabel").fadeOut("slow");
             $(".citaScheduleLabel").fadeOut("slow");
+            $(".contact-medico").fadeOut("slow");
 
             const citasManager = new CitasManager();
             citasManager.inputCitasHandler(true, true);
@@ -354,6 +355,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             $("#citas-table").fadeOut("slow");
             $(".medicoScheduleLabel").fadeOut("slow");
             $(".citaScheduleLabel").fadeOut("slow");
+            $(".contact-medico").fadeIn("slow");
 
             const infoMedico = await getById("medicos", this.value);
             const modalReg = document.querySelector("#modalReg .modal-body");
@@ -389,11 +391,11 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             $("#horarios-table").fadeIn("slow");
 
             // Subir el scroll hasta inicio para visualizar mejor el mensaje de error
-            modalReg.scrollTo({
-                top: modalReg.scrollHeight,
-                bottom: 0,
-                behavior: 'smooth'
-            });
+            // modalReg.scrollTo({
+            //     top: modalReg.scrollHeight,
+            //     bottom: 0,
+            //     behavior: 'smooth'
+            // });
         });
 
         $("#s-tipo_cita").on("change", function (e) {
@@ -423,6 +425,9 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
     selectable: false,
     selectMirror: false,
     eventClick: async function (arg) {
+
+        // Ocultamos el popover si se selecciona desde el ver más
+        $(".fc .fc-popover").fadeOut("slow");
 
         const cita = await getById(module, arg.event._def.publicId);
 

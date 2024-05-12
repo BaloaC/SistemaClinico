@@ -153,7 +153,7 @@
                                                 <li>Días fueras del horario del médico</li>
                                             </ul>
                                         </div>
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-12 col-md-6 contact-medico" style="display: none;">
                                             <p>Para asignar citas fuera del horario del médico puede comunicarse con él a través del siguiente número telefónico: <br> <b id="numeroTelefonicoMedico">Seleccione el médico para mostrar su número de contacto</b></p>
                                             <label for="input-radios-container">¿El médico autorizó la asignación de la cita fuera de su horario establecido?</label>
                                             <div class="input-radios-container">
