@@ -73,20 +73,20 @@ class FacturaConsultaController extends Controller {
         $consultaList = FacturaConsultaService::listarFacturas();
         $_facturaConsultaModel = new FacturaConsultaModel();
 
-        if (isset($_GET['start']) || isset($_GET['search'])) {
-            if (isset($_GET['start'])) {
-                $size = isset($_GET['length']) ? $_GET['length'] : 10;
-                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+        // if (isset($_GET['start']) || isset($_GET['search'])) {
+        //     if (isset($_GET['start'])) {
+        //         $size = isset($_GET['length']) ? $_GET['length'] : 10;
+        //         $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
 
-                $ultimo_registro = $pagina_actual * $size;
-                $primer_registro = $ultimo_registro - $size;
-                $_facturaConsultaModel->limit([$primer_registro, $size]);
-            }
+        //         $ultimo_registro = $pagina_actual * $size;
+        //         $primer_registro = $ultimo_registro - $size;
+        //         $_facturaConsultaModel->limit([$primer_registro, $size]);
+        //     }
 
-            if (strlen($_GET['search']['value']) > 0) {
-                $_facturaConsultaModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
-            }
-        }
+        //     if (strlen($_GET['search']['value']) > 0) {
+        //         $_facturaConsultaModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        //     }
+        // }
 
         if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
             $_facturaConsultaModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");

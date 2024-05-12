@@ -291,6 +291,22 @@ class FacturaConsultaHelpers {
             $actualizado = $consultaExamen->where('consulta_examen_id', '=', $examen->consulta_examen_id)->update(array('precio_examen_bs' => $precio_examen_bs));
         }
 
+        $_consultaCitaModel = new ConsultaCitaModel();
+        $consulta_cita = $_consultaCitaModel->where('consulta_id', '=', $consulta_id)->getFirst();
+
+        if (!is_null($consulta_cita)) {
+            $_citaExamenModel = new CitaExamenModel();
+            $examenes = $_citaExamenModel->where('cita_id', '=', $consulta_cita->cita_id)->getAll();
+
+            foreach ($examenes as $examen) {
+                $precio_examen_bs = $examen->precio_examen_usd * (float) $valorDivisa->value;
+                $precio_examen_bs = round($precio_examen_bs, 2);
+                
+                $_citaExamenModel = new CitaExamenModel();
+                $actualizado = $_citaExamenModel->where('cita_examen_id', '=', $examen->cita_examen_id)->update(array('precio_examen_bs' => $precio_examen_bs));
+            }
+        }
+        
         $_consultaInsumoModel = new ConsultaInsumoModel();
         $insumos = $_consultaInsumoModel->where('consulta_id', '=', $consulta_id)->getAll();
 

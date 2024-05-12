@@ -20,6 +20,26 @@ class FacturaConsultaService {
 
         // Obtenemos todas las facturas
         $_facturaConsulta = new FacturaConsultaModel();
+
+        if (isset($_GET['start']) || isset($_GET['search'])) {
+            if (isset($_GET['start'])) {
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = floor($_GET['start'] / $_GET['length']) + 1;
+
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_facturaConsulta->limit([$primer_registro, $size]);
+            }
+
+            if(isset($_GET['search'])) {
+                if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                    $_facturaConsulta->where("CONCAT(factura_consulta.factura_consulta_id)", 'LIKE', "%{$_GET['search']['value']}%");
+                } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                    $_facturaConsulta->where("CONCAT(factura_consulta.factura_consulta_id)", 'LIKE', "%{$_GET['search']}%");
+                }
+            }
+        }
+
         $innersConsulta = $_facturaConsulta->listInner($innerConsulta);
 
         if ( array_key_exists('date', $_GET) ) {
