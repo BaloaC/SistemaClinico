@@ -86,7 +86,7 @@ class ConsultaSeguroService {
         $consultaSeguro[] = $_consultaSeguroModel->where('consulta_seguro_id', '=', $consulta_id)->getFirst();
         
         if (is_null($consultaSeguro[0])) {
-            $respuesta = new Response(false, 'Esa consulta por seguro no se encuentra registrda');
+            $respuesta = new Response(false, 'Esa consulta por seguro no se encuentra registrada');
             echo $respuesta->json(400);
             exit();
         }

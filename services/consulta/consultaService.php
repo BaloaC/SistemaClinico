@@ -173,8 +173,8 @@ class ConsultaService {
             return $respuesta->json(400);
         }
 
-        $_citaModel = new CitaModel;
-        $cita_previa = $_citaModel->where('cita_id', '=', $formulario['cita_id'])->getFirst();
+        // $_citaModel = new CitaModel;
+        // $cita_previa = $_citaModel->where('cita_id', '=', $formulario['cita_id'])->getFirst();
 
         // obtenemos los exámenes que no estén registrados en cita_examen
         $examenes_filtrados = [];

@@ -5,7 +5,7 @@ class CitasValidaciones {
     public static function validacionesGenerales($formulario) {
 
         $validarCita = new Validate;
-        $camposString = array("motivo_cita");
+        // $camposString = array("motivo_cita");
         $campoId = array("paciente_id", "medico_id", "especialidad_id", "cita_id", "examen_id");
         $exclude = array("seguro_id");
 
@@ -21,11 +21,11 @@ class CitasValidaciones {
             exit();
         }
 
-        if ( $validarCita->isString($formulario, $camposString) ) {
-            $respuesta = new Response('DATOS_INVALIDOS');
-            echo $respuesta->json(400);
-            exit();
-        }
+        // if ( $validarCita->isString($formulario, $camposString) ) {
+        //     $respuesta = new Response('DATOS_INVALIDOS');
+        //     echo $respuesta->json(400);
+        //     exit();
+        // }
 
         if ( !$validarCita->isDuplicatedId('especialidad_id', 'medico_id', $formulario['especialidad_id'], $formulario['medico_id'], 'medico_especialidad') ) {
             $respuesta = new Response(false, 'El médico no ejerce la especialidad seleccionada');
