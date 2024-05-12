@@ -73,6 +73,13 @@ class ConsultaController extends Controller {
                 MedicoValidaciones::validarMedicoImpartaEspecialidad($_POST);
             }
 
+            // agregando el tipo_servicio
+            if (isset($_POST['cita_id'])) {
+                $_citaModel = new CitaModel();
+                $cita = $_citaModel->where('cita_id', '=', $_POST['cita_id'])->getFirst();
+                $consulta_separada[1]['tipo_servicio'] = $cita->tipo_servicio;
+            }
+
             $_consultaModel = new ConsultaModel();
             $this->consulta_id = $_consultaModel->insert($consulta_separada[1]);
             $mensaje = ($this->consulta_id > 0);
@@ -212,8 +219,9 @@ class ConsultaController extends Controller {
 
                 $consulta_normal = $consultasModel->getFirst();
                 if (!is_null($consulta_normal)) {
-                    $consulta = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
-                    $lista_consultas[] = array_merge((array) $consulta, (array) ConsultaService::obtenerConsultaNormal($consulta_normal));
+                    // $consulta = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
+                    // $lista_consultas[] = array_merge((array) $consulta, (array) ConsultaService::obtenerConsultaNormal($consulta_normal));
+                    $lista_consultas[] = ConsultaService::obtenerConsultaNormal($consulta_normal);
                 }
             }
         }

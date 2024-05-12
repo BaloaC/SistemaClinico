@@ -249,7 +249,7 @@ class FacturaConsultaHelpers {
         } else {
             $_consultaCita = new ConsultaCitaModel();
             $consulta_cita = $_consultaCita->where('consulta_id', '=', $consulta_id)->getFirst();
-
+            
             if (is_null($consulta_cita)) {
                 $_consultaSinCita = new ConsultaSinCitaModel();
                 $consulta_sin_cita = $_consultaSinCita->where('consulta_id', '=', $consulta_id)->getFirst();
