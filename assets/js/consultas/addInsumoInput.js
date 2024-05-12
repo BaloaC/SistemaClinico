@@ -1,8 +1,6 @@
-import dinamicSelect2, { emptyAllSelect2, select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
-import validateExistingSelect2 from "../global/validateExistingSelect2.js";
-import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
 import validateInputs from "../global/validateInputs.js";
 
 export let insumosList = null;
@@ -23,7 +21,6 @@ const handleModalOpen = async (parentModal) => {
         insumosList = await getAll("insumos/consulta");
 
         dinamicSelect2({
-            // obj: insumosList,
             selectSelector: `#s-insumo`,
             selectValue: "insumo_id",
             selectNames: ["nombre"],
@@ -72,8 +69,6 @@ const handleModalOpen = async (parentModal) => {
                     select: true,
                     agotado: false
                 }
-
-                // if(queryPage === true) query.page = params.page || 1;
 
                 // Query parameters will be ?search=[term]&page=[page]
                 return query;
@@ -198,8 +193,6 @@ function addInsumoInput(parentModal = "#modalReg") {
                 select: true,
                 agotado: false
             }
-
-            // if(queryPage === true) query.page = params.page || 1;
 
             // Query parameters will be ?search=[term]&page=[page]
             return query;

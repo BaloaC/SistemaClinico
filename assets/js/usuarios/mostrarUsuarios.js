@@ -1,17 +1,7 @@
-import { select2OnClick } from "../global/dinamicSelect2.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import formatToRealDate from "../global/formatToRealDate.js";
 import createDataTable from "../global/createDataTable.js";
 const path = location.pathname.split('/');
-
-// select2OnClick({
-//     selectSelector: "#s-especialidad",
-//     selectValue: "especialidad_id",
-//     selectNames: ["nombre"],
-//     module: "especialidades/consulta",
-//     parentModal: "#modalReg",
-//     placeholder: "Seleccione una especialidad"
-// });
 
 addEventListener("DOMContentLoaded", e => {
 
@@ -60,25 +50,7 @@ addEventListener("DOMContentLoaded", e => {
 
     ];
     const order = [[2, 'desc']];
-    const columnDefsUsuarios = [
-        {
-            searchPanes: {
-                show: false,
-            },
-            targets: [2, 3],
-        },
-        {
-            type: 'datetime-moment',
-            targets: 3
-        }
-    ];
-    const searchPanesUsuarios = {
-        controls: false,
-        hideCount: true,
-        collapse: true,
-        initCollapsed: true
-    };
-
+    
     createDataTable({
         id: "#usuariosTable",
         url: `/${path[1]}/usuarios/consulta/`,
@@ -86,9 +58,6 @@ addEventListener("DOMContentLoaded", e => {
         order,
         processing: true,
         serverSide: true
-        // columnDefs: columnDefsUsuarios,
-        // searchPanes: searchPanesUsuarios,
-        // dom: "Plfrtip"
     });
 });
 

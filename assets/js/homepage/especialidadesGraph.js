@@ -1,9 +1,6 @@
 /* Chart code */
 // Create root element
-import dinamicSelect2, {
-    emptySelect2,
-    select2OnClick,
-} from "../global/dinamicSelect2.js";
+import dinamicSelect2 from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
 import getAllConsultationsByMonth from "./getAllConsultationsByMonth.js";
 import getAllConsultationsForYear from "./getAllConsultationsForYear.js";

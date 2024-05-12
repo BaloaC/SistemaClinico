@@ -2,7 +2,6 @@ import cleanValdiation from "../global/cleanValidations.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import deleteSecondValue from "../global/deleteSecondValue.js";
 import { createOptionOrSelectInstead } from "../global/dinamicSelect2.js";
-import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import { patterns } from "../global/patternsValidation.js";
 import scrollTo from "../global/scrollTo.js";
@@ -61,18 +60,6 @@ async function updateMedico(id) {
                 }
             });
         });
-
-
-        // json[0].horario.forEach((horario, index) => {
-
-        //     let algunValorCoincide = horarioInput.some(function (objeto) {
-        //         return horario.dias_semana === objeto.value;
-        //     });
-
-        //     if (algunValorCoincide) {
-        //         checkbox.checked = true;
-        //     }
-        // })
 
         //Establecer el option con los datos del usuario
         // $form.especialidad_id.dataset.secondValue = especialidad.especialidad_id;

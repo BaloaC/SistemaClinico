@@ -36,6 +36,7 @@
                                 <table id="fMedicos" class="table table-compact">
                                     <thead>
                                         <tr>
+                                            <th>Item</th>
                                             <th>Nombre doctor</th>
                                             <th>Sumatoria consultas naturales</th>
                                             <th>Sumatoria consultas aseguradas</th>

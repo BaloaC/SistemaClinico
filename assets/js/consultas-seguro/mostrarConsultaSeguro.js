@@ -1,5 +1,3 @@
-import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
-import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 import concatItems from "../global/concatItems.js";
@@ -7,7 +5,6 @@ import formatToRealDate from "../global/formatToRealDate.js";
 import { removeActAnalist, removeDeleteAnalist } from "../global/validateRol.js";
 import createDataTable from "../global/createDataTable.js";
 
-const path = location.pathname.split('/');
 export let infoSeguro;
 export let examenesSeguroListAll;
 removeActAnalist();
@@ -152,6 +149,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             "data": null,
             "defaultContent": ''
         },
+        {data: "consulta_seguro_id"},
         {
             data: null,
             render: function (data, type, row) {
@@ -196,19 +194,6 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                 }
             }
         },
-        // {
-        //     data: "factura_seguro_id",
-        //     render: function (data, type, row) {
-        //         // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
-        //         if (row.estatus_con == 1) {
-        //             return `
-        //                 <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFSeguro(${data})"><i class="fas fa-trash del-consulta"></i></a>
-        //             `
-        //         } else {
-        //             return `-`;
-        //         }
-        //     }
-        // }
 
     ];
 

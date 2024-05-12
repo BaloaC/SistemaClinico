@@ -1,7 +1,4 @@
 import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
-import getAll from "../global/getAll.js";
-import validateExistingSelect2 from "../global/validateExistingSelect2.js";
-import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
 import validateInputs from "../global/validateInputs.js";
 
 export let examenesSeguroList = null;
@@ -21,7 +18,6 @@ modalRegister.addEventListener('show.bs.modal', async () => {
     if (modalOpened === false) {
 
         dinamicSelect2({
-            // obj: examenesSeguroList,
             selectSelector: `#s-examen_id`,
             selectValue: "examen_id",
             selectNames: ["nombre"],

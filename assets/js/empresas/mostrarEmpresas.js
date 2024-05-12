@@ -1,6 +1,4 @@
-import concatItems from "../global/concatItems.js";
 import { select2OnClick } from "../global/dinamicSelect2.js";
-import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
 
 async function getEmpresa(id) {
@@ -34,14 +32,12 @@ async function getEmpresa(id) {
 
         $nombreSeguro.innerHTML = seguros;
 
-
-        // $nombreSeguro.innerText = `${json[0].nombre}`;
         $btnActualizar.setAttribute("onclick", `updateEmpresa(${id})`);
         $btnEliminar.setAttribute("onclick", `deleteEmpresa(${id})`);
 
     } catch (error) {
 
-        alert(error);
+        console.log(error);
     }
 }
 

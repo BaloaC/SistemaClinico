@@ -268,9 +268,6 @@ addEventListener("DOMContentLoaded", e => {
         id: "#pacientes",
         columns: pacientesColumns,
         url: `/${path[1]}/pacientes/consulta/`,
-        // dom: "Plfrtip",
-        // columnDefs: columnDefsPacientes,
-        // searchPanes: searchPanesPacientes,
         format,
         processing: true,
         serverSide: true

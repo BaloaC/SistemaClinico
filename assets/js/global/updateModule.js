@@ -1,4 +1,3 @@
-import deleteSecondValue from "./deleteSecondValue.js";
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import scrollTo from "./scrollTo.js";
 
@@ -57,6 +56,4 @@ export default async function updateModule(data, data_id, module, form, successM
             $alert.classList.add("d-none");
         }, 3000)
     }
-
-    //#btn - actualizarInfo"
 }

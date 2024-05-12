@@ -1,8 +1,7 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
-import getAll from "../global/getAll.js";
 import { patterns } from "../global/patternsValidation.js";
-import { listadoProveedoresPagination, pagination, proveedoresPagination, ssrProveedoresRequest } from "./proveedoresPagination.js";
+import { pagination, proveedoresPagination, ssrProveedoresRequest } from "./proveedoresPagination.js";
 
 async function addProveedor() {
 

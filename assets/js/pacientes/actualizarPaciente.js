@@ -1,17 +1,13 @@
-import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import deleteSecondValue from "../global/deleteSecondValue.js";
-import dinamicSelect2, { select2OnClick } from "../global/dinamicSelect2.js";
 import getAge from "../global/getAge.js";
 import getById from "../global/getById.js";
 import { patterns } from "../global/patternsValidation.js";
 import scrollTo from "../global/scrollTo.js";
 import showDefaultModalAct from "../global/showDefaultModalAct.js";
 import updateModule from "../global/updateModule.js";
-import validateInputsOnUpdate from "../global/validateInputsOnUpdate.js";
 import actualizarTipoPaciente from "./actualizarTipoPaciente.js";
-import getTitulares from "./getTitulares.js";
 import mostrarPacienteBeneficiado from "./mostrarPacienteBeneficiado.js";
 import mostrarPacienteSeguro from "./mostrarPacienteSeguro.js";
 

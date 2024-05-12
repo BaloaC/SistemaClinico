@@ -3,7 +3,6 @@ import getAll from "../global/getAll.js";
 let root = null;
 let chart = null;
 let series = null;
-let title = null;
 let xAxis = null;
 
 export async function getPacientesByAge(startRange = null, endRange = null) {

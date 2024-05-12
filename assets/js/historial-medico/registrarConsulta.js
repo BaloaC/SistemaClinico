@@ -1,5 +1,4 @@
 import addModule from "../global/addModule.js";
-import getAge from "../global/getAge.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import getById from "../global/getById.js";
 import dinamicSelect2, { emptySelect2, select2OnClick } from "../global/dinamicSelect2.js";
@@ -60,25 +59,6 @@ select2OnClick({
     placeholder: "Seleccione los exámenes",
     multiple: true
 });
-
-// select2OnClick({
-//     selectSelector: "#s-insumo",
-//     selectValue: "insumo_id",
-//     selectNames: ["nombre"],
-//     module: "insumos/consulta",
-//     parentModal: "#modalRegConsulta",
-//     placeholder: "Seleccione el insumo"
-// });
-
-// select2OnClick({
-//     selectSelector: "#s-medicamento",
-//     selectValue: "medicamento_id",
-//     selectNames: ["nombre_medicamento"],
-//     module: "medicamento/consulta",
-//     parentModal: "#modalRegConsulta",
-//     placeholder: "Seleccione el medicamento"
-// });
-
 
 async function addConsulta() {
 
@@ -148,23 +128,6 @@ async function addConsulta() {
         })
 
         if (indicaciones.length != 0 && indicaciones[0].descripcion != "") { data.indicaciones = indicaciones; }
-
-
-
-
-
-        // TODO: Validar los inputs del paciente
-
-        // if (!(/^\d{6,8}$/.test(data.cedula))) throw { message: "La cédula no es válida" };
-        // if (!(/^[0-9]*\.?[0-9]+$/.test(data.altura))) throw { message: "La altura no es válida" };
-        // if (!(/^[0-9]*\.?[0-9]+$/.test(data.peso))) throw { message: "La cédula no es válida" };
-
-
-        // if (isNaN(data.rif) || data.rif.length !== 9) throw { message: "El RIF ingresado es inválido" };
-
-        // if (!(/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
-
-        // data.rif = data.cod_rif + "-" + data.rif;
 
         const registroExitoso = await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!","#modalRegConsulta", ".alertConsulta");
 

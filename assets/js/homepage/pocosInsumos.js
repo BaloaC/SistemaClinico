@@ -1,4 +1,3 @@
-import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import getAll from "../global/getAll.js";
 
 const path = location.pathname.split('/');
@@ -6,8 +5,6 @@ const path = location.pathname.split('/');
 $(document).ready(async function () {
 
     const insumosList = await getAll("insumos/consulta");
-
-    // console.log(insumosList);
 
     const insumosPorAgotarse = (insumosList?.result && !insumosList?.result?.code) ? [] : insumosList.filter(insumos => insumos.cantidad < insumos.cantidad_min);
 

@@ -1,5 +1,4 @@
-import dinamicSelect2, { emptyAllSelect2, select2OnClick } from "../global/dinamicSelect2.js";
-import getAll from "../global/getAll.js";
+import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
 import validateInputs from "../global/validateInputs.js";
 
 const select2Options = {
@@ -16,10 +15,7 @@ const modalRegister = document.getElementById("modalReg");
 const handleModalOpen = async () => {
     if (modalOpened === false) {
 
-        // const proveedoresList = await getAll("proveedores/consulta");
-
         dinamicSelect2({
-            // obj: proveedoresList,
             selectSelector: "#s-proveedor",
             selectValue: "proveedor_id",
             selectNames: ["proveedor_id", "nombre"],
@@ -48,7 +44,6 @@ const handleModalOpen = async () => {
         });
 
         dinamicSelect2({
-            // obj: insumosList,
             selectSelector: "#s-insumo",
             selectValue: "insumo_id",
             selectNames: ["nombre"],

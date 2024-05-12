@@ -1,7 +1,5 @@
-import dinamicSelect2, { emptyAllSelect2, select2OnClick } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
-import validateExistingSelect2 from "../global/validateExistingSelect2.js";
-import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
 import validateInputs from "../global/validateInputs.js";
 
 export let medicosList = null;
@@ -22,7 +20,6 @@ const handleModalOpen = async (parentModal) => {
         medicosList = await getAll("medicos/consulta");
 
         dinamicSelect2({
-            // obj: medicosList,
             selectSelector: `#s-medico-pago`,
             selectValue: "medico_id",
             selectNames: ["cedula", "nombre-apellidos"],

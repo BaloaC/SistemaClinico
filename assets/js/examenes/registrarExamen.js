@@ -1,9 +1,8 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import dinamicSelect2, { emptySelect2 } from "../global/dinamicSelect2.js";
-import getAll from "../global/getAll.js";
 import { patterns } from "../global/patternsValidation.js";
-import { examenesPagination, listadoExamenesPagination, pagination, ssrExamanesRequest } from "./examenesPagination.js";
+import { examenesPagination, pagination, ssrExamanesRequest } from "./examenesPagination.js";
 
 const especialidadSelect = document.getElementById("s-especialidad");
 

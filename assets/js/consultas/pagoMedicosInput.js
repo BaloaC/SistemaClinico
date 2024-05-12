@@ -1,7 +1,6 @@
 export default function pagoMedicosInput (inputRadio) {
 
     const medicoSelect = document.getElementById("s-medico");
-    const especialidadSelect = document.getElementById("s-especialidad");
     const medicoPagoSelect = document.getElementById("s-medico-pago");
     
     const pagoMedicoContainer = document.querySelector(".info-pago-medico");

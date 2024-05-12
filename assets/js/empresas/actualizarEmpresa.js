@@ -2,7 +2,6 @@ import deleteSecondValue from "../global/deleteSecondValue.js";
 import updateModule from "../global/updateModule.js";
 import getById from "../global/getById.js";
 import { select2OnClick } from "../global/dinamicSelect2.js";
-import getAll from "../global/getAll.js";
 import { empresasPagination, pagination, ssrEmpresaRequest } from "./empresasPagination.js";
 import cleanValdiation from "../global/cleanValidations.js";
 import { patterns } from "../global/patternsValidation.js";

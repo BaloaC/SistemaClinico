@@ -67,8 +67,6 @@ export default async function tipoAsegurado(paciente_id) {
             document.querySelector("#s-seguro").dataset.active = 0;
         });
     }
-    // $('#s-seguro').next('.select2-container').fadeOut('slow');
-    // $('#s-seguro').next('.select2-container').fadeIn('slow');
 }
 
 

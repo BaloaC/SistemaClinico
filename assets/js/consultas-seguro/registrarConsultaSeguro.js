@@ -1,8 +1,6 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
-import dinamicSelect2, { emptyAllSelect2, select2OnClick } from "../global/dinamicSelect2.js";
-import getAge from "../global/getAge.js";
-import getAll from "../global/getAll.js";
+import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
 import { patterns } from "../global/patternsValidation.js";
 
 let modalOpened = false;
@@ -17,10 +15,7 @@ export const updateConsultaSeguroSelect = async (modalParent) => {
 
     document.getElementById("s-consulta-seguro").classList.remove("is-valid");
 
-    // const infoConsultas = await getAll("consultas/consulta");
-
     dinamicSelect2({
-        // obj: infoConsultas ?? [],
         selectSelector: `#s-consulta-seguro`,
         selectValue: "consulta_id",
         selectNames: ["consulta_id", "motivo_cita"],

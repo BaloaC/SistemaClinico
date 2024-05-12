@@ -25,6 +25,7 @@ addEventListener("DOMContentLoaded", async e => {
             "data": null,
             "defaultContent": ''
         },
+        { data: "factura_seguro_id" },
         { data: "rif" },
         { data: "nombre" },
         { data: "mes" },
@@ -139,13 +140,6 @@ addEventListener("DOMContentLoaded", async e => {
         ]
     };
 
-    const columnDefsFSeguro = [{
-        searchPanes: {
-            show: false,
-        },
-        targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    }];
-
     const format = (data) => {
         console.log(data);
         return `
@@ -164,9 +158,6 @@ addEventListener("DOMContentLoaded", async e => {
         columns: fSeguroColumns,
         order,
         format,
-        // columnDefs: columnDefsFSeguro,
-        // searchPanes: searchPanesFSeguro,
-        // dom: "Plfrtip",
         processing: true,
         serverSide: true
     });

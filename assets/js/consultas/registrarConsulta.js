@@ -1,5 +1,4 @@
 import addModule from "../global/addModule.js";
-import getAge from "../global/getAge.js";
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import getById from "../global/getById.js";
 import scrollTo from "../global/scrollTo.js";

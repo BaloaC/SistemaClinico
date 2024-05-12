@@ -27,11 +27,6 @@ function deleteMedicoEspecialidadInput(input, parentModal = "#modalReg") {
     especialidadContainer.remove();
 
     validateExistingSelect2OnDelete({parentModal, selectClass, objList: especialidadesList, optionId: "especialidad_id", addButtonId, select2Options});
-    
-    // Si se elimina el segundo titular ocultarle el icono de eliminar
-    // if (especialidad.length === 2) {
-    //     document.querySelectorAll(".medico-especialidad-id")[0].parentElement.parentElement.querySelector("div")[2].classList.add("d-none");
-    // }
 }
 
 window.deleteMedicoEspecialidadInput = deleteMedicoEspecialidadInput;

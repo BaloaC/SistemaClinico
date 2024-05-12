@@ -15,6 +15,7 @@ addEventListener("DOMContentLoaded", (e) => {
             data: null,
             defaultContent: "",
         },
+        { data: "factura_compra_id" },
         { data: "proveedor_nombre" },
         {
             data: "monto_con_iva",
@@ -53,7 +54,6 @@ addEventListener("DOMContentLoaded", (e) => {
         {
             data: "factura_compra_id",
             render: function (data, type, row) {
-                // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
 
                 const estaDentroDeLos3DiasAnteriores = (fechaObjetivo) => {
     
@@ -83,52 +83,6 @@ addEventListener("DOMContentLoaded", (e) => {
         },
     ];
 
-    const columnDefsFCompras = [
-        {
-            searchPanes: {
-                show: false,
-            },
-            targets: [0, 1, 2, 3, 4, 5, 6],
-        },
-        // Para permitir el filtrado con la fecha filtrada
-        {
-            type: 'datetime-moment',
-            targets: 6
-        },
-    ];
-
-    const searchPanesFCompras = {
-        controls: false,
-        hideCount: true,
-        collapse: true,
-        initCollapsed: true,
-        panes: [
-            {
-                header: 'Filtrar por estatus del recibo:',
-                options: [
-                    {
-                        label: 'Pagada',
-                        value: function (rowData, rowIdx) {
-                            return rowData.estatus_fac === "1";
-                        },
-                        className: 'factura-pagada'
-                    },
-                    {
-                        label: 'Anulada',
-                        value: function (rowData, rowIdx) {
-                            return rowData.estatus_fac === "2";
-                        },
-                        className: 'factura-anulada'
-                    },
-                ],
-                dtOpts: {
-                    searching: false,
-                    order: [[1, 'desc']]
-                }
-            },
-        ]
-    };
-
     const order = [[6, 'desc'], [5, 'desc']];
 
     const format = (data) => {
@@ -154,11 +108,8 @@ addEventListener("DOMContentLoaded", (e) => {
         id: "#fCompra",
         url: `/${path[1]}/factura/compra/consulta/`,
         columns: fComprasColumns,
-        // columnDefs: columnDefsFCompras,
-        // searchPanes: searchPanesFCompras,
         order,
         format,
-        // dom: "Plfrtip",
         formatDataCustom: true,
         formatDataCustomUrl: "factura/compra",
         formatDataCustomId: "factura_compra_id",

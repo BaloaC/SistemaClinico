@@ -1,6 +1,5 @@
-import dinamicSelect2, { emptyAllSelect2, emptySelect2, selectText } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
 import getAll from "../global/getAll.js";
-import getById from "../global/getById.js";
 import pagoMedicosInput from "./pagoMedicosInput.js";
 
 function turnInput(container, disabled) {
@@ -172,9 +171,6 @@ export default async function consultaEmergencia(inputRadio) {
                 // Transforms the top-level key of the response object from 'data' to 'results'
                 return {
                     results: data1 ?? [],
-                    // pagination: {
-                    //     more: data1.length
-                    // }
                 };
             }
         });
@@ -247,10 +243,7 @@ export default async function consultaEmergencia(inputRadio) {
         
                         // Transforms the top-level key of the response object from 'data' to 'results'
                         return {
-                            results: data1 ?? [],
-                            // pagination: {
-                            //     more: data1.length
-                            // }
+                            results: data1 ?? []
                         };
                     }
                 });
@@ -284,7 +277,6 @@ export default async function consultaEmergencia(inputRadio) {
         inputDateConsulta.disabled = false;
         $(inputDateConsultaLabel).fadeIn("slow");
         inputDateConsultaHidden.disabled = true;
-        // pacienteBeneficiado.disabled = false;
     }
 
 }

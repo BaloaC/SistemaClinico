@@ -1,5 +1,3 @@
-import { createOptionOrSelectInstead } from "../global/dinamicSelect2.js";
-
 function pagarConsulta({ citaType, consulta_id, paciente_id }) {
 
     if (citaType === "Normal") {

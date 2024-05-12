@@ -82,8 +82,6 @@ export default async function tipoTitular(inputRadio) {
                 document.querySelector("#s-titular").dataset.active = 0;
             });
         }
-        // $('#s-titular').next('.select2-container').fadeOut('slow');
-        // $('#s-titular').next('.select2-container').fadeIn('slow');
     } else {
         $('#s-titular').next('.select2-container').fadeOut('slow');
         document.querySelector("label[for='titular_id'").classList.add("d-none");
