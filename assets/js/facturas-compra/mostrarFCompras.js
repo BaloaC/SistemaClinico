@@ -15,6 +15,7 @@ addEventListener("DOMContentLoaded", (e) => {
             data: null,
             defaultContent: "",
         },
+        { data: "factura_compra_id" },
         { data: "proveedor_nombre" },
         {
             data: "monto_con_iva",

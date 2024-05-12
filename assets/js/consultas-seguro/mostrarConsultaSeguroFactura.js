@@ -24,6 +24,7 @@ addEventListener("DOMContentLoaded", async e => {
             "data": null,
             "defaultContent": ''
         },
+        {data: "consulta_seguro_id"},
         {
             data: null,
             render: function (data, type, row) {

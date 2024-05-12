@@ -27,7 +27,7 @@
 
         header p {
             margin: 0;
-            font-size: 18px;
+            font-size: 16px;
             text-align: center;
             line-height: 2.5;
         }
@@ -60,13 +60,14 @@
         }
 
         .tabla {
-            width: 950px;
-            padding: 2rem;
+            width: 500px;
+            /* padding: 2rem; */
         }
 
         #title {
             text-align: center;
-            font-size: x-large;
+            /* font-size: x-large; */
+            font-size: 16px;
         }
 
 
@@ -91,7 +92,7 @@
 
         .firma {
             /* margin-top: 50px; */
-            margin-top: 5rem;
+            margin-top: 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -156,11 +157,11 @@
 
         <div class="firma">
             <div class="col">
-                <p>_____________________________________</p>
+                <p>__________________________</p>
                 <p>Firma y sello de Especialista</p>
             </div>
             <div class="col">
-                <p>_____________________________________</p>
+                <p>__________________________</p>
                 <p>Firma y sello de Contador</p>
             </div>
         </div>

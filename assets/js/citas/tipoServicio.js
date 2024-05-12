@@ -3,7 +3,9 @@ export default async function tipoServicio(inputRadio) {
     const examenSelect = document.getElementById("s-examen");
     const examenInputContainer = document.querySelector(".examenInput");
 
-    if (inputRadio.value === "1") {
+    console.log(inputRadio);
+
+    if (inputRadio.value === "1" || inputRadio.value === "2") {
         examenSelect.disabled = false;
         $(examenInputContainer).fadeIn("slow");
     } else {
@@ -16,8 +18,9 @@ export default async function tipoServicio(inputRadio) {
 document.getElementById("modalReg").addEventListener("show.bs.modal", () => {
 
     const examenInputChecked = document.getElementById("tipoServicioExamen");
+    const consultaExamenInputChecked = document.getElementById("tipoServicioConsulta");
 
-    if (examenInputChecked.checked) {
+    if (examenInputChecked.checked || consultaExamenInputChecked.checked) {
 
         const examenSelect = document.getElementById("s-examen");
         const examenInputContainer = document.querySelector(".examenInput");

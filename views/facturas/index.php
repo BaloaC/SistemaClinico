@@ -37,6 +37,7 @@
                                     <thead>
                                         <tr>
                                             <th>Detalles</th>
+                                            <th>Item</th>
                                             <th>Nombre Proveedor</th>
                                             <!-- <th>Total Insumos</th> -->
                                             <th>Monto con IVA</th>

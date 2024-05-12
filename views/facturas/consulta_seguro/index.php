@@ -98,6 +98,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Detalles</th>
+                                                <th>Item</th>
                                                 <th>Cédula Paciente</th>
                                                 <th>Especialidad</th>
                                                 <th>Tipo de servicio</th>

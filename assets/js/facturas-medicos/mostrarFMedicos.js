@@ -38,6 +38,7 @@ addEventListener("DOMContentLoaded", e => {
     $.fn.dataTable.moment('DD-MM-YYYY');
 
     const fMedicosColumns = [
+        { data: "factura_medico_id" },
         {
             data: "nombre",
             render: function (data, type, row) {

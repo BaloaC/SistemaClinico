@@ -36,6 +36,7 @@
                                     <thead>
                                         <tr>
                                             <th>Detalles</th>
+                                            <th>Item</th>
                                             <th>Nombre paciente</th>
                                             <th>Método pago</th>
                                             <th>Monto total BS</th>

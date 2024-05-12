@@ -104,16 +104,20 @@
                                         </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-12 col-md-6">
+                                    <div class="col-12 col-md-12">
                                         <label for="input-radios-container" class="">Tipo de servicio</label>
                                         <div class="input-radios-container">
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioExamen" onchange="tipoServicio(this)" value="1" required>
-                                                <label class="form-check-label" for="inlineRadio1">Consulta con exámenes</label>
+                                                <label class="form-check-label" for="inlineRadio1">Exámenes</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioConsulta" onchange="tipoServicio(this)" value="2" checked required>
-                                                <label class="form-check-label" for="inlineRadio2">Consulta sola sin exámenes</label>
+                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioConsulta" onchange="tipoServicio(this)" value="2" required>
+                                                <label class="form-check-label" for="inlineRadio2">Consulta con exámenes</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="tipoPacienteRadio" id="tipoServicioSoloConsulta" onchange="tipoServicio(this)" value="3" checked required>
+                                                <label class="form-check-label" for="inlineRadio2">Consulta sin exámenes</label>
                                             </div>
                                         </div>
                                     </div>

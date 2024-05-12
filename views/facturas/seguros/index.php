@@ -36,6 +36,7 @@
                                     <thead>
                                         <tr>
                                             <th>Detalles</th>
+                                            <th>Item</th>
                                             <th>Rif</th>
                                             <th>Nombre Seguro</th>
                                             <th>Mes</th>

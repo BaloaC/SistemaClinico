@@ -25,6 +25,7 @@ addEventListener("DOMContentLoaded", async e => {
             "data": null,
             "defaultContent": ''
         },
+        { data: "factura_seguro_id" },
         { data: "rif" },
         { data: "nombre" },
         { data: "mes" },

@@ -149,6 +149,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             "data": null,
             "defaultContent": ''
         },
+        {data: "consulta_seguro_id"},
         {
             data: null,
             render: function (data, type, row) {

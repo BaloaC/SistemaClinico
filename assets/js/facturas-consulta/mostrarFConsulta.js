@@ -161,6 +161,7 @@ addEventListener("DOMContentLoaded", e => {
             "data": null,
             "defaultContent": ''
         },
+        {data: "factura_consulta_id"},
         {
             data: function (row) {
                 return `${row.nombre_paciente} ${row.apellidos}` ?? `Consulta por emergercia`;
