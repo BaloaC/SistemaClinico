@@ -79,20 +79,43 @@
                                 </div>
                             </div>
 
-                            <div class="info-examenes" style="display: none;">
-                                <div class="row">
-                                    <div class="col-12 col-md-6">
-                                        <label for="examenes">Exámenes realizados en la consulta</label>
-                                        <select name="examenes[]" id="s-examen-sinConsulta" class="form-control mb-3" data-active="0" multiple="multiple" disabled>
-                                            <option></option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <label for="observaciones">Observaciones</label>
-                                        <input type="text" name="observaciones" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" disabled> 
-                                        <small class="form-text">Solo puede contener letras</small>
-                                    </div>
+                            <div class="info-examenes mt-3" style="display: none;">
+                                <h5>Información del Paciente</h5>
+                                <div class="col-12 col-md-6">
+                                    <label for="nombres">Paciente Titular</label>
+                                    <select name="paciente_id" id="s-paciente-sinConsulta" class="form-control" data-active="0" required>
+                                        <option></option>
+                                    </select>
                                 </div>
+                                <h5>Información del médico</h2>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <label for="especialidad_id">Especialidad</label>
+                                            <select name="especialidad_id" id="s-especialidad-sinConsulta" class="form-control" data-active="0">
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="medico_id">Médico</label>
+                                            <select name="medico_id" id="s-medico-sinConsulta" class="form-control" data-active="0" disabled>
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <h5>Información de la Consulta</h5>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <label for="examenes">Exámenes realizados en la consulta</label>
+                                            <select name="examenes[]" id="s-examen-sinConsulta" class="form-control mb-3" data-active="0" multiple="multiple" disabled>
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="observaciones">Observaciones</label>
+                                            <input type="text" name="observaciones" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" disabled>
+                                            <small class="form-text">Solo puede contener letras</small>
+                                        </div>
+                                    </div>
                             </div>
 
                             <div class="info-consultaSinExamenes">

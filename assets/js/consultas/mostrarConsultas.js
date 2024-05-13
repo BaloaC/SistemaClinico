@@ -47,7 +47,19 @@ const handleModalOpen = async () => {
         });
 
         emptyAllSelect2({
+            selectSelector: "#s-paciente-sinConsulta",
+            placeholder: "Cargando",
+            parentModal: "#modalReg"
+        });
+
+        emptyAllSelect2({
             selectSelector: "#s-medico",
+            placeholder: "Debe seleccionar una especialidad",
+            parentModal: "#modalReg"
+        });
+
+        emptyAllSelect2({
+            selectSelector: "#s-medico-sinConsulta",
             placeholder: "Debe seleccionar una especialidad",
             parentModal: "#modalReg"
         });
@@ -65,6 +77,12 @@ const handleModalOpen = async () => {
         });
 
         emptySelect2({
+            selectSelector: "#s-especialidad-sinConsulta",
+            placeholder: "Debe seleccionar un médico",
+            parentModal: "#modalReg",
+        });
+
+        emptySelect2({
             selectSelector: "#s-seguro-emergencia",
             placeholder: "Debe seleccionar un paciente",
             parentModal: "#modalReg"
@@ -74,30 +92,6 @@ const handleModalOpen = async () => {
         document.getElementById("s-paciente").disabled = true;
         medicoSelect.disabled = true;
         document.getElementById("s-seguro-emergencia").disabled = true;
-
-        dinamicSelect2({
-            selectSelector: "#s-examen-sinConsulta",
-            selectValue: "examen_id",
-            selectNames: ["nombre"],
-            parentModal: "#modalReg",
-            placeholder: "Seleccione los exámenes",
-            multiple: true,
-            ajax: true,
-            ajaxUrl: `examenes/consulta`,
-            processResultsAjax: function (data, params) {
-
-                params.page = params.page || 1;
-
-                const data1 = data?.data.map(object => {
-                    const { examen_id: valorPropiedad1, nombre: nombreExamen } = object;
-                    return { id: valorPropiedad1, text: nombreExamen };
-                });
-
-                // Transforms the top-level key of the response object from 'data' to 'results'
-                return { results: data1, pagination: { more: data1.length } };
-            }
-        });
-
 
         dinamicSelect2({
 
@@ -159,7 +153,7 @@ const handleModalOpen = async () => {
             }
         });
 
-        dinamicSelect2({
+        const select2Paciente = {
             selectSelector: "#s-paciente",
             selectValue: "paciente_id",
             selectNames: ["cedula", "nombre-apellidos"],
@@ -196,9 +190,9 @@ const handleModalOpen = async () => {
                     }
                 };
             }
-        });
+        }
 
-        dinamicSelect2({
+        const select2Especialidad = {
             selectSelector: especialidadSelect,
             selectValue: "especialidad_id",
             selectNames: ["nombre_especialidad"],
@@ -223,7 +217,19 @@ const handleModalOpen = async () => {
                     }
                 };
             }
-        });
+        }
+
+        dinamicSelect2(select2Paciente);
+
+        // Para crear el select2 sin consulta
+        select2Paciente.selectSelector = "#s-paciente-sinConsulta";
+        dinamicSelect2(select2Paciente);
+
+        dinamicSelect2(select2Especialidad);
+        
+        // Para crear el select2 sin consulta
+        select2Especialidad.selectSelector = "#s-especialidad-sinConsulta"
+        dinamicSelect2(select2Especialidad);
 
         // $("#s-medico").val([]).trigger("change")
         document.getElementById("s-medico").classList.remove("is-valid");
@@ -333,10 +339,75 @@ const handleModalOpen = async () => {
 
         });
 
+        $("#s-especialidad-sinConsulta").on("change", async function (e) {
+
+            let especialidad_id = this.value;
+
+            // Exámenes por especialidad select2
+
+            $("#s-examen-sinConsulta").empty().select2();
+
+            dinamicSelect2({
+                selectSelector: "#s-examen-sinConsulta",
+                selectValue: "examen_id",
+                selectNames: ["nombre"],
+                parentModal: "#modalReg",
+                placeholder: "Seleccione los exámenes",
+                multiple: true,
+                ajax: true,
+                ajaxUrl: `examenes/especialidad/${especialidad_id}`,
+                processResultsAjax: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    const data1 = data?.data.map(object => {
+                        const { examen_id: valorPropiedad1, nombre: nombreExamen } = object;
+                        return { id: valorPropiedad1, text: nombreExamen };
+                    });
+
+                    // Transforms the top-level key of the response object from 'data' to 'results'
+                    return { results: data1 };
+                }
+            });
+
+            // Médico select
+            $("#s-medico-sinConsulta").empty().select2();
+
+            dinamicSelect2({
+                selectSelector: "#s-medico-sinConsulta",
+                selectValue: "medico_id",
+                selectNames: ["cedula", "nombre-apellidos"],
+                ajax: true,
+                ajaxUrl: `/medicos/especialidad/${especialidad_id}`,
+                parentModal: "#modalReg",
+                placeholder: "Seleccione un médico",
+                queryPage: false,
+                processResultsAjax: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    const data1 = [];
+
+                    data?.data.map(object => {
+                        const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico, especialidad } = object;
+                        data1.push({ id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` });
+
+                    });
+
+                    // Transforms the top-level key of the response object from 'data' to 'results'
+                    return {
+                        results: data1
+                    };
+                }
+            });
+
+            medicoSelect.disabled = false;
+        });
+
         $(especialidadSelect).on("change", async function (e) {
 
             let especialidad_id = this.value;
-            
+
             // Exámenes por especialidad select2
 
             $("#s-examen").empty().select2();
