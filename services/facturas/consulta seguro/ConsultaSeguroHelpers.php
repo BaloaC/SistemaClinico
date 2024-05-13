@@ -17,6 +17,15 @@ class ConsultaSeguroHelpers {
         $_citaModel = new CitaModel();
         $cita = $_citaModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
         
+        if (!is_null($cita)) {
+            $_citaSeguroModel = new CitaSeguroModel();
+            $cita_seguro = $_citaSeguroModel->where('cita_id', '=', $cita->cita_id)->getFirst();
+
+            if (!is_null($cita_seguro)) {
+                $cita->clave = $cita_seguro->clave;
+            }
+        }
+
         $_consultaModel = new ConsultaModel();
         $consultaBase = $_consultaModel->where('consulta_id', '=', $consulta_cita->consulta_id)->getFirst();
         
