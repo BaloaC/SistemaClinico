@@ -184,7 +184,7 @@ class ConsultaSeguroController extends Controller{
         $total_registros = $_consultaSeguroModel->where('estatus_con', '!=', '2')->getAll();
         // Comprobamos que haya una lista
         $hayResultados = count($consultasSeguros) > 0;
-        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $consultasSeguros);
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $consultas_seguros);
     }
 
     public function listarConsultaSeguroPorId($consulta_seguro_id){
