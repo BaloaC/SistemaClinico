@@ -4,6 +4,7 @@ include_once "./services/facturas/consulta/FacturaConsultaHelpers.php";
 include_once "./services/facturas/consulta/FacturaConsultaService.php";
 include_once "./services/facturas/consulta/FacturaConsultaValidaciones.php";
 include_once './services/consulta/consultaHelpers.php';
+include_once './services/facturas/consulta seguro/ConsultaSeguroService.php';
 include_once './services/Helpers.php';
 
 class FacturaConsultaController extends Controller {
@@ -40,13 +41,14 @@ class FacturaConsultaController extends Controller {
 
         if (!is_null($consulta_seguro)) {
             $factura = ConsultaSeguroService::listarConsultasSeguroId($consulta_seguro->consulta_seguro_id);
-            $monto_consulta_usd = $factura['monto_total_usd'] - $factura['cobertura_seguro'];
+            $monto_consulta_usd = $factura[0]['monto_total_usd'] - $factura[0]['cobertura_seguro'];
             $_POST['diferencia_asegurada'] = true;
-
+            
         } else {
             $monto_consulta_usd = FacturaConsultaHelpers::obtenerPrecioConsulta($_POST['consulta_id']);;
         }
 
+        $_POST['monto_consulta_usd'] = $monto_consulta_usd;
         $_POST['monto_consulta_bs'] = $monto_consulta_usd * (float) $valorDivisa->value;
 
         $data = $validarFactura->dataScape($_POST);

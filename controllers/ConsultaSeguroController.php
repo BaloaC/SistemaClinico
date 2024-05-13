@@ -79,8 +79,10 @@ class ConsultaSeguroController extends Controller{
             $data['monto_consulta_bs'] = 0;
             if ($cita->tipo_servicio == 1) {
                 $data['monto_consulta_usd'] = 0;
-            } else {
+            } else if ($cita->tipo_servicio == 2) {
                 $data['monto_consulta_usd'] = FacturaConsultaHelpers::obtenerPrecioConsulta($_POST['consulta_id']);
+                // echo 'el monto de la consulta es';
+                // var_dump($data['monto_consulta_usd']);
             }
 
             $data['cobertura_seguro'] = $cita->monto_aprobado;
@@ -104,7 +106,8 @@ class ConsultaSeguroController extends Controller{
                 $consulta = $consulta[0];
 
             } else {
-                $consulta[0]['monto_consulta_usd'] = $_POST['monto_consulta_usd'];
+                // $consulta[0]['monto_consulta_usd'] = $_POST['monto_consulta_usd'];
+                $consulta[0]['monto_consulta_usd'] = $data['monto_consulta_usd'];
                 $consulta = array_merge($consulta[0], FacturaConsultaHelpers::obtenerMontoTotal($consulta[0]));
             }
 

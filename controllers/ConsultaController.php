@@ -73,6 +73,13 @@ class ConsultaController extends Controller {
                 MedicoValidaciones::validarMedicoImpartaEspecialidad($_POST);
             }
 
+            // agregando el tipo_servicio
+            if (isset($_POST['cita_id'])) {
+                $_citaModel = new CitaModel();
+                $cita = $_citaModel->where('cita_id', '=', $_POST['cita_id'])->getFirst();
+                $consulta_separada[1]['tipo_servicio'] = $cita->tipo_servicio;
+            }
+
             $_consultaModel = new ConsultaModel();
             $this->consulta_id = $_consultaModel->insert($consulta_separada[1]);
             $mensaje = ($this->consulta_id > 0);
@@ -167,7 +174,7 @@ class ConsultaController extends Controller {
     public function listarConsultasPorPaciente($paciente_id) {
         // $params = isset($_GET['estatus']) ? $_GET['estatus'] : null;
         $lista_consultas = [];
-
+        
         $condicional_emergencia = "";
         if (isset($_GET['emergencia'])) {
             $condicional_emergencia = $_GET['emergencia'];
@@ -198,22 +205,25 @@ class ConsultaController extends Controller {
             }
         }
 
-        $consultasSinCitaModel = new ConsultaSinCitaModel();
-        $consultasSinCitas = $consultasSinCitaModel->where('paciente_id', '=', $paciente_id)->getAll();
-        if ($consultasSinCitas != 0 && count($consultasSinCitas) > 0) {
-            foreach ($consultasSinCitas as $consulta) {
-                $consultasModel = new ConsultaModel();
-                $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
-                
-                if (isset($_GET['status'])) {
-                    $consultasModel->where('estatus_con', '=', $_GET['status']);
+        if (!isset($_GET['tipo_cita'])) {
+            $consultasSinCitaModel = new ConsultaSinCitaModel();
+            $consultasSinCitas = $consultasSinCitaModel->where('paciente_id', '=', $paciente_id)->getAll();
+            if ($consultasSinCitas != 0 && count($consultasSinCitas) > 0) {
+                foreach ($consultasSinCitas as $consulta) {
+                    $consultasModel = new ConsultaModel();
+                    $consultasModel->where('consulta_id', '=', $consulta->consulta_id);
                     
-                }
-
-                $consulta_normal = $consultasModel->getFirst();
-                if (!is_null($consulta_normal)) {
-                    $consulta = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
-                    $lista_consultas[] = array_merge((array) $consulta, (array) ConsultaService::obtenerConsultaNormal($consulta_normal));
+                    if (isset($_GET['status'])) {
+                        $consultasModel->where('estatus_con', '=', $_GET['status']);
+                        
+                    }
+    
+                    $consulta_normal = $consultasModel->getFirst();
+                    if (!is_null($consulta_normal)) {
+                        // $consulta = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
+                        // $lista_consultas[] = array_merge((array) $consulta, (array) ConsultaService::obtenerConsultaNormal($consulta_normal));
+                        $lista_consultas[] = ConsultaService::obtenerConsultaNormal($consulta_normal, false);
+                    }
                 }
             }
         }
@@ -230,8 +240,9 @@ class ConsultaController extends Controller {
 
                 $consulta_normal = $consultasModel->getFirst();
                 if (!is_null($consulta_normal)) {
-                    $consulta = array_merge((array) $consulta, (array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id));
-                    $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+                    // $consulta = array_merge((array) $consulta, (array) ConsultaHelper::obtenerRelaciones($consulta->consulta_id));
+                    // $lista_consultas[] = array_merge((array) $consulta, (array) $consulta_normal);
+                    $lista_consultas[] = $consulta_normal;
                 }
             }
         }

@@ -23,7 +23,8 @@ class MedicoHelpers {
     protected static $arraySelect = array(
         "especialidad.nombre AS nombre_especialidad",
         "especialidad.especialidad_id",
-        "medico_especialidad.medico_especialidad_id"
+        "medico_especialidad.medico_especialidad_id",
+        "medico_especialidad.costo_especialidad"
     );
 
     public static function obtenerRelaciones($medicos, $obtenerHorario = true) {

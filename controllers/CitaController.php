@@ -23,7 +23,8 @@ class CitaController extends Controller {
         "cita.motivo_cita",
         "cita.cedula_titular",
         "cita.tipo_cita",
-        "cita.estatus_cit"
+        "cita.estatus_cit",
+        "cita.monto_aprobado"
     );
 
     protected $arrayInner = array(
@@ -69,7 +70,7 @@ class CitaController extends Controller {
         if (array_key_exists('examenes', $_POST)) {
             CitasValidaciones::validarCitaExamen($_POST['examenes']);
 
-            if ($_POST['tipo_cita'] == 2) {
+            if ($_POST['tipo_cita'] == 2 && $_POST['tipo_servicio'] == 1) {
                 CitasValidaciones::validarExamenesCitaAsegurada($_POST);
             }
         }
