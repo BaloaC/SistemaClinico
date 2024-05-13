@@ -70,7 +70,7 @@ const handleModalOpen = async (modalParent) => {
         $("#s-paciente-consulta").on("change", async function () {
 
             let paciente_id = this.value;
-            const consultasAseguradas = await getAll(`consultas/paciente/${paciente_id}?tipo_cita=2`);
+            const consultasAseguradas = await getAll(`consultas/paciente/${paciente_id}?tipo_cita=2&status=4`);
 
             $("#s-consulta-normal").empty().select2();
             

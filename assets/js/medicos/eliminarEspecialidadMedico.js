@@ -1,6 +1,5 @@
 import deleteModule from "../global/deleteModule.js";
-import getAll from "../global/getAll.js";
-import { medicosPagination } from "./medicosPagination.js";
+import { listadoMedicosPagination, medicosPagination, pagination, ssrMedicosPagination } from "./medicosPagination.js";
 
 function deleteEspecialidad(id) {
     document.getElementById("modalDeleteLabelRelacion").textContent = "Eliminar especialidad del médico"
@@ -8,9 +7,14 @@ function deleteEspecialidad(id) {
 }
 
 async function confirmDeleteEspecialidad(id) {
+
     await deleteModule("medicos/especialidad", id, "Día del horario eliminado correctamente!", "#modalDeleteRelacion", "delAlertRelacion");
-    const listadoMedicos = await getAll("medicos/consulta");
+
+    const listadoMedicos = await ssrMedicosPagination(1);
+    pagination.initializated = false;
+    pagination.paginaActual = 1;
     medicosPagination(listadoMedicos);
+    listadoMedicosPagination.registros = listadoMedicos;
 }
 
 window.deleteEspecialidad = deleteEspecialidad;
