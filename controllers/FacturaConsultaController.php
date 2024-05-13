@@ -92,16 +92,46 @@ class FacturaConsultaController extends Controller {
         //         $_facturaConsultaModel->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
         //     }
         // }
+        $facturasList = "";
 
-        if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
-            $_facturaConsultaModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        if ( isset($_GET['search']) ) {
+            if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                $_facturaConsultaModel->setSelect('COUNT(*) AS total')->where("CONCAT(factura_consulta.factura_consulta_id)", 'LIKE', "%{$_GET['search']}%");
+            } else if ( strlen($_GET['search']['value']) > 0) {
+                $_facturaConsultaModel->setSelect('COUNT(*) AS total')->where("CONCAT(factura_consulta.factura_consulta_id)", 'LIKE', "%{$_GET['search']['value']}%");
+            } else {
+                $_facturaConsultaModel->setSelect('COUNT(*) AS total');
+            }
         } else {
             $_facturaConsultaModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_facturaConsultaModel->getAll();
+        // if (isset($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+        //     $_facturaConsultaModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']['value']}%");
+        // } else {
+        //     $_facturaConsultaModel->setSelect('COUNT(*) AS total');
+        // }
+
+        // $total_registros = $_facturaConsultaModel->getAll();
+        $innersConsulta = $_facturaConsultaModel->listInner(array("consulta" => "factura_consulta"));
+        $selectConsulta = array("factura_consulta.factura_consulta_id","factura_consulta.consulta_id","factura_consulta.tipo_consulta","factura_consulta.metodo_pago","factura_consulta.monto_consulta_bs","factura_consulta.monto_consulta_usd","factura_consulta.estatus_fac","consulta.fecha_consulta","consulta.es_emergencia");
+
+        if ( array_key_exists('date', $_GET) ) {
+            
+            $fecha_mes = DateTime::createFromFormat('Y-m-d', $_GET['date']);
+            $mes = $fecha_mes->format("m");
+            $anio = $fecha_mes->format("Y");
+            
+            $facturasList = $_facturaConsultaModel->where('YEAR(fecha_consulta)',"=",$anio)
+                                                ->where('MONTH(fecha_consulta)', '=', $mes)
+                                                ->innerJoin($selectConsulta, $innersConsulta, "factura_consulta");
+
+        } else {
+            $facturasList = $_facturaConsultaModel->innerJoin($selectConsulta, $innersConsulta, "factura_consulta");
+        }
         
-        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $consultaList);
+        // Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $consultaList);
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($facturasList), $consultaList);
     }
 
     public function listarFacturaConsultaPorId($factura_consulta_id) {
