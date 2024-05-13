@@ -65,9 +65,13 @@ class SeguroController extends Controller{
         foreach ($seguros as $seguro) {
             $_seguroExamenModel = new SeguroExamenModel();
             $seguroExamen = $_seguroExamenModel->where('seguro_id', '=', $seguro->seguro_id)->getFirst();
-            $lista_examenes = explode(',', $seguroExamen->examenes);
-            $seguro->cantidad_examenes = count($lista_examenes);
-            // $seguro_lista[] = SeguroService::ListarTodos($seguro);
+
+            if (!is_null($seguroExamen) && count($seguroExamen) > 0) {
+                $lista_examenes = explode(',', $seguroExamen->examenes);
+                $seguro->cantidad_examenes = count($lista_examenes);
+                // $seguro_lista[] = SeguroService::ListarTodos($seguro);
+            }
+            
             $seguro_lista[] = $seguro;
         }
 

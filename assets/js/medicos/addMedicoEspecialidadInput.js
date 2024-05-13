@@ -91,7 +91,7 @@ async function addMedicoEspecialidadInput(button, parentModal = "#modalReg") {
     const { selectClass, costoClass, deleteButtonFunction, addButtonId } = inputClassOptions[parentModal];
 
     let template = `
-    <div class="row align-items-start newInput">
+    <div class="row align-items-end newInput">
         <div class="col-12 col-md-5">
             <label for="medico">Especialidad</label>
             <select id="s-especialidad${clicks}" data-validate="true" class="form-control default-select ${selectClass}" data-active="0" required>

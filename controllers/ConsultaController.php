@@ -205,7 +205,7 @@ class ConsultaController extends Controller {
             }
         }
 
-        if (!isset($_GET['tipo_cita'])) {
+        if (!isset($_GET['tipo_cita']) || $_GET['tipo_cita'] == 1) {
             $consultasSinCitaModel = new ConsultaSinCitaModel();
             $consultasSinCitas = $consultasSinCitaModel->where('paciente_id', '=', $paciente_id)->getAll();
             if ($consultasSinCitas != 0 && count($consultasSinCitas) > 0) {

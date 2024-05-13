@@ -241,7 +241,9 @@ class FacturaConsultaHelpers {
             $consulta_actual = $_consultaModel->where('consulta_id', '=', $consulta['consulta_id'])->getFirst();
 
             if ($consulta_actual->tipo_servicio == 1) {
-                $consulta['monto_total_usd'] = $consulta['monto_consulta_usd'];
+                $consulta['monto_total_usd'] = $montoUsd;
+                $consulta['monto_total_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
+
             } else if ($consulta_actual->tipo_servicio == 2) {
                 $consulta['monto_total_usd'] = $montoUsd + $consulta['monto_consulta_usd'];
                 $consulta['monto_total_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
