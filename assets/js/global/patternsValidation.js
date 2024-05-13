@@ -1,7 +1,7 @@
 // ** Define patrones de expresiones regulares para validar los campos
 export const patterns = {
     username: /^[a-zA-Z0-9_-]{1,16}$/, // Patrón para nombre de usuario
-    password: /^(?=.*\d)[\d\w@-]{8,20}$/i, // Patrón para contraseña
+    password: /^(?=.*[\d])(?=.*[A-Z@-])[^\s]{8,20}$/, // Patrón para contraseña
     email: /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/, // Patrón para email
     phone: /^\d{7}$/, // Patrón para número de teléfono
     rif: /^\d{9}$/, // Patrón para RIF

@@ -119,10 +119,9 @@
                                             <button type="button" class="btn"><i class="fas fa-times m-0"></i></button>
                                         </div>
                                     </div>
+                                    <button type="button" class="btn btn-primary mt-3 ms-3 w-30" id="addMedicoEspecialidad" onclick="addMedicoEspecialidadInput('addMedicoEspecialidad')">Añadir otra especialidad</button>
                                 </div>
-                                <div>
-                                    <button type="button" class="btn btn-primary mt-3" id="addMedicoEspecialidad" onclick="addMedicoEspecialidadInput('addMedicoEspecialidad')">Añadir otra especialidad</button>
-                                </div>
+
                                 <div class="col-12 col-check mt-4">
                                     <div class="py-3">Seleccione los horarios del doctor</div>
                                     <div class="row align-items-center">
@@ -498,7 +497,7 @@
                     <div id="actAlertPercentage" class="alert d-none" role="alert"></div>
                     <form action="" id="act-cambioPorcentaje" class="p-3 px-4">
                         <label for="nombre">Porcentaje</label>
-                        <input type="number" name="porcentaje_medico" id="porcentajeMedicoInput" step="any" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="45" required>
+                        <input type="number" name="porcentaje_medico" id="porcentajeMedicoInput" step="any" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="3" required>
                         <small class="form-text">No se permiten números negativos</small>
                     </form>
                 </div>

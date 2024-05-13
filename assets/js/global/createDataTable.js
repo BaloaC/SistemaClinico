@@ -5,7 +5,13 @@ const path = location.pathname.split('/');
 
 export default function createDataTable({ id, columns, url = null, data = null, columnDefs = null, searchPanes = null, dom = null, format = undefined, formatDataCustom = false, formatDataCustomUrl = null, formatDataCustomId = null, serverSide = false, processing = false, order = null, paging = true, info = true, scrollX = false, scrollY = null, scrollCollapse = false, requestType = "GET", requestData = {} }) {
 
-    const handlerCodeFalseAjax = (code) => document.getElementById(id.replace("#","")).dataset.codeFalseAjax = code;
+    const handlerCodeFalseAjax = (code) => {
+
+        const element = document.getElementById(id.replace("#", ""));
+        if (element !== null) element.dataset.codeFalseAjax = code;
+    };
+
+
     handlerCodeFalseAjax(false);
 
     const ajax = (url !== null) ? {
@@ -19,7 +25,7 @@ export default function createDataTable({ id, columns, url = null, data = null, 
 
             // Validamos de que si la petición es satistfactoria pero no tiene datos no cargamos el datatables
             if (data?.code === false || data?.data?.length === 0) {
-                
+
                 handlerCodeFalseAjax(true);
                 $(id).DataTable().clear().draw();
             }
@@ -34,8 +40,10 @@ export default function createDataTable({ id, columns, url = null, data = null, 
         }
     } : null;
 
-    // En caso de que la petición haya sido exitosa y con datos no hace falta pasar la propiedad success en el ajax
-    if(document.getElementById(id.replace("#","")).dataset?.codeFalseAjax == "false") delete ajax?.success;
+    // Obtenemos el id de la tabla para validar si cuenta con algún dataset
+    const element = document.getElementById(id.replace("#", ""));
+
+    if (element !== null && element.dataset?.codeFalseAjax === "false") delete ajax?.success; 
 
     const config = {
 
@@ -55,12 +63,12 @@ export default function createDataTable({ id, columns, url = null, data = null, 
     }
 
     // Se verifican que esas propiedades no estén null para poder ingresarlas a la configuración
+    if (element !== null && element.dataset?.codeFalseAjax === "false" && processing) config.processing = processing; 
+    if (element !== null && element.dataset?.codeFalseAjax === "false" && serverSide) config.serverSide = serverSide; 
     if (dom !== null) config.dom = dom;
     if (order !== null) config.order = order;
     if (scrollY !== null) config.scrollY = scrollY;
     if (scrollX !== null) config.scrollX = scrollX;
-    if (processing && document.getElementById(id.replace("#","")).dataset?.codeFalseAjax == "false") config.processing = processing;
-    if (serverSide && document.getElementById(id.replace("#","")).dataset?.codeFalseAjax == "false") config.serverSide = serverSide;
     if (scrollCollapse !== null) config.scrollCollapse = scrollCollapse;
     if (scrollCollapse !== null) config.scrollCollapse = scrollCollapse;
 

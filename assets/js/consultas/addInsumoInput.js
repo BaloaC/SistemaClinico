@@ -113,7 +113,7 @@ function addInsumoInput(parentModal = "#modalReg") {
 
     clicks += 1;
     let template = `
-        <div class="row align-items-start newInput">
+        <div class="row align-items-end newInput">
             <div class="col-12 col-md-5">
                 <label for="insumo">Insumo</label>
                 <select name="insumo_id" id="s-insumo${clicks}" class="form-control insumo-id" data-active="0">
@@ -122,11 +122,11 @@ function addInsumoInput(parentModal = "#modalReg") {
                 </div>
                 <div class="col-12 col-md-5">
                 <label for="cantidad">Cantidad utilizada</label>
-                <input type="number" step="any" name="cantidad" data-validate="true" data-type="number" class="form-control insumo-cant">
+                <input type="number" step="any" name="cantidad" data-validate="true" data-type="number" class="form-control mb-3 insumo-cant">
                 <small class="form-text col-12">Solo se permiten números</small>
                 <small class="text-secondary mensaje-medida${clicks}"></small>
             </div>
-            <div class="col-3 col-md-1 pt-4-5">
+            <div class="col-3 col-md-1 pt-4-5 align-self-start">
                 <button type="button" class="btn" onclick="deleteInput(this,'.insumo-id', '${parentModal}')"><i class="fas fa-times m-0"></i></button>
             </div>
         </div>

@@ -90,17 +90,17 @@ const handleModalOpen = async (modalParent) => {
                     if (typeof data === "object" && data?.data?.consultas !== 0) {
                         data?.data?.consultas?.forEach(object => {
                             
-                            const { consulta_id: valorPropiedad1, motivo_cita } = object;
+                            const { consulta_id: valorPropiedad1, observaciones } = object;
                             
-                            data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${motivo_cita}` });
+                            data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${observaciones ?? "Sin observaciones"}` });
                         });
                     }
 
                     if (typeof consultasAseguradas === "object" && consultasAseguradas?.consultas.length !== 0) {
                         consultasAseguradas?.consultas?.forEach(object => {
                             
-                            const { consulta_id: valorPropiedad1, motivo_cita, es_emergencia } = object;
-                            let consultaText = es_emergencia == 1 ? "Consulta por emergencia" : (motivo_cita ?? "Consulta asegurada");
+                            const { consulta_id: valorPropiedad1, es_emergencia, observaciones } = object;
+                            let consultaText = es_emergencia == 1 && observaciones ? "Consulta por emergencia" : (observaciones ?? "Consulta asegurada");
 
                             data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${consultaText}` });
                         });

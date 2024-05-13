@@ -36,8 +36,8 @@ document.addEventListener("submit", async e => {
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (data.clave !== data.confirmarClave) throw { message: "Las contraseñas no coinciden" };
         if (!((/^[a-zA-Z0-9_-]{1,16}$/).test(data.nombre))) throw { message: "Nombre de usuario inválido" };
-        if (!((/^(?=.*\d)[\d\w@-]{8,20}$/i).test(data.clave))) throw { message: "Contraseña inválida" };
-        if (!((/^(?=.*\d)[\d\w@-]{8,20}$/i).test(data.confirmarClave))) throw { message: "Contraseña inválida" };
+        if (!((/^(?=.*[\d])(?=.*[A-Z@-])[^\s]{8,20}$/).test(data.clave))) throw { message: "Contraseña inválida" };
+        if (!((/^(?=.*[\d])(?=.*[A-Z@-])[^\s]{8,20}$/).test(data.confirmarClave))) throw { message: "Contraseña inválida" };
         if (!((/^\d{6,}$/).test(data.pin))) throw { message: "Pin inválido" };
         if (!(data.rol > 0 && data.rol <= 5)) throw { message: "Nivel de usuario inválido" };
 

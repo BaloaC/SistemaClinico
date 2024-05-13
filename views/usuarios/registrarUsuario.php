@@ -14,7 +14,7 @@
                 <!-- Registro container -->
                 <div class="row login-container col-12 col-md-10 d-flex align-items-center justify-content-center rounded">
                     <!-- Registro information -->
-                    <div class="col-md-6 col-8 my-4 bg-light rounded-3">
+                    <div class="col-12 col-md-8 col-lg-6 my-4 bg-light rounded-3">
                         <!-- Logo -->
                         <div class="d-flex justify-content-center mt-2">
                             <a href="<?php echo Url::base() . "/login" ?>">
@@ -48,8 +48,6 @@
                                     <small class="form-text">El pin debe contener mínimo 6 números</small>
                                     <label for="rol">Nivel de usuario</label>
                                     <select class="form-select" name="rol" required>
-                                        <option value="" disabled>Seleccione un nivel de usuario...</option>
-                                        <!-- <option value="1">Admin</option> -->
                                         <option value="2">Gerente</option>
                                         <option value="3">Contador</option>
                                         <option value="4">Analista</option>

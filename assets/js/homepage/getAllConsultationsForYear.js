@@ -14,9 +14,9 @@ export default async function getAllConsultationsForYear(bySpeciality) {
 
     let consultationsYear;
     if(bySpeciality === "all"){
-        consultationsYear = consultations.filter(consultation => new Date(consultation.fecha_consulta).getFullYear() === new Date().getFullYear() );
+        consultationsYear = consultations.filter(consultation => new Date(consultation?.fecha_consulta).getFullYear() === new Date().getFullYear() );
     } else{
-        consultationsYear = consultations.filter(consultation => new Date(consultation.fecha_consulta).getFullYear() === new Date().getFullYear() && consultation.especialidad_id == bySpeciality);
+        consultationsYear = consultations.filter(consultation => new Date(consultation?.fecha_consulta).getFullYear() === new Date().getFullYear() && consultation?.especialidad_id == bySpeciality);
     }
 
     consultationsYear.forEach(el => {

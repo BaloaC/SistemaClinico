@@ -5,7 +5,7 @@ import validateInputs from "../global/validateInputs.js";
 const select2Options = {
     selectValue: "medicamento_id",
     selectNames: ["nombre_medicamento"],
-    placeholder: "Seleccione el medicamento"
+    placeholder: "Primero seleccione una especialidad"
 }
 
 let clicks = 0;
@@ -122,52 +122,6 @@ const handleModalOpen = async (parentModal) => {
             parentModal,
         })
 
-        // dinamicSelect2({
-        //     // obj: medicamentosList,
-        //     selectSelector: `#s-medicamento`,
-        //     selectValue: "medicamento_id",
-        //     selectNames: ["nombre_medicamento"],
-        //     parentModal: parentModal,
-        //     placeholder: "Seleccione el medicamento",
-        //     ajax: true,
-        //     ajaxUrl: `medicamento/especialidad/${}`,
-        //     queryPage: false,
-        //     processResultsAjax: function (data, params) {
-
-        //         const existingSelects = document.querySelectorAll(`.medicamento-id`);
-
-        //         let selectedOptions = [];
-
-        //         // Recorremos los select que existen
-        //         existingSelects.forEach(select2 => {
-        //             if (document.getElementById(`s-medicamento`).value != select2.value) {
-        //                 selectedOptions.push(select2.value);
-        //             }
-        //         })
-
-        //         const data1 = [];
-
-        //         data?.data.forEach(object => {
-        //             const { medicamento_id: valorPropiedad1, nombre_medicamento: nombre_medicamento } = object;
-        //             let isDuplicate = false;
-
-        //             selectedOptions?.forEach(select => {
-        //                 if (select == object.medicamento_id) {
-        //                     isDuplicate = true;
-        //                     return; // Salir del bucle forEach si se encuentra una duplicación
-        //                 }
-        //             });
-
-        //             if (!isDuplicate) {
-        //                 data1.push({ id: valorPropiedad1, text: nombre_medicamento });
-        //             }
-        //         });
-
-        //         // Transforms the top-level key of the response object from 'data' to 'results'
-        //         return { results: data1 };
-        //     }
-        // });
-
         modalOpened = true;
     }
 }
@@ -187,7 +141,7 @@ function addRecipeInput(parentModal = "#modalReg") {
 
     clicks += 1;
     let template = `
-        <div class="row align-items-start mt-4 newInput">
+        <div class="row align-items-end mt-4 newInput">
             <div class="col-12 col-md-5">
             <label for="medicamento">Filtrar por especialidad</label>
                 <select name="medicamento_id" id="s-especialidadm${clicks}" class="form-control especialidad-id" data-active="0">
@@ -205,7 +159,7 @@ function addRecipeInput(parentModal = "#modalReg") {
                 <input type="text" name="uso" data-validate="true" data-type="address" class="form-control uso-medicamento">
                 <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
             </div>
-            <div class="col-3 col-md-1 pt-4-5">
+            <div class="col-3 col-md-1 pt-4-5 align-self-start">
                 <button type="button" class="btn" onclick="deleteInput(this,'.medicamento-id')"><i class="fas fa-times m-0"></i></button>
             </div>
         </div>

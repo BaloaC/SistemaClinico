@@ -91,7 +91,7 @@ async function addMedicoEspecialidadInput(button, parentModal = "#modalReg") {
     const { selectClass, costoClass, deleteButtonFunction, addButtonId } = inputClassOptions[parentModal];
 
     let template = `
-    <div class="row align-items-end newInput">
+    <div class="row align-items-start newInput">
         <div class="col-12 col-md-5">
             <label for="medico">Especialidad</label>
             <select id="s-especialidad${clicks}" data-validate="true" class="form-control default-select ${selectClass}" data-active="0" required>
@@ -100,11 +100,11 @@ async function addMedicoEspecialidadInput(button, parentModal = "#modalReg") {
         </div>
         <div class="col-12 col-md-5">
             <label for="monto">Costo especialidad</label>
-            <input type="number" name="costo-especialidad" step="any" data-validate="true" data-type="price" class="form-control ${costoClass}"" required>
+            <input type="number" name="costo-especialidad" step="any" data-validate="true" data-type="price" class="form-control mb-3 ${costoClass}"" required>
             <small class="form-text">No se permiten números negativos</small>
         </div>
-        <div class="col-3 col-md-1">
-            <button type="button" class="btn mt-4" onclick="${deleteButtonFunction}"><i class="fas fa-times m-0"></i></button>
+        <div class="col-3 col-md-1 pt-4-5 align-self-start">
+            <button type="button" class="btn" onclick="${deleteButtonFunction}"><i class="fas fa-times m-0"></i></button>
         </div>
     </div>
 

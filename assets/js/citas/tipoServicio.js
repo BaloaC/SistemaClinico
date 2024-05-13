@@ -5,7 +5,7 @@ export default async function tipoServicio(inputRadio) {
 
     console.log(inputRadio);
 
-    if (inputRadio.value === "1" || inputRadio.value === "2") {
+    if (inputRadio.value === "1") {
         examenSelect.disabled = false;
         $(examenInputContainer).fadeIn("slow");
     } else {
@@ -17,10 +17,9 @@ export default async function tipoServicio(inputRadio) {
 // En caso de abrir el modal y con la opción del examen seleccionada, habilitar los exámenes
 document.getElementById("modalReg").addEventListener("show.bs.modal", () => {
 
-    const examenInputChecked = document.getElementById("tipoServicioExamen");
-    const consultaExamenInputChecked = document.getElementById("tipoServicioConsulta");
+    const tipoServicioSelect = document.getElementById("s-tipo-servicio");
 
-    if (examenInputChecked.checked || consultaExamenInputChecked.checked) {
+    if (tipoServicioSelect.value !== "2") {
 
         const examenSelect = document.getElementById("s-examen");
         const examenInputContainer = document.querySelector(".examenInput");

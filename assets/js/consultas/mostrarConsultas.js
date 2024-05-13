@@ -272,8 +272,6 @@ const handleModalOpen = async () => {
                 }
             });
 
-            // Lógica para manejar el select2 de los médicos
-
             const medicamentosSelect = document.querySelectorAll(".medicamento-id");
 
             // Reinicializar los select2 de los medicamentos para que se puedan actualizar según la especilidad
@@ -289,6 +287,7 @@ const handleModalOpen = async () => {
 
                 const newOption = new Option(data.text, data.id, true, true);
                 $(`#s-especialidadm${key === 0 ? "" : key}`).append(newOption).trigger('change');
+                $(`#s-especialidadm${key === 0 ? "" : key}`).val([]).trigger('change');
 
                 dinamicSelect2({
                     // obj: medicamentosList,
@@ -485,6 +484,7 @@ const handleModalOpen = async () => {
 
                 const newOption = new Option(data.text, data.id, true, true);
                 $(`#s-especialidadm${key === 0 ? "" : key}`).append(newOption).trigger('change');
+                $(`#s-especialidadm${key === 0 ? "" : key}`).val([]).trigger('change');
 
                 dinamicSelect2({
                     selectSelector: select,
@@ -848,7 +848,7 @@ addEventListener("DOMContentLoaded", async e => {
         } else {
             recipes += `
             <tr>
-                <td colspan="4"><b>No hay recipes asigandos</b></td>
+                <td colspan="4"><b>No hay recipes asignados</b></td>
             </tr>
             `;
         }

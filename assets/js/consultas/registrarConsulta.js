@@ -109,6 +109,11 @@ async function addConsulta() {
                 medicamento_id: value.value,
                 uso: medicamentoUso[key].value
             }
+
+            // Validamos que si se quiere insertar más de un recipe, no estén con información vacía
+            if (medicamento.medicamento_id === "" && key > 0) throw { message: "Debe especificar el medicamento en el recipe" }
+            if (medicamento.uso === "" && key > 0) throw { message: "Debe especificar el uso en el recipe" }
+
             recipes.push(medicamento);
         })
 
