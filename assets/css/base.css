@@ -334,7 +334,7 @@ span.select2.select2-container.select2-container--bootstrap-5 {
 
 .footer-pagination {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     margin-bottom: 4rem;
 }
 
@@ -345,7 +345,8 @@ span.select2.select2-container.select2-container--bootstrap-5 {
 /* Paginación */
 #boton-pagina-anterior, #boton-pagina-siguiente, .page-item.page-link.active {
     background-color: #222fb9 !important;
-    border-color: #222fb9 !important
+    border-color: #222fb9 !important;
+    margin: 0 1rem;
 }
 
 @media screen and (max-width: 576px) {
