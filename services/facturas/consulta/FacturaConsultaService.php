@@ -164,6 +164,7 @@ class FacturaConsultaService {
         $es_asegurada = is_null($consulta_seguro) ? false : true;
 
         $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura, $es_asegurada);
+        $consulta_info['es_asegurada'] = true;
         // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
         $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);
         $examenes_cita = FacturaConsultaHelpers::obtenerCitasExamenes($factura);
@@ -177,8 +178,6 @@ class FacturaConsultaService {
         
         if (!is_null($examenes)) {
             // $consultaList[] = array_merge($consulta_info, $examenes);
-            echo '<pre>';
-            // var_dump( ($examenes) );
             return FacturaConsultaHelpers::obtenerMontoTotal(array_merge($consulta_info, $examenes));
         } else {
             return FacturaConsultaHelpers::obtenerMontoTotal(array_merge($consulta_info));

@@ -19,6 +19,11 @@ class GlobalController extends Controller{
             return $respuesta->json(400);
         }
 
+        if ($_POST['porcentaje_medico'] > 100) {
+            $respuesta = new Response(false, 'El porcentaje no deber pasar el 100%');
+            return $respuesta->json(400);
+        }
+
         $_globalModel = new GlobalModel();
         $fueActualizado = $_globalModel->where('global.key', '=', "porcentaje_medico")->update(array("value" => $_POST['porcentaje_medico']));
         
