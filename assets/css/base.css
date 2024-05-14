@@ -346,6 +346,10 @@ span.select2.select2-container.select2-container--bootstrap-5 {
     border-color: #00000000;
 }
 
+.input-group-text.label-input-char, #addon {
+    margin-right: 1rem;
+}
+
 /* Paginación */
 #boton-pagina-anterior, #boton-pagina-siguiente, .page-item.page-link.active {
     background-color: #222fb9 !important;
@@ -361,4 +365,8 @@ span.select2.select2-container.select2-container--bootstrap-5 {
         margin-top: 1rem;
     }
 
+    .historial-medico-btn {
+        flex-direction: column !important;
+        align-items: end !important;
+    }
 }

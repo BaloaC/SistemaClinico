@@ -82,7 +82,7 @@ async function addFSeguro() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        if (!(patterns.price.test(data.monto_consulta_usd))) throw { message: "El precio ingresado es inválido" };
+        // if (!(patterns.price.test(data.monto_consulta_usd))) throw { message: "El precio ingresado es inválido" };
 
 
         const registroExitoso = await addModule("factura/consultaSeguro", "info-fseguro", data, "La factura seguro ha sido generada correctamente!", "#modalRegAsegurada", ".alertConsultaSeguro");

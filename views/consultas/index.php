@@ -71,7 +71,7 @@
 
                             <div class="row">
                                 <div class="col-12 col-md-6">
-                                    <h5>Tipo de consulta</h5>
+                                    <h5>Tipo de servicio</h5>
                                     <select id="tipoConsultas" class="form-control my-3 " onchange="tipoConsulta(this)">
                                         <option value="examen">Exámen</option>
                                         <option value="consulta" selected>Consulta</option>

@@ -21,7 +21,7 @@ async function addFConsulta() {
         formData.forEach((value, key) => (data[key] = value));
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
-        if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto_consulta_usd))) throw { message: "El monto ingresado en usd es inválido" };
+        // if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto_consulta_usd))) throw { message: "El monto ingresado en usd es inválido" };
 
         const registroExitoso = await addModule("factura/consulta","info-fconsulta",data,"La factura consulta ha generada correctamente!", "#modalRegNormal", ".alertConsulta");
 
