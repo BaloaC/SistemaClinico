@@ -231,9 +231,9 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-md-5">
-                                        <label for="monto">Monto</label>
+                                        <!-- <label for="monto">Monto</label>
                                         <input type="number" name="monto_pago" step="any" class="form-control monto-pago" data-validate="true" data-type="price" disabled>
-                                        <small class="form-text">No se permiten números negativos</small>
+                                        <small class="form-text">No se permiten números negativos</small> -->
                                     </div>
                                     <div class="col-3 col-md-1 d-none">
                                         <button type="button" class="btn" onclick="deleteInput(this,'.medico-pago-id')"><i class="fas fa-times m-0"></i></button>
@@ -517,9 +517,9 @@
                                     <select name="metodo_pago" id="s-metodo-pago" class="form-control" data-active="0" required>
                                         <option></option>
                                     </select>
-                                    <label for="monto_sin_iva">Monto</label>
+                                    <!-- <label for="monto_sin_iva">Monto</label>
                                     <input type="number" step="any" name="monto_consulta_usd" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
-                                    <small class="form-text">No se permiten números negativos</small>
+                                    <small class="form-text">No se permiten números negativos</small> -->
                                 </div>
                             </div>
                         </form>
@@ -547,13 +547,13 @@
                             <select name="consulta_id" id="s-consulta-seguro" class="form-control mb-3" data-active="0" required>
                                 <option></option>
                             </select>
-                            <label for="tipo_servico">Tipo de servicio</label>
+                            <!-- <label for="tipo_servico">Tipo de servicio</label>
                             <select name="tipo_servicio" id="s-tipo-servicio" class="form-control mb-3" data-active="0" required>
                                 <option></option>
-                            </select>
-                            <label for="monto">Monto</label>
+                            </select> -->
+                            <!-- <label for="monto">Monto</label>
                             <input type="number" name="monto_consulta_usd" id="monto" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
-                            <small class="form-text">El precio de ser mayor o igual a 0</small>
+                            <small class="form-text">El precio de ser mayor o igual a 0</small> -->
                         </form>
                     </div>
                     <div class="modal-footer">
