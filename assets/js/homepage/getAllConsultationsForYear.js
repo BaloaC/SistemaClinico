@@ -2,9 +2,16 @@ import getAll from "../global/getAll.js";
 import { series, xAxis } from "./especialidadesGraph.js";
 
 export default async function getAllConsultationsForYear(bySpeciality) {
+
+
+    const loadingMessage = document.querySelector(".consultasMensuales.loading");
+    loadingMessage.classList.remove("d-none");
+
     const consultations = await getAll("consultas/consulta");
     let [enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     
+    loadingMessage.classList.add("d-none");
+
     if (consultations == undefined || consultations.length <= 0) {
         let mensajeEspecialidad = document.getElementsByClassName('text-no-graph')[0];
         if (mensajeEspecialidad.classList.contains('d-none')) {

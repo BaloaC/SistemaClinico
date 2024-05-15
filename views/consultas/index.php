@@ -70,11 +70,20 @@
                         <form action="" id="info-consulta" class="form-reg p-3 px-4">
 
                             <div class="row">
+                                <h5>Información del servicio</h5>
                                 <div class="col-12 col-md-6">
-                                    <h5>Tipo de servicio</h5>
+                                    <label for="tipoConsulta">Tipo de servicio</label>
                                     <select id="tipoConsultas" class="form-control my-3 " onchange="tipoConsulta(this)">
                                         <option value="examen">Exámen</option>
                                         <option value="consulta" selected>Consulta</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="tipoConsulta">Tipo de consulta</label>
+                                    <select name="es_emergencia" id="s-tipo_consulta" class="form-control my-3">
+                                        <option value="1">Por emergencia</option>
+                                        <option value="2">Normal</option>
+                                        <option value="0" selected>Con cita previa</option>
                                     </select>
                                 </div>
                             </div>
@@ -122,7 +131,8 @@
                                 <div class="row">
                                     <div class="row ">
                                         <h5>Información de la cita</h5>
-                                        <div class="col-12 col-md-6 emergenciaContainer">
+                                        <!-- <div class="col-12 col-md-6"> -->
+                                        <!-- <div class="col-12 col-md-6 emergenciaContainer">
                                             <label for="input-radios-container" class="">¿La consulta es por emergencia?</label>
                                             <div class="input-radios-container">
                                                 <div class="form-check form-check-inline">
@@ -147,7 +157,7 @@
                                                     <label class="form-check-label" for="inlineRadio2">No</label>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="col-12 col-md-6 info-cita">
                                             <label for="cita">Cita</label>
                                             <select name="cita_id" id="s-cita" class="form-control" data-active="0" required>

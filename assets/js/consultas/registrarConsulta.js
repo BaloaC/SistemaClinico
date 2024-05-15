@@ -38,9 +38,7 @@ async function addConsulta() {
 
         }
 
-        if (data.consultaPorEmergencia === "1") {
-            data.es_emergencia = true;
-        }
+        data.es_emergencia === "2" || data.es_emergencia === "0" ?  data.es_emergencia = false : data.es_emergencia = true;
 
         // En caso de que sea de emergencia y titular únicamente
         if(data.pacienteBeneficiadoEmergencia === "0" && data.es_emergencia){

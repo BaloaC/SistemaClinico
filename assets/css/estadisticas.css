@@ -3,7 +3,7 @@
 @import url('homepage.css');
 
 section {   
-    height: 100vh;
+    height: auto;
 }
 
 .w-75 {
@@ -42,9 +42,9 @@ section {
         margin-bottom: 5.5rem;
     }
 
-    section {
+    /* section {
         height: 85vh;
-    }
+    } */
 }
 
 

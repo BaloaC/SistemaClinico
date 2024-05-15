@@ -42,6 +42,7 @@
                         <div class="card card-home shadow-dark position-relative">
                             <div id="chartdiv"></div>
                             <p class="text-no-graph d-none">Todavía no hay consultas registradas</p>
+                            <p class="consultasMensuales loading text-no-graph no-data d-none">Cargando</p>
                         </div>
                     </div>
                 </div>

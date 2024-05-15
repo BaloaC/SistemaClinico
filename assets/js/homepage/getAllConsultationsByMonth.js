@@ -2,9 +2,15 @@ import getAll from "../global/getAll.js";
 import { series, title, xAxis } from "./especialidadesGraph.js";
 
 export default async function getAllConsultationsByMonth(bySpeciality) {
+
+    const loadingMessage = document.querySelector(".consultasMensuales.loading");
+    loadingMessage.classList.remove("d-none");
+
     const consultations = await getAll("consultas/consulta");
     let [oneSeven, eightFiveteen, sixTeenTwentytwo, TwentythreeTwentynine] = [0, 0, 0, 0];
     
+    loadingMessage.classList.add("d-none");
+
     if (consultations == undefined || consultations.length <= 0) {
         let mensajeEspecialidad = document.getElementsByClassName('text-no-graph')[0];
         if (mensajeEspecialidad.classList.contains('d-none')) {
@@ -14,9 +20,10 @@ export default async function getAllConsultationsByMonth(bySpeciality) {
 
     let consultationsYear;
     if(bySpeciality === "all"){
-        consultationsYear = consultations.filter(consultation => new Date(consultation.fecha_consulta).getMonth() === new Date().getMonth());
+        console.log(consultations);
+        consultationsYear = consultations.filter(consultation => new Date(consultation?.fecha_consulta).getMonth() === new Date().getMonth());
     } else{
-        consultationsYear = consultations.filter(consultation => new Date(consultation.fecha_consulta).getMonth() === new Date().getMonth() && consultation.especialidad_id == bySpeciality);
+        consultationsYear = consultations.filter(consultation => new Date(consultation?.fecha_consulta).getMonth() === new Date().getMonth() && consultation.especialidad_id == bySpeciality);
     }
     
     console.log(consultationsYear);
