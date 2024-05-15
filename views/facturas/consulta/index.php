@@ -83,10 +83,10 @@
                                     <select name="metodo_pago" id="s-metodo-pago" class="form-control" data-active="0" required>
                                         <option></option>
                                     </select>
-                                    <label for="monto_sin_iva">Monto</label><br>
+                                    <!-- <label for="monto_sin_iva">Monto</label><br>
                                     <small class="text-secondary">(El valor ingresado es en dólares)</small>
                                     <input type="number" step="any" name="monto_consulta_usd" id="monto_consulta_usd_consulta" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
-                                    <small class="form-text">No se permiten números negativos</small>
+                                    <small class="form-text">No se permiten números negativos</small> -->
                                 </div>
                             </div>
                         </form>

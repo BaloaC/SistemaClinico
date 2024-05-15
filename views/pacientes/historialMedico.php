@@ -21,9 +21,9 @@
                 <div class="col-6">
                     <h4 class="pt-5 pb-2 text-grey">Historial Médico</h4>
                 </div>
-                <div class="col-6 d-flex align-items-center justify-content-end">
-                    <button class="btn btn-sm btn-add mx-1" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalRegAntecedentes"><i class="fa-sm fas fa-plus"></i> Antecedentes</button>
-                    <button class="btn btn-sm btn-add mx-1" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Agregar consulta</button>
+                <div class="col-6 d-flex align-items-center justify-content-end historial-medico-btn">
+                    <button class="btn btn-sm btn-add m-1" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalRegAntecedentes"><i class="fa-sm fas fa-plus"></i> Antecedentes</button>
+                    <button class="btn btn-sm btn-add m-1" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Agregar consulta</button>
                 </div>
                 <hr class="border-white">
             </div>

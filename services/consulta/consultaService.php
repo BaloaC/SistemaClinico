@@ -248,11 +248,13 @@ class ConsultaService {
                 $relaciones = ConsultaHelper::obtenerRelaciones($consulta->consulta_id);
             }
             
-            if (count((array) $relaciones) > 0) {
+            if (count((array) $relaciones) > 0 && !empty($consultaCompleta[0])) {
                 $consultaCompleta[0] = (object) array_merge((array) $consultaCompleta[0], (array) $relaciones);
             }
 
-            return $consultas[] = (object) array_merge((array) $consulta, (array) $consultaCompleta[0]);
+            if(isset($consultaCompleta[0])){
+                return $consultas[] = (object) array_merge((array) $consulta, (array) $consultaCompleta[0]);
+            }
             
         } else { // Si es por cita extraemos la información de consulta_cita
             $_cita = new CitaModel();

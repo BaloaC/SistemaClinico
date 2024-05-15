@@ -71,6 +71,8 @@ export default class CitasManager {
                         this.inputHoraSalidaCita(null, null, "#hora_salida2");
                     }
 
+                    // Validamos que el mensaje de contacto con el médico aparezca si se hace click en un día fuera de su horario
+                    instance.selectedDateElem.children[0].classList.contains("noWorking") ? $(".contact-medico").fadeIn("slow") : $(".contact-medico").fadeOut("slow");
                 },
                 onDayCreate: async (dObj, dStr, fp, dayElem) => {
 
@@ -78,14 +80,6 @@ export default class CitasManager {
                     const listCitasByDate = await this.obtenerCitasPorFecha(dateDayElem);
                     const horarioDelDia = this.obtenerHorarioDelDiaPorMedico(dateDayElem);
                     const dateTime = new Date();
-
-                    if (document.getElementById(inputId).value === dateDayElem) {
-
-                        inputId === "fecha_cita" ? this.mostrarCitasDelDia(listCitasByDate) : this.mostrarCitasDelDia(listCitasByDate, { citasTableClass: "#citas-table-reschedule tbody", withoutCitasClass: ".withoutCitasReschedule", modalRegClass: "#modalReprogramar .modal-body" });
-                        this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
-                        this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
-                    };
-
 
                     if (dateTime.getTime() <= dayElem.dateObj.getTime()) {
 
@@ -98,6 +92,16 @@ export default class CitasManager {
                             dayElem.innerHTML += `<span class='event ${(dayElem.dateObj.getDay() === 0 || dayElem.dateObj.getDay() === 6) ? "disabled" : "noWorking"}'></span>`;
                         }
                     }
+
+                    if (document.getElementById(inputId).value === dateDayElem) {
+
+                        // Si la fecha seleccionada no está disponible en el horario del médico mostrar la información de contacto
+                        dayElem.children[0].classList.contains("noWorking") ? $(".contact-medico").fadeIn("slow") : $(".contact-medico").fadeOut("slow");
+
+                        inputId === "fecha_cita" ? this.mostrarCitasDelDia(listCitasByDate) : this.mostrarCitasDelDia(listCitasByDate, { citasTableClass: "#citas-table-reschedule tbody", withoutCitasClass: ".withoutCitasReschedule", modalRegClass: "#modalReprogramar .modal-body" });
+                        this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
+                        this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
+                    };
                 },
                 "disable": [
                     function (date) { return (date.getDay() === 0 || date.getDay() === 6); }

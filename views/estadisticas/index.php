@@ -14,9 +14,8 @@
 
     <div class="container home">
         <div class="row">
-            <!-- <button onclick="getPacientesByType()">CLICK </button> -->
-            <h1 class="py-4 fs-7 mt-5">Panel de estadisticas</h1>
-            <h5 class="w-75">En esta sección del sistema, podrá visualizar a través de gráficas la información registrada en el mismo a nivel general o mensual.</h5>
+            <h1 class="py-4 fs-7 mt-5">Panel de Estadísticas</h1>
+            <h5 class="w-75">En esta sección del sistema, podrá visualizar a través de gráficas la información registrada en el mismo a nivel general o semanal.</h5>
 
             <p>Filtrar por:</p>
             <select id="filterSelect" class="form-control w-25" onchange="inputGraphFilterHandler(this)">
@@ -82,21 +81,19 @@
 
             </div>
         </section>
-        <section>
-            <div class="container">
-                <h3 class="mt-5">Médicos</h3>
-                <div class="row especialidad-container mt-5">
+        <!-- <section> -->
+            <!-- <div class="container">/ -->
+                <!-- <h3 class="mt-5">Médicos</h3> -->
+                <!-- <div class="row especialidad-container mt-5"> -->
                     <!-- Gráfica Consultas Médicos-->
-                    <div class="col-12 col-lg-6 order-lg-first order-last flex-column">
+                    <!-- <div class="col-12 col-lg-6 order-lg-first order-last flex-column">
                         <div class="card card-home shadow-dark position-relative">
-                            <div id="medicoConsulta" class="chart"></div>
-                            <p class="medicoConsulta text-no-graph no-data d-none">Todavía no hay médicos con consultas registradas</p>
-                            <p class="medicoConsulta loading text-no-graph no-data d-none">Cargando</p>
+                            
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
         <section>
             <div class="container">
                 <h3 class="mt-5">Consultas</h3>
@@ -115,6 +112,14 @@
                             <div id="consultasEspecialidad" class="chart"></div>
                             <p class="consultasEspecialidad text-no-graph no-data d-none">Todavía no hay consultas registradas este mes</p>
                             <p class="consultasEspecialidad loading text-no-graph no-data d-none">Cargando</p>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6 order-lg-last order-first">
+                        <div class="card card-home shadow-dark position-relative">
+                            <<div id="medicoConsulta" class="chart"></div>
+                            <p class="medicoConsulta text-no-graph no-data d-none">Todavía no hay médicos con consultas registradas</p>
+                            <p class="medicoConsulta loading text-no-graph no-data d-none">Cargando</p>
                         </div>
                     </div>
                 </div>

@@ -88,4 +88,8 @@ export default async function consultaSinCita(inputRadio) {
 
 }
 
+document.getElementById("s-tipo_consulta").addEventListener("change", function () {
+    consultaSinCita(this);
+});
+
 window.consultaSinCita = consultaSinCita;

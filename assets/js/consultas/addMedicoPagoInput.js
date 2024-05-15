@@ -78,7 +78,7 @@ function addMedicoPagoInput(parentModal = "#modalReg") {
     clicks += 1;
     let template = `
 
-    <div class="row align-items-start newInput">
+    <div class="row align-items-end newInput">
         <div class="col-12 col-md-5">
             <label for="medico">Médico</label>
             <select id="s-medico-pago${clicks}" class="form-control medico-pago-id" data-active="0" required>
@@ -87,10 +87,10 @@ function addMedicoPagoInput(parentModal = "#modalReg") {
         </div>
         <div class="col-12 col-md-5">
             <label for="monto" class="">Monto</label>
-            <input type="number" step="any" data-validate="true" data-type="price" class="form-control monto-pago" required>
+            <input type="number" step="any" data-validate="true" data-type="price" class="form-control mb-3 monto-pago" required>
             <small class="form-text">No se permiten números negativos</small>
         </div>
-        <div class="col-3 col-md-1 pt-4-5">
+        <div class="col-3 col-md-1 pt-4-5 align-self-start">
             <button type="button" class="btn" onclick="deleteInput(this,'.medico-pago-id')"><i class="fas fa-times m-0"></i></button>
         </div>
     </div>

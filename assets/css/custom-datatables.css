@@ -42,6 +42,9 @@
     color: #fff !important;
 }
 
+.dataTables_wrapper a {
+    text-decoration: none;
+}
 
 .dataTables_wrapper .dataTables_paginate {
     padding: 10px 0;
@@ -63,7 +66,6 @@
     display: inline-block;
 }
 
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
     background: #222fb9 !important;
     color: #fff !important;
@@ -112,3 +114,16 @@ table.dataTable tbody tr.selected > * {
     background: #222fb9;
     color: white;
 } */
+
+
+.paginate_button.previous.disabled,.paginate_button.next.disabled {
+    background: #222fb99c !important;
+}
+
+.paginate_button.previous,.paginate_button.next {
+    background: #222fb9 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #20287d !important;
+}

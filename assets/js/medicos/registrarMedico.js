@@ -51,7 +51,7 @@ async function addMedico() {
                 const inputsTime = e.parentElement.parentElement.parentElement.querySelectorAll("input[type='time']");
 
                 if(inputsTime[0].value >= inputsTime[1].value){
-                    throw { message: `La hora de salida es menor igual a la fecha de entrada en el día ${e.value}` }
+                    throw { message: `La hora de salida es menor o igual a la hora de entrada en el día ${e.value}` }
                 }
 
                 const dias_semana = {

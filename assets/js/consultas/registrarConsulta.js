@@ -38,9 +38,7 @@ async function addConsulta() {
 
         }
 
-        if (data.consultaPorEmergencia === "1") {
-            data.es_emergencia = true;
-        }
+        data.es_emergencia === "2" || data.es_emergencia === "0" ?  data.es_emergencia = false : data.es_emergencia = true;
 
         // En caso de que sea de emergencia y titular únicamente
         if(data.pacienteBeneficiadoEmergencia === "0" && data.es_emergencia){
@@ -109,6 +107,11 @@ async function addConsulta() {
                 medicamento_id: value.value,
                 uso: medicamentoUso[key].value
             }
+
+            // Validamos que si se quiere insertar más de un recipe, no estén con información vacía
+            if (medicamento.medicamento_id === "" && key > 0) throw { message: "Debe especificar el medicamento en el recipe" }
+            if (medicamento.uso === "" && key > 0) throw { message: "Debe especificar el uso en el recipe" }
+
             recipes.push(medicamento);
         })
 
@@ -125,6 +128,8 @@ async function addConsulta() {
         })
 
         if (indicaciones.length != 0 && indicaciones[0].descripcion != "") { data.indicaciones = indicaciones; }
+
+        if(!data.fecha_consulta) {data.fecha_consulta = new Date().toISOString().slice(0, 10);}
 
         if (data.total_insumos > 0 && !("insumos" in data)) throw { message: "Debe especificar los insumos utilizados" }
 

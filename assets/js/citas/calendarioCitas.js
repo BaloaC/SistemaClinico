@@ -355,7 +355,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             $("#citas-table").fadeOut("slow");
             $(".medicoScheduleLabel").fadeOut("slow");
             $(".citaScheduleLabel").fadeOut("slow");
-            $(".contact-medico").fadeIn("slow");
+            // $(".contact-medico").fadeIn("slow");
 
             const infoMedico = await getById("medicos", this.value);
             const modalReg = document.querySelector("#modalReg .modal-body");
