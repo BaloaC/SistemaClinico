@@ -93,6 +93,19 @@ class CitasHelpers {
         }
     }
 
+    public static function actualizarExamenCita($cita_examenes) {
+        foreach ($cita_examenes as $cita_examen) {
+            
+            $_citaExamenModel = new CitaExamenModel();
+            $se_actualizo = $_citaExamenModel->where('cita_examen_id', '=', $cita_examen['cita_examen_id'])->update($cita_examen);
+            if ($se_actualizo <= 0 || !$se_actualizo) {
+                $respuesta = new Response(false, 'Ocurrió un error actualizando la cita examen id'.$cita_examen['cita_examen_id_id']);
+                echo $respuesta->json(400);
+                exit();
+            }
+        }
+    }
+
     public static function obtenerExamenes($cita_id) {
         $_citaExamenModel = new CitaExamenModel();
         $inners = $_citaExamenModel->listInner(['examen' => 'cita_examen']);

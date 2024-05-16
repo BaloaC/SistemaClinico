@@ -312,8 +312,13 @@ class CitaController extends Controller {
         if ($actualizado > 0) {
             $_cita = new CitaModel();
             $esActualizado = $_cita->where('cita_id', '=', $cita_id)->update($cita);
+
+            CitasHelpers::actualizarExamenCita($_POST['cita_examenes']);
         }
 
+        if ($esActualizado > 0) {
+            
+        }
         $mensaje = ($esActualizado > 0);
 
         Helpers::retornarMensajeActualizacion($mensaje, $actualizado);

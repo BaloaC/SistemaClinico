@@ -333,6 +333,73 @@ class FacturaConsultaHelpers {
         }
     }
 
+    public static function insertarDiferenciaSaldo($formulario, $factura) {
+        $cobertura = $factura[0]['cobertura_seguro'];
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+
+        $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
+        $consulta_emergencia = $_consultaEmergenciaModel->where('consulta_id', '=', $formulario['consulta_id'])->getFirst();
+
+        // Si la consulta es por emergencia
+        if (!is_null($consulta_emergencia)) {
+            $_consultaExamenModel = new ConsultaExamenModel();
+            $consulta_examenes = $_consultaExamenModel->where('consulta_id', '=', $formulario['consulta_id'])->getAll();
+
+            if (!is_null($consulta_examenes)) {
+                foreach ($consulta_examenes as $examen) {
+                    $_consultaExamen = new ConsultaExamenModel();
+                    $consulta_examen = $_consultaExamen->where('consulta_examen_id', '=', $examen->consulta_examen_id)->getFirst();
+
+                    if ($consulta_examen->cubierto_por == 1) {
+                        $precio_examen_bs = round($consulta_examen->precio_examen_usd * $valorDivisa, 2);
+                        $consulta_examen = $_consultaExamen->update(['precio_examen_bs' => $precio_examen_bs]);
+
+                    } else if ($consulta_examen->cubierto_por == 2) {
+                        $cobertura -= $consulta_examen->precio_examen_usd;
+                    }
+                }
+            }
+
+            $_consultaExamenModel->resetValues();
+            $consulta_examen = $_consultaExamenModel->where('consulta_id', '=', $formulario['consulta_id'])->where('cubierto_por', '=', 3)->getFirst();
+            if (!is_null($consulta_examen)) {
+                $monto_restante = $consulta_examen->precio_examen_usd - $cobertura;
+                $_consultaExamenModel->update(['monto_cubierto_usd' =>  $monto_restante, 'monto_cubierto_bs' => round($monto_restante * $valorDivisa, 2) ]);
+            }
+        // Si la consulta es por cita
+        } else {
+            $_consultaCitaModel = new ConsultaCitaModel();
+            $consulta_cita = $_consultaCitaModel->where('consulta_id', '=', $formulario['consulta_id'])->getFirst();
+
+            if (!is_null($consulta_cita)) {
+                $_citaExamenModel = new CitaExamenModel();
+                $cita_examenes = $_citaExamenModel->where('cita_id', '=', $consulta_cita->cita_id)->getAll();
+
+                if (!is_null($cita_examenes)) {
+                    foreach ($cita_examenes as $examen) {
+                        $_citaExamen = new CitaExamenModel();
+                        $cita_examen = $_citaExamen->where('cita_examen_id', '=', $examen->cita_examen_id)->getFirst();
+    
+                        if ($cita_examen->cubierto_por == 1) {
+                            $precio_examen_bs = round($cita_examen->precio_examen_usd * $valorDivisa, 2);
+                            $cita_examen = $_citaExamen->update(['precio_examen_bs' => $precio_examen_bs]);
+    
+                        } else if ($cita_examen->cubierto_por == 2) {
+                            $cobertura -= $cita_examen->precio_examen_usd;
+                        }
+                    }
+                }
+
+                $_citaExamenModel->resetValues();
+                $cita_examen = $_citaExamenModel->where('cita_id', '=', $consulta_cita->cita_id)->where('cubierto_por', '=', 3)->getFirst();
+                if (!is_null($cita_examen)) {
+                    $monto_restante = $cita_examen->precio_examen_usd - $cobertura;
+                    $_consultaCitaModel->update(['monto_cubierto_usd' =>  $monto_restante, 'monto_cubierto_bs' => round($monto_restante * $valorDivisa, 2) ]);
+                }
+            }
+        }
+    }
+
     public static function RetornarMensaje($mensaje, $data) {
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($data);
