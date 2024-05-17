@@ -61,23 +61,80 @@ class ConsultaSeguroService {
 
     public static function listarConsultasSeguros($consultasSeguros) {
 
-        // $_consultaSeguroModel = new ConsultaSeguroModel();
-        // $consultasSeguros = $_consultaSeguroModel->where('estatus_con', '!=', 2)->getAll();
-        $listaConsultas = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultasSeguros);
-        
-        $consultas = [];
+        $lista_consultas = [];
 
-        foreach ($listaConsultas as $consulta) {
-            if ( isset( $consulta['factura'] ) ) { // Si es por emergencia
-                $consultas[] = $consulta;
-                // $consultas[] = ConsultaSeguroHelpers::calcularConsultaEmergencia($consulta);
+        foreach ($consultasSeguros as $consulta) {
+            $consulta_actual = $consulta;
+            $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
+            $consulta_emergencia = $_consultaEmergenciaModel->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
+
+            if (!is_null($consulta_emergencia)) {
+                $consulta_actual->factura = $consulta_emergencia;
+    
+                $_pacienteModel = new PacienteModel();
+                $paciente_titular = $_pacienteModel->where('paciente_id', '=', $consulta_emergencia->paciente_id)->getFirst();
+                $consulta_actual->titular = $paciente_titular;
+    
+                if ($paciente_titular->cedula != $consulta_emergencia->cedula_beneficiado) {
+                    $_paciente = new PacienteModel();
+                    $paciente_beneficiado = $_paciente->where('cedula', '=', $consulta_emergencia->cedula_beneficiado)->getFirst();
+                    $consulta_actual->beneficiado = $paciente_beneficiado;
+                } else {
+                    $consulta_actual->beneficiado = $paciente_titular;
+                }
+
+                $_consultaSinCita = new ConsultaSinCitaModel();
+                $inners = $_consultaSinCita->listInner(['especialidad' => 'consulta_sin_cita']);
+                $info_especialidad = $_consultaSinCita->where('consulta_id', '=', $consulta->consulta_id)->innerJoin(['especialidad.nombre'], $inners, "consulta_sin_cita");
+                $consulta_actual->medico = [(object) ['nombre_especialidad' => $info_especialidad[0]->nombre ] ];
 
             } else {
-                $consultas[] = FacturaConsultaHelpers::obtenerMontoTotal($consulta);
+                $consulta_actual = $consulta;
+                $_consultaCitaModel = new ConsultaCitaModel();
+                $consulta_cita = $_consultaCitaModel->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
+                
+                $_citaModel = new CitaModel();
+                $cita = $_citaModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
+
+                $_especialidadModel = new EspecialidadModel();
+                $especialidad = $_especialidadModel->where('especialidad_id', '=', $cita->especialidad_id)->getFirst();
+                $consulta_actual->medico = [(object) ['nombre_especialidad' => $especialidad->nombre] ];
+
+                $_pacienteModel = new PacienteModel();
+                $paciente_beneficiado = $_pacienteModel->where('paciente_id', '=', $cita->paciente_id)->getFirst();
+                $consulta_actual->beneficiado = $paciente_beneficiado;
+
+                if ($paciente_beneficiado->cedula != $cita->cedula_titular) {
+                    $_paciente = new PacienteModel();
+                    $paciente_titular = $_paciente->where('cedula', '=', $cita->cedula_titular)->getFirst();
+                    $consulta_actual->titular = $paciente_titular;
+                } else {
+                    $consulta_actual->titular = $paciente_beneficiado;
+                }
             }
+
+            $lista_consultas[] = $consulta_actual;
         }
+
+        // $_consultaSeguroModel = new ConsultaSeguroModel();
+        // // $consultasSeguros = $_consultaSeguroModel->where('estatus_con', '!=', 2)->getAll();
+        // $listaConsultas = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultasSeguros);
         
-        return $consultas;
+        // $consultas = [];
+
+        // foreach ($listaConsultas as $consulta) {
+        //     if ( isset( $consulta['factura'] ) ) { // Si es por emergencia
+        //         $consultas[] = $consulta;
+        //         // $consultas[] = ConsultaSeguroHelpers::calcularConsultaEmergencia($consulta);
+
+        //     } else {
+        //         $consultas[] = FacturaConsultaHelpers::obtenerMontoTotal($consulta);
+        //     }
+        // }
+        
+        // return $listaConsultas;
+
+        return $lista_consultas;
     }
 
     public static function listarConsultasSeguroId($consulta_id) {

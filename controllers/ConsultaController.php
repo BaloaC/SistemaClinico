@@ -145,7 +145,7 @@ class ConsultaController extends Controller {
             if ($consulta->es_emergencia) {
                 $consultas[] = ConsultaService::obtenerConsultaEmergencia($consulta, false);
             } else {
-                $consultas[] = ConsultaService::obtenerConsultaNormal($consulta);
+                $consultas[] = ConsultaService::obtenerConsultaNormal($consulta, false);
             }
         }
 

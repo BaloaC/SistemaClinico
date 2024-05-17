@@ -17,7 +17,7 @@ class FacturaSeguroHelpers {
             "consulta.fecha_consulta",
             "consulta_seguro.consulta_seguro_id",
             "consulta_seguro.seguro_id",
-            "consulta_seguro.tipo_servicio",
+            // "consulta_seguro.tipo_servicio",
             "consulta_seguro.fecha_ocurrencia",
             "consulta_seguro.monto_consulta_usd",
             "consulta_seguro.monto_consulta_bs",
