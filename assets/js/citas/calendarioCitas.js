@@ -473,8 +473,8 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         document.getElementById("btn-actualizar").disabled = (cita.estatus_cit == 1 || cita.estatus_cit == 4) ? true : false;
         document.getElementById("btn-reprogramar").disabled = (cita.estatus_cit == 1 || cita.estatus_cit == 3) ? false : true;
         document.getElementById("export-cita").setAttribute("onclick", `openPopup('pdf/cita/${cita.cita_id}')`);
-        (cita.estatus_cit == 1) ? null : document.getElementById("btn-actualizar").setAttribute("onclick", `updateCita(${cita.cita_id})`);
-        document.getElementById("btn-actualizar").value = cita.cita_id;
+        (cita.estatus_cit == 1) ? null : document.getElementById("btn-actualizar").setAttribute("onclick", `updateCita(${JSON.stringify(cita)})`);
+        document.getElementById("btn-actualizar").value = JSON.stringify(cita);
 
         modalInfo.show();
     },
