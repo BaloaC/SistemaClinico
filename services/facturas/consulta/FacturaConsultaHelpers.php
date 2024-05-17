@@ -333,8 +333,11 @@ class FacturaConsultaHelpers {
         }
     }
 
-    public static function insertarDiferenciaSaldo($formulario, $factura) {
-        $cobertura = $factura[0]['cobertura_seguro'];
+    /**
+     * Esta función inserta los montos de los exámenes cuando es consulta_seguro
+     */
+    public static function insertarDiferenciaExamenes($formulario, $factura) {
+        $cobertura = $factura['cobertura_seguro'];
         $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
 
         $_consultaEmergenciaModel = new ConsultaEmergenciaModel();

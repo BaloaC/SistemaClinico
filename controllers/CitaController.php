@@ -235,8 +235,15 @@ class CitaController extends Controller {
 
         $_citaModel = new CitaModel();
         $inners = $_citaModel->listInner($this->arrayInner);
-        $lista = $_citaModel->where('cita_id', '=', $cita_id)->where('estatus_cit', '!=', '2')->innerJoin($this->arraySelect, $inners, "cita");
+        $lista = $_citaModel->where('cita_id', '=', $cita_id)
+                            ->where('estatus_cit', '!=', '2')
+                            ->innerJoin($this->arraySelect, $inners, "cita");
         
+        $_medicoEspecialidadModel = new MedicoEspecialidadModel();
+        $medico_especialidad = $_medicoEspecialidadModel->where('medico_id', '=', $lista[0]->medico_id)
+                                                        ->where('especialidad_id', '=', $lista[0]->especialidad_id)
+                                                        ->where('estatus_med', '=', 1)->getFirst();
+        $lista[0]->costo_especialidad = $medico_especialidad->costo_especialidad;
         if ($lista) {
             $lista_citas = "";
             
