@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 
 class AuditCita extends AuditMiddleware {
     
@@ -50,4 +50,4 @@ class AuditCita extends AuditMiddleware {
         
         $this->insertAudit($this->row);
     }
-}
+} -->

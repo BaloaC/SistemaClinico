@@ -334,6 +334,28 @@ class FacturaConsultaHelpers {
     }
 
     /**
+     * Esta función inserta el monto de la consulta cuando es consulta_seguro
+     */
+    public static function insertarMontoConsultaAsegurada($formulario, $factura) {
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+        $_consultaCitaModel = new ConsultaCitaModel();
+        $consulta_cita = $_consultaCitaModel->where('consulta_id', '=', $formulario['consulta_id'])->getFirst();
+
+        if (!is_null($consulta_cita)) {
+            $_citaModel = new CitaModel();
+            $cita = $_citaModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
+
+            if ($cita->tipo_servicio == 2) {
+                $monto_consulta_usd = $factura['monto_total_usd'] - $factura['cobertura_seguro'];
+                $_consultaSeguroModel = new ConsultaSeguroModel();
+                $consulta_seguro = $_consultaSeguroModel->where('consulta_id', '=', $formulario['consulta_id'])
+                                                        ->update(['monto_consulta_bs' => round($monto_consulta_usd * $valorDivisa, 2)]);
+
+            }
+        }
+    }
+
+    /**
      * Esta función inserta los montos de los exámenes cuando es consulta_seguro
      */
     public static function insertarDiferenciaExamenes($formulario, $factura) {

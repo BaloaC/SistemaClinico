@@ -294,13 +294,11 @@ class CitaController extends Controller {
     }
 
     public function actualizarCita($cita_id) {
-        
         global $isEnabledAudit;
         $isEnabledAudit = 'citas';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarCita = new Validate;
-
         CitasValidaciones::validarActualizacion($_POST, $cita_id);
         CitasValidaciones::validarCitaId($cita_id);
 

@@ -95,11 +95,23 @@ class CitasHelpers {
 
     public static function actualizarExamenCita($cita_examenes) {
         foreach ($cita_examenes as $cita_examen) {
-            
+            $info_actualizar = [];
+
             $_citaExamenModel = new CitaExamenModel();
-            $se_actualizo = $_citaExamenModel->where('cita_examen_id', '=', $cita_examen['cita_examen_id'])->update($cita_examen);
+            $cita_exa = $_citaExamenModel->where('cita_examen_id', '=', $cita_examen['cita_examen_id'])->getFirst();
+
+            $info_actualizar['cubierto_por'] = $cita_examen['cubierto_por'];
+            if ($cita_examen['cubierto_por'] != 2 ) {
+                $_examenModel = new ExamenModel();
+                $examen = $_examenModel->where('examen_id', '=', $cita_exa->examen_id)->getFirst();
+                $info_actualizar['precio_examen_usd'] = $examen->precio_examen;
+            }
+            
+            $_citaExamenModel->resetValues();
+            $se_actualizo = $_citaExamenModel->where('cita_examen_id', '=', $cita_examen['cita_examen_id'])->update($info_actualizar);
+            
             if ($se_actualizo <= 0 || !$se_actualizo) {
-                $respuesta = new Response(false, 'Ocurrió un error actualizando la cita examen id'.$cita_examen['cita_examen_id_id']);
+                $respuesta = new Response(false, 'Ocurrió un error actualizando la cita examen id '.$cita_examen['cita_examen_id']);
                 echo $respuesta->json(400);
                 exit();
             }
