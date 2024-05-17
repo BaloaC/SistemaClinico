@@ -243,7 +243,7 @@
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <label for="monto" class="">Monto aprobado</label>
-                                    <input type="number" step="any" name="monto_aprobado" data-validate="true" data-type="price" class="form-control" required>
+                                    <input type="number" step="any" name="monto_aprobado" data-validate="true" data-type="price" class="form-control" oninput="montoAprobadoHandler(this)" required>
                                     <small class="form-text">No se permiten números negativos</small>
                                 </div>
                             </div>
@@ -272,7 +272,7 @@
                         </form>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <p id="montoDisponible">a</p>
+                        <p id="montoDisponible"></p>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
                     </div>
                 </div>
@@ -409,6 +409,8 @@
     <script type="module" src="<?php echo Url::to('assets/js/citas/confirmReprogramation.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/calendarioCitas.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/tipoServicio.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/montoAprobadoHandler.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/checkExamenHandler.js'); ?>"></script>
 </body>
 
 </html>
