@@ -67,7 +67,7 @@ class ConsultaSeguroService {
             $consulta_actual = $consulta;
             $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
             $consulta_emergencia = $_consultaEmergenciaModel->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
-
+            
             if (!is_null($consulta_emergencia)) {
                 $consulta_actual->factura = $consulta_emergencia;
     
@@ -82,7 +82,7 @@ class ConsultaSeguroService {
                 } else {
                     $consulta_actual->beneficiado = $paciente_titular;
                 }
-
+                
                 $_consultaSinCita = new ConsultaSinCitaModel();
                 $inners = $_consultaSinCita->listInner(['especialidad' => 'consulta_sin_cita']);
                 $info_especialidad = $_consultaSinCita->where('consulta_id', '=', $consulta->consulta_id)->innerJoin(['especialidad.nombre'], $inners, "consulta_sin_cita");
@@ -95,7 +95,7 @@ class ConsultaSeguroService {
                 
                 $_citaModel = new CitaModel();
                 $cita = $_citaModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
-
+                
                 $_especialidadModel = new EspecialidadModel();
                 $especialidad = $_especialidadModel->where('especialidad_id', '=', $cita->especialidad_id)->getFirst();
                 $consulta_actual->medico = [(object) ['nombre_especialidad' => $especialidad->nombre] ];

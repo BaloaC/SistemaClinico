@@ -23,6 +23,7 @@ class CitaController extends Controller {
         "cita.motivo_cita",
         "cita.cedula_titular",
         "cita.tipo_cita",
+        "cita.tipo_servicio",
         "cita.estatus_cit",
         "cita.monto_aprobado"
     );
