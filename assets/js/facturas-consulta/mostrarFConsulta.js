@@ -90,9 +90,11 @@ const handleModalOpen = async (modalParent) => {
                     if (typeof data === "object" && data?.data?.consultas !== 0) {
                         data?.data?.consultas?.forEach(object => {
                             
-                            const { consulta_id: valorPropiedad1, observaciones } = object;
+                            const { consulta_id: valorPropiedad1, observaciones,  nombre_especialidad } = object;
+
+                            console.log(object);
                             
-                            data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${observaciones ?? "Sin observaciones"}` });
+                            data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${nombre_especialidad} -  ${observaciones ?? "Sin observaciones"}` });
                         });
                     }
 
