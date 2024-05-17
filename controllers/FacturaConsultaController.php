@@ -57,8 +57,10 @@ class FacturaConsultaController extends Controller {
         $data['factura_id'] = $id;
         
         if ($id > 0) {
-            if (!$_POST['diferencia_asegurada']) {
+            if (!isset($_POST['diferencia_asegurada'])) {
                 FacturaConsultaHelpers::insertarPreciosFacturaNormal($_POST['consulta_id']);
+            } else {
+                FacturaConsultaHelpers::insertarDiferenciaExamenes($_POST, $factura[0]);
             }
             
             $_consultaModel = new ConsultaModel();

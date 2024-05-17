@@ -154,32 +154,50 @@ class ConsultaSeguroHelpers {
         $consulta_insumos = $consultaInsumoModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
 
         $costo_examenes_bs = 0; $costo_insumos_bs = 0;
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
 
         if( !is_null($consulta_examenes) ) {
             foreach ($consulta_examenes as $examen) {
-                
-                $examen_modificado = Array( 'precio_examen_bs' => 0 );
+                if ($examen->monto_cubierto_usd != 0 || $examen->cubierto_por == 2) {
+                    $examen_modificado = Array( 'precio_examen_bs' => 0 );
+    
+                    $examen_modificado['precio_examen_bs'] = round( $examen->precio_examen_usd * $valorDivisa ,2 );
+                    $costo_examenes_bs += $examen_modificado['precio_examen_bs'];
+                    
+                    $consultaExamenModel = new ConsultaExamenModel();
+                    $isUpdate = $consultaExamenModel->where('consulta_examen_id', '=', $examen->consulta_examen_id)->update($examen_modificado);
+                } else {
 
-                $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-                $examen_modificado['precio_examen_bs'] = round( $examen->precio_examen_usd * $valorDivisa ,2 );
-                $costo_examenes_bs += $examen_modificado['precio_examen_bs'];
-                
-                $consultaExamenModel = new ConsultaExamenModel();
-                $isUpdate = $consultaExamenModel->where('consulta_examen_id', '=', $examen->consulta_examen_id)->update($examen_modificado);
+                    if ($examen->cubierto_por == 3) {
+                        $monto_faltante = $examen->monto_cubierto_usd - $examen->precio_examen_usd;
+                        $examen_modificado = Array(
+                            'precio_examen_bs' => $examen->precio_examen_bs + round($monto_faltante * $valorDivisa, 2)
+                        );
+                    }
+                }
             }
         }
 
         if( !is_null($cita_examenes) ) {
             foreach ($cita_examenes as $examen) {
-                
-                $examen_modificado = Array( 'precio_examen_bs' => 0 );
+                if ($examen->monto_cubierto_usd != 0 || $examen->cubierto_por == 2) {
+                    $examen_modificado = Array( 'precio_examen_bs' => 0 );
 
-                $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-                $examen_modificado['precio_examen_bs'] = round( $examen->precio_examen_usd * $valorDivisa ,2 );
-                $costo_examenes_bs += $examen_modificado['precio_examen_bs'];
-                
-                $_citaExamenModel = new CitaExamenModel();
-                $isUpdate = $_citaExamenModel->where('cita_examen_id', '=', $examen->cita_examen_id)->update($examen_modificado);
+                    $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+                    $examen_modificado['precio_examen_bs'] = round( $examen->precio_examen_usd * $valorDivisa ,2 );
+                    $costo_examenes_bs += $examen_modificado['precio_examen_bs'];
+                    
+                    $_citaExamenModel = new CitaExamenModel();
+                    $isUpdate = $_citaExamenModel->where('cita_examen_id', '=', $examen->cita_examen_id)->update($examen_modificado);
+                } else {
+
+                    if ($examen->cubierto_por == 3) {
+                        $monto_faltante = $examen->monto_cubierto_usd - $examen->precio_examen_usd;
+                        $examen_modificado = Array(
+                            'precio_examen_bs' => $examen->precio_examen_bs + round($monto_faltante * $valorDivisa, 2)
+                        );
+                    }
+                }
             }
         }
         

@@ -8,6 +8,7 @@ class CitaExamenModel extends GenericModel {
     protected $examen_id;
     protected $precio_examen_bs;
     protected $precio_examen_usd;
+    protected $cubierto_por;
 
     public function __construct($propiedades = null) {
         parent::__construct('cita_examen', CitaExamenModel::class, $propiedades);
@@ -18,12 +19,14 @@ class CitaExamenModel extends GenericModel {
     public function getExamenId(){return $this->examen_id;}
     public function getPrecioExamenBs(){return $this->precio_examen_bs;}
     public function getPrecioExamenUsd(){return $this->precio_examen_usd;}
+    public function getCubiertoPor(){return $this->cubierto_por;}
 
     /* Setters */
     public function setCitaId($cita_id){return $this->cita_id = $cita_id;}
     public function setExamenId($examen_id){return $this->examen_id = $examen_id;}
     public function setPrecioExamenBs($precio_examen_bs){return $this->precio_examen_bs = $precio_examen_bs;}
     public function setPrecioExamenUsd($precio_examen_usd){return $this->precio_examen_usd = $precio_examen_usd;}
+    public function setCubiertoPor($cubierto_por){return $this->cubierto_por = $cubierto_por;}
 }
 
 ?>
