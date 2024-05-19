@@ -109,7 +109,7 @@
 
                                         <select name="tipo_servicio" id="s-tipo-servicio" onchange="tipoServicio(this)" class="form-control mb-3" required>
                                             <option value="1">Solo exámenes</option>
-                                            <option value="1">Consulta con exámenes</option>
+                                            <option value="2">Consulta con exámenes</option>
                                             <option value="2" selected>Consulta sin exámenes</option>
                                         </select>
                                     </div>
@@ -218,7 +218,7 @@
 
         <!-- Modal Actualizar-->
         <div class="modal fade" id="modalAct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-3" id="modalActLabel">Actualización de la Cita</h1>
@@ -227,15 +227,52 @@
                     <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-cita" class="p-3 px-4">
-                            <p class="text-secondary">Las citas se mantendrán como pendientes hasta que la clave otorgada por el seguro sea insertada</p>
-                            <label for="clave">Clave</label>
-                            <input type="text" name="clave" id="clave" class="form-control mb-3">
-                            <label for="monto" class="">Monto aprobado</label>
-                            <input type="number" step="any" name="monto_aprobado" data-validate="true" data-type="price" class="form-control" required>
-                            <small class="form-text">No se permiten números negativos</small>
+                            <div class="col-12 col-md-6 d-flex align-items-center">
+                                <i class="fas fa-info-circle text-secondary me-3"></i>
+                                <p class="text-secondary m-0">Las citas se mantendrán como pendientes hasta que la clave otorgada por el seguro sea insertada</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <label for="clave">Clave</label>
+                                    <input type="text" name="clave" id="clave" class="form-control mb-3">
+
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <input type="checkbox" class="form-check-input me-3" onclick="return false;" checked >
+                                        <p class="m-0 form-check-label">Cubrir costo consulta: <span id="costoConsulta"></span></p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="monto" class="">Monto aprobado</label>
+                                    <input type="number" step="any" name="monto_aprobado" data-validate="true" data-type="price" class="form-control" oninput="montoAprobadoHandler(this)" required>
+                                    <small class="form-text">No se permiten números negativos</small>
+                                </div>
+                            </div>
+
+                            <div class="row examenesCitaContainer mt-3">
+                                <h5>Exámenes</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-borderless">
+                                        <thead>
+                                            <tr>
+                                                <th>Cubierto Por Seguro</th>
+                                                <th>Cubierto Por Paciente</th>
+                                                <th>Precio</th>
+                                                <th>Nombre</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="examenesCitaTbody">
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer justify-content-between">
+                        <p id="montoDisponible"></p>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
                     </div>
                 </div>
@@ -372,6 +409,8 @@
     <script type="module" src="<?php echo Url::to('assets/js/citas/confirmReprogramation.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/calendarioCitas.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/tipoServicio.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/montoAprobadoHandler.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/checkExamenHandler.js'); ?>"></script>
 </body>
 
 </html>
