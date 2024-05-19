@@ -11,6 +11,7 @@ class CitaExamenModel extends GenericModel {
     protected $monto_cubierto_bs;
     protected $monto_cubierto_usd;
     protected $cubierto_por;
+    protected $estatus_cit;
 
     public function __construct($propiedades = null) {
         parent::__construct('cita_examen', CitaExamenModel::class, $propiedades);
@@ -24,6 +25,7 @@ class CitaExamenModel extends GenericModel {
     public function getMontoCubiertoBs(){return $this->monto_cubierto_bs;}
     public function getMontoCubiertoUsd(){return $this->monto_cubierto_usd;}
     public function getCubiertoPor(){return $this->cubierto_por;}
+    public function getEstatusCit(){return $this->estatus_cit;}
 
     /* Setters */
     public function setCitaId($cita_id){return $this->cita_id = $cita_id;}
@@ -33,6 +35,7 @@ class CitaExamenModel extends GenericModel {
     public function setMontoCubiertoBs($monto_cubierto_bs){return $this->monto_cubierto_bs = $monto_cubierto_bs;}
     public function setMontoCubiertoUsd($monto_cubierto_usd){return $this->monto_cubierto_usd = $monto_cubierto_usd;}
     public function setCubiertoPor($cubierto_por){return $this->cubierto_por = $cubierto_por;}
+    public function setEstatusCi($estatus_cit){return $this->estatus_cit = $estatus_cit;}
 }
 
 ?>

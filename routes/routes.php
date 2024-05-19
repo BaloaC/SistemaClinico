@@ -125,6 +125,7 @@ Router::get('/medicos/cedula/:ci', MedicoController::class . '@listarMedicoPorCI
 Router::get('/medicos/especialidad/:id', MedicoController::class . '@listarMedicoPorEspecialidad', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::post('/medicos', MedicoController::class . '@insertarMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::put('/medicos/:id', MedicoController::class . '@actualizarMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
+Router::put('/especialidades/medicos/:id', MedicoController::class . '@actualizarMedicoEspecialidad', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::delete('/medicos/:id', MedicoController::class . '@eliminarMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 
 // //Medicos_especialidad - API
