@@ -171,8 +171,12 @@ class ConsultaSeguroHelpers {
                     if ($examen->cubierto_por == 3) {
                         $monto_faltante = $examen->monto_cubierto_usd - $examen->precio_examen_usd;
                         $examen_modificado = Array(
-                            'precio_examen_bs' => $examen->precio_examen_bs + round($monto_faltante * $valorDivisa, 2)
+                            'precio_examen_bs' => $examen->monto_cubierto_bs + round($monto_faltante * $valorDivisa, 2)
                         );
+
+                        $costo_examenes_bs += $examen_modificado['precio_examen_bs'];
+                        $consultaExamenModel = new ConsultaExamenModel();
+                        $consultaExamenModel->where('consulta_examen_id', '=', $examen->consulta_examen_id)->update($examen_modificado);
                     }
                 }
             }
@@ -194,8 +198,12 @@ class ConsultaSeguroHelpers {
                     if ($examen->cubierto_por == 3) {
                         $monto_faltante = $examen->monto_cubierto_usd - $examen->precio_examen_usd;
                         $examen_modificado = Array(
-                            'precio_examen_bs' => $examen->precio_examen_bs + round($monto_faltante * $valorDivisa, 2)
+                            'precio_examen_bs' => $examen->monto_cubierto_bs + round($monto_faltante * $valorDivisa, 2)
                         );
+                        $costo_examenes_bs += $examen_modificado['precio_examen_bs'];
+
+                        $_citaExamenModel = new CitaExamenModel();
+                        $_citaExamenModel->where('cita_examen_id', '=', $examen->cita_examen_id)->update($examen_modificado);
                     }
                 }
             }

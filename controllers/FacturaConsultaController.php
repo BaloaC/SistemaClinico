@@ -30,7 +30,7 @@ class FacturaConsultaController extends Controller {
         $validarFactura = new Validate;        
         FacturaConsultaValidaciones::validacionesGenerales($_POST);
         FacturaConsultaValidaciones::validarSiEsAsegurada($_POST['consulta_id']);
-
+        
         $_globalModel = new GlobalModel();
         $valorDivisa = $_globalModel->whereSentence('key', '=', 'cambio_divisa')->getFirst();
 
