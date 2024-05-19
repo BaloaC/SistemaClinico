@@ -320,7 +320,6 @@ class CitaController extends Controller {
             
         }
         $mensaje = ($esActualizado > 0);
-
         Helpers::retornarMensajeActualizacion($mensaje, $actualizado);
     }
 
