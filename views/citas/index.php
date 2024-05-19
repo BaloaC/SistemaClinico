@@ -254,8 +254,9 @@
                                     <table class="table table-borderless">
                                         <thead>
                                             <tr>
+                                                <th>Eliminar</th>
                                                 <th>Cubierto Por Seguro</th>
-                                                <th>Cubierto Por Paciente</th>
+                                                <!-- <th>Cubierto Por Paciente</th> -->
                                                 <th>Precio</th>
                                                 <th>Nombre</th>
                                             </tr>
