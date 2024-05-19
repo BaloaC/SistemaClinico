@@ -219,7 +219,7 @@ const handleModalOpen = async () => {
             }
         }
 
-        dinamicSelect2(select2Paciente);
+        // dinamicSelect2(select2Paciente);
 
         // Para crear el select2 sin consulta
         select2Paciente.selectSelector = "#s-paciente-sinConsulta";

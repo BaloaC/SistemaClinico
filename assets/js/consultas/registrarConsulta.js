@@ -131,6 +131,8 @@ async function addConsulta() {
 
         if(!data.fecha_consulta) {data.fecha_consulta = new Date().toISOString().slice(0, 10);}
 
+        if(!data.es_emergencia) delete data.es_emergencia;
+
         if (data.total_insumos > 0 && !("insumos" in data)) throw { message: "Debe especificar los insumos utilizados" }
 
         const registroExitoso = await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!", "#modalReg", defaultAlert, {success: false, error: true});

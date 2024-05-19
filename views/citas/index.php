@@ -109,7 +109,7 @@
 
                                         <select name="tipo_servicio" id="s-tipo-servicio" onchange="tipoServicio(this)" class="form-control mb-3" required>
                                             <option value="1">Solo exámenes</option>
-                                            <option value="2">Consulta con exámenes</option>
+                                            <option value="3">Consulta con exámenes</option>
                                             <option value="2" selected>Consulta sin exámenes</option>
                                         </select>
                                     </div>
