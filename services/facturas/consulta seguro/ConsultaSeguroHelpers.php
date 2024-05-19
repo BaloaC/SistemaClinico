@@ -147,8 +147,8 @@ class ConsultaSeguroHelpers {
         $_citaExamenModel = new CitaExamenModel();
         $cita_examenes = $_citaExamenModel->where('cita_id', '=', $consulta_cita->cita_id)->getAll();
 
-        $_citaExamenModel = new CitaExamenModel();
-        $consulta_examenes = $_citaExamenModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
+        $_consultaExamenModel = new ConsultaExamenModel();
+        $consulta_examenes = $_consultaExamenModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
 
         $consultaInsumoModel = new ConsultaInsumoModel();
         $consulta_insumos = $consultaInsumoModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
@@ -219,7 +219,7 @@ class ConsultaSeguroHelpers {
 
         $monto_total_bs = round($consulta_seguro->monto_consulta_usd * $valorDivisa, 2);
         $monto_sumatoria_bs = $monto_total_bs + $costo_examenes_bs + $costo_insumos_bs;
-        $consulta_modificada = Array("monto_consulta_bs" => $monto_total_bs);
+        $consulta_modificada = Array("monto_consulta_bs" => $monto_total_bs, "estatus_con" => 3);
         $consultaUpdate = $consultaSeguroModel->update($consulta_modificada);
     }
 }

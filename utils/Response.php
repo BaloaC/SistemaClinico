@@ -133,8 +133,8 @@ class Response{
         if ($this->code && $isEnabledAudit) {
 
             if ($isEnabledAudit == 'citas') {
-                $auditCita = new AuditCita();
-                $auditCita->handleRequest();
+                // $auditCita = new AuditCita();
+                // $auditCita->handleRequest();
 
             } else if ($isEnabledAudit == 'consultas') {
                 $auditConsulta = new AuditConsulta();
