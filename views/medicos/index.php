@@ -365,6 +365,33 @@
         </div>
     </div>
 
+    <!-- Modal actualización de precios especialidad -->
+    <div class="modal fade" id="modalActMontoEspecialidad" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabelMontoEspecialidad" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalActLabelMontoEspecialidad">Actualizar costo especialidad</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="actMontoEspecialidadAlert" class="alert d-none" role="alert"></div>
+                    <form action="" id="act-montoEspecialidad" class="p-3 px-4">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="nombre">Costo especialidad</label>
+                                    <input type="number" step="any" name="costo_especialidad" class="form-control mb-3" id="costo_especialidad" data-validate="true" data-type="price" data-max-length="45" required>
+                                    <small class="form-text">El costo no debe estar vacío o contener números negativos</small>
+                                </div>
+                            </div>
+                        </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn-confirmActMontoEspecialidad" class="btn btn-primary">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <template id="horarioInitialInputs">
         <div class="col-12 col-check mt-4">
             <div class="py-3">Seleccione los horarios del doctor</div>
@@ -523,6 +550,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/medicos/deleteMedicoEspecialidadInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/medicosSelect2.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/medicos/updatePercentage.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/medicos/actualizarCostoEspecialidad.js'); ?>"></script>
 </body>
 
 </html>

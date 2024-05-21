@@ -226,7 +226,7 @@ const handleModalOpen = async () => {
         dinamicSelect2(select2Paciente);
 
         dinamicSelect2(select2Especialidad);
-        
+
         // Para crear el select2 sin consulta
         select2Especialidad.selectSelector = "#s-especialidad-sinConsulta"
         dinamicSelect2(select2Especialidad);
@@ -406,33 +406,36 @@ const handleModalOpen = async () => {
         $(especialidadSelect).on("change", async function (e) {
 
             let especialidad_id = this.value;
-
             // Exámenes por especialidad select2
 
-            $("#s-examen").empty().select2();
+            if (document.getElementById("s-tipo_consulta").value !== "1") {
 
-            dinamicSelect2({
-                selectSelector: "#s-examen",
-                selectValue: "examen_id",
-                selectNames: ["nombre"],
-                parentModal: "#modalReg",
-                placeholder: "Seleccione los exámenes",
-                multiple: true,
-                ajax: true,
-                ajaxUrl: `examenes/especialidad/${especialidad_id}`,
-                processResultsAjax: function (data, params) {
+                $("#s-examen").empty().select2();
 
-                    params.page = params.page || 1;
+                dinamicSelect2({
+                    selectSelector: "#s-examen",
+                    selectValue: "examen_id",
+                    selectNames: ["nombre"],
+                    parentModal: "#modalReg",
+                    placeholder: "Seleccione los exámenes",
+                    multiple: true,
+                    ajax: true,
+                    ajaxUrl: `examenes/especialidad/${especialidad_id}`,
+                    processResultsAjax: function (data, params) {
 
-                    const data1 = data?.data.map(object => {
-                        const { examen_id: valorPropiedad1, nombre: nombreExamen } = object;
-                        return { id: valorPropiedad1, text: nombreExamen };
-                    });
+                        params.page = params.page || 1;
 
-                    // Transforms the top-level key of the response object from 'data' to 'results'
-                    return { results: data1 };
-                }
-            });
+                        const data1 = data?.data.map(object => {
+                            const { examen_id: valorPropiedad1, nombre: nombreExamen } = object;
+                            return { id: valorPropiedad1, text: nombreExamen };
+                        });
+
+                        // Transforms the top-level key of the response object from 'data' to 'results'
+                        return { results: data1 };
+                    }
+                });
+
+            }
 
             // Médico select
             $(medicoSelect).empty().select2();

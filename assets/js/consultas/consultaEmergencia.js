@@ -46,8 +46,8 @@ export default async function consultaEmergencia(inputRadio) {
         $("#addMedicoPago").fadeOut("slow");
         $("#addInsumo").fadeOut("slow");
         seguroSelect.disabled = true;
-        $(".examenSelect").fadeIn("slow");
-        examenSelect.disabled = false;
+        // $(".examenSelect").fadeIn("slow");
+        // examenSelect.disabled = false;
         // sinCitaSi.value = 1;
 
         citaSelect.disabled = false
@@ -138,8 +138,8 @@ export default async function consultaEmergencia(inputRadio) {
             $(".inputRadioPagoMedico").fadeIn("slow");
             $(".info-insumos-emergencia").fadeIn("slow");
             $("#addInsumo").fadeIn("slow");
-            $(".examenSelect").fadeOut("slow");
-            examenSelect.disabled = true;
+            // $(".examenSelect").fadeOut("slow");
+            // examenSelect.disabled = true;
 
             $("#cedula_beneficiado").empty().select2();
 
@@ -181,6 +181,32 @@ export default async function consultaEmergencia(inputRadio) {
                     return {
                         results: data1 ?? [],
                     };
+                }
+            });
+
+
+            $("#s-examen").empty().select2();
+
+            dinamicSelect2({
+                selectSelector: "#s-examen",
+                selectValue: "examen_id",
+                selectNames: ["nombre"],
+                parentModal: "#modalReg",
+                placeholder: "Seleccione los exámenes",
+                multiple: true,
+                ajax: true,
+                ajaxUrl: `examenes/consulta`,
+                processResultsAjax: function (data, params) {
+
+                    params.page = params.page || 1;
+
+                    const data1 = data?.data.map(object => {
+                        const { examen_id: valorPropiedad1, nombre: nombreExamen } = object;
+                        return { id: valorPropiedad1, text: nombreExamen };
+                    });
+
+                    // Transforms the top-level key of the response object from 'data' to 'results'
+                    return { results: data1 };
                 }
             });
     
@@ -314,8 +340,8 @@ export default async function consultaEmergencia(inputRadio) {
         });
 
             seguroSelect.disabled = true;
-            $(".examenSelect").fadeIn("slow");
-            examenSelect.disabled = false;
+            // $(".examenSelect").fadeIn("slow");
+            // examenSelect.disabled = false;
         }
 
         const pagoMedicosChecked = document.getElementById("RegistrarPagoMedicoSi");
