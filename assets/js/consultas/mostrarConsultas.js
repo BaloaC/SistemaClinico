@@ -801,8 +801,6 @@ addEventListener("DOMContentLoaded", async e => {
 
     const format = (data) => {
 
-        console.log(data);
-
         if (data.clave == null) data.clave = "No aplica";
         let tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
         if (data.es_emergencia === 1) tipo_cita = "Asegurada";
@@ -921,7 +919,7 @@ addEventListener("DOMContentLoaded", async e => {
                 </tr>
                 <tr class="blue-td">
                     <td>Exámenes realizados: <br><b>${examenes}</b></td>
-                    <td>Insumos utilizados: <br><b>${insumos}</b></td>
+                    ${data.es_emergencia === 1 ? `<td>Insumos utilizados: <br><b>${insumos}</b></td>` : ""}
                 </tr>
                 <tr><td><br></td></tr>
                 <tr>

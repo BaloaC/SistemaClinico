@@ -12,6 +12,11 @@ class FacturaMensajeriaController extends Controller{
         return $this->view('facturas/mensajeria/index');
     }
 
+    public function detalleFactura(){
+
+        return $this->view('facturas/mensajeria/detalleFactura.php');
+    }
+
     public function formRegistrarFacturaMensajeria(){
 
         return $this->view('facturas/mensajeria/registrarFacturas');

@@ -33,7 +33,7 @@ export async function ssrSegurosRequest(numPage, search = "") {
 
 export async function segurosPagination(registros, buscarRegistros = "") {
 
-    if (registros?.length === 0 || registros === undefined) {
+    if (registros?.length === 0 || registros === undefined || registros?.data === undefined) {
 
         const mensajeVacio = `<p class="text-center mb-5 fs-5">No se encontraron registros.</p>`
         document.getElementById('card-container').innerHTML = mensajeVacio;
@@ -98,7 +98,7 @@ export async function segurosPagination(registros, buscarRegistros = "") {
             document.getElementById('card-container').innerHTML = '';
 
             // Mostrar los registros de la página actual
-            for (let i = 0; i < fin && i < list.data.length; i++) {
+            for (let i = 0; i < fin && i < list?.data?.length; i++) {
                 crearTarjeta(list.data[i], plantilla, separadores);
             }
 

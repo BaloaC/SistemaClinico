@@ -35,6 +35,7 @@
                                 <table id="fMensajeria" class="table table-compact">
                                     <thead>
                                         <tr>
+                                            <th>Detalles</th>
                                             <th>Item</th>
                                             <th>Rif</th>
                                             <th>Seguro</th>
@@ -124,7 +125,7 @@
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-mensajeria/mostrarFMensajeria.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-mensajeria/registrarFMensajeria.js'); ?>"></script>
-    <!-- <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/eliminarFConsulta.js'); ?>"></script> -->
+    <script type="module" src="<?php echo Url::to('assets\js\facturas-mensajeria\detalleFacturas.js'); ?>"></script>
 </body>
 
 </html>

@@ -202,10 +202,12 @@
                                             <small class="form-text">Solo puede contener letras</small>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label for="examenes">Exámenes realizados en la consulta</label>
-                                            <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple">
-                                                <option></option>
-                                            </select>
+                                            <div class="examenSelect">
+                                                <label for="examenes">Exámenes realizados en la consulta</label>
+                                                <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple">
+                                                    <option></option>
+                                                </select>
+                                            </div>
 
                                             <label for="fecha_consulta" style="display: none;">Fecha consulta</label>
                                             <input type="date" name="fecha_consulta" class="form-control mb-3" style="display: none;" data-validate="true" data-type="date" disabled required>

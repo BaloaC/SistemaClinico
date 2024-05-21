@@ -36,6 +36,7 @@ Router::get("/pdf/consultaemergencia/:id", PdfController::class . '@pdf_consulta
 Router::get("/pdf/cintillo/:id", PdfController::class . '@pdf_cintillo');
 Router::get("/pdf/facturamensajeria/:id", PdfController::class . '@pdf_facturaMensajeria');
 Router::get("/pdf/consultaseguro/:id", PdfController::class . '@pdf_consultaSeguro');
+Router::get("/pdf/presupuesto/:id", PdfController::class . '@pdf_presupuesto');
 
 // //Login - vista
 Router::get('/login', LoginController::class . '@index');
@@ -353,6 +354,7 @@ Router::put('/cambioDivisa', GlobalController::class . '@actualizarValorDivisa',
 
 // //Factura_Medico - Vistas
 Router::get('/factura/mensajeria', FacturaMensajeriaController::class . '@index');
+Router::get('/consulta/mensajeriaDetalle/:id', FacturaMensajeriaController::class . '@detalleFactura');
 Router::get('/factura/mensajeria/registrar', FacturaMensajeriaController::class . '@formRegistrarFacturaMensajeria');
 Router::get('/factura/mensajeria/actualizar/:id', FacturaMensajeriaController::class . '@formActualizarFacturaConsulta');
 

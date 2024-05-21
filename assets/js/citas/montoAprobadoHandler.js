@@ -11,21 +11,25 @@ function montoAprobadoHandler(input) {
         let montoExamen = parseFloat(examen.textContent.slice(1));
         let montoDisponibleTotal = parseFloat(montoDisponible.innerText.split("$")[1]);
         let examenElements = examen.parentElement.querySelectorAll("td");
-        let cubiertoPorSeguro = examenElements[0].firstChild;
-        let cubiertoPorPaciente = examenElements[1].firstChild;
+        let cubiertoPorSeguro = examenElements[1].firstChild;
+        cubiertoPorSeguro.classList.remove("cubiertoPor3");
 
         // Si el monto del examen no supera al montoTotal permitimos que se seleccione, caso contrario no
         if(montoExamen <= montoDisponibleTotal){
 
-            cubiertoPorPaciente.disabled = false;
+            cubiertoPorSeguro.checked = false;
             cubiertoPorSeguro.disabled = false;
             
         } else {
 
-            cubiertoPorPaciente.checked = false;
-            cubiertoPorSeguro.checked = false;
-            cubiertoPorPaciente.disabled = true;
-            cubiertoPorSeguro.disabled = true;
+            // Si no queda saldo desactivar, pero en caso de que quede, permitir seleccionarlo para que pueda cubrirlo el seguro y paciente
+            if(montoDisponibleTotal <= 0){
+                cubiertoPorSeguro.checked = false;
+                cubiertoPorSeguro.disabled = true;
+            } else {
+                cubiertoPorSeguro.checked = false;
+                cubiertoPorSeguro.disabled = false;
+            }
         }
     });
 

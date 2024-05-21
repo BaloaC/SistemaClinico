@@ -19,6 +19,7 @@ export default async function consultaEmergencia(inputRadio) {
     const pacienteBeneficiado = document.getElementById("cedula_beneficiado");
     const seguroSelect = document.getElementById("s-seguro-emergencia");
     const medicoSelect = document.getElementById("s-medico");
+    const examenSelect = document.getElementById("s-examen");
     const especialidadSelect = document.getElementById("s-especialidad");
     const citaSelect = document.getElementById("s-cita");
     const inputDateConsulta = document.querySelector("input[name='fecha_consulta']");
@@ -45,6 +46,8 @@ export default async function consultaEmergencia(inputRadio) {
         $("#addMedicoPago").fadeOut("slow");
         $("#addInsumo").fadeOut("slow");
         seguroSelect.disabled = true;
+        $(".examenSelect").fadeIn("slow");
+        examenSelect.disabled = false;
         // sinCitaSi.value = 1;
 
         citaSelect.disabled = false
@@ -135,7 +138,8 @@ export default async function consultaEmergencia(inputRadio) {
             $(".inputRadioPagoMedico").fadeIn("slow");
             $(".info-insumos-emergencia").fadeIn("slow");
             $("#addInsumo").fadeIn("slow");
-
+            $(".examenSelect").fadeOut("slow");
+            examenSelect.disabled = true;
 
             $("#cedula_beneficiado").empty().select2();
 
@@ -308,6 +312,10 @@ export default async function consultaEmergencia(inputRadio) {
                 };
             }
         });
+
+            seguroSelect.disabled = true;
+            $(".examenSelect").fadeIn("slow");
+            examenSelect.disabled = false;
         }
 
         const pagoMedicosChecked = document.getElementById("RegistrarPagoMedicoSi");
@@ -315,7 +323,7 @@ export default async function consultaEmergencia(inputRadio) {
 
 
         citaSelect.disabled = true;
-        seguroSelect.disabled = true;
+        
         // sinCitaSi.value = 0;
 
 

@@ -15,11 +15,12 @@ async function updateCita(citaObject) {
             citaObject.examenes.map((examen, item) => {
                 examenes += `
                     <tr class="examen_id_${examen.examen_id}">
-                        <td><i class="fas fa-trash"></i></td>
+                        <td><i class="fas fa-trash" onclick="deleteExamenCoberture(${examen.examen_id})"></i></td>
                         <td scope="row"><input type="checkbox" class="form-check-input examenCita${examen.examen_id} examenCubierto examenCubiertoPorSeguro" data-id="${examen.examen_id}" onchange="checkExamenHandler(this)" disabled></td>
                         <td class="examenPrice">$${examen.precio_examen_usd}</td>
                         <td>${examen.nombre}</td>
                     </tr>
+                    <tr class="examen_id_mensaje_${examen.examen_id}" style="display:none"><td class="ms-3 text-danger" colspan="4" style="font-size: 0.90rem">a</td></tr>
                 `;
             });
 

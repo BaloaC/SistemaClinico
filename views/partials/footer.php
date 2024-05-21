@@ -7,7 +7,7 @@
 <script src="<?php echo Url::to('assets/libs/jquery/jquery-3.6.0.min.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo Url::to('assets/libs/datatables/datatables.min.js'); ?>"></script>
 <script src="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.js'); ?>"></script>
-<script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>\
+<script src="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.js'); ?>"></script>
 <script src="<?php echo Url::to('assets/libs/datatables/datetime-moment-default.js'); ?>"></script>
 <script src="<?php echo Url::to('assets/libs/datatables/datetime-moment-custom.js'); ?>"></script>
 <script src="<?php echo Url::to('assets/libs/bootstrap/bootstrap.bundle.min.js'); ?>"></script>

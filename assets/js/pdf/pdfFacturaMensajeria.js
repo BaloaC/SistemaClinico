@@ -11,7 +11,8 @@ console.log(infoFactura);
 
 if(infoFactura.consultas?.length > 0){
 
-    infoFactura.consultas.forEach((consulta, iterator) => {
+    infoFactura.consultas.forEach((consulta, iterator) => {        
+
         consultas += `
             <tr>
                 <td>${iterator + 1}</td>
@@ -20,7 +21,7 @@ if(infoFactura.consultas?.length > 0){
                 <td>${consulta?.beneficiado?.cedula ?? consulta.paciente_beneficiado.cedula}</td>
                 <td>${consulta?.titular?.cedula ?? consulta.paciente_titular.cedula}</td>
                 <td>${consulta?.beneficiado?.nombre ?? consulta?.paciente_beneficiado.nombre} ${consulta?.beneficiado?.apellidos ?? consulta?.paciente_beneficiado.apellidos}</td>
-                <td>${convertCurrencyToVES(consulta.monto_consulta_bs)} Bs</td>
+                <td>${convertCurrencyToVES(consulta.monto_total_bs)} Bs</td>
             </tr>
         `;
     });
