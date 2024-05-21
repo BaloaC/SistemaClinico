@@ -364,7 +364,7 @@ class FacturaConsultaHelpers {
 
         $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
         $consulta_emergencia = $_consultaEmergenciaModel->where('consulta_id', '=', $formulario['consulta_id'])->getFirst();
-
+        
         // Si la consulta es por emergencia
         if (!is_null($consulta_emergencia)) {
             $_consultaExamenModel = new ConsultaExamenModel();
@@ -378,7 +378,7 @@ class FacturaConsultaHelpers {
                     if ($consulta_examen->cubierto_por == 1) {
                         $precio_examen_bs = round($consulta_examen->precio_examen_usd * $valorDivisa, 2);
                         $consulta_examen = $_consultaExamen->update(['precio_examen_bs' => $precio_examen_bs]);
-
+                        
                     } else if ($consulta_examen->cubierto_por == 2) {
                         $cobertura -= $consulta_examen->precio_examen_usd;
                     }
@@ -415,11 +415,32 @@ class FacturaConsultaHelpers {
                     }
                 }
 
+                // actualizamos los cita_exámenes cubiertos por ambos
                 $_citaExamenModel->resetValues();
                 $cita_examen = $_citaExamenModel->where('cita_id', '=', $consulta_cita->cita_id)->where('cubierto_por', '=', 3)->getFirst();
                 if (!is_null($cita_examen)) {
-                    $monto_restante = $cita_examen->precio_examen_usd - $cobertura;
-                    $_consultaCitaModel->update(['monto_cubierto_usd' =>  $monto_restante, 'monto_cubierto_bs' => round($monto_restante * $valorDivisa, 2) ]);
+                    $cobertura_restante = $cobertura - $factura['monto_consulta_usd'];
+                    $monto_restante = $cita_examen->precio_examen_usd - $cobertura_restante;
+                    $montos_actualizados = [
+                        'monto_cubierto_usd' =>  $monto_restante,
+                        'monto_cubierto_bs' => round($monto_restante * $valorDivisa, 2)
+                    ];
+                    $seactualizao = $_citaExamenModel->update($montos_actualizados);
+                }
+
+                // actualizamos los exámenes si se realizaron durante la consulta
+                $_consultaExamenModel = new ConsultaExamenModel();
+                $consulta_examenes = $_consultaExamenModel->where('consulta_id', '=', $formulario['consulta_id'])->getAll();
+                
+                if (!is_null($consulta_examenes)) {
+                    foreach ($consulta_examenes as $examen) {
+                        $precio_examen_bs = $examen->precio_examen_usd * (float) $valorDivisa;
+                        $precio_examen_bs = round($precio_examen_bs, 2);
+                        
+                        $consultaExamen = new ConsultaExamenModel();
+                        $consultaExamen->where('consulta_examen_id', '=', $examen->consulta_examen_id)
+                                        ->update(array('precio_examen_bs' => $precio_examen_bs));
+                    }
                 }
             }
         }

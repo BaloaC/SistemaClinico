@@ -8,7 +8,10 @@ class CitaExamenModel extends GenericModel {
     protected $examen_id;
     protected $precio_examen_bs;
     protected $precio_examen_usd;
+    protected $monto_cubierto_bs;
+    protected $monto_cubierto_usd;
     protected $cubierto_por;
+    protected $estatus_cit;
 
     public function __construct($propiedades = null) {
         parent::__construct('cita_examen', CitaExamenModel::class, $propiedades);
@@ -19,14 +22,20 @@ class CitaExamenModel extends GenericModel {
     public function getExamenId(){return $this->examen_id;}
     public function getPrecioExamenBs(){return $this->precio_examen_bs;}
     public function getPrecioExamenUsd(){return $this->precio_examen_usd;}
+    public function getMontoCubiertoBs(){return $this->monto_cubierto_bs;}
+    public function getMontoCubiertoUsd(){return $this->monto_cubierto_usd;}
     public function getCubiertoPor(){return $this->cubierto_por;}
+    public function getEstatusCit(){return $this->estatus_cit;}
 
     /* Setters */
     public function setCitaId($cita_id){return $this->cita_id = $cita_id;}
     public function setExamenId($examen_id){return $this->examen_id = $examen_id;}
     public function setPrecioExamenBs($precio_examen_bs){return $this->precio_examen_bs = $precio_examen_bs;}
     public function setPrecioExamenUsd($precio_examen_usd){return $this->precio_examen_usd = $precio_examen_usd;}
+    public function setMontoCubiertoBs($monto_cubierto_bs){return $this->monto_cubierto_bs = $monto_cubierto_bs;}
+    public function setMontoCubiertoUsd($monto_cubierto_usd){return $this->monto_cubierto_usd = $monto_cubierto_usd;}
     public function setCubiertoPor($cubierto_por){return $this->cubierto_por = $cubierto_por;}
+    public function setEstatusCi($estatus_cit){return $this->estatus_cit = $estatus_cit;}
 }
 
 ?>

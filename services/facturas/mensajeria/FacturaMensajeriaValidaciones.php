@@ -23,6 +23,13 @@ class FacturaMensajeriaValidaciones {
 
         // Validamos las consultas
         foreach ($formulario['consultas'] as $consulta) {
+
+            if ( $validarFactura->isDuplicated('factura_mensajeria_consultas', 'consulta_seguro_id', $consulta['consulta_seguro_id']) ) {
+                $respuesta = new Response(false, 'La consulta indicada ya se encuentra relacionada a una factura_mensajeria');
+                $respuesta->setData('Problemas con la consulta '.$consulta['consulta_seguro_id']);
+                echo $respuesta->json(400);
+                exit();
+            }
             
             if ( !$validarFactura->isDuplicated('consulta_seguro', 'consulta_seguro_id', $consulta['consulta_seguro_id']) ) {
                 $respuesta = new Response(false, 'La consulta indicada no se encuentra en el sistema');

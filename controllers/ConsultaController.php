@@ -56,7 +56,7 @@ class ConsultaController extends Controller {
 
         $es_emergencia = isset($_POST['es_emergencia']); // Validamos que el atributo emergencia sea booleano
 
-        if ( $es_emergencia ) {
+        if ( $es_emergencia && $_POST['es_emergencia'] ) {
             $this->consulta_id = ConsultaService::insertarConsultaEmergencia($_POST);
 
         } else {

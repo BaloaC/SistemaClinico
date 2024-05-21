@@ -162,6 +162,25 @@ class MedicoController extends Controller {
         return $respuesta->json(200);
     }
 
+    public function actualizarMedicoEspecialidad($medico_especialidad_id) {
+        // global $isEnabledAudit;
+        // $isEnabledAudit = 'médicos';
+
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        if ($_POST['costo_especialidad'] <= 0) {
+            $respuesta = new Response(false, 'El costo de la especialidad debe ser mayor a 0');
+            $respuesta->setData(['costo_especialidad' => $_POST['costo_especialidad']]);
+            echo $respuesta->json(400);
+            exit();
+        }
+
+        $_medicoEspecialidadModel = new MedicoEspecialidadModel();
+        $se_actualizo = $_medicoEspecialidadModel->where('medico_especialidad_id', '=', $medico_especialidad_id)->update($_POST);
+        
+        $respuesta = new Response($se_actualizo < 0 ? 'ACTUALIZACION_FALLIDA' : 'ACTUALIZACION_EXITOSA');
+        return $respuesta->json($se_actualizo < 0 ? 400 : 200);
+    }
+
     public function eliminarMedico($medico_id) {
         global $isEnabledAudit;
         $isEnabledAudit = 'médicos';
