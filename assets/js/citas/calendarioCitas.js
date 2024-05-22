@@ -376,7 +376,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
 
             let listHorarios = "";
-            horariosOrdenados.forEach(horario => {
+            horariosOrdenados?.forEach(horario => {
                 listHorarios += `
                 <tr>
                 <td class="text-capitalize">${horario.dias_semana}</td>
@@ -388,7 +388,15 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
             horariosTable.innerHTML = listHorarios;
 
-            $("#horarios-table").fadeIn("slow");
+            if(listHorarios !== ""){
+                $("#horarios-tableNotFound").fadeOut("slow");
+                $(".medicoScheduleLabel").fadeIn("slow");
+                $("#horarios-table").fadeIn("slow");
+            }  else {
+                $("#horarios-table").fadeOut("slow");
+                $(".medicoScheduleLabel").fadeOut("slow");
+                $("#horarios-tableNotFound").fadeIn("slow");
+            }
 
             // Subir el scroll hasta inicio para visualizar mejor el mensaje de error
             // modalReg.scrollTo({
