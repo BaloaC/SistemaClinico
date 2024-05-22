@@ -138,14 +138,17 @@ class ConsultaSeguroHelpers {
         $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
         $consulta_emergencia = $_consultaEmergenciaModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getFirst();
 
-        if ( !is_null($consulta_emergencia) ) {
+        if ( !is_null($consulta_emergencia) ) {    
             ConsultaHelper::actualizarPrecioEmergencia($consulta_emergencia);
         }
-
+        
         $_consultaCita = new ConsultaCitaModel();
         $consulta_cita = $_consultaCita->where('consulta_id', '=', $consulta_seguro->consulta_id)->getFirst();
-        $_citaExamenModel = new CitaExamenModel();
-        $cita_examenes = $_citaExamenModel->where('cita_id', '=', $consulta_cita->cita_id)->getAll();
+
+        if (!is_null($consulta_cita)) {
+            $_citaExamenModel = new CitaExamenModel();
+            $cita_examenes = $_citaExamenModel->where('cita_id', '=', $consulta_cita->cita_id)->getAll();
+        }
 
         $_consultaExamenModel = new ConsultaExamenModel();
         $consulta_examenes = $_consultaExamenModel->where('consulta_id', '=', $consulta_seguro->consulta_id)->getAll();
@@ -182,28 +185,30 @@ class ConsultaSeguroHelpers {
             }
         }
 
-        if( !is_null($cita_examenes) ) {
-            foreach ($cita_examenes as $examen) {
-                if ($examen->monto_cubierto_usd != 0 || $examen->cubierto_por == 2) {
-                    $examen_modificado = Array( 'precio_examen_bs' => 0 );
+        if (!is_null($consulta_cita)) {
+            if( !is_null($cita_examenes) ) {
+                foreach ($cita_examenes as $examen) {
+                    if ($examen->monto_cubierto_usd != 0 || $examen->cubierto_por == 2) {
+                        $examen_modificado = Array( 'precio_examen_bs' => 0 );
 
-                    $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-                    $examen_modificado['precio_examen_bs'] = round( $examen->precio_examen_usd * $valorDivisa ,2 );
-                    $costo_examenes_bs += $examen_modificado['precio_examen_bs'];
-                    
-                    $_citaExamenModel = new CitaExamenModel();
-                    $isUpdate = $_citaExamenModel->where('cita_examen_id', '=', $examen->cita_examen_id)->update($examen_modificado);
-                } else {
-
-                    if ($examen->cubierto_por == 3) {
-                        $monto_faltante = $examen->monto_cubierto_usd - $examen->precio_examen_usd;
-                        $examen_modificado = Array(
-                            'precio_examen_bs' => $examen->monto_cubierto_bs + round($monto_faltante * $valorDivisa, 2)
-                        );
+                        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+                        $examen_modificado['precio_examen_bs'] = round( $examen->precio_examen_usd * $valorDivisa ,2 );
                         $costo_examenes_bs += $examen_modificado['precio_examen_bs'];
-
+                        
                         $_citaExamenModel = new CitaExamenModel();
-                        $_citaExamenModel->where('cita_examen_id', '=', $examen->cita_examen_id)->update($examen_modificado);
+                        $isUpdate = $_citaExamenModel->where('cita_examen_id', '=', $examen->cita_examen_id)->update($examen_modificado);
+                    } else {
+
+                        if ($examen->cubierto_por == 3) {
+                            $monto_faltante = $examen->monto_cubierto_usd - $examen->precio_examen_usd;
+                            $examen_modificado = Array(
+                                'precio_examen_bs' => $examen->monto_cubierto_bs + round($monto_faltante * $valorDivisa, 2)
+                            );
+                            $costo_examenes_bs += $examen_modificado['precio_examen_bs'];
+
+                            $_citaExamenModel = new CitaExamenModel();
+                            $_citaExamenModel->where('cita_examen_id', '=', $examen->cita_examen_id)->update($examen_modificado);
+                        }
                     }
                 }
             }

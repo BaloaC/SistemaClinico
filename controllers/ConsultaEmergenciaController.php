@@ -1,7 +1,6 @@
 <?php
 
-include_once './services/consultas/consulta emergencia/ConsultaEmergenciaValidate.php';
-include_once './services/consultas/consulta emergencia/ConsultaEmergenciaService.php';
+include_once './services/consulta/consultaValidaciones.php';
 
 class ConsultaEmergenciaController extends Controller {
 
@@ -39,7 +38,7 @@ class ConsultaEmergenciaController extends Controller {
 
         $put = [
             "autorizacion" => $_POST['autorizacion'],
-            "autorizacion" => $_POST['monto_aprobado']
+            "monto_aprobado" => $_POST['monto_aprobado']
         ];
 
         $_consultaEmergenciaModel = new ConsultaEmergenciaModel();

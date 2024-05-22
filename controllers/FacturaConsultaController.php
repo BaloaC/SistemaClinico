@@ -38,12 +38,12 @@ class FacturaConsultaController extends Controller {
         $_consultaSeguroModel = new ConsultaSeguroModel();
         $consulta_seguro = $_consultaSeguroModel->where('consulta_id', '=', $_POST['consulta_id'])->getFirst();
         $monto_consulta_usd = 0;
-
+        
         if (!is_null($consulta_seguro)) {
             $factura = ConsultaSeguroService::listarConsultasSeguroId($consulta_seguro->consulta_seguro_id);
 
-            if (isset($consulta['consulta_emergencia'])) {
-                $monto_consulta_usd = $factura[0]['factura']['total_consulta'] - $factura[0]['factura']['monto_aprobado'];
+            if (isset($factura[0]['factura'])) {
+                $monto_consulta_usd = round($factura[0]['factura']->total_consulta - $factura[0]['factura']->monto_aprobado, 2);
             } else {
                 $monto_consulta_usd = $factura[0]['monto_total_usd'] - $factura[0]['cobertura_seguro'];
             }
@@ -52,7 +52,7 @@ class FacturaConsultaController extends Controller {
         } else {
             $monto_consulta_usd = FacturaConsultaHelpers::obtenerPrecioConsulta($_POST['consulta_id']);;
         }
-
+        
         $_POST['monto_consulta_usd'] = $monto_consulta_usd;
         $_POST['monto_consulta_bs'] = $monto_consulta_usd * (float) $valorDivisa->value;
 

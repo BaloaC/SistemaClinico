@@ -276,7 +276,7 @@ class ConsultaValidaciones {
             exit();
         }
 
-        if (!isset($formulario['clave']) || strlen($formulario['clave']) < 0) {
+        if (!isset($formulario['autorizacion']) || strlen($formulario['autorizacion']) < 0) {
             $respuesta = new Response(false, 'La autorización de la consulta es obligatoria');
             $respuesta->setData($formulario['clave']);
             echo $respuesta->json(400);

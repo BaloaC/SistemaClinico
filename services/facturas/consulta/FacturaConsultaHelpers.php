@@ -450,15 +450,37 @@ class FacturaConsultaHelpers {
      * Esta función insertar los montos de consulta emergencia
      */
     public static function insertarDiferenciaEmergencia($formulario, $factura) {
-        $cobertura = $factura['factura']['monto_aprobado'];
         $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
 
         $informacion_actualizada = [];
-        $informacion_actualizada['monto_cubierto_usd'] = $factura['factura']['total_consulta'] - $factura['factura']['monto_aprobado'];
+        $informacion_actualizada['monto_cubierto_usd'] = $_POST['monto_consulta_usd'];
         $informacion_actualizada['monto_cubierto_bs'] = round($informacion_actualizada['monto_cubierto_usd'] * $valorDivisa, 2);
-
+        
+        $precios = ['consultas_medicas', 'laboratorios', 'medicamentos', 'area_observacion', 'enfermeria', 'total_insumos', 'total_examenes'];
+        $monto_restante = $informacion_actualizada['monto_cubierto_usd'];
+        $i = 0;
+        $sumatoria_bs = 0;
+        
+        while($monto_restante > 0 ) {
+            $propiedad = $precios[$i];
+            if ($factura['factura']->$propiedad != 0) {
+                if ($factura['factura']->$propiedad >= $monto_restante) {
+                    $informacion_actualizada[$propiedad."_bs"] = round($monto_restante * $valorDivisa, 2);
+                    $sumatoria_bs += $informacion_actualizada[$propiedad."_bs"];
+                    $monto_restante -= $factura['factura']->$propiedad;
+                }
+    
+                if ($factura['factura']->$propiedad < $monto_restante) {
+                    $informacion_actualizada[$propiedad."_bs"] = round($factura['factura']->$propiedad * $valorDivisa, 2);
+                    $sumatoria_bs += $informacion_actualizada[$propiedad."_bs"];
+                    $monto_restante -= $factura['factura']->$propiedad;
+                }
+            }
+            $i++;
+        }
+        $informacion_actualizada['total_consulta_bs'] = $sumatoria_bs;
         $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
-        $_consultaEmergenciaModel->where('consulta_emergencia_id', '=', $factura['facutra']['consulta_emergencia_id'])->update($informacion_actualizada);
+        $_consultaEmergenciaModel->where('consulta_emergencia_id', '=', $factura['factura']->consulta_emergencia_id)->update($informacion_actualizada);
     }
 
     public static function RetornarMensaje($mensaje, $data) {

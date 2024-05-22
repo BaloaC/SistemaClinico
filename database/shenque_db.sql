@@ -812,6 +812,7 @@ CREATE TABLE IF NOT EXISTS `factura_mensajeria_consultas` (
     `factura_mensajeria_id` int(9) UNSIGNED ZEROFILL NOT NULL,
     `consulta_seguro_id` int(9) UNSIGNED ZEROFILL NOT NULL,
     `fecha_mensajeria_consultas` timestamp NOT NULL,
+    `estatus_fac` ENUM('1','2') NOT NULL DEFAULT '1',
     PRIMARY KEY (`factura_mensajeria_consultas_id`),
     KEY `fk_mensajeria_consultas` (`consulta_seguro_id`),
     FOREIGN KEY (`consulta_seguro_id`) REFERENCES `consulta_seguro` (`consulta_seguro_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
