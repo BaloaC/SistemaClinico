@@ -109,7 +109,7 @@
 
                                         <select name="tipo_servicio" id="s-tipo-servicio" onchange="tipoServicio(this)" class="form-control mb-3" required>
                                             <option value="1">Solo exámenes</option>
-                                            <option value="2">Consulta con exámenes</option>
+                                            <option value="3">Consulta con exámenes</option>
                                             <option value="2" selected>Consulta sin exámenes</option>
                                         </select>
                                     </div>
@@ -227,9 +227,13 @@
                     <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-cita" class="p-3 px-4">
-                            <div class="col-12 col-md-6 d-flex align-items-center">
+                            <div class="col-12 col-md-8 d-flex align-items-center">
                                 <i class="fas fa-info-circle text-secondary me-3"></i>
-                                <p class="text-secondary m-0">Las citas se mantendrán como pendientes hasta que la clave otorgada por el seguro sea insertada</p>
+                                <p class="text-secondary m-0">Las citas se mantendrán como pendientes hasta que la clave otorgada por el seguro sea insertada.</p>
+                            </div>
+                            <div class="col-12 col-md-8 d-flex align-items-center mt-3">
+                                <i class="fas fa-exclamation-circle text-warning me-3"></i>
+                                <p class="m-0">Importante: Los exámenes que no se puedan cubrir por el seguro, automáticamente serán cubiertos por el paciente, de no querer cubrirlos, deberá eliminarlos.</p>
                             </div>
                             <div class="row">
                                 <div class="col-12 col-md-6">
@@ -254,8 +258,9 @@
                                     <table class="table table-borderless">
                                         <thead>
                                             <tr>
+                                                <th>Eliminar</th>
                                                 <th>Cubierto Por Seguro</th>
-                                                <th>Cubierto Por Paciente</th>
+                                                <!-- <th>Cubierto Por Paciente</th> -->
                                                 <th>Precio</th>
                                                 <th>Nombre</th>
                                             </tr>
@@ -265,9 +270,8 @@
                                         </tbody>
                                     </table>
                                 </div>
-
                             </div>
-
+                            <h6 id="sinExamenesCita" class="mt-4" style="display: none;">No hay exámenes por cubrir</h6>
 
                         </form>
                     </div>
@@ -411,6 +415,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/citas/tipoServicio.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/montoAprobadoHandler.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/checkExamenHandler.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/deleteExamenCoberture.js'); ?>"></script>
 </body>
 
 </html>

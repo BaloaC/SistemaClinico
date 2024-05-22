@@ -57,16 +57,17 @@ async function getMedico(id) {
 
         if (json[0].especialidad?.length >= 1) {
 
-            json[0].especialidad.forEach(el => {
+            json[0].especialidad.forEach(el => {                
                 especialidad += `
-                <button class="btn btn-sm btn-empresa" id="btn-add" value="${el.medico_especialidad_id}" ${json[0].especialidad.length > 1
+                <button class="btn btn-sm btn-empresa" id="btn-add" value="${el.medico_especialidad_id}" onclick="updateCostoEspecialidad(${el.medico_especialidad_id},${el.costo_especialidad})" data-costo-especialidad=${el.costo_especialidad} data-bs-toggle="modal" data-bs-target="#modalActMontoEspecialidad">
+                    ${el.nombre_especialidad} - Costo: $${el.costo_especialidad}
+                    <i class="fa-sm fas fa-times" ${json[0].especialidad.length > 1
                         ? `onclick=(deleteEspecialidad(${el.medico_especialidad_id})) data-bs-toggle="modal" data-bs-target="#modalDeleteRelacion"`
-                        : `data-bs-toggle="modal" data-bs-target="#modalAlert"`}>
-                    ${el.nombre_especialidad}
-                    <i class="fa-sm fas fa-times"></i> 
+                        : `data-bs-toggle="modal" data-bs-target="#modalAlert"`}></i> 
                 </button>
             `;
             });
+
 
             $especialidadMedico.innerHTML = especialidad;
 

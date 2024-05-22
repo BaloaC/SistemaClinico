@@ -130,7 +130,8 @@ async function addConsulta() {
         if (indicaciones.length != 0 && indicaciones[0].descripcion != "") { data.indicaciones = indicaciones; }
 
         if(!data.fecha_consulta) {data.fecha_consulta = new Date().toISOString().slice(0, 10);}
-
+        if(!data.es_emergencia || document.getElementById("tipoConsultas").value === "examen") delete data.es_emergencia;
+        if(data.pacienteBeneficiadoEmergencia === "0") delete data.pacienteBeneficiadoEmergencia;
         if (data.total_insumos > 0 && !("insumos" in data)) throw { message: "Debe especificar los insumos utilizados" }
 
         const registroExitoso = await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!", "#modalReg", defaultAlert, {success: false, error: true});
@@ -140,6 +141,7 @@ async function addConsulta() {
         $form.reset();
         deleteElementByClass("newInput");
         cleanValdiation("info-consulta");
+        $("#tipoConsultas").val("consulta").change();
         consultaEmergencia({ value: "0" });
         // Si la consulta es por cita, luego de registrarse satisfactoriamente, 
         if (data?.cita_id) registerStatusConsulta.successfulConsulta = true;

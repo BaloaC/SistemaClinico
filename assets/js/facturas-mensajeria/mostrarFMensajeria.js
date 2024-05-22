@@ -15,6 +15,12 @@ addEventListener("DOMContentLoaded", e => {
     $.fn.dataTable.moment('DD-MM-YYYY');
 
     const fMensajeriaColumns = [
+        {
+            "className": 'dt-control',
+            "orderable": false,
+            "data": null,
+            "defaultContent": ''
+        },
         { data: "factura_mensajeria_id" },
         {
             data: function (row) {
@@ -67,12 +73,24 @@ addEventListener("DOMContentLoaded", e => {
     ];
     const order = [[3, 'desc']];
 
+    const format = (data) => {
+        console.log(data);
+        return `
+            <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
+                <tr>
+                    <td><p class="link-primary cursor-pointer" onclick="openPopupDatelleFactura('${data.factura_mensajeria_id}')">Visualizar consultas del recibo</p></td>
+                </tr>
+            </table>
+        `;
+    }
+
     createDataTable({
         id: "#fMensajeria",
         url: `/${path[1]}/factura/mensajeria/consulta/`,
         columns: fMensajeriaColumns,
         columnDefs: columnDefsFMensajeria,
         order,
+        format,
         processing: true,
         serverSide: true
     });

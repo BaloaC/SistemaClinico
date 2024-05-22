@@ -3,10 +3,10 @@ import scrollTo from "./scrollTo.js";
 
 const path = location.pathname.split('/');
 
-export default async function updateModule(data, data_id, module, form, successMessage) {
+export default async function updateModule(data, data_id, module, form, successMessage, actAlert = "actAlert", modal = "#modalAct") {
 
     const $form = document.getElementById(form);
-    const $alert = document.getElementById("actAlert");
+    const $alert = document.getElementById(actAlert);
     
     try {
 
@@ -39,7 +39,7 @@ export default async function updateModule(data, data_id, module, form, successM
         scrollTo("modalActBody");
 
         setTimeout(() => {
-            $("#modalAct").modal("hide");
+            $(modal).modal("hide");
             $alert.classList.add("d-none");
         }, 500);
 

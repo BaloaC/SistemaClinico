@@ -8,7 +8,7 @@ function deleteEspecialidad(id) {
 
 async function confirmDeleteEspecialidad(id) {
 
-    await deleteModule("medicos/especialidad", id, "Día del horario eliminado correctamente!", "#modalDeleteRelacion", "delAlertRelacion");
+    await deleteModule("medicos/especialidad", id, "Especialidad eliminada correctamente del médico!", "#modalDeleteRelacion", "delAlertRelacion");
 
     const listadoMedicos = await ssrMedicosPagination(1);
     pagination.initializated = false;

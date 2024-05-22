@@ -219,14 +219,14 @@ const handleModalOpen = async () => {
             }
         }
 
-        dinamicSelect2(select2Paciente);
+        // dinamicSelect2(select2Paciente);
 
         // Para crear el select2 sin consulta
         select2Paciente.selectSelector = "#s-paciente-sinConsulta";
         dinamicSelect2(select2Paciente);
 
         dinamicSelect2(select2Especialidad);
-        
+
         // Para crear el select2 sin consulta
         select2Especialidad.selectSelector = "#s-especialidad-sinConsulta"
         dinamicSelect2(select2Especialidad);
@@ -406,33 +406,36 @@ const handleModalOpen = async () => {
         $(especialidadSelect).on("change", async function (e) {
 
             let especialidad_id = this.value;
-
             // Exámenes por especialidad select2
 
-            $("#s-examen").empty().select2();
+            if (document.getElementById("s-tipo_consulta").value !== "1") {
 
-            dinamicSelect2({
-                selectSelector: "#s-examen",
-                selectValue: "examen_id",
-                selectNames: ["nombre"],
-                parentModal: "#modalReg",
-                placeholder: "Seleccione los exámenes",
-                multiple: true,
-                ajax: true,
-                ajaxUrl: `examenes/especialidad/${especialidad_id}`,
-                processResultsAjax: function (data, params) {
+                $("#s-examen").empty().select2();
 
-                    params.page = params.page || 1;
+                dinamicSelect2({
+                    selectSelector: "#s-examen",
+                    selectValue: "examen_id",
+                    selectNames: ["nombre"],
+                    parentModal: "#modalReg",
+                    placeholder: "Seleccione los exámenes",
+                    multiple: true,
+                    ajax: true,
+                    ajaxUrl: `examenes/especialidad/${especialidad_id}`,
+                    processResultsAjax: function (data, params) {
 
-                    const data1 = data?.data.map(object => {
-                        const { examen_id: valorPropiedad1, nombre: nombreExamen } = object;
-                        return { id: valorPropiedad1, text: nombreExamen };
-                    });
+                        params.page = params.page || 1;
 
-                    // Transforms the top-level key of the response object from 'data' to 'results'
-                    return { results: data1 };
-                }
-            });
+                        const data1 = data?.data.map(object => {
+                            const { examen_id: valorPropiedad1, nombre: nombreExamen } = object;
+                            return { id: valorPropiedad1, text: nombreExamen };
+                        });
+
+                        // Transforms the top-level key of the response object from 'data' to 'results'
+                        return { results: data1 };
+                    }
+                });
+
+            }
 
             // Médico select
             $(medicoSelect).empty().select2();
@@ -801,8 +804,6 @@ addEventListener("DOMContentLoaded", async e => {
 
     const format = (data) => {
 
-        console.log(data);
-
         if (data.clave == null) data.clave = "No aplica";
         let tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
         if (data.es_emergencia === 1) tipo_cita = "Asegurada";
@@ -921,7 +922,7 @@ addEventListener("DOMContentLoaded", async e => {
                 </tr>
                 <tr class="blue-td">
                     <td>Exámenes realizados: <br><b>${examenes}</b></td>
-                    <td>Insumos utilizados: <br><b>${insumos}</b></td>
+                    ${data.es_emergencia === 1 ? `<td>Insumos utilizados: <br><b>${insumos}</b></td>` : ""}
                 </tr>
                 <tr><td><br></td></tr>
                 <tr>

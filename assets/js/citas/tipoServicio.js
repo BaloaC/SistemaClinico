@@ -5,7 +5,7 @@ export default async function tipoServicio(inputRadio) {
 
     console.log(inputRadio);
 
-    if (inputRadio.value === "1") {
+    if (inputRadio.value === "1" || inputRadio.value === "3") {
         examenSelect.disabled = false;
         $(examenInputContainer).fadeIn("slow");
     } else {

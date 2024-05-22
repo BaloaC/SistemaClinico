@@ -49,6 +49,7 @@ async function addCita() {
         data.hora_entrada = `${data.hora_entrada}:00`;
         data.hora_salida = `${data.hora_salida}:00`;
 
+        if(data.tipo_servicio === "3") data.tipo_servicio = 2;
 
         const registroExitoso = await addModule("citas", "info-cita", data, "Cita agendada exitosamente!");
 

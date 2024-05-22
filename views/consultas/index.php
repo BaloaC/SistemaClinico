@@ -130,34 +130,7 @@
                             <div class="info-consultaSinExamenes">
                                 <div class="row">
                                     <div class="row ">
-                                        <h5>Información de la cita</h5>
-                                        <!-- <div class="col-12 col-md-6"> -->
-                                        <!-- <div class="col-12 col-md-6 emergenciaContainer">
-                                            <label for="input-radios-container" class="">¿La consulta es por emergencia?</label>
-                                            <div class="input-radios-container">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="consultaPorEmergencia" id="consultaEmergenciaSi" onchange="consultaEmergencia(this)" value="1" required>
-                                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="consultaPorEmergencia" id="consultaEmergenciaNo" onchange="consultaEmergencia(this)" value="0" checked required>
-                                                    <label class="form-check-label" for="inlineRadio2">No</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6 sinCitaContainer">
-                                            <label for="input-radios-container" class="">¿La consulta es sin cita previa?</label>
-                                            <div class="input-radios-container">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="consultaSinCitaPrevia" id="consultaCitaSi" onchange="consultaSinCita(this)" value="1" required>
-                                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="consultaSinCitaPrevia" id="consultaCitaNo" onchange="consultaSinCita(this)" value="0" checked required>
-                                                    <label class="form-check-label" for="inlineRadio2">No</label>
-                                                </div>
-                                            </div>
-                                        </div> -->
+                                        <h5 class="info-cita-label">Información de la cita</h5>
                                         <div class="col-12 col-md-6 info-cita">
                                             <label for="cita">Cita</label>
                                             <select name="cita_id" id="s-cita" class="form-control" data-active="0" required>
@@ -229,10 +202,12 @@
                                             <small class="form-text">Solo puede contener letras</small>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label for="examenes">Exámenes realizados en la consulta</label>
-                                            <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple">
-                                                <option></option>
-                                            </select>
+                                            <div class="examenSelect">
+                                                <label for="examenes">Exámenes realizados en la consulta</label>
+                                                <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple">
+                                                    <option></option>
+                                                </select>
+                                            </div>
 
                                             <label for="fecha_consulta" style="display: none;">Fecha consulta</label>
                                             <input type="date" name="fecha_consulta" class="form-control mb-3" style="display: none;" data-validate="true" data-type="date" disabled required>

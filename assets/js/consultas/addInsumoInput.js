@@ -113,7 +113,7 @@ function addInsumoInput(parentModal = "#modalReg") {
 
     clicks += 1;
     let template = `
-        <div class="row align-items-end newInput">
+        <div class="row align-items-start newInput">
             <div class="col-12 col-md-5">
                 <label for="insumo">Insumo</label>
                 <select name="insumo_id" id="s-insumo${clicks}" class="form-control insumo-id" data-active="0">

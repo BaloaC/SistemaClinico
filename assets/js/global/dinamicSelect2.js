@@ -53,11 +53,12 @@ export default function dinamicSelect2({ obj = null, selectNames = null, selectV
                 }
             }
             ajaxObj.data = querys ?? function (params) {
+                
                 const query = {
-                    search: params.term,
                     select: true
                 }
 
+                if(params.term) query.search = params.term;
                 if(queryPage === true) query.page = params.page || 1;
 
                 // Query parameters will be ?search=[term]&page=[page]

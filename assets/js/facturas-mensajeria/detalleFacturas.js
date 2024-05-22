@@ -1,0 +1,83 @@
+import formatToRealDate from "../global/formatToRealDate.js";
+import getById from "../global/getById.js";
+
+const id = location.pathname.split("/")[4];
+
+function openPopupDatelleFactura(id){
+
+    let basePath = `${location.origin}/${location.pathname.split("/")[1]}/consulta/mensajeriaDetalle/${id}`;
+    const windowFeatures = "left=100,top=100,width=800,height=600,popup=true";
+    const openPopup = window.open(basePath,"_blank",windowFeatures);
+
+    openPopup.moveTo(0,0);
+    // openPopup.resizeTo(screen.availWidth,screen.availHeight);
+}    
+
+window.openPopupDatelleFactura = openPopupDatelleFactura;
+
+if (id) {
+
+    const facturaMensajeria = await getById("factura/mensajeria", id);
+    const listConsultas = facturaMensajeria.consultas;
+    const consultaContainer = document.getElementById("consultaAccordion");
+    const templateConsulta = document.getElementById("template-consulta").content;
+    const consultaFragment = document.createDocumentFragment();
+
+    if (listConsultas.length > 0) {
+
+        $(".loadingMessage").fadeOut("slow");
+        $(".consultaLabel").fadeIn("slow");
+
+        listConsultas.forEach((el, i) => {
+
+            let dropdownLink = templateConsulta.querySelector(".btn-link");
+            let consultaContainer = templateConsulta.querySelector(".collapse");
+            let consulta_id = templateConsulta.getElementById("consulta_id");
+            let nombre_medico = templateConsulta.getElementById("nombre_medico");
+            let especialidad = templateConsulta.getElementById("especialidad");
+            let fecha_consulta = templateConsulta.getElementById("fecha_consulta");
+            let motivo_cita = templateConsulta.getElementById("motivo_cita");
+            let indicaciones = templateConsulta.getElementById("indicaciones");
+            let observaciones = templateConsulta.getElementById("observaciones");
+            let montoTotalUsd = templateConsulta.getElementById("monto_total_usd");
+            let montoTotalBs = templateConsulta.getElementById("monto_total_bs");
+
+            if (i === 0) {
+                consultaContainer.classList.add("show");
+            } else {
+                consultaContainer.classList.remove("show");
+            }
+
+            consulta_id.textContent = el.consulta_id;
+            nombre_medico.textContent = `${el.nombre_medico ?? el?.medico[0]?.nombre_medico ?? el?.medico?.nombre} ${el.apellidos_medico ?? el?.medico[0]?.apellidos_medico ?? el?.medico?.apellidos}`;
+            especialidad.textContent = el.nombre_especialidad ?? el?.medico[0]?.nombre_especialidad ?? el?.especialidad?.nombre;
+            fecha_consulta.textContent = formatToRealDate(el?.consulta?.fecha_consulta);
+            observaciones.textContent = el?.consulta?.observaciones || "Sin observaciones";
+            motivo_cita.textContent = el.motivo_cita ?? el?.cita?.motivo_cita ?? "La consulta es de emergencia";
+            indicaciones.textContent = el.indicaciones !== undefined ? concatItems(el.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación";
+            montoTotalUsd.textContent = `$${el.monto_total_usd}`;
+            montoTotalBs.textContent = `${el.monto_total_bs} Bs`;
+
+            dropdownLink.innerHTML = `<b>Especialidad:</b> ${especialidad.textContent} <br> <b>Fecha:</b> ${fecha_consulta.textContent}`;
+            dropdownLink.setAttribute("data-bs-target", `#consulta-${el.consulta_id}`);
+            dropdownLink.setAttribute("aria-controls", `#consulta-${el.consulta_id}`);
+            consultaContainer.setAttribute("id", `consulta-${el.consulta_id}`);
+
+            let clone = document.importNode(templateConsulta, true);
+            consultaFragment.appendChild(clone);
+        });
+
+        // Actualizamos el contenedor e insertamos los datos
+        consultaContainer.replaceChildren();
+        consultaContainer.appendChild(consultaFragment);
+
+    } else {
+
+        const h6 = document.createElement("h6");
+        h6.textContent = "El paciente no posee consultas";
+
+        // Actualizamos el contenedor e insertamos los datos
+        consultaContainer.replaceChildren();
+        consultaContainer.appendChild(h6);
+    }
+}
