@@ -41,7 +41,12 @@ class FacturaConsultaController extends Controller {
 
         if (!is_null($consulta_seguro)) {
             $factura = ConsultaSeguroService::listarConsultasSeguroId($consulta_seguro->consulta_seguro_id);
-            $monto_consulta_usd = $factura[0]['monto_total_usd'] - $factura[0]['cobertura_seguro'];
+
+            if (isset($consulta['consulta_emergencia'])) {
+                $monto_consulta_usd = $factura[0]['factura']['total_consulta'] - $factura[0]['factura']['monto_aprobado'];
+            } else {
+                $monto_consulta_usd = $factura[0]['monto_total_usd'] - $factura[0]['cobertura_seguro'];
+            }
             $_POST['diferencia_asegurada'] = true;
             
         } else {
@@ -60,7 +65,11 @@ class FacturaConsultaController extends Controller {
             if (!isset($_POST['diferencia_asegurada'])) {
                 FacturaConsultaHelpers::insertarPreciosFacturaNormal($_POST['consulta_id']);
             } else {
-                FacturaConsultaHelpers::insertarDiferenciaExamenes($_POST, $factura[0]);
+                if (array_key_exists('factura', $factura[0])) {
+                    FacturaConsultaHelpers::insertarDiferenciaEmergencia($_POST, $factura[0]);
+                } else {
+                    FacturaConsultaHelpers::insertarDiferenciaExamenes($_POST, $factura[0]);
+                }
             }
             
             $_consultaModel = new ConsultaModel();

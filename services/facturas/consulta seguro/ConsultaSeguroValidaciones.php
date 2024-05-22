@@ -68,5 +68,11 @@ class ConsultaSeguroValidaciones {
             echo $respuesta->json(400);
             exit();
         }
+
+        if (is_null($consultaEmergencia->autorizacion)) {
+            $respuesta = new Response(false, 'No se pueden facturar consultas por emergencia sin autorización del seguro');
+            echo $respuesta->json(400);
+            exit();
+        }
     }
 }

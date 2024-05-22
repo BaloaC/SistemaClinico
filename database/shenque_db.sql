@@ -492,7 +492,8 @@ CREATE TABLE  IF NOT EXISTS `cita_examen` (
     `precio_examen_bs` float NOT NULL,
     `precio_examen_usd` float NOT NULL,
     `cubierto_por` ENUM('1','2','3') NOT NULL DEFAULT '1',
-    `monto_cubierto` FLOAT NOT NULL DEFAULT '0',
+    `monto_cubierto_usd` FLOAT NOT NULL DEFAULT '0',
+    `monto_cubierto_bs` FLOAT NOT NULL DEFAULT '0',
     `estatus_cit` enum('1','2') NOT NULL DEFAULT '1',
     PRIMARY KEY (`cita_examen_id`),
     FOREIGN KEY (`cita_id`) REFERENCES `cita` (`cita_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -567,8 +568,9 @@ CREATE TABLE  IF NOT EXISTS `consulta_examen` (
     `precio_examen_bs` float NOT NULL,
     `precio_examen_usd` float NOT NULL,
     `estatus_con` enum('1','2') NOT NULL DEFAULT '1',
-    `cubierto_por` ENUM('1','2','3') NOT NULL DEFAULT '1',
-    `monto_cubierto` FLOAT NOT NULL DEFAULT '0',
+    `monto_cubierto_usd` FLOAT NOT NULL DEFAULT '0',
+    `monto_cubierto_bs` FLOAT NOT NULL DEFAULT '0',
+    cita_exame
     PRIMARY KEY (`consulta_examen_id`),
     FOREIGN KEY (`consulta_id`) REFERENCES `consulta` (`consulta_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY (`examen_id`) REFERENCES `examen` (`examen_id`) ON DELETE NO ACTION ON UPDATE NO ACTION

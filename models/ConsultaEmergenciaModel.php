@@ -28,6 +28,10 @@ class ConsultaEmergenciaModel extends GenericModel {
     protected $enfermeria_bs;
     protected $total_insumos_bs;
     protected $total_consulta_bs;
+    protected $autorizacion;
+    protected $monto_aprobado;
+    protected $monto_cubierto_bs;
+    protected $monto_cubierto_usd;
 
     public function __construct($propiedades = null) {
         parent::__construct('consulta_emergencia', ConsultaEmergenciaModel::class, $propiedades);
@@ -58,6 +62,10 @@ class ConsultaEmergenciaModel extends GenericModel {
     public function getenfermeriaBs(){return $this->enfermeria_bs;}
     public function getTotalInsumosBs(){return $this->total_insumos_bs;}
     public function getTotalConsultaBs(){return $this->total_consulta_bs;}
+    public function getAutorizacion(){return $this->autorizacion;}
+    public function getMontoAprobado(){return $this->monto_aprobado;}
+    public function getMontoCubiertoBs(){return $this->monto_cubierto_bs;}
+    public function getMontoCubiertoUsd(){return $this->monto_cubierto_usd;}
 
     /* Setters */
     public function setConsultaId($consulta_id){return $this->consulta_id =$consulta_id;}
@@ -84,6 +92,10 @@ class ConsultaEmergenciaModel extends GenericModel {
     public function setenfermeriaBs($enfermeria_bs){return $this->enfermeria_bs = $enfermeria_bs;}
     public function setTotalInsumosBs($total_insumos_bs){return $this->total_insumos_bs = $total_insumos_bs;}
     public function setTotalConsultaBs($total_consulta_bs){return $this->total_consulta_bs = $total_consulta_bs;}
+    public function setAutorizacion($autorizacion){return $this->autorizacion = $autorizacion;}
+    public function setMontoAprobado($monto_aprobado){return $this->monto_aprobado = $monto_aprobado;}
+    public function setMontoCubiertoBs($monto_cubierto_bs){return $this->monto_cubierto_bs = $monto_cubierto_bs;}
+    public function setMontoCubiertoUsd($monto_cubierto_usd){return $this->monto_cubierto_usd = $monto_cubierto_usd;}
 }
 
 ?>

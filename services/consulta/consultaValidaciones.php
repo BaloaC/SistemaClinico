@@ -259,4 +259,28 @@ class ConsultaValidaciones {
             }
         }
     }
+
+    public static function validarActualizacion($formulario) {
+        $validarConsulta= new Validate();
+    
+        if ($formulario['monto_aprobado'] <= 0) {
+            $respuesta = new Response(false, 'El monto aprobado debe ser mayor a 0');
+            $respuesta->setData($formulario['monto_aprobado']);
+            echo $respuesta->json(400);
+            exit();
+        }
+
+        if ($validarConsulta->isEmpty($formulario)) {
+            $respuesta = new Response('DATOS_VACIOS');
+            echo $respuesta->json(400);
+            exit();
+        }
+
+        if (!isset($formulario['clave']) || strlen($formulario['clave']) < 0) {
+            $respuesta = new Response(false, 'La autorización de la consulta es obligatoria');
+            $respuesta->setData($formulario['clave']);
+            echo $respuesta->json(400);
+            exit();
+        }
+    }
 }

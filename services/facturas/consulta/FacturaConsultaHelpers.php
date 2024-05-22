@@ -446,6 +446,21 @@ class FacturaConsultaHelpers {
         }
     }
 
+    /**
+     * Esta función insertar los montos de consulta emergencia
+     */
+    public static function insertarDiferenciaEmergencia($formulario, $factura) {
+        $cobertura = $factura['factura']['monto_aprobado'];
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+
+        $informacion_actualizada = [];
+        $informacion_actualizada['monto_cubierto_usd'] = $factura['factura']['total_consulta'] - $factura['factura']['monto_aprobado'];
+        $informacion_actualizada['monto_cubierto_bs'] = round($informacion_actualizada['monto_cubierto_usd'] * $valorDivisa, 2);
+
+        $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
+        $_consultaEmergenciaModel->where('consulta_emergencia_id', '=', $factura['facutra']['consulta_emergencia_id'])->update($informacion_actualizada);
+    }
+
     public static function RetornarMensaje($mensaje, $data) {
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
         $respuesta->setData($data);
