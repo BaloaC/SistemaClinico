@@ -496,7 +496,7 @@
                         ¿Está seguro que desea eliminar este antecedente?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn-confirmDelete" class="btn btn-danger" onclick="confirmDelete()">Eliminar</button>
+                        <button type="button" id="btn-confirmDeleteAntecedente" class="btn btn-danger" onclick="confirmDeleteAntecedente()">Eliminar</button>
                     </div>
                 </div>
             </div>
