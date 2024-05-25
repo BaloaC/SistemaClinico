@@ -78,7 +78,7 @@ function addMedicoPagoInput(parentModal = "#modalReg") {
     clicks += 1;
     let template = `
 
-    <div class="row align-items-end newInput">
+    <div class="row align-items-start newInput">
         <div class="col-12 col-md-5">
             <label for="medico">Médico</label>
             <select id="s-medico-pago${clicks}" class="form-control medico-pago-id" data-active="0" required>

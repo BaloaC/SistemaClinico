@@ -126,6 +126,11 @@ export default async function consultaEmergencia(inputRadio) {
         $(".info-cita").fadeOut("slow");
         $(".info-cita-label").fadeOut("slow");
 
+        // Deshabilitamos y no permitimos que se seleccione el médico ni la especialidad en consulta emergencia
+        $(".info-medico").fadeOut("slow");
+        medicoSelect.disabled = true;
+        especialidadSelect.disabled = true;
+
         console.log(inputRadio.value);
 
         // Si es por emergencia sin cita
@@ -340,8 +345,11 @@ export default async function consultaEmergencia(inputRadio) {
         });
 
             seguroSelect.disabled = true;
-            // $(".examenSelect").fadeIn("slow");
-            // examenSelect.disabled = false;
+
+            // Permitimos que se envie la información del médico en caso este sea sin cita previa
+            $(".info-medico").fadeIn("slow");
+            medicoSelect.disabled = false;
+            especialidadSelect.disabled = false;
         }
 
         const pagoMedicosChecked = document.getElementById("RegistrarPagoMedicoSi");
@@ -349,18 +357,9 @@ export default async function consultaEmergencia(inputRadio) {
 
 
         citaSelect.disabled = true;
-        
-        // sinCitaSi.value = 0;
-
-
-
         $(".info-paciente").fadeIn("slow");
-        $(".info-medico").fadeIn("slow");
         pacienteSelect.disabled = false;
-        medicoSelect.disabled = false;
-        especialidadSelect.disabled = false;
-
-
+        
         if (pacienteSelect.value) seguroSelect.disabled = false;
 
 

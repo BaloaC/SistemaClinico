@@ -29,9 +29,18 @@ export default async function consultaSinCita(inputRadio) {
 
     } else{
 
+        if(inputRadio.value === "1"){
+            medicoSelect.disabled = true;
+            especialidadSelect.disabled = true;
+            $(".info-medico").fadeOut("slow");
+        } else {
+            medicoSelect.disabled = false;
+            especialidadSelect.disabled = false;
+            $(".info-medico").fadeIn("slow");
+        }
+
         pacienteSelect.disabled = false;
-        medicoSelect.disabled = false;
-        especialidadSelect.disabled = false;
+        
         citaSelect.disabled = true;
         $("#cedulaBeneficiadoSmall").fadeOut("slow");
         $(".inputPacienteBeneficiadoEmergencia").fadeOut("slow");
@@ -39,7 +48,6 @@ export default async function consultaSinCita(inputRadio) {
         $("#cedulaBeneficiadoSmall").fadeOut("slow");
         $(".info-cita").fadeOut("slow");
         $(".info-paciente").fadeIn("slow");
-        $(".info-medico").fadeIn("slow");
         $(inputDateConsulta).fadeIn("slow");
         inputDateConsulta.disabled = false;
         $(inputDateConsultaLabel).fadeIn("slow");

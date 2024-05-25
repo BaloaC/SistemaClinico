@@ -252,9 +252,18 @@ export default async function mostrarHistorialMedico(id) {
                     consultaContainer.classList.remove("show");
                 }
 
+                let medicoNombre;
+                let medicoApellido;
+                let medicoEspecialidad;
+                if(el?.medico && el?.medico.length > 0){
+                    medicoNombre = el.medico[0].nombre_medico;
+                    medicoApellido = el.medico[0].apellidos_medico;
+                    medicoEspecialidad = el.medico[0].nombre_especialidad;
+                }  
+
                 consulta_id.textContent = el.consulta_id;
-                nombre_medico.textContent = `${el.nombre_medico ?? el?.medico[0]?.nombre_medico} ${el.apellidos_medico ?? el?.medico[0]?.apellidos_medico}`;
-                especialidad.textContent = el.nombre_especialidad ?? el?.medico[0]?.nombre_especialidad;
+                nombre_medico.textContent = `${el.nombre_medico ?? medicoNombre} ${el.apellidos_medico ?? medicoApellido}`;
+                especialidad.textContent = el.nombre_especialidad ?? medicoEspecialidad;
                 fecha_consulta.textContent = formatToRealDate(el.fecha_consulta);
                 observaciones.textContent = el.observaciones || "Sin observaciones";
                 motivo_cita.textContent = el.motivo_cita ?? "La consulta es de emergencia";

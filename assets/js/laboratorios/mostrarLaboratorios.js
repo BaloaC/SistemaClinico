@@ -17,15 +17,24 @@ class VistaLaboratorio {
     }
 
     async obtenerExamenes() {
+
         this.examenesLista = await getAll("examenes/laboratorios");
-        const abecedario = this.examenesLista.map(function (examen) {
-            return examen.nombre.charAt(0);
-        });
 
-        this.abecedarioLista = [...new Set(abecedario)];
-        this.abecedarioLista.sort();
+        // Validamos quue si no existen exámenes mostra un mensaje de que aún no hay registrados
+        if(this.examenesLista?.length > 0){
+            const abecedario = this.examenesLista.map(function (examen) {
+                return examen.nombre.charAt(0);
+            });
+    
+            this.abecedarioLista = [...new Set(abecedario)];
+            this.abecedarioLista.sort();
+    
+            this.mostrarAbecedario();
+        } else {
 
-        this.mostrarAbecedario();
+            const examenesContainer = document.querySelector(".examenes-list");
+            examenesContainer.innerHTML = `<div class="text-center"><h5 class="mx-5">No hay exámenes de laboratorio registrados todavía</h5></div>`;
+        }
     }
 
     async mostrarAbecedario() {
@@ -44,7 +53,7 @@ class VistaLaboratorio {
     }
 
     async mostrarLaboratorios(inicial) {
-        let inicialMayuscula = inicial.toLowerCase();
+        let inicialMayuscula = inicial?.toLowerCase();
         const laboratoriosList = this.examenesLista.filter(examen => examen.nombre.toLowerCase().slice("0")[0] === inicialMayuscula);
         const examenesContainer = document.querySelector(".examenes-list");
         let template = "";

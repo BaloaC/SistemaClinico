@@ -163,6 +163,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div id="horarios-tableNotFound"><b>El médico no tiene horarios asignados</b></div>
                                         <table id="horarios-table" class="table table-borderless" style="display: none;">
                                             <h6 class="my-3 fw-bolder medicoScheduleLabel" style="display: none;">Horario del médico</h6>
                                             <thead>

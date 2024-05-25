@@ -38,7 +38,7 @@ export default class CitasManager {
         const daysOfWeek = { lunes: 1, martes: 2, miercoles: 3, jueves: 4, viernes: 5, sabado: 6, domingo: 0 }
         const availableDays = [];
 
-        this.schedule.map(scheduleOfTheDay => {
+        this.schedule?.map(scheduleOfTheDay => {
             availableDays.push(daysOfWeek[scheduleOfTheDay.dias_semana]);
         })
 
@@ -62,8 +62,15 @@ export default class CitasManager {
 
                     if (inputId === "fecha_cita") {
                         this.mostrarCitasDelDia(listCitasByDate);
-                        this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) });
-                        this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) });
+
+                        if(horarioDelDia && horarioDelDia.length > 0){
+
+                            this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) });
+                            this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) });
+                        } else {
+                            this.inputHoraEntraCita(null)
+                            this.inputHoraSalidaCita(null);
+                        }
 
                     } else { //Si no es en el registro de citas (reprogramar citas), no limitar las horas
                         this.mostrarCitasDelDia(listCitasByDate, { citasTableClass: "#citas-table-reschedule", citasTableBodyClass: "#citas-table-reschedule tbody", withoutCitasClass: ".withoutCitasReschedule", modalRegClass: "#modalReprogramar .modal-body" });
@@ -80,7 +87,8 @@ export default class CitasManager {
                     const listCitasByDate = await this.obtenerCitasPorFecha(dateDayElem);
                     const horarioDelDia = this.obtenerHorarioDelDiaPorMedico(dateDayElem);
                     const dateTime = new Date();
-
+                    console.log("🍓 ~ file: CitasManager.js:103 ~ CitasManager ~ onDayCreate: ~ horarioDelDia[0]:", horarioDelDia)
+                    
                     if (dateTime.getTime() <= dayElem.dateObj.getTime()) {
 
                         if (availableDays.includes(dayElem.dateObj.getDay())) {
@@ -97,10 +105,16 @@ export default class CitasManager {
 
                         // Si la fecha seleccionada no está disponible en el horario del médico mostrar la información de contacto
                         dayElem.children[0].classList.contains("noWorking") ? $(".contact-medico").fadeIn("slow") : $(".contact-medico").fadeOut("slow");
-
+                        
                         inputId === "fecha_cita" ? this.mostrarCitasDelDia(listCitasByDate) : this.mostrarCitasDelDia(listCitasByDate, { citasTableClass: "#citas-table-reschedule tbody", withoutCitasClass: ".withoutCitasReschedule", modalRegClass: "#modalReprogramar .modal-body" });
-                        this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
-                        this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
+
+                        if(horarioDelDia && horarioDelDia.length > 0){
+                            this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
+                            this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
+                        } else {
+                            this.inputHoraEntraCita(null)
+                            this.inputHoraSalidaCita(null);
+                        }
                     };
                 },
                 "disable": [
@@ -225,7 +239,7 @@ export default class CitasManager {
 
         const dias = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
 
-        const horarioDelDia = this.schedule.filter(scheduleOfTheDay => {
+        const horarioDelDia = this.schedule?.filter(scheduleOfTheDay => {
             return scheduleOfTheDay.dias_semana == dias[new Date(dateStr).getDay() + 1];
         })
 

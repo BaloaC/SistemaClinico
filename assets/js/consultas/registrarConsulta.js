@@ -182,7 +182,7 @@ async function addConsulta() {
         $('#consultas').DataTable().ajax.reload();
 
         // Si el registro se hace por el módulo de consultas actualizar el select de las consultas aseguradas
-        if(defaultAlert === ".alert") await updateConsultaSeguroSelect("#modalRegAsegurada");
+        if(document.getElementById("consulta") !== null) await updateConsultaSeguroSelect("#modalRegAsegurada");
         
 
     } catch (error) {
