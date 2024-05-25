@@ -102,7 +102,7 @@ const handleModalOpen = async (modalParent) => {
                         consultasAseguradas?.consultas?.forEach(object => {
                             
                             const { consulta_id: valorPropiedad1, es_emergencia, observaciones } = object;
-                            let consultaText = es_emergencia == 1 && observaciones ? "Consulta por emergencia" : (observaciones ?? "Consulta asegurada");
+                            let consultaText = es_emergencia == 1 ? "Consulta por emergencia" : (observaciones ?? "Consulta asegurada");
 
                             data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${consultaText}` });
                         });

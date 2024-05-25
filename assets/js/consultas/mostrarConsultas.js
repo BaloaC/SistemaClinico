@@ -552,8 +552,8 @@ const handleModalOpen = async () => {
                 placeholder: "Seleccione un seguro"
             });
 
-            const consultaSinCita = document.getElementById("consultaCitaSi").value;
-            document.getElementById("s-seguro-emergencia").disabled = consultaSinCita == 1 ? true : false;
+            // const consultaSinCita = document.getElementById("s-tipo_consulta").value;
+            // document.getElementById("s-seguro-emergencia").disabled = consultaSinCita == 1 ? true : false;
             if (document.getElementById("s-seguro-emergencia").value) document.getElementById("s-seguro-emergencia").classList.add("is-valid");
 
 
@@ -936,7 +936,7 @@ addEventListener("DOMContentLoaded", async e => {
                 ${factura}
                 <tr><td><br></td></tr>
                 <tr>
-                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="openPopup('${data.es_emergencia == 0 ? "pdf/consulta/" + data.consulta_id : "pdf/consultaseguro/" + data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> <br> <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg${tipo_cita}" onclick="pagarConsulta(${JSON.stringify({ citaType: tipo_cita, consulta_id: data.consulta_id, paciente_id: data.paciente_id }).replaceAll("\"", "'")})"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button></td>
+                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="openPopup('${data.es_emergencia == 0 ? "pdf/consulta/" + data.consulta_id : "pdf/presupuesto/" + data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> <br> <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg${tipo_cita}" onclick="pagarConsulta(${JSON.stringify({ citaType: tipo_cita, consulta_id: data.consulta_id, paciente_id: data.paciente_id }).replaceAll("\"", "'")})"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button></td>
                 </tr>
             </table>
         `

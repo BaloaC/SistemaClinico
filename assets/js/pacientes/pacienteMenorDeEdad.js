@@ -84,7 +84,7 @@ function pacienteMenorDeEdad(input) {
             let option = tipoPaciente.options[i];
 
             // Si el tipo de paciente es distinto a beneficiado lo habilitamos las opciones, caso contrario desabilitamos la opción de paciente beneficiado
-            if (i !== 4){
+            if (i !== 4 && i !== 0){
                 option.disabled = false;  
             } else {
                 // option.disabled = true;

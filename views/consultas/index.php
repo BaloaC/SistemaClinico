@@ -234,9 +234,9 @@
                                             <label for="cedula">Area de observación</label>
                                             <input type="number" name="area_observacion" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="6" value="0" disabled required>
                                             <small class="form-text">No se permiten números negativos</small>
-                                            <label for="cedula">Total insumos</label>
+                                            <!-- <label for="cedula">Total insumos</label>
                                             <input type="number" name="total_insumos" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="6" value="0" disabled required>
-                                            <small class="form-text">No se permiten números negativos</small>
+                                            <small class="form-text">No se permiten números negativos</small> -->
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <label for="forRegistrarPagoMedico" id="registrarPagoMedicoLabel">¿Desea registrar el pago de algún médico?</label>
@@ -276,7 +276,7 @@
                                 </div>
                                 <div class="row mt-4 info-pago-medico" style="display: none;">
                                     <h5>Pago médico</h5>
-                                    <div class="row align-items-end">
+                                    <div class="row align-items-start">
                                         <div class="col-12 col-md-5">
                                             <label for="medico">Médico</label>
                                             <select id="s-medico-pago" class="form-control medico-pago-id" data-active="0" disabled>
@@ -297,7 +297,7 @@
 
                                 <div class="row mt-4 info-insumos-emergencia" style="display: none;">
                                     <h5>Insumos utilizados en la Consulta (Opcional)</h5>
-                                    <div class="row align-items-end">
+                                    <div class="row align-items-start">
                                         <div class="col-12 col-md-5">
                                             <label for="insumo">Insumo</label>
                                             <select id="s-insumo" class="form-control insumo-id" data-active="0" disabled>

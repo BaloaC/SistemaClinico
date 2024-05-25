@@ -88,6 +88,331 @@
             </div>
         </div>
 
+
+        <!-- Modal Registo Consulta-->
+        <div class="modal fade" id="modalReg" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Consulta</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modalRegBody">
+                        <div class="alert d-none" role="alert"></div>
+                        <form action="" id="info-consulta" class="form-reg p-3 px-4">
+
+                            <div class="row">
+                                <h5>Información del servicio</h5>
+                                <div class="col-12 col-md-6">
+                                    <label for="tipoConsulta">Tipo de servicio</label>
+                                    <select id="tipoConsultas" class="form-control my-3 " onchange="tipoConsulta(this)">
+                                        <option value="examen">Exámen</option>
+                                        <option value="consulta" selected>Consulta</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="tipoConsulta">Tipo de consulta</label>
+                                    <select name="es_emergencia" id="s-tipo_consulta" class="form-control my-3">
+                                        <option value="1">Por emergencia</option>
+                                        <option value="2">Normal</option>
+                                        <option value="0" selected>Con cita previa</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="info-examenes mt-3" style="display: none;">
+                                <h5>Información del Paciente</h5>
+                                <div class="col-12 col-md-6">
+                                    <label for="nombres">Paciente Titular</label>
+                                    <select name="paciente_id" id="s-paciente-sinConsulta" class="form-control" data-active="0" required disabled>
+                                        <option></option>
+                                    </select>
+                                </div>
+                                <h5>Información del médico</h2>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <label for="especialidad_id">Especialidad</label>
+                                            <select name="especialidad_id" id="s-especialidad-sinConsulta" class="form-control" data-active="0" disabled>
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="medico_id">Médico</label>
+                                            <select name="medico_id" id="s-medico-sinConsulta" class="form-control" data-active="0" disabled>
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <h5>Información de la Consulta</h5>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <label for="examenes">Exámenes realizados en la consulta</label>
+                                            <select name="examenes[]" id="s-examen-sinConsulta" class="form-control mb-3" data-active="0" multiple="multiple" disabled>
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="observaciones">Observaciones</label>
+                                            <input type="text" name="observaciones" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" disabled>
+                                            <small class="form-text">Solo puede contener letras</small>
+                                        </div>
+                                    </div>
+                            </div>
+
+                            <div class="info-consultaSinExamenes">
+                                <div class="row">
+                                    <div class="row ">
+                                        <h5 class="info-cita-label">Información de la cita</h5>
+                                        <div class="col-12 col-md-6 info-cita">
+                                            <label for="cita">Cita</label>
+                                            <select name="cita_id" id="s-cita" class="form-control" data-active="0" required>
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-4 info-paciente" style="display: none;">
+                                        <h5>Información del Paciente</h5>
+                                        <div class="col-12 col-md-6">
+                                            <label for="nombres">Paciente Titular</label>
+                                            <select name="paciente_id" id="s-paciente" class="form-control" data-active="0" required>
+                                                <option></option>
+                                            </select>
+
+                                            <div class="inputCedulaBeneficiado" style="display: none;">
+                                                <label for="cedula" id="cedula_beneficiado-label" style="display: none;">Cédula beneficiado</label>
+                                                <select name="cedula_beneficiado" id="cedula_beneficiado" class="form-control mb-3" style="display: none;" disabled required>
+                                                    <option></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+
+                                            <label for="forRegistrarFactura" id="pacienteBeneficiadoEmergenciaLabel">¿La consulta es para un paciente beneficiado?</label>
+                                            <div class="input-radios-container inputPacienteBeneficiadoEmergencia">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="pacienteBeneficiadoEmergencia" id="pacienteBeneficiadoEmergenciaSi" value="1" onchange="pacienteBeneficiadoEmergenciaInput(this.value)" required disabled>
+                                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="pacienteBeneficiadoEmergencia" id="pacienteBeneficiadoEmergenciaNo" value="0" onchange="pacienteBeneficiadoEmergenciaInput(this.value)" checked required disabled>
+                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-4 info-medico" style="display: none;">
+                                        <h5>Información del médico</h2>
+                                            <div class="col-12 col-md-6">
+                                                <label for="especialidad_id">Especialidad</label>
+                                                <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
+                                                    <option></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="medico_id">Médico</label>
+                                                <select name="medico_id" id="s-medico" class="form-control" data-active="0">
+                                                    <option></option>
+                                                </select>
+                                            </div>
+                                    </div>
+
+                                    <div class="row mt-4">
+                                        <h5>Información de la Consulta</h5>
+                                        <div class="col-12 col-md-6">
+                                            <label for="peso">Peso</label>
+                                            <input type="number" step="any" name="peso" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6">
+                                            <small class="form-text">No se permiten números negativos</small>
+
+                                            <label for="estatura">Estatura</label>
+                                            <input type="number" step="any" name="altura" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6">
+                                            <small class="form-text">No se permiten números negativos</small>
+
+                                            <label for="observaciones">Observaciones</label>
+                                            <input type="text" name="observaciones" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255">
+                                            <small class="form-text">Solo puede contener letras</small>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="examenSelect">
+                                                <label for="examenes">Exámenes realizados en la consulta</label>
+                                                <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple">
+                                                    <option></option>
+                                                </select>
+                                            </div>
+
+                                            <label for="fecha_consulta" style="display: none;">Fecha consulta</label>
+                                            <input type="date" name="fecha_consulta" class="form-control mb-3" style="display: none;" data-validate="true" data-type="date" disabled required>
+                                            <input type="hidden" name="fecha_consulta" id="fecha_consulta_cita">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-4 info-consulta-emergencia" style="display: none;">
+                                        <h5>Información de la consulta de emergencia</h5>
+                                        <h6>Nota: todos los montos ingresados deben ser en dólares.</h6>
+                                        <div class="col-12 col-md-6">
+                                            <label for="monto-consulta">Enfermería</label>
+                                            <input type="number" step="any" name="enfermeria" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
+                                            <small class="form-text">No se permiten números negativos</small>
+                                            <label for="monto-consulta">Monto consulta</label>
+                                            <input type="number" step="any" name="consultas_medicas" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
+                                            <small class="form-text">No se permiten números negativos</small>
+                                            <label for="seguro">Seguro</label>
+                                            <select id="s-seguro-emergencia" name="seguro_id" class="form-control seguro-emergencia" data-active="0" disabled required>
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="cedula">Area de observación</label>
+                                            <input type="number" name="area_observacion" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="6" value="0" disabled required>
+                                            <small class="form-text">No se permiten números negativos</small>
+                                            <!-- <label for="cedula">Total insumos</label>
+                                            <input type="number" name="total_insumos" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="6" value="0" disabled required>
+                                            <small class="form-text">No se permiten números negativos</small> -->
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="forRegistrarPagoMedico" id="registrarPagoMedicoLabel">¿Desea registrar el pago de algún médico?</label>
+                                            <div class="input-radios-container inputRadioPagoMedico">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="registrarPagoMedicoBool" id="RegistrarPagoMedicoSi" value="1" onchange="pagoMedicosInput(this.value)" required disabled>
+                                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="registrarPagoMedicoBool" id="RegistrarPagoMedicoNo" value="0" onchange="pagoMedicosInput(this.value)" checked required disabled>
+                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="forRegistrarFactura">¿Desea registrar la factura directamente?</label>
+                                            <div class="input-radios-container">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="registrarFacturaBool" id="registrarFacturaSi" value="1" required disabled>
+                                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="registrarFacturaBool" id="registrarFacturaNo" value="0" checked required disabled>
+                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+
+                                    </div>
+                                    <div class="col-12 col-md-6">
+
+                                    </div>
+                                </div>
+                                <div class="row mt-4 info-pago-medico" style="display: none;">
+                                    <h5>Pago médico</h5>
+                                    <div class="row align-items-start">
+                                        <div class="col-12 col-md-5">
+                                            <label for="medico">Médico</label>
+                                            <select id="s-medico-pago" class="form-control medico-pago-id" data-active="0" disabled>
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <label for="monto">Monto</label>
+                                            <input type="number" name="monto_pago" step="any" class="form-control mb-3 monto-pago" data-validate="true" data-type="price" disabled>
+                                            <small class="form-text">No se permiten números negativos</small>
+                                        </div>
+                                        <div class="col-3 col-md-1 d-none align-selft-start">
+                                            <button type="button" class="btn" onclick="deleteInput(this,'.medico-pago-id')"><i class="fas fa-times m-0"></i></button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary mt-3 w-25" style="display: none;" id="addMedicoPago" onclick="addMedicoPagoInput()">Añadir otro médico</button>
+                                </div>
+
+                                <div class="row mt-4 info-insumos-emergencia" style="display: none;">
+                                    <h5>Insumos utilizados en la Consulta (Opcional)</h5>
+                                    <div class="row align-items-start">
+                                        <div class="col-12 col-md-5">
+                                            <label for="insumo">Insumo</label>
+                                            <select id="s-insumo" class="form-control insumo-id" data-active="0" disabled>
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <label for="cantidad">Cantidad utilizada</label>
+                                            <input type="number" step="any" data-validate="true" data-type="number" class="form-control mb-3 insumo-cant" disabled>
+                                            <small class="form-text col-12">Solo se permiten números</small>
+                                            <small class="text-secondary mensaje-medida"></small>
+                                        </div>
+                                        <div class="col-3 col-md-1 d-none align-self-start">
+                                            <button type="button" class="btn" onclick="deleteInput(this,'.insumo-id')"><i class="fas fa-times m-0"></i></button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary mt-3 w-25" style="display: none;" id="addInsumo" onclick="addInsumoInput()">Añadir otro insumo</button>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <h5>Recipes otorgados en la Consulta (Opcional)</h5>
+                                    <div class="row align-items-end">
+                                        <div class="col-12 col-md-5">
+                                            <label for="medicamento">Filtrar por especialidad</label>
+                                            <select id="s-especialidadm" class="form-control especialidad-id" data-active="0">
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <label for="medicamento">Medicamento</label>
+                                            <select id="s-medicamento" class="form-control medicamento-id" data-active="0">
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <label for="uso">Uso</label>
+                                            <input type="text" data-validate="true" data-type="address" class="form-control uso-medicamento">
+                                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+                                        </div>
+                                        <div class="col-3 col-md-1 d-none align-self-start">
+                                            <button type="button" class="btn" onclick="deleteInput(this,'.medicamento-id')"><i class="fas fa-times m-0"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary mt-3" id="addRecipe" onclick="addRecipeInput()">Añadir otro recipe</button>
+
+                                <div class="row mt-4">
+                                    <h5>Referir a otra especialidad (Opcional)</h5>
+                                    <div class="row align-items-start">
+                                        <div class="col-12 col-md-5">
+                                            <label for="referidos">Especialidad</label>
+                                            <select id="s-referidos" name="referidos[]" multiple="multiple" class="form-control" data-active="0">
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <h5>Indicaciones mencionadas en la Consulta (Opcional)</h5>
+                                    <div class="row align-items-end">
+                                        <div class="col-12 col-md-5">
+                                            <label for="indicacion">Descripción de la indicación</label>
+                                            <input type="text" data-validate="true" data-type="address" class="form-control indicaciones">
+                                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+                                        </div>
+                                        <!-- <div class="col-3 col-md-1 pt-4-5 d-none">
+                                        <button type="button" class="btn" onclick="deleteInput(this,'.indicaciones')"><i class="fas fa-times m-0"></i></button>
+                                    </div> -->
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-primary mt-3" id="addIndicacion" onclick="addIndicacionInput()">Añadir otra indicación</button>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addConsulta()">Registrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Modal Registro-->
         <div class="modal fade" id="modalRegAntecedentes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -171,260 +496,7 @@
                         ¿Está seguro que desea eliminar este antecedente?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn-confirmDelete" class="btn btn-danger" onclick="confirmDelete()">Eliminar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal Registo Consulta-->
-        <div class="modal fade" id="modalReg" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalRegLabel">Registrar Consulta</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" id="modalRegBody">
-                        <div class="alertHistorialMedicoConsulta alert d-none" role="alert"></div>
-                        <form action="" id="info-consulta" class="form-reg p-3 px-4">
-                            <div class="row">
-                                <div class="row ">
-                                    <h5>Información de la cita</h5>
-                                    <div class="col-12 col-md-6 emergenciaContainer">
-                                        <label for="input-radios-container" class="">¿La consulta es por emergencia?</label>
-                                        <div class="input-radios-container">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="consultaPorEmergencia" id="consultaEmergenciaSi" onchange="consultaEmergencia(this)" value="1" required>
-                                                <label class="form-check-label" for="inlineRadio1">Sí</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="consultaPorEmergencia" id="consultaEmergenciaNo" onchange="consultaEmergencia(this)" value="0" checked required>
-                                                <label class="form-check-label" for="inlineRadio2">No</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6 sinCitaContainer">
-                                        <label for="input-radios-container" class="">¿La consulta es sin cita previa?</label>
-                                        <div class="input-radios-container">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="consultaSinCitaPrevia" id="consultaCitaSi" onchange="consultaSinCita(this)" value="1" required>
-                                                <label class="form-check-label" for="inlineRadio1">Sí</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="consultaSinCitaPrevia" id="consultaCitaNo" onchange="consultaSinCita(this)" value="0" checked required>
-                                                <label class="form-check-label" for="inlineRadio2">No</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6 info-cita">
-                                        <label for="cita">Cita</label>
-                                        <select name="cita_id" id="s-cita" class="form-control" data-active="0" required>
-                                            <option></option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="row mt-4 info-paciente" style="display: none;">
-                                    <h5>Información del Paciente</h5>
-                                    <div class="col-12 col-md-6">
-                                        <label for="nombres">Paciente</label>
-                                        <select name="paciente_id" id="s-paciente" class="form-control" data-active="0" required>
-                                            <option></option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <label for="cedula" id="cedula_beneficiado-label" style="display: none;">Cédula beneificado</label>
-                                        <input type="number" name="cedula_beneficiado" id="cedula_beneficiado" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" style="display: none;" data-bs-toggle="popover" disabled required>
-                                        <small class="form-text" id="cedulaBeneficiadoSmall">La cédula debe contener entre 6 o 8 números</small>
-                                    </div>
-                                </div>
-
-                                <div class="row mt-4 info-medico" style="display: none;">
-                                    <h5>Información del médico</h2>
-                                        <div class="col-12 col-md-6">
-                                            <label for="medico_id">Médico</label>
-                                            <select name="medico_id" id="s-medico" class="form-control" data-active="0">
-                                                <option></option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label for="especialidad_id">Especialidad</label>
-                                            <select name="especialidad_id" id="s-especialidad" class="form-control" data-active="0">
-                                                <option></option>
-                                            </select>
-                                        </div>
-                                </div>
-
-                                <div class="row mt-4">
-                                    <h5>Información de la Consulta</h5>
-                                    <div class="col-12 col-md-6">
-                                        <label for="peso">Peso</label>
-                                        <input type="number" step="any" name="peso" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6">
-                                        <small class="form-text">No se permiten números negativos</small>
-
-                                        <label for="estatura">Estatura</label>
-                                        <input type="number" step="any" name="altura" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6">
-                                        <small class="form-text">No se permiten números negativos</small>
-
-                                        <label for="observaciones">Observaciones</label>
-                                        <input type="text" name="observaciones" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255">
-                                        <small class="form-text">Solo puede contener letras</small>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <label for="examenes">Exámenes llevados a la consulta</label>
-                                        <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple">
-                                            <option></option>
-                                        </select>
-
-                                        <label for="fecha_consulta">Fecha consulta</label>
-                                        <input type="date" name="fecha_consulta" class="form-control mb-3" data-validate="true" data-type="date" required>
-                                    </div>
-                                </div>
-
-                                <div class="row mt-4 info-consulta-emergencia" style="display: none;">
-                                    <h5>Información de la consulta de emergencia</h5>
-                                    <h6>Nota: todos los montos ingresados deben ser en dólares.</h6>
-                                    <div class="col-12 col-md-6">
-                                        <label for="monto-consulta">Enfermería</label>
-                                        <input type="number" step="any" name="enfermeria" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
-                                        <small class="form-text">No se permiten números negativos</small>
-                                        <label for="monto-consulta">Laboratorio</label>
-                                        <input type="number" step="any" name="laboratorios" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
-                                        <small class="form-text">No se permiten números negativos</small>
-                                        <label for="monto-consulta">Medicamentos</label>
-                                        <input type="number" step="any" name="medicamentos" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
-                                        <small class="form-text">No se permiten números negativos</small>
-                                        <label for="monto-consulta">Monto consulta</label>
-                                        <input type="number" step="any" name="consultas_medicas" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
-                                        <small class="form-text">No se permiten números negativos</small>
-                                        <label for="forRegistrarFactura">¿Desea registrar la factura directamente?</label>
-                                        <div class="input-radios-container">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="registrarFacturaBool" id="registrarFacturaSi" value="1" required disabled>
-                                                <label class="form-check-label" for="inlineRadio1">Sí</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="registrarFacturaBool" id="registrarFacturaNo" value="0" checked required disabled>
-                                                <label class="form-check-label" for="inlineRadio2">No</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <label for="cedula">Area de observación</label>
-                                        <input type="number" name="area_observacion" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="6" value="0" disabled required>
-                                        <small class="form-text">No se permiten números negativos</small>
-                                        <label for="cedula">Total insumos</label>
-                                        <input type="number" name="total_insumos" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="6" value="0" disabled required>
-                                        <small class="form-text">No se permiten números negativos</small>
-                                        <label for="seguro">Seguro</label>
-                                        <select id="s-seguro-emergencia" name="seguro_id" class="form-control seguro-emergencia" data-active="0" disabled required>
-                                            <option></option>
-                                        </select>
-                                        <label for="forRegistrarPagoMedico" id="registrarPagoMedicoLabel">¿Desea registrar el pago de algún médico?</label>
-                                        <div class="input-radios-container inputRadioPagoMedico">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="registrarPagoMedicoBool" id="RegistrarPagoMedicoSi" value="1" onchange="pagoMedicosInput(this.value)" required disabled>
-                                                <label class="form-check-label" for="inlineRadio1">Sí</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="registrarPagoMedicoBool" id="RegistrarPagoMedicoNo" value="0" onchange="pagoMedicosInput(this.value)" checked required disabled>
-                                                <label class="form-check-label" for="inlineRadio2">No</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12 col-md-6">
-
-                                </div>
-                                <div class="col-12 col-md-6">
-
-                                </div>
-                            </div>
-                            <div class="row mt-4 info-pago-medico" style="display: none;">
-                                <h5>Pago médico</h5>
-                                <div class="row align-items-start">
-                                    <div class="col-12 col-md-5">
-                                        <label for="medico">Médico</label>
-                                        <select id="s-medico-pago" class="form-control medico-pago-id" data-active="0" disabled>
-                                            <option></option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 col-md-5">
-                                        <label for="monto">Monto</label>
-                                        <input type="number" name="monto_pago" step="any" class="form-control monto-pago" data-validate="true" data-type="price" disabled>
-                                        <small class="form-text">No se permiten números negativos</small>
-                                    </div>
-                                    <div class="col-3 col-md-1 d-none">
-                                        <button type="button" class="btn" onclick="deleteInput(this,'.medico-pago-id')"><i class="fas fa-times m-0"></i></button>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-primary mt-3 w-25" style="display: none;" id="addMedicoPago" onclick="addMedicoPagoInput()">Añadir otro médico</button>
-                            </div>
-
-                            <div class="row mt-4">
-                                <h5>Insumos utilizados en la Consulta (Opcional)</h5>
-                                <div class="row align-items-start">
-                                    <div class="col-12 col-md-5">
-                                        <label for="insumo">Insumo</label>
-                                        <select id="s-insumo" class="form-control insumo-id" data-active="0">
-                                            <option></option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 col-md-5">
-                                        <label for="cantidad">Cantidad utilizada</label>
-                                        <input type="number" step="any" data-validate="true" data-type="number" class="form-control insumo-cant">
-                                        <small class="form-text col-12">Solo se permiten números</small>
-                                    </div>
-                                    <div class="col-3 col-md-1 d-none">
-                                        <button type="button" class="btn" onclick="deleteInput(this,'.insumo-id')"><i class="fas fa-times m-0"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button type="button" class="btn btn-primary mt-3" id="addInsumo" onclick="addInsumoInput()">Añadir otro insumo</button>
-
-                            <div class="row mt-4">
-                                <h5>Recipes otorgados en la Consulta (Opcional)</h5>
-                                <div class="row align-items-start">
-                                    <div class="col-12 col-md-5">
-                                        <label for="medicamento">Medicamento</label>
-                                        <select id="s-medicamento" class="form-control medicamento-id" data-active="0">
-                                            <option></option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 col-md-5">
-                                        <label for="uso">Uso</label>
-                                        <input type="text" data-validate="true" data-type="address" class="form-control uso-medicamento">
-                                        <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
-                                    </div>
-                                    <div class="col-3 col-md-1 d-none">
-                                        <button type="button" class="btn" onclick="deleteInput(this,'.medicamento-id')"><i class="fas fa-times m-0"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-primary mt-3" id="addRecipe" onclick="addRecipeInput()">Añadir otro medicamento</button>
-
-                            <div class="row mt-4">
-                                <h5>Indicaciones mencionadas en la Consulta (Opcional)</h5>
-                                <div class="row align-items-start">
-                                    <div class="col-12 col-md-5">
-                                        <label for="indicacion">Indicación</label>
-                                        <input type="text" data-validate="true" data-type="address" class="form-control indicaciones">
-                                        <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
-                                    </div>
-                                    <div class="col-3 col-md-1 d-none">
-                                        <button type="button" class="btn" onclick="deleteInput(this,'.indicaciones')"><i class="fas fa-times m-0"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-primary mt-3" id="addIndicacion" onclick="addIndicacionInput()">Añadir otra indicación</button>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addConsulta()">Registrar</button>
+                        <button type="button" id="btn-confirmDeleteAntecedente" class="btn btn-danger" onclick="confirmDeleteAntecedente()">Eliminar</button>
                     </div>
                 </div>
             </div>
@@ -509,15 +581,27 @@
 
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/historial-medico/mostrarHistorialMedico.js'); ?>"></script>
-    <!-- <script type="module" src="<?php echo Url::to('assets/js/historial-medico/registrarConsulta.js'); ?>"></script> -->
     <script type="module" src="<?php echo Url::to('assets/js/historial-medico/addAntecedente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/historial-medico/updateAntecedente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/historial-medico/deleteAntecedente.js'); ?>"></script>
+    <!-- <script type="module" src="<?php echo Url::to('assets/js/historial-medico/registrarConsulta.js'); ?>"></script> -->
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/mostrarConsultas.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/registrarConsulta.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/eliminarConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/addInsumoInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/addIndicacionInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/addRecipeInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/addMedicoPagoInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/deleteInput.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/consultas/registrarConsulta.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/registrarFConsulta.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/mostrarFCOnsulta.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas-seguro/registrarConsultaSeguro.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/consultaEmergencia.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/consultaSinCita.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/pagoMedicosInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/pacienteBeneficiadoEmergenciaInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/pagarConsulta.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/tipoConsulta.js'); ?>"></script>
     <!-- <script type="module" src="<?php echo Url::to('assets/js/pacientes/mostrarPacientes.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/tipoPaciente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/registrarPaciente.js'); ?>"></script>
