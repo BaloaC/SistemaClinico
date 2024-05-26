@@ -149,7 +149,7 @@ class FacturaConsultaHelpers {
         if (!is_null($consulta_cita)) {
             $_citaExamenModel = new CitaExamenModel();
             $inners = $_citaExamenModel->listInner(['examen' => 'cita_examen']);
-            $array_select = Array('cita_examen.precio_examen_usd', 'cita_examen.precio_examen_bs', 'cita_examen.cita_examen_id', 'cita_examen.cita_id', 'cita_examen.examen_id', 'cita_examen.estatus_cit', 'examen.nombre');
+            $array_select = Array('cita_examen.precio_examen_usd', 'cita_examen.precio_examen_bs', 'cita_examen.cita_examen_id', 'cita_examen.cita_id', 'cita_examen.examen_id', 'cita_examen.cubierto_por' ,'cita_examen.estatus_cit', 'examen.nombre');
             $cita_examenes = $_citaExamenModel->where('cita_examen.cita_id', '=', $consulta_cita->cita_id)->innerJoin($array_select, $inners, "cita_examen");
 
             if (!is_null($cita_examenes)) {
@@ -271,7 +271,7 @@ class FacturaConsultaHelpers {
                 $_medicoEspecialidadModel = new MedicoEspecialidadModel();
                 $consulta_sin_cita = $_consultaSinCita->where('consulta_id', '=', $consulta_id)->getFirst();
                 $medico_especialidad = $_medicoEspecialidadModel->where('medico_id', '=', $consulta_sin_cita->medico_id)->getFirst();
-
+                
                 return $medico_especialidad->costo_especialidad;
 
             } else if (!is_null($consulta_cita)) {
@@ -280,7 +280,8 @@ class FacturaConsultaHelpers {
 
                 if ($cita->tipo_servicio == 2) {
                     $_medicoEspecialidadModel = new MedicoEspecialidadModel();
-                    $medico_especialidad = $_medicoEspecialidadModel->where('medico_id', '=', $cita->medico_id)->getFirst();
+                    $medico_especialidad = $_medicoEspecialidadModel->where('medico_id', '=', $cita->medico_id)->where('especialidad_id', '=', $cita->especialidad_id)->getFirst();
+                    
                     return $medico_especialidad->costo_especialidad;
                 } else {
                     return 0;

@@ -75,16 +75,15 @@ class ConsultaSeguroController extends Controller{
             //     $respuesta->setData("Error al procesar al paciente id $pacienteSeguro->paciente_id con saldo $pacienteSeguro->saldo_disponible");
             //     return $respuesta->json(400);
             // }
-
+            
             $data['monto_consulta_bs'] = 0;
             if ($cita->tipo_servicio == 1) {
                 $data['monto_consulta_usd'] = 0;
             } else if ($cita->tipo_servicio == 2) {
                 $data['monto_consulta_usd'] = FacturaConsultaHelpers::obtenerPrecioConsulta($_POST['consulta_id']);
             }
-
+            
             $data['cobertura_seguro'] = $cita->monto_aprobado;
-
             $id = $_consultaSeguroModel->insert($data);
             $data['factura_id'] = $id;
             $mensaje = ($id > 0);
