@@ -1,8 +1,10 @@
 function montoAprobadoHandler(input) {
 
     const montoDisponible = document.getElementById("montoDisponible");
+    const costoConsulta = parseFloat(document.getElementById("costoConsulta").innerText.slice(1));
+    let montoDisponibleInput = input.value !== "" ? parseFloat(input.value) : 0;
 
-    montoDisponible.innerText = `Saldo a favor: $${input.value !== "" ? input.value : 0}`
+    montoDisponible.innerText = `Saldo a favor: $${montoDisponibleInput - costoConsulta}`
 
     const examenesPrecio = document.querySelectorAll(".examenPrice");
 

@@ -30,13 +30,23 @@ addEventListener("DOMContentLoaded", e => {
             }
         },
         {
+            data: "estatus_usu",
+            render: function (data, type, row) {
+                if (data == 1) {
+                    return `<span class="badge light badge-success">Activo</span>`;
+                } else if (data == 2) {
+                    return `<span class="badge light badge-warning">Inactivo</span>`;
+                } 
+            },
+        },
+        {
             data: "usuario_id",
             render: function (data, type, row) {
+                {/* <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-usuario" onclick="deleteUsuario(${data})"><i class="fas fa-trash del-usuario"></i></a> */}
                 switch (rol) {
-
                     case "1": return `
                     <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-usuario" onclick="updateUsuario(${data})"><i class="fas fa-edit act-usuario"></i></a>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-usuario" onclick="deleteUsuario(${data})"><i class="fas fa-trash del-usuario"></i></a>
+                    
                     `;
 
                     case "2": return `

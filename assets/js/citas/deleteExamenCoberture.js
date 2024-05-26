@@ -3,7 +3,10 @@ function deleteExamenCoberture(examen_id) {
     const montoDisponible = document.getElementById("montoDisponible");
     let montoDisponibleTotal = parseFloat(montoDisponible.innerText.split("$")[1]);
     const examenCobertureContainer = document.querySelector(`.examen_id_${examen_id}`);
+    const mensajeCobertureContainer = document.querySelector(`.examen_id_mensaje_${examen_id}`);
     const examenCobertureElements = examenCobertureContainer.querySelectorAll("td");
+    const inputExamen = examenCobertureElements[1].lastChild;
+
     const examenPrice = parseFloat(examenCobertureElements[2].lastChild.nodeValue.slice(1));
 
     // Si el el examen se seleccionó para cobertura regresar el monto del examen al total
@@ -12,7 +15,7 @@ function deleteExamenCoberture(examen_id) {
     }
 
     // Si ya no quedan más elementos ocultar la tabla de los exámenes y mostrar el mensaje
-    if(document.querySelector(".examenesCitaTbody").childElementCount <= 1){
+    if(document.querySelectorAll(".examen_mensaje").length <= 1){
 
         $(".examenesCitaContainer").fadeOut("slow");
         $("#sinExamenesCita").fadeIn("slow");
@@ -23,7 +26,9 @@ function deleteExamenCoberture(examen_id) {
     }
 
     // Eliminamos el examen
-    examenCobertureContainer.remove();
+    $(examenCobertureContainer).fadeOut("slow");
+    inputExamen.classList.add("deleted");
+    mensajeCobertureContainer.remove();
     
     
 }

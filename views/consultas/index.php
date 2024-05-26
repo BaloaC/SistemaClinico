@@ -197,9 +197,9 @@
                                             <input type="number" step="any" name="altura" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6">
                                             <small class="form-text">No se permiten números negativos</small>
 
-                                            <label for="observaciones">Observaciones</label>
-                                            <input type="text" name="observaciones" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255">
-                                            <small class="form-text">Solo puede contener letras</small>
+                                            <label for="fecha_consulta" style="display: none;">Fecha consulta</label>
+                                            <input type="date" name="fecha_consulta" class="form-control mb-3" style="display: none;" data-validate="true" data-type="date" disabled required>
+                                            <input type="hidden" name="fecha_consulta" id="fecha_consulta_cita">
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="examenSelect">
@@ -209,9 +209,9 @@
                                                 </select>
                                             </div>
 
-                                            <label for="fecha_consulta" style="display: none;">Fecha consulta</label>
-                                            <input type="date" name="fecha_consulta" class="form-control mb-3" style="display: none;" data-validate="true" data-type="date" disabled required>
-                                            <input type="hidden" name="fecha_consulta" id="fecha_consulta_cita">
+                                            <label for="observaciones">Observaciones</label>
+                                            <input type="text" name="observaciones" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255">
+                                            <small class="form-text">Solo puede contener letras</small>
                                         </div>
                                     </div>
 

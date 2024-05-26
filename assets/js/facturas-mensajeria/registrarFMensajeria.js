@@ -20,15 +20,7 @@ const handleModalOpen = async () => {
     // En caso de que se haya registrado correctamente una consulta por cita, volvemos actualizar el select de las citas
     if (registerStatusFactura.successfulFactura === true) {
 
-        const infoCitas = await getAll("citas/consulta");
-        let listCitas;
-
-        if ('result' in infoCitas && infoCitas.result.code === false) listCitas = [];
-
-
-        if (infoCitas.length > 0) {
-            listCitas = infoCitas.filter(cita => cita.estatus_cit === "1");
-        }
+        const segurosList = await getAll("seguros/consulta");
 
         emptyAllSelect2({
             selectSelector: "#s-seguro",
@@ -37,7 +29,7 @@ const handleModalOpen = async () => {
         });
 
         dinamicSelect2({
-            obj: listSeguros ?? [],
+            obj: segurosList ?? [],
             selectSelector: "#s-seguro",
             selectValue: "seguro_id",
             selectNames: ["rif", "nombre"],
@@ -91,7 +83,7 @@ const handleModalOpen = async () => {
             dinamicSelect2({
                 selectSelector: "#s-consultas",
                 selectValue: "consulta_seguro_id",
-                selectNames: ["consulta_seguro_id", "tipo_servicio", "fecha_ocurrencia"],
+                selectNames: ["consulta_seguro_id", "fecha_ocurrencia"],
                 obj: consultasSeguro?.result?.code === false ? [] : consultasSeguro,
                 parentModal: "#modalRegNormal",
                 placeholder: "Seleccione alguna consulta",

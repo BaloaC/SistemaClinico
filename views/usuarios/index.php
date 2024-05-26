@@ -65,20 +65,26 @@
                         <div id="alert" class="alert d-none" role="alert"></div>
                         <form id="info-usuario" class="register-form p-3 px-4">
                             <div id="form-info" class="form-info">
-                                <label for="nombre">Nombre de usuario</label>
+                                <label for="nombre">Nombres del usuario</label>
+                                <input class="form-control" type="text" name="nombre" data-validate="true" data-type="name" data-max-length="16" required>
+                                <small class="form-text">El nombre solo puede contener letras</small>
+                                <label for="nombre">Apellidos del usuario</label>
+                                <input class="form-control" type="text" name="nombre" data-validate="true" data-type="name" data-max-length="16" required>
+                                <small class="form-text">El apellido solo puede contener letras</small>
+                                <label for="nombre">Usuario</label>
                                 <input class="form-control" type="text" name="nombre" data-validate="true" data-type="username" data-max-length="16" required>
                                 <small class="form-text">Solo se permiten los siguientes caracteres: "_" y "-"</small>
                                 <label for="clave">Contraseña</label>
                                 <!-- <div class="input-group mb-3 pass-container"> -->
-                                    <input class="form-control mb-3" id="password1" type="password" name="clave" data-validate="true" data-type="password" data-max-length="20" required>
-                                    <small class="form-text">La contraseña debe contener al menos 8 caracteres y un número <br> y los caracteres permitdos son: "@" y "-"</small>
-                                    <!-- <i class="fas fa-eye" id="togglePassword1" onclick="showPassword(this,'password1')"></i> -->
+                                <input class="form-control mb-3" id="password1" type="password" name="clave" data-validate="true" data-type="password" data-max-length="20" required>
+                                <small class="form-text">La contraseña debe contener al menos 8 caracteres y un número <br> y los caracteres permitdos son: "@" y "-"</small>
+                                <!-- <i class="fas fa-eye" id="togglePassword1" onclick="showPassword(this,'password1')"></i> -->
                                 <!-- </div> -->
                                 <label for="confirmarClave">Confirmar contraseña</label>
                                 <!-- <div class="input-group mb-3 pass-container"> -->
-                                    <input class="form-control mb-3" id="password2" type="password" name="confirmarClave" data-max-length="20" required>
-                                    <small class="form-text">Las contraseñas no coinciden</small>
-                                    <!-- <i class="fas fa-eye" id="togglePassword2" onclick="showPassword(this,'password2')"></i> -->
+                                <input class="form-control mb-3" id="password2" type="password" name="confirmarClave" data-max-length="20" required>
+                                <small class="form-text">Las contraseñas no coinciden</small>
+                                <!-- <i class="fas fa-eye" id="togglePassword2" onclick="showPassword(this,'password2')"></i> -->
                                 <!-- </div> -->
                                 <label for="pin">Pin</label>
                                 <input class="form-control mb-3" type="password" name="pin" data-validate="true" data-type="pin" required>
