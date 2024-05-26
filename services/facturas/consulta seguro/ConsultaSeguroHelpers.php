@@ -235,4 +235,102 @@ class ConsultaSeguroHelpers {
         $consulta_modificada = Array("monto_consulta_bs" => $monto_total_bs, "estatus_con" => 3);
         $consultaUpdate = $consultaSeguroModel->update($consulta_modificada);
     }
+
+    /**
+     * Helper para obtener el monto total de la factura
+     */
+    public static function CalcularMontos($consulta) {
+            
+        $montoBs = 0; $montoUsd = 0;
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+
+        if (isset($consulta['insumos'])) {
+            foreach ($consulta['insumos'] as $insumos) {
+                
+                $montoUsd += $insumos->monto_total_usd;
+
+                if ( $insumos->monto_total_bs == 0 ) {
+                    $montoBs += round( $insumos->monto_total_usd * $valorDivisa, 2);
+
+                } else {
+                    $montoBs += $insumos->monto_total_bs;
+                }
+            }
+        }
+        
+        if (isset($consulta['examenes'])) {
+            foreach ($consulta['examenes'] as $examenes) {
+                
+                $montoUsd += $examenes->precio_examen_usd;
+                
+                if ( $examenes->precio_examen_bs == 0 ) {
+                    $montoBs += round( $examenes->precio_examen_usd * $valorDivisa, 2);
+
+                } else {
+                    $montoBs += $examenes->precio_examen_bs;
+                }
+            }
+        }
+        
+        if (isset($consulta['cita_examenes'])) {
+            foreach ($consulta['cita_examenes'] as $examenes) {
+                
+                $montoUsd += $examenes->precio_examen_usd;
+                
+                if ($examenes->cubierto_por == 1) {
+                    $montoBs += $examenes->precio_examen_bs;
+
+                } else if ($examenes->cubierto_por == 2) {
+                    if ( $examenes->precio_examen_bs == 0 ) {
+                        $montoBs += round( $examenes->precio_examen_usd * $valorDivisa, 2);
+    
+                    } else {
+                        $montoBs += $examenes->precio_examen_bs;
+                    }
+
+                } else if ($examenes->cubierto_por == 3) {
+                    if ($examenes->precio_examen_bs == 0) {
+                        $monto_restante = $examenes->precio_examen_usd - $examenes->monto_cubierto_usd;
+                        $examenes->precio_examen_bs = round( $monto_restante * $valorDivisa, 2) + $examenes->monto_cubierto_bs;
+                        $montoBs = $examenes->precio_examen_bs;
+                    }
+                }
+            }
+        }
+        
+        // Logica para calcular el monto_total
+        $_consultaCitaModel = new ConsultaCitaModel();
+        $consulta_cita = $_consultaCitaModel->where('consulta_id', '=', $consulta['consulta_id'])->getFirst();
+        
+        if ( !is_null($consulta_cita) ) {
+            $_citaModel = new CitaModel();
+            $cita = $_citaModel->where('cita_id', '=', $consulta_cita->cita_id)->getFirst();
+
+            if ( !is_null($cita) && $cita->tipo_servicio == 2 || is_null($cita)) {
+                $consulta['monto_total_usd'] = $montoUsd + $consulta['monto_consulta_usd'];
+                $consulta['monto_total_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
+                $consulta['monto_consulta_bs'] = round($consulta['monto_consulta_usd'] * $valorDivisa, 2);
+
+            } else if ( !is_null($cita) && $cita->tipo_servicio == 1) {
+                $consulta['monto_total_usd'] = $montoUsd;
+                $consulta['monto_total_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
+            }
+        } else {
+
+            $_consultaModel = new ConsultaModel();
+            $consulta_actual = $_consultaModel->where('consulta_id', '=', $consulta['consulta_id'])->getFirst();
+
+            if ($consulta_actual->tipo_servicio == 1) {
+                $consulta['monto_total_usd'] = $montoUsd;
+                $consulta['monto_total_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
+
+            } else if ($consulta_actual->tipo_servicio == 2) {
+                $consulta['monto_total_usd'] = $montoUsd + $consulta['monto_consulta_usd'];
+                $consulta['monto_total_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
+                $consulta['monto_consulta_bs'] = round($consulta['monto_total_usd'] * $valorDivisa, 2);
+            }
+        }
+
+        return $consulta;
+    }
 }
