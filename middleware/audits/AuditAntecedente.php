@@ -15,10 +15,15 @@ class AuditAntecedente extends AuditMiddleware {
 
         $_paciente = new PacienteModel();
         $paciente = "";
+
         if (isset($_POST['paciente_id'])) {
             $paciente = $_paciente->where('paciente_id', '=', $_POST['paciente_id'])->getFirst();
         } else {
-            $paciente = $_paciente->where('paciente_id', '=', preg_replace('/[^0-9]/', '', $_GET['uri']))->getFirst();
+            $_antecedenteModel = new AntecedenteMedicoModel();
+            $antecedente = $_antecedenteModel->where('antecedentes_medicos_id', '=', preg_replace('/[^0-9]/', '', $_GET['uri']))->getFirst();
+
+            $_pacienteModel = new PacienteModel();
+            $paciente = $_pacienteModel->where('paciente_id', '=', $antecedente->paciente_id)->getFirst();
         }
         
         if ($this->method == 'POST') {
