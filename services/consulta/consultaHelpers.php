@@ -216,6 +216,7 @@ class ConsultaHelper {
         $formulario['total_examenes_bs'] = 0;
         $formulario['laboratorios'] = 0;
         $formulario['cantidad_laboratorios'] = 0;
+        $formulario['total_insumos'] = 0;
 
         if (!isset($formulario['medicamentos'])) {
             $formulario['medicamentos'] = 0;
@@ -566,28 +567,59 @@ class ConsultaHelper {
     }
 
     public static function actualizarPrecioEmergencia($consulta) {
-
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+        
         // $_consultaSeguroModel = new ConsultaSeguroModel();
         // $consulta_seguro = $_consultaSeguroModel->where('consulta_seguro_id', '=', $consulta["consulta_seguro_id"])->getFirst();
 
         // $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
         // $consulta_emergencia = $_consultaEmergenciaModel->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
+        if ($consulta->monto_cubierto_usd == 0) {
+            $consulta_emergencia_nueva = Array(
+                'consultas_medicas_bs' => round( $consulta->consultas_medicas * $valorDivisa, 2),
+                'laboratorios_bs' => round( $consulta->laboratorios * $valorDivisa, 2),
+                'medicamentos_bs' => round( $consulta->medicamentos * $valorDivisa, 2),
+                'area_observacion_bs' => round( $consulta->area_observacion * $valorDivisa, 2),
+                'enfermeria_bs' => round( $consulta->enfermeria * $valorDivisa, 2),
+                'total_insumos_bs' => round( $consulta->total_insumos * $valorDivisa, 2),
+                'total_examenes_bs' => round( $consulta->total_examenes * $valorDivisa, 2),
+                'total_consulta_bs' => round( $consulta->total_consulta * $valorDivisa, 2),
+            );
+    
+            $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
+            $_consultaEmergenciaModel->where('consulta_id', '=', $consulta->consulta_id)->update($consulta_emergencia_nueva);
 
-        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+        } else {
+            
+            $precio_dolar_cubierto = round($consulta->monto_cubierto_bs / $consulta->monto_cubierto_usd, 2);
+            $precios = ['consultas_medicas', 'laboratorios', 'medicamentos', 'area_observacion', 'enfermeria', 'total_insumos', 'total_examenes'];
+            $informacion_actualizada = [];
+            $sumatoria_bs = 0;
+            
+            foreach ($precios as $precio) {
+                $propiedad = $precio."_bs";
+                if ($consulta->$propiedad == 0 && $consulta->$precio != 0) {
+                    $informacion_actualizada[$propiedad] = round($consulta->$precio * $valorDivisa, 2);
+                    $sumatoria_bs += $informacion_actualizada[$propiedad];
 
-        $consulta_emergencia_nueva = Array(
-            'consultas_medicas_bs' => round( $consulta->consultas_medicas * $valorDivisa, 2),
-            'laboratorios_bs' => round( $consulta->laboratorios * $valorDivisa, 2),
-            'medicamentos_bs' => round( $consulta->medicamentos * $valorDivisa, 2),
-            'area_observacion_bs' => round( $consulta->area_observacion * $valorDivisa, 2),
-            'enfermeria_bs' => round( $consulta->enfermeria * $valorDivisa, 2),
-            'total_insumos_bs' => round( $consulta->total_insumos * $valorDivisa, 2),
-            'total_examenes_bs' => round( $consulta->total_examenes * $valorDivisa, 2),
-            'total_consulta_bs' => round( $consulta->total_consulta * $valorDivisa, 2),
-        );
+                } else if ($consulta->$propiedad != 0) {
+                    
+                    // Al dividir el monto en bolivares con el monto en dolares, el resultado debe ser el valor del dolar
+                    // de no ser asi, el monto esta incompleto
+                    $valor = round($consulta->$propiedad / $precio_dolar_cubierto, 2);
+                    if ($valor != $consulta->$precio) {
+                        $monto_faltante = $consulta->$precio - $valor;
+                        $monto_bs_nuevo = $consulta->$propiedad + ($monto_faltante * $valorDivisa);
+                        $informacion_actualizada[$propiedad] = round($monto_bs_nuevo, 2);
+                        $sumatoria_bs += $informacion_actualizada[$propiedad];
+                    }
+                }
+            }
 
-        $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
-        $_consultaEmergenciaModel->where('consulta_id', '=', $consulta->consulta_id)->update($consulta_emergencia_nueva);
+            $informacion_actualizada['total_consulta_bs'] += $consulta->total_consulta_bs + $sumatoria_bs;
+            $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
+            $_consultaEmergenciaModel->where('consulta_id', '=', $consulta->consulta_id)->update($informacion_actualizada);
+        }
     }
 
     public static function separarInformación($informacion, $es_cita) {

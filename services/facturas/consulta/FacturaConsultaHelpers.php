@@ -149,7 +149,7 @@ class FacturaConsultaHelpers {
         if (!is_null($consulta_cita)) {
             $_citaExamenModel = new CitaExamenModel();
             $inners = $_citaExamenModel->listInner(['examen' => 'cita_examen']);
-            $array_select = Array('cita_examen.precio_examen_usd', 'cita_examen.precio_examen_bs', 'cita_examen.cita_examen_id', 'cita_examen.cita_id', 'cita_examen.examen_id', 'cita_examen.estatus_cit', 'examen.nombre');
+            $array_select = Array('cita_examen.precio_examen_usd', 'cita_examen.precio_examen_bs', 'cita_examen.cita_examen_id', 'cita_examen.cita_id', 'cita_examen.examen_id', 'cita_examen.cubierto_por' ,'cita_examen.estatus_cit', 'examen.nombre');
             $cita_examenes = $_citaExamenModel->where('cita_examen.cita_id', '=', $consulta_cita->cita_id)->innerJoin($array_select, $inners, "cita_examen");
 
             if (!is_null($cita_examenes)) {
@@ -271,7 +271,7 @@ class FacturaConsultaHelpers {
                 $_medicoEspecialidadModel = new MedicoEspecialidadModel();
                 $consulta_sin_cita = $_consultaSinCita->where('consulta_id', '=', $consulta_id)->getFirst();
                 $medico_especialidad = $_medicoEspecialidadModel->where('medico_id', '=', $consulta_sin_cita->medico_id)->getFirst();
-
+                
                 return $medico_especialidad->costo_especialidad;
 
             } else if (!is_null($consulta_cita)) {
@@ -280,7 +280,8 @@ class FacturaConsultaHelpers {
 
                 if ($cita->tipo_servicio == 2) {
                     $_medicoEspecialidadModel = new MedicoEspecialidadModel();
-                    $medico_especialidad = $_medicoEspecialidadModel->where('medico_id', '=', $cita->medico_id)->getFirst();
+                    $medico_especialidad = $_medicoEspecialidadModel->where('medico_id', '=', $cita->medico_id)->where('especialidad_id', '=', $cita->especialidad_id)->getFirst();
+                    
                     return $medico_especialidad->costo_especialidad;
                 } else {
                     return 0;
@@ -444,6 +445,43 @@ class FacturaConsultaHelpers {
                 }
             }
         }
+    }
+
+    /**
+     * Esta función insertar los montos de consulta emergencia
+     */
+    public static function insertarDiferenciaEmergencia($formulario, $factura) {
+        $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
+
+        $informacion_actualizada = [];
+        $informacion_actualizada['monto_cubierto_usd'] = $_POST['monto_consulta_usd'];
+        $informacion_actualizada['monto_cubierto_bs'] = round($informacion_actualizada['monto_cubierto_usd'] * $valorDivisa, 2);
+        
+        $precios = ['consultas_medicas', 'laboratorios', 'medicamentos', 'area_observacion', 'enfermeria', 'total_insumos', 'total_examenes'];
+        $monto_restante = $informacion_actualizada['monto_cubierto_usd'];
+        $i = 0;
+        $sumatoria_bs = 0;
+        
+        while($monto_restante > 0 ) {
+            $propiedad = $precios[$i];
+            if ($factura['factura']->$propiedad != 0) {
+                if ($factura['factura']->$propiedad >= $monto_restante) {
+                    $informacion_actualizada[$propiedad."_bs"] = round($monto_restante * $valorDivisa, 2);
+                    $sumatoria_bs += $informacion_actualizada[$propiedad."_bs"];
+                    $monto_restante -= $factura['factura']->$propiedad;
+                }
+    
+                if ($factura['factura']->$propiedad < $monto_restante) {
+                    $informacion_actualizada[$propiedad."_bs"] = round($factura['factura']->$propiedad * $valorDivisa, 2);
+                    $sumatoria_bs += $informacion_actualizada[$propiedad."_bs"];
+                    $monto_restante -= $factura['factura']->$propiedad;
+                }
+            }
+            $i++;
+        }
+        $informacion_actualizada['total_consulta_bs'] = $sumatoria_bs;
+        $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
+        $_consultaEmergenciaModel->where('consulta_emergencia_id', '=', $factura['factura']->consulta_emergencia_id)->update($informacion_actualizada);
     }
 
     public static function RetornarMensaje($mensaje, $data) {

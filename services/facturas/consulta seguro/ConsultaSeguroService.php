@@ -42,6 +42,7 @@ class ConsultaSeguroService {
             $consulta = $_consultaModel->where('consulta_id', '=', $formulario['consulta_id'])->update(['estatus_con' => 3]);
         }
 
+        $formulario['cobertura_seguro'] = $consultaEmergencia->monto_aprobado;
         $formulario['seguro_id'] = $consultaEmergencia->seguro_id;
         $formulario['monto_consulta_usd'] = $consultaEmergencia->total_consulta;
 

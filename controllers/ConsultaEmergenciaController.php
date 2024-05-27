@@ -1,9 +1,8 @@
 <?php
 
-include_once './services/consultas/consulta emergencia/ConsultaEmergenciaValidate.php';
-include_once './services/consultas/consulta emergencia/ConsultaEmergenciaService.php';
+include_once './services/consulta/consultaValidaciones.php';
 
-class ConsultaController extends Controller {
+class ConsultaEmergenciaController extends Controller {
 
     // variables para el inner join de consultas
     protected $selectConsulta = array(
@@ -31,6 +30,22 @@ class ConsultaController extends Controller {
 
     public function formActualizarConsulta($consulta_id) {
         return $this->view('consultas/actualizarConsultas', ['consulta_id' => $consulta_id]);
+    }
+
+    public function actualizarConsultaEmergencia($consulta_emergencia_id) {
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        ConsultaValidaciones::validarActualizacion($_POST);
+
+        $put = [
+            "autorizacion" => $_POST['autorizacion'],
+            "monto_aprobado" => $_POST['monto_aprobado']
+        ];
+
+        $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
+        $se_actualizo = $_consultaEmergenciaModel->where('consulta_emergencia_id', '=', $consulta_emergencia_id)->update($put);
+
+        $respuesta = new Response($se_actualizo <= 0 ? 'ACTUALIZACION_FALLIDA' : 'ACTUALIZACION_EXITOSA');
+        return $respuesta->json($se_actualizo <= 0 ? 400 : 200);
     }
 
     public function listarConsultas() {

@@ -215,6 +215,8 @@ Router::post('/consultas', ConsultaController::class . '@insertarConsulta',  [$A
 Router::put('/consultas/:id', ConsultaController::class . '@actualizarConsulta',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::delete('/consultas/:id', ConsultaController::class . '@eliminarConsulta',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 
+Router::put('/consulta/emergencia/:id', ConsultaEmergenciaController::class . '@actualizarConsultaEmergencia',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
+
 // //Medicamento - Vistas
 Router::get('/medicamentos', MedicamentoController::class . '@index');
 Router::get('/medicamentos/registrar', MedicamentoController::class . '@formRegistrarMedicamento');

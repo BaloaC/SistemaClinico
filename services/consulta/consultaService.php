@@ -83,14 +83,14 @@ class ConsultaService {
         $consulta_id = ConsultaHelper::insertarConsulta($consultaEmergencia, 'emergencia');
         $consultaEmergencia['consulta_id'] = $consulta_id;  
 
-        $consultaSinCita = array(
-            "consulta_id" => $consultaEmergencia['consulta_id'],
-            "especialidad_id" => $formulario['especialidad_id'],
-            "medico_id" => $formulario["medico_id"],
-            "paciente_id" => $formulario["paciente_id"],
-        );
-        $consultaSinCitaModel = new ConsultaSinCitaModel();
-        $consultaSinCitaModel->insert($consultaSinCita);
+        // $consultaSinCita = array(
+        //     "consulta_id" => $consultaEmergencia['consulta_id'],
+        //     "especialidad_id" => $formulario['especialidad_id'],
+        //     "medico_id" => $formulario["medico_id"],
+        //     "paciente_id" => $formulario["paciente_id"],
+        // );
+        // $consultaSinCitaModel = new ConsultaSinCitaModel();
+        // $consultaSinCitaModel->insert($consultaSinCita);
 
         if( isset($consultaEmergencia['pagos']) ) {
             ConsultaService::actualizarAcumuladoMedico($consultaEmergencia['pagos']);

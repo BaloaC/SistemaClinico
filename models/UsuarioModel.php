@@ -11,6 +11,7 @@ class UsuarioModel extends GenericModel{
     protected $tokken;
     protected $rol;
     protected $fecha_creacion;
+    protected $estatus_usu;
 
     public function __construct($propiedades = null){
         
@@ -25,6 +26,7 @@ class UsuarioModel extends GenericModel{
     public function getTokken(){return $this->tokken;}
     public function getRol(){return $this->rol;}
     public function getFecha_creacion(){return $this->fecha_creacion;}
+    public function getEstatusUsu(){return $this->estatus_usu;}
 
     /* Setters */
     public function setUsuarioId($usuario_id){$this->usuario_id = $usuario_id;}
@@ -34,6 +36,7 @@ class UsuarioModel extends GenericModel{
     public function setTokken($tokken){return $this->tokken = $tokken;}
     public function setRol($rol){return $this->rol = $rol;}
     public function setFecha_creacion($fecha_creacion){return $this->fecha_creacion = $fecha_creacion;}
+    public function setEstatusUsu($estatus_usu){return $this->estatus_usu = $estatus_usu;}
 }
 
 

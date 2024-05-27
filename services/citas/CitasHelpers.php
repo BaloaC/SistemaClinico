@@ -96,10 +96,10 @@ class CitasHelpers {
     public static function actualizarExamenCita($cita_examenes) {
         foreach ($cita_examenes as $cita_examen) {
             $info_actualizar = [];
-
+            
             $_citaExamenModel = new CitaExamenModel();
             $cita_exa = $_citaExamenModel->where('cita_examen_id', '=', $cita_examen['cita_examen_id'])->getFirst();
-
+            
             $info_actualizar['cubierto_por'] = $cita_examen['cubierto_por'];
             if ($cita_examen['cubierto_por'] != 2 ) {
                 $_examenModel = new ExamenModel();
