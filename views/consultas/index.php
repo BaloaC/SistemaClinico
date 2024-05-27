@@ -225,10 +225,6 @@
                                             <label for="monto-consulta">Monto consulta</label>
                                             <input type="number" step="any" name="consultas_medicas" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
                                             <small class="form-text">No se permiten números negativos</small>
-                                            <label for="seguro">Seguro</label>
-                                            <select id="s-seguro-emergencia" name="seguro_id" class="form-control seguro-emergencia" data-active="0" disabled required>
-                                                <option></option>
-                                            </select>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <label for="cedula">Area de observación</label>
@@ -237,19 +233,10 @@
                                             <!-- <label for="cedula">Total insumos</label>
                                             <input type="number" name="total_insumos" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="6" value="0" disabled required>
                                             <small class="form-text">No se permiten números negativos</small> -->
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label for="forRegistrarPagoMedico" id="registrarPagoMedicoLabel">¿Desea registrar el pago de algún médico?</label>
-                                            <div class="input-radios-container inputRadioPagoMedico">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="registrarPagoMedicoBool" id="RegistrarPagoMedicoSi" value="1" onchange="pagoMedicosInput(this.value)" required disabled>
-                                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="registrarPagoMedicoBool" id="RegistrarPagoMedicoNo" value="0" onchange="pagoMedicosInput(this.value)" checked required disabled>
-                                                    <label class="form-check-label" for="inlineRadio2">No</label>
-                                                </div>
-                                            </div>
+                                            <label for="seguro">Seguro</label>
+                                            <select id="s-seguro-emergencia" name="seguro_id" class="form-control seguro-emergencia" data-active="0" disabled required>
+                                                <option></option>
+                                            </select>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <label for="forRegistrarFactura">¿Desea registrar la factura directamente?</label>
@@ -263,6 +250,20 @@
                                                     <label class="form-check-label" for="inlineRadio2">No</label>
                                                 </div>
                                             </div>
+                                            <!-- <label for="forRegistrarPagoMedico" id="registrarPagoMedicoLabel">¿Desea registrar el pago de algún médico?</label>
+                                            <div class="input-radios-container inputRadioPagoMedico">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="registrarPagoMedicoBool" id="RegistrarPagoMedicoSi" value="1" onchange="pagoMedicosInput(this.value)" required disabled>
+                                                    <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="registrarPagoMedicoBool" id="RegistrarPagoMedicoNo" value="0" onchange="pagoMedicosInput(this.value)" checked required disabled>
+                                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                        <div class="col-12 col-md-6">
+
                                         </div>
                                     </div>
                                 </div>
