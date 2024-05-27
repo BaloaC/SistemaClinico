@@ -168,6 +168,11 @@ class CitasValidaciones {
 
     public static function validarHorario($formulario) {
 
+        if ( DateTime::createFromFormat('H:i:s', $formulario['hora_entrada']) > DateTime::createFromFormat('H:i:s', '17:30:00') || DateTime::createFromFormat('H:i:s', $formulario['hora_entrada']) < DateTime::createFromFormat('H:i:s', '07:00:00')) {
+            $response = new Response(false, 'Las citas no pueden ser fuera de horario laboral del centro médico');
+            echo $response->json(400);
+        }
+
         // Obtenemos el día según la fecha de la cita
         setlocale(LC_TIME, 'es_VE.UTF-8','esp');
         $fechaCita = strtotime($formulario['fecha_cita']);
@@ -182,7 +187,7 @@ class CitasValidaciones {
         
         // Obtenemos el horario del médico ese día
         $_horarioModel = new HorarioModel();
-        $medico = $_horarioModel->where('medico_id', '=', $formulario['medico_id'])->getAll();
+        $medico = $_horarioModel->where('medico_id', '=', $formulario['medico_id'])->getFirst();
         $horarioMedico = [];
         
         // Validamos si atiende a esa hora

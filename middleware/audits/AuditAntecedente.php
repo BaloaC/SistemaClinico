@@ -14,7 +14,12 @@ class AuditAntecedente extends AuditMiddleware {
         $accion = '';
 
         $_paciente = new PacienteModel();
-        $paciente = $_paciente->where('paciente_id', '=', $_POST['paciente_id'])->getFirst();
+        $paciente = "";
+        if (isset($_POST['paciente_id'])) {
+            $paciente = $_paciente->where('paciente_id', '=', $_POST['paciente_id'])->getFirst();
+        } else {
+            $paciente = $_paciente->where('paciente_id', '=', preg_replace('/[^0-9]/', '', $_GET['uri']))->getFirst();
+        }
         
         if ($this->method == 'POST') {
             $row = "El usuario ".$this->usuario->nombre." insertó un nuevo antecedente médico de tipo ".$_POST['tipo_antecedente_id']." al paciente ".$paciente->nombre." con cédula ".$paciente->cedula;

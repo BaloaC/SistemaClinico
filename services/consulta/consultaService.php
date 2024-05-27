@@ -316,14 +316,36 @@ class ConsultaService {
         }
 
         $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-        $consultas->factura->consultas_medicas_bs = round( $consultas->factura->consultas_medicas * $valorDivisa, 2);
-        $consultas->factura->laboratorios_bs = round( $consultas->factura->laboratorios * $valorDivisa, 2);
-        $consultas->factura->medicamentos_bs = round( $consultas->factura->medicamentos * $valorDivisa, 2);
-        $consultas->factura->area_observacion_bs = round( $consultas->factura->area_observacion * $valorDivisa, 2);
-        $consultas->factura->enfermeria_bs = round( $consultas->factura->enfermeria * $valorDivisa, 2);
-        $consultas->factura->total_insumos_bs = round( $consultas->factura->total_insumos * $valorDivisa, 2);
-        $consultas->factura->total_examenes_bs = round( $consultas->factura->total_examenes * $valorDivisa, 2);
-        $consultas->factura->total_consulta_bs = round( $consultas->factura->total_consulta * $valorDivisa, 2);
+        if ($consultas->factura->total_consulta == $consultas->factura->monto_aprobado) {
+            $consultas->factura->consultas_medicas_bs = round( $consultas->factura->consultas_medicas * $valorDivisa, 2);
+            $consultas->factura->laboratorios_bs = round( $consultas->factura->laboratorios * $valorDivisa, 2);
+            $consultas->factura->medicamentos_bs = round( $consultas->factura->medicamentos * $valorDivisa, 2);
+            $consultas->factura->area_observacion_bs = round( $consultas->factura->area_observacion * $valorDivisa, 2);
+            $consultas->factura->enfermeria_bs = round( $consultas->factura->enfermeria * $valorDivisa, 2);
+            $consultas->factura->total_insumos_bs = round( $consultas->factura->total_insumos * $valorDivisa, 2);
+            $consultas->factura->total_examenes_bs = round( $consultas->factura->total_examenes * $valorDivisa, 2);
+            $consultas->factura->total_consulta_bs = round( $consultas->factura->total_consulta * $valorDivisa, 2);
+        } else {
+
+            $valor_divisa = $consultas->factura->monto_cubierto_usd / $consultas->factura->monto_cubierto_bs;
+
+            $valores = ['consultas_medicas_bs','laboratorios_bs','medicamentos_bs','area_observacion_bs','enfermeria_bs','total_insumos_bs','total_examenes_bs','total_consulta_bs'];
+            foreach ($valores as $valor) {
+                $valor_bs = $valor.'_bs';
+
+                if ( $consultas->factura->$valor_bs == 0 ) {
+                    $consultas->factura->$valor_bs = round( $consultas->factura->$valor * $valorDivisa, 2);
+                } else {
+                    $esta_completo = ($consultas->factura->$valor_bs / $consultas->factura->$valor) != $valor_divisa;
+    
+                    if (!$esta_completo) {
+                        $pago_dolares = $consultas->factura->$valor_bs / $valor_divisa;
+                        $pago_restante = $consultas->factura->$valor - $pago_dolares;
+                        $consultas->factura->$valor_bs = round($pago_restante * $valorDivisa, 2) + $consultas->factura->$valor_bs;
+                    }
+                }
+            }
+        }
         
         if (!is_null($relaciones) && count((array) $relaciones) > 0) {
             return (object) array_merge((array) $consultas, (array) $relaciones);

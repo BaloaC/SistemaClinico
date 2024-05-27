@@ -55,7 +55,7 @@ class ConsultaSeguroHelpers {
      * Helper para obtener la información de una consulta_seguro por emergencia
      */
     public static function obtenerInformacionEmergencia($consulta) {
-                $_consultaModel = new ConsultaModel();
+        $_consultaModel = new ConsultaModel();
         $consultaBase = $_consultaModel->where('consulta_id', '=', $consulta->consulta_id)->getFirst();
         $consulta_emergencia = ConsultaService::obtenerConsultaEmergencia($consulta);
         

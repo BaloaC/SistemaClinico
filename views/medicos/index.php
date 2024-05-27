@@ -119,7 +119,9 @@
                                             <button type="button" class="btn"><i class="fas fa-times m-0"></i></button>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-primary mt-3 ms-3 w-30" id="addMedicoEspecialidad" onclick="addMedicoEspecialidadInput('addMedicoEspecialidad')">Añadir otra especialidad</button>
+                                    <div>
+                                        <button type="button" class="btn btn-primary mt-3" id="addMedicoEspecialidad" onclick="addMedicoEspecialidadInput('addMedicoEspecialidad')">Añadir otra especialidad</button>
+                                    </div>
                                 </div>
 
                                 <div class="col-12 col-check mt-4">

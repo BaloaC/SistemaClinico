@@ -398,7 +398,7 @@ CREATE TABLE  IF NOT EXISTS `examen` (
     `nombre` varchar(45) NOT NULL,
     `precio_examen` int(11) DEFAULT NULL,
     `tipo` enum('1','2','3') NOT NULL,
-    `hecho_aqui` tinyint(1) NOT NULL DEFAULT 0,
+    -- `hecho_aqui` tinyint(1) NOT NULL DEFAULT 0,
     `estatus_exa` enum('1','2') NOT NULL DEFAULT '1',
     PRIMARY KEY (`examen_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
