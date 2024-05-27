@@ -28,7 +28,13 @@
                             <div class="alert d-none w-50 mb-4 m-auto" role="alert"></div>
                             <form class="register-form offset-2 col-8 text-start position-relative">
                                 <div id="form-info" class="form-info">
-                                    <label for="nombre">Nombre de usuario</label>
+                                    <label for="nombre">Nombres del usuario</label>
+                                    <input class="form-control" type="text" name="nombre" data-validate="true" data-type="name" data-max-length="16" required>
+                                    <small class="form-text">El nombre solo puede contener letras</small>
+                                    <label for="nombre">Apellidos del usuario</label>
+                                    <input class="form-control" type="text" name="nombre" data-validate="true" data-type="name" data-max-length="16" required>
+                                    <small class="form-text">El apellido solo puede contener letras</small>
+                                    <label for="nombre">Usuario</label>
                                     <input class="form-control" type="text" name="nombre" data-validate="true" data-type="username" data-max-length="16" required>
                                     <small class="form-text">Solo se permiten los siguientes caracteres: "_" y "-"</small>
                                     <label for="clave">Contraseña</label>

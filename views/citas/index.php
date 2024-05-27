@@ -147,6 +147,7 @@
                                                 <li>Horario del médico disponible</li>
                                                 <li>Horario del médico ocupado</li>
                                                 <li>Días fueras del horario del médico</li>
+                                                <li>Días deshabilitados</li>
                                             </ul>
                                         </div>
                                         <div class="col-12 col-md-6 contact-medico" style="display: none;">
@@ -228,13 +229,15 @@
                     <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-cita" class="p-3 px-4">
-                            <div class="col-12 col-md-8 d-flex align-items-center">
-                                <i class="fas fa-info-circle text-secondary me-3"></i>
-                                <p class="text-secondary m-0">Las citas se mantendrán como pendientes hasta que la clave otorgada por el seguro sea insertada.</p>
-                            </div>
-                            <div class="col-12 col-md-8 d-flex align-items-center mt-3">
-                                <i class="fas fa-exclamation-circle text-warning me-3"></i>
-                                <p class="m-0">Importante: Los exámenes que no se puedan cubrir por el seguro, automáticamente serán cubiertos por el paciente, de no querer cubrirlos, deberá eliminarlos.</p>
+                            <div class="row mb-5">
+                                <div class="col-12 col-md-6 d-flex align-items-center">
+                                    <i class="fas fa-info-circle text-secondary me-3"></i>
+                                    <p class="text-secondary m-0">Las citas se mantendrán como pendientes hasta que la clave otorgada por el seguro sea insertada.</p>
+                                </div>
+                                <div class="col-12 col-md-6 d-flex align-items-center mt-3">
+                                    <i class="fas fa-exclamation-circle text-warning me-3"></i>
+                                    <p class="m-0">Importante: Los exámenes que no se puedan cubrir por el seguro, automáticamente serán cubiertos por el paciente, de no querer cubrirlos, deberá eliminarlos.</p>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-12 col-md-6">
@@ -242,7 +245,7 @@
                                     <input type="text" name="clave" id="clave" class="form-control mb-3">
 
                                     <div class="d-flex align-items-center justify-content-start">
-                                        <input type="checkbox" class="form-check-input me-3" onclick="return false;" checked >
+                                        <input type="checkbox" class="form-check-input me-3" onclick="return false;" checked>
                                         <p class="m-0 form-check-label">Cubrir costo consulta: <span id="costoConsulta"></span></p>
                                     </div>
                                 </div>
@@ -267,7 +270,7 @@
                                             </tr>
                                         </thead>
                                         <tbody class="examenesCitaTbody">
-                                            
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -303,6 +306,7 @@
                                 <li>Horario del médico disponible</li>
                                 <li>Horario del médico ocupado</li>
                                 <li>Días fueras del horario del médico</li>
+                                <li>Días deshabilitados</li>
                             </ul>
                             <table id="horarios-table-reschedule" class="table table-borderless" style="display: none;">
                                 <h6 class="my-3 fw-bolder medicoRescheduleLabel" style="display: none;">Horario del médico</h6>

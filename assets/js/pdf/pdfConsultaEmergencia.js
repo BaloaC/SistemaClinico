@@ -24,6 +24,6 @@ document.getElementById("cant_consultas").textContent = dataFactura.factura?.can
 document.getElementById("total_consultas").textContent = dataFactura.factura?.consultas_medicas_bs ? `${convertCurrencyToVES(dataFactura.factura?.consultas_medicas_bs)} Bs` : `${convertCurrencyToVES(dataFactura.monto_consulta_bs)} Bs`;
 document.getElementById("monto_total_consulta").textContent = dataFactura?.monto_consulta_bs ? `${convertCurrencyToVES(dataFactura?.monto_consulta_bs ?? 0)} Bs` : `${convertCurrencyToVES(dataFactura.monto_total_bs ?? 0)} Bs`;
 document.getElementById("cobertura").textContent = dataFactura?.cobertura_seguro;
-document.getElementById("diferenciaPaciente").textContent = parseFloat(dataFactura?.monto_consulta_usd) - parseFloat(dataFactura?.cobertura_seguro);
+document.getElementById("diferenciaPaciente").textContent = parseFloat(dataFactura?.monto_total_usd) - parseFloat(dataFactura?.cobertura_seguro);
 
 window.print();

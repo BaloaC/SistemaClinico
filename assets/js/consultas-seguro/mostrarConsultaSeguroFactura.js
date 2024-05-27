@@ -85,15 +85,20 @@ addEventListener("DOMContentLoaded", async e => {
     const order = [[5, 'desc']];
 
     const format = (data) => {
+    console.log("🍓 ~ file: mostrarConsultaSeguroFactura.js:88 ~ format ~ data:", data)
+
 
         if (data.clave == null && data?.cita?.tipo_cita != 2) data.clave = "No aplica";
         if (data.clave == null && data?.cita?.tipo_cita == 2) data.clave = "Desconocida";
         let tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
         if (data.es_emergencia === 1) tipo_cita = "Asegurada";
 
-        let examenes = data.examenes !== undefined ? concatItems(data.examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen",
-            insumos = data.insumos !== undefined ? concatItems(data.insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo",
-            indicaciones = data.indicaciones !== undefined ? concatItems(data.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación";
+        let examenes = data?.consultas[0]?.examenes !== undefined ? concatItems(data.consultas[0].examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen",
+            insumos = data?.consultas[0]?.insumos !== undefined ? concatItems(data.consultas[0].insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo",
+            indicaciones = data?.consultas[0]?.indicaciones !== undefined ? concatItems(data.consultas[0].indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación",
+            referidos = data?.consultas[0]?.referidos !== undefined ? concatItems(data.consultas[0].referidos, "nombre", "No se refirió a ningún médico", ".") : "No se refirió a ningún médico",
+            cita_examenes = data?.cita_examenes !== undefined ? concatItems(data.cita_examenes, "nombre", "No se realizó a ningún exámen por cita", ".") : "No se realizó a ningún exámen por cita";
+
 
         let recipes = `
         <tr>
@@ -198,7 +203,9 @@ addEventListener("DOMContentLoaded", async e => {
                 </tr>
                 <tr><td><br></td></tr>
                 <tr>
-                    <td colspan="4">Indicaciones: <br><b>${indicaciones}</b></td>
+                    <td>Indicaciones: <br><b>${indicaciones}</b></td>
+                    <td>Exámenes por citas: <br><b>${cita_examenes}</b></td>
+                    <td>Referidos: <br><b>${referidos}</b></td>
                 </tr>
                 <tr><td><br></td></tr>
                 ${recipes}
@@ -207,7 +214,7 @@ addEventListener("DOMContentLoaded", async e => {
                 ${factura}
                 <tr><td><br></td></tr>
                 <tr>
-                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="openPopup('pdf/consultaemergencia/${data.consulta_seguro_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
+                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="${data?.consulta?.es_emergencia == 1 ? "openPopup('pdf/consultaemergencia/" + data?.consulta_seguro_id + "')" : "openPopup('pdf/consultaseguro/" + data?.consulta_id + "')"}"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
                 </tr>
             </table>
         `
@@ -223,6 +230,8 @@ addEventListener("DOMContentLoaded", async e => {
         formatDataCustom: true,
         formatDataCustomUrl: "factura/consultaSeguro",
         formatDataCustomId: "consulta_seguro_id",
+        formatDataCustomUrl2: "consultas",
+        formatDataCustomId2: "consulta_id",
         processing: true,
         serverSide: true
     });

@@ -15,6 +15,7 @@
 
         header img {
             text-align: start;
+            position: absolute;
         }
 
         h3, header p {
@@ -52,11 +53,12 @@
         }
 
         .cuadro th {
-            border: 1px solid black;
+            /* border: 1px solid black; */
             border-left: none;
             border-right: none;
             padding: 0.5rem;
             text-align: start;
+            border-bottom: 1px solid;
         }
 
         .tabla {
@@ -68,6 +70,7 @@
             text-align: center;
             /* font-size: x-large; */
             font-size: 16px;
+            border-top: 1px solid;
         }
 
 
@@ -117,29 +120,30 @@
                 <tr>
                     <th colspan="2" id="title">Recibo de pago de consulta médica</th>
                 </tr>
-                <tr>
-                    <th colspan="2" id="title">Recibo de pago correspondiente a la fecha de la consulta: <span id="fecha">2023-02-18</span></th>
+                <tr class="insumos-head light">
+                    <th>Item</th>
+                    <th id="recibo_id"></th>
                 </tr>
                 <tr class="insumos-head light">
                     <th>Nombre Paciente</th>
                     <th id="nombre_paciente">Enrique Chacón</th>
                 </tr>
-                <tr class="insumos-head">
+                <!-- <tr class="insumos-head">
                     <th>Cédula Paciente</th>
                     <th id="cedula_paciente">2</th>
                 </tr>
                 <tr class="insumos-head light">
                     <th>Cédula titular</th>
                     <th id="cedula_titular">1</th>
-                </tr>
-                <tr class="insumos-head">
+                </tr> -->
+                <!-- <tr class="insumos-head">
                     <th>Nombre médico</th>
                     <th id="nombre_medico">$30.21</th>
                 </tr>
                 <tr class="insumos-head light">
                     <th>Especialidad</th>
                     <th id="especialidad">$20</th>
-                </tr>
+                </tr> -->
                 <tr class="insumos-head">
                     <th>Método de pago</th>
                     <th id="metodo_pago"></th>
@@ -151,6 +155,10 @@
                 <tr class="insumos-head light">
                     <th>Pago total en Usd</th>
                     <th id="pago_total_usd"></th>
+                </tr>
+                <tr class="insumos-head light">
+                    <th>Fecha pago</th>
+                    <th id="fecha"></th>
                 </tr>
             </thead>
         </table>

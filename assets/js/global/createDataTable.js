@@ -3,7 +3,7 @@ import getById from "./getById.js";
 
 const path = location.pathname.split('/');
 
-export default function createDataTable({ id, columns, url = null, data = null, columnDefs = null, searchPanes = null, dom = null, format = undefined, formatDataCustom = false, formatDataCustomUrl = null, formatDataCustomId = null, serverSide = false, processing = false, order = null, paging = true, info = true, scrollX = false, scrollY = null, scrollCollapse = false, requestType = "GET", requestData = {} }) {
+export default function createDataTable({ id, columns, url = null, data = null, columnDefs = null, searchPanes = null, dom = null, format = undefined, formatDataCustom = false, formatDataCustomUrl = null, formatDataCustomUrl2 = null, formatDataCustomId = null, formatDataCustomId2 = null, serverSide = false, processing = false, order = null, paging = true, info = true, scrollX = false, scrollY = null, scrollCollapse = false, requestType = "GET", requestData = {} }) {
 
     const handlerCodeFalseAjax = (code) => {
 
@@ -92,6 +92,13 @@ export default function createDataTable({ id, columns, url = null, data = null, 
                 if (formatDataCustom === true) {
                     formatData = await getById(formatDataCustomUrl, row.data()[formatDataCustomId]);
                     if (formatData[0]) formatData = formatData[0];
+
+
+                    let formatDataSecond;
+                    if(formatDataCustomUrl2 !== null){
+                        formatDataSecond = await getById(formatDataCustomUrl2, row.data()[formatDataCustomId2] ?? formatData[formatDataCustomId2]);
+                        formatData[formatDataCustomUrl2] = formatDataSecond;
+                    }
                 }
 
                 row.child(format(formatData)).show();

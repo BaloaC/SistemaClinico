@@ -68,37 +68,31 @@
     background-color: #222fb9 !important;
 }
 
-.fc-event.fc-event-start.fc-event-end.fc-daygrid-event.fc-daygrid-dot-event{
+.fc-event.fc-event-start.fc-event-end.fc-daygrid-event.fc-daygrid-dot-event {
     flex-wrap: wrap;
     white-space: break-spaces;
 }
 
-ul.leyenda li:nth-child(1)::before {
+ul.leyenda li::before {
     content: "";
     display: inline-block;
     width: 10px;
     height: 10px;
-    background-color: #07ff0030;
     margin-right: 5px;
-    /* Alinear con el margen izquierdo de la lista */
+}
+
+ul.leyenda li:nth-child(1)::before {
+    background-color: #07ff0030;
 }
 
 ul.leyenda li:nth-child(2)::before {
-    content: "";
-    display: inline-block;
-    width: 10px;
-    height: 10px;
     background-color: #ff000042;
-    margin-right: 5px;
-    /* Alinear con el margen izquierdo de la lista */
 }
 
 ul.leyenda li:nth-child(3)::before {
-    content: "";
-    display: inline-block;
-    width: 10px;
-    height: 10px;
     background-color: #0000000f;
-    margin-right: 5px;
-    /* Alinear con el margen izquierdo de la lista */
+}
+
+ul.leyenda li:nth-child(4)::before {
+    background-color: #8d49251a;
 }
