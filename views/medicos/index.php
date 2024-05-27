@@ -315,7 +315,7 @@
                                 <div class="row mt-4 act-medico-especialidad">
                                     <h5>Especialidades</h5>
                                 </div>
-                                <button type="button" class="btn btn-primary mt-3" id="addMedicoEspecialidadAct" onclick="addMedicoEspecialidadInput('addMedicoEspecialidadAct', '#modalAct')">Añadir otra especialidad</button>
+                                <button type="button" class="btn btn-primary mt-3 w-30" id="addMedicoEspecialidadAct" onclick="addMedicoEspecialidadInput('addMedicoEspecialidadAct', '#modalAct')">Añadir otra especialidad</button>
                                 <div class="act-horarios">
                                 </div>
                             </div>

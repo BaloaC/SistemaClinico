@@ -22,6 +22,8 @@ async function confirmUpdate() {
         examenes.forEach(examen => {
 
             const checkboxesCubiertos = document.querySelectorAll(`.examenCita${examen.dataset.id}`);
+            const estatus_cit = examen.classList.contains("deleted") ? 2 : 1;
+        
 
             let cubiertoPor = 2;
 
@@ -38,7 +40,8 @@ async function confirmUpdate() {
 
                 let examenCita = {
                     cita_examen_id: examen.dataset.id,
-                    cubierto_por: cubiertoPor
+                    cubierto_por: cubiertoPor,
+                    estatus_cit
                 }
 
                 examenesCita.push(examenCita);
@@ -47,7 +50,7 @@ async function confirmUpdate() {
 
         parseData.cita_examenes = examenesCita;
 
-        console.log(parseData);
+        // console.log(parseData);
 
         await updateModule(parseData, "cita_id", "citas", "act-cita", "Cita actualizada exitosamente!");
         calendar.refetchEvents();

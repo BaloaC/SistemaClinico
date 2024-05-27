@@ -136,11 +136,11 @@ export default async function consultaEmergencia(inputRadio) {
         // Si es por emergencia sin cita
         if (inputRadio.value === "1") {
             turnInput(".info-consulta-emergencia", false);
-            turnInput(".info-pago-medico", false);
+            turnInput(".info-pago-medico", true);
             turnInput(".info-insumos-emergencia", false);
             $(".info-consulta-emergencia").fadeIn("slow");
-            $("#registrarPagoMedicoLabel").fadeIn("slow");
-            $(".inputRadioPagoMedico").fadeIn("slow");
+            // $("#registrarPagoMedicoLabel").fadeIn("slow");
+            // $(".inputRadioPagoMedico").fadeIn("slow");
             $(".info-insumos-emergencia").fadeIn("slow");
             $("#addInsumo").fadeIn("slow");
             // $(".examenSelect").fadeOut("slow");
@@ -352,8 +352,8 @@ export default async function consultaEmergencia(inputRadio) {
             especialidadSelect.disabled = false;
         }
 
-        const pagoMedicosChecked = document.getElementById("RegistrarPagoMedicoSi");
-        pagoMedicosChecked.checked ? pagoMedicosInput("1") : pagoMedicosInput("0");
+        // const pagoMedicosChecked = document.getElementById("RegistrarPagoMedicoSi");
+        // pagoMedicosChecked.checked ? pagoMedicosInput("1") : pagoMedicosInput("0");
 
 
         citaSelect.disabled = true;

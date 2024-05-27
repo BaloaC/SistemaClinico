@@ -65,3 +65,8 @@
 .flatpickr-input-readonly {
     background-color: #fff !important;
 }
+
+.flatpickr-disabled {
+    background-color: #8d49251a !important;
+    color: #00000030 !important;
+}
