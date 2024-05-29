@@ -1,4 +1,5 @@
 import Cookies from "../../libs/jscookie/js.cookie.min.js";
+import getAll from "./getAll.js";
 import getById from "./getById.js";
 
 const path = location.pathname.split('/');
@@ -96,7 +97,7 @@ export default function createDataTable({ id, columns, url = null, data = null, 
 
                     let formatDataSecond;
                     if(formatDataCustomUrl2 !== null){
-                        formatDataSecond = await getById(formatDataCustomUrl2, row.data()[formatDataCustomId2] ?? formatData[formatDataCustomId2]);
+                        formatDataSecond = await getAll(`${formatDataCustomUrl2}/${row.data()[formatDataCustomId2] ?? formatData[formatDataCustomId2]}?status=3`);
                         formatData[formatDataCustomUrl2] = formatDataSecond;
                     }
                 }

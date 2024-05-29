@@ -26,6 +26,7 @@ class FacturaMedicoController extends Controller{
         "factura_medico.pacientes_consulta",
         "factura_medico.fecha_pago",
         "factura_medico.fecha_emision",
+        "factura_medico.estatus_fac"
         // "factura_medico.precio_dolar"
     );
 
@@ -130,6 +131,13 @@ class FacturaMedicoController extends Controller{
 
         $_facturaMedico = new FacturaMedicoModel();
         $factura_medico = $_facturaMedico->where('factura_medico_id', '=', $factura_medico_id)->getFirst();
+
+        if (is_null($factura_medico)) {
+            $respuesta = new Response(false, 'La factura indicada no existe');
+            $respuesta->setData($factura_medico_id);
+            echo $respuesta->json(400);
+            exit();
+        }
 
         if ($factura_medico->estatus_fac != '1') {
             $respuesta = new Response(false, 'No puede realizar operaciones con una factura ya cancelada o eliminada');

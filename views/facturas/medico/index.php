@@ -108,6 +108,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/mostrarFMedicos.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/registrarFMedico.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/eliminarFMedico.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/marcarComoPagado.js'); ?>"></script>
 </body>
 
 </html>

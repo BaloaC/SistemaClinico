@@ -29,7 +29,9 @@ if (infoCintillo.consultas?.length > 0) {
             [nombrePaciente, cedulaPaciente, especialidad] = ["Desconocido"];
         }
 
-        console.log(consulta);
+        const tipoDeServicio = consulta?.consulta.tipo_servicio == 1 ? "Exámenes" : "Consulta";
+
+        
         consultas += `
             <tr>
                 <td>${consulta.consulta_seguro_id}</td>
@@ -37,7 +39,7 @@ if (infoCintillo.consultas?.length > 0) {
                 <td>${especialidad}</td>
                 <td>${nombrePaciente}</td>
                 <td>${cedulaPaciente}</td>
-                <td>${consulta.tipo_servicio}</td>
+                <td>${tipoDeServicio}</td>
                 <td>$${consulta.monto_consulta_usd}</td>
             </tr>
         `;

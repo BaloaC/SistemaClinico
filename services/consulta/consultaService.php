@@ -327,21 +327,24 @@ class ConsultaService {
             $consultas->factura->total_consulta_bs = round( $consultas->factura->total_consulta * $valorDivisa, 2);
         } else {
 
-            $valor_divisa = $consultas->factura->monto_cubierto_usd / $consultas->factura->monto_cubierto_bs;
-
-            $valores = ['consultas_medicas_bs','laboratorios_bs','medicamentos_bs','area_observacion_bs','enfermeria_bs','total_insumos_bs','total_examenes_bs','total_consulta_bs'];
-            foreach ($valores as $valor) {
-                $valor_bs = $valor.'_bs';
-
-                if ( $consultas->factura->$valor_bs == 0 ) {
-                    $consultas->factura->$valor_bs = round( $consultas->factura->$valor * $valorDivisa, 2);
-                } else {
-                    $esta_completo = ($consultas->factura->$valor_bs / $consultas->factura->$valor) != $valor_divisa;
+            if ($consultas->factura->monto_cubierto_usd != 0) {
+                
+                $valor_divisa = $consultas->factura->monto_cubierto_usd / $consultas->factura->monto_cubierto_bs;
     
-                    if (!$esta_completo) {
-                        $pago_dolares = $consultas->factura->$valor_bs / $valor_divisa;
-                        $pago_restante = $consultas->factura->$valor - $pago_dolares;
-                        $consultas->factura->$valor_bs = round($pago_restante * $valorDivisa, 2) + $consultas->factura->$valor_bs;
+                $valores = ['consultas_medicas','laboratorios','medicamentos','area_observacion','enfermeria','total_insumos','total_examenes','total_consulta'];
+                foreach ($valores as $valor) {
+                    $valor_bs = $valor.'_bs';
+    
+                    if ( $consultas->factura->$valor_bs == 0 ) {
+                        $consultas->factura->$valor_bs = round( $consultas->factura->$valor * $valorDivisa, 2);
+                    } else {
+                        $esta_completo = ($consultas->factura->$valor_bs / $consultas->factura->$valor) != $valor_divisa;
+        
+                        if (!$esta_completo) {
+                            $pago_dolares = $consultas->factura->$valor_bs / $valor_divisa;
+                            $pago_restante = $consultas->factura->$valor - $pago_dolares;
+                            $consultas->factura->$valor_bs = round($pago_restante * $valorDivisa, 2) + $consultas->factura->$valor_bs;
+                        }
                     }
                 }
             }

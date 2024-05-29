@@ -243,6 +243,8 @@ class ConsultaHelper {
         $formulario['total_insumos_bs'] = 0;
         $formulario['total_examenes_bs'] = 0;
         $formulario['total_consulta_bs'] = 0;
+        $formulario['monto_aprobado'] = $formulario['total_consulta'];
+        $formulario['autorizacion'] = "auth";
         
         $fueInsertado = $_consultaEmergencia->insert($formulario); 
         

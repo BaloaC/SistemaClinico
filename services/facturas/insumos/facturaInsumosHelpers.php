@@ -31,7 +31,7 @@ class FacturaInsumoHelpers {
                 $unidadesPosts = $insumoNuevo['unidades'] + $insumo_factura->cantidad_unidad;
                 $actualizar = array('cantidad_unidad' => $unidadesPosts, 'estatus_ins' => 1);
                 
-                if ($actualizar_precio) {
+                if ($insumo['actualizar_precio']) {
                     $valorPorcentaje = GlobalsHelpers::obtenerPorcentajeInsumo();
                     $nuevoPrecio = ($insumoNuevo['precio_unit_usd'] * $valorPorcentaje) / 100;
                     $actualizar['precio'] = round($insumoNuevo['precio_unit_usd'] + $nuevoPrecio, 2);

@@ -38,7 +38,6 @@
                                         <tr>
                                             <th>Item</th>
                                             <th>Nombre</th>
-                                            <th>Cantidad</th>
                                             <th>Cantidad Mínima</th>
                                             <th>Cantidad por unidad</th>
                                             <th>Capacidad por unidad</th>

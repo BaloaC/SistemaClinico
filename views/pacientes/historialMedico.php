@@ -275,7 +275,7 @@
                                             </select>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label for="forRegistrarFactura">¿Desea registrar la factura directamente?</label>
+                                            <!-- <label for="forRegistrarFactura">¿Desea registrar la factura directamente?</label>
                                             <div class="input-radios-container">
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="registrarFacturaBool" id="registrarFacturaSi" value="1" required disabled>
@@ -285,7 +285,7 @@
                                                     <input class="form-check-input" type="radio" name="registrarFacturaBool" id="registrarFacturaNo" value="0" checked required disabled>
                                                     <label class="form-check-label" for="inlineRadio2">No</label>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <!-- <label for="forRegistrarPagoMedico" id="registrarPagoMedicoLabel">¿Desea registrar el pago de algún médico?</label>
                                             <div class="input-radios-container inputRadioPagoMedico">
                                                 <div class="form-check form-check-inline">

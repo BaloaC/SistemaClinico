@@ -61,7 +61,7 @@ class FacturaCompraController extends Controller
 
         if ($mensaje) {
 
-            FacturaInsumoHelpers::insertarCompraInsumo($insumos, $id, $_POST['actualizar_precio']);
+            FacturaInsumoHelpers::insertarCompraInsumo($insumos, $id);
             $respuesta = new Response('ACTUALIZACION_EXITOSA');
             
             $respuesta->setData( array_merge($data, array("insumos" => $insumos)) );
