@@ -11,6 +11,7 @@ class SeguroModel extends GenericModel {
     protected $porcentaje;
     protected $costo_consulta;
     protected $estatus_seg;
+    protected $maximo_dias;
 
     public function __construct($propiedades = null) {
         parent::__construct('seguro', SeguroModel::class, $propiedades);
@@ -24,6 +25,7 @@ class SeguroModel extends GenericModel {
     public function getPorcentaje(){return $this->porcentaje;}
     public function getCostoConsulta(){return $this->costo_consulta;}
     public function getEstatusSeg(){return $this->estatus_seg;}
+    public function getMaximoDias(){return $this->maximo_dias;}
 
     /* Setters */
     public function setRif($rif){return $this->rif = $rif;}
@@ -33,6 +35,7 @@ class SeguroModel extends GenericModel {
     public function setPorcentaje($porcentaje){return $this->porcentaje = $porcentaje;}
     public function setCostoConsulta($costo_consulta){return $this->costo_consulta = $costo_consulta;}
     public function setEstatusSeg($estatus_seg){return $this->estatus_seg = $estatus_seg;}
+    public function setMaximoDias($maximo_dias){return $this->maximo_dias = $maximo_dias;}
 }
 
 ?>

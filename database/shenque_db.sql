@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS  `usuario` (
     `tokken` varchar(10) DEFAULT NULL,
     `rol` int(11) NOT NULL,
     `pin` varchar(100) NOT NULL,
-    `estatus_usu` enum('1','2') NOT NULL DEFAULT '1',
+    `estatus_usu` enum('1','2') NOT NULL DEFAULT '2',
     `fecha_creacion` datetime NOT NULL,
     PRIMARY KEY (`usuario_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -132,6 +132,7 @@ CREATE TABLE IF NOT EXISTS `seguro` (
     `telefono` varchar(13) NOT NULL,
     `porcentaje` int(11) NOT NULL,
     `costo_consulta` int(11) NOT NULL,
+    maximo_dias INT NOT NULL DEFAULT '15',
     `estatus_seg` enum('1','2') NOT NULL DEFAULT '1',
     PRIMARY KEY (`seguro_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

@@ -39,7 +39,7 @@ class UsuarioController extends Controller{
         $id = CuentaService::insertarNuevoUsuario($_POST);
         $preguntasSeguridad = $_POST['preguntas'];
 
-        if ($id) {
+        if ($id != 0) {
             
             CuentaHelpers::insertarPreguntaSeguridad($preguntasSeguridad, $id);
             
