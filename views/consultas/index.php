@@ -425,118 +425,20 @@
 
         <!-- Modal Actualizar -->
         <div class="modal fade" id="modalAct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Paciente</h1>
+                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar Consulta</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
-                        <form action="" id="act-paciente" class="p-3 px-4">
-                            <div class="two-inputs">
-                                <!-- Labels -->
-                                <div class="row">
-                                    <label for="nombres">Nombres</label>
-                                    <label for="apellidos">Apellidos</label>
-                                </div>
-                                <!-- Inputs -->
-                                <div class="row">
-                                    <input type="text" name="nombres" class="form-control mb-3">
-                                    <input type="text" name="apellidos" class="form-control mb-3">
-                                </div>
-                            </div>
-                            <div class="two-inputs">
-                                <!-- Labels -->
-                                <div class="row">
-                                    <label for="cedula">Cédula</label>
-                                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                                </div>
-                                <!-- Inputs -->
-                                <div class="row">
-                                    <input type="number" name="cedula" class="form-control mb-3">
-                                    <input type="date" name="fecha_nacimiento" class="form-control mb-3">
-                                </div>
-                            </div>
-                            <div class="two-inputs">
-                                <!-- Labels -->
-                                <div class="row">
-                                    <label for="telefono">Teléfono</label>
-                                    <label for="direccion">Dirección</label>
-                                </div>
-                                <!-- Inputs -->
-                                <div class="row">
-                                    <div class="input-group mb-3">
-                                        <select name="cod_tel" id="cod-tel" class="me-2">
-                                            <option value="0412">0412</option>
-                                            <option value="0414">0414</option>
-                                            <option value="0424">0424</option>
-                                            <option value="0416">0416</option>
-                                            <option value="0426">0426</option>
-                                        </select>
-                                        <input type="text" name="telefono" class="form-control">
-                                    </div>
-                                    <input type="text" name="direccion" class="form-control mb-3">
-                                </div>
-                            </div>
-                            <div class="two-inputs">
-                                <!-- Labels -->
-                                <div class="row">
-                                    <label for="tipo_paciente">Tipo de paciente</label>
-                                    <!-- <label for="seguro">Seguro</label> -->
-                                </div>
-                                <!-- Inputs -->
-                                <div class="row">
-                                    <select name="tipo_paciente" id="tipo_paciente" class="form-control mb-3" requried>
-                                        <option value="1">Natural</option>
-                                        <option value="2">Asegurado</option>
-                                        <option value="3">Beneficiado</option>
-                                    </select>
-                                    <!-- <select name="seguro_id" id="seguro_id" class="form-control mb-3">
-                                        <option value="">Seleccione un seguro</option>
-                                    </select> -->
-                                </div>
-                            </div>
-                            <!-- <div class="two-inputs">
-                               
-                                <div class="row">
-                                    <label for="empresa">Empresa</label>
-                                    <label for="tipo_seguro">Tipo de seguro</label>
-                                </div>
-                              
-                                <div class="row">
-                                    <select name="empresa_id" id="empresa_id" class="form-control mb-3">
-                                        <option value="">Consultar empresas</option>
-                                    </select>
-                                    <select name="tipo_seguro" class="form-control mb-3" >
-                                        <option value="">Seleccione el tipo de seguro</option>
-                                        <option value="1">Acumulativo</option>
-                                        <option value="2">Normal</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="two-inputs">
-                                
-                                <div class="row">
-                                    <label for="fecha_contra">Fecha de Contratación</label>
-                                    <label for="cobertura_general">Cobertura General</label>
-                                </div>
-                                
-                                <div class="row">
-                                    <input type="date" name="fecha_contra" class="form-control mb-3" disabled>
-                                    <input type="number" name="saldo_disponible" class="form-control mb-3" disabled>
-                                </div>
-                            </div>
-                            <div class="two-inputs">
-                               
-                                <div class="row">
-                                    <label for="saldo_disponible">Saldo disponible</label>
-                                </div>
-                                
-                                <div class="row">
-                                    <input type="number" name="saldo_disponible" class="form-control mb-3" disabled>
-                                </div>
-                            </div> -->
+                        <form action="" id="act-consulta" class="p-3 px-4">
+                            <label for="clave">Clave</label>
+                            <input type="text" name="autorizacion" id="clave" class="form-control mb-3">
+                            <label for="monto" class="">Monto aprobado</label>
+                            <input type="number" step="any" name="monto_aprobado" data-validate="true" data-type="price" class="form-control" required>
+                            <small class="form-text">No se permiten números negativos</small>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -657,6 +559,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/consultas/pacienteBeneficiadoEmergenciaInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/pagarConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/tipoConsulta.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/updateConsulta.js'); ?>"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (e) => {
             document.getElementsByName("fecha_consulta")[0].max = new Date().toISOString().split('T')[0];

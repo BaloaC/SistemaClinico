@@ -45,6 +45,7 @@
                                             <th>Fecha de pago</th>
                                             <th>Fecha emisión</th>
                                             <th>Total a pagar</th>
+                                            <th>Estatus</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -85,16 +86,36 @@
         </div>
 
         <!-- Modal Confirmar Eliminación -->
+        <div class="modal fade" id="modalAct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar estatus del recibo pago</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modalActBody">
+                        <div id="actAlert" class="alert d-none" role="alert"></div>
+                        ¿Está seguro que desea actualizar este recibo?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-actualizarInfo1" class="btn btn-primary">Actualizar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal Confirmar Eliminación -->
         <div class="modal fade" id="modalDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar recibo compra</h1>
+                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar recibo pago</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div id="delAlert" class="alert d-none" role="alert"></div>
-                        ¿Está seguro que desea eliminar esta recibo?
+                        ¿Está seguro que desea eliminar este recibo?
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="btn-confirmDelete" class="btn btn-danger">Eliminar</button>

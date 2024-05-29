@@ -79,11 +79,18 @@ addEventListener("DOMContentLoaded", e => {
         },
         {
             data: "factura_medico_id",
+            render: function (data, type, row){
+                return `
+                    <a href="#" data-bs-toggle="modal" data-bs-target="${row.estatus_fac == 1 ? "#modalAct" : ""}" onclick="marcarComoPagado('${row.estatus_fac == 1 ? data : 0}', false)">${row.estatus_fac == 1 ? "<span class='badge light badge-warning'>Pagar</span>" : "<span class='badge light badge-success'>Pagada</span>"}</a>
+                `;
+            }
+        },
+        {
+            data: "factura_medico_id",
             render: function (data, type, row) {
 
                 // <a href="#" data-bs-toggle="modal" data-bs-target="#modalInfo" class="view-info" onclick="getPaciente(${data})"><i class="fas fa-eye view-info""></i></a>
                 return `
-                        <a href="#" class="btn btn-primary my-2" onclick="marcarComoPagado('${row.estatus_fac == 1 ? data : 0}')">${row.estatus_fac == 1 ? "Pagar" : "Pagada"}</a>
                         <a href="#" onclick="openPopup('pdf/facturamedico/${data}')"><i class="fas fa-file-export"></i></a>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deleteFMedico(${data})"><i class="fas fa-trash del-consulta"></i></a>
                     `

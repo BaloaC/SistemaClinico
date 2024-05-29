@@ -438,6 +438,11 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         $(".fc .fc-popover").fadeOut("slow");
 
         const cita = await getById(module, arg.event._def.publicId);
+        let infoSeguro;
+
+        if(cita.cita_seguro && cita.cita_seguro.length > 0){
+            infoSeguro = await getById("seguros", cita?.cita_seguro[0]?.seguro_id);
+        }
 
         let estatusCita;
         let claveCita = (cita.tipo_cita === 1) ? "No aplica" : ((cita.cita_seguro && cita.cita_seguro[0]) ? cita.cita_seguro[0].clave : "Por asignar");
@@ -482,14 +487,32 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         (cita.estatus_cit == 1) ? null : document.getElementById("btn-actualizar").setAttribute("onclick", `updateCita(${JSON.stringify(cita)})`);
         document.getElementById("btn-actualizar").value = JSON.stringify(cita);
 
+        const diferenciaDeDias = (fechaActual, fechaAsignada) => {
+            let unDia = 1000 * 60 * 60 * 24; // Milisegundos en un día
+            let diferenciaEnMilisegundos =  fechaActual - fechaAsignada;
+            let diferenciaEnDias = Math.round(diferenciaEnMilisegundos / unDia);
+            return diferenciaEnDias;
+        }
+
+        const diferenciaDeDiasMaximo = diferenciaDeDias(new Date(), new Date(cita.fecha_cita));
+
+
         if(cita.estatus_cit == 1 || cita.estatus_cit == 4 || cita.estatus_cit == 5){
 
             document.getElementById("btn-actualizar").disabled = true;
             $("#btn-actualizar").fadeOut("slow");
         } else {
+
+
+            if(diferenciaDeDiasMaximo <= infoSeguro?.maximo_dias){
+
+                document.getElementById("btn-actualizar").disabled = false;
+                $("#btn-actualizar").fadeIn("slow");
+            } else {
+                document.getElementById("btn-actualizar").disabled = true;
+                $("#btn-actualizar").fadeOut("slow");
+            }
             
-            document.getElementById("btn-actualizar").disabled = false;
-            $("#btn-actualizar").fadeIn("slow");
         }
         
         if(cita.estatus_cit == 1 || cita.estatus_cit == 3) {
