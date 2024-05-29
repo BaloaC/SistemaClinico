@@ -187,7 +187,7 @@ class CitasValidaciones {
         
         // Obtenemos el horario del médico ese día
         $_horarioModel = new HorarioModel();
-        $medico = $_horarioModel->where('medico_id', '=', $formulario['medico_id'])->getFirst();
+        $medico = $_horarioModel->where('medico_id', '=', $formulario['medico_id'])->getAll();
         $horarioMedico = [];
         
         // Validamos si atiende a esa hora

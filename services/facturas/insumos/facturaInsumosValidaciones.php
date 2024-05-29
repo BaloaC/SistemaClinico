@@ -5,7 +5,7 @@ class FacturaInsumosValidaciones {
     public static function validacionesFactura($formulario) {
         
         $validarFactura = new Validate;
-        $camposNumericos = array('proveedor_id', 'total_productos', 'monto_con_iva', 'monto_sin_iva', 'excento');
+        $camposNumericos = array('proveedor_id', 'total_productos', 'monto_con_iva', 'monto_sin_iva', 'excento', 'actualizar_precio');
         $exclude = ['actualizar_precio'];
 
         if ( ($validarFactura->isEmpty($formulario, $exclude)) ) {
@@ -57,11 +57,12 @@ class FacturaInsumosValidaciones {
     public static function validarInsumo($formulario) {
 
         $camposNumericos = array('unidades', 'precio_unit_bs', 'precio_total_bs');
+        $exclude = array('actualizar_precio');
         $validarFactura = new Validate;
 
         foreach ($formulario as $insumo) {
             
-            if ( $validarFactura->isEmpty($insumo) ) {
+            if ( $validarFactura->isEmpty($insumo, $exclude) ) {
                 $respuesta = new Response(false, 'No se pueden enviar datos vacíos en los insumos');
                 $respuesta->setData($insumo);
                 echo $respuesta->json(400);

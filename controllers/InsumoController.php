@@ -27,10 +27,11 @@ class InsumoController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         
         $camposNumericos = array("precio", "cantidad_unidad", "capacidad_unidad", "cantidad_capacidad");
+        $exclude = array("es_cobrado");
         $validarInsumo = new Validate;
         
         switch($validarInsumo) {
-            case ($validarInsumo->isEmpty($_POST)):
+            case ($validarInsumo->isEmpty($_POST, $exclude)):
                 $respuesta = new Response('DATOS_VACIOS');
                 return $respuesta->json(400);
 

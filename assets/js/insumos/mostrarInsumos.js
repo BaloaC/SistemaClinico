@@ -7,7 +7,6 @@ addEventListener("DOMContentLoaded", () => {
     const insumosColumns = [
         { data: "insumo_id" },
         { data: "nombre" },
-        { data: "cantidad" },
         { data: "cantidad_min" },
         { data: "cantidad_unidad" },
         { data: "capacidad_unidad" },

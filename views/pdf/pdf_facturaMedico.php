@@ -52,11 +52,12 @@
         }
 
         .cuadro th {
-            border: 1px solid black;
+            /* border: 1px solid black; */
             border-left: none;
             border-right: none;
             padding: 0.5rem;
             text-align: start;
+            border-bottom: 1px solid;
         }
 
         .tabla {

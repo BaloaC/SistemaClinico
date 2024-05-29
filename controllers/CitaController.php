@@ -306,7 +306,7 @@ class CitaController extends Controller {
         $data = $validarCita->dataScape($_POST);
         $newArray['clave'] = $data['clave'];
 
-        $cita = Array(
+        $cita_actualizada = Array(
             'monto_aprobado' => $data['monto_aprobado'],
             'estatus_cit' => 1
         );
@@ -332,9 +332,11 @@ class CitaController extends Controller {
         
         if ($actualizado > 0) {
             $_cita = new CitaModel();
-            $esActualizado = $_cita->where('cita_id', '=', $cita_id)->update($cita);
+            $esActualizado = $_cita->where('cita_id', '=', $cita_id)->update($cita_actualizada);
 
-            CitasHelpers::actualizarExamenCita($_POST['cita_examenes']);
+            if (array_key_exists('cita_examenes', $_POST)) {
+                CitasHelpers::actualizarExamenCita($_POST['cita_examenes']);
+            }
         }
 
         if ($esActualizado > 0) {

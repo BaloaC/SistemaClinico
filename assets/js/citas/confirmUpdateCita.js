@@ -50,6 +50,8 @@ async function confirmUpdate() {
 
         parseData.cita_examenes = examenesCita;
 
+        console.log(data.cita_examenes);
+        if(data.cita_examenes.length === 0) delete data.cita_examenes;
         // console.log(parseData);
 
         await updateModule(parseData, "cita_id", "citas", "act-cita", "Cita actualizada exitosamente!");
