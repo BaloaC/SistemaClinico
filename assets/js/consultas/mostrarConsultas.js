@@ -936,7 +936,7 @@ addEventListener("DOMContentLoaded", async e => {
                 ${factura}
                 <tr><td><br></td></tr>
                 <tr>
-                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="openPopup('${data.es_emergencia == 0 ? "pdf/consulta/" + data.consulta_id : "pdf/presupuesto/" + data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> <br> <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg${tipo_cita}" onclick="pagarConsulta(${JSON.stringify({ citaType: tipo_cita, consulta_id: data.consulta_id, paciente_id: data.paciente_id }).replaceAll("\"", "'")})"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button></td>
+                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="openPopup('${data.es_emergencia == 0 ? "pdf/consulta/" + data.consulta_id : "pdf/presupuesto/" + data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> <br> <button class="btn btn-sm btn-add mb-3" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg${tipo_cita}" onclick="pagarConsulta(${JSON.stringify({ citaType: tipo_cita, consulta_id: data.consulta_id, paciente_id: data.paciente_id }).replaceAll("\"", "'")})"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button> <br> ${data.es_emergencia == 1 ? '<button class="btn btn-sm btn-add" id="btn-act" data-bs-toggle="modal" data-bs-target="#modalAct" onclick="updateConsulta(' + data.consulta_id + ')"><i class="fa-sm fas fa-plus"></i> Actualizar consulta</button>': ""}</td>
                 </tr>
             </table>
         `

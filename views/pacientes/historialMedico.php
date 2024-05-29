@@ -229,9 +229,9 @@
                                             <input type="number" step="any" name="altura" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6">
                                             <small class="form-text">No se permiten números negativos</small>
 
-                                            <label for="observaciones">Observaciones</label>
-                                            <input type="text" name="observaciones" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255">
-                                            <small class="form-text">Solo puede contener letras</small>
+                                            <label for="fecha_consulta" style="display: none;">Fecha consulta</label>
+                                            <input type="date" name="fecha_consulta" class="form-control mb-3" style="display: none;" data-validate="true" data-type="date" disabled required>
+                                            <input type="hidden" name="fecha_consulta" id="fecha_consulta_cita">
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="examenSelect">
@@ -241,9 +241,9 @@
                                                 </select>
                                             </div>
 
-                                            <label for="fecha_consulta" style="display: none;">Fecha consulta</label>
-                                            <input type="date" name="fecha_consulta" class="form-control mb-3" style="display: none;" data-validate="true" data-type="date" disabled required>
-                                            <input type="hidden" name="fecha_consulta" id="fecha_consulta_cita">
+                                            <label for="observaciones">Observaciones</label>
+                                            <input type="text" name="observaciones" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255">
+                                            <small class="form-text">Solo puede contener letras</small>
                                         </div>
                                     </div>
 
@@ -257,10 +257,6 @@
                                             <label for="monto-consulta">Monto consulta</label>
                                             <input type="number" step="any" name="consultas_medicas" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="6" value="0" disabled required>
                                             <small class="form-text">No se permiten números negativos</small>
-                                            <!-- <label for="seguro">Seguro</label>
-                                            <select id="s-seguro-emergencia" name="seguro_id" class="form-control seguro-emergencia" data-active="0" disabled required>
-                                                <option></option>
-                                            </select> -->
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <label for="cedula">Area de observación</label>
@@ -299,6 +295,7 @@
                                             </div> -->
                                         </div>
                                         <div class="col-12 col-md-6">
+
                                         </div>
                                     </div>
                                 </div>
@@ -416,6 +413,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Modal Registro-->
         <div class="modal fade" id="modalRegAntecedentes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalRegLabel" aria-hidden="true">
@@ -606,6 +604,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/consultas/pacienteBeneficiadoEmergenciaInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/pagarConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/tipoConsulta.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/consultas/updateConsulta.js'); ?>"></script>
     <!-- <script type="module" src="<?php echo Url::to('assets/js/pacientes/mostrarPacientes.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/tipoPaciente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/pacientes/registrarPaciente.js'); ?>"></script>

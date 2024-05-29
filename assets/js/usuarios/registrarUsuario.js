@@ -12,7 +12,7 @@ document.getElementById("siguiente").addEventListener("click", (event) => {
 
     formInfo = document.getElementById("form-info");
     formPreguntas = document.getElementById("form-preguntas");
-    if (!nextValidate(".form-info", 4)) return;
+    if (!nextValidate(".form-info", 6)) return;
 
     formInfo.classList.toggle("op-0");
     setTimeout(() => {
