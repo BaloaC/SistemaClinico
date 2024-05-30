@@ -122,7 +122,7 @@ function addInsumoInput(parentModal = "#modalReg") {
                 </div>
                 <div class="col-12 col-md-5">
                 <label for="cantidad">Cantidad utilizada</label>
-                <input type="number" step="any" name="cantidad" data-validate="true" data-type="number" class="form-control mb-3 insumo-cant">
+                <input type="number" step="any" name="cantidad" data-validate="true" data-type="price" class="form-control mb-3 insumo-cant">
                 <small class="form-text col-12">Solo se permiten números</small>
                 <small class="text-secondary mensaje-medida${clicks}"></small>
             </div>

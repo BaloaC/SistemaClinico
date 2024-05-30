@@ -82,21 +82,17 @@ const handleModalOpen = async (modalParent) => {
                 placeholder: "Seleccione una consulta",
                 defaultLabel: ["Consulta por emergencia"],
                 ajax: true,
-                ajaxUrl: `consultas/paciente/${paciente_id}?tipo_cita=1`,
+                ajaxUrl: `consultas/paciente/${paciente_id}?emergencia=1`,
                 processResultsAjax: function (data, params) { 
 
                     const data1 = [];
 
                     if (typeof data === "object" && data?.data?.consultas !== 0) {
                         data?.data?.consultas?.forEach(object => {
-
-                            console.log(object)
                             
-                            const { consulta_id: valorPropiedad1, observaciones,  fecha_consulta } = object;
-
-                            console.log(object);
+                            const { consulta_id: valorPropiedad1, observaciones } = object;
                             
-                            data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} -  ${observaciones ?? "Sin observaciones"} - ${formatToRealDate(fecha_consulta)}` });
+                            data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${observaciones ?? "Sin observaciones"}` });
                         });
                     }
 
@@ -104,7 +100,7 @@ const handleModalOpen = async (modalParent) => {
                         consultasAseguradas?.consultas?.forEach(object => {
                             
                             const { consulta_id: valorPropiedad1, es_emergencia, observaciones } = object;
-                            let consultaText = es_emergencia == 1 ? "Consulta por emergencia" : (observaciones ?? "Consulta asegurada");
+                            let consultaText = es_emergencia == 1 && observaciones ? "Consulta por emergencia" : (observaciones ?? "Consulta asegurada");
 
                             data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${consultaText}` });
                         });

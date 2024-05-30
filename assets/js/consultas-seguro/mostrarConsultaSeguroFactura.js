@@ -222,7 +222,7 @@ addEventListener("DOMContentLoaded", async e => {
 
     createDataTable({
         id: "#consultas",
-        url: `/${path[1]}/factura/consultaSeguro/consulta/`,
+        url: `/${path[1]}/factura/consultaSeguro/consulta?con_clave=1`,
         columns: consultaSeguroColumns,
         order,
         format,

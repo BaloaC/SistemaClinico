@@ -72,18 +72,18 @@
                             <div class="row">
                                 <h5>Información del servicio</h5>
                                 <div class="col-12 col-md-6">
-                                    <label for="tipoConsulta">Tipo de servicio</label>
-                                    <select id="tipoConsultas" class="form-control my-3 " onchange="tipoConsulta(this)">
-                                        <option value="examen">Exámen</option>
-                                        <option value="consulta" selected>Consulta</option>
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-6">
                                     <label for="tipoConsulta">Tipo de consulta</label>
                                     <select name="es_emergencia" id="s-tipo_consulta" class="form-control my-3">
                                         <option value="1">Por emergencia</option>
                                         <option value="2">Normal</option>
                                         <option value="0" selected>Con cita previa</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="tipoServicio">Tipo de servicio</label>
+                                    <select id="tipoConsultas" name="tipoConsulta" class="form-control my-3 " onchange="tipoConsulta(this)">
+                                        <option value="examen">Exámen</option>
+                                        <option value="consulta" selected>Consulta</option>
                                     </select>
                                 </div>
                             </div>
@@ -307,7 +307,7 @@
                                         </div>
                                         <div class="col-12 col-md-5">
                                             <label for="cantidad">Cantidad utilizada</label>
-                                            <input type="number" step="any" data-validate="true" data-type="number" class="form-control mb-3 insumo-cant" disabled>
+                                            <input type="number" step="any" data-validate="true" data-type="price" class="form-control mb-3 insumo-cant" disabled>
                                             <small class="form-text col-12">Solo se permiten números</small>
                                             <small class="text-secondary mensaje-medida"></small>
                                         </div>

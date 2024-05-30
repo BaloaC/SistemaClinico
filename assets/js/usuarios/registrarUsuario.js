@@ -1,9 +1,11 @@
 const path = location.pathname.split('/');
 
 // ** Función para validar si todos los inputs están validados antes de dar siguiente
-function nextValidate(form, inputsNumber) {
-    const inputsValidate = document.querySelectorAll(`${form} .form-control.valid`);
-    if (inputsValidate.length === inputsNumber) return true
+function nextValidate() {
+
+    const inputsValidate = Array.from(document.querySelectorAll(`.form-control`)).filter(input => input.value === "" || input.classList.contains("invalid"));
+    console.log("🍓 ~ file: registrarUsuario.js:8 ~ nextValidate ~ inputsValidate:", inputsValidate)
+    if (inputsValidate.length === 3) return true
     else return false;
 }
 
@@ -12,7 +14,7 @@ document.getElementById("siguiente").addEventListener("click", (event) => {
 
     formInfo = document.getElementById("form-info");
     formPreguntas = document.getElementById("form-preguntas");
-    if (!nextValidate(".form-info", 6)) return;
+    if (!nextValidate()) return;
 
     formInfo.classList.toggle("op-0");
     setTimeout(() => {

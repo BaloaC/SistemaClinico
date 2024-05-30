@@ -39,6 +39,7 @@ async function addConsulta() {
         }
 
         data.es_emergencia === "2" || data.es_emergencia === "0" ?  data.es_emergencia = false : data.es_emergencia = true;
+        data.tipoConsulta === "examen" ? data.tipo_servicio = "2" : data.tipo_servicio = "1"; 
 
         // En caso de que sea de emergencia y titular únicamente
         if(data.pacienteBeneficiadoEmergencia === "0" && data.es_emergencia){
@@ -131,6 +132,7 @@ async function addConsulta() {
 
         if(!data.fecha_consulta) {data.fecha_consulta = new Date().toISOString().slice(0, 10);}
         if(!data.es_emergencia && data.seguro_id) delete data.seguro_id;
+        if(data.es_emergencia) data.tipo_servicio = "1";
         if(!data.es_emergencia || document.getElementById("tipoConsultas").value === "examen") delete data.es_emergencia;
         if(data.pacienteBeneficiadoEmergencia === "0") delete data.pacienteBeneficiadoEmergencia;
         if (data.total_insumos > 0 && !("insumos" in data)) throw { message: "Debe especificar los insumos utilizados" }

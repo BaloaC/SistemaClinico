@@ -176,15 +176,15 @@
                                                 <option value="">Consultar empresas</option>
                                             </select>
 
-                                            <label for="saldo_disponible">Saldo disponible</label>
-                                            <input type="number" step="any" name="saldo_disponible" class="form-control mb-3" disabled required>
+                                            <!-- <label for="saldo_disponible">Saldo disponible</label>
+                                            <input type="number" step="any" name="saldo_disponible" class="form-control mb-3" disabled required> -->
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <label for="fecha_contra">Fecha de Contratación</label>
                                             <input type="date" name="fecha_contra" class="form-control mb-3" disabled required>
 
-                                            <label for="cobertura_general">Cobertura General</label>
-                                            <input type="number" step="any" name="cobertura_general" class="form-control mb-3" disabled required>
+                                            <!-- <label for="cobertura_general">Cobertura General</label>
+                                            <input type="number" step="any" name="cobertura_general" class="form-control mb-3" disabled required> -->
                                         </div>
                                     </div>
 
@@ -354,17 +354,17 @@
                                         <select name="empresa_id" id="s-empresa-act" class="form-control mb-3" data-active="0" disabled required>
                                             <option value="">Consultar empresas</option>
                                         </select>
-
+<!-- 
                                         <label for="saldo_disponible">Saldo disponible</label>
-                                        <input type="number" step="any" name="saldo_disponible" class="form-control mb-3" disabled required>
+                                        <input type="number" step="any" name="saldo_disponible" class="form-control mb-3" disabled required> -->
 
                                     </div>
                                     <div class="col-12 col-md-6 new-seguro-input" style="display: none;">
                                         <label for="fecha_contra">Fecha de Contratación</label>
                                         <input type="date" name="fecha_contra" class="form-control mb-3" disabled required>
 
-                                        <label for="cobertura_general">Cobertura General</label>
-                                        <input type="number" step="any" name="cobertura_general" class="form-control mb-3" disabled required>
+                                        <!-- <label for="cobertura_general">Cobertura General</label>
+                                        <input type="number" step="any" name="cobertura_general" class="form-control mb-3" disabled required> -->
                                     </div>
                                 </div>
                             </div>
