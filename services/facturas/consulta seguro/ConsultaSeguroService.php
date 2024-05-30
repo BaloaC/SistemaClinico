@@ -58,6 +58,8 @@ class ConsultaSeguroService {
             echo $respuesta->json(400);
             exit();
         }
+
+        return $fueInsertado;
     }
 
     public static function listarConsultasSeguros($consultasSeguros) {

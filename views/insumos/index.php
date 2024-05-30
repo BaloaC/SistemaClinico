@@ -84,9 +84,9 @@
                             <input type="number" step="any" name="capacidad_unidad" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small>
 
-                            <label for="tipo_medida">Es cobrado</label>
+                            <label for="tipo_medida">Es cobrado en consulta</label>
                             <select name="es_cobrado" class="form-control mb-3" id="es_cobrado" required>
-                                <option value="" selected disabled>Seleccione si ya fue cobrado</option>
+                                <option value="" selected disabled>Seleccione si es cobrado en consulta</option>
                                 <option value="1">Sí</option>
                                 <option value="0">No</option>
                             </select>
@@ -159,9 +159,9 @@
                             <input type="number" step="any" name="capacidad_unidad" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">El campo de ser mayor o igual a 0</small>
 
-                            <label for="tipo_medida">Es cobrado</label>
+                            <label for="tipo_medida">Es cobrado en consulta</label>
                             <select name="es_cobrado" class="form-control mb-3" id="es_cobrado" required>
-                                <option value="" selected disabled>Seleccione si ya fue cobrado</option>
+                                <option value="" selected disabled>Seleccione si es cobrado en consulta</option>
                                 <option value="1">Sí</option>
                                 <option value="0">No</option>
                             </select>

@@ -316,7 +316,7 @@ class ConsultaService {
         }
 
         $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-        if ($consultas->factura->total_consulta == $consultas->factura->monto_aprobado) {
+        if ($consultas->factura->total_consulta == $consultas->factura->monto_aprobado || $consultas->factura->monto_cubierto_usd == 0) {
             $consultas->factura->consultas_medicas_bs = round( $consultas->factura->consultas_medicas * $valorDivisa, 2);
             $consultas->factura->laboratorios_bs = round( $consultas->factura->laboratorios * $valorDivisa, 2);
             $consultas->factura->medicamentos_bs = round( $consultas->factura->medicamentos * $valorDivisa, 2);
@@ -412,11 +412,17 @@ class ConsultaService {
     }
 
     public static function obtenerConsultasPorEmergencia($params) {
-        $_consultaSinCitaModel = new ConsultaSinCitaModel();
-        $_consultaSinCitaModel->where('consulta.estatus_con', '!=', 2);
+        $_consultaModel = new ConsultaModel();
+        $_consultaModel->where('consulta.es_emergencia', '=', 1);
         
+        if (isset($params['con_clave']) && $params['con_clave']) {
+            $_consultaModel->where('consulta_emergencia.autorizacion', '!=', 'NULL');
+        }
+
         if (isset($params['estatus'])) {
-            $_consultaSinCitaModel->where('consulta.estatus_con', '=', $params['estatus']);
+            $_consultaModel->where('consulta.estatus_con', '=', $params['estatus']);
+        } else {
+            $_consultaModel->where('consulta.estatus_con', '!=', 2);
         }
 
         if (isset($params['start']) || isset($params['search']) || isset($params['page']) ){
@@ -426,42 +432,42 @@ class ConsultaService {
 
                 $ultimo_registro = $pagina_actual * $size;
                 $primer_registro = $ultimo_registro - $size;
-                $_consultaSinCitaModel->limit([$primer_registro, $size]);
+                $_consultaModel->limit([$primer_registro, $size]);
             }
 
             if(isset($params['search'])) {
                 if (is_array($params['search']) && strlen($params['search']['value']) > 0) {
-                    $_consultaSinCitaModel->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']['value']}%");
+                    $_consultaModel->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']['value']}%");
                 } else if (!is_array($params['search']) && strlen($params['search']) > 0 && $params['select']) {
-                    $_consultaSinCitaModel->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
+                    $_consultaModel->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
                 }
             }
         }
 
-        $inners = $_consultaSinCitaModel->listInner(["consulta" => "consulta_sin_cita", "paciente" => "consulta_sin_cita"]);
+        $inners = $_consultaModel->listInner(["consulta" => "consulta_emergencia", "paciente" => "consulta_emergencia"]);
         $select = ["consulta.consulta_id", "consulta.observaciones", "paciente.nombre", "paciente.apellidos"];
-        $lista = $_consultaSinCitaModel->innerJoin($select, $inners, "consulta_sin_cita");
-        $_consultaSinCitaModel->resetValues();
-
+        $lista = $_consultaModel->innerJoin($select, $inners, "consulta_emergencia");
+        $_consultaModel->resetValues();
+        
         if ( isset($params['search']) ) {
             if (!is_array($params['search']) && strlen($params['search']) > 0 && $params['select']) {
-                $_consultaSinCitaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
+                $_consultaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
             } else if ( strlen($params['search']['value']) > 0) {
-                $_consultaSinCitaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']['value']}%");
+                $_consultaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']['value']}%");
             } else {
-                $_consultaSinCitaModel->setSelect('COUNT(*) AS total');
+                $_consultaModel->setSelect('COUNT(*) AS total');
             }
         } else {
-            $_consultaSinCitaModel->setSelect('COUNT(*) AS total');
+            $_consultaModel->setSelect('COUNT(*) AS total');
         }
 
-        $_consultaSinCitaModel->where('consulta.estatus_con', '!=', 2);
+        $_consultaModel->where('consulta.estatus_con', '!=', 2);
 
         if (isset($params['estatus'])) {
-            $_consultaSinCitaModel->where('consulta.estatus_con', '=', $params['estatus']);
+            $_consultaModel->where('consulta.estatus_con', '=', $params['estatus']);
         }
         
-        $lista_count = $_consultaSinCitaModel->innerJoin($select, $inners, "consulta_sin_cita");
+        $lista_count = $_consultaModel->innerJoin($select, $inners, "consulta_emergencia");
         return ['lista_count' => $lista_count, 'lista' => $lista];
     }
 

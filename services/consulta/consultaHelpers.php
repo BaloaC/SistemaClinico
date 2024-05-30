@@ -216,7 +216,10 @@ class ConsultaHelper {
         $formulario['total_examenes_bs'] = 0;
         $formulario['laboratorios'] = 0;
         $formulario['cantidad_laboratorios'] = 0;
-        $formulario['total_insumos'] = 0;
+        
+        if (!isset($formulario['total_insumos'])) {
+            $formulario['total_insumos'] = 0;
+        }
 
         if (!isset($formulario['medicamentos'])) {
             $formulario['medicamentos'] = 0;
@@ -243,8 +246,6 @@ class ConsultaHelper {
         $formulario['total_insumos_bs'] = 0;
         $formulario['total_examenes_bs'] = 0;
         $formulario['total_consulta_bs'] = 0;
-        $formulario['monto_aprobado'] = $formulario['total_consulta'];
-        $formulario['autorizacion'] = "auth";
         
         $fueInsertado = $_consultaEmergencia->insert($formulario); 
         
@@ -544,8 +545,6 @@ class ConsultaHelper {
                 $capacidad_nueva = $insumoExistente->cantidad_capacidad - $insumo['cantidad'];
                 $cantidad_nueva = $capacidad_nueva / $insumoExistente->capacidad_unidad;
                 $actualizar = ['cantidad_capacidad' => $capacidad_nueva, 'cantidad_unidad' => $cantidad_nueva];
-                // $unidadesPosts = $insumoExistente->cantidad - $insumo['cantidad'];
-                // $actualizar = array('cantidad' => $unidadesPosts);
 
                 // actualizando el stock del insumo
                 $actualizado = $_insumoModel->where('insumo_id', '=', $insumo['insumo_id'])->update($actualizar);

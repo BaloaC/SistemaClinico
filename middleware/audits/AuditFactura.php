@@ -17,7 +17,7 @@ class AuditFactura extends AuditMiddleware {
         $row = '';
         $accion = '';
         
-        if ($this->method == 'DELETE') {
+        if ($this->method == 'POST') {
             if (isset($request['factura_id'])) {
                 $row = "El usuario ".$this->usuario->nombre." insertó la orden de ".$nombre_orden[ count($nombre_orden) - 1 ]." con id ".$request['factura_id'];
                 $accion = 'inserción';

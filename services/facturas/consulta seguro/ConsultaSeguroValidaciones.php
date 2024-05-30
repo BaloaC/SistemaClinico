@@ -63,6 +63,12 @@ class ConsultaSeguroValidaciones {
         $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
         $consultaEmergencia = $_consultaEmergenciaModel->where('consulta_id', '=', $formulario['consulta_id'])->getFirst();
         
+        if (is_null($consultaEmergencia->autorizacion) || count($consultaEmergencia->autorizacion) == 0) {
+            $respuesta = new Response(false, 'Esta factura de emergencia no tiene autorización');
+            echo $respuesta->json(400);
+            exit();
+        }
+
         if (is_null($consultaEmergencia)) {
             $respuesta = new Response(false, 'La consulta indicada no se encuentra relacionada a un seguro');
             echo $respuesta->json(400);

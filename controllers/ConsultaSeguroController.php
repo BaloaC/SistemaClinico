@@ -49,10 +49,12 @@ class ConsultaSeguroController extends Controller{
         if ( is_null($consulta) ){
             // Si no es consulta por cita, es consulta por emergencia
             ConsultaSeguroValidaciones::validarConsultaEmergencia($data);
-            ConsultaSeguroService::insertarConsultaEmergencia($data);
+            $id = ConsultaSeguroService::insertarConsultaEmergencia($data);
+            $data['factura_id'] = $id;
             // ConsultaSeguroService::actualizarEstatusConsulta($data['consulta_id']);
 
             $respuesta = new Response('INSERCION_EXITOSA');
+            $respuesta->setData($data);
             return $respuesta->json(201);
 
         } else {

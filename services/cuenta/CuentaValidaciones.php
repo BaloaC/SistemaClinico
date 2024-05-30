@@ -41,10 +41,10 @@ class CuentaValidaciones {
             exit();
         }
 
-        if (!$validarUsuario->isDuplicated("usuario", 'usuario_id', $usuario_id)) {
-            $respuesta = new Response('NOT_FOUND');
-            echo $respuesta->json(200);
-            exit();
-        }
+        // if (!$validarUsuario->isDuplicated("usuario", 'usuario_id', $usuario_id)) {
+        //     $respuesta = new Response('NOT_FOUND');
+        //     echo $respuesta->json(400);
+        //     exit();
+        // }
     }
 }

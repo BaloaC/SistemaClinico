@@ -66,10 +66,10 @@
                         <form id="info-usuario" class="register-form p-3 px-4">
                             <div id="form-info" class="form-info">
                                 <label for="nombre">Nombres del usuario</label>
-                                <input class="form-control" type="text" name="nombre" data-validate="true" data-type="name" data-max-length="16" required>
+                                <input class="form-control" type="text" name="nombres" data-validate="true" data-type="name" data-max-length="16" required>
                                 <small class="form-text">El nombre solo puede contener letras</small>
                                 <label for="nombre">Apellidos del usuario</label>
-                                <input class="form-control" type="text" name="nombre" data-validate="true" data-type="name" data-max-length="16" required>
+                                <input class="form-control" type="text" name="apellidos" data-validate="true" data-type="name" data-max-length="16" required>
                                 <small class="form-text">El apellido solo puede contener letras</small>
                                 <label for="nombre">Usuario</label>
                                 <input class="form-control" type="text" name="nombre" data-validate="true" data-type="username" data-max-length="16" required>

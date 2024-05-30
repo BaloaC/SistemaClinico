@@ -6,6 +6,8 @@ class UsuarioModel extends GenericModel{
 
     protected $usuario_id;
     protected $nombre;
+    protected $nombres;
+    protected $apellidos;
     protected $clave;
     protected $pin;
     protected $tokken;
@@ -21,6 +23,8 @@ class UsuarioModel extends GenericModel{
     /* Getters */
     public function getUsuarioId(){return $this->usuario_id;}
     public function getNombre(){return $this->nombre;}
+    public function getNombres(){return $this->nombres;}
+    public function getApellidos(){return $this->apellidos;}
     public function getClave(){return $this->clave;}
     public function getPin(){return $this->pin;}
     public function getTokken(){return $this->tokken;}
@@ -30,7 +34,9 @@ class UsuarioModel extends GenericModel{
 
     /* Setters */
     public function setUsuarioId($usuario_id){$this->usuario_id = $usuario_id;}
+    public function setNombre($nombre){$this->nombre = $nombre;}
     public function setNombres($nombres){$this->nombres = $nombres;}
+    public function setApellidos($apellidos){$this->apellidos = $apellidos;}
     public function setClave($clave){$this->clave = $clave;}
     public function setPin($pin){$this->pin = $pin;}
     public function setTokken($tokken){return $this->tokken = $tokken;}

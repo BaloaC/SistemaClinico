@@ -143,18 +143,20 @@ class UsuarioController extends Controller{
                     return $respuesta->json(400);
                 }
             default: 
-            $data = $validarUsuario->dataScape($_POST);
-            $data["clave"] = password_hash($data["clave"], PASSWORD_DEFAULT);
+                $data = $validarUsuario->dataScape($_POST);
+                if (array_key_exists('clave', $_POST)) {
+                    $data["clave"] = password_hash($data["clave"], PASSWORD_DEFAULT);
+                }
 
-            $_usuarioModel = new UsuarioModel();
+                $_usuarioModel = new UsuarioModel();
 
-            $actualizado = $_usuarioModel->where('usuario_id','=',$usuario_id)->update($data);
-            $mensaje = ($actualizado > 0);
-    
-            $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-            $respuesta->setData($actualizado);
-    
-            return $respuesta->json($mensaje ? 200 : 400);
+                $actualizado = $_usuarioModel->where('usuario_id','=',$usuario_id)->update($data);
+                $mensaje = ($actualizado > 0);
+        
+                $respuesta = new Response($mensaje ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
+                $respuesta->setData($actualizado);
+        
+                return $respuesta->json($mensaje ? 200 : 400);
         }
     }
 

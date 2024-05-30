@@ -176,10 +176,10 @@ class ConsultaController extends Controller {
         $lista_consultas = [];
         
         $condicional_emergencia = "";
-        if (isset($_GET['emergencia'])) {
+        if (isset($_GET['emergencia']) && $_GET['emergencia']) {
             $condicional_emergencia = $_GET['emergencia'];
         } else {
-            $condicional_emergencia = true;
+            $condicional_emergencia = false;
         }
         
         if ($condicional_emergencia) {
