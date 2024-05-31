@@ -45,7 +45,8 @@ class AuditConsulta extends AuditMiddleware {
         $this->row = [
             "usuario_id" => $this->usuario->usuario_id,
             "accion" => 'inserción',
-            "descripcion" => $row
+            "descripcion" => $row,
+            "modulo" => 'consultas',
         ];
 
         $this->handleResponse();

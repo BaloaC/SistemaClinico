@@ -9,6 +9,7 @@ class AuditoriaController extends Controller {
         "auditoria.usuario_id",
         "auditoria.accion",
         "auditoria.descripcion",
+        "auditoria.modulo",
         "usuario.nombre as nombre_usuario",
     );
 
@@ -24,6 +25,22 @@ class AuditoriaController extends Controller {
     public function listarAuditoria() {
         $_auditoriaModel = new AuditoriaModel();
         $inners = $_auditoriaModel->listInner($this->arrayInner);
+
+        if (isset($_GET['accion'])) {
+            $_auditoriaModel->where('auditoria.accion', '=', $_GET['accion']);
+        }
+
+        if (isset($_GET['usuario_id'])) {
+            $_auditoriaModel->where('auditoria.usuario_id', '=', $_GET['usuario_id']);
+        }
+
+        if (isset($_GET['modulo'])) {
+            $_auditoriaModel->setWhere("`modulo` = " . $_GET['modulo']);
+        }
+
+        if (isset($_GET['fecha_inicio'])) {
+            $_auditoriaModel->whereDate('DATE(auditoria.fecha_creacion)', $_GET['fecha_inicio'], $_GET['fecha_fin']);
+        }
 
         if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
             if (isset($_GET['start']) || isset($_GET['page'])) {
@@ -47,7 +64,25 @@ class AuditoriaController extends Controller {
 
         $lista = $_auditoriaModel->innerJoin($this->arraySelect, $inners, "auditoria");
         $_auditoriaModel->resetValues();
+
+        $inners = $_auditoriaModel->listInner($this->arrayInner);
         
+        if (isset($_GET['accion'])) {
+            $_auditoriaModel->where('auditoria.accion', '=', $_GET['accion']);
+        }
+
+        if (isset($_GET['usuario_id'])) {
+            $_auditoriaModel->where('auditoria.usuario_id', '=', $_GET['usuario_id']);
+        }
+
+        if (isset($_GET['modulo'])) {
+            $_auditoriaModel->setWhere("`modulo` = " . $_GET['modulo']);
+        }
+
+        if (isset($_GET['fecha_inicio'])) {
+            $_auditoriaModel->whereDate('DATE(auditoria.fecha_creacion)', $_GET['fecha_inicio'], $_GET['fecha_fin']);
+        }
+
         if ( isset($_GET['search']) ) {
             if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
                 $_auditoriaModel->setSelect('COUNT(*) AS total')->where('CONCAT(descripcion)', 'LIKE', "%{$_GET['search']}%");
@@ -60,8 +95,8 @@ class AuditoriaController extends Controller {
             $_auditoriaModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_auditoriaModel->getAll();
-        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $lista);
+        $total_registros = $_auditoriaModel->innerJoin($this->arraySelect, $inners, "auditoria");
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($total_registros), $lista);
     }
 
     public function listarAuditoriaPorFecha() {
@@ -205,6 +240,63 @@ class AuditoriaController extends Controller {
 
         $inners = $_auditoriaModel->listInner($this->arrayInner);
         $_auditoriaModel->where('auditoria.usuario_id', '=', $usuario_id);
+        if ( isset($_GET['search']) ) {
+            if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                $_auditoriaModel->setSelect('COUNT(*) AS total')->where('CONCAT(descripcion)', 'LIKE', "%{$_GET['search']}%");
+            } else if ( strlen($_GET['search']['value']) > 0) {
+                $_auditoriaModel->setSelect('COUNT(*) AS total')->where('CONCAT(descripcion)', 'LIKE', "%{$_GET['search']['value']}%");
+            } else {
+                $_auditoriaModel->setSelect('COUNT(*) AS total');
+            }
+        } else {
+            $_auditoriaModel->setSelect('COUNT(*) AS total');
+        }
+
+        $total_registros = $_auditoriaModel->innerJoin($this->arraySelect, $inners, "auditoria");
+        Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($total_registros), $auditoria);
+    }
+
+    public function listarAuditoriaPorModulo() {
+        $_auditoriaModel = new AuditoriaModel();
+
+        $inners = $_auditoriaModel->listInner($this->arrayInner);
+        $modulo = $_GET['modulo'];
+        $_auditoriaModel->setWhere("`modulo` = " . $modulo);
+
+        if (isset($_GET['accion'])) {
+            $_auditoriaModel->setWhere("`accion` = " . $_GET['accion']);
+        }
+        
+        if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
+            if (isset($_GET['start']) || isset($_GET['page'])) {
+                
+                $size = isset($_GET['length']) ? $_GET['length'] : 10;
+                $pagina_actual = isset($_GET['page']) ? $_GET['page'] : floor($_GET['start'] / $_GET['length']) + 1;
+                
+                $ultimo_registro = $pagina_actual * $size;
+                $primer_registro = $ultimo_registro - $size;
+                $_auditoriaModel->limit([$primer_registro, $size]);
+            }
+            
+            if(isset($_GET['search'])) {
+                if (is_array($_GET['search']) && strlen($_GET['search']['value']) > 0) {
+                    $_auditoriaModel->where('CONCAT(descripcion)', 'LIKE', "%{$_GET['search']['value']}%");
+                } else if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
+                    $_auditoriaModel->where('CONCAT(descripcion)', 'LIKE', "%{$_GET['search']}%");
+                }
+            }
+        }
+        
+        $auditoria = $_auditoriaModel->innerJoin($this->arraySelect, $inners, "auditoria");
+        $_auditoriaModel->resetValues();
+        
+        $inners = $_auditoriaModel->listInner($this->arrayInner);
+        $_auditoriaModel->setWhere("`modulo` = " . $modulo);
+
+        if (isset($_GET['accion'])) {
+            $_auditoriaModel->setWhere("`accion` = " . $_GET['accion']);
+        }
+
         if ( isset($_GET['search']) ) {
             if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
                 $_auditoriaModel->setSelect('COUNT(*) AS total')->where('CONCAT(descripcion)', 'LIKE', "%{$_GET['search']}%");

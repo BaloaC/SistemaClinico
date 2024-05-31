@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS `auditoria` (
     `usuario_id` int(11) NOT NULL,
     `accion` varchar(45) NOT NULL,
     `descripcion` varchar(255) NOT NULL,
+    `modulo` VARCHAR(30) NOT NULL;
     PRIMARY KEY (`auditoria_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

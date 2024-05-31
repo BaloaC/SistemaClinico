@@ -51,6 +51,12 @@ class BaseModel{
         return $this;
     }
 
+    public function setWhere($where) {
+        $this->wheres .= (strpos($this->wheres, "WHERE")) ? " AND " : " WHERE ";
+        $this->wheres .= $where;
+        return $this;
+    }
+
     //Método para insertar un registro
     public function insert($obj){
         try {
@@ -184,7 +190,6 @@ class BaseModel{
             $inners = $listInner;
 
             $dist = $distint ? 'DISTINCT' : '';
-
             $this->sql = "SELECT $dist $inner_join FROM $this->table"." $inners $this->wheres {$this->limits}";
             
             $query = $this->connection->prepare($this->sql);

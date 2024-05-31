@@ -50,6 +50,7 @@ class AuditMiddleware extends Middleware {
 
     public function handleResponse($request = null) {
         $accion = "";
+        global $isEnabledAudit;
 
         if ( $this->method == 'POST' ) {
             $accion = 'inserción';
@@ -60,7 +61,8 @@ class AuditMiddleware extends Middleware {
         $data = [
             "usuario_id" => $this->usuario->usuario_id,
             "descripcion" => $this->row,
-            "accion" =>  $accion
+            "accion" =>  $accion,
+            "modulo" => $isEnabledAudit,
         ];
 
         $_auditModel = new AuditoriaModel();
