@@ -230,10 +230,10 @@ class ConsultaSeguroController extends Controller{
 
             if (count($consultas_citas) > 0 && count($consultas_emergencias) > 0) {
                 $consultas_pacientes = array_merge($consultas_citas, $consultas_emergencias);
-            } else {
-                $consultas_pacientes = ($consultas_emergencias || $consultas_citas);
+            } else if (count($consultas_citas) > 0 || count($consultas_emergencias) > 0) {
+                $consultas_pacientes = count($consultas_citas) > 0 ? $consultas_citas : $consultas_emergencias;
             }
-            
+
             if (count($consultas_pacientes) > 0) {
                 $consultas_seguros = ConsultaSeguroHelpers::obtenerInformacionCompleta($consultas_pacientes);
                 $facturas = [];
