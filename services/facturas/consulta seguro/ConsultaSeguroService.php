@@ -86,10 +86,10 @@ class ConsultaSeguroService {
                     $consulta_actual->beneficiado = $paciente_titular;
                 }
                 
-                $_consultaSinCita = new ConsultaSinCitaModel();
-                $inners = $_consultaSinCita->listInner(['especialidad' => 'consulta_sin_cita']);
-                $info_especialidad = $_consultaSinCita->where('consulta_id', '=', $consulta->consulta_id)->innerJoin(['especialidad.nombre'], $inners, "consulta_sin_cita");
-                $consulta_actual->medico = [(object) ['nombre_especialidad' => $info_especialidad[0]->nombre ] ];
+                // $_consultaSinCita = new ConsultaSinCitaModel();
+                // $inners = $_consultaSinCita->listInner(['especialidad' => 'consulta_sin_cita']);
+                // $info_especialidad = $_consultaSinCita->where('consulta_id', '=', $consulta->consulta_id)->innerJoin(['especialidad.nombre'], $inners, "consulta_sin_cita");
+                // $consulta_actual->medico = [(object) ['nombre_especialidad' => $info_especialidad[0]->nombre ] ];
 
             } else {
                 $consulta_actual = $consulta;

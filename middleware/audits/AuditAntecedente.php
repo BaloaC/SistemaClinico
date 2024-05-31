@@ -42,7 +42,8 @@ class AuditAntecedente extends AuditMiddleware {
         $this->row = [
             "usuario_id" => $this->usuario->usuario_id,
             "accion" => $accion,
-            "descripcion" => $row
+            "descripcion" => $row,
+            "modulo" => 'antecedentes',
         ];
 
         $this->handleResponse();

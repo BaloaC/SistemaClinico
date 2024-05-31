@@ -144,7 +144,7 @@ class PacienteValidaciones {
 
     public static function validarPacienteSeguro($formulario) {
         $validarPaciente = new Validate;
-        $camposNumericos = array("cobertura_general", "saldo_disponible");
+        // $camposNumericos = array("cobertura_general", "saldo_disponible");
         $campoId1 = array("seguro_id", "empresa_id","paciente_id");
 
         if ( array_key_exists('seguro', $formulario) ) {
@@ -163,11 +163,11 @@ class PacienteValidaciones {
                     exit();
                 }
 
-                if ( $validarPaciente->isNumber($seguro, $camposNumericos) ) {
-                    $respuesta = new Response(false, 'Los datos del seguro son inválidos');
-                    echo $respuesta->json(400);
-                    exit();
-                }
+                // if ( $validarPaciente->isNumber($seguro, $camposNumericos) ) {
+                //     $respuesta = new Response(false, 'Los datos del seguro son inválidos');
+                //     echo $respuesta->json(400);
+                //     exit();
+                // }
 
                 if ( $validarPaciente->isDate($seguro['fecha_contra']) ) {
                     $respuesta = new Response(false, 'La fecha indicada en el registro del seguro es inválida');

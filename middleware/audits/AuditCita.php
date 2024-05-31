@@ -1,4 +1,4 @@
-<!-- <?php
+<?php
 
 class AuditCita extends AuditMiddleware {
     
@@ -17,7 +17,7 @@ class AuditCita extends AuditMiddleware {
         
         if ($this->method == 'POST') {
 
-            if( count($this->POST) == 4 ) {
+            if( array_key_exists('accion', $this->POST) && $this->POST[' accion'] == "reprogramacion") {
                 $_citaModel = new CitaModel();
                 $cita = $_citaModel->where('cita_id', '=', preg_replace('/[^0-9]/', '', $_GET['uri']))->getFirst();
                 $paciente = $_paciente->where('paciente_id', '=', $cita->paciente_id)->getFirst();
@@ -50,4 +50,4 @@ class AuditCita extends AuditMiddleware {
         
         $this->insertAudit($this->row);
     }
-} -->
+}
