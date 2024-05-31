@@ -88,13 +88,13 @@ export default class CitasManager {
                     };
                 },
                 onDayCreate: async (dObj, dStr, fp, dayElem) => {
+                console.log("🍓 ~ file: CitasManager.js:91 ~ CitasManager ~ onDayCreate: ~ dayElem:", dayElem, dObj, fp)
+
 
                     const dateDayElem = dayElem.dateObj.toISOString().split('T')[0];
                     const listCitasByDate = await this.obtenerCitasPorFecha(dateDayElem);
                     const horarioDelDia = this.obtenerHorarioDelDiaPorMedico(dateDayElem);
                     const dateTime = new Date();
-                    console.log("🍓 ~ file: CitasManager.js:103 ~ CitasManager ~ onDayCreate: ~ horarioDelDia[0]:", horarioDelDia)
-
                     if (dateTime.getTime() <= dayElem.dateObj.getTime()) {
 
                         if (availableDays.includes(dayElem.dateObj.getDay())) {
@@ -110,13 +110,13 @@ export default class CitasManager {
                     if (document.getElementById(inputId).value === dateDayElem) {
 
                         // Si la fecha seleccionada no está disponible en el horario del médico mostrar la información de contacto
-                        if (instance.selectedDateElem.children[0].classList.contains("noWorking")) {
-                            $(".contact-medico").fadeIn("slow");
-                            $(".contact-medico1").fadeIn("slow");
-                        } else {
-                            $(".contact-medico").fadeOut("slow");
-                            $(".contact-medico1").fadeOut("slow");
-                        };
+                        // if (instance.selectedDateElem.children[0].classList.contains("noWorking")) {
+                        //     $(".contact-medico").fadeIn("slow");
+                        //     $(".contact-medico1").fadeIn("slow");
+                        // } else {
+                        //     $(".contact-medico").fadeOut("slow");
+                        //     $(".contact-medico1").fadeOut("slow");
+                        // };
 
                         inputId === "fecha_cita" ? this.mostrarCitasDelDia(listCitasByDate) : this.mostrarCitasDelDia(listCitasByDate, { citasTableClass: "#citas-table-reschedule tbody", withoutCitasClass: ".withoutCitasReschedule", modalRegClass: "#modalReprogramar .modal-body" });
 

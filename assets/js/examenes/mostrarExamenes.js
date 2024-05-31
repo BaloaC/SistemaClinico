@@ -28,7 +28,7 @@ async function getExamen(id) {
 
         } else {
 
-            especialidadExamen.innerHTML = "Este exámen no posee ninguna especialidad";
+            especialidadExamen.innerHTML = "Este examen no posee ninguna especialidad";
         }
 
         nombreExamen.innerText = json.nombre;

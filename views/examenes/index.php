@@ -63,12 +63,12 @@
                     <div class="modal-body" id="modalRegBody">
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-examen" class="form-reg p-3 px-4">
-                            <label for="nombre">Nombre exámen</label>
+                            <label for="nombre">Nombre examen</label>
                             <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameExam" data-max-length="45" required>
                             <small class="form-text">El nombre solo debe contener al menos 3 letras sin caracteres especiales</small>
                             <label for="tipo">Tipo</label>
                             <select name="tipo" id="s-tipo" class="form-control mb-3" required>
-                                <option value="" disabled selected>Seleccione el tipo de exámen</option>
+                                <option value="" disabled selected>Seleccione el tipo de examen</option>
                                 <option value="1">Ecografía</option>
                                 <option value="2">Laboratorio</option>
                                 <option value="3">Ultrasonido</option>
@@ -77,7 +77,7 @@
                             <select name="especialidades[]" id="s-especialidad" class="form-control mb-3" data-active="0" multiple="multiple" required>
                                 <option></option>
                             </select>
-                            <label for="nombre" id="precioExamenLabel">Precio exámen</label>
+                            <label for="nombre" id="precioExamenLabel">Precio examen</label>
                             <input type="number" step="any" name="precio_examen" id="precioExamen" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">No se permiten números negativos</small>
                         </form>
@@ -122,12 +122,12 @@
                     <div class="modal-body" id="modalActBody">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-examen" class="p-3 px-4">
-                            <label for="nombre">Nombre exámen</label>
+                            <label for="nombre">Nombre examen</label>
                             <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameExam" data-max-length="45" required>
                             <small class="form-text">El nombre solo debe contener al menos 3 letras sin caracteres especiales</small>
                             <label for="tipo">Tipo</label>
                             <select name="tipo" id="s-tipo" class="form-control mb-3" required>
-                                <option value="" disabled selected>Seleccione el tipo de exámen</option>
+                                <option value="" disabled selected>Seleccione el tipo de examen</option>
                                 <option value="1">Ecografía</option>
                                 <option value="2">Laboratorio</option>
                                 <option value="3">Ultrasonido</option>
@@ -136,7 +136,7 @@
                             <select name="especialidades[]" id="s-especialidad-act" class="form-control mb-3" data-active="0" multiple="multiple">
                                 <option></option>
                             </select>
-                            <label for="nombre" id="precioExamenLabelAct">Precio exámen</label>
+                            <label for="nombre" id="precioExamenLabelAct">Precio examen</label>
                             <input type="number" step="any" name="precio_examen" id="precioExamenAct" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
                             <small class="form-text">No se permiten números negativos</small>
                         </form>
@@ -158,7 +158,7 @@
                     </div>
                     <div class="modal-body">
                         <div id="delAlert" class="alert d-none" role="alert"></div>
-                        ¿Estás seguro que deseas eliminar este exámen?
+                        ¿Estás seguro que deseas eliminar este examen?
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="btn-confirmDelete" class="btn btn-danger">Eliminar</button>
@@ -176,7 +176,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div id="delAlertSeguro" class="alert alert-warning" role="alert">No es posible dejar un exámen sin especialidad asociada</div>
+                        <div id="delAlertSeguro" class="alert alert-warning" role="alert">No es posible dejar un examen sin especialidad asociada</div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="btn-confirmDeleteSeguro" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
