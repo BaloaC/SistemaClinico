@@ -63,7 +63,7 @@ export default class CitasManager {
                     if (inputId === "fecha_cita") {
                         this.mostrarCitasDelDia(listCitasByDate);
 
-                        if(horarioDelDia && horarioDelDia.length > 0){
+                        if (horarioDelDia && horarioDelDia.length > 0) {
 
                             this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) });
                             this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) });
@@ -79,7 +79,13 @@ export default class CitasManager {
                     }
 
                     // Validamos que el mensaje de contacto con el médico aparezca si se hace click en un día fuera de su horario
-                    instance.selectedDateElem.children[0].classList.contains("noWorking") ? $(".contact-medico").fadeIn("slow") : $(".contact-medico").fadeOut("slow");
+                    if (instance.selectedDateElem.children[0].classList.contains("noWorking")) {
+                        $(".contact-medico").fadeIn("slow");
+                        $(".contact-medico1").fadeIn("slow");
+                    } else {
+                        $(".contact-medico").fadeOut("slow");
+                        $(".contact-medico1").fadeOut("slow");
+                    };
                 },
                 onDayCreate: async (dObj, dStr, fp, dayElem) => {
 
@@ -88,7 +94,7 @@ export default class CitasManager {
                     const horarioDelDia = this.obtenerHorarioDelDiaPorMedico(dateDayElem);
                     const dateTime = new Date();
                     console.log("🍓 ~ file: CitasManager.js:103 ~ CitasManager ~ onDayCreate: ~ horarioDelDia[0]:", horarioDelDia)
-                    
+
                     if (dateTime.getTime() <= dayElem.dateObj.getTime()) {
 
                         if (availableDays.includes(dayElem.dateObj.getDay())) {
@@ -104,11 +110,17 @@ export default class CitasManager {
                     if (document.getElementById(inputId).value === dateDayElem) {
 
                         // Si la fecha seleccionada no está disponible en el horario del médico mostrar la información de contacto
-                        dayElem.children[0].classList.contains("noWorking") ? $(".contact-medico").fadeIn("slow") : $(".contact-medico").fadeOut("slow");
-                        
+                        if (instance.selectedDateElem.children[0].classList.contains("noWorking")) {
+                            $(".contact-medico").fadeIn("slow");
+                            $(".contact-medico1").fadeIn("slow");
+                        } else {
+                            $(".contact-medico").fadeOut("slow");
+                            $(".contact-medico1").fadeOut("slow");
+                        };
+
                         inputId === "fecha_cita" ? this.mostrarCitasDelDia(listCitasByDate) : this.mostrarCitasDelDia(listCitasByDate, { citasTableClass: "#citas-table-reschedule tbody", withoutCitasClass: ".withoutCitasReschedule", modalRegClass: "#modalReprogramar .modal-body" });
 
-                        if(horarioDelDia && horarioDelDia.length > 0){
+                        if (horarioDelDia && horarioDelDia.length > 0) {
                             this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
                             this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
                         } else {
@@ -208,9 +220,11 @@ export default class CitasManager {
             config.defaultDate = horario.hora_entrada;
         } else {
 
-            config.defaultDate = "00:00";
-            delete config.minTime;
-            delete config.maxTime;
+            config.defaultDate = "08:00";
+            config.minTime = "08:00";
+            config.maxTime = "16:30";
+            // delete config.minTime;
+            // delete config.maxTime;
         }
 
         flatpickr(inputId, config);
@@ -227,9 +241,10 @@ export default class CitasManager {
             config.defaultDate = this.aumentarDecrementar30Minutos(dateStr ?? horario?.hora_entrada, true);
         } else {
 
-            config.defaultDate = "00:00";
+            config.defaultDate = "08:00";
             config.minTime = this.aumentarDecrementar30Minutos(dateStr ?? horario?.hora_entrada, true);
-            delete config.maxTime;
+            config.maxTime = "17:00";
+            // delete config.maxTime;
         }
 
         flatpickr(inputId, config);
@@ -248,7 +263,7 @@ export default class CitasManager {
 
     aumentarDecrementar30Minutos(hora, aumento) {
 
-        if (hora === undefined) return "00:00";
+        if (hora === undefined) return "08:00";
 
         // Separar las horas y los minutos
         const [horas, minutos] = hora.split(":").map(Number);

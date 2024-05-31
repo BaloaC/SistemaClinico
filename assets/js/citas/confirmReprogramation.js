@@ -1,5 +1,6 @@
 import addModule from "../global/addModule.js";
 import cleanValdiation from "../global/cleanValidations.js";
+import scrollTo from "../global/scrollTo.js";
 import { calendar } from "./calendarioCitas.js";
 
 async function confirmReprogramation() {
@@ -19,8 +20,12 @@ async function confirmReprogramation() {
         data.hora_entrada = `${data.hora_entrada}:00`;
         data.hora_salida = `${data.hora_salida}:00`;
 
-        const reprogramacionExitosa = await addModule(`citas/${data.cita_id}`,"reprogramacion-cita",data,"Cita reprogamada exitosamente!","#modalReprogramar",".reprogramacionAlert",undefined, "modalRegBodyReprogramar");
-       
+        if (data.hora_entrada === data.hora_salida) throw { message: "La hora de salida debe ser superior a la hora de entrada" };
+        if (parseInt(data.hora_entrada.split(":")[0]) < 8 || parseInt(data.hora_salida.split(":")[0] > 5)) throw { message: "Las citas no pueden ser fuera de horario laboral del centro médico" }
+
+
+        const reprogramacionExitosa = await addModule(`citas/${data.cita_id}`, "reprogramacion-cita", data, "Cita reprogamada exitosamente!", "#modalReprogramar", ".reprogramacionAlert", undefined, "modalRegBodyReprogramar");
+
         if (!reprogramacionExitosa.code) throw { result: reprogramacionExitosa.result };
 
         calendar.refetchEvents();
@@ -33,9 +38,12 @@ async function confirmReprogramation() {
         let message = error.message || error.result.message;
         $alert.textContent = message;
 
+        scrollTo("modalRegBodyReprogramar");
+
         setTimeout(() => {
             $alert.classList.add("d-none");
         }, 3000)
+        
     }
 }
 

@@ -1,7 +1,7 @@
 import getById from "../global/getById.js";
 import sortScheduleByDay from "../global/sortScheduleByDay.js";
 import to12HourFormat from "../global/to12HoursFormat.js";
-import CitasManager from "./citasManager.js";
+import CitasManager from "./CitasManager.js";
 
 async function reprogramationCita(id) {
     const $form = document.getElementById("reprogramacion-cita");
@@ -15,7 +15,10 @@ async function reprogramationCita(id) {
         const horariosOrdenados = sortScheduleByDay(infoMedico[0]?.horario);
         const horariosTable = document.getElementById("horarios-table-reschedule");
         const fechaCitaReprogramada = document.getElementById("fecha_cita_reprogramada");
+        const numeroTelefonicoCita = document.getElementById("numeroTelefonicoMedico1");
         fechaCitaReprogramada.value = new Date().toISOString().split('T')[0];
+
+        numeroTelefonicoCita.innerText = infoMedico[0].telefono;
 
         let listHorarios = "";
         horariosOrdenados.forEach(horario => {
@@ -31,7 +34,7 @@ async function reprogramationCita(id) {
         horariosTable.innerHTML = listHorarios;
 
         $("#horarios-table-reschedule").fadeIn("slow");
-        $("#medicoRescheduleLabel").fadeIn("slow");
+        $(".medicoRescheduleLabel").fadeIn("slow");
 
         const citasManager = new CitasManager(horariosOrdenados, infoMedico[0]?.medico_id);
         citasManager.obtenerCitas({ inputId: "fecha_cita_reprogramada" });

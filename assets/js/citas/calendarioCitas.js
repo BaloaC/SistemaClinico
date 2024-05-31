@@ -7,7 +7,7 @@ import isBeforeToday from "../global/isBeforeToday.js";
 import sortScheduleByDay from "../global/sortScheduleByDay.js";
 import to12HourFormat from "../global/to12HoursFormat.js";
 import CitasManager from "./CitasManager.js";
-import parseCitas from "./parseCitas.js";
+import parseCitas from "./parseCitas.js?v=1";
 import tipoAsegurado from "./tipoAsegurado.js";
 import tipoTitular from "./tipoTitular.js";
 
@@ -364,8 +364,10 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             const forzarCitaSi = document.getElementById("forzar_cita_si");
             const forzarCitaNo = document.getElementById("forzar_cita_no");
             const numeroTelefonicoCita = document.getElementById("numeroTelefonicoMedico");
+            const numeroTelefonicoCita1 = document.getElementById("numeroTelefonicoMedico1");
 
             numeroTelefonicoCita.innerText = infoMedico[0].telefono;
+            numeroTelefonicoCita1.innerText = infoMedico[0].telefono;
 
             const citasManager = new CitasManager(horariosOrdenados, this.value);
             citasManager.obtenerCitas();

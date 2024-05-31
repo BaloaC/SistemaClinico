@@ -1,5 +1,6 @@
 import convertCurrencyToVES from "./convertCurrencyToVES.js";
 import getAll from "./getAll.js";
+import { confirmUpdateCurrencyExchange } from "./updateCurrencyExchange.js";
 
 export default async function getGlobalValues() {
 
@@ -14,7 +15,10 @@ export default async function getGlobalValues() {
         .then(response => response.json())
         .then(json => {
             currencyExchange.innerText = `${convertCurrencyToVES(json.monitors.usd.price)} Bs`;
+
+            return globalValues[1]["value"];
         })
+        .then(valorBack => confirmUpdateCurrencyExchange(valorBack))
         .catch(error => console.log(error))
     }
 
