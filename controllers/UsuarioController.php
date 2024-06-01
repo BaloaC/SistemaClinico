@@ -55,7 +55,10 @@ class UsuarioController extends Controller{
 
     public function listarUsuarios(){
         $_usuarioModel = new UsuarioModel();
-        $_usuarioModel->where('estatus_usu', '=', '1');
+
+        if (isset($_GET['status'])) {
+            $_usuarioModel->where('estatus_usu', '=', $_GET['status']);
+        }
 
         if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
             if (isset($_GET['start']) || isset($_GET['page'])) {
@@ -92,7 +95,11 @@ class UsuarioController extends Controller{
             $_usuarioModel->setSelect('COUNT(*) AS total');
         }
 
-        $total_registros = $_usuarioModel->where('estatus_usu', '=', '1')->getAll();
+        if (isset($_GET['status'])) {
+            $_usuarioModel->where('estatus_usu', '=', $_GET['status']);
+        }
+
+        $total_registros = $_usuarioModel->getAll();
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), $total_registros[0]->total, $lista);
 
         // $mensaje = (count($lista) > 0);
