@@ -97,19 +97,26 @@ class ExamenController extends Controller{
         $_examenModel = new ExamenModel();
         $lista = $_examenModel->where('examen_id', '=', $examen_id)->where('estatus_exa', '=', '1')->getFirst();
 
-        $_examenEspecialidadModel = new ExamenEspecialidadModel();
-        $inners = $_examenEspecialidadModel->listInner(["especialidad" => "examen_especialidad"]);
-        $select = ['examen_especialidad.examen_especialidad_id','especialidad.especialidad_id', 'especialidad.nombre'];
-        $lista->especialidades = $_examenEspecialidadModel->where('examen_especialidad.examen_id', '=', $examen_id)
-                                                            ->where('examen_especialidad.estatus_exa', '!=', 2)
-                                                            ->where('especialidad.estatus_esp', '!=', 2)
-                                                            ->innerJoin($select, $inners, 'examen_especialidad');
+        if (!is_null($lista)) {
+            $_examenEspecialidadModel = new ExamenEspecialidadModel();
+            $inners = $_examenEspecialidadModel->listInner(["especialidad" => "examen_especialidad"]);
+            $select = ['examen_especialidad.examen_especialidad_id','especialidad.especialidad_id', 'especialidad.nombre'];
+            $especialidades = $_examenEspecialidadModel->where('examen_especialidad.examen_id', '=', $examen_id)
+                                                                ->where('examen_especialidad.estatus_exa', '!=', 2)
+                                                                ->where('especialidad.estatus_esp', '!=', 2)
+                                                                ->innerJoin($select, $inners, 'examen_especialidad');
+            if (!is_null($especialidades)) {
+                $lista->especialidades = $especialidades;
+            }
+            $mensaje = ($lista != null);
+            $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
+            $respuesta->setData($lista);
+    
+            return $respuesta->json(200);
+        }
 
-        $mensaje = ($lista != null);
-        $respuesta = new Response($mensaje ? 'CORRECTO' : 'NOT_FOUND');
-        $respuesta->setData($lista);
-
-        return $respuesta->json(200);
+        $respuesta = new Response('NOT_FOUND');
+        return $respuesta->json(400);
     }
 
     public function listarExamenDeLaboratorios(){
