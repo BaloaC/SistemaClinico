@@ -61,38 +61,27 @@ export default async function mostrarHistorialMedico(id) {
 
 
         // ** Validamos si el paciente es asegurado y tiene seguros
-        if (infoPaciente.tipo_paciente === "3") {
+        if (infoPaciente.tipo_paciente === "3" && infoPaciente.seguro.length > 0) {
 
-            if (infoPaciente.seguro.length > 0) {
+            infoPaciente.seguro.forEach(el => {
 
-                infoPaciente.seguro.forEach(el => {
+                let nombreEmpresa = templateSeguro.getElementById("nombre_empresa");
+                let nombreSeguro = templateSeguro.getElementById("nombre_seguro");
 
-                    let nombreEmpresa = templateSeguro.getElementById("nombre_empresa");
-                    let nombreSeguro = templateSeguro.getElementById("nombre_seguro");
+                nombreEmpresa.textContent = el.nombre_empresa;
+                nombreSeguro.textContent = el.nombre_seguro;
 
-                    nombreEmpresa.textContent = el.nombre_empresa;
-                    nombreSeguro.textContent = el.nombre_seguro;
+                let clone = document.importNode(templateSeguro, true);
+                seguroFragment.appendChild(clone);
+            });
 
-                    let clone = document.importNode(templateSeguro, true);
-                    seguroFragment.appendChild(clone);
-                });
+            //Mostrarmos el label
+            const seguroLabel = document.getElementById("seguroLabel");
+            seguroLabel.classList.remove("d-none");
 
-                //Mostrarmos el label
-                const seguroLabel = document.getElementById("seguroLabel");
-                seguroLabel.classList.remove("d-none");
-
-                // Actualizamos el contenedor e insertamos los datos
-                seguroContainer.replaceChildren();
-                seguroContainer.appendChild(seguroFragment);
-            } else {
-
-                const p = document.createElement("p");
-                p.textContent = "El paciente no posee seguros asociados";
-
-                // Actualizamos el contenedor e insertamos los datos
-                seguroContainer.replaceChildren();
-                seguroContainer.appendChild(p);
-            }
+            // Actualizamos el contenedor e insertamos los datos
+            seguroContainer.replaceChildren();
+            seguroContainer.appendChild(seguroFragment);
 
         } else {
 
@@ -103,50 +92,43 @@ export default async function mostrarHistorialMedico(id) {
         }
 
         // ** Validamos si el paciente es beneficiado y tiene titulares
-        if (infoPaciente.tipo_paciente === "4") {
+        if (infoPaciente.tipo_paciente === "4" && infoPaciente?.titulares?.length > 0) {
 
-            if (infoPaciente?.titulares?.length > 0) {
-
-
-
-                const tipo_familiar = {
-                    "1": "Padre/Madre",
-                    "2": "Representante",
-                    "3": "Primo/a",
-                    "4": "Hermano/a",
-                    "5": "Esposo/a",
-                    "6": "Tío/a",
-                    "7": "Sobrino/a",
-                }
-
-                infoPaciente.titulares.forEach(el => {
-
-                    let nombre = templateTitular.getElementById("nombre");
-                    let cedula = templateTitular.getElementById("cedula");
-                    let edad = templateTitular.getElementById("edad");
-                    let relacion = templateTitular.getElementById("relacion");
-
-                    nombre.textContent = `${el.nombre} ${el.apellidos}`;
-                    nombre.href = `../historialmedico/${el.paciente_id}`;
-                    cedula.textContent = el.cedula;
-                    edad.textContent = el.edad;
-                    relacion.textContent = tipo_familiar[el.tipo_familiar];
-
-                    let clone = document.importNode(templateTitular, true);
-                    titularFragment.appendChild(clone);
-                });
-
-
-                //Mostrarmos el label
-                const titularLabel = document.getElementById("titularesLabel");
-                titularLabel.classList.remove("d-none");
-
-                // Actualizamos el contenedor e insertamos los datos
-                titularContainer.replaceChildren();
-                titularContainer.appendChild(titularFragment);
-
+            const tipo_familiar = {
+                "1": "Padre/Madre",
+                "2": "Representante",
+                "3": "Primo/a",
+                "4": "Hermano/a",
+                "5": "Esposo/a",
+                "6": "Tío/a",
+                "7": "Sobrino/a",
             }
 
+            infoPaciente.titulares.forEach(el => {
+
+                let nombre = templateTitular.getElementById("nombre");
+                let cedula = templateTitular.getElementById("cedula");
+                let edad = templateTitular.getElementById("edad");
+                let relacion = templateTitular.getElementById("relacion");
+
+                nombre.textContent = `${el.nombre} ${el.apellidos}`;
+                nombre.href = `../historialmedico/${el.paciente_id}`;
+                cedula.textContent = el.cedula;
+                edad.textContent = el.edad;
+                relacion.textContent = tipo_familiar[el.tipo_familiar];
+
+                let clone = document.importNode(templateTitular, true);
+                titularFragment.appendChild(clone);
+            });
+
+
+            //Mostrarmos el label
+            const titularLabel = document.getElementById("titularesLabel");
+            titularLabel.classList.remove("d-none");
+
+            // Actualizamos el contenedor e insertamos los datos
+            titularContainer.replaceChildren();
+            titularContainer.appendChild(titularFragment);
         } else {
 
             // Ocultamos el container
@@ -156,47 +138,44 @@ export default async function mostrarHistorialMedico(id) {
         }
 
         // ** Validamos si el paciente es asegurado y tiene beneficiado
-        if (infoPaciente.tipo_paciente === "3") {
+        if (infoPaciente.tipo_paciente === "3" && infoPaciente?.beneficiados?.length > 0) {
 
-
-            if (infoPaciente?.beneficiados?.length > 0) {
-
-                const tipo_familiar = {
-                    "1": "Padre/Madre",
-                    "2": "Representante",
-                    "3": "Primo/a",
-                    "4": "Hermano/a",
-                    "5": "Esposo/a",
-                    "6": "Tío/a",
-                    "7": "Sobrino/a",
-                }
-
-                infoPaciente.beneficiados.forEach(el => {
-
-                    let nombre = templateBeneficiado.getElementById("nombre");
-                    let cedula = templateBeneficiado.getElementById("cedula");
-                    let edad = templateBeneficiado.getElementById("edad");
-                    let relacion = templateBeneficiado.getElementById("relacion");
-
-                    nombre.textContent = `${el.nombre} ${el.apellidos}`;
-                    nombre.href = `../historialmedico/${el.paciente_id}`;
-                    cedula.textContent = el.cedula;
-                    edad.textContent = el.edad;
-                    relacion.textContent = tipo_familiar[el.tipo_familiar];
-
-                    let clone = document.importNode(templateBeneficiado, true);
-                    beneficiadoFragment.appendChild(clone);
-                });
-
-                //Mostrarmos el label
-                const beneficiadoLabel = document.getElementById("beneficiadosLabel");
-                beneficiadoLabel.classList.remove("d-none");
-
-                // Actualizamos el contenedor e insertamos los datos
-                beneficiadoContainer.replaceChildren();
-                beneficiadoContainer.appendChild(beneficiadoFragment);
-
+            const tipo_familiar = {
+                "1": "Padre/Madre",
+                "2": "Representante",
+                "3": "Primo/a",
+                "4": "Hermano/a",
+                "5": "Esposo/a",
+                "6": "Tío/a",
+                "7": "Sobrino/a",
             }
+
+            infoPaciente.beneficiados.forEach(el => {
+
+                let nombre = templateBeneficiado.getElementById("nombre");
+                let cedula = templateBeneficiado.getElementById("cedula");
+                let edad = templateBeneficiado.getElementById("edad");
+                let relacion = templateBeneficiado.getElementById("relacion");
+
+                nombre.textContent = `${el.nombre} ${el.apellidos}`;
+                nombre.href = `../historialmedico/${el.paciente_id}`;
+                cedula.textContent = el.cedula;
+                edad.textContent = el.edad;
+                relacion.textContent = tipo_familiar[el.tipo_familiar];
+
+                let clone = document.importNode(templateBeneficiado, true);
+                beneficiadoFragment.appendChild(clone);
+            });
+
+            //Mostrarmos el label
+            const beneficiadoLabel = document.getElementById("beneficiadosLabel");
+            beneficiadoLabel.classList.remove("d-none");
+            beneficiadoContainer.classList.remove("d-none");
+            beneficiadoContainer.classList.remove("invisible");
+
+            // Actualizamos el contenedor e insertamos los datos
+            beneficiadoContainer.replaceChildren();
+            beneficiadoContainer.appendChild(beneficiadoFragment);
 
         } else {
 
@@ -236,6 +215,9 @@ export default async function mostrarHistorialMedico(id) {
                 let clone = document.importNode(templateAntecedente, true);
                 antecedenteFragment.appendChild(clone);
             });
+
+            antecedenteContainer.classList.remove("d-none");
+            antecedenteContainer.classList.remove("invisible");
 
             // Actualizamos el contenedor e insertamos los datos
             antecedenteContainer.replaceChildren();

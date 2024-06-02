@@ -470,7 +470,7 @@
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form method="POST" id="act-antecedente" class="p-3 px-4">
                             <label for="tipo_antecedente_id">Tipo de antecedente</label>
-                            <select name="tipo_antecedente_id" class="form-control mb-3" required>
+                            <select name="tipo_antecedente_id" class="form-control mb-3" disabled>
                                 <option value="" disabled selected>Seleccione el tipo de antecedente</option>
                                 <option value="1">Antecedentes Patológicos</option>
                                 <option value="2">Antecedentes Psicológicos</option>
@@ -613,7 +613,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/consultas/addMedicoPagoInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/deleteInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/registrarFConsulta.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/mostrarFCOnsulta.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/facturas-consulta/mostrarFConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas-seguro/registrarConsultaSeguro.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/consultaEmergencia.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/consultaSinCita.js'); ?>"></script>
