@@ -6,7 +6,7 @@ function deleteExamen(id) {
 }
 
 async function confirmDelete(id) {
-    await deleteModule("examenes", id, "Exámen eliminado exitosamente!");
+    await deleteModule("examenes", id, "Examen eliminado exitosamente!");
     const listadoExamenes = await ssrExamanesRequest(1);
     pagination.initializated = false;
     pagination.paginaActual = 1;

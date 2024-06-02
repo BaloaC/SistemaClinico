@@ -45,6 +45,9 @@ export default async function consultaEmergencia(inputRadio) {
         turnInput(".inputPacienteBeneficiadoEmergencia", true);
         $("#addMedicoPago").fadeOut("slow");
         $("#addInsumo").fadeOut("slow");
+        $("#tipoConsultas").fadeIn("slow");
+        $("label[for='tipoServicio']").fadeIn("slow");
+        
         seguroSelect.disabled = true;
         // $(".examenSelect").fadeIn("slow");
         // examenSelect.disabled = false;
@@ -63,62 +66,6 @@ export default async function consultaEmergencia(inputRadio) {
         inputDateConsulta.disabled = true;
         $(inputDateConsultaLabel).fadeOut("slow");
         inputDateConsultaHidden.disabled = false;
-
-        // $(".info-paciente").fadeIn("slow");
-        // $(".info-medico").fadeIn("slow");
-
-        // dinamicSelect2({
-        //     // obj: pacientesList ?? [],
-        //     selectSelector: "#s-paciente",
-        //     selectValue: "paciente_id",
-        //     selectNames: ["cedula", "nombre-apellidos"],
-        //     parentModal: "#modalReg",
-        //     placeholder: "Seleccione un paciente",
-        //     ajax: true,
-        //     ajaxUrl: "pacientes/consulta",
-        //     processResultsAjax: function (data, params) {
-
-        //         const data1 = [];
-
-        //         if (typeof data === "object" && data?.data !== 0) {
-        //             data?.data.forEach(object => {
-        //                 const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
-
-        //                 const handleTipoPaciente = (tipo_paciente) => {
-        //                     if (tipo_paciente == 1) tipo_paciente = "Natural";
-        //                     else if (tipo_paciente == 2) tipo_paciente = "Representante";
-        //                     else if (tipo_paciente == 3) tipo_paciente = "Asegurado";
-        //                     else if (tipo_paciente == 4) tipo_paciente = "Beneficiado";
-
-        //                     return tipo_paciente;
-        //                 }
-
-        //                 data1.push({ id: valorPropiedad1, text: `${cedula} - ${nombre} ${apellidos} - ${handleTipoPaciente(tipo_paciente)}` });
-        //             });
-        //         }
-
-        //         // Transforms the top-level key of the response object from 'data' to 'results'
-        //         return {
-        //             results: data1 ?? [],
-        //             pagination: {
-        //                 more: data1.length
-        //             }
-        //         };
-        //     }
-        // });
-
-        // pacienteSelect.disabled = false;
-        // medicoSelect.disabled = false;
-        // especialidadSelect.disabled = false;
-        // $(inputDateConsulta).fadeIn("slow");
-        // inputDateConsulta.disabled = false;
-        // $(inputDateConsultaLabel).fadeIn("slow");
-        // inputDateConsultaHidden.disabled = true;
-
-        // $("#cedula_beneficiado-label").fadeOut("slow");
-        // $("#cedula_beneficiado").fadeOut("slow");
-        // $("#cedulaBeneficiadoSmall").fadeOut("slow");
-        // pacienteBeneficiado.disabled = true;
 
     } else { // Es por emergencia
 
@@ -145,6 +92,9 @@ export default async function consultaEmergencia(inputRadio) {
             $("#addInsumo").fadeIn("slow");
             // $(".examenSelect").fadeOut("slow");
             // examenSelect.disabled = true;
+            $("label[for='tipoServicio']").fadeOut("slow");
+            $("#tipoConsultas").fadeOut("slow");
+            document.getElementById("tipoConsultas").value = "consulta";
 
             $("#cedula_beneficiado").empty().select2();
 
@@ -302,6 +252,8 @@ export default async function consultaEmergencia(inputRadio) {
             $(".inputRadioPagoMedico").fadeOut("slow");
             $(".info-insumos-emergencia").fadeOut("slow");
             $("#addInsumo").fadeOut("slow");
+            $("label[for='tipoServicio']").fadeIn("slow");
+            $("#tipoConsultas").fadeIn("slow");
 
 
             dinamicSelect2({

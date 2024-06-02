@@ -31,9 +31,9 @@ async function addPaciente() {
                 const seguro_id = {
                     seguro_id: el,
                     empresa_id: data.empresa_id,
-                    cobertura_general: data.cobertura_general,
+                    // cobertura_general: data.cobertura_general,
                     fecha_contra: data.fecha_contra,
-                    saldo_disponible: data.saldo_disponible
+                    // saldo_disponible: data.saldo_disponible
                 }
                 seguro.push(seguro_id);
             })

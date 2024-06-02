@@ -21,11 +21,19 @@
         <div class="container">
             <!-- Cabezera -->
             <div class="row">
-                <div class="col-6">
+                <div class="col-6 d-flex align-items-center">
                     <h4 class="pt-5 pb-2 text-grey">Citas</h4>
                 </div>
-                <div class="col-6 d-flex align-items-center justify-content-end">
-                    <!-- <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Citas</button> -->
+                <div class="col-6 d-flex flex-column align-items-end justify-content-end">
+                    <div class="mt-4">
+                        <p>Leyenda:</p>
+                        <ul class="leyenda-citas">
+                            <li>Cita normal</li>
+                            <li>Cita asegurada</li>
+                            <li>Cita reprogramada</li>
+                            <li>Cita vista</li>
+                        </ul>
+                    </div>
                 </div>
                 <hr class="border-white">
             </div>
@@ -242,7 +250,8 @@
                             <div class="row">
                                 <div class="col-12 col-md-6">
                                     <label for="clave">Clave</label>
-                                    <input type="text" name="clave" id="clave" class="form-control mb-3">
+                                    <input type="text" name="clave" id="clave" data-max-length="15" data-type="nameExam" data-validate="true" class="form-control mb-3">
+                                    <small class="form-text">Solo se permiten números y letras con un mínimo de 3 caracteres</small>
 
                                     <div class="d-flex align-items-center justify-content-start">
                                         <input type="checkbox" class="form-check-input me-3" onclick="return false;" checked>
@@ -251,7 +260,7 @@
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <label for="monto" class="">Monto aprobado</label>
-                                    <input type="number" step="any" name="monto_aprobado" data-validate="true" data-type="price" class="form-control" oninput="montoAprobadoHandler(this)" required>
+                                    <input type="number" step="any" name="monto_aprobado" data-max-length="5" data-validate="true" data-type="price" class="form-control" oninput="montoAprobadoHandler(this)" required>
                                     <small class="form-text">No se permiten números negativos</small>
                                 </div>
                             </div>
@@ -325,6 +334,20 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <div class="col-12 col-md-12 contact-medico1" style="display: none;">
+                                <p>Para asignar citas fuera del horario del médico puede comunicarse con él a través del siguiente número telefónico: <br> <b id="numeroTelefonicoMedico1">Seleccione el médico para mostrar su número de contacto</b></p>
+                                <label for="input-radios-container">¿El médico autorizó la asignación de la cita fuera de su horario establecido?</label>
+                                <div class="input-radios-container">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_si" value="true">
+                                        <label class="form-check-label" for="inlineRadio1">Sí</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_no" value="false" checked>
+                                        <label class="form-check-label" for="inlineRadio2">No</label>
+                                    </div>
+                                </div>
+                            </div>
                             <label for="hora_entrada">Hora entrada</label>
                             <input type="time" name="hora_entrada" id="hora_entrada2" data-type="timeAppointment" step="1" class="form-control hora_entrada2 flatpickr-input-readonly mb-3" disabled>
                             <label for="hora_salida">Hora salida</label>
@@ -410,7 +433,7 @@
     <script src="<?php echo Url::to('assets/libs/flatpickr/es.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/fullcalendar/index.global.min.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/fullcalendar/es.global.min.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/citas/calendarioCitas.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/calendarioCitas.js?v=2'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/addCita.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/confirmUpdateCita.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/updateCita.js'); ?>"></script>

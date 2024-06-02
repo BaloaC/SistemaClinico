@@ -7,7 +7,7 @@ function deleteEspecialidad(id) {
 }
 
 async function confirmDeleteEspecialidad(id) {
-    await deleteModule("examenes/especialidad/", id, "Especialidad del exámen eliminada correctamente!", "#modalDeleteRelacion", "delAlertRelacion");
+    await deleteModule("examenes/especialidad/", id, "Especialidad del examen eliminada correctamente!", "#modalDeleteRelacion", "delAlertRelacion");
     const listadoExamenes = await ssrExamanesRequest(1);
     pagination.initializated = false;
     pagination.paginaActual = 1;

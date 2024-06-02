@@ -38,6 +38,7 @@ Router::get("/pdf/cintillo/:id", PdfController::class . '@pdf_cintillo');
 Router::get("/pdf/facturamensajeria/:id", PdfController::class . '@pdf_facturaMensajeria');
 Router::get("/pdf/consultaseguro/:id", PdfController::class . '@pdf_consultaSeguro');
 Router::get("/pdf/presupuesto/:id", PdfController::class . '@pdf_presupuesto');
+Router::get("/pdf/auditoria/:id", PdfController::class . '@pdf_auditoria');
 
 // //Login - vista
 Router::get('/login', LoginController::class . '@index');

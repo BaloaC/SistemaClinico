@@ -128,8 +128,8 @@ async function confirmUpdate() {
         // ** Enviar el seguro en caso de que se vaya a añadir uno en la actualizaron
         if ('seguro[]' in parseData && 'empresa_id' in parseData) {
             parseData.seguro = [{
-                cobertura_general: parseData.cobertura_general,
-                saldo_disponible: parseData.saldo_disponible,
+                // cobertura_general: parseData.cobertura_general,
+                // saldo_disponible: parseData.saldo_disponible,
                 paciente_id: parseData.paciente_id,
                 seguro_id: parseData["seguro[]"],
                 empresa_id: parseData.empresa_id,

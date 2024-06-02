@@ -49,7 +49,19 @@ async function addCita() {
         data.hora_entrada = `${data.hora_entrada}:00`;
         data.hora_salida = `${data.hora_salida}:00`;
 
-        if(data.tipo_servicio === "3") data.tipo_servicio = 2;
+        const horaEntradaObj = new Date();
+        const horaEntrada = data.hora_entrada.split(":");
+        horaEntradaObj.setHours(horaEntrada[0],horaEntrada[1]);
+
+        const horaSalidaObj = new Date();
+        const horaSalida = data.hora_salida.split(":");
+        horaSalidaObj.setHours(horaSalida[0],horaSalida[1]);
+
+        if (data.hora_entrada === data.hora_salida) throw { message: "La hora de salida debe ser superior a la hora de entrada" };
+        if (horaEntradaObj > horaSalidaObj) throw { message: "La hora de entrada no puede ser superior a la de salida" }
+        if (parseInt(data.hora_entrada.split(":")[0]) < 8 || parseInt(data.hora_salida.split(":")[0] > 5)) throw { message: "Las citas no pueden ser fuera de horario laboral del centro médico" }
+
+        if (data.tipo_servicio === "3") data.tipo_servicio = 2;
 
         const registroExitoso = await addModule("citas", "info-cita", data, "Cita agendada exitosamente!");
 
@@ -62,7 +74,7 @@ async function addCita() {
         console.log(error);
 
         scrollTo("modalRegBody");
-        
+
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
         $alert.textContent = error.message || error.result.message;

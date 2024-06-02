@@ -24,21 +24,11 @@ async function updateCurrencyExchange() {
 
 window.updateCurrencyExchange = updateCurrencyExchange;
 
-async function confirmUpdateCurrencyExchange() {
-    const form = document.getElementById("act-cambioDivisa"),
-        alert = document.getElementById("actAlertDivisa");
+export async function confirmUpdateCurrencyExchange(cambioDivisa) {
 
     try {
-        const formData = new FormData(form),
-            data = {};
-
-        formData.forEach((value, key) => (data[key] = value));
-
-        if (!form.checkValidity()) { form.reportValidity(); return; }
-        if (!(patterns.price.test(data.cambio_divisa))) throw { message: "El valor debe ser númerico y sin números negativos" };
-
-        const parseData = deleteSecondValue("#act-cambioDivisa input, #act-cambioDivisa select", data);
-
+        const currentPrice = document.getElementById("currencyExchange").textContent.split(" ")[0];
+        
         const options = {
 
             method: "PUT",
@@ -47,13 +37,11 @@ async function confirmUpdateCurrencyExchange() {
                 "Content-type": "application/json; charset=utf-8",
                 "Authorization": "Bearer " + Cookies.get("tokken")
             },
-            body: JSON.stringify({ cambio_divisa: parseData.cambio_divisa })
+            body: JSON.stringify({ cambio_divisa: currentPrice.toString().replace(",",".") })
         };
 
-        const currentPrice = document.getElementById("currencyExchange").textContent.split(" ")[0];
-
         // Validamos que si el precio es igual, no hacer la petición
-        if (currentPrice.toString().replace(",",".") != parseData.cambio_divisa){
+        if (currentPrice.toString().replace(",",".") != cambioDivisa){
         
             let response = await fetch(`/${path[1]}/cambioDivisa`, options)
             const json = await response.json();
@@ -61,37 +49,8 @@ async function confirmUpdateCurrencyExchange() {
             if (!json.code) throw { result: json };
         }
 
-
-        alert.classList.add("alert");
-        alert.classList.remove("alert-danger");
-        alert.classList.add("alert-success");
-        alert.classList.remove("d-none");
-        alert.textContent = "Monto actualizado correctamente!";
-        form.reset();
-        scrollTo("modalActBody");
-
-        setTimeout(() => {
-            $("#modalActCambioDivisa").modal("hide");
-            alert.classList.add("d-none");
-            alert.classList.remove("alert");
-        }, 750);
-
-        cleanValdiation("act-cambioDivisa");
-        await getGlobalValues();
-
     } catch (error) {
         console.log(error);
-
-        alert.classList.add("alert");
-        alert.classList.remove("d-none");
-        alert.classList.add("alert-danger");
-        let message = error.message || error.result.message;
-        alert.textContent = message;
-
-        setTimeout(() => {
-            alert.classList.add("d-none");
-            alert.classList.remove("alert");
-        }, 3000)
     }
 }
 

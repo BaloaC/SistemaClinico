@@ -63,8 +63,9 @@
                         <!-- </div> -->
                         <button type="button" id="btn-registrar" class="btn btn-sm btn-add d-inline" onclick="filtrarAuditoria(event)"><i class="fas fa-sm fa-filter"></i> Filtrar</button>
                 </div>
-                <div class="col-6 d-flex justify-content-end align-items-center">
-                    <a href="./exportarBd" type="button" id="btn-registrar" class="btn btn-sm btn-add d-inline"><i class="fas fa-sm fa-file-export"></i>Exportar Base de Datos</a>
+                <div class="col-6 d-flex justify-content-end align-items-end flex-column">
+                    <a href="./exportarBd" type="button" id="btn-registrar" class="btn btn-sm btn-add d-inline my-3"><i class="fas fa-sm fa-file-export"></i>Exportar Base de Datos</a>
+                    <a href="#" type="button" id="btn-registrar" class="btn btn-sm btn-add d-inline" onclick="openPopup('pdf/auditoria/0')"><i class="fas fa-sm fa-file-export"></i>Exportar PDF</a>
                 </div>
                 <hr class="border-white">
             </div>
