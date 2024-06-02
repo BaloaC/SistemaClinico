@@ -1,3 +1,4 @@
+import cleanValdiation from "../global/cleanValidations.js";
 import deleteSecondValue from "../global/deleteSecondValue.js";
 import getById from "../global/getById.js";
 import updateModule from "../global/updateModule.js";
@@ -37,7 +38,7 @@ async function updateAntecedente(id) {
 
 window.updateAntecedente = updateAntecedente;
 
-async function confirmUpdate() {
+async function confirmUpdateAntedecente() {
 
     const id = location.pathname.split("/")[4];
 
@@ -54,6 +55,7 @@ async function confirmUpdate() {
 
         await updateModule(parseData, "antecedentes_medicos_id", "antecedentes", "act-antecedente", "Antecedente actualizado exitosamente!");
 
+        cleanValdiation("act-antecedente");
         mostrarHistorialMedico(id);
 
     } catch (error) {
@@ -69,9 +71,9 @@ async function confirmUpdate() {
     }
 }
 
-window.confirmUpdate = confirmUpdate;
+window.confirmUpdateAntedecente = confirmUpdateAntedecente;
 
 document.getElementById("act-antecedente").addEventListener('submit', (event) => {
     event.preventDefault();
-    confirmUpdate();
+    confirmUpdateAntedecente();
 })

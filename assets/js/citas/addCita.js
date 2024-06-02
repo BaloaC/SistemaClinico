@@ -59,7 +59,7 @@ async function addCita() {
 
         if (data.hora_entrada === data.hora_salida) throw { message: "La hora de salida debe ser superior a la hora de entrada" };
         if (horaEntradaObj > horaSalidaObj) throw { message: "La hora de entrada no puede ser superior a la de salida" }
-        if (parseInt(data.hora_entrada.split(":")[0]) < 8 || parseInt(data.hora_salida.split(":")[0] > 5)) throw { message: "Las citas no pueden ser fuera de horario laboral del centro médico" }
+        if (!(parseInt(data.hora_entrada.split(":")[0]) >= 8 && (parseInt(data.hora_entrada.split(":")[0]) <= 17)) || !(parseInt(data.hora_salida.split(":")[0]) >= 8 && (parseInt(data.hora_salida.split(":")[0]) <= 17))) throw { message: "Las citas no pueden ser fuera de horario laboral del centro médico" }
 
         if (data.tipo_servicio === "3") data.tipo_servicio = 2;
 

@@ -88,8 +88,6 @@ export default class CitasManager {
                     };
                 },
                 onDayCreate: async (dObj, dStr, fp, dayElem) => {
-                console.log("🍓 ~ file: CitasManager.js:91 ~ CitasManager ~ onDayCreate: ~ dayElem:", dayElem, dObj, fp)
-
 
                     const dateDayElem = dayElem.dateObj.toISOString().split('T')[0];
                     const listCitasByDate = await this.obtenerCitasPorFecha(dateDayElem);

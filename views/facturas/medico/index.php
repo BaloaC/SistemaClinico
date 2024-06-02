@@ -37,7 +37,7 @@
                                     <thead>
                                         <tr>
                                             <th>Item</th>
-                                            <th>Nombre doctor</th>
+                                            <th>Nombre médico</th>
                                             <th>Sumatoria consultas naturales</th>
                                             <th>Sumatoria consultas aseguradas</th>
                                             <th>Acumulado seguro</th>

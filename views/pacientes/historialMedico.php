@@ -48,7 +48,7 @@
                                     <p class="text-secondary">Edad <span id="edad"></span></p>
                                 </div>
                             </div>
-                            <div class="card">
+                            <div class="card" id="antecedenteContainer">
                                 <div class="card-body">
                                     <p class="fw-bold">Antecedentes</p>
                                     <div class="antecedente-container">
@@ -68,6 +68,14 @@
                                 <div class="card-body">
                                     <p id="beneficiadosLabel" class="d-none"><b>Benecifiado:</b></p>
                                     <div class="beneficiado-container">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card" id="titularesContainer">
+                                <div class="card-body">
+                                    <p id="titularesLabel" class="d-none"><b>Titular:</b></p>
+                                    <div class="titular-container">
                                     </div>
                                 </div>
                             </div>
@@ -431,13 +439,13 @@
                                 <option value="" disabled selected>Seleccione el tipo de antecedente</option>
                                 <option value="1">Antecedentes Patológicos</option>
                                 <option value="2">Antecedentes Psicológicos</option>
-                                <option value="2">Antecedentes médicos familiares</option>
-                                <option value="2">Cirugías o traumatismos</option>
-                                <option value="2">Alergias</option>
-                                <option value="2">Reacción a medicamentos</option>
-                                <option value="2">Enfermedades Padecidas</option>
-                                <option value="2">Tratamientos</option>
-                                <option value="2">Hábitos de salud</option>
+                                <option value="3">Antecedentes médicos familiares</option>
+                                <option value="4">Cirugías o traumatismos</option>
+                                <option value="5">Alergias</option>
+                                <option value="6">Reacción a medicamentos</option>
+                                <option value="7">Enfermedades Padecidas</option>
+                                <option value="8">Tratamientos</option>
+                                <option value="9">Hábitos de salud</option>
                             </select>
                             <label for="descripcion">Descripción</label>
                             <input type="text" name="descripcion" class="form-control mb-3" data-max-length="45" required>
@@ -466,20 +474,20 @@
                                 <option value="" disabled selected>Seleccione el tipo de antecedente</option>
                                 <option value="1">Antecedentes Patológicos</option>
                                 <option value="2">Antecedentes Psicológicos</option>
-                                <option value="2">Antecedentes médicos familiares</option>
-                                <option value="2">Cirugías o traumatismos</option>
-                                <option value="2">Alergias</option>
-                                <option value="2">Reacción a medicamentos</option>
-                                <option value="2">Enfermedades Padecidas</option>
-                                <option value="2">Tratamientos</option>
-                                <option value="2">Hábitos de salud</option>
+                                <option value="3">Antecedentes médicos familiares</option>
+                                <option value="4">Cirugías o traumatismos</option>
+                                <option value="5">Alergias</option>
+                                <option value="6">Reacción a medicamentos</option>
+                                <option value="7">Enfermedades Padecidas</option>
+                                <option value="8">Tratamientos</option>
+                                <option value="9">Hábitos de salud</option>
                             </select>
                             <label for="descripcion">Descripción</label>
                             <input type="text" name="descripcion" class="form-control mb-3" data-max-length="45" required>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
+                        <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdateAntedecente()">Actualizar</button>
                     </div>
                 </div>
             </div>
@@ -524,7 +532,16 @@
 
         <template id="template-beneficiado">
             <div class="seguro">
-                <p><b>Nombres:</b> <span id="nombre"></span></p>
+                <p><b>Nombres:</b> <a id="nombre" class="link-dark text-decoration-none"></a></p>
+                <p><b>Cédula:</b> <span id="cedula"></span></p>
+                <p><b>Edad:</b> <span id="edad"></span></p>
+                <p><b>Relación:</b> <span id="relacion"></span></p>
+            </div>
+        </template>
+
+        <template id="template-titular">
+            <div class="seguro">
+                <p><b>Nombres:</b> <a id="nombre" class="link-dark text-decoration-none"></a></p>
                 <p><b>Cédula:</b> <span id="cedula"></span></p>
                 <p><b>Edad:</b> <span id="edad"></span></p>
                 <p><b>Relación:</b> <span id="relacion"></span></p>

@@ -35,13 +35,25 @@ function getAuditoria(type, form = null) {
 async function filtrarAuditoria(e) {
     e.preventDefault();
 
-    const $form = document.getElementById("filtrarPor"),
-        inputFiltro = document.getElementById("inputFiltro");
+    const $form = document.getElementById("filtrarPor");
+    const formData = new FormData($form),
+        data = {};
 
-    if (!inputFiltro.value) return;
+    formData.forEach((value, key) => (data[key] = value));
+
+    console.log(data);
     if (!$form.checkValidity()) { $form.reportValidity(); return; }
+    // if(data?.fecha_inicio )
 
-    const auditoriaInfo = getAuditoria(inputFiltro.value, $form);
+
+    let auditoriaUrl = "";
+
+    if(data.usuario_id) auditoriaUrl += `?usuario_id=${data.usuario_id}`;
+    if(data.accionValue) auditoriaUrl += `&accion=${data.accionValue}`;
+    if(data.moduloValue) auditoriaUrl += `&modulo="${data.moduloValue}"`;
+    if(data.fecha_inicio) auditoriaUrl += `&fecha_inicio=${data.fecha_inicio}&fecha_fin=${data.fecha_fin}`;   
+
+    document.getElementById("btn-exportarPdf").setAttribute("onclick",`openPopup('pdf/auditoria/00000${auditoriaUrl}')`);
 
     $('#auditoria').DataTable().clear();
     $('#auditoria').DataTable().destroy();
@@ -56,11 +68,10 @@ async function filtrarAuditoria(e) {
     createDataTable({
         id: "#auditoria",
         columns: auditoriaColumns,
-        url: `/${path[1]}/auditoria/${auditoriaInfo.url}`,
+        url: `/${path[1]}/auditoria/consulta${auditoriaUrl}`,
         serverSide: true,
         processing: true,
-        order: [[4, 'desc']],
-        requestData: auditoriaInfo.body
+        order: [[4, 'desc']]
     });
 }
 

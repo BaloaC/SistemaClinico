@@ -87,7 +87,7 @@ class EstadisticasController extends Controller
         foreach ($consultasFiltradas as $consulta) {
 
             // Consultas normales
-            if (isset($consulta->tipo_cita) && $consulta->tipo_cita = 1) {
+            if ((isset($consulta->tipo_cita) && $consulta->tipo_cita == 1) || (isset($consulta->es_emergencia) && $consulta->es_emergencia == 0)) {
                 $consultaInfo[] = $consulta;
             } else {
                 $consultasAseguradas[] = $consulta;
@@ -254,7 +254,7 @@ class EstadisticasController extends Controller
             } else {
                 $conteosEspecialidades[$especialidadId] = [
                     'cantidad' => 1,
-                    'nombre_especialidad' => $dato->medico[0]->nombre_especialidad ?? $dato->nombre_especialidad ?? "Sin especialidad."
+                    'nombre_especialidad' => $dato->medico[0]->nombre_especialidad ?? $dato->nombre_especialidad ?? "Consulta por emergencia."
                 ];
             }
         }
