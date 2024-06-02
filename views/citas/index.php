@@ -433,7 +433,7 @@
     <script src="<?php echo Url::to('assets/libs/flatpickr/es.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/fullcalendar/index.global.min.js'); ?>"></script>
     <script src="<?php echo Url::to('assets/libs/fullcalendar/es.global.min.js'); ?>"></script>
-    <script type="module" src="<?php echo Url::to('assets/js/citas/calendarioCitas.js?v=2'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/calendarioCitas.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/addCita.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/confirmUpdateCita.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/updateCita.js'); ?>"></script>

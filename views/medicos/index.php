@@ -125,7 +125,7 @@
                                 </div>
 
                                 <div class="col-12 col-check mt-4">
-                                    <div class="py-3">Seleccione los horarios del doctor</div>
+                                    <div class="py-3">Seleccione los horarios del médico</div>
                                     <div class="row align-items-center">
                                         <div class="col-md-2">
                                             <div class="form-check">
@@ -396,7 +396,7 @@
 
     <template id="horarioInitialInputs">
         <div class="col-12 col-check mt-4">
-            <div class="py-3">Seleccione los horarios del doctor</div>
+            <div class="py-3">Seleccione los horarios del médico</div>
             <div class="row align-items-center">
                 <div class="col-md-2">
                     <div class="form-check">

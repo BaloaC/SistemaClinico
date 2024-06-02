@@ -144,7 +144,7 @@ async function addConsulta() {
         $form.reset();
         deleteElementByClass("newInput");
         cleanValdiation("info-consulta");
-        $("#tipoConsultas").val("consulta").change();
+        // $("#tipoConsultas").val("consulta").change();
         consultaEmergencia({ value: "0" });
         // Si la consulta es por cita, luego de registrarse satisfactoriamente, 
         if (data?.cita_id) registerStatusConsulta.successfulConsulta = true;

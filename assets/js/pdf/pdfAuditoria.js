@@ -1,11 +1,17 @@
 import getAll from "../global/getAll.js";
 
-const data = location.pathname.split("/")[4].split("-");
+const data = location.pathname.split("/")[4];
+console.log("🍓 ~ file: pdfAuditoria.js:4 ~ data:", data)
 
+
+const url = data.split("00000");
+console.log("🍓 ~ file: pdfAuditoria.js:6 ~ url:", url)
 
 let infoAuditoria;
-if(data[0] === "0"){
+if(data.split("00000")[1] === ""){
     infoAuditoria = await getAll(`auditoria/consulta`)
+} else {
+    infoAuditoria = await getAll(`auditoria/consulta${data.split("00000")[1]}`)
 }
 
 let registros = "";

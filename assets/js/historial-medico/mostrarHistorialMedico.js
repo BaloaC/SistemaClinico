@@ -25,6 +25,9 @@ export default async function mostrarHistorialMedico(id) {
         const beneficiadoContainer = document.querySelector(".beneficiado-container");
         const templateBeneficiado = document.getElementById("template-beneficiado").content;
         const beneficiadoFragment = document.createDocumentFragment();
+        const titularContainer = document.querySelector(".titular-container");
+        const templateTitular = document.getElementById("template-titular").content;
+        const titularFragment = document.createDocumentFragment();
         const templateAntecedente = document.getElementById("template-antecedente").content;
         const antecedenteFragment = document.createDocumentFragment();
         const citaContainer = document.getElementById("citaAccordion");
@@ -79,11 +82,59 @@ export default async function mostrarHistorialMedico(id) {
             // Actualizamos el contenedor e insertamos los datos
             seguroContainer.replaceChildren();
             seguroContainer.appendChild(seguroFragment);
+
         } else {
 
             // Ocultamos el container
             const seguroContainer = document.getElementById("seguroContainer");
+            seguroContainer.classList.add("d-none");
             seguroContainer.classList.add("invisible");
+        }
+
+        // ** Validamos si el paciente es beneficiado y tiene titulares
+        if (infoPaciente.tipo_paciente === "4" && infoPaciente?.titulares?.length > 0) {
+
+            const tipo_familiar = {
+                "1": "Padre/Madre",
+                "2": "Representante",
+                "3": "Primo/a",
+                "4": "Hermano/a",
+                "5": "Esposo/a",
+                "6": "Tío/a",
+                "7": "Sobrino/a",
+            }
+
+            infoPaciente.titulares.forEach(el => {
+
+                let nombre = templateTitular.getElementById("nombre");
+                let cedula = templateTitular.getElementById("cedula");
+                let edad = templateTitular.getElementById("edad");
+                let relacion = templateTitular.getElementById("relacion");
+
+                nombre.textContent = `${el.nombre} ${el.apellidos}`;
+                nombre.href = `../historialmedico/${el.paciente_id}`;
+                cedula.textContent = el.cedula;
+                edad.textContent = el.edad;
+                relacion.textContent = tipo_familiar[el.tipo_familiar];
+
+                let clone = document.importNode(templateTitular, true);
+                titularFragment.appendChild(clone);
+            });
+
+
+            //Mostrarmos el label
+            const titularLabel = document.getElementById("titularesLabel");
+            titularLabel.classList.remove("d-none");
+
+            // Actualizamos el contenedor e insertamos los datos
+            titularContainer.replaceChildren();
+            titularContainer.appendChild(titularFragment);
+        } else {
+
+            // Ocultamos el container
+            const titularContainer = document.getElementById("titularesContainer");
+            titularContainer.classList.add("d-none");
+            titularContainer.classList.add("invisible");
         }
 
         // ** Validamos si el paciente es asegurado y tiene beneficiado
@@ -107,6 +158,7 @@ export default async function mostrarHistorialMedico(id) {
                 let relacion = templateBeneficiado.getElementById("relacion");
 
                 nombre.textContent = `${el.nombre} ${el.apellidos}`;
+                nombre.href = `../historialmedico/${el.paciente_id}`;
                 cedula.textContent = el.cedula;
                 edad.textContent = el.edad;
                 relacion.textContent = tipo_familiar[el.tipo_familiar];
@@ -118,14 +170,18 @@ export default async function mostrarHistorialMedico(id) {
             //Mostrarmos el label
             const beneficiadoLabel = document.getElementById("beneficiadosLabel");
             beneficiadoLabel.classList.remove("d-none");
+            beneficiadoContainer.classList.remove("d-none");
+            beneficiadoContainer.classList.remove("invisible");
 
             // Actualizamos el contenedor e insertamos los datos
             beneficiadoContainer.replaceChildren();
             beneficiadoContainer.appendChild(beneficiadoFragment);
+
         } else {
 
             // Ocultamos el container
             const beneficiadoContainer = document.getElementById("beneficiadosContainer");
+            beneficiadoContainer.classList.add("d-none");
             beneficiadoContainer.classList.add("invisible");
         }
 
@@ -160,17 +216,19 @@ export default async function mostrarHistorialMedico(id) {
                 antecedenteFragment.appendChild(clone);
             });
 
+            antecedenteContainer.classList.remove("d-none");
+            antecedenteContainer.classList.remove("invisible");
+
             // Actualizamos el contenedor e insertamos los datos
             antecedenteContainer.replaceChildren();
             antecedenteContainer.appendChild(antecedenteFragment);
 
         } else {
-            const p = document.createElement("p");
-            p.textContent = "El paciente no posee antecedentes médicos";
 
-            // Actualizamos el contenedor e insertamos los datos
-            antecedenteContainer.replaceChildren();
-            antecedenteContainer.appendChild(p);
+            // Ocultamos el container
+            const antecedenteContainer = document.getElementById("antecedenteContainer");
+            antecedenteContainer.classList.add("d-none");
+            antecedenteContainer.classList.add("invisible");
         }
 
         // ** Validamos en caso de que el paciente tenga citas pendientes
@@ -230,7 +288,7 @@ export default async function mostrarHistorialMedico(id) {
 
         // ** Validación en caso de que el paciente tenga consultas registradas
         if (listConsultas.length > 0) {
-            console.log(listConsultas);
+
             consultaPdf.classList.remove("d-none");
             consultaPdf.setAttribute("onclick", `openPopup('pdf/historialmedico/${id}')`);
 
@@ -255,15 +313,15 @@ export default async function mostrarHistorialMedico(id) {
                 let medicoNombre;
                 let medicoApellido;
                 let medicoEspecialidad;
-                if(el?.medico && el?.medico.length > 0){
+                if (el?.medico && el?.medico.length > 0) {
                     medicoNombre = el.medico[0].nombre_medico;
                     medicoApellido = el.medico[0].apellidos_medico;
                     medicoEspecialidad = el.medico[0].nombre_especialidad;
-                }  
+                }
 
                 consulta_id.textContent = el.consulta_id;
-                nombre_medico.textContent = `${el.nombre_medico ?? medicoNombre} ${el.apellidos_medico ?? medicoApellido}`;
-                especialidad.textContent = el.nombre_especialidad ?? medicoEspecialidad;
+                nombre_medico.textContent = `${el.nombre_medico ?? medicoNombre ?? ""} ${el.apellidos_medico ?? medicoApellido ?? "Consulta por emergencia"}`;
+                especialidad.textContent = el.nombre_especialidad ?? medicoEspecialidad ?? "Consulta por emergencia";
                 fecha_consulta.textContent = formatToRealDate(el.fecha_consulta);
                 observaciones.textContent = el.observaciones || "Sin observaciones";
                 motivo_cita.textContent = el.motivo_cita ?? "La consulta es de emergencia";
