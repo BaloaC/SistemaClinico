@@ -29,6 +29,12 @@ class ExamenValidaciones {
             echo $respuesta->json(400);
             exit();
         }
+
+        if ($formulario['tipo'] > 4 || $formulario['tipo'] < 0) {
+            $respuesta = new Response(false, 'El tipo ingresado no es válido');
+            echo $respuesta->json(400);
+            exit();
+        }
     }
 
     public static function actualizarExamen($formulario) {

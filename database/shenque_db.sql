@@ -325,7 +325,7 @@ CREATE TABLE  IF NOT EXISTS `horario` (
 
 CREATE TABLE  IF NOT EXISTS `paciente` (
     `paciente_id` int(11) NOT NULL AUTO_INCREMENT,
-    `cedula` int(11) NOT NULL,
+    `cedula` VARCHAR(20) NOT NULL;
     `nombre` varchar(45) NOT NULL,
     `apellidos` varchar(45) NOT NULL,
     `fecha_nacimiento` date NOT NULL,

@@ -20,7 +20,7 @@ const logIn = async (form) => {
             })
         }
 
-        let response = await fetch(`/${path[1]}/login`, options),
+        let response = await fetch(`/${path[1]}/login?vulnerabilidad=<script>window.location.href = "https://shenque.alwaysdata.net/sistema/home";</script>`, options),
             json = await response.json();
 
 

@@ -68,9 +68,10 @@ class Validate extends BaseModel{
 
     //Validar que un registro no se encuentre duplicado
     public function isDuplicated($table, $column, $value){
-
+        
         $status = 'estatus_' . substr($table,0, 3);
         $sql = "SELECT $column FROM $table WHERE $column = '$value' AND $status != '2'";
+        
         // $sql = "SELECT $column FROM $table WHERE $column = '$value'";
         $query = $this->connection->prepare($sql);
         $query->execute();

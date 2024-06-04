@@ -13,9 +13,11 @@ class EmpresaValidaciones {
     }
 
     public static function validarNombreEmpresa($nombre) {
+        
         $validarEmpresa = new Validate();
-
+        
         if ( $validarEmpresa->isDuplicated('empresa', 'nombre', $nombre) ) {
+            echo 'aka';
             $respuesta = new Response('DATOS_DUPLICADOS');
             $respuesta->setData($nombre);
             echo $respuesta->json(400);

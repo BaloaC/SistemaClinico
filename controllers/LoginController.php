@@ -27,37 +27,39 @@ class LoginController extends Controller{
         $_UsuarioModel = new UsuarioModel();
         $usuario = $_UsuarioModel->where('nombre','=',$_POST["nombre"])->getFirst();
         
-        if ($usuario->estatus_usu == 2) {
-            $respuesta = new Response(false, 'Su usuario se encuentar deshabilitado');
-            echo $respuesta->json(400);
-            exit();
-        } else {
-            
-            $claveEncriptada = $usuario->clave;
-            $clave = $_POST["clave"];
-
-            if(password_verify($clave, $claveEncriptada)){
-                $code = bin2hex(random_bytes(5));
-                $tokken = array( 'tokken' => $code);
-
-                $_UsuarioModel = new UsuarioModel();
-                $actualizado = $_UsuarioModel->where('nombre','=',$_POST['nombre'])->update($tokken);
-                $mensaje = ($actualizado > 0);
-                
-                $tokken['usuario_id'] = $usuario->usuario_id;
-                $tokken['rol'] = $usuario->rol;
-
-                // Automatización de facturas_seguro
-                $_facturaSeguro = new FacturaSeguroController();
-                // $_facturaSeguro->insertarFacturaSeguro();
-
-                $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
-                $respuesta->setData($tokken);
-
-                return $respuesta->json(200);
-
+        if (!is_null($usuario)) {
+            if ($usuario->estatus_usu == 2) {
+                $respuesta = new Response(false, 'Su usuario se encuentar deshabilitado');
+                echo $respuesta->json(400);
+                exit();
             } else {
-                return $respuesta = new Response('DATOS_INVALIDOS');
+                
+                $claveEncriptada = $usuario->clave;
+                $clave = $_POST["clave"];
+    
+                if(password_verify($clave, $claveEncriptada)){
+                    $code = bin2hex(random_bytes(5));
+                    $tokken = array( 'tokken' => $code);
+    
+                    $_UsuarioModel = new UsuarioModel();
+                    $actualizado = $_UsuarioModel->where('nombre','=',$_POST['nombre'])->update($tokken);
+                    $mensaje = ($actualizado > 0);
+                    
+                    $tokken['usuario_id'] = $usuario->usuario_id;
+                    $tokken['rol'] = $usuario->rol;
+    
+                    // Automatización de facturas_seguro
+                    $_facturaSeguro = new FacturaSeguroController();
+                    // $_facturaSeguro->insertarFacturaSeguro();
+    
+                    $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
+                    $respuesta->setData($tokken);
+    
+                    return $respuesta->json(200);
+    
+                } else {
+                    return $respuesta = new Response('DATOS_INVALIDOS');
+                }
             }
         }
         
