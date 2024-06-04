@@ -30,7 +30,7 @@ class ExamenValidaciones {
             exit();
         }
 
-        if ($formulario['tipo'] > 4 || $formulario['tipo'] < 0) {
+        if ($formulario['tipo'] > 3 || $formulario['tipo'] < 0) {
             $respuesta = new Response(false, 'El tipo ingresado no es válido');
             echo $respuesta->json(400);
             exit();
