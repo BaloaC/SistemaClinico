@@ -35,7 +35,7 @@ function template(infoUser) {
     let templatePin = `
         <div>
             <label for="pin" class="mt-3">Pin de Seguridad</label>
-            <input class="form-control" type="text" name="pin" required>
+            <input class="form-control" type="password" name="pin" required>
             <label for="nueva_clave" class="mt-3">Nueva clave</label>
             <div class="input-group mb-3 pass-container">
                 <input class="form-control" id="password1" type="password" name="clave" data-validate="true" data-type="password" data-max-length="20" required>

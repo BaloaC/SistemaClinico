@@ -327,8 +327,11 @@ class AuditoriaController extends Controller {
         
         $salida_sql = $bd . '_' . $fecha . '.sql'; //Nombre del archivo .sql
         
+        // Comando local:
         $execute = "c:\\xampp\\mysql\\bin\\mysqldump.exe -u $usuario --password=$password --opt $bd > $salida_sql"; //Funciones para exportar la base de datos
-        
+        // Comando del servidor:
+        // $execute = "mysqldump -h mysql-shenque.alwaysdata.net -u shenque --password=ShenqueAdmin123$ shenque_db > $salida_sql";
+
         system($execute, $resultado);
         
         //Se construye el nombre del archivo ZIP ejemplo: mibase_20220101.zip
