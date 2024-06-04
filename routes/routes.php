@@ -19,6 +19,7 @@ Router::get('/auditoria/accion', AuditoriaController::class . '@listarAuditoriaP
 Router::get('/auditoria/modulo', AuditoriaController::class . '@listarAuditoriaPorModulo', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("1","2") )]);
 Router::get('/auditoria/:id', AuditoriaController::class . '@listarAuditoriaPorUsuario', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("1","2") )]);
 Router::get('/exportarBd', AuditoriaController::class . '@exportarBd');
+Router::post('/importarBd', AuditoriaController::class . '@importarBd');
 
 // //Auditoria - Vista
 Router::get("/auditoria", AuditoriaController::class . '@index');

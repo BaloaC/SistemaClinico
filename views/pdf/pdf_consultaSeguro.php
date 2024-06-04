@@ -138,7 +138,7 @@
         <img src="<?php echo Url::to('assets/img/logo.png'); ?>" alt="logo">
     </header>
     <div class="row">
-        <p>AUTORIZADO: <span id="clave">3232</span></p>
+        <p>AUTORIZADO: <span id="clave"></span></p>
         <p>Fecha Ingreso: <span id="fechaIngreso">2022-03-01</span></p>
     </div>
     <div class="row gray-color">
@@ -177,7 +177,7 @@
                 </tr>
                 <tr>
                     <th colspan="1">DXM:</th>
-                    <th colspan="2" class="underline">0</th>
+                    <th colspan="2" class="underline"></th>
                 </tr>
                 <tr>
                     <th colspan="1">
@@ -203,7 +203,7 @@
                 </tr>
                 <tr>
                     <th colspan="1">Empresa:</th>
-                    <th colspan="2" class="underline" id="nombreEmpresa">X</th>
+                    <th colspan="2" class="underline" id="nombreEmpresa"></th>
                 </tr>
                 <tr>
                     <th colspan="1">

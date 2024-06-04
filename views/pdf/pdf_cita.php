@@ -73,7 +73,7 @@
         }
 
         .contacto {
-            margin-top: 3rem;
+            margin-top: 8rem;
             margin-right: 1rem;
             text-align: center;
         }
@@ -81,7 +81,7 @@
         /* Estilos para la firma y sello */
 
         .firma {
-            margin-top: 10px;
+            margin-top: 5rem;
             display: flex;
             flex-direction: column;
             align-items: center;

@@ -23,7 +23,7 @@
                     <h4 class="pt-5 pb-2 text-grey">Auditoría</h4>
                     <h5 class="pt-3 pb-2 text-grey d-inline">Filtrar por:</h5>
                     <!-- <small class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-success-emphasis alert alert-danger border border-success-subtle rounded-2" role="alert">La fecha final no puede ser inferior a la fecha inicial</small> -->
-                    
+
                     <!-- <select id="inputFiltro" class="form-select d-inline w-50">
                         <option value="" selected disabled>Seleccione un filtro</option>
                         <option value="sinFiltro">Sin filtro</option>
@@ -104,7 +104,8 @@
                         <button type="button" id="btn-registrar" class="btn btn-sm btn-add d-inline" onclick="filtrarAuditoria(event)"><i class="fas fa-sm fa-filter"></i> Filtrar</button>
                 </div>
                 <div class="col-12 col-md-6 d-flex justify-content-end align-items-end flex-column">
-                    <a href="./exportarBd" type="button" id="btn-registrar" class="btn btn-sm btn-add d-inline my-3"><i class="fas fa-sm fa-file-export"></i>Exportar Base de Datos</a>
+                    <a href="./exportarBd" type="button" id="btn-registrar" class="btn btn-sm btn-add d-inline"><i class="fas fa-sm fa-file-export"></i> Exportar Base de Datos</a>
+                    <a type="button" id="btn-upload" class="btn btn-sm btn-add d-inline my-3" data-bs-target="#modalUpload" data-bs-toggle="modal"><i class="fas fa-sm fa-file-upload"></i> Importar Base de Datos</a>
                     <a href="#" type="button" id="btn-exportarPdf" class="btn btn-sm btn-add d-inline" onclick="openPopup('pdf/auditoria/00000')"><i class="fas fa-sm fa-file-export"></i>Exportar PDF</a>
                 </div>
                 <hr class="border-white">
@@ -135,12 +136,40 @@
                 </div>
             </div>
         </div>
+
+
+        <!-- Modal subir archivo-->
+        <div class="modal fade" id="modalUpload" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="modalActLabel">Importar base de datos</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modalUploadBody">
+                        <div id="uploadAlert" class="alert d-none" role="alert"></div>
+                        <form action="" id="act-upload" class="p-3 px-4">
+                            <div class="p-4">
+                                <label for="formFile" class="form-label">Archivo sql</label>
+                                <input class="form-control" type="file" id="sqlFile">
+                                <p id="loadingMessage" class="m-auto mt-3 text-center" style="display: none;">Cargando...</p>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="uploadBd()">Importar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
     <script type="module" src="<?php echo Url::to('assets/js/auditoria/mostrarAuditoria.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/auditoria/filtrarPorTipo.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/auditoria/filtrarAuditoria.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/auditoria/uploadBd.js'); ?>"></script>
 </body>
 
 </html>

@@ -15,6 +15,7 @@
 
         header img {
             text-align: start;
+            position: absolute;
         }
 
         h3, header p {

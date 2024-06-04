@@ -214,7 +214,7 @@ addEventListener("DOMContentLoaded", async e => {
                 ${factura}
                 <tr><td><br></td></tr>
                 <tr>
-                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="${data?.consulta?.es_emergencia == 1 ? "openPopup('pdf/consultaemergencia/" + data?.consulta_seguro_id + "')" : "openPopup('pdf/consultaseguro/" + data?.consulta_id + "')"}"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
+                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="${data?.consulta?.es_emergencia == 1 ? "openPopup('pdf/consultaemergencia/" + data?.consulta_seguro_id + "')" : "openPopup('pdf/consultaseguro/" + data?.consulta_seguro_id + "')"}"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
                 </tr>
             </table>
         `

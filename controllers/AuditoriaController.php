@@ -335,7 +335,7 @@ class AuditoriaController extends Controller {
         
         $zip = new ZipArchive(); // Objeto de la libreria interna ZipArchive
         
-        $salida_zip = $bd. '_' .$fecha . '.zip'; // Nombre del archivo ZIP
+        $salida_zip = 'respaldo/'. $bd. '_' .$fecha . '.zip'; // Nombre del archivo ZIP
         
         if($zip->open($salida_zip,ZIPARCHIVE::CREATE) === true){
         
@@ -350,6 +350,17 @@ class AuditoriaController extends Controller {
         } else{
             echo 'Error'; // Enviamos el mensaje de error
         }
+    }
+
+    public function importarBd() {
+
+        $conexionBd = new Database();
+        $archivoSql = $_FILES["archivosql"];
+
+        $conexionBd->connect()->exec(file_get_contents($archivoSql["tmp_name"]));
+        
+        $respuesta = new Response(true, 'Se ha realizado correctamente la importación de la base de datos');
+        return $respuesta->json(200);
     }
 
     // utils

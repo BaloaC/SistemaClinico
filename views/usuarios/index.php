@@ -40,6 +40,7 @@
                                             <th>Nombre</th>
                                             <th>Rol</th>
                                             <th>Fecha de creación</th>
+                                            <th>Estatus</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -208,6 +209,25 @@
             </div>
         </div>
 
+        <!-- Modal Confirmar Eliminación -->
+        <div class="modal fade" id="modalActEstatus" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActEstatus" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar estatus del usuario</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modalActBody">
+                        <div id="actEstatusAlert" class="alert d-none" role="alert"></div>
+                        ¿Está seguro que desea actuaizar el estatus de este usuario?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-actualizarInfo1" class="btn btn-primary">Actualizar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
@@ -215,6 +235,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/usuarios/registrarUsuarioModule.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/usuarios/actualizarUsuario.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/usuarios/eliminarUsuario.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/usuarios/actualizarEstatusUsuario.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/global/filterOptionsVanillaSelect.js'); ?>"></script>
 </body>
 

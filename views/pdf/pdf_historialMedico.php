@@ -15,6 +15,7 @@
 
         header img {
             text-align: start;
+            position: absolute;
         }
 
 
@@ -51,6 +52,10 @@
             align-items: center;
         }
 
+        .title table {
+            width: 100%;
+        }
+
         .title p {
             text-align: center;
         }
@@ -75,6 +80,11 @@
             width: 90%;
             margin-left: 2rem;
         }
+
+        .mainTitle {
+            text-align: center;
+            margin: auto;
+        }
     </style>
 </head>
 
@@ -84,8 +94,8 @@
         <p><b>CENTRO MEDICO HIPERBARICO Y DE REHABILITACION <br> SHENQUE C.A <br> CALLE PRONLONGACION MIRANDA 3-05
                 SEC.PUNTO FRESCO <br> CAGUA EDO ARAGUA</b></p>
     </header>
+    <h3 class="mainTitle"><b>Historial del paciente<b></h3> <br>
     <div class="title">
-        <p><b>Historial del paciente<b></p>
         <table>
             <thead>
                 <th>Nombres: <span id="nombres">Cargando</span></th>
