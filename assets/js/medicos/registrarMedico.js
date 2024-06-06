@@ -54,6 +54,8 @@ async function addMedico() {
                     throw { message: `La hora de salida es menor o igual a la hora de entrada en el día ${e.value}` }
                 }
 
+                if (!(parseInt(inputsTime[0].value.split(":")[0]) >= 8 && (parseInt(inputsTime[0].value.split(":")[0]) <= 17)) || !(parseInt(inputsTime[1].value.split(":")[0]) >= 8 && (parseInt(inputsTime[1].value.split(":")[0]) <= 17))) throw { message: "El horario del médico no puede ser fuera de horario laboral del centro médico" }
+
                 const dias_semana = {
                     dias_semana: e.value,
                     hora_entrada: inputsTime[0].value,

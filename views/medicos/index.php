@@ -135,11 +135,11 @@
                                         </div>
                                         <div class="col-md-5">
                                             <label for="hora_entrada">Hora entrada</label>
-                                            <input type="time" name="hora_inicio_lunes" class="form-control mb-3" disabled>
+                                            <input type="time" min="08:00" max="17:00" name="hora_inicio_lunes" class="form-control mb-3" disabled>
                                         </div>
                                         <div class="col-md-5">
                                             <label for="hora_salida">Hora salida</label>
-                                            <input type="time" name="hora_salida_lunes" class="form-control mb-3" disabled>
+                                            <input type="time" min="08:00" max="17:00" name="hora_salida_lunes" class="form-control mb-3" disabled>
                                         </div>
                                     </div>
                                     <div class="row align-items-center">
@@ -151,11 +151,11 @@
                                         </div>
                                         <div class="col-md-5">
                                             <label for="hora_entrada">Hora entrada</label>
-                                            <input type="time" name="hora_inicio_martes" class="form-control mb-3" disabled>
+                                            <input type="time" min="08:00" max="17:00" name="hora_inicio_martes" class="form-control mb-3" disabled>
                                         </div>
                                         <div class="col-md-5">
                                             <label for="hora_salida">Hora salida</label>
-                                            <input type="time" name="hora_salida_martes" class="form-control mb-3" disabled>
+                                            <input type="time" min="08:00" max="17:00" name="hora_salida_martes" class="form-control mb-3" disabled>
                                         </div>
                                     </div>
                                     <div class="row align-items-center">
@@ -167,11 +167,11 @@
                                         </div>
                                         <div class="col-md-5">
                                             <label for="hora_entrada">Hora entrada</label>
-                                            <input type="time" name="hora_inicio_miercoles" class="form-control mb-3" disabled>
+                                            <input type="time" min="08:00" max="17:00" name="hora_inicio_miercoles" class="form-control mb-3" disabled>
                                         </div>
                                         <div class="col-md-5">
                                             <label for="hora_salida">Hora salida</label>
-                                            <input type="time" name="hora_salida_miercoles" class="form-control mb-3" disabled>
+                                            <input type="time" min="08:00" max="17:00" name="hora_salida_miercoles" class="form-control mb-3" disabled>
                                         </div>
                                     </div>
                                     <div class="row align-items-center">
@@ -183,11 +183,11 @@
                                         </div>
                                         <div class="col-md-5">
                                             <label for="hora_entrada">Hora entrada</label>
-                                            <input type="time" name="hora_inicio_jueves" class="form-control mb-3" disabled>
+                                            <input type="time" min="08:00" max="17:00" name="hora_inicio_jueves" class="form-control mb-3" disabled>
                                         </div>
                                         <div class="col-md-5">
                                             <label for="hora_salida">Hora salida</label>
-                                            <input type="time" name="hora_salida_jueves" class="form-control mb-3" disabled>
+                                            <input type="time" min="08:00" max="17:00" name="hora_salida_jueves" class="form-control mb-3" disabled>
                                         </div>
                                     </div>
                                     <div class="row align-items-center">
@@ -199,11 +199,11 @@
                                         </div>
                                         <div class="col-md-5">
                                             <label for="hora_entrada">Hora entrada</label>
-                                            <input type="time" name="hora_inicio_viernes" class="form-control mb-3" disabled>
+                                            <input type="time" min="08:00" max="17:00" name="hora_inicio_viernes" class="form-control mb-3" disabled>
                                         </div>
                                         <div class="col-md-5">
                                             <label for="hora_salida">Hora salida</label>
-                                            <input type="time" name="hora_salida_viernes" class="form-control mb-3" disabled>
+                                            <input type="time" min="08:00" max="17:00" name="hora_salida_viernes" class="form-control mb-3" disabled>
                                         </div>
                                     </div>
                                     <div class="row align-items-center">
@@ -215,11 +215,11 @@
                                         </div>
                                         <div class="col-md-5">
                                             <label for="hora_entrada">Hora entrada</label>
-                                            <input type="time" name="hora_inicio_sabado" class="form-control mb-3" disabled>
+                                            <input type="time" min="08:00" max="17:00" name="hora_inicio_sabado" class="form-control mb-3" disabled>
                                         </div>
                                         <div class="col-md-5">
                                             <label for="hora_salida">Hora salida</label>
-                                            <input type="time" name="hora_salida_sabado" class="form-control mb-3" disabled>
+                                            <input type="time" min="08:00" max="17:00" name="hora_salida_sabado" class="form-control mb-3" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -406,11 +406,11 @@
                 </div>
                 <div class="col-md-5">
                     <label for="hora_entrada">Hora entrada</label>
-                    <input type="time" name="hora_inicio_lunes" class="form-control mb-3 horarioEntryInput" disabled>
+                    <input type="time" min="08:00" max="17:00" name="hora_inicio_lunes" class="form-control mb-3 horarioEntryInput" disabled>
                 </div>
                 <div class="col-md-5">
                     <label for="hora_salida">Hora salida</label>
-                    <input type="time" name="hora_salida_lunes" class="form-control mb-3 horarioExitInput" disabled>
+                    <input type="time" min="08:00" max="17:00" name="hora_salida_lunes" class="form-control mb-3 horarioExitInput" disabled>
                 </div>
             </div>
             <div class="row align-items-center">
@@ -422,11 +422,11 @@
                 </div>
                 <div class="col-md-5">
                     <label for="hora_entrada">Hora entrada</label>
-                    <input type="time" name="hora_inicio_martes" class="form-control mb-3 horarioEntryInput" disabled>
+                    <input type="time" min="08:00" max="17:00" name="hora_inicio_martes" class="form-control mb-3 horarioEntryInput" disabled>
                 </div>
                 <div class="col-md-5">
                     <label for="hora_salida">Hora salida</label>
-                    <input type="time" name="hora_salida_martes" class="form-control mb-3 horarioExitInput" disabled>
+                    <input type="time" min="08:00" max="17:00" name="hora_salida_martes" class="form-control mb-3 horarioExitInput" disabled>
                 </div>
             </div>
             <div class="row align-items-center">
@@ -438,11 +438,11 @@
                 </div>
                 <div class="col-md-5">
                     <label for="hora_entrada">Hora entrada</label>
-                    <input type="time" name="hora_inicio_miercoles" class="form-control mb-3 horarioEntryInput" disabled>
+                    <input type="time" min="08:00" max="17:00" name="hora_inicio_miercoles" class="form-control mb-3 horarioEntryInput" disabled>
                 </div>
                 <div class="col-md-5">
                     <label for="hora_salida">Hora salida</label>
-                    <input type="time" name="hora_salida_miercoles" class="form-control mb-3 horarioExitInput" disabled>
+                    <input type="time" min="08:00" max="17:00" name="hora_salida_miercoles" class="form-control mb-3 horarioExitInput" disabled>
                 </div>
             </div>
             <div class="row align-items-center">
@@ -454,11 +454,11 @@
                 </div>
                 <div class="col-md-5">
                     <label for="hora_entrada">Hora entrada</label>
-                    <input type="time" name="hora_inicio_jueves" class="form-control mb-3 horarioEntryInput" disabled>
+                    <input type="time" min="08:00" max="17:00" name="hora_inicio_jueves" class="form-control mb-3 horarioEntryInput" disabled>
                 </div>
                 <div class="col-md-5">
                     <label for="hora_salida">Hora salida</label>
-                    <input type="time" name="hora_salida_jueves" class="form-control mb-3 horarioExitInput" disabled>
+                    <input type="time" min="08:00" max="17:00" name="hora_salida_jueves" class="form-control mb-3 horarioExitInput" disabled>
                 </div>
             </div>
             <div class="row align-items-center">
@@ -470,11 +470,11 @@
                 </div>
                 <div class="col-md-5">
                     <label for="hora_entrada">Hora entrada</label>
-                    <input type="time" name="hora_inicio_viernes" class="form-control mb-3 horarioEntryInput" disabled>
+                    <input type="time" min="08:00" max="17:00" name="hora_inicio_viernes" class="form-control mb-3 horarioEntryInput" disabled>
                 </div>
                 <div class="col-md-5">
                     <label for="hora_salida">Hora salida</label>
-                    <input type="time" name="hora_salida_viernes" class="form-control mb-3 horarioExitInput" disabled>
+                    <input type="time" min="08:00" max="17:00" name="hora_salida_viernes" class="form-control mb-3 horarioExitInput" disabled>
                 </div>
             </div>
             <div class="row align-items-center">
@@ -486,11 +486,11 @@
                 </div>
                 <div class="col-md-5">
                     <label for="hora_entrada">Hora entrada</label>
-                    <input type="time" name="hora_inicio_sabado" class="form-control mb-3 horarioEntryInput" disabled>
+                    <input type="time" min="08:00" max="17:00" name="hora_inicio_sabado" class="form-control mb-3 horarioEntryInput" disabled>
                 </div>
                 <div class="col-md-5">
                     <label for="hora_salida">Hora salida</label>
-                    <input type="time" name="hora_salida_sabado" class="form-control mb-3 horarioExitInput" disabled>
+                    <input type="time" min="08:00" max="17:00" name="hora_salida_sabado" class="form-control mb-3 horarioExitInput" disabled>
                 </div>
             </div>
         </div>
