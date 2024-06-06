@@ -94,7 +94,7 @@
                                 <div class="col-6">
                                     <label for="direccion">Dirección</label>
                                     <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
-                                    <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+                                    <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
                                     <label for="cedula">Cédula</label>
                                     <input type="number" name="cedula" class="form-control mb-3" data-validate="true" data-type="dni" data-max-length="8" required>
                                     <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
@@ -311,6 +311,7 @@
                                     <small class="form-text">El apellido solo debe contener al menos 3 letras sin números o caracteres </small>
                                     <label for="apellidos">Dirección</label>
                                     <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
+                                    <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
                                 </div>
                                 <div class="row mt-4 act-medico-especialidad">
                                     <h5>Especialidades</h5>

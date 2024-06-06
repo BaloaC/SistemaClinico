@@ -122,7 +122,7 @@
                                         <div class="col-12 col-md-6">
                                             <label for="observaciones">Observaciones</label>
                                             <input type="text" name="observaciones" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" disabled>
-                                            <small class="form-text">Solo puede contener letras</small>
+                                            <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
                                         </div>
                                     </div>
                             </div>
@@ -211,7 +211,7 @@
 
                                             <label for="observaciones">Observaciones</label>
                                             <input type="text" name="observaciones" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255">
-                                            <small class="form-text">Solo puede contener letras</small>
+                                            <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
                                         </div>
                                     </div>
 
@@ -336,7 +336,7 @@
                                         <div class="col-12 col-md-5">
                                             <label for="uso">Uso</label>
                                             <input type="text" data-validate="true" data-type="address" class="form-control uso-medicamento">
-                                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+                                            <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
                                         </div>
                                         <div class="col-3 col-md-1 d-none align-self-start">
                                             <button type="button" class="btn" onclick="deleteInput(this,'.medicamento-id')"><i class="fas fa-times m-0"></i></button>
@@ -363,7 +363,7 @@
                                         <div class="col-12 col-md-5">
                                             <label for="indicacion">Descripción de la indicación</label>
                                             <input type="text" data-validate="true" data-type="address" class="form-control indicaciones">
-                                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+                                            <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
                                         </div>
                                         <!-- <div class="col-3 col-md-1 pt-4-5 d-none">
                                         <button type="button" class="btn" onclick="deleteInput(this,'.indicaciones')"><i class="fas fa-times m-0"></i></button>

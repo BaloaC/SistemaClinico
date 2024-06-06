@@ -107,7 +107,7 @@
                                         <div class="col-12 col-md-6">
                                             <label for="motivo_cita">Motivo cita</label>
                                             <input type="text" name="motivo_cita" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="45">
-                                            <small class="form-text">Solo se permiten letras y números</small>
+                                            <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
 
                                         </div>
                                 </div>

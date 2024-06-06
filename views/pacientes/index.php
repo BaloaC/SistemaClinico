@@ -79,7 +79,7 @@
 
                                     <label for="direccion">Dirección</label>
                                     <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
-                                    <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+                                    <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
 
                                     <label for="tipo_paciente">Tipo de paciente</label>
                                     <select name="tipo_paciente" id="s-tipo_paciente" class="form-control mb-3" required>
@@ -280,7 +280,7 @@
 
                                     <label for="direccion">Dirección</label>
                                     <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
-                                    <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+                                    <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
 
                                     <label for="fecha_nacimiento">Fecha de Nacimiento</label>
                                     <input type="date" name="fecha_nacimiento" class="form-control mb-3" data-validate="true" data-type="date" onchange="pacienteMenorDeEdadUpdate(this)" required>

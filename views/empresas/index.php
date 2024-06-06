@@ -95,7 +95,7 @@
                             <small class="form-text">El nombre solo puede contener letras y mínimo 6 caracteres</small>
                             <label for="direccion">Dirección</label>
                             <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
-                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+                            <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
                             <label for="seguro">Seguro</label>
                             <select name="seguro[]" id="s-seguro" class="form-control mb-3" data-active="0" multiple="multiple" required>
                                 <option></option>
@@ -159,7 +159,7 @@
                             <small class="form-text">El nombre solo puede contener letras y mínimo 6 caracteres</small>
                             <label for="direccion">Dirección</label>
                             <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
-                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+                            <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
                             <label for="seguro">Seguro</label>
                             <select name="seguro[]" id="s-seguro-update" class="form-control mb-3" data-active="0" multiple="multiple">
                                 <option></option>

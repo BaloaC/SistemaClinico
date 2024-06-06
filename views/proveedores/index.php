@@ -69,7 +69,7 @@
                             <small class="form-text">El nombre solo debe contener al menos 6 letras sin caracteres especiales</small>
                             <label for="ubicacion">Ubicación</label>
                             <input type="text" name="ubicacion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
-                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+                            <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -95,7 +95,7 @@
                             <small class="form-text">El nombre solo debe contener al menos 6 letras sin caracteres especiales</small>
                             <label for="ubicacion">Ubicación</label>
                             <input type="text" name="ubicacion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255" required>
-                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+                            <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
                         </form>
                     </div>
                     <div class="modal-footer">

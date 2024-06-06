@@ -147,7 +147,7 @@
                             <small class="form-text">El nombre solo puede contener letras</small>
                             <label for="direccion">Dirección</label>
                             <input type="text" name="direccion" class="form-control mb-3" data-validate="true" data-type="address" data-max-length="255">
-                            <small class="form-text">Solo se permiten los siguientes simbolos "@#+_,-"</small>
+                            <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
                             <label for="telefono">Teléfono</label>
                             <div class="input-group mb-3">
                                 <select name="cod_tel" id="cod-tel" class="me-2">
