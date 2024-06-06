@@ -79,6 +79,10 @@ class PacienteController extends Controller{
             $_pacienteModel->where('tipo_paciente', '=', $_GET['tipo_paciente']);
         }
 
+        if (isset($_GET['tipo_paciente_2'])) {
+            $_pacienteModel->where('tipo_paciente', '=', $_GET['tipo_paciente_2']);
+        }
+
         if (isset($_GET['start']) || isset($_GET['search']) || isset($_GET['page']) ){
             if (isset($_GET['start']) || isset($_GET['page'])) {
 
@@ -129,6 +133,10 @@ class PacienteController extends Controller{
 
             if (isset($_GET['tipo_paciente'])) {
                 $_pacienteModel->where('tipo_paciente', '=', $_GET['tipo_paciente']);
+            }
+
+            if (isset($_GET['tipo_paciente_2'])) {
+                $_pacienteModel->where('tipo_paciente', '=', $_GET['tipo_paciente_2']);
             }
 
             $total_registros = $_pacienteModel->where('estatus_pac', '=', '1')->getAll();

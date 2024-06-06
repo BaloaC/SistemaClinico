@@ -113,7 +113,7 @@ class UsuarioController extends Controller{
     public function listarUsuarioPorId($usuario_id){
 
         $_usuarioModel = new UsuarioModel();
-        $usuario = $_usuarioModel->where('usuario_id','=',$usuario_id)->where('estatus_usu', '=', '1')->getFirst();
+        $usuario = $_usuarioModel->where('usuario_id','=',$usuario_id)->getFirst();
         $mensaje = ($usuario != null);
 
         $respuesta = new Response($mensaje ? 'CORRECTO' : 'ERROR');
