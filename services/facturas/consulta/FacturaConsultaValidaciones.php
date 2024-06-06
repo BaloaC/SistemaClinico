@@ -57,4 +57,20 @@ class FacturaConsultaValidaciones {
             }
         }
     }
+
+    public static function validarSiEsEmergencia($consulta_id) {
+        $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
+        $consulta_emergencia = $_consultaEmergenciaModel->where('consulta_id', '=', $consulta_id)->getFirst();
+
+        if (!is_null($consulta_emergencia)) {
+            $_consultaModel = new ConsultaModel();
+            $consulta = $_consultaModel->where('consulta_id', '=', $consulta_id)->getFirst();
+
+            if ($consulta->estatus_con != 4) {
+                $response = new Response(false, 'Por este medio solo se pueden facturar consultas por emergencia que no sean cubiertas totalmente por el seguro');
+                echo $response->json(400);
+                exit();
+            }
+        }
+    }
 }
