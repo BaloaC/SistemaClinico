@@ -102,7 +102,8 @@
                             </select>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('info-empresa')"></i>
                         <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addEmpresa()">Registrar</button>
                     </div>
                 </div>
@@ -166,7 +167,8 @@
                             </select>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('act-empresa')"></i>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
                     </div>
                 </div>

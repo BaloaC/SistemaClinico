@@ -226,7 +226,8 @@
                             </div>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('info-medico')"></i>
                         <button type="button" id="btn-registrar" class="btn btn-primary" onClick="addMedico()">Registrar</button>
                     </div>
                 </div>
@@ -322,7 +323,8 @@
                             </div>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('act-medico')"></i>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
                     </div>
                 </div>
@@ -388,7 +390,8 @@
                             </div>
                         </form>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer d-flex justify-content-between">
+                    <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('act-montoEspecialidad')"></i>
                     <button type="button" id="btn-confirmActMontoEspecialidad" class="btn btn-primary">Actualizar</button>
                 </div>
             </div>
@@ -531,7 +534,8 @@
                         <small class="form-text">No se permiten números negativos</small>
                     </form>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer d-flex justify-content-between">
+                    <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('act-cambioPorcentaje')"></i>
                     <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdatePercentage()">Actualizar</button>
                 </div>
             </div>

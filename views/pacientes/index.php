@@ -195,7 +195,8 @@
                             </div>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('info-paciente')"></i>
                         <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addPaciente()">Registrar</button>
                     </div>
                 </div>
@@ -360,7 +361,7 @@
 <!-- 
                                         <label for="saldo_disponible">Saldo disponible</label>
                                         <input type="number" step="any" name="saldo_disponible" class="form-control mb-3" disabled required> -->
-
+                        
                                     </div>
                                     <div class="col-12 col-md-6 new-seguro-input" style="display: none;">
                                         <label for="fecha_contra">Fecha de Contratación</label>
@@ -373,7 +374,8 @@
                             </div>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('act-paciente')"></i>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
                     </div>
                 </div>

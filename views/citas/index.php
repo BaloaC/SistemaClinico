@@ -219,7 +219,8 @@
                             </div>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('info-cita')"></i>
                         <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addCita()">Registrar</button>
                     </div>
                 </div>
@@ -290,6 +291,7 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <p id="montoDisponible"></p>
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('act-cita')"></i>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
                     </div>
                 </div>
@@ -367,7 +369,8 @@
                             </table>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('reprogramacion-cita')"></i>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmReprogramation()">Actualizar</button>
                     </div>
                 </div>

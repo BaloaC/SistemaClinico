@@ -81,7 +81,7 @@
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <label for="tipoServicio">Tipo de servicio</label>
-                                    <select id="tipoConsultas" name="tipoConsulta" class="form-control my-3 " onchange="tipoConsulta(this)">
+                                    <select id="tipoConsultas" name="tipoConsulta" class="form-control my-3 " onchange="tipoConsultaSelect(this)">
                                         <option value="examen">Exámen</option>
                                         <option value="consulta" selected>Consulta</option>
                                     </select>
@@ -375,7 +375,8 @@
                         </form>
 
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('info-consulta')"></i>
                         <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addConsulta()">Registrar</button>
                     </div>
                 </div>
@@ -441,7 +442,8 @@
                             <small class="form-text">No se permiten números negativos</small>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('act-consulta')"></i>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
                     </div>
                 </div>

@@ -119,7 +119,8 @@
                             <button type="button" class="btn btn-primary mt-3" id="addExamen" onclick="addExamenSeguroInput()">Añadir otro exámen</button>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('info-seguro')"></i>
                         <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addSeguro()">Registrar</button>
                     </div>
                 </div>
@@ -192,7 +193,8 @@
                             </div>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('act-seguro')"></i>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
                     </div>
                 </div>

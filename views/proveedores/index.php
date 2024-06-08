@@ -72,7 +72,8 @@
                             <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('info-proveedor')"></i>
                         <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addProveedor()">Registrar</button>
                     </div>
                 </div>
@@ -98,7 +99,8 @@
                             <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('act-proveedor')"></i>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
                     </div>
                 </div>

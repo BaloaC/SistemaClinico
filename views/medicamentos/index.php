@@ -81,7 +81,8 @@
                             </select>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('info-medicamento')"></i>
                         <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addMedicamento()">Registrar</button>
                     </div>
                 </div>
@@ -116,7 +117,8 @@
                             </select>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('act-medicamento')"></i>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
                     </div>
                 </div>

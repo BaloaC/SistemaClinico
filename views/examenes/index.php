@@ -82,7 +82,8 @@
                             <small class="form-text">No se permiten números negativos</small>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('info-examen')"></i>
                         <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addExamen()">Registrar</button>
                     </div>
                 </div>
@@ -141,7 +142,8 @@
                             <small class="form-text">No se permiten números negativos</small>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('act-examen')"></i>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
                     </div>
                 </div>

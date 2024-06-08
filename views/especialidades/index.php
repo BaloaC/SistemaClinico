@@ -66,7 +66,8 @@
                             <small class="form-text">El nombre solo debe contener al menos 3 letras sin números o caracteres</small>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('info-especialidad')"></i>
                         <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addEspecialidad()">Registrar</button>
                     </div>
                 </div>
@@ -90,7 +91,8 @@
                             <small class="form-text">El nombre solo debe contener al menos 3 letras sin números o caracteres</small>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-betweern">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('act-especialidad')"></i>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
                     </div>
                 </div>

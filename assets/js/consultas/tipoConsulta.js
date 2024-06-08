@@ -6,18 +6,18 @@ function turnInput(container, disabled) {
     });
 }
 
-async function tipoConsulta(input){
-    if(input.value === "consulta"){
-        turnInput(".info-examenes", true);
-        $(".info-examenes").fadeOut("slow");
-        turnInput(".info-consultaSinExamenes", false);
-        $(".info-consultaSinExamenes").fadeIn("slow");
-    } else {
+async function tipoConsultaSelect(input){
+    if(input.value === "examen"){
         turnInput(".info-consultaSinExamenes", true);
         $(".info-consultaSinExamenes").fadeOut("slow");
         turnInput(".info-examenes", false);
         $(".info-examenes").fadeIn("slow");
+    } else {
+        turnInput(".info-examenes", true);
+        $(".info-examenes").fadeOut("slow");
+        turnInput(".info-consultaSinExamenes", false);
+        $(".info-consultaSinExamenes").fadeIn("slow");
     }
 }
 
-window.tipoConsulta = tipoConsulta;
+window.tipoConsultaSelect = tipoConsultaSelect;

@@ -415,7 +415,8 @@
                         </form>
 
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('info-consulta')"></i>
                         <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addConsulta()">Registrar</button>
                     </div>
                 </div>
@@ -451,7 +452,8 @@
                             <input type="text" name="descripcion" class="form-control mb-3" data-max-length="45" required>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('info-antecedente')"></i>
                         <button type="button" id="btn-registrar" class="btn btn-primary" onclick="addAntecedente()">Registrar</button>
                     </div>
                 </div>
@@ -486,7 +488,8 @@
                             <input type="text" name="descripcion" class="form-control mb-3" data-max-length="45" required>
                         </form>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('act-antecedente')"></i>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdateAntedecente()">Actualizar</button>
                     </div>
                 </div>
