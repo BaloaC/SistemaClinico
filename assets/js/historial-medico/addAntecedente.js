@@ -26,7 +26,7 @@ async function addAntecedente() {
         Array.from(document.getElementById("info-antecedente").elements).forEach(element => {
             element.classList.remove('valid');
         })
-        mostrarHistorialMedico(id);
+        mostrarHistorialMedico(id, true);
 
     } catch (error) {
         console.log(error);

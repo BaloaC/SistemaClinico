@@ -82,11 +82,11 @@
                 </tr>
                 <tr>
                     <th>Procesador</th>
-                    <td colspan="3">ANGELA HERNANDEZ</td>
+                    <td colspan="3" id="procesadorPor">ANGELA HERNANDEZ</td>
                 </tr>
                 <tr>
                     <th>Seguro</th>
-                    <td colspan="3" id="seguroNombre">SENIAT</td>
+                    <td colspan="3" id="seguroNombre"></td>
                 </tr>
                 <tr>
                     <th>DXM</th>
@@ -127,6 +127,12 @@
                     <td colspan="3">ÁREA DE OBSERVACIÓN</td>
                     <td id="observacionUsd"></td>
                     <td id="observacionBs"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="3">CONSULTA</td>
+                    <td id="consultaUsd"></td>
+                    <td id="consultaBs"></td>
                 </tr>
                 <tr>
                     <td></td>

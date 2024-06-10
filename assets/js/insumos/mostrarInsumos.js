@@ -8,7 +8,20 @@ addEventListener("DOMContentLoaded", () => {
         { data: "insumo_id" },
         { data: "nombre" },
         { data: "cantidad_min" },
-        { data: "cantidad_unidad" },
+        {
+            data: "cantidad_unidad",
+            render: function (data, type, row) {
+            
+                if(row.tipo_medida === "2"){
+                    if(!Number.isInteger(data)){
+                        return `${Math.ceil(data)} <br> <small class="text-muted">Existen ${Math.ceil(data)} botellas,<br> pero la última está comenzada</small>`;
+                    }
+                }
+
+                return `${data}`;
+            }
+        },
+
         { data: "capacidad_unidad" },
         { 
             data: "tipo_medida",
@@ -47,8 +60,8 @@ addEventListener("DOMContentLoaded", () => {
             data: "insumo_id",
             render: function (data, type, row) {
 
+                // <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-paciente" onclick="updateInsumo(${data})"><i class="fas fa-edit act-paciente"></i></a>
                 return `
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-paciente" onclick="updateInsumo(${data})"><i class="fas fa-edit act-paciente"></i></a>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-especialidad" onclick="deleteInsumo(${data})"><i class="fas fa-trash del-insumo"></i></a>
                     `
             }

@@ -617,7 +617,7 @@ class ConsultaHelper {
                 }
             }
 
-            $informacion_actualizada['total_consulta_bs'] += $consulta->total_consulta_bs + $sumatoria_bs;
+            $informacion_actualizada['total_consulta_bs'] = $consulta->total_consulta_bs + $sumatoria_bs;
             $_consultaEmergenciaModel = new ConsultaEmergenciaModel();
             $_consultaEmergenciaModel->where('consulta_id', '=', $consulta->consulta_id)->update($informacion_actualizada);
         }

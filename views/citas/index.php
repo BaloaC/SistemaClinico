@@ -354,6 +354,9 @@
                             <input type="time" name="hora_entrada" id="hora_entrada2" data-type="timeAppointment" step="1" class="form-control hora_entrada2 flatpickr-input-readonly mb-3" disabled>
                             <label for="hora_salida">Hora salida</label>
                             <input type="time" name="hora_salida" id="hora_salida2" data-type="timeAppointment" step="1" class="form-control hora_salida2 flatpickr-input-readonly mb-3" disabled>
+                            <div class="outOfSchedule my-3" style="display: none;">
+                                <p><b>Importante:</b> La cita se reasiganará fuera del horario del médico</p>
+                            </div>
                             <h6 class="my-3 fw-bolder citaRescheduleLabel">Citas asigandas del día</h6>
                             <h6 class="withoutCitasReschedule" style="display: none;">No hay citas asiganadas para este día</h6>
                             <table id="citas-table-reschedule" class="table table-borderless" style="display: none;">

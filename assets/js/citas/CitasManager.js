@@ -86,6 +86,34 @@ export default class CitasManager {
                         $(".contact-medico").fadeOut("slow");
                         $(".contact-medico1").fadeOut("slow");
                     };
+
+                    if(inputId === "fecha_cita_reprogramada"){
+
+                        
+                        let self = this;
+                        
+                        document.getElementById("hora_salida2").addEventListener("change", function(element) {
+
+                            if((self.convertirAHoras(horarioDelDia[0].hora_salida) < self.convertirAHoras(element.target.value)) || (self.convertirAHoras(horarioDelDia[0].hora_entrada) > self.convertirAHoras(element.target.value))){
+                                $(".outOfSchedule").fadeIn("slow");
+                            } else {
+                                $(".outOfSchedule").fadeOut("slow");
+                            }
+                        })
+                        
+                        document.getElementById("hora_entrada2").addEventListener("change", function(element) {
+
+                            if((self.convertirAHoras(horarioDelDia[0].hora_salida) < self.convertirAHoras(element.target.value)) || (self.convertirAHoras(horarioDelDia[0].hora_entrada) > self.convertirAHoras(element.target.value))){
+                                $(".outOfSchedule").fadeIn("slow");
+                            } else {
+                                $(".outOfSchedule").fadeOut("slow");
+                            }
+                        })
+
+                        if(horarioDelDia && horarioDelDia.length === 0){
+                            $(".outOfSchedule").fadeIn("slow");
+                        }
+                    }
                 },
                 onDayCreate: async (dObj, dStr, fp, dayElem) => {
 
@@ -125,7 +153,38 @@ export default class CitasManager {
                             this.inputHoraEntraCita(null)
                             this.inputHoraSalidaCita(null);
                         }
+
+
+                        if(inputId === "fecha_cita_reprogramada"){
+
+                        
+                            let self = this;
+                            
+                            document.getElementById("hora_salida2").addEventListener("change", function(element) {
+    
+                                if((self.convertirAHoras(horarioDelDia[0].hora_salida) < self.convertirAHoras(element.target.value)) || (self.convertirAHoras(horarioDelDia[0].hora_entrada) > self.convertirAHoras(element.target.value))){
+                                    $(".outOfSchedule").fadeIn("slow");
+                                } else {
+                                    $(".outOfSchedule").fadeOut("slow");
+                                }
+                            })
+                            
+                            document.getElementById("hora_entrada2").addEventListener("change", function(element) {
+    
+                                if((self.convertirAHoras(horarioDelDia[0].hora_salida) < self.convertirAHoras(element.target.value)) || (self.convertirAHoras(horarioDelDia[0].hora_entrada) > self.convertirAHoras(element.target.value))){
+                                    $(".outOfSchedule").fadeIn("slow");
+                                } else {
+                                    $(".outOfSchedule").fadeOut("slow");
+                                }
+                            })
+    
+                            if(horarioDelDia && horarioDelDia.length === 0){
+                                $(".outOfSchedule").fadeIn("slow");
+                            }
+                        }
                     };
+
+                    
                 },
                 "disable": [
                     function (date) { return (date.getDay() === 0 || date.getDay() === 6); }

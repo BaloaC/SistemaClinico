@@ -56,7 +56,7 @@ async function confirmUpdateAntedecente() {
         await updateModule(parseData, "antecedentes_medicos_id", "antecedentes", "act-antecedente", "Antecedente actualizado exitosamente!");
 
         cleanValdiation("act-antecedente");
-        mostrarHistorialMedico(id);
+        mostrarHistorialMedico(id, true);
 
     } catch (error) {
         console.log(error);

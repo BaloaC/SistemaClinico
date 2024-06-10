@@ -27,6 +27,10 @@
                     <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Usuario</button>
                 </div>
                 <hr class="border-white">
+                <div class="help-message d-flex align-items-center mb-3 w-50">
+                    <i class="fas fa-info-circle text-secondary me-3"></i> 
+                    <p class="text-secondary m-0">Para actualizar el estatus del usuario, debe hacer click directamente en el estatus <span class='badge light badge-warning'>Inactivo</span> para activarlo, caso contrario si se presiona con el estatus de <span class='badge light badge-success'>Activo</span> inactivará el usuario</p>
+                </div>
             </div>
             <!-- Usuarios -->
             <div class="row">
