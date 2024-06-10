@@ -9,7 +9,6 @@ console.log("🍓 ~ file: pdfPresupuesto.js:6 ~ data:", data)
 const seguroInfo = await getById("seguros/", data[0].factura.seguro_id);
 // console.log("🍓 ~ file: pdfPresupuesto.js:7 ~ titularInfo:", titularInfo)
 
-
 document.getElementById("nombrePaciente").innerText = `${data[0].beneficiado.nombre} ${data[0].beneficiado.apellidos}`.toUpperCase();
 document.getElementById("cedulaPaciente").innerText = data[0].beneficiado.cedula;
 document.getElementById("nombreTitular").innerText = `${data[0].titular.nombre} ${data[0].titular.apellidos}`.toUpperCase();
@@ -26,6 +25,8 @@ document.getElementById("enfermeriaUsd").innerText = `$${data[0].factura.enferme
 document.getElementById("enfermeriaBs").innerText = `${convertCurrencyToVES(data[0].factura.enfermeria_bs)} Bs`;
 document.getElementById("observacionUsd").innerText = `$${data[0].factura.area_observacion}`;
 document.getElementById("observacionBs").innerText = `${convertCurrencyToVES(data[0].factura.area_observacion_bs)} Bs`;
+document.getElementById("consultaUsd").innerText = `$${data[0].factura.consultas_medicas}`;
+document.getElementById("consultaBs").innerText = `${convertCurrencyToVES(data[0].factura.consultas_medicas_bs)} Bs`;
 document.getElementById("totalUsd").innerText = `$${data[0].factura.total_consulta}`;
 document.getElementById("totalBs").innerText = `${convertCurrencyToVES(data[0].factura.total_consulta_bs)} Bs`;
 

@@ -29,6 +29,8 @@ if (id) {
         $(".consultaLabel").fadeIn("slow");
 
         listConsultas.forEach((el, i) => {
+        console.log("🍓 ~ file: detalleFacturas.js:32 ~ listConsultas.forEach ~ el:", el)
+
 
             let dropdownLink = templateConsulta.querySelector(".btn-link");
             let consultaContainer = templateConsulta.querySelector(".collapse");
@@ -49,7 +51,7 @@ if (id) {
             }
 
             consulta_id.textContent = el.consulta_id;
-            nombre_medico.textContent = `${el.nombre_medico ?? el?.medico[0]?.nombre_medico ?? el?.medico?.nombre} ${el.apellidos_medico ?? el?.medico[0]?.apellidos_medico ?? el?.medico?.apellidos}`;
+            nombre_medico.textContent = `${el.nombre_medico ?? el?.medico[0]?.nombre_medico ?? el?.medico?.nombre ?? "Consulta por emergencia"} ${el.apellidos_medico ?? el?.medico[0]?.apellidos_medico ?? el?.medico?.apellidos ?? ""}`;
             especialidad.textContent = el.nombre_especialidad ?? el?.medico[0]?.nombre_especialidad ?? el?.especialidad?.nombre;
             fecha_consulta.textContent = formatToRealDate(el?.consulta?.fecha_consulta);
             observaciones.textContent = el?.consulta?.observaciones || "Sin observaciones";

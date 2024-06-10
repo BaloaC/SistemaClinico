@@ -8,7 +8,20 @@ addEventListener("DOMContentLoaded", () => {
         { data: "insumo_id" },
         { data: "nombre" },
         { data: "cantidad_min" },
-        { data: "cantidad_unidad" },
+        {
+            data: "cantidad_unidad",
+            render: function (data, type, row) {
+            
+                if(row.tipo_medida === "2"){
+                    if(!Number.isInteger(data)){
+                        return `${Math.ceil(data)} <br> <small class="text-muted">Existen ${Math.ceil(data)} botellas,<br> pero la última está comenzada</small>`;
+                    }
+                }
+
+                return `${data}`;
+            }
+        },
+
         { data: "capacidad_unidad" },
         { 
             data: "tipo_medida",
