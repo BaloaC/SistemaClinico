@@ -43,7 +43,7 @@ class AuditFactura extends AuditMiddleware {
             "usuario_id" => $this->usuario->usuario_id,
             "accion" => $accion,
             "descripcion" => $row,
-            "modulo" => $nombre_orden,
+            "modulo" => "recibo de".$nombre_orden[ count($nombre_orden) - 1 ],
         ];
 
         $this->handleResponse();
