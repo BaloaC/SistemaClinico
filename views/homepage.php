@@ -91,8 +91,8 @@
                         <!-- Primera Fila -->
                         <div class="col-12">
                             <div class="row pb-5">
-                                <article class="col-lg-2 col-md-6 col-sm-6 p-2">
-                                    <a class="text-decoration-none text-dark" href="">
+                                <article class="col-lg-2 col-md-6 col-sm-6 p-2 admin-module">
+                                    <a class="text-decoration-none text-dark" href="<?php echo Url::base() . "/usuarios" ?>">
                                         <div class="bg-img mb-4">
                                             <img src="<?php echo Url::to('assets/img/rueda-dentada.png') ?>" alt="adminAlt">
                                         </div>
@@ -100,7 +100,7 @@
                                         <p class="text-light text-lightblue">Acceso a la gestión de usuarios del sistema</p>
                                     </a>
                                 </article>
-                                <article class="offset-lg-2 col-lg-2 col-md-6 col-sm-6 p-2">
+                                <article class="offset-lg-2 col-lg-2 col-md-6 col-sm-6 p-2 personal-module">
                                     <p>
                                     <div class="bg-img mb-4">
                                         <img src="<?php echo Url::to('assets/img/cirujano.png') ?>" alt="especialidadesAlt">
@@ -116,18 +116,18 @@
                         <!-- Segunda Fila -->
                         <div class="col-12">
                             <div class="row">
-                                <article class="col-lg-2 col-md-6 col-sm-6 p-2">
+                                <article class="col-lg-2 col-md-6 col-sm-6 p-2 atencion-module">
                                     <p>
                                     <div class="bg-img mb-4">
                                         <img src="<?php echo Url::to('assets/img/resultado-medico.png') ?>" alt="pacientesAlt">
                                     </div>
                                     <h2 class="text-light">Atención Médica</h2>
-                                    <p class="text-light text-lightblue">Acceso a los módulos de <a href="<?php echo Url::base() . "/consultas" ?>">consultas</a>, <a href="<?php echo Url::base() . "/citas" ?>">citas</a>,
-                                        <a href="<?php echo Url::base() . "/examenes" ?>">exámenes</a> y <a href="<?php echo Url::base() . "/pacientes" ?>">pacientes</a>
+                                    <p class="text-light text-lightblue">Acceso a los módulos de <a class="consulta-link" href="<?php echo Url::base() . "/consultas" ?>">consultas,</a> <a href="<?php echo Url::base() . "/citas" ?>">citas,</a>
+                                        <a class="examen-link" href="<?php echo Url::base() . "/examenes" ?>">exámenes</a> y <a href="<?php echo Url::base() . "/pacientes" ?>">pacientes</a>
                                     </p>
                                     </a>
                                 </article>
-                                <article class="offset-lg-2 col-lg-2 col-md-6 col-sm-6 p-2">
+                                <article class="offset-lg-2 col-lg-2 col-md-6 col-sm-6 p-2 facturacion-module">
                                     <p>
                                     <div class="bg-img mb-4">
                                         <img src="<?php echo Url::to('assets/img/factura.png') ?>" alt="facturacionAlt">
@@ -138,7 +138,7 @@
                                         y de <a href="<?php echo Url::base() . "/factura/medico" ?>">médicos</a></p>
                                     </a>
                                 </article>
-                                <article class="offset-lg-2 col-lg-2 col-md-12 p-2">
+                                <article class="offset-lg-2 col-lg-2 col-md-12 p-2 inventario-module">
                                     <p>
                                     <div class="bg-img mb-4">
                                         <img src="<?php echo Url::to('assets/img/medicamento.png') ?>" alt="inventarioAlt">
@@ -153,6 +153,19 @@
                 </div>
             </div>
         </footer>
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-5"><img src="<?php echo Url::to('assets/img/manual.png') ?>" alt="manual-alt" width="100%"></div>
+                    <div class="col-12 col-md-7">
+                        <h1 class="text-light mb-3">¿Necesitas ayuda?</h1> 
+                        <h5 class="text-light">Descarga aquí el manual de usuario para obtener más información acerca del sistema y conocer todas las funcionalidades para tu usuario.</h3>
+                    
+                        <div class="d-flex mt-5"></div><img src="<?php echo Url::to('assets/img/pdf.png') ?>" alt="pdfAlt"> <a class="link-light" href="<?php echo Url::to('assets/manuales/admin.pdf') ?>" id="pdfLink" download>Presione aquí para descargar</a></div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <?php include constant('PATH_VIEWS') . '/partials/footer.php'; ?>
@@ -164,6 +177,7 @@
     <script type="module" src="<?php echo Url::to('assets/libs/amcharts5/Responsive.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/homepage/especialidadesGraph.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/homepage/especialidadesFetch.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/homepage/navLinkByRol.js'); ?>"></script>
 
 
 

@@ -8,7 +8,7 @@ function deleteAntecedente(id) {
 async function confirmDeleteAntecedente(id){
     const idPaciente = location.pathname.split("/")[4];
     await deleteModule("antecedentes", id, "Antecedente eliminado exitosamente!");
-    mostrarHistorialMedico(idPaciente);
+    mostrarHistorialMedico(idPaciente, true);
 }
 
 window.deleteAntecedente = deleteAntecedente;

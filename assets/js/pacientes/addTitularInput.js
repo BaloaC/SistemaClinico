@@ -32,7 +32,7 @@ const handleModalOpen = async (parentModal) => {
             parentModal: parentModal,
             placeholder: "Seleccione un titular",
             ajax: true,
-            ajaxUrl: "pacientes/consulta",
+            ajaxUrl: "pacientes/consulta?tipo_paciente=2&tipo_paciente_2=3",
             queryPage: false,
             processResultsAjax: function (data, params) {
 
@@ -40,11 +40,7 @@ const handleModalOpen = async (parentModal) => {
 
                 if (typeof data === "object" && data?.data !== 0) {
 
-                    const titulares = [];
-
-                    data?.data.filter(paciente => (paciente.tipo_paciente == 2 || paciente.tipo_paciente == 3) ? titulares.push(paciente) : null);
-
-                    titulares?.forEach(object => {
+                    data?.data?.forEach(object => {
                         const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
 
                         const handleTipoPaciente = (tipo_paciente) => {
@@ -151,7 +147,7 @@ async function addTitularInput() {
         parentModal: "#modalReg",
         placeholder: select2Options.placeholder,
         ajax: true,
-        ajaxUrl: "pacientes/consulta",
+        ajaxUrl: "pacientes/consulta?tipo_paciente=2&tipo_paciente_2=3",
         queryPage: false,
         processResultsAjax: function (data, params) {
 
@@ -167,12 +163,8 @@ async function addTitularInput() {
                 }
             })
 
-            const titulares = [];
 
-            data?.data.filter(paciente => (paciente.tipo_paciente == 2 || paciente.tipo_paciente == 3) ? titulares.push(paciente) : null);
-
-
-            titulares.forEach(object => {
+            data?.data?.forEach(object => {
 
                 const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
                 let isDuplicate = false;

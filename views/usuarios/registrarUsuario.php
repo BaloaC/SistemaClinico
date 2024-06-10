@@ -28,13 +28,13 @@
                             <div class="alert d-none w-50 mb-4 m-auto" role="alert"></div>
                             <form class="register-form offset-2 col-8 text-start position-relative">
                                 <div id="form-info" class="form-info">
-                                    <label for="nombre">Nombres del usuario</label>
+                                    <label for="nombre">Nombres completos</label>
                                     <input class="form-control" type="text" name="nombres" data-validate="true" data-type="name" data-max-length="16" required>
                                     <small class="form-text">El nombre solo puede contener letras</small>
-                                    <label for="nombre">Apellidos del usuario</label>
+                                    <label for="nombre">Apellidos completos</label>
                                     <input class="form-control" type="text" name="apellidos" data-validate="true" data-type="name" data-max-length="16" required>
                                     <small class="form-text">El apellido solo puede contener letras</small>
-                                    <label for="nombre">Usuario</label>
+                                    <label for="nombre">Nombre de usuario</label>
                                     <input class="form-control" type="text" name="nombre" data-validate="true" data-type="username" data-max-length="16" required>
                                     <small class="form-text">Solo se permiten los siguientes caracteres: "_" y "-"</small>
                                     <label for="clave">Contraseña</label>
@@ -105,7 +105,7 @@
                                     </select>
                                     <input class="form-control mt-3" type="text" name="respuesta3" placeholder="Respuesta a la pregunta de Seguridad" required>
 
-                                    <div class="text-center"><input type="submit" class="btn btn-primary my-3" value="Registrar Usuario"></div>
+                                    <div class="text-center"><input type="button" id="anterior" class="btn btn-primary my-3 me-3" value="Regresar"><input type="submit" class="btn btn-primary my-3" value="Registrar"></div>
                                 </div>
                             </form>
                         </div>

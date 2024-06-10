@@ -8,7 +8,7 @@ removeAddAnalist();
 
 const id = location.pathname.split("/")[4];
 
-export default async function mostrarHistorialMedico(id) {
+export default async function mostrarHistorialMedico(id, updateAntecedente = false) {
     try {
 
         const rol = Cookies.get("rol");
@@ -16,6 +16,7 @@ export default async function mostrarHistorialMedico(id) {
         const nombre = document.getElementById("nombre_paciente");
         const fecha = document.getElementById("fecha");
         const edad = document.getElementById("edad");
+        const cedulaPaciente = document.getElementById("cedulaPaciente");
         const tipo_paciente = document.getElementById("tipo_paciente");
         const consultaPdf = document.getElementById("consulta-pdf");
         const seguroContainer = document.querySelector(".seguro-container");
@@ -37,12 +38,109 @@ export default async function mostrarHistorialMedico(id) {
         const templateConsulta = document.getElementById("template-consulta").content;
         const consultaFragment = document.createDocumentFragment();
 
-        const infoPaciente = await getById("pacientes", id);
-        const infoConsultas = await getById("consultas/paciente", id);
-        const listCita = await getById("citas/paciente", id);
+        const infoConsultas = await getById("consultas/paciente", id)
 
-        // ! Obtenemos las citas asigandas y las que están en espera. En caso de que se necesite mostrar más citas
-        // const listCita = infoCitas.filter(cita => cita.estatus_cit === "1" || cita.estatus_cit === "3").sort((a,b) => b.cita_id - a.cita_id);
+        // ** Validamos si el paciente cuenta con antecedetes médicos
+        if (infoConsultas?.antecedentes_medicos?.length > 0) {
+
+            infoConsultas.antecedentes_medicos.forEach(el => {
+
+                let tipoAntecedente = templateAntecedente.getElementById("tipo_antedecente");
+                let descripcionAntecedente = templateAntecedente.getElementById("descripcion_antecedente");
+                let actLink = templateAntecedente.querySelector(".act-antecedente");
+                let delLink = templateAntecedente.querySelector(".del-antecedente");
+                let actIcon = templateAntecedente.querySelector(".fa-edit");
+                let delIcon = templateAntecedente.querySelector(".fa-trash");
+
+                if (rol === "1" || rol === "2" || rol === "5") {
+
+                    actLink.setAttribute("onclick", `updateAntecedente(${el.antecedentes_medicos_id})`);
+                    delLink.setAttribute("onclick", `deleteAntecedente(${el.antecedentes_medicos_id})`);
+                } else {
+                    actLink.setAttribute("data-bs-toggle", "");
+                    delLink.setAttribute("data-bs-toggle", "")
+                    actIcon.classList.add("d-none");
+                    delIcon.classList.add("d-none");
+                }
+
+
+                tipoAntecedente.textContent = el.nombre;
+                descripcionAntecedente.textContent = el.descripcion;
+
+                let clone = document.importNode(templateAntecedente, true);
+                antecedenteFragment.appendChild(clone);
+            });
+
+            const antecedenteContainerHidded = document.getElementById("antecedenteContainer");
+            antecedenteContainerHidded.classList.remove("d-none");
+            antecedenteContainerHidded.classList.remove("invisible");
+
+            // Actualizamos el contenedor e insertamos los datos
+            antecedenteContainer.replaceChildren();
+            antecedenteContainer.appendChild(antecedenteFragment);
+
+        } else {
+
+            // Ocultamos el container
+            const antecedenteContainer = document.getElementById("antecedenteContainer");
+            antecedenteContainer.classList.add("d-none");
+            antecedenteContainer.classList.add("invisible");
+        }
+
+        // ** Validamos si el paciente cuenta con antecedetes médicos
+        if (infoConsultas?.antecedentes_medicos?.length > 0) {
+
+            infoConsultas.antecedentes_medicos.forEach(el => {
+
+                let tipoAntecedente = templateAntecedente.getElementById("tipo_antedecente");
+                let descripcionAntecedente = templateAntecedente.getElementById("descripcion_antecedente");
+                let actLink = templateAntecedente.querySelector(".act-antecedente");
+                let delLink = templateAntecedente.querySelector(".del-antecedente");
+                let actIcon = templateAntecedente.querySelector(".fa-edit");
+                let delIcon = templateAntecedente.querySelector(".fa-trash");
+
+                if (rol === "1" || rol === "2" || rol === "5") {
+
+                    actLink.setAttribute("onclick", `updateAntecedente(${el.antecedentes_medicos_id})`);
+                    delLink.setAttribute("onclick", `deleteAntecedente(${el.antecedentes_medicos_id})`);
+                } else {
+                    actLink.setAttribute("data-bs-toggle", "");
+                    delLink.setAttribute("data-bs-toggle", "")
+                    actIcon.classList.add("d-none");
+                    delIcon.classList.add("d-none");
+                }
+
+
+                tipoAntecedente.textContent = el.nombre;
+                descripcionAntecedente.textContent = el.descripcion;
+
+                let clone = document.importNode(templateAntecedente, true);
+                antecedenteFragment.appendChild(clone);
+            });
+
+            const antecedenteContainerHidded = document.getElementById("antecedenteContainer");
+            antecedenteContainerHidded.classList.remove("d-none");
+            antecedenteContainerHidded.classList.remove("invisible");
+
+            // Actualizamos el contenedor e insertamos los datos
+            antecedenteContainer.replaceChildren();
+            antecedenteContainer.appendChild(antecedenteFragment);
+
+        } else {
+
+            // Ocultamos el container
+            const antecedenteContainer = document.getElementById("antecedenteContainer");
+            antecedenteContainer.classList.add("d-none");
+            antecedenteContainer.classList.add("invisible");
+        }
+
+        // Validamos que si es solo actualizar los antecedentes dejamos de hacer las demás solicitudes
+        if(updateAntecedente === true) return;
+
+
+
+        const infoPaciente = await getById("pacientes", id);
+        const listCita = await getById("citas/paciente", id);
 
         // Obtenemos las consultas por id de manera descendente
         const listConsultas = infoConsultas.consultas;
@@ -50,6 +148,7 @@ export default async function mostrarHistorialMedico(id) {
         nombre.textContent = `${infoPaciente.nombre || infoPaciente.nombre_paciente} ${infoPaciente.apellidos}`;
         fecha.textContent = `${formatToRealDate(infoPaciente.fecha_nacimiento)}`;
         edad.textContent = `${infoPaciente.edad}`;
+        cedulaPaciente.textContent = `${infoPaciente.cedula}`;
 
         switch (infoPaciente.tipo_paciente) {
             case "1": tipo_paciente.textContent = "Natural"; break;
@@ -183,52 +282,6 @@ export default async function mostrarHistorialMedico(id) {
             const beneficiadoContainer = document.getElementById("beneficiadosContainer");
             beneficiadoContainer.classList.add("d-none");
             beneficiadoContainer.classList.add("invisible");
-        }
-
-        // ** Validamos si el paciente cuenta con antecedetes médicos
-        if (infoConsultas?.antecedentes_medicos?.length > 0) {
-
-            infoConsultas.antecedentes_medicos.forEach(el => {
-
-                let tipoAntecedente = templateAntecedente.getElementById("tipo_antedecente");
-                let descripcionAntecedente = templateAntecedente.getElementById("descripcion_antecedente");
-                let actLink = templateAntecedente.querySelector(".act-antecedente");
-                let delLink = templateAntecedente.querySelector(".del-antecedente");
-                let actIcon = templateAntecedente.querySelector(".fa-edit");
-                let delIcon = templateAntecedente.querySelector(".fa-trash");
-
-                if (rol === "1" || rol === "2" || rol === "5") {
-
-                    actLink.setAttribute("onclick", `updateAntecedente(${el.antecedentes_medicos_id})`);
-                    delLink.setAttribute("onclick", `deleteAntecedente(${el.antecedentes_medicos_id})`);
-                } else {
-                    actLink.setAttribute("data-bs-toggle", "");
-                    delLink.setAttribute("data-bs-toggle", "")
-                    actIcon.classList.add("d-none");
-                    delIcon.classList.add("d-none");
-                }
-
-
-                tipoAntecedente.textContent = el.nombre;
-                descripcionAntecedente.textContent = el.descripcion;
-
-                let clone = document.importNode(templateAntecedente, true);
-                antecedenteFragment.appendChild(clone);
-            });
-
-            antecedenteContainer.classList.remove("d-none");
-            antecedenteContainer.classList.remove("invisible");
-
-            // Actualizamos el contenedor e insertamos los datos
-            antecedenteContainer.replaceChildren();
-            antecedenteContainer.appendChild(antecedenteFragment);
-
-        } else {
-
-            // Ocultamos el container
-            const antecedenteContainer = document.getElementById("antecedenteContainer");
-            antecedenteContainer.classList.add("d-none");
-            antecedenteContainer.classList.add("invisible");
         }
 
         // ** Validamos en caso de que el paciente tenga citas pendientes
