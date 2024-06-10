@@ -300,15 +300,20 @@ class ConsultaService {
         $_paciente = new PacienteModel();
         $paciente = $_paciente->where('paciente_id','=', $consultaEmergencia->paciente_id)->getFirst();
 
+        $_pacienteSeguro = new PacienteSeguroModel();
+        $innersSeguro = $_pacienteSeguro->listInner(["empresa" => "paciente_seguro"]);
+        $paciente_seguro = $_pacienteSeguro->where('paciente_seguro.paciente_id', '=', $consultaEmergencia->paciente_id)
+                                            ->innerJoin(array("empresa.nombre, empresa.rif, empresa.direccion"), $innersSeguro, "paciente_seguro");
+        
         $_pacienteModel = new PacienteModel();
         $beneficiado = $_pacienteModel->where('cedula', '=', $consultaEmergencia->cedula_beneficiado)->getFirst();
         
         $consultas = $consulta;
-        $consultas->medico = $consultaSinCita;
         $consultas->paciente_id = $consultaEmergencia->paciente_id;
         $consultas->factura = $consultaEmergencia;
         $consultas->titular = $paciente;
         $consultas->beneficiado = $beneficiado;
+        $consultas->empresas = $paciente_seguro;
 
         $relaciones = NULL;
         if ($obtenerRelaciones) {

@@ -6,6 +6,7 @@ class AuditMiddleware extends Middleware {
     protected $POST;
     protected $data;
     protected $code;
+    protected $modulo;
     
     public function __construct() {
         parent::__construct();
@@ -26,6 +27,7 @@ class AuditMiddleware extends Middleware {
         $this->getUsuario(); 
         $this->insertAudit();
         global $isEnabledAudit;
+        $this->modulo = $isEnabledAudit;
 
         $accion = '';
         
@@ -62,7 +64,7 @@ class AuditMiddleware extends Middleware {
             "usuario_id" => $this->usuario->usuario_id,
             "descripcion" => $this->row,
             "accion" =>  $accion,
-            "modulo" => $isEnabledAudit,
+            "modulo" => $this->modulo,
         ];
 
         $_auditModel = new AuditoriaModel();
