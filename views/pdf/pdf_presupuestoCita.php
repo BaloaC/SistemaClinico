@@ -48,6 +48,11 @@
             text-align: center;
             line-height: 2.5;
         }
+
+        h3 {
+            text-align: center;
+            margin: 2rem auto;
+        }
     </style>
 </head>
 
@@ -57,7 +62,7 @@
         <p><b>CENTRO MEDICO HIPERBARICO Y DE REHABILITACION <br> SHENQUE C.A <br> CALLE PRONLONGACION MIRANDA 3-05
                 SEC.PUNTO FRESCO <br> CAGUA EDO ARAGUA</b></p>
     </header>
-    <h3>PRESUPUESTO CONSULTA</h3>
+    <h3>PRESUPUESTO CITA</h3>
     <div>
         <table>
             <thead>
@@ -69,18 +74,18 @@
                     <th>C.I.</th>
                     <td colspan="3" id="cedulaPaciente">Cargando</td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <th>Titular</th>
                     <td colspan="3" id="nombreTitular">Cargando</td>
                 </tr>
                 <tr>
                     <th>Cédula</th>
                     <td colspan="3" id="cedulaTitular">Cargando</td>
-                </tr>
-                <tr>
+                </tr> -->
+                <!-- <tr>
                     <th>Empresa</th>
                     <td colspan="3" id="empresaNombre">Cargando</td>
-                </tr>
+                </tr> -->
                 <tr>
                     <th>Procesador</th>
                     <td colspan="3" id="procesadorPor">Cargando</td>
@@ -88,6 +93,10 @@
                 <tr>
                     <th>Seguro</th>
                     <td colspan="3" id="seguroNombre">Cargando</td>
+                </tr>
+                <tr>
+                    <th>Monto aprobado</th>
+                    <td colspan="3" id="montoAprobado">Cargando</td>
                 </tr>
                 <tr>
                     <th>DXM</th>
@@ -103,49 +112,22 @@
                     <td></td>
                     <td colspan="3">EXÁMENES</td>
                     <td id="examenesUsd"></td>
-                    <td id="examenesBs"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td colspan="3">INSUMOS</td>
-                    <td id="insumoUsd">30</td>
-                    <td id="insumoBs"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td colspan="3">LABORATORIO</td>
-                    <td id="laboratorioUsd">30</td>
-                    <td id="laboratorioBs"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td colspan="3">SERVICIO DE ENFERMERÍA</td>
-                    <td id="enfermeriaUsd">30</td>
-                    <td id="enfermeriaBs"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td colspan="3">ÁREA DE OBSERVACIÓN</td>
-                    <td id="observacionUsd"></td>
-                    <td id="observacionBs"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td colspan="3">CONSULTA</td>
                     <td id="consultaUsd"></td>
-                    <td id="consultaBs"></td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td colspan="3">Totales Bs.</td>
+                    <td colspan="3">Total.</td>
                     <td id="totalUsd"></td>
-                    <td id="totalBs"></td>
                 </tr>
             </thead>
         </table>
     </div>
 
-    <script type="module" src="<?php echo Url::to('assets/js/pdf/pdfPresupuesto.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/pdf/pdfPresupuestoCita.js'); ?>"></script>
     <script>
         window.onafterprint = function() {
             window.close();

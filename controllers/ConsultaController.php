@@ -194,6 +194,10 @@ class ConsultaController extends Controller {
                     if (isset($_GET['status'])) {
                         $consultasModel->where('estatus_con', '=', $_GET['status']);
                     }
+
+                    if (isset($_GET['status_emer'])) {
+                        $consultasModel->where('estatus_con', '=', $_GET['status_emer']);
+                    }
                     
                     $consulta_normal = $consultasModel->getFirst();
                     

@@ -104,7 +104,7 @@
                         <button type="button" id="btn-registrar" class="btn btn-sm btn-add d-inline" onclick="filtrarAuditoria(event)"><i class="fas fa-sm fa-filter"></i> Filtrar</button>
                 </div>
                 <div class="col-12 col-md-6 d-flex justify-content-end align-items-end flex-column">
-                    <a href="./exportarBd" type="button" id="btn-registrar" class="btn btn-sm btn-add d-inline"><i class="fas fa-sm fa-file-export"></i> Exportar Base de Datos</a>
+                    <a data-bs-target="#modalConfirmExport" data-bs-toggle="modal" type="button" id="btn-registrar" class="btn btn-sm btn-add d-inline"><i class="fas fa-sm fa-file-export"></i> Exportar Base de Datos</a>
                     <a type="button" id="btn-upload" class="btn btn-sm btn-add d-inline my-3" data-bs-target="#modalUpload" data-bs-toggle="modal"><i class="fas fa-sm fa-file-upload"></i> Importar Base de Datos</a>
                     <a href="#" type="button" id="btn-exportarPdf" class="btn btn-sm btn-add d-inline" onclick="openPopup('pdf/auditoria/00000')"><i class="fas fa-sm fa-file-export"></i>Exportar PDF</a>
                 </div>
@@ -151,13 +151,69 @@
                         <form action="" id="act-upload" class="p-3 px-4">
                             <div class="p-4">
                                 <label for="formFile" class="form-label">Archivo sql</label>
-                                <input class="form-control" type="file" id="sqlFile">
+                                <input class="form-control" type="file" id="sqlFile" accept=".sql">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-actualizarInfo" class="btn btn-primary" data-bs-target="#modalConfirmImport" data-bs-toggle="modal">Importar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal confirm export -->
+        <div class="modal fade" id="modalConfirmExport" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalConfirmExport" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="modalConfirmExportLabel">Confirmación de seguridad</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modalConfirmExportBody">
+                        <div id="exportConfirmAlert" class="alert d-none" role="alert"></div>
+                        <div class="help-message d-flex align-items-center p-4">
+                            <i class="fas fa-info-circle text-secondary me-3"></i>
+                            <p class="text-secondary m-0">Para realizar la exportación de la base de datos, deberá confirmar la sesión actual del usuario por seguridad</p>
+                        </div>
+                        <form action="#" id="info-validarExport" class="p-3 px-4">
+                            <div class="p-4 pt-0">
+                                <label for="formFile" class="form-label">Clave del usuario</label>
+                                <input class="form-control" type="password" id="claveUserExport">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-exportInfo" class="btn btn-primary" onclick="confirmValidateExport()">Validar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal confirm import -->
+        <div class="modal fade" id="modalConfirmImport" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalConfirmImport" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="modalConfirmImportLabel">Confirmación de seguridad</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modalConfirmImportBody">
+                        <div id="importConfirmAlert" class="alert d-none" role="alert"></div>
+                        <div class="help-message d-flex align-items-center p-4">
+                            <i class="fas fa-info-circle text-secondary me-3"></i>
+                            <p class="text-secondary m-0">Para realizar la importación de la base de datos, deberá confirmar la sesión actual del usuario por seguridad</p>
+                        </div>
+                        <form action="#" id="info-validarImport" class="p-3 px-4">
+                            <div class="p-4 pt-0">
+                                <label for="formFile" class="form-label">Clave del usuario</label>
+                                <input class="form-control" type="password" id="claveUserImport">
                                 <p id="loadingMessage" class="m-auto mt-3 text-center" style="display: none;">Cargando...</p>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="uploadBd()">Importar</button>
+                        <button type="button" id="btn-importInfo" class="btn btn-primary" onclick="confirmValidateImport()">Validar</button>
                     </div>
                 </div>
             </div>
@@ -170,6 +226,8 @@
     <script type="module" src="<?php echo Url::to('assets/js/auditoria/filtrarPorTipo.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/auditoria/filtrarAuditoria.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/auditoria/uploadBd.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/auditoria/confirmValidateExport.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/auditoria/confirmValidateImport.js'); ?>"></script>
 </body>
 
 </html>
