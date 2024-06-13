@@ -36,6 +36,7 @@ const logIn = async (form) => {
         Cookies.set("usuario", credentials.get("nombre"));
         Cookies.set("usuario_id", json.data.usuario_id);
         Cookies.set("rol", json.data.rol);
+        Cookies.set("nombreUsuario", `${json.data.nombres} ${json.data.apellidos}`);
         Cookies.set("failedSession", "0");
 
         setTimeout(() => {

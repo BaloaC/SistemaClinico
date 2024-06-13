@@ -485,7 +485,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         document.getElementById("motivoCita").textContent = cita.motivo_cita;
         document.getElementById("claveCita").textContent = claveCita;
         document.getElementById("examenesCita").textContent = concatItems(cita.examenes, "nombre", "Sin exámenes", ",");
-        document.getElementById("export-cita").setAttribute("onclick", `openPopup('pdf/cita/${cita.cita_id}')`);
+        document.getElementById("export-cita").setAttribute("onclick", cita.tipo_cita == 2 && cita.estatus_cit != 4 ? `openPopup('pdf/presupuestocita/${cita.cita_id}')` : `openPopup('pdf/cita/${cita.cita_id}')`);
         (cita.estatus_cit == 1) ? null : document.getElementById("btn-actualizar").setAttribute("onclick", `updateCita(${JSON.stringify(cita)})`);
         document.getElementById("btn-actualizar").value = JSON.stringify(cita);
 

@@ -53,7 +53,7 @@ async function filtrarAuditoria(e) {
     if(data.moduloValue) auditoriaUrl += `&modulo="${data.moduloValue}"`;
     if(data.fecha_inicio) auditoriaUrl += `&fecha_inicio=${data.fecha_inicio}&fecha_fin=${data.fecha_fin}`;   
 
-    document.getElementById("btn-exportarPdf").setAttribute("onclick",`openPopup('pdf/auditoria/00000${auditoriaUrl}')`);
+    document.getElementById("btn-exportarPdf").setAttribute("onclick",`openPopup('pdf/auditoria/00001${auditoriaUrl}')`);
 
     $('#auditoria').DataTable().clear();
     $('#auditoria').DataTable().destroy();

@@ -1,6 +1,4 @@
 function filtrarAuditoriaInput(input) {
-    console.log("🍓 ~ file: filtrarAuditoria.js:2 ~ filtrarAuditoriaInput ~ input:", input)
-
 
     switch (input.name) {
         case "accion":

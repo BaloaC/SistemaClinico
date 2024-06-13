@@ -1,7 +1,6 @@
 import getAll from "../global/getAll.js";
 
-const data = location.pathname.split("/")[4];
-console.log("🍓 ~ file: pdfAuditoria.js:4 ~ data:", data)
+const data = location.href.split("/")[6];
 
 
 const url = data.split("00000");

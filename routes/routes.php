@@ -39,6 +39,7 @@ Router::get("/pdf/cintillo/:id", PdfController::class . '@pdf_cintillo');
 Router::get("/pdf/facturamensajeria/:id", PdfController::class . '@pdf_facturaMensajeria');
 Router::get("/pdf/consultaseguro/:id", PdfController::class . '@pdf_consultaSeguro');
 Router::get("/pdf/presupuesto/:id", PdfController::class . '@pdf_presupuesto');
+Router::get("/pdf/presupuestocita/:id", PdfController::class . '@pdf_presupuestoCita');
 Router::get("/pdf/auditoria/:id", PdfController::class . '@pdf_auditoria');
 
 // //Login - vista
@@ -47,7 +48,7 @@ Router::get('/login/recuperarusuario', LoginController::class . '@recuperarUsuar
 
 // //Login - API
 Router::post('/login', LoginController::class . '@entrar');
-Router::post('/validar', LoginController::class . '@validarUsuario');
+Router::post('/validarUsuario', LoginController::class . '@validarUsuario');
 Router::post('/login/:id', LoginController::class . '@recuperarUsuario');
 
 // //Preguntas - API
@@ -214,7 +215,7 @@ Router::get('/consultas/actualizar/:id', ConsultaController::class . '@formActua
 Router::get('/consultas/consulta', ConsultaController::class . '@listarConsultas',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3","4","5") )]);
 Router::get('/consultas/:id', ConsultaController::class . '@listarConsultaPorId',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3","4","5") )]);
 Router::get('/consultas/paciente/:id', ConsultaController::class . '@listarConsultasPorPaciente',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
-Router::get('/consultas/aseguradas', ConsultaController::class . '@listarConsultasAseguradas',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
+Router::get('/consultas/aseguradas', ConsultaController::class . '@listarConsultasAseguradas',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","3","5") )]);
 Router::post('/consultas', ConsultaController::class . '@insertarConsulta',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::put('/consultas/:id', ConsultaController::class . '@actualizarConsulta',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::delete('/consultas/:id', ConsultaController::class . '@eliminarConsulta',  [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
