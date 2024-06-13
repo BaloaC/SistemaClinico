@@ -47,6 +47,7 @@ Router::get('/login/recuperarusuario', LoginController::class . '@recuperarUsuar
 
 // //Login - API
 Router::post('/login', LoginController::class . '@entrar');
+Router::post('/validar', LoginController::class . '@validarUsuario');
 Router::post('/login/:id', LoginController::class . '@recuperarUsuario');
 
 // //Preguntas - API

@@ -65,6 +65,47 @@ class LoginController extends Controller{
         
         return $respuesta = new Response('DATOS_INVALIDOS');
     }
+
+    public function validarUsuario() {
+        $_POST = json_decode(file_get_contents('php://input'), true);
+        $camposKey = array("nombre", "clave");
+        
+        $validarLogin = new Validate;
+
+        if ($validarLogin->isEmpty($_POST)) {
+            return $respuesta = new Response('DATOS_INVALIDOS');
+        }
+
+        $_UsuarioModel = new UsuarioModel();
+        $usuario = $_UsuarioModel->where('nombre','=',$_POST["nombre"])->getFirst();
+
+        if (!is_null($usuario)) {
+            if ($usuario->estatus_usu == 2) {
+                $respuesta = new Response(false, 'Su usuario se encuentar deshabilitado');
+                echo $respuesta->json(400);
+                exit();
+            } else {
+                
+                $claveEncriptada = $usuario->clave;
+                $clave = $_POST["clave"];
+    
+                if(password_verify($clave, $claveEncriptada)){   
+                    $respuesta = new Response('CORRECTO');    
+                    echo $respuesta->json(200);
+                    exit();
+    
+                } else {
+                    $respuesta = new Response('DATOS_INVALIDOS');
+                    echo $respuesta->json(400);
+                    exit();
+                }
+            }
+        }
+        
+        $respuesta = new Response('DATOS_INVALIDOS');
+        echo $respuesta->json(400);
+        exit();
+    }
     
     public function recuperarUsuario($usuario_id) {
         
