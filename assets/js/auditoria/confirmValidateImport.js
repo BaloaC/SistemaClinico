@@ -15,7 +15,7 @@ async function confirmValidateImport() {
         }
     }
 
-    fetch(`../validarUsuario`, options)
+    fetch(`./validarUsuario`, options)
         .then(response => response.json())
         .then(json => {
 
@@ -39,7 +39,7 @@ async function confirmValidateImport() {
 
                 $(loadingMessage).fadeIn("slow");
 
-                fetch(`../importarBd`, options)
+                fetch(`./importarBd`, options)
                     .then(response => response.json())
                     .then(json => {
 
@@ -58,6 +58,7 @@ async function confirmValidateImport() {
                                 $alert.classList.add("d-none");
                             }, 500);
 
+                            document.getElementById("info-validarImport").reset();
 
                         } else {
 

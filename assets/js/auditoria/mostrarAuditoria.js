@@ -62,6 +62,7 @@ async function filtrarAuditoria(e) {
         { data: "auditoria_id" },
         { data: "nombre_usuario" },
         { data: "accion" },
+        { data: "modulo" },
         { data: "descripcion" },
         { data: "fecha_creacion" }
     ];
@@ -83,6 +84,7 @@ addEventListener("DOMContentLoaded", () => {
         { data: "auditoria_id" },
         { data: "nombre_usuario" },
         { data: "accion" },
+        { data: "modulo" },
         { data: "descripcion" },
         { data: "fecha_creacion" }
     ];
