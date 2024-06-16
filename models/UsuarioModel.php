@@ -11,6 +11,7 @@ class UsuarioModel extends GenericModel{
     protected $clave;
     protected $pin;
     protected $tokken;
+    protected $intentos;
     protected $rol;
     protected $fecha_creacion;
     protected $estatus_usu;
@@ -28,6 +29,7 @@ class UsuarioModel extends GenericModel{
     public function getClave(){return $this->clave;}
     public function getPin(){return $this->pin;}
     public function getTokken(){return $this->tokken;}
+    public function getIntentos(){return $this->intentos;}
     public function getRol(){return $this->rol;}
     public function getFecha_creacion(){return $this->fecha_creacion;}
     public function getEstatusUsu(){return $this->estatus_usu;}
@@ -40,6 +42,7 @@ class UsuarioModel extends GenericModel{
     public function setClave($clave){$this->clave = $clave;}
     public function setPin($pin){$this->pin = $pin;}
     public function setTokken($tokken){return $this->tokken = $tokken;}
+    public function setIntentoss($intentos){return $this->intentos = $intentos;}
     public function setRol($rol){return $this->rol = $rol;}
     public function setFecha_creacion($fecha_creacion){return $this->fecha_creacion = $fecha_creacion;}
     public function setEstatusUsu($estatus_usu){return $this->estatus_usu = $estatus_usu;}
