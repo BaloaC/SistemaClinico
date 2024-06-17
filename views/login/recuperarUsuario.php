@@ -42,10 +42,10 @@
                                         <small class="form-text">El nombre de usuario es obligatorio</small>
                                         <div class="text-center"><input type="button" id="siguiente" class="btn btn-primary my-5" value="Siguiente"></div>
                                     </div>
-                                    <div id="form-recovery">
+                                    <div id="form-recovery" style="display: none;">
                                         <label>Seleccione un método de recuperación</label>
                                         <select name="metodo" id="select-metodo" class="w-100" required>
-                                            <option value="0">Seleccione una opción</option>
+                                            <option value="0" selected disabled>Seleccione una opción</option>
                                             <option value="1">Pin</option>
                                             <option value="2">Preguntas de Seguridad</option>
                                         </select>

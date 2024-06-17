@@ -98,11 +98,15 @@ document.getElementById("siguiente").addEventListener("click", async (event) => 
         const formUser = document.getElementById("form-user"),
             formRecovery = document.getElementById("form-recovery");
 
-        formUser.classList.toggle("op-0");
-        setTimeout(() => {
-            formUser.classList.toggle("d-none");
-            formRecovery.classList.add("form-centrar");
-        }, 500);
+
+        $(formUser).fadeOut("slow");
+        $(formRecovery).fadeIn("slow");
+
+        // formUser.classList.toggle("op-0");
+        // setTimeout(() => {
+        //     formUser.classList.toggle("d-none");
+        //     formRecovery.classList.add("form-centrar");
+        // }, 500);
 
     } catch (error) {
 

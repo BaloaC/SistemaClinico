@@ -62,7 +62,7 @@
                                     <div class="text-center"><input type="button" id="siguiente" class="btn btn-primary my-5" value="Siguiente"></div>
                                 </div>
 
-                                <div id="form-preguntas" class="form-preguntas">
+                                <div id="form-preguntas" class="form-preguntas" style="display: none;">
                                     <label>Pregunta de Seguridad 1</label>
                                     <select class="form-select preguntasSeguridad" name="pregunta1" id="pregunta1" required>
                                         <option value="">Seleccione una pregunta de seguridad</option>
