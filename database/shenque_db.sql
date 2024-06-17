@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS  `usuario` (
     `apellidos` VARCHAR(40) NOT NULL AFTER `nombres`,
     `clave` varchar(100) NOT NULL,
     `tokken` varchar(10) DEFAULT NULL,
+    `intentos` VARCHAR(10) NULL DEFAULT
     `rol` int(11) NOT NULL,
     `pin` varchar(100) NOT NULL,
     `estatus_usu` enum('1','2') NOT NULL DEFAULT '2',
