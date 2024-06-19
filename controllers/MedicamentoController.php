@@ -78,7 +78,7 @@ class MedicamentoController extends Controller{
 
     public function eliminarMedicamento($medicamento_id){
         global $isEnabledAudit;
-        $isEnabledAudit = 'insumos';
+        $isEnabledAudit = 'medicamentos';
         
         $_medicamentoModel = new MedicamentoModel();
         $data = array(
