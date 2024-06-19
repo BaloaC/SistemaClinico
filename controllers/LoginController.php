@@ -67,6 +67,8 @@ class LoginController extends Controller{
                     $mensaje = ($actualizado > 0);
                     
                     $tokken['usuario_id'] = $usuario->usuario_id;
+                    $tokken['nombres'] = $usuario->nombres;
+                    $tokken['apellidos'] = $usuario->apellidos;
                     $tokken['rol'] = $usuario->rol;
     
                     // Automatización de facturas_seguro
