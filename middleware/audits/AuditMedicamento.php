@@ -22,7 +22,10 @@ class AuditMedicamento extends AuditMiddleware {
             $accion = 'actualización';
 
         } else if ($this->method == 'DELETE') {
-            $row = "El usuario ".$this->usuario->nombre." eliminó el medicamento_id ".preg_replace('/[^0-9]/', '', $_GET['uri']);
+            $_medicamentoModel = new MedicamentoModel();
+            $medicamento = $_medicamentoModel->where('medicamento_id', '=', preg_replace('/[^0-9]/', '', $_GET['uri']))->getFirst();
+
+            $row = "El usuario ".$this->usuario->nombre." eliminó el medicamento ".$medicamento->nombre_medicamento;
             $accion = 'eliminación';
         }
         

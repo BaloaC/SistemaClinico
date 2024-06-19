@@ -43,7 +43,33 @@ class AuditMiddleware extends Middleware {
             }
             
             case 'DELETE':
-                $this->row = $this->usuario->nombre." ha eliminado al elemento id ".preg_replace('/[^0-9]/', '', $_GET['uri'])." en el módulo $isEnabledAudit";
+                $identificador = ""; $nombre_tabla = "";
+
+                try {
+
+                    if ($isEnabledAudit == 'exámenes') {
+                        $nombre_tabla = 'examen';
+
+                    } else if ($isEnabledAudit == 'proveedores') {
+                        $nombre_tabla = 'proveedor';
+
+                    } else {
+                        $nombre_tabla = substr($isEnabledAudit, -1) == 's' ? substr($isEnabledAudit, 0, -1) : $isEnabledAudit;
+                    }
+
+                    $nombre_modelo = ucfirst($nombre_tabla)."Model";
+                    $modelo = new $nombre_modelo();
+                    $registro = $modelo->where($nombre_tabla.'_id', '=', preg_replace('/[^0-9]/', '', $_GET['uri']))->getFirst();
+
+                    if (isset($registro->nombre) || isset($registro->nombres)) {
+                        $identificador = isset($registro->nombre) ? $registro->nombre : $registro->nombres;
+                    }
+                } catch (\Throwable $th) {
+                    $identificador = "id ".preg_replace('/[^0-9]/', '', $_GET['uri']);
+                }
+                
+
+                $this->row = $this->usuario->nombre." ha eliminado al elemento ".$identificador." en el módulo $isEnabledAudit";
                 break;
         }
 

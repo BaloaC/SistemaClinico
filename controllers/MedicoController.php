@@ -153,7 +153,7 @@ class MedicoController extends Controller {
 
     public function actualizarMedico($medico_id) {
         global $isEnabledAudit;
-        $isEnabledAudit = 'médicos';
+        $isEnabledAudit = 'medicos';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
 
@@ -183,7 +183,7 @@ class MedicoController extends Controller {
 
     public function eliminarMedico($medico_id) {
         global $isEnabledAudit;
-        $isEnabledAudit = 'médicos';
+        $isEnabledAudit = 'medicos';
 
         $_medicoModel = new MedicoModel();
         $data = array(
