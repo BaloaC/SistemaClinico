@@ -43,6 +43,8 @@ async function updateSeguro(id) {
         $form.telefono.value = $tel[1];
         $form.telefono.dataset.secondValue = $tel[1];
         $form.cod_tel.dataset.secondValue = $telCod;
+        $form.maximo_dias.value = json.maximo_dias;
+        $form.maximo_dias.dataset.secondValue = json.maximo_dias;
         $form.porcentaje.value = json.porcentaje;
         $form.porcentaje.dataset.secondValue = json.porcentaje;
         $form.costo_consulta.value = json.costo_consulta;

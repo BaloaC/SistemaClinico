@@ -48,7 +48,7 @@ const logIn = async (form) => {
         console.log(error);
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
-        $alert.textContent = "El usuario o la contraseña son inválidos";
+        $alert.textContent = error.result.message === "Faltan datos o los datos son inválidos" ? "El usuario o la contraseña son inválidos" : error.result.message;
     }
 
 }

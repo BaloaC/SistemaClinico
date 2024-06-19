@@ -160,6 +160,9 @@
                                 <input type="text" name="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7">
                                 <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
                             </div>
+                            <label for="costo_consulta">Días máximos para ingreso de clave</label>
+                            <input type="number" step="any" name="maximo_dias" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="3" >
+                            <small class="form-text">Solo se permiten números</small>
                             <label for="porcentaje">Porcentaje</label>
                             <div class="input-group">
                                 <span class="input-group-text label-input-char" id="addon">%</span>
