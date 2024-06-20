@@ -38,7 +38,42 @@ class AuditMiddleware extends Middleware {
             
             case 'PUT': {
                 $campos = array_keys($_POST);
-                $this->row = $this->usuario->nombre." ha actualizado al elemento id ".preg_replace('/[^0-9]/', '', $_GET['uri'])." los campos ".implode(", ", $campos)." en el módulo $isEnabledAudit";
+                $identificador = ""; $nombre_tabla = "";
+
+                if ($isEnabledAudit == 'usuarios' && array_key_exists('estatus_usu', $this->POST)) {
+                    // Si es actualización de usuario
+                    $_usuarioModel = new UsuarioModel();
+                    $usuario = $_usuarioModel->where('usuario_id', '=', preg_replace('/[^0-9]/', '', $_GET['uri']))->getFirst();
+                    $data_actualizada = $usuario->estatus_usu == 1 ? "habilitado" : "deshabilitado";
+                    $this->row = $this->usuario->nombre." ha ".$data_actualizada." al usuario ".$usuario->nombres." en el módulo $isEnabledAudit";
+
+                } else {
+                    // Si es actualización normal
+                    try {
+                        if ($isEnabledAudit == 'exámenes') {
+                            $nombre_tabla = 'examen';
+    
+                        } else if ($isEnabledAudit == 'proveedores') {
+                            $nombre_tabla = 'proveedor';
+    
+                        } else {
+                            $nombre_tabla = substr($isEnabledAudit, -1) == 's' ? substr($isEnabledAudit, 0, -1) : $isEnabledAudit;
+                        }
+    
+                        $nombre_modelo = ucfirst($nombre_tabla)."Model";
+                        $modelo = new $nombre_modelo();
+                        $registro = $modelo->where($nombre_tabla.'_id', '=', preg_replace('/[^0-9]/', '', $_GET['uri']))->getFirst();
+    
+                        if (isset($registro->nombre) || isset($registro->nombres)) {
+                            $identificador = isset($registro->nombre) ? $registro->nombre : $registro->nombres;
+                        }
+                    } catch (\Throwable $th) {
+                        $identificador = "id ".preg_replace('/[^0-9]/', '', $_GET['uri']);
+                    }
+    
+                    $this->row = $this->usuario->nombre." ha actualizado al elemento ".$identificador." los campos ".implode(", ", $campos)." en el módulo $isEnabledAudit";
+                }
+
                 break;
             }
             
@@ -46,7 +81,6 @@ class AuditMiddleware extends Middleware {
                 $identificador = ""; $nombre_tabla = "";
 
                 try {
-
                     if ($isEnabledAudit == 'exámenes') {
                         $nombre_tabla = 'examen';
 
@@ -67,7 +101,6 @@ class AuditMiddleware extends Middleware {
                 } catch (\Throwable $th) {
                     $identificador = "id ".preg_replace('/[^0-9]/', '', $_GET['uri']);
                 }
-                
 
                 $this->row = $this->usuario->nombre." ha eliminado al elemento ".$identificador." en el módulo $isEnabledAudit";
                 break;
