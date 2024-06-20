@@ -36,7 +36,7 @@ export async function ssrExamanesRequest(numPage, search = "") {
 
 export function examenesPagination(registros, buscarRegistros = "") {
 
-    if (registros?.length <= 0 || registros === undefined || registros?.data === undefined) {
+    if (registros?.length <= 0 || registros === undefined || registros?.data === undefined || registros?.data.length === 0) {
 
         const mensajeVacio = `<p class="text-center mb-5 fs-5">No se encontraron registros.</p>`
         document.getElementById('card-container').innerHTML = mensajeVacio;

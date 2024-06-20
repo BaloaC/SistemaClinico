@@ -2,6 +2,7 @@ import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
 async function confirmValidateImport() {
 
+    const $alert = document.getElementById("importConfirmAlert");
     const clave = document.getElementById("claveUserImport");
 
     const options = {
@@ -15,66 +16,74 @@ async function confirmValidateImport() {
         }
     }
 
-    fetch(`../validarUsuario`, options)
+    if (Cookies.get("authT")) {
+
+        const tokenAuth = Cookies.get("authT");
+        const partsToken = tokenAuth.split("||");
+        const authDate = new Date(atob(partsToken[0]).replaceAll("\"", ""));
+        const currentDate = new Date();
+        const diferenciaMinutos = (currentDate - authDate) / 1000 / 60;
+
+        if ((diferenciaMinutos < 30 && parseInt(partsToken[2]) >= 3)) {
+
+            $alert.classList.remove("d-none");
+            $alert.classList.add("alert-danger");
+            $alert.textContent = "Máximo de intentos alcanzados, por favor espere un momento y vuelva a intentar";
+
+            setTimeout(() => {
+                $alert.classList.add("d-none");
+            }, 3000)
+
+            return;
+        }
+    }
+
+
+
+    fetch(`./validarUsuario`, options)
         .then(response => response.json())
         .then(json => {
-
-            const $alert = document.getElementById("importConfirmAlert");
 
             if (json.code === true) {
 
 
-                const loadingMessage = document.getElementById("loadingMessage");
-                const sqlFile = document.getElementById("sqlFile");
-                const form = new FormData();
-                form.append("archivosql", sqlFile.files[0]);
+                Cookies.set("authT", `${btoa(JSON.stringify(new Date()))}||${Cookies.get("usuario_id")}||0`);
 
-                const options = {
-                    method: "POST",
-                    body: form,
-                    headers: {
-                        "Authorization": "Bearer " + Cookies.get("tokken")
-                    }
-                }
+                $alert.classList.remove("d-none");
+                $alert.classList.remove("alert-danger");
+                $alert.classList.add("alert-success");
+                $alert.textContent = "Sesión validada correctamente!";
 
-                $(loadingMessage).fadeIn("slow");
-
-                fetch(`../importarBd`, options)
-                    .then(response => response.json())
-                    .then(json => {
-
-                        $(loadingMessage).fadeOut("slow");
-
-                        if (json.code === true) {
-
-                            $alert.classList.remove("alert-danger");
-                            $alert.classList.add("alert-success");
-                            $alert.classList.remove("d-none");
-                            $alert.textContent = "Se ha realizado la importación de la base de datos correctamente!";
+                document.getElementById("info-validarImport").reset();
 
 
-                            setTimeout(() => {
-                                $("#modalConfirmImport").modal("hide");
-                                $alert.classList.add("d-none");
-                            }, 500);
+                $("#modalConfirmImport").modal("hide");
+                $("#modalUpload").modal("show");
 
-
-                        } else {
-
-                            $alert.classList.remove("d-none");
-                            $alert.classList.add("alert-danger");
-                            let message = json.message || json.result.message;
-                            $alert.textContent = message;
-
-                            scrollTo("modalUploadBody");
-
-                            setTimeout(() => {
-                                $alert.classList.add("d-none");
-                            }, 3000)
-                        }
-                    });
+                setTimeout(() => {
+                    $alert.classList.add("d-none");
+                }, 1000);
 
             } else {
+
+                if (Cookies.get("authT")) {
+                    const tokenAuth = Cookies.get("authT");
+                    const partsToken = tokenAuth.split("||");
+                    const authDate = new Date(atob(partsToken[0]).replaceAll("\"", ""));
+                    const currentDate = new Date();
+                    const diferenciaMinutos = (currentDate - authDate) / 1000 / 60;
+                    let intentos = parseInt(partsToken[2]) + 1;
+
+
+                    if (diferenciaMinutos > 30) {
+                        Cookies.set("authT", `${btoa(JSON.stringify(new Date()))}||${Cookies.get("usuario_id")}||1`);
+                    } else {
+                        Cookies.set("authT", `${partsToken[0]}||${Cookies.get("usuario_id")}||${intentos}`);
+                    }
+                } else {
+                    Cookies.set("authT", `${btoa(JSON.stringify(new Date()))}||${Cookies.get("usuario_id")}||1`);
+                }
+
 
                 $alert.classList.remove("d-none");
                 $alert.classList.add("alert-danger");

@@ -161,6 +161,8 @@ async function confirmUpdate() {
         }
 
         delete parseData.cedula_beneficiario;
+        delete parseData.pacientePoseeTitulares;
+        delete parseData.paciente_beneficiado_id;
 
         // Validamos que se envie al menos una propiedad para hacer la petición
         if (Object.values(parseData)?.length > 3) {

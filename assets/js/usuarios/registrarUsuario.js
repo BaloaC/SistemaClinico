@@ -4,7 +4,7 @@ const path = location.pathname.split('/');
 function nextValidate() {
 
     const inputsValidate = Array.from(document.querySelectorAll(`.form-control`)).filter(input => input.value === "" || input.classList.contains("invalid"));
-    if (inputsValidate.length === 3) return true
+    if (inputsValidate.length <= 3) return true
     else return false;
 }
 
@@ -15,11 +15,8 @@ document.getElementById("siguiente").addEventListener("click", (event) => {
     formPreguntas = document.getElementById("form-preguntas");
     if (!nextValidate()) return;
 
-    formInfo.classList.toggle("op-0");
-    setTimeout(() => {
-        formPreguntas.classList.remove("op-0");
-        formPreguntas.classList.add("form-centrar");
-    }, 500);
+    $(formInfo).fadeOut("slow");
+    $(formPreguntas).fadeIn("slow");
 })
 
 document.getElementById("anterior").addEventListener("click", (event) => {
@@ -27,14 +24,8 @@ document.getElementById("anterior").addEventListener("click", (event) => {
     formInfo = document.getElementById("form-info");
     formPreguntas = document.getElementById("form-preguntas");
 
-
-    formPreguntas.classList.add("op-0");
-    formPreguntas.classList.remove("form-centrar");
-
-    setTimeout(() => {
-        formInfo.classList.toggle("op-0");
-    }, 500);
-        
+    $(formPreguntas).fadeOut("slow");
+    $(formInfo).fadeIn("slow");
 })
 
 document.addEventListener("submit", async e => {

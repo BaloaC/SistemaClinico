@@ -19,6 +19,10 @@ function cleanForm(form) {
             document.getElementById(form).reset();
         }
 
+        element.classList.remove("valid");
+        element.classList.remove("invalid");
+        element.classList.remove("is-invalid");
+        element.classList.remove("is-valid");
     })
 }
 

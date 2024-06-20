@@ -32,16 +32,6 @@ img {
     font-weight: 500;
 }
 
-#form-preguntas,
-#form-recovery {
-    position: absolute;
-    top: -30px;
-    right: -5rem;
-    opacity: 0;
-    display: none;
-    /* transform: translateY(); */
-}
-
 #form-recovery {
     position: relative;
 }

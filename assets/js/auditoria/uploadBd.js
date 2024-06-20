@@ -3,9 +3,9 @@ import Cookies from "../../libs/jscookie/js.cookie.min.js";
 async function uploadBd() {
 
     const loadingMessage = document.getElementById("loadingMessage");
-    const sqlFile = document.getElementById("sqlFile"); 
+    const sqlFile = document.getElementById("sqlFile");
     const form = new FormData();
-    form.append("archivosql",sqlFile.files[0]);
+    form.append("archivosql", sqlFile.files[0]);
 
     const options = {
         method: "POST",
@@ -15,9 +15,38 @@ async function uploadBd() {
         }
     }
 
+    const showTokenFailedMessage = async () => {
+
+        const $alert = document.getElementById("uploadAlert");
+        $alert.classList.remove("d-none");
+        $alert.classList.add("alert-danger");
+        let message = "No se ha podido validar la sesión intente nuevamente"
+        $alert.textContent = message;
+
+        setTimeout(() => {
+            $alert.classList.add("d-none");
+            $("#modalUpload").modal("hide");
+        }, 3000)
+    }
+    
+    if (Cookies.get("authT") === undefined){
+        await showTokenFailedMessage(); 
+        return;
+    } 
+
+    if (Cookies.get("authT")) {
+        const authToken = Cookies.get("authT");
+        const partsToken = authToken.split("||");
+
+        if (parseInt(partsToken[2]) !== 0){
+            await showTokenFailedMessage();
+            return;
+        }
+    }
+
     $(loadingMessage).fadeIn("slow");
 
-    fetch(`importarBd`, options)
+    fetch(`./importarBd`, options)
         .then(response => response.json())
         .then(json => {
 

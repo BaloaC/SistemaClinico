@@ -15,7 +15,7 @@ async function confirmValidateExport() {
         }
     }
 
-    fetch(`../validarUsuario`, options)
+    fetch(`./validarUsuario`, options)
         .then(response => response.json())
         .then(json => {
 
@@ -34,7 +34,8 @@ async function confirmValidateExport() {
                     $alert.classList.add("d-none");
                 }, 500);
 
-                location.href = "../exportarBd";
+                document.getElementById("info-validarExport").reset();
+                location.href = "./exportarBd";
 
             } else {
 

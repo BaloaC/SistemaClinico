@@ -105,7 +105,7 @@
                 </div>
                 <div class="col-12 col-md-6 d-flex justify-content-end align-items-end flex-column">
                     <a data-bs-target="#modalConfirmExport" data-bs-toggle="modal" type="button" id="btn-registrar" class="btn btn-sm btn-add d-inline"><i class="fas fa-sm fa-file-export"></i> Exportar Base de Datos</a>
-                    <a type="button" id="btn-upload" class="btn btn-sm btn-add d-inline my-3" data-bs-target="#modalUpload" data-bs-toggle="modal"><i class="fas fa-sm fa-file-upload"></i> Importar Base de Datos</a>
+                    <a type="button" id="btn-upload" class="btn btn-sm btn-add d-inline my-3" data-bs-target="#modalConfirmImport" data-bs-toggle="modal"><i class="fas fa-sm fa-file-upload"></i> Importar Base de Datos</a>
                     <a href="#" type="button" id="btn-exportarPdf" class="btn btn-sm btn-add d-inline" onclick="openPopup('pdf/auditoria/00000')"><i class="fas fa-sm fa-file-export"></i>Exportar PDF</a>
                 </div>
                 <hr class="border-white">
@@ -122,6 +122,7 @@
                                             <th>Item</th>
                                             <th>Usuario</th>
                                             <th>Acción</th>
+                                            <th>Módulo</th>
                                             <th>Descripción</th>
                                             <th>Fecha</th>
                                         </tr>
@@ -156,7 +157,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn-actualizarInfo" class="btn btn-primary" data-bs-target="#modalConfirmImport" data-bs-toggle="modal">Importar</button>
+                        <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="uploadBd()">Importar</button>
                     </div>
                 </div>
             </div>

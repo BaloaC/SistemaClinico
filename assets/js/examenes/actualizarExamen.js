@@ -101,6 +101,8 @@ async function confirmUpdate() {
 
         const parseData = deleteSecondValue("#act-examen input, #act-examen select", data);
 
+        delete parseData["especialidades[]"];
+        
         // Validamos que se envie al menos una propiedad para hacer la petición
         if (Object.values(parseData)?.length > 1) {
 
