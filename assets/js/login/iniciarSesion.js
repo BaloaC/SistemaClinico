@@ -20,6 +20,30 @@ const logIn = async (form) => {
             })
         }
 
+        if (Cookies.get("authL")) {
+
+            const tokenAuth = Cookies.get("authL");
+            const partsToken = tokenAuth.split("||");
+            const authDate = new Date(atob(partsToken[0]).replaceAll("\"", ""));
+            const currentDate = new Date();
+            const diferenciaMinutos = (currentDate - authDate) / 1000 / 60;
+
+    
+            if ((diferenciaMinutos < 30 && parseInt(partsToken[1]) >= 3)) {
+    
+                $alert.classList.remove("d-none");
+                $alert.classList.add("alert-danger");
+                $alert.textContent = "Máximo de intentos alcanzados, por favor espere un momento y vuelva a intentar";
+    
+                setTimeout(() => {
+                    $alert.classList.add("d-none");
+                }, 3000)
+    
+                return;
+            }
+        }
+    
+
         let response = await fetch(`/${path[1]}/login?vulnerabilidad=<script>window.location.href = "https://shenque.alwaysdata.net/sistema/home";</script>`, options),
             json = await response.json();
 
@@ -45,6 +69,25 @@ const logIn = async (form) => {
         }, 1000);
 
     } catch (error) {
+
+        if (Cookies.get("authL")) {
+            const tokenAuth = Cookies.get("authL");
+            const partsToken = tokenAuth.split("||");
+            const authDate = new Date(atob(partsToken[0]).replaceAll("\"", ""));
+            const currentDate = new Date();
+            const diferenciaMinutos = (currentDate - authDate) / 1000 / 60;
+            let intentos = parseInt(partsToken[1]) + 1;
+
+
+            if (diferenciaMinutos > 30) {
+                Cookies.set("authL", `${btoa(JSON.stringify(new Date()))}||1`);
+            } else {
+                Cookies.set("authL", `${partsToken[0]}||${intentos}`);
+            }
+        } else {
+            Cookies.set("authL", `${btoa(JSON.stringify(new Date()))}||1`);
+        }
+
         console.log(error);
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
