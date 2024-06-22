@@ -56,7 +56,7 @@ class MedicamentoController extends Controller{
 
     public function actualizarMedicamento($medicamento){
         global $isEnabledAudit;
-        $isEnabledAudit = 'insumos';
+        $isEnabledAudit = 'medicamentos';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarMedicamento = new Validate();

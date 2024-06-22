@@ -14,7 +14,31 @@ class AuditMedicamento extends AuditMiddleware {
         $accion = '';
         
         if ($this->method == 'POST') {
-            $row = "El usuario ".$this->usuario->nombre." insertó un nuevo medicamento de tipo ".$_POST['tipo_medicamento']." llamado ".$_POST['nombre_medicamento'];
+            $tipo_medicamento = "";
+
+            switch ($_POST['tipo_medicamento']) {
+                case '1':
+                    $tipo_medicamento = "de tipo Cápsula";
+                    break;
+                
+                case '2':
+                    $tipo_medicamento = "de tipo Jarabe";
+                    break;
+    
+                case '3':
+                    $tipo_medicamento = "de tipo Inyección";
+                    break;
+    
+                case '4':
+                    $tipo_medicamento = "de tipo Solución";
+                    break;
+                
+                default:
+                    $tipo_medicamento = "";
+                    break;
+            }
+            
+            $row = "El usuario ".$this->usuario->nombre." insertó un nuevo medicamento ".$tipo_medicamento." llamado ".$_POST['nombre_medicamento'];
             $accion = 'inserción';
         
         } else if ($this->method == 'PUT') {
