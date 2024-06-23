@@ -31,6 +31,9 @@ class UsuarioController extends Controller{
         if(isset(apache_request_headers()['Authorization'])) {
             global $isEnabledAudit;
             $isEnabledAudit = 'usuarios';
+        } else {
+            global $isEnabledAudit;
+            $isEnabledAudit = 'cuentas';
         }
 
         $_POST = json_decode(file_get_contents('php://input'), true);
@@ -44,6 +47,7 @@ class UsuarioController extends Controller{
             CuentaHelpers::insertarPreguntaSeguridad($preguntasSeguridad, $id);
             
             $respuesta = new Response('INSERCION_EXITOSA');
+            $respuesta->setData(['usuario_id' => $id]);
             return $respuesta->json(201);
 
         } else {

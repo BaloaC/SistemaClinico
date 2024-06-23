@@ -42,6 +42,8 @@ class PreguntaSeguridadController extends Controller {
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarUsuario = new Validate;
+        global $isEnabledAudit;
+        $isEnabledAudit = 'cuentas';
 
         switch ($_POST) {
 
