@@ -32,6 +32,8 @@ addEventListener("DOMContentLoaded", e => {
                 if (data == 2) return "Jarabe";
                 if (data == 3) return "Inyección";
                 if (data == 4) return "Solución";
+                if (data == 5) return "Gotas";
+                if (data == 6) return "Crema/Loción";
             }
         },
         {
