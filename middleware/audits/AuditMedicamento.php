@@ -32,6 +32,10 @@ class AuditMedicamento extends AuditMiddleware {
                 case '4':
                     $tipo_medicamento = "de tipo Solución";
                     break;
+
+                case '4':
+                    $tipo_medicamento = "de tipo Gotas";
+                    break;
                 
                 default:
                     $tipo_medicamento = "";
