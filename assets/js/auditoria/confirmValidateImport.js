@@ -16,6 +16,23 @@ async function confirmValidateImport() {
         }
     }
 
+    const showAlertMessageFailed = async (message) => {
+
+        $alert.classList.remove("d-none");
+        $alert.classList.add("alert-danger");
+        $alert.textContent = message;
+
+        setTimeout(() => {
+            $alert.classList.add("d-none");
+        }, 3000)
+    }
+
+    if (Cookies.get("rol") !== "1") {
+
+        await showAlertMessageFailed("Su usuario no tiene acceso a esta funcionalidad del sistema, por favor contacte al administrador para que este pueda realizarla.");
+        return;
+    }
+
     if (Cookies.get("authT")) {
 
         const tokenAuth = Cookies.get("authT");
@@ -26,14 +43,7 @@ async function confirmValidateImport() {
 
         if ((diferenciaMinutos < 30 && parseInt(partsToken[2]) >= 3)) {
 
-            $alert.classList.remove("d-none");
-            $alert.classList.add("alert-danger");
-            $alert.textContent = "Máximo de intentos alcanzados, por favor espere un momento y vuelva a intentar";
-
-            setTimeout(() => {
-                $alert.classList.add("d-none");
-            }, 3000)
-
+            await showAlertMessageFailed("Máximo de intentos alcanzados, por favor espere un momento y vuelva a intentar.");
             return;
         }
     }

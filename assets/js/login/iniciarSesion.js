@@ -19,8 +19,8 @@ const logIn = async (form) => {
                 clave: credentials.get("clave"),
             })
         }
-
-        if (Cookies.get("authL")) {
+        
+        if (Cookies.get("authL") && (path[3] === "login" || path[0] === "")) {
 
             const tokenAuth = Cookies.get("authL");
             const partsToken = tokenAuth.split("||");

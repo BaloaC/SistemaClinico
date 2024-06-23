@@ -28,7 +28,7 @@ async function validateSession() {
 
         // Si la sesión ha fallado mostramos la alerta de mensaje en el login
         if(failedSession === "1"){
-            const alert = document.querySelector(".alert");
+            const alert = document.querySelector(".alertLogin");
             alert.textContent = "La sesión no se pudo validar correctamente";
             alert.classList.add("alert-danger");
             alert.classList.remove("d-none");
@@ -73,6 +73,9 @@ function logOut() {
     Cookies.remove("usuario");
     Cookies.remove("tokken");
     Cookies.remove("rol");
+    Cookies.remove("authL");
+    Cookies.remove("authT");
+    Cookies.remove("nombreUsuario");
 
     location = `/${path[1]}/login`;
 }
