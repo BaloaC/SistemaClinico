@@ -16,7 +16,9 @@ async function addInsumo() {
         if (!data.nombre.length > 3) throw { message: "El nombre de contener al menos 3 caracteres" };
         if (!(patterns.nameExam.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
         // if (!(patterns.price.test(data.cantidad)) && !(patterns.price.test(data.cantidad_min))) throw { message: "Un campo númerico ingresado no es válido" };
-        if (!(patterns.price.test(data.precio))) throw { message: "El precio ingresado no es válido" };
+        if (data.precio !== undefined && (data.precio === "0" || !(patterns.price.test(data.precio)))) throw { message: "El precio ingresado no es válido" };
+
+        if(!data.precio) data.precio = 0;
 
         const registroExitoso = await addModule("insumos", "info-insumo", data, "Insumo registrado con exito!");
        

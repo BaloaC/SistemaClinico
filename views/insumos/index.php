@@ -85,7 +85,7 @@
                             <small class="form-text">El campo de ser mayor o igual a 0</small>
 
                             <label for="tipo_medida">Es cobrado en consulta</label>
-                            <select name="es_cobrado" class="form-control mb-3" id="es_cobrado" required>
+                            <select name="es_cobrado" class="form-control mb-3" id="es_cobrado" onchange="esCobrado(this)" required>
                                 <option value="" selected disabled>Seleccione si es cobrado en consulta</option>
                                 <option value="1">Sí</option>
                                 <option value="0">No</option>
@@ -109,7 +109,7 @@
                             
                             <label for="nombre">Precio</label><br>
                             <small class="text-secondary">(El valor ingresado es en dólares)</small>
-                            <input type="number" step="any" name="precio" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required>
+                            <input type="number" step="any" name="precio" id="precioInsumo" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" required disabled value="0">
                             <small class="form-text">El precio de ser mayor o igual a 0</small>
                         </form>
                     </div>
@@ -211,6 +211,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/insumos/registrarInsumo.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/insumos/actualizarInsumo.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/insumos/eliminarInsumo.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/insumos/esCobrado.js'); ?>"></script>
 </body>
 
 </html>
