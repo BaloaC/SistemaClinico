@@ -34,12 +34,17 @@ class AuditCuenta extends AuditMiddleware {
         } else {
             return;
         }
+
+        date_default_timezone_set('America/Caracas');
+        $hoy = new DateTime();
+        $hoy_formateado = $hoy->format('Y-m-d H:i:s');
         
         $this->row = [
             "usuario_id" => $usuario,
             "accion" => $accion,
             "descripcion" => $row,
             "modulo" => 'usuarios',
+            "fecha_creacion" => $hoy_formateado,
         ];
 
         $this->handleResponse();

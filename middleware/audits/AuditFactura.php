@@ -39,11 +39,16 @@ class AuditFactura extends AuditMiddleware {
             $accion = 'actualización';
         }
         
+        date_default_timezone_set('America/Caracas');
+        $hoy = new DateTime();
+        $hoy_formateado = $hoy->format('Y-m-d H:i:s');
+
         $this->row = [
             "usuario_id" => $this->usuario->usuario_id,
             "accion" => $accion,
             "descripcion" => $row,
             "modulo" => "recibo de ".$nombre_orden[ count($nombre_orden) - 1 ],
+            "fecha_creacion" => $hoy_formateado,
         ];
 
         $this->handleResponse();

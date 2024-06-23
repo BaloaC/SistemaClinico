@@ -37,10 +37,15 @@ class AuditCita extends AuditMiddleware {
             $row = "El usuario ".$this->usuario->nombre." insertó la clave de la cita_id ".preg_replace('/[^0-9]/', '', $_GET['uri'])." del paciente ".$paciente->nombre." ".$paciente->apellidos;
         }
 
+        date_default_timezone_set('America/Caracas');
+        $hoy = new DateTime();
+        $hoy_formateado = $hoy->format('Y-m-d H:i:s');
+
         $this->row = [
             "usuario_id" => $this->usuario->usuario_id,
             "accion" => $this->method == 'POST' ? 'inserción' : 'actualización',
-            "descripcion" => $row
+            "descripcion" => $row,
+            "fecha_creacion" => $hoy_formateado,
         ];
 
         $this->handleResponse();
