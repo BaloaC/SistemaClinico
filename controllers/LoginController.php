@@ -46,12 +46,13 @@ class LoginController extends Controller{
                         $hora = $fecha->format('H:i');
 
                         $intentos = explode('|', $usuario->intentos);
-                        $hora_limite = DateTime::createFromFormat('H:i', $intentos[1]);
+                        $hora_intentos = DateTime::createFromFormat('H:i', $intentos[1]);
                         $interval = new DateInterval('PT30M');
+                        $hora_limite = (clone $hora_intentos);
                         $hora_limite->add($interval);
                         $nueva_hora = $hora_limite->format('H:i');
                         
-                        if ($hora < $nueva_hora) {
+                        if ($hora > $hora_intentos->format('H:i') && $hora < $nueva_hora) {
                             $respuesta = new Response(false, 'Máximos intentos de inicio de sesión alcanzados, intente más tarde');
                             echo $respuesta->json(400);
                             exit();
@@ -59,8 +60,8 @@ class LoginController extends Controller{
                     }
 
                     $code = bin2hex(random_bytes(5));
-                    $intentos = null;
-                    $tokken = array( 'tokken' => $code, 'intentos' => $intentos);
+                    $intentos = 0;
+                    $tokken = array( 'tokken' => $code, 'intentos' => "");
     
                     $_UsuarioModel = new UsuarioModel();
                     $actualizado = $_UsuarioModel->where('nombre','=',$_POST['nombre'])->update($tokken);
