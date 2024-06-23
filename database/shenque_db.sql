@@ -627,7 +627,7 @@ CREATE TABLE  IF NOT EXISTS `medicamento` (
     `medicamento_id` int(11) NOT NULL AUTO_INCREMENT,
     `especialidad_id` int(11) NOT NULL,
     `nombre_medicamento` varchar(45) NOT NULL,
-    `tipo_medicamento` enum('1','2','3', '4') DEFAULT NULL,
+    `tipo_medicamento` enum('1','2','3', '4', '5', '6') DEFAULT NULL,
     `estatus_med` enum('1','2') NOT NULL DEFAULT '1',
     PRIMARY KEY (`medicamento_id`),
     FOREIGN KEY (`especialidad_id`) REFERENCES `especialidad` (`especialidad_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
