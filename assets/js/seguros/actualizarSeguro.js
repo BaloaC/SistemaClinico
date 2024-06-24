@@ -86,6 +86,7 @@ async function confirmUpdate() {
         if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
         if (isNaN(data.telefono) || data.telefono.length !== 7) throw { message: "El número ingresado no es válido" };
         if (isNaN(data.cod_tel) || data.cod_tel.length !== 4) throw { message: "El número ingresado no es válido" };
+        if (!(patterns.percentage.test(data.porcentaje))) throw { message: "El porcentaje debe de ser entre el 1% y 100%" };
 
         let $tel = data.cod_tel + data.telefono,
             $rif = data.cod_rif + "-" + data.rif;
