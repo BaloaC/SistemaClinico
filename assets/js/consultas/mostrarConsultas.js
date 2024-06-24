@@ -803,8 +803,6 @@ addEventListener("DOMContentLoaded", async e => {
     const order = [[6, 'desc']];
 
     const format = (data) => {
-        console.log("🍓 ~ file: mostrarConsultas.js:806 ~ format ~ data:", data)
-
 
         if (data.clave == null) data.clave = "No aplica";
         let tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";

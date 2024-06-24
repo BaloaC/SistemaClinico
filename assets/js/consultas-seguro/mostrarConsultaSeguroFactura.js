@@ -85,8 +85,6 @@ addEventListener("DOMContentLoaded", async e => {
     const order = [[5, 'desc']];
 
     const format = (data) => {
-    console.log("🍓 ~ file: mostrarConsultaSeguroFactura.js:88 ~ format ~ data:", data)
-
 
         if (data.clave == null && data?.cita?.tipo_cita != 2) data.clave = "No aplica";
         if (data.clave == null && data?.cita?.tipo_cita == 2) data.clave = "Desconocida";

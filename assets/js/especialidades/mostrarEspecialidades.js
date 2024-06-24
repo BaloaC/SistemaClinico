@@ -20,7 +20,9 @@ addEventListener("DOMContentLoaded", () => {
 
                 switch (rol) {
 
+                    case "3": return `-`;
                     case "4": return `-`;
+                    case "5": return `-`;
                         
                     default: return `
                     <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-especialidad" onclick="updateEspecialidad(${data})"><i class="fas fa-edit act-especialidad"></i></a>
@@ -28,9 +30,8 @@ addEventListener("DOMContentLoaded", () => {
                     `;
                 }
 
-                // TODO: Filtrar opciones por rol
-                
-            }
+            },
+            visible: rol === "1" || rol === "2" ? true : false
         }
 
     ];

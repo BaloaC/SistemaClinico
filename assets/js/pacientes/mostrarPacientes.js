@@ -167,7 +167,8 @@ addEventListener("DOMContentLoaded", e => {
                     default: return `-`;
 
                 }
-            }
+            },
+            visible: rol === "4" ? false : true
         }
 
     ];

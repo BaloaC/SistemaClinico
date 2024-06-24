@@ -124,10 +124,10 @@
                             <p><span>Datos empresa:</span></p>
                             <p>Dirección: <span id="direcEmpresa"></span></p>
                             <p>Nombre seguro: <span id="nombreSeguro"></span></p>
-                            <a id="btn-eliminar" class="float-right" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="fas fa-trash"></i></a>
                         </div>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex justify-content-between">
+                        <a id="btn-eliminar" class="float-right cursor-pointer" data-bs-toggle="modal" data-bs-target="#modalDelete"><i class="fas fa-trash"></i></a>
                         <button type="button" id="btn-actualizar" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAct">Actualizar empresa</button>
                     </div>
                 </div>

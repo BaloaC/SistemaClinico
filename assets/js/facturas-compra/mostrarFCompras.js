@@ -80,6 +80,7 @@ addEventListener("DOMContentLoaded", (e) => {
                     return `-`;
                 }
             },
+            visible: row.estatus_fac == 1 && estaDentroDeLos3DiasAnteriores(new Date(row.fecha_compra)) ? true : false
         },
     ];
 
