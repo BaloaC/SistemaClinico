@@ -50,7 +50,11 @@ class AuditMedicamento extends AuditMiddleware {
             $accion = 'inserción';
         
         } else if ($this->method == 'PUT') {
-            $row = "El usuario ".$this->usuario->nombre." actualizó el medicamento_id ".preg_replace('/[^0-9]/', '', $_GET['uri']);
+            $_medicamentoModel = new MedicamentoModel();
+            $medicamento = $_medicamentoModel->where('medicamento_id', '=', preg_replace('/[^0-9]/', '', $_GET['uri']))->getFirst();
+            $nombre_medicamento = !is_null($medicamento) ? $medicamento->nombre_medicamento : 'con id'.preg_replace('/[^0-9]/', '', $_GET['uri']);
+
+            $row = "El usuario ".$this->usuario->nombre." actualizó el medicamento ".$nombre_medicamento;
             $accion = 'actualización';
 
         } else if ($this->method == 'DELETE') {
@@ -61,11 +65,16 @@ class AuditMedicamento extends AuditMiddleware {
             $accion = 'eliminación';
         }
         
+        date_default_timezone_set('America/Caracas');
+        $hoy = new DateTime();
+        $hoy_formateado = $hoy->format('Y-m-d H:i:s');
+
         $this->row = [
             "usuario_id" => $this->usuario->usuario_id,
             "accion" => $accion,
             "descripcion" => $row,
             "modulo" => 'medicamentos',
+            "fecha_creacion" => $hoy_formateado,
         ];
 
         $this->handleResponse();

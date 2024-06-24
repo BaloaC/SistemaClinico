@@ -167,7 +167,8 @@ class LoginController extends Controller{
     }
     
     public function recuperarUsuario($usuario_id) {
-        
+        global $isEnabledAudit;
+        $isEnabledAudit = 'cuentas';
         $_POST = json_decode(file_get_contents('php://input'), true);
         
         // if ($_POST['tipo_auth'] > 2) {

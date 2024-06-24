@@ -39,11 +39,16 @@ class AuditAntecedente extends AuditMiddleware {
             $accion = 'eliminación';
         }
         
+        date_default_timezone_set('America/Caracas');
+        $hoy = new DateTime();
+        $hoy_formateado = $hoy->format('Y-m-d H:i:s');
+
         $this->row = [
             "usuario_id" => $this->usuario->usuario_id,
             "accion" => $accion,
             "descripcion" => $row,
             "modulo" => 'antecedentes',
+            "fecha_creacion" => $hoy_formateado,
         ];
 
         $this->handleResponse();

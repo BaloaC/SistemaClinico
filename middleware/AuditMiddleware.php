@@ -118,12 +118,17 @@ class AuditMiddleware extends Middleware {
         } else {
             $accion = $this->method == 'PUT' ? 'actualización' : 'eliminación';
         }
+
+        date_default_timezone_set('America/Caracas');
+        $hoy = new DateTime();
+        $hoy_formateado = $hoy->format('Y-m-d H:i:s');
         
         $data = [
             "usuario_id" => $this->usuario->usuario_id,
             "descripcion" => $this->row,
             "accion" =>  $accion,
             "modulo" => $this->modulo,
+            "fecha_creacion" => $hoy_formateado,
         ];
 
         $_auditModel = new AuditoriaModel();

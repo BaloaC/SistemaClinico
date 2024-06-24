@@ -42,11 +42,16 @@ class AuditConsulta extends AuditMiddleware {
             $row = "El usuario ".$this->usuario->nombre." insertó la consulta ".$tipoConsulta." del paciente con cédula ".$paciente->cedula;
         }
 
+        date_default_timezone_set('America/Caracas');
+        $hoy = new DateTime();
+        $hoy_formateado = $hoy->format('Y-m-d H:i:s');
+
         $this->row = [
             "usuario_id" => $this->usuario->usuario_id,
             "accion" => 'inserción',
             "descripcion" => $row,
             "modulo" => 'consultas',
+            "fecha_creacion" => $hoy_formateado,
         ];
 
         $this->handleResponse();
