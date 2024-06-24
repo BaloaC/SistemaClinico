@@ -92,8 +92,8 @@
                 </a>
             </li>
             <li class="nav-item logout-item-link d-none">
-                <a class="nav-link rol-1 rol-2 rol-3 rol-4 rol-5 cursor-pointer" id="logoutLink">
-                    <i class="fas fa-sign-out-alt" id="btn-logout"></i>
+                <a class="nav-link rol-1 rol-2 rol-3 rol-4 rol-5 cursor-pointer" id="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i>
                 </a>
             </li>
             </ul>

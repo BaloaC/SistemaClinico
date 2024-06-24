@@ -185,7 +185,7 @@
                     </div>
                     <div class="modal-body">
                         <div id="delAlert" class="alert d-none" role="alert"></div>
-                        ¿Estás empresa que deseas eliminar este empresa?
+                        ¿Estás seguro que deseas eliminar este empresa?
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="btn-confirmDelete" class="btn btn-danger">Eliminar empresa</button>

@@ -15,5 +15,6 @@ export const patterns = {
     price: /^[0-9]*\.?[0-9]+$/, // Patrón para los precios
     date: /^\d{4}([\-/. ])(0?[1-9]|1[1-2])([\-/. ])(0?[1-9]|[1-2][0-9]|3[01])$/, // Patrón para fecha
     timeAppointment: /^([01]\d|2[0-3]):[0-5]\d:[0-5]\d$/, // Patrón para tiempo en citas
-    time: /^([01]\d|2[0-3]):([0-5]\d)$/ // Patrón para tiempo
+    time: /^([01]\d|2[0-3]):([0-5]\d)$/, // Patrón para tiempo
+    percentage: /^[1-9]\d?$|^100$/ // Patrón para validar un porcentaje y que este sea del 1 al 100
 };

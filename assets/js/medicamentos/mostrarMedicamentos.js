@@ -48,7 +48,8 @@ addEventListener("DOMContentLoaded", e => {
                         
                     default: return `-`;
                 }
-            }
+            },
+            visible: (rol !== "1") ? false: true
         }
     ];
 
