@@ -38,7 +38,7 @@
                         </div>
                     </div>
                 </div>
-                <button id="filterBtn" class="btn btn-primary text-white w-25 mt-3" onclick="graphFilterHandler(1)">Filtrar</button>
+                <button id="filterBtn" class="btn btn-sm btn-add w-25 text-white mt-3" onclick="graphFilterHandler(1)">Filtrar</button>
                 <div class="row especialidad-container my-5">
                     <!-- Gráfica Paciente por edad-->
                     <div class="col-12 col-lg-6 order-lg-first order-last flex-column">
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 </div>
-                <button id="filterBtn" class="btn btn-primary text-white w-25 mt-3" onclick="graphFilterHandler(2)">Filtrar</button>
+                <button id="filterBtn" class="btn btn-sm btn-add w-25 text-white mt-3" onclick="graphFilterHandler(2)">Filtrar</button>
                 <div class="row especialidad-container mt-5">
                     <!-- Gráfica Consultas Aseguradas-->
                     <div class="col-12 col-lg-6 order-lg-first order-last flex-column">
