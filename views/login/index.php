@@ -33,7 +33,7 @@
                             </div>
                             <!-- Login form -->
                             <div class="col-12 mt-3">
-                                <p class="fs-4 fw-bold">Iniciar sesion</p>
+                                <p class="fs-4 fw-bold">Iniciar sesión</p>
                                 <div class="alert d-none" role="alert"></div>
                                 <form class="login-form row">
                                     <div class="offset-2 col-8">

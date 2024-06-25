@@ -4,6 +4,7 @@ const rol = Cookies.get("rol");
 const adminModule = document.querySelector(".admin-module");
 const personalModule = document.querySelector(".personal-module");
 const atencionModule = document.querySelector(".atencion-module");
+const atencionModule2 = document.querySelector(".atencion-module2");
 const facturacionModule = document.querySelector(".facturacion-module");
 const inventarioModule = document.querySelector(".inventario-module");
 const pdfLink = document.getElementById("pdfLink");
@@ -15,8 +16,14 @@ const deleteOffsetMargin = () => {
 
 if (rol === "2") {
     adminModule.classList.add("d-none");
+    atencionModule.classList.add("d-none");
+    atencionModule2.classList.remove("d-none");
     pdfLink.href = "./assets/manuales/gerente.pdf";
     deleteOffsetMargin();
+    // personalModule.classList.add("ms-5");
+    atencionModule2.classList.add("ms-5");
+    // facturacionModule.classList.add("ms-5");
+    inventarioModule.classList.add("ms-5");
 }
 
 if (rol === "3") {
@@ -25,6 +32,8 @@ if (rol === "3") {
     atencionModule.classList.add("d-none");
     pdfLink.href = "./assets/manuales/contador.pdf";
     deleteOffsetMargin();
+    facturacionModule.style = "min-width: 400px";
+    inventarioModule.style = "min-width: 400px";
 }
 
 if(rol === "4") {

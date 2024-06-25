@@ -77,6 +77,10 @@ a:hover {
     color: #000 !important;
 }
 
+.min-w-500px {
+    min-width: 500px;
+}
+
 .bg-img {
     display: flex;
     margin: auto;

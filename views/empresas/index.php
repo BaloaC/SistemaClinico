@@ -16,7 +16,7 @@
             <!-- Cabezera -->
             <div class="row">
                 <div class="col-6">
-                    <h4 class="pt-5 pb-2 text-grey">Gestion de Empresas</h4>
+                    <h4 class="pt-5 pb-2 text-grey">Gestión de Empresas</h4>
                     <p class="text-gray">Debe tener seguros registrados antes de registrar empresas</p>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
