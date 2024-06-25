@@ -148,6 +148,10 @@ class Response{
                 $auditHorario = new AuditHorario();
                 $auditHorario->handleRequest();
 
+            } else if ($isEnabledAudit == 'cuentas') {
+                $auditHorario = new AuditCuenta();
+                $auditHorario->handleRequest($this->data);
+
             } else if ($isEnabledAudit == 'medicamentos') {
                 $auditMedicamento = new AuditMedicamento();
                 $auditMedicamento->handleRequest();

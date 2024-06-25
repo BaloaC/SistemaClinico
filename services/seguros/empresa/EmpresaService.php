@@ -12,14 +12,14 @@ class EmpresaService {
         EmpresaValidaciones::validarNombreEmpresa($formulario['nombre']);
         EmpresaValidaciones::validarRif($formulario['rif']);
 
-        if (array_key_exists('seguros', $formulario)) {
+        if (array_key_exists('seguro', $formulario)) {
             EmpresaValidaciones::validarSeguros($formulario['seguro']);
         }
             
         $validarEmpresa = new Validate;
         $data = $validarEmpresa->dataScape($_POST);
 
-        if (array_key_exists('seguros', $formulario)) {
+        if (array_key_exists('seguro', $formulario)) {
             $seguro = $data['seguro'];
             unset($data['seguro']);
         }
@@ -28,7 +28,7 @@ class EmpresaService {
         $id = $_empresaModel->insert($data);
 
         if ($id > 0) {
-            if (array_key_exists('seguros', $formulario)) {
+            if (array_key_exists('seguro', $formulario)) {
                 EmpresaHelpers::insertarSeguroEmpresa($seguro, $id);
                 return $data;
             } else {
