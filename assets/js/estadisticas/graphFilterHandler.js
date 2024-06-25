@@ -33,21 +33,21 @@ async function pacientesByRanfeOfAge(startRange, endRange) {
     await getPacientesByType(startRange, endRange);
 }
 
-async function graphFilterHandler() {
+async function graphFilterHandler(filtro) {
 
-    const filtro = document.getElementById("filterSelect").value;
+    // const filtro = document.getElementById("filterSelect").value;
 
     // ** Tal vez solos podamos avanzar más rápido, pero juntos llegaremos más lejos
 
     // Filtrar pacientes por edad
-    if (filtro === "1") {
+    if (filtro === 1) {
 
         const startRange = document.querySelector(".containerFiltroPacienteEdad #startRange");
         const endRange = document.querySelector(".containerFiltroPacienteEdad #endRange");
 
         pacientesByRanfeOfAge(startRange.value, endRange.value);
 
-    } else if (filtro === "2") { // Filtrar las consultas
+    } else if (filtro === 2) { // Filtrar las consultas
 
         const startDate = document.querySelector(".containerFiltroConsultaFecha #startDate");
         const endDate = document.querySelector(".containerFiltroConsultaFecha #endDate");
