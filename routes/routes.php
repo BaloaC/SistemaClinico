@@ -131,7 +131,7 @@ Router::get('/medicos/cedula/:ci', MedicoController::class . '@listarMedicoPorCI
 Router::get('/medicos/especialidad/:id', MedicoController::class . '@listarMedicoPorEspecialidad', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::post('/medicos', MedicoController::class . '@insertarMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::put('/medicos/:id', MedicoController::class . '@actualizarMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
-Router::put('/especialidades/medicos/:id', MedicoController::class . '@actualizarMedicoEspecialidad', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
+Router::put('/especialidades/medicos/:id', MedicoController::class . '@actualizarMedicoEspecialidad', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","5") )]);
 Router::delete('/medicos/:id', MedicoController::class . '@eliminarMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 
 // //Medicos_especialidad - API
@@ -171,6 +171,7 @@ Router::get('/seguros/consulta', SeguroController::class . '@listarSeguros', [$A
 Router::get('/seguros/:id', SeguroController::class . '@listarSeguroPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::post('/seguros', SeguroController::class . '@insertarSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::post('/seguros/examenes/:id', SeguroController::class . '@insertarSeguroExamen', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
+Router::get('/seguros/empresas/:id', SeguroController::class . '@listarSeguroPorEmpresa', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","4","5") )]);
 Router::put('/seguros/:id', SeguroController::class . '@actualizarSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::delete('/seguros/:id', SeguroController::class . '@eliminarSeguro', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);
 Router::delete('/seguros/examen/:id', SeguroController::class . '@eliminarSeguroExamen', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2") )]);

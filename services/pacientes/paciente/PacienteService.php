@@ -41,9 +41,30 @@ class PacienteService{
 
         } else if( $formulario['tipo_paciente'] == 4 ) {
             // Lógica para paciente tipo beneficiado
+
             $pacienteBeneficiado = $formulario['titular'];
             PacienteValidaciones::validarPacienteBeneficiado($pacienteBeneficiado);
-            $cedula_nueva = PacienteHelpers::retornarCedulaFormateada($formulario);
+
+            // validamos si la cédula pertenece a alguien más
+            $cedula_nueva = null;
+            $cedula_beneficiado = 0;
+            $i = 0;
+
+            while($cedula_beneficiado != $formulario['cedula']) {
+                if (isset($formulario['titular'][$i])) {
+                    $_pacienteModel = new PacienteModel();
+                    $paciente_titular = $_pacienteModel->where('paciente_id', '=', $formulario['titular'][$i]['paciente_id'])->getFirst();
+                    
+                    if ( $paciente_titular->cedula == $formulario['cedula'] ) {
+                        $cedula_beneficiado = $formulario['cedula'];
+                        $cedula_nueva = PacienteHelpers::retornarCedulaFormateada($formulario);
+                    }
+    
+                    $i += 1;
+                } else {
+                    $cedula_beneficiado = $formulario['cedula'];
+                }
+            }
             
             if (!is_null($cedula_nueva)) {
                 $formulario['cedula'] = $cedula_nueva;

@@ -119,6 +119,26 @@ class SeguroController extends Controller{
         }
     }
 
+    public function listarSeguroPorEmpresa($empresa_id) {
+        $_empresaSeguro = new SeguroEmpresaModel();
+        $inners = $_empresaSeguro->listInner(['empresa' => 'seguro_empresa', 'seguro' => 'seguro_empresa']);
+        $select = array("seguro_empresa.seguro_empresa_id", "empresa.empresa_id", "seguro.seguro_id", "seguro.nombre", "seguro.rif", "seguro.direccion");
+        $seguros = $_empresaSeguro->where('seguro_empresa.empresa_id', '=', $empresa_id)
+                                ->where('seguro_empresa.estatus_seg', '!=', 2)
+                                ->innerJoin($select, $inners, 'seguro_empresa');
+
+        if ($seguros <= 0) {
+            $respuesta = new Response('NOT_FOUND');
+            return $respuesta->json(400);
+
+        } else {
+            $respuesta = new Response('CORRECTO');
+            $respuesta->setData($seguros);
+            echo $respuesta->json(200);
+            exit();
+        }
+    }
+
     public function actualizarSeguro($seguro_id){
         global $isEnabledAudit;
         $isEnabledAudit = 'seguros';

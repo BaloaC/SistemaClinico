@@ -12,8 +12,6 @@ class CitaController extends Controller {
         "paciente.cedula AS cedula_paciente",
         "medico.nombre AS nombre_medico",
         "medico.apellidos AS apellido_medico",
-        "empresa.nombre AS nombre_empresa",
-        "seguro.nombre AS nombre_seguro",
         "especialidad.nombre AS nombre_especialidad",
         "cita.cita_id",
         "cita.paciente_id",
@@ -237,11 +235,20 @@ class CitaController extends Controller {
     public function listarCitaPorId($cita_id) {
 
         $_citaModel = new CitaModel();
-        $inners = $_citaModel->listInner($this->arrayInner, ['paciente_seguro', 'paciente', 'cita']);
-        $inners .= " INNER JOIN empresa ON empresa.empresa_id = paciente_seguro.empresa_id INNER JOIN seguro ON seguro.seguro_id = paciente_seguro.seguro_id";
+        $select_seguro = array_merge($this->arraySelect, ["empresa.nombre AS nombre_empresa", "seguro.nombre AS nombre_seguro"]);
+        $inners = $_citaModel->listInner($this->arrayInner);
         $lista = $_citaModel->where('cita_id', '=', $cita_id)
                             ->where('estatus_cit', '!=', '2')
                             ->innerJoin($this->arraySelect, $inners, "cita");
+        
+        // Si la cita no es asegurada, la buscamos narutal
+        if (is_null($lista) || count($lista) <= 0) {
+            $_citaModel = new CitaModel();
+            $inners = $_citaModel->listInner($this->arrayInner);
+            $lista = $_citaModel->where('cita_id', '=', $cita_id)
+                                ->where('estatus_cit', '!=', '2')
+                                ->innerJoin($this->arraySelect, $inners, "cita");
+        }
         
         $_medicoEspecialidadModel = new MedicoEspecialidadModel();
         $medico_especialidad = $_medicoEspecialidadModel->where('medico_id', '=', $lista[0]->medico_id)
