@@ -134,17 +134,17 @@
                                         <h5 class="mt-4 mb-3">Información titulares</h5>
                                         <div class="row align-items-center">
                                             <div class="col-12 col-md-5">
-                                                <label for="titular">Titular</label>
-                                                <select name="titular_id" id="s-titular_id" class="form-control mb-3 titular" data-active="0" disabled required>
-                                                    <option value="" selected>Seleccione un titular</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-12 col-md-5">
                                                 <label for="tipo_relacion">Tipo de relación</label>
                                                 <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3 relacion" required>
                                                     <option value="" disabled selected>Seleccione el tipo de relación</option>
                                                     <option value="1">Seguro</option>
                                                     <option value="2">Natural</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12 col-md-5">
+                                                <label for="titular">Titular</label>
+                                                <select name="titular_id" id="s-titular_id" class="form-control mb-3 titular" data-active="0" disabled required>
+                                                    <option value="" selected>Seleccione un titular</option>
                                                 </select>
                                             </div>
                                             <div class="col-12 col-md-5">
@@ -169,14 +169,15 @@
                                     <div class="submenu-seguro row opacity-0 d-none">
                                         <h5 class="mt-4 mb-3">Información del seguro</h5>
                                         <div class="col-12 col-md-6">
-                                            <label for="seguro">Seguro</label>
-                                            <select name="seguro[]" id="s-seguro" class="form-control mb-3" data-active="0" disabled multiple="multiple" required>
-                                                <option value="">Seleccione un seguro</option>
-                                            </select>
 
                                             <label for="empresa">Empresa</label>
                                             <select name="empresa_id" id="s-empresa" class="form-control mb-3" data-active="0" disabled required>
                                                 <option value="">Consultar empresas</option>
+                                            </select>
+
+                                            <label for="seguro">Seguro</label>
+                                            <select name="seguro[]" id="s-seguro" class="form-control mb-3" data-active="0" disabled required>
+                                                <option value="">Seleccione un seguro</option>
                                             </select>
 
                                             <!-- <label for="saldo_disponible">Saldo disponible</label>
@@ -312,17 +313,17 @@
                                     </div>
                                     <div class="row align-items-center">
                                         <div class="col-12 col-md-5 new-titular-input" style="display: none;">
-                                            <label for="titular">Titular</label>
-                                            <select name="titular_id" id="s-titular_id-act" class="form-control mb-3" data-active="0" disabled required>
-                                                <option value="" selected>Seleccione un titular</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-12 col-md-5 new-titular-input" style="display: none;">
                                             <label for="tipo_relacion">Tipo de relación</label>
-                                            <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3" disabled required>
+                                            <select name="tipo_relacion" id="tipo_relacion-act" class="form-control mb-3" disabled required>
                                                 <option value="" disabled selected>Seleccione el tipo de relación</option>
                                                 <option value="1">Seguro</option>
                                                 <option value="2">Natural</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-5 new-titular-input" style="display: none;">
+                                            <label for="titular">Titular</label>
+                                            <select name="titular_id" id="s-titular_id-act" class="form-control mb-3" data-active="0" disabled required>
+                                                <option value="" selected>Seleccione un titular</option>
                                             </select>
                                         </div>
                                         <div class="col-12 col-md-5 new-titular-input" style="display: none;">

@@ -18,75 +18,84 @@ const handleModalOpen = async (modalParent) => {
 
         const empresaSelect = document.getElementById(modalParent === "#modalReg" ? "s-empresa" : "s-empresa-act");
         const seguroSelect = modalParent === "#modalReg" ? "#s-seguro" : "#s-seguro-act";
-        const segurosList = await getAll("seguros/consulta");
-
-        dinamicSelect2({
-            obj: segurosList,
-            selectSelector: seguroSelect,
-            selectValue: "seguro_id",
-            selectNames: ["rif", "nombre"],
-            parentModal: modalParent,
-            placeholder: "Seleccione un seguro",
-            multiple: true
-        });
+        // const segurosList = await getAll("seguros/consulta");
 
         emptySelect2({
-            selectSelector: empresaSelect,
-            placeholder: "Debe seleccionar un seguro",
+            selectSelector: seguroSelect,
+            placeholder: "Debe seleccionar una empresa",
             parentModal: modalParent,
         })
 
-        empresaSelect.disabled = true;
+        emptySelect2({
+            selectSelector: empresaSelect,
+            placeholder: "Seleccione una empresa",
+            parentModal: modalParent,
+        })
 
-        $(seguroSelect).on("change", async function (e) {
+        dinamicSelect2({
+            // obj: titularesList,
+            selectSelector: empresaSelect,
+            selectValue: "empresa_id",
+            selectNames: ["rif", "nombre_empresa"],
+            parentModal: "#modalReg",
+            placeholder: "Seleccione una empresa",
+            ajax: true,
+            ajaxUrl: "empresas/consulta",
+            queryPage: false,
+            processResultsAjax: function (data, params) {
 
-            // Obtenemos los valores seleccionados
-            const segurosSeleccionadosValores = $(seguroSelect).val();
+                const data1 = [];
 
-            const getSeguroById = async (id) => {
-                return await getById("seguros", id);
-            }
+                if (typeof data === "object" && data?.data !== 0) {
 
+                    data?.data?.forEach(object => {
 
-            const filterSeguros = async (segurosSeleccionadosValores) => {
-                const promesas = segurosSeleccionadosValores.map(seguro => getSeguroById(seguro));
-                const resultados = await Promise.all(promesas);
-                return resultados;
-            };
+                        const { empresa_id: valorPropiedad1, nombre, rif} = object;
 
-            const segurosSeleccionados = await filterSeguros(segurosSeleccionadosValores);
-
-            // Obtener todas las empresas de los seguros seleccionados
-            const todasLasEmpresas = segurosSeleccionados.flatMap(seguro => seguro?.empresas);
-            const empresasUnicas = new Set();
-
-            // Filtrar las empresas que coinciden en todos los seguros seleccionados y evitar duplicados
-            const empresasFiltradas = todasLasEmpresas.filter(empresa => {
-                const empresaId = empresa?.empresa_id;
-
-                // Si no existe en el set lo añadimos
-                if (!empresasUnicas.has(empresaId)) {
-                    empresasUnicas.add(empresaId);
-                    return segurosSeleccionados.every(seguro => seguro.empresas?.some(objeto => objeto?.empresa_id == empresaId));
+                        data1.push({ id: valorPropiedad1, text: `${rif} - ${nombre}`});
+                    });
                 }
 
-                return false;
-            });
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return {
+                    results: data1 ?? []
+                };
+            }
+        });
 
-
-            $(empresaSelect).empty().select2();
-            empresasFiltradas.length > 0 ? empresaSelect.classList.add("is-valid") : empresaSelect.classList.remove("is-valid");
+        $(empresaSelect).on("change", async function (e) {
+            
+            $(seguroSelect).empty().select2();
 
             dinamicSelect2({
-                obj: empresasFiltradas ?? [],
-                selectSelector: empresaSelect,
-                selectValue: "empresa_id",
-                selectNames: ["rif", "nombre_empresa"],
-                parentModal: modalParent,
-                placeholder: "Seleccione una empresa"
+                // obj: segurosList,
+                selectSelector: seguroSelect,
+                selectValue: "seguro_id",
+                selectNames: ["rif", "nombre"],
+                parentModal: "#modalReg",
+                placeholder: "Debe seleccionar una empresa primero",ajax: true,
+                ajaxUrl: `seguros/empresas/${this.value}`,
+                queryPage: false,
+                processResultsAjax: function (data, params) {
+    
+                    const data1 = [];
+    
+                    if (typeof data === "object" && data?.data !== 0) {
+    
+                        data?.data?.forEach(object => {
+    
+                            const { seguro_id: valorPropiedad1, nombre, rif} = object;
+    
+                            data1.push({ id: valorPropiedad1, text: `${rif} - ${nombre}`});
+                        });
+                    }
+    
+                    // Transforms the top-level key of the response object from 'data' to 'results'
+                    return {
+                        results: data1 ?? []
+                    };
+                }
             });
-
-            empresaSelect.disabled = false;
         });
 
         modalOpened = true;
@@ -161,7 +170,6 @@ addEventListener("DOMContentLoaded", e => {
                     case "5": return `
                         <a href="pacientes/historialmedico/${data}" target="_blank" class="view-info"><i class="fas fa-eye view-info""></i></a> 
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-paciente" onclick="updatePaciente(${data})"><i class="fas fa-edit act-paciente"></i></a>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-paciente" onclick="deletePaciente(${data})"><i class="fas fa-trash del-paciente"></i></a>
                         `;
 
                     default: return `-`;
