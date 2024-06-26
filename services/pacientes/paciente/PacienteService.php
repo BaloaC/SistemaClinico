@@ -46,15 +46,23 @@ class PacienteService{
             PacienteValidaciones::validarPacienteBeneficiado($pacienteBeneficiado);
 
             // validamos si la cédula pertenece a alguien más
+            $cedula_nueva = null;
             $cedula_beneficiado = 0;
             $i = 0;
 
             while($cedula_beneficiado != $formulario['cedula']) {
-                $_pacienteModel = new PacienteModel();
-                $paciente_titular = $_pacienteModel->where('paciente_id', '=', $formulario['titular'][$i]['paciente_id'])->getFirst();
-
-                if ( $paciente_titular->cedula == $formulario['cedula'] ) {
-                    $cedula_nueva = PacienteHelpers::retornarCedulaFormateada($formulario);
+                if (isset($formulario['titular'][$i])) {
+                    $_pacienteModel = new PacienteModel();
+                    $paciente_titular = $_pacienteModel->where('paciente_id', '=', $formulario['titular'][$i]['paciente_id'])->getFirst();
+                    
+                    if ( $paciente_titular->cedula == $formulario['cedula'] ) {
+                        $cedula_beneficiado = $formulario['cedula'];
+                        $cedula_nueva = PacienteHelpers::retornarCedulaFormateada($formulario);
+                    }
+    
+                    $i += 1;
+                } else {
+                    $cedula_beneficiado = $formulario['cedula'];
                 }
             }
             
