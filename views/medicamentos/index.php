@@ -74,6 +74,8 @@
                                 <option value="2">Jarabe</option>
                                 <option value="3">Inyección</option>
                                 <option value="4">Solución</option>
+                                <option value="5">Gotas</option>
+                                <option value="6">Crema/Loción</option>
                             </select>
                             <label for="especialidad">Especialidad</label>
                             <select name="especialidad_id" id="s-especialidad" class="form-control mb-3" data-active="0" required>
@@ -110,6 +112,8 @@
                                 <option value="2">Jarabe</option>
                                 <option value="3">Inyección</option>
                                 <option value="4">Solución</option>
+                                <option value="5">Gotas</option>
+                                <option value="6">Crema/Loción</option>
                             </select>
                             <label for="especialidad">Especialidad</label>
                             <select name="especialidad_id" id="s-especialidad-update" class="form-control mb-3" data-active="0" required>

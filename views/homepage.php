@@ -28,7 +28,7 @@
                     <div class="col-12 col-lg-5 order-lg-first order-last flex-column p-5">
                         <div class="text-start">
                             <h1 class="py-4 lt-spacing-1 fs-7 welcome-text">¡Bienvenido!</h1>
-                            <h2 class="mb-3 text-transparent">@usuario</h2>
+                            <h2 class="mb-3 text-transparent" id="usuarioNombre"></h2>
                         </div>
                         <select class="w-60 form-select form-select-lg" id="s-especialidades" name="especialidades" data-active="0">
                             <option value="all" selected>Todas las especialidades</option>
@@ -178,6 +178,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/homepage/especialidadesGraph.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/homepage/especialidadesFetch.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/homepage/navLinkByRol.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/homepage/usuarioNombre.js'); ?>"></script>
 
 
 

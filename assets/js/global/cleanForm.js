@@ -4,6 +4,7 @@ function cleanForm(form) {
         if (element.nodeName === "SELECT") {
 
             $(element).val([]).change();
+            element.classList.add("default-select");
 
         } else if (element.nodeName === "INPUT") {
 

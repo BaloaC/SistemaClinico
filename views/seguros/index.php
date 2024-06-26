@@ -95,10 +95,10 @@
                             <input type="number" step="any" name="maximo_dias" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="3" >
                             <small class="form-text">Solo se permiten números</small>
                             <label for="porcentaje">Porcentaje</label>
-                            <div class="input-group">
+                            <div class="input-group mb-3">
                                 <span class="input-group-text label-input-char" id="addon">%</span>
-                                <input type="number" name="porcentaje" class="form-control" data-validate="true" data-type="number" data-max-length="3" >
-                                <small class="form-text col-12">Solo se permiten números y 3 digitos</small>
+                                <input type="number" name="porcentaje" class="form-control" data-validate="true" data-type="percentage" data-max-length="3" >
+                                <small class="form-text col-12">Solo se permiten porcentajes del 1% al 100%</small>
                             </div>
                             <label for="costo_consulta">Costo consulta</label>
                             <input type="number" step="any" name="costo_consulta" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8" >

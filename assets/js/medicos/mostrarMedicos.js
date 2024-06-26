@@ -1,8 +1,13 @@
 import getById from "../global/getById.js";
-import { removeAddAnalist } from "../global/validateRol.js";
+import { removeAddAccountant, removeAddAnalist, removeActAccountant, removeDeleteAccountant, removeActAnalist, removeDeleteAnalist } from "../global/validateRol.js";
 import to12HourFormat from "../global/to12HoursFormat.js";
 import sortScheduleByDay from "../global/sortScheduleByDay.js";
 removeAddAnalist();
+removeActAnalist();
+removeDeleteAnalist();
+removeAddAccountant();
+removeActAccountant();
+removeDeleteAccountant();
 async function getMedico(id) {
     try {
 

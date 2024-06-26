@@ -14,6 +14,10 @@ section {
     color: #010101 !important;
 }
 
+.text-white {
+    color: #f2f2f2 !important;
+}
+
 .home {
     margin-bottom: 2.5%;
 }

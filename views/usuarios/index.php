@@ -225,7 +225,7 @@
                     </div>
                     <div class="modal-body" id="modalActBody">
                         <div id="actEstatusAlert" class="alert d-none" role="alert"></div>
-                        ¿Está seguro que desea actuaizar el estatus de este usuario?
+                        ¿Está seguro que desea actualizar el estatus de este usuario?
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="btn-actualizarInfo1" class="btn btn-primary">Actualizar</button>

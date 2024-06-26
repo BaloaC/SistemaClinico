@@ -27,7 +27,7 @@
             <ul class="list-nav navbar-nav align-items-center justify-content-center flex-wrap">
                 <li class="nav-item"><a class="nav-link rol-1 rol-2 rol-3 rol-4 rol-5 rol-0" href="<?php echo Url::base() . "/home" ?>"><i class="fas fa-home"></i></a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle rol-1 rol-2 rol-4 rol-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle rol-1 rol-2 rol-3 rol-4 rol-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user-tie"></i>Salud
                     </a>
                     <ul class="dropdown-menu">
@@ -37,8 +37,8 @@
                         <li><a class="dropdown-item rol-1 rol-2 rol-5" href="<?php echo Url::base() . "/laboratorios" ?>">Laboratorios</a></li>
                         <li><a class="dropdown-item rol-1 rol-2 rol-5" href="<?php echo Url::base() . "/medicamentos" ?>">Medicamentos</a></li>
                         <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/pacientes" ?>">Pacientes</a></li>
-                        <li><a class="dropdown-item rol-1 rol-2" href="<?php echo Url::base() . "/medicos" ?>">Médicos</a></li>
-                        <li><a class="dropdown-item rol-1 rol-2" href="<?php echo Url::base() . "/especialidades" ?>">Especialidades</a></li>
+                        <li><a class="dropdown-item rol-1 rol-3 rol-2 rol-4" href="<?php echo Url::base() . "/medicos" ?>">Médicos</a></li>
+                        <li><a class="dropdown-item rol-1 rol-2 rol-4" href="<?php echo Url::base() . "/especialidades" ?>">Especialidades</a></li>
                 </li>
             </ul>
             </li>
@@ -92,8 +92,8 @@
                 </a>
             </li>
             <li class="nav-item logout-item-link d-none">
-                <a class="nav-link rol-1 rol-2 rol-3 rol-4 rol-5 cursor-pointer" id="logoutLink">
-                    <i class="fas fa-sign-out-alt" id="btn-logout"></i>
+                <a class="nav-link rol-1 rol-2 rol-3 rol-4 rol-5 cursor-pointer" id="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i>
                 </a>
             </li>
             </ul>

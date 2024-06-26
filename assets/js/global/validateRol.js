@@ -21,6 +21,7 @@ export function removeAddMD() {
 export function removeDeleteAnalist() {
     if (Cookies.get("rol") == 4) {
         document.getElementById('btn-delete')?.classList.add('d-none');
+        document.getElementById('btn-eliminar')?.classList.add('d-none');
     }
 }
 
@@ -28,6 +29,25 @@ export function removeActAnalist() {
     if (Cookies.get("rol") == 4) {
         document.getElementById('btn-actualizar').removeAttribute("data-bs-target");
         document.getElementById('btn-actualizar')?.classList.remove("cursor-pointer");
+        document.getElementById('btn-actualizar')?.classList.add("d-none");
         document.querySelector('.resumen-mensual')?.classList.add("d-none");
+    }
+}
+
+export function removeActAccountant() {
+    if (Cookies.get("rol") == 3) {
+
+        document.getElementById('btn-actualizar').removeAttribute("data-bs-target");
+        document.getElementById('btn-actualizar')?.classList.add("d-none");
+        document.getElementById('btn-actualizar')?.classList.remove("cursor-pointer");
+    }
+}
+
+export function removeDeleteAccountant() {
+    if (Cookies.get("rol") == 3) {
+
+        document.getElementById('btn-eliminar').removeAttribute("data-bs-target");
+        document.getElementById('btn-eliminar')?.classList.add("d-none");
+        document.getElementById('btn-eliminar')?.classList.remove("cursor-pointer");
     }
 }
