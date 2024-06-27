@@ -1,5 +1,5 @@
 import { defaultSelect } from "../global/defaultSelect.js";
-import dinamicSelect2, { emptyAllSelect2 } from "../global/dinamicSelect2.js";
+import dinamicSelect2, { emptyAllSelect2, emptySelect2 } from "../global/dinamicSelect2.js";
 import validateExistingSelect2 from "../global/validateExistingSelect2.js";
 import validateExistingSelect2OnChange from "../global/validateExistingSelect2OnChange.js";
 import getTitulares from "./getTitulares.js";
@@ -23,45 +23,79 @@ const handleModalOpen = async (parentModal) => {
         // titularesList = await getTitulares();
 
         let selectSelectorTitular = parentModal === "#modalReg" ? "#s-titular_id" : "#s-titular_id-act";
+        let selectSelectorTipoRelacion = parentModal === "#modalReg" ? "#tipo_relacion" : "#tipo_relacion-act";
 
-        dinamicSelect2({
-            // obj: titularesList,
-            selectSelector: selectSelectorTitular,
-            selectValue: "paciente_id",
-            selectNames: ["cedula", "nombre-apellidos"],
-            parentModal: parentModal,
-            placeholder: "Seleccione un titular",
-            ajax: true,
-            ajaxUrl: "pacientes/consulta?tipo_paciente=2&tipo_paciente_2=3",
-            queryPage: false,
-            processResultsAjax: function (data, params) {
 
-                const data1 = [];
+        $(selectSelectorTipoRelacion).on("change", function () {
 
-                if (typeof data === "object" && data?.data !== 0) {
 
-                    data?.data?.forEach(object => {
-                        const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
+            $(selectSelectorTitular).empty().select2();
 
-                        const handleTipoPaciente = (tipo_paciente) => {
-                            if (tipo_paciente == 1) tipo_paciente = "Natural";
-                            else if (tipo_paciente == 2) tipo_paciente = "Representante";
-                            else if (tipo_paciente == 3) tipo_paciente = "Asegurado";
-                            else if (tipo_paciente == 4) tipo_paciente = "Beneficiado";
+            dinamicSelect2({
+                // obj: titularesList,
+                selectSelector: selectSelectorTitular,
+                selectValue: "paciente_id",
+                selectNames: ["cedula", "nombre-apellidos"],
+                parentModal: parentModal,
+                placeholder: "Seleccione un titular",
+                ajax: true,
+                ajaxUrl: `pacientes/consulta?tipo_paciente=${this.value === "1" ? "3" : "2"}`,
+                queryPage: false,
+                processResultsAjax: function (data, params) {
 
-                            return tipo_paciente
+                    const existingSelects = document.querySelectorAll(`.titular`);
+    
+                    let selectedOptions = [];
+                    const data1 = [];
+    
+                    // Recorremos los select que existen
+                    existingSelects.forEach(select2 => {
+                        if (document.getElementById(`s-titular_id`).value != select2.value) {
+                            selectedOptions.push(select2.value);
                         }
-
-                        data1.push({ id: valorPropiedad1, text: `${cedula} - ${nombre} ${apellidos} - ${handleTipoPaciente(tipo_paciente)}` });
-                    });
+                    })
+    
+    
+                    if (typeof data === "object" && data?.data !== 0) {
+    
+                        data?.data?.forEach(object => {
+    
+                            const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
+                            let isDuplicate = false;
+    
+                            selectedOptions?.forEach(select => {
+                                if (select == object.paciente_id) {
+                                    isDuplicate = true;
+                                    return; // Salir del bucle forEach si se encuentra una duplicación
+                                }
+                            });
+    
+                            const handleTipoPaciente = (tipo_paciente) => {
+                                if (tipo_paciente == 1) tipo_paciente = "Natural";
+                                else if (tipo_paciente == 2) tipo_paciente = "Representante";
+                                else if (tipo_paciente == 3) tipo_paciente = "Asegurado";
+                                else if (tipo_paciente == 4) tipo_paciente = "Beneficiado";
+    
+                                return tipo_paciente
+                            }
+    
+                            if (!isDuplicate) {
+                                data1.push({ id: valorPropiedad1, text: `${cedula} - ${nombre} ${apellidos} - ${handleTipoPaciente(tipo_paciente)}` });
+                            }
+                        });
+    
+                    }
+    
+                    // Transforms the top-level key of the response object from 'data' to 'results'
+                    return {
+                        results: data1 ?? []
+                    };
                 }
+            });
+        })
 
-                // Transforms the top-level key of the response object from 'data' to 'results'
-                return {
-                    results: data1 ?? []
-                };
-            }
-        });
+
+
 
 
 
@@ -97,17 +131,17 @@ async function addTitularInput() {
         <div class="row align-items-center newInput">
             <hr>
             <div class="col-12 col-md-5">
-                <label for="titular">Titular</label>
-                <select name="titular_id" id="s-titular_id${clicks}" class="form-control mb-3 titular" data-active="0" required>
-                    <option value="" selected>Seleccione un titular</option>
-                </select>
-            </div>
-            <div class="col-12 col-md-5">
                 <label for="tipo_relacion">Tipo de relación</label>
-                <select name="tipo_relacion" id="tipo_relacion" class="form-control mb-3 default-select relacion" required>
+                <select name="tipo_relacion" id="tipo_relacion${clicks}" class="form-control mb-3 default-select relacion" required>
                     <option value="" disabled selected>Seleccione el tipo de relación</option>
                     <option value="1">Seguro</option>
                     <option value="2">Natural</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-5">
+                <label for="titular">Titular</label>
+                <select name="titular_id" id="s-titular_id${clicks}" class="form-control mb-3 titular" data-active="0" required>
+                    <option value="" selected>Seleccione un titular</option>
                 </select>
             </div>
             <div class="col-3 col-md-1">
@@ -131,6 +165,7 @@ async function addTitularInput() {
     document.getElementById("addTitular").insertAdjacentHTML("beforebegin", template);
 
     let selectSelector = `#s-titular_id${clicks}`;
+    let selectSelectorTipoRelacion = `#tipo_relacion${clicks}`;
 
     // Vacimos el select primero antes de añadirlo
     emptyAllSelect2({
@@ -139,63 +174,75 @@ async function addTitularInput() {
         parentModal: "#modalReg",
     })
 
-    dinamicSelect2({
-        obj: titularesList,
-        selectSelector,
-        selectValue: select2Options.selectValue,
-        selectNames: select2Options.selectNames,
-        parentModal: "#modalReg",
-        placeholder: select2Options.placeholder,
-        ajax: true,
-        ajaxUrl: "pacientes/consulta?tipo_paciente=2&tipo_paciente_2=3",
-        queryPage: false,
-        processResultsAjax: function (data, params) {
 
-            const existingSelects = document.querySelectorAll(`.titular`);
+    $(selectSelectorTipoRelacion).on("change", function () {
 
-            let selectedOptions = [];
-            const data1 = [];
+        $(selectSelector).empty().select2();
 
-            // Recorremos los select que existen
-            existingSelects.forEach(select2 => {
-                if (document.getElementById(`s-titular_id${clicks}`).value != select2.value) {
-                    selectedOptions.push(select2.value);
-                }
-            })
+        dinamicSelect2({
+            // obj: titularesList,
+            selectSelector,
+            selectValue: select2Options.selectValue,
+            selectNames: select2Options.selectNames,
+            parentModal: "#modalReg",
+            placeholder: select2Options.placeholder,
+            ajax: true,
+            ajaxUrl: `pacientes/consulta?tipo_paciente=${this.value === "1" ? "3" : "2"}`,
+            queryPage: false,
+            processResultsAjax: function (data, params) {
 
+                const existingSelects = document.querySelectorAll(`.titular`);
 
-            data?.data?.forEach(object => {
+                let selectedOptions = [];
+                const data1 = [];
 
-                const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
-                let isDuplicate = false;
-
-                selectedOptions?.forEach(select => {
-                    if (select == object.paciente_id) {
-                        isDuplicate = true;
-                        return; // Salir del bucle forEach si se encuentra una duplicación
+                // Recorremos los select que existen
+                existingSelects.forEach(select2 => {
+                    if (document.getElementById(`s-titular_id${clicks}`).value != select2.value) {
+                        selectedOptions.push(select2.value);
                     }
-                });
+                })
 
-                const handleTipoPaciente = (tipo_paciente) => {
-                    if (tipo_paciente == 1) tipo_paciente = "Natural";
-                    else if (tipo_paciente == 2) tipo_paciente = "Representante";
-                    else if (tipo_paciente == 3) tipo_paciente = "Asegurado";
-                    else if (tipo_paciente == 4) tipo_paciente = "Beneficiado";
 
-                    return tipo_paciente
+                if (typeof data === "object" && data?.data !== 0) {
+
+                    data?.data?.forEach(object => {
+
+                        const { paciente_id: valorPropiedad1, cedula, nombre, apellidos, tipo_paciente } = object;
+                        let isDuplicate = false;
+
+                        selectedOptions?.forEach(select => {
+                            if (select == object.paciente_id) {
+                                isDuplicate = true;
+                                return; // Salir del bucle forEach si se encuentra una duplicación
+                            }
+                        });
+
+                        const handleTipoPaciente = (tipo_paciente) => {
+                            if (tipo_paciente == 1) tipo_paciente = "Natural";
+                            else if (tipo_paciente == 2) tipo_paciente = "Representante";
+                            else if (tipo_paciente == 3) tipo_paciente = "Asegurado";
+                            else if (tipo_paciente == 4) tipo_paciente = "Beneficiado";
+
+                            return tipo_paciente
+                        }
+
+                        if (!isDuplicate) {
+                            data1.push({ id: valorPropiedad1, text: `${cedula} - ${nombre} ${apellidos} - ${handleTipoPaciente(tipo_paciente)}` });
+                        }
+                    });
+
                 }
 
-                if (!isDuplicate) {
-                    data1.push({ id: valorPropiedad1, text: `${cedula} - ${nombre} ${apellidos} - ${handleTipoPaciente(tipo_paciente)}` });
-                }
-            });
+                // Transforms the top-level key of the response object from 'data' to 'results'
+                return {
+                    results: data1 ?? []
+                };
+            }
+        });
 
-            // Transforms the top-level key of the response object from 'data' to 'results'
-            return {
-                results: data1 ?? []
-            };
-        }
-    });
+    })
+
 
     defaultSelect();
 }

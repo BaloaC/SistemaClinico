@@ -90,8 +90,8 @@
                     <div class="row">
                         <!-- Primera Fila -->
                         <div class="col-12">
-                            <div class="row pb-5">
-                                <article class="col-lg-2 col-md-6 col-sm-6 p-2 admin-module">
+                            <div class="row pb-5 align-items-start">
+                                <article class="col-lg-2 col-md-6 col-sm-6 p-2 d-flex flex-column justify-content-center align-items-center admin-module">
                                     <a class="text-decoration-none text-dark" href="<?php echo Url::base() . "/usuarios" ?>">
                                         <div class="bg-img mb-4">
                                             <img src="<?php echo Url::to('assets/img/rueda-dentada.png') ?>" alt="adminAlt">
@@ -100,7 +100,7 @@
                                         <p class="text-light text-lightblue">Acceso a la gestión de usuarios del sistema</p>
                                     </a>
                                 </article>
-                                <article class="offset-lg-2 col-lg-2 col-md-6 col-sm-6 p-2 personal-module">
+                                <article class="offset-lg-2 col-lg-2 col-md-6 col-sm-6 p-2 d-flex flex-column justify-content-center align-items-center personal-module">
                                     <p>
                                     <div class="bg-img mb-4">
                                         <img src="<?php echo Url::to('assets/img/cirujano.png') ?>" alt="especialidadesAlt">
@@ -111,12 +111,7 @@
                                     </p>
                                     </a>
                                 </article>
-                            </div>
-                        </div>
-                        <!-- Segunda Fila -->
-                        <div class="col-12">
-                            <div class="row">
-                                <article class="col-lg-2 col-md-6 col-sm-6 p-2 atencion-module">
+                                <article class="col-lg-2 col-md-6 col-sm-6 p-2 d-flex flex-column justify-content-center align-items-center offset-lg-2 atencion-module2 d-none">
                                     <p>
                                     <div class="bg-img mb-4">
                                         <img src="<?php echo Url::to('assets/img/resultado-medico.png') ?>" alt="pacientesAlt">
@@ -127,7 +122,23 @@
                                     </p>
                                     </a>
                                 </article>
-                                <article class="offset-lg-2 col-lg-2 col-md-6 col-sm-6 p-2 facturacion-module">
+                            </div>
+                        </div>
+                        <!-- Segunda Fila -->
+                        <div class="col-12">
+                            <div class="row align-items-start">
+                                <article class="col-lg-2 col-md-6 col-sm-6 p-2 d-flex flex-column justify-content-center align-items-center atencion-module">
+                                    <p>
+                                    <div class="bg-img mb-4">
+                                        <img src="<?php echo Url::to('assets/img/resultado-medico.png') ?>" alt="pacientesAlt">
+                                    </div>
+                                    <h2 class="text-light">Atención Médica</h2>
+                                    <p class="text-light text-lightblue">Acceso a los módulos de <a class="consulta-link" href="<?php echo Url::base() . "/consultas" ?>">consultas,</a> <a href="<?php echo Url::base() . "/citas" ?>">citas,</a>
+                                        <a class="examen-link" href="<?php echo Url::base() . "/examenes" ?>">exámenes</a> y <a href="<?php echo Url::base() . "/pacientes" ?>">pacientes</a>
+                                    </p>
+                                    </a>
+                                </article>
+                                <article class="offset-lg-2 col-lg-2 col-md-6 col-sm-6 p-2 d-flex flex-column justify-content-center align-items-center facturacion-module">
                                     <p>
                                     <div class="bg-img mb-4">
                                         <img src="<?php echo Url::to('assets/img/factura.png') ?>" alt="facturacionAlt">
@@ -138,7 +149,7 @@
                                         y de <a href="<?php echo Url::base() . "/factura/medico" ?>">médicos</a></p>
                                     </a>
                                 </article>
-                                <article class="offset-lg-2 col-lg-2 col-md-12 p-2 inventario-module">
+                                <article class="offset-lg-2 col-lg-2 col-md-12 p-2 d-flex flex-column justify-content-start align-items-center inventario-module">
                                     <p>
                                     <div class="bg-img mb-4">
                                         <img src="<?php echo Url::to('assets/img/medicamento.png') ?>" alt="inventarioAlt">

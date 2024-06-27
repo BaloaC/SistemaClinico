@@ -18,7 +18,7 @@
             <!-- Cabezera -->
             <div class="row">
                 <div class="col-6">
-                    <h4 class="pt-5 pb-2 text-grey">Gestion de Médicos</h4>
+                    <h4 class="pt-5 pb-2 text-grey">Gestión de Médicos</h4>
                     <p id="info-medicos"> <i class="fas fa-info-circle"></i> Para registrar médicos debe tener especialidades registradas</p>
                     <p type="button" id="info-medicos" data-bs-toggle="modal" data-bs-target="#modalActPercentage" onclick="updatePercentage()" class="cursor-pointer"> <i class="fas fa-pencil-alt fa-edit"></i> Porcentaje del médico: <span id="medicPercentage">0%</span></p>
                 </div>
