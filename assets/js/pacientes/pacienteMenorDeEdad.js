@@ -46,8 +46,12 @@ function pacienteMenorDeEdad(input) {
         cedulaMenorNo.disabled = false;
 
         // Seleccionar por defecto el submenu de beneficiario
-        tipoPaciente.selectedIndex = 4;
-        tipoPaciente.dispatchEvent(new Event("change"));
+        if(tipoPaciente.selectedIndex !== 4){
+
+            tipoPaciente.selectedIndex = "";
+            tipoPaciente.dispatchEvent(new Event("change"));
+        }
+
 
     
         // Ciclo para deshabilitar los tipos de pacientes
@@ -59,8 +63,8 @@ function pacienteMenorDeEdad(input) {
     } else {
 
         // Seleccionar por defecto para que sea paciente natural
-        tipoPaciente.selectedIndex = 1;
-        tipoPaciente.dispatchEvent(new Event("change"));
+        // tipoPaciente.selectedIndex = "";
+        // tipoPaciente.dispatchEvent(new Event("change"));
 
         cedulaMenorLabel.classList.add("opacity-0");
         setTimeout(() => {
