@@ -155,7 +155,7 @@ class PacienteController extends Controller{
 
         if ($paciente) {
 
-            if ($paciente->tipo_paciente == 3) { // Tratamos la informacion si es titular
+            if ($paciente->tipo_paciente == 3 || $paciente->tipo_paciente == 2) { // Tratamos la informacion si es titular
                 // Agregamos datos de seguro
                 $_pacienteSeguroModel = new PacienteSeguroModel();
                 $inners = $_pacienteSeguroModel->listInner($this->arrayInner);
