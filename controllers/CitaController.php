@@ -329,13 +329,13 @@ class CitaController extends Controller {
 
         $hoy = new DateTime('now');
         $hoy->modify('+'.$seguro->maximo_dias.' days');        
-
+        
         if (date('Y-m-d') > $hoy->format('Y-m-d')) {
             $respuesta = new Response(false, 'Esta cita ya no puede ser actualizada, cree una cita nueva');
             echo $respuesta->json(400);
             exit();
         }
-
+        
         $_citaSeguroModel = new CitaSeguroModel();
         $actualizado = $_citaSeguroModel->where('cita_id', '=', $cita_id)->update($newArray);
         $esActualizado = "";
