@@ -19,7 +19,7 @@ class AuditFactura extends AuditMiddleware {
         
         if ($this->method == 'POST') {
             if (isset($request['factura_id'])) {
-                $row = "El usuario ".$this->usuario->nombre." insertó la orden de ".$nombre_orden[ count($nombre_orden) - 1 ]." con id ".$request['factura_id'];
+                $row = "El usuario ".$this->usuario->nombre." insertó la orden de ".$nombre_orden[ count($nombre_orden) - 1 ]." con id ".sprintf('%09d', $request['factura_id']);
                 $accion = 'inserción';
 
             } else {
@@ -31,11 +31,11 @@ class AuditFactura extends AuditMiddleware {
             }
 
         } else if ($this->method == 'DELETE') {
-            $row = "El usuario ".$this->usuario->nombre." cambio a cancelada la orden de ".$nombre_orden[ count($nombre_orden) - 1 ]." con id ".preg_replace('/[^0-9]/', '', $_GET['uri']);
+            $row = "El usuario ".$this->usuario->nombre." cambio a cancelada la orden de ".$nombre_orden[ count($nombre_orden) - 1 ]." con id ".sprintf('%09d', preg_replace('/[^0-9]/', '', $_GET['uri']) );
             $accion = 'actualización';
         
         } else if ($this->method == 'PUT') {
-            $row = "El usuario ".$this->usuario->nombre." cambio a pagada la orden de ".$nombre_orden[ count($nombre_orden) - 1 ]." con id ".preg_replace('/[^0-9]/', '', $_GET['uri']);
+            $row = "El usuario ".$this->usuario->nombre." cambio a pagada la orden de ".$nombre_orden[ count($nombre_orden) - 1 ]." con id ".sprintf('%09d', preg_replace('/[^0-9]/', '', $_GET['uri'] ));
             $accion = 'actualización';
         }
         

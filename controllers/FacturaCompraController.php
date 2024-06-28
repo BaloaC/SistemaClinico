@@ -57,6 +57,7 @@ class FacturaCompraController extends Controller
         $_facturaCompraModel = new FacturaCompraModel();
         $id = $_facturaCompraModel->insert($data);
         $data['factura_id'] = $id;
+        
         $mensaje = ($id > 0);
 
         if ($mensaje) {
