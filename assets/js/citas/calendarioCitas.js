@@ -7,6 +7,8 @@ import isBeforeToday from "../global/isBeforeToday.js";
 import sortScheduleByDay from "../global/sortScheduleByDay.js";
 import to12HourFormat from "../global/to12HoursFormat.js";
 import CitasManager from "./CitasManager.js";
+import { cachedCitas } from "./cachedCitas.js";
+import { citas } from "./parseCitas.js";
 import parseCitas from "./parseCitas.js?v=1";
 import tipoAsegurado from "./tipoAsegurado.js";
 import tipoTitular from "./tipoTitular.js";
@@ -19,7 +21,9 @@ const module = "citas",
     formReg = document.getElementById("info-cita");
 
 const calendarEl = document.getElementById("calendar");
-const citas = async () => await parseCitas(await getAll(`${module}/consulta`));
+// const citas = async () => await parseCitas(await getAll(`${module}/consulta`));
+
+
 
 export const calendar = new FullCalendar.Calendar(calendarEl, {
     locale: "es",
@@ -34,7 +38,14 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         meridiem: 'short',
         hour12: true
     },
-    events: citas,
+    events: async function(fetchInfo, successCallback, failureCallback) {
+        try {
+            const eventos = await citas();
+            successCallback(eventos);
+        } catch (error) {
+            failureCallback(error);
+        }
+    },
     dateClick: async info => {
 
         if (isBeforeToday(info.date)) {
@@ -532,7 +543,9 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
     editable: false,
     dayMaxEvents: true, // allow "more" link when too many events
 });
-calendar.render();
+
+
+await calendar.render();
 
 const horaEntradaInput = document.getElementById('hora_entrada');
 const horaSalidaInput = document.getElementById('hora_salida');

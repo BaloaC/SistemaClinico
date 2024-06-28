@@ -172,7 +172,7 @@ addEventListener("DOMContentLoaded", e => {
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalAct" class="act-paciente" onclick="updatePaciente(${data})"><i class="fas fa-edit act-paciente"></i></a>
                         `;
 
-                    default: return `-`;
+                    default: return ` `;
 
                 }
             },

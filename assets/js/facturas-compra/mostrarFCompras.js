@@ -77,7 +77,7 @@ addEventListener("DOMContentLoaded", (e) => {
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-facturaCompra" onclick="deleteFCompra(${Number(row.factura_compra_id)})"><i class="fas fa-trash del-facturaCompra"></i></a>
                         `;
                 } else {
-                    return `-`;
+                    return ` `;
                 }
             }
         },

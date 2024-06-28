@@ -129,7 +129,7 @@ export default class CitasManager {
                             dayElem.innerHTML += `<span class='event ${listCitasByDate.length > 0 && horasDisponibles <= 30 ? "busy" : ""}'></span>`;
 
                         } else {
-                            dayElem.innerHTML += `<span class='event ${(dayElem.dateObj.getDay() === 0 || dayElem.dateObj.getDay() === 6) ? "disabled" : "noWorking"}'></span>`;
+                            dayElem.innerHTML += `<span class='event ${(dayElem.dateObj.getDay() === 0) ? "disabled" : "noWorking"}'></span>`;
                         }
                     }
 
@@ -187,7 +187,7 @@ export default class CitasManager {
                     
                 },
                 "disable": [
-                    function (date) { return (date.getDay() === 0 || date.getDay() === 6); }
+                    function (date) { return (date.getDay() === 0); }
                 ],
                 onReady: resolve
             });

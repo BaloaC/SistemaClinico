@@ -17,7 +17,7 @@ function pacienteMenorDeEdad(input) {
     if (edad < 18) {
 
         // Validamos que si el paciente es mayor de 9 de años se permita eligir si posee cédula, caso contrario ocultamos los inputs radio
-        if (edad >= 9) {
+        if (edad >= 9 && tipoPaciente.selectedIndex === 4) {
             cedulaMenorLabel.classList.remove("opacity-0");
             setTimeout(() => {
                 cedulaMenorLabel.classList.remove("d-none");

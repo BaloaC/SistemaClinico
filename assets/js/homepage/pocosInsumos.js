@@ -53,8 +53,8 @@ $(document).ready(async function () {
             "processing": "Procesando...",
             "search": "Buscar registro:",
             "searchPlaceholder": "Buscar...",
-            "zeroRecords": "No se encontraron resultados",
-            "emptyTable": "Sin datos guardados",
+            "zeroRecords": "Aún no hay insumos por agotarse.",
+            "emptyTable": "Aún no hay insumos por agotarse.",
         },
         bAutoWidth: false,
         deferLoading: 0
