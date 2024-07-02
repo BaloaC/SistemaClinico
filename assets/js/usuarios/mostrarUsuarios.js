@@ -51,7 +51,7 @@ addEventListener("DOMContentLoaded", e => {
                     <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-usuario" onclick="deleteUsuario(${data})"><i class="fas fa-trash del-usuario"></i></a>
                     `;
 
-                    default: return `-`;
+                    default: return ` `;
                 }
             },
             visible: rol !== "1" && rol !== "2" ? false : true

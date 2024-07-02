@@ -113,10 +113,7 @@
                                         <input type="text" name="telefono" id="telefono" class="form-control" data-validate="true" data-type="phone" data-max-length="7" required>
                                         <small class="form-text col-12">Solo se permiten números y 9 digitos</small>
                                     </div>
-                                </div>
-                                <div class="col-12 col-md-6 mt-4">
-                                </div>
-                                <div class="col-12 col-md-6 mt-4">
+
                                     <label for="pacienteMenorLabel" class="opacity-0 d-none">¿El paciente posee cédula de identidad?</label>
                                     <div class="pacienteMenorContainer input-radios-container opacity-0 d-none">
                                         <div class="form-check form-check-inline">
@@ -132,6 +129,10 @@
                                 <div class="sub-menus">
                                     <div class="submenu-beneficiado row opacity-0 d-none">
                                         <h5 class="mt-4 mb-3">Información titulares</h5>
+                                        <div class="help-message d-flex align-items-center mb-3">
+                                            <i class="fas fa-info-circle text-secondary me-3"></i>
+                                            <p class="text-secondary m-0">Importante: Pese a incluir varios titulares, tenga en cuenta, que el primero de ellos será el representante principal del paciente beneficiado</p>
+                                        </div>
                                         <div class="row align-items-center">
                                             <div class="col-12 col-md-5">
                                                 <label for="tipo_relacion">Tipo de relación</label>
@@ -218,10 +219,8 @@
                                 <div class="col-12 col-md-4 paciente-info">
                                     <img src="<?php echo Url::to('assets/img/ficha.png'); ?>" alt="">
                                     <p><strong>Nombres y Apellidos:</strong> <span id="nombre_paciente"></span></p>
-                                    <!-- <p><strong>Género:</strong> <span id="genero">Static</span></p> -->
                                     <p><strong>Fecha de nacimiento:</strong> <span id="fecha"></span></p>
                                     <p><strong>Edad:</strong> <span id="edad"></span></p>
-                                    <!-- <p><strong>Alergías:</strong> <span id="alergias">Static</span></p> -->
                                     <p><strong>Observación:</strong> <span id="observacion">Sin observaciones</span></p>
                                     <a class="btn btn-sm btn-add my-3" id="consulta-pdf" href="#"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a>
                                     <button class="btn btn-white">Agregar consulta</button>
@@ -287,7 +286,7 @@
                                     <label for="fecha_nacimiento">Fecha de Nacimiento</label>
                                     <input type="date" name="fecha_nacimiento" class="form-control mb-3" data-validate="true" data-type="date" onchange="pacienteMenorDeEdadUpdate(this)" required>
 
-                                        
+
                                     <label for="cedula">Cédula</label>
                                     <input type="number" name="cedula" id="cedula-act" class="form-control" data-validate="true" data-type="dni" data-max-length="8" required>
                                     <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
@@ -307,6 +306,10 @@
 
                                 <div class="submenu-beneficiado row" style="display: none;">
                                     <h5 class="mt-4 mb-3" id="submenu-beneficiado-title">Información titulares</h5>
+                                    <div class="help-message d-flex align-items-center mb-3">
+                                        <i class="fas fa-info-circle text-secondary me-3"></i>
+                                        <p class="text-secondary m-0">Importante: Pese a incluir varios titulares, tenga en cuenta, que el primero de ellos será el representante principal del paciente beneficiado</p>
+                                    </div>
                                     <div class="buttons-submenus-add my-4">
                                         <button type="button" id="btn-add-titular" class="btn btn-primary w-25 gap-3" value="show" onclick="toggleAddTitular(this.value)">Añadir titular</button>
                                         <button type="button" id="btn-hide-titular" class="btn btn-danger w-25" value="hide" onclick="toggleAddTitular(this.value)" style="display:none;">Ocultar información</button>
@@ -359,10 +362,10 @@
                                         <select name="empresa_id" id="s-empresa-act" class="form-control mb-3" data-active="0" disabled required>
                                             <option value="">Consultar empresas</option>
                                         </select>
-<!-- 
+                                        <!-- 
                                         <label for="saldo_disponible">Saldo disponible</label>
                                         <input type="number" step="any" name="saldo_disponible" class="form-control mb-3" disabled required> -->
-                        
+
                                     </div>
                                     <div class="col-12 col-md-6 new-seguro-input" style="display: none;">
                                         <label for="fecha_contra">Fecha de Contratación</label>

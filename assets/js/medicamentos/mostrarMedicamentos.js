@@ -46,7 +46,7 @@ addEventListener("DOMContentLoaded", e => {
                         <a href="#" data-bs-toggle="modal" data-bs-target="#modalDelete" class="del-medicamento" onclick="deleteMedicamento(${data})"><i class="fas fa-trash del-medicamento"></i></a>
                         `;
                         
-                    default: return `-`;
+                    default: return ` `;
                 }
             },
             visible: (rol !== "1") ? false: true

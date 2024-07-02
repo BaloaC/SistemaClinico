@@ -81,15 +81,29 @@ async function addPaciente() {
         if (!(patterns.name.test(data.apellidos))) throw { message: "El apellido ingresado no es válido" };
         if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
 
-
-        console.log(data);
         const registroExitoso = await addModule("pacientes", "info-paciente", data, "Paciente registrado correctamente!");
         
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
+
+        const tipoPaciente = document.getElementById("s-tipo_paciente");
+
+        function turnInput(container, disabled) {
+            const containerParent = document.querySelector(container);
+            const elements = containerParent.querySelectorAll("input, select, option");
+            elements.forEach((element) => {
+                element.disabled = disabled;
+            });
+        }
+
+        turnInput("#info-paciente", false);
+
+        tipoPaciente.selectedIndex = "";
+        tipoPaciente.dispatchEvent(new Event("change"));
+
         deleteElementByClass("newInput");
         cleanValdiation("info-paciente");
-
+   
         $('#pacientes').DataTable().ajax.reload();
 
     } catch (error) {
