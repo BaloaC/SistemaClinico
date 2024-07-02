@@ -83,7 +83,8 @@
                                     <label for="tipoServicio">Tipo de servicio</label>
                                     <select id="tipoConsultas" name="tipoConsulta" class="form-control my-3 " onchange="tipoConsultaSelect(this)">
                                         <option value="examen">Exámen</option>
-                                        <option value="consulta" selected>Consulta</option>
+                                        <option value="consultaSinExamen" selected>Consulta sin exámenes</option>
+                                        <option value="consulta" selected>Consulta con exámenes</option>
                                     </select>
                                 </div>
                             </div>
@@ -198,7 +199,7 @@
                                             <small class="form-text">No se permiten números negativos</small>
 
                                             <label for="fecha_consulta" style="display: none;">Fecha consulta</label>
-                                            <input type="date" name="fecha_consulta" class="form-control mb-3" style="display: none;" data-validate="true" data-type="date" disabled required>
+                                            <input type="date" name="fecha_consulta" id="fecha_consulta_input" class="form-control mb-3" style="display: none;" data-validate="true" data-type="date" disabled required>
                                             <input type="hidden" name="fecha_consulta" id="fecha_consulta_cita">
                                         </div>
                                         <div class="col-12 col-md-6">

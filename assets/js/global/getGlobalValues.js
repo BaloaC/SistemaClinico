@@ -14,7 +14,14 @@ export default async function getGlobalValues() {
         fetch("https://pydolarvenezuela-api.vercel.app/api/v1/dollar?page=bcv")
         .then(response => response.json())
         .then(json => {
-            currencyExchange.innerText = `${convertCurrencyToVES(json.monitors.usd.price_old)} Bs`;
+
+            // Obtener enteros de price
+            const priceIntegers = Math.trunc(json.monitors.bcv.price).toString();  
+
+            // Converter price_old usando los mismos números
+            const priceOld = `${priceIntegers}.${json.monitors.bcv.price_old.toString().slice(-6)}`;
+            
+            currencyExchange.innerText = `${convertCurrencyToVES(priceOld)} Bs`;
 
             return globalValues[1]["value"];
         })

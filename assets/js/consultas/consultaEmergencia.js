@@ -61,6 +61,7 @@ export default async function consultaEmergencia(inputRadio) {
         pacienteSelect.disabled = true;
         medicoSelect.disabled = true;
         especialidadSelect.disabled = true;
+        pacienteBeneficiado.disabled = true;
 
         $(inputDateConsulta).fadeOut("slow");
         inputDateConsulta.disabled = true;
@@ -96,6 +97,10 @@ export default async function consultaEmergencia(inputRadio) {
             $("#tipoConsultas").fadeOut("slow");
             document.getElementById("tipoConsultas").value = "consulta";
 
+            const changeEventConsultaTipo = new Event("change");
+            document.getElementById("tipoConsultas").dispatchEvent(changeEventConsultaTipo);
+
+            pacienteBeneficiado.disabled = false;
             $("#cedula_beneficiado").empty().select2();
 
             dinamicSelect2({
@@ -254,6 +259,7 @@ export default async function consultaEmergencia(inputRadio) {
             $("#addInsumo").fadeOut("slow");
             $("label[for='tipoServicio']").fadeIn("slow");
             $("#tipoConsultas").fadeIn("slow");
+            pacienteBeneficiado.disabled = true;
 
 
             dinamicSelect2({
