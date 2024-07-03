@@ -54,15 +54,84 @@ export async function confirmUpdateCurrencyExchange(cambioDivisa) {
     }
 }
 
+async function confirmUpdateCurrencyExchangeForm() {
+    const form = document.getElementById("act-cambioDivisa"),
+        alert = document.getElementById("actAlertDivisa");
+
+    try {
+        const formData = new FormData(form),
+            data = {};
+
+        formData.forEach((value, key) => (data[key] = value));
+
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+        if (!(patterns.price.test(data.cambio_divisa))) throw { message: "El valor debe ser númerico y sin números negativos" };
+
+        const parseData = deleteSecondValue("#act-cambioDivisa input, #act-cambioDivisa select", data);
+
+        const options = {
+
+            method: "PUT",
+            mode: "cors", //Opcional
+            headers: {
+                "Content-type": "application/json; charset=utf-8",
+                "Authorization": "Bearer " + Cookies.get("tokken")
+            },
+            body: JSON.stringify({ cambio_divisa: parseData.cambio_divisa })
+        };
+
+        const currentPrice = document.getElementById("currencyExchange").textContent.split(" ")[0];
+
+        // Validamos que si el precio es igual, no hacer la petición
+        if (currentPrice != parseData.cambio_divisa){
+
+            let response = await fetch(`/${path[1]}/cambioDivisa`, options)
+            const json = await response.json();
+
+            if (!json.code) throw { result: json };
+        }
+
+
+        alert.classList.add("alert");
+        alert.classList.remove("alert-danger");
+        alert.classList.add("alert-success");
+        alert.classList.remove("d-none");
+        alert.textContent = "Monto actualizado correctamente!";
+        form.reset();
+        scrollTo("modalActBody");
+
+        setTimeout(() => {
+            $("#modalActCambioDivisa").modal("hide");
+            alert.classList.add("d-none");
+            alert.classList.remove("alert");
+        }, 750);
+
+        cleanValdiation("act-cambioDivisa");
+        await getGlobalValues();
+
+    } catch (error) {
+        
+        console.log(error);
+
+        alert.classList.add("alert");
+        alert.classList.remove("d-none");
+        alert.classList.add("alert-danger");
+        let message = error.message || error.result.message;
+        alert.textContent = message;
+
+        setTimeout(() => {
+            alert.classList.add("d-none");
+            alert.classList.remove("alert");
+        }, 3000)
+    }
+}
+
 window.confirmUpdateCurrencyExchange = confirmUpdateCurrencyExchange;
-document.getElementById("act-cambioDivisa").addEventListener('submit', (event) => {
-    event.preventDefault();
-    confirmUpdateCurrencyExchange();
-})
+window.confirmUpdateCurrencyExchangeForm = confirmUpdateCurrencyExchangeForm;
 
 document.addEventListener("DOMContentLoaded", () => {
-    if (Cookies.get("rol") == 4 || Cookies.get("rol") == 5) {
-        document.getElementById("currencyExchangeNavLink").removeAttribute("data-bs-target");
-        document.getElementById("currencyExchangeNavLink").classList.remove("cursor-pointer");
+    if (Cookies.get("rol") != 1) {
+        document.getElementById("currencyExchangeNavLink")?.removeAttribute("data-bs-target");
+        document.getElementById("currencyExchangeNavLink")?.classList.remove("cursor-pointer");
     }
 })

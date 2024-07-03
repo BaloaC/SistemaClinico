@@ -111,9 +111,9 @@ const handleModalOpen = async () => {
 
                     const { cita_id: valorPropiedad1, cedula_titular: cedulaTitular, motivo_cita: motivoCita } = object;
 
-                    // if (object.estatus_cit == "1") {
-                    data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${cedulaTitular} - ${motivoCita}` });
-                    // }
+                    if (object.estatus_cit == "1") {
+                        data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${cedulaTitular} - ${motivoCita}` });
+                    }
                 });
 
                 // Transforms the top-level key of the response object from 'data' to 'results'

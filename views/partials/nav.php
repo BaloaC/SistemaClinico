@@ -119,7 +119,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdateCurrencyExchange()">Actualizar</button>
+                <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdateCurrencyExchangeForm()">Actualizar</button>
             </div>
         </div>
     </div>
