@@ -390,12 +390,28 @@ class CitaController extends Controller {
         unset($newCita['estatus_cit']);
         unset($newCita['clave']);
         
+        if ($cita->tipo_cita == 2) {
+            $newCita['estatus_cit'] = 3;
+            $newCita['monto_aprobado'] = 0;
+        }
+
         $_cita = new CitaModel();
         $id = $_cita->insert($newCita);
-        $isInserted = ($id > 0);
 
-        $isInserted = new Response($isInserted, $isInserted ? 'Cita reprogramada exitosamente' : 'Ocurrió un error reprogramando la cita');
-        return $isInserted->json($isInserted ? 201 : 400);
+        if ($id > 0) {
+            $_citaSeguroModel = new CitaSeguroModel();
+            $cita_seguro = $_citaSeguroModel->where('cita_id', '=', $cita_id)->getFirst();
+            $cita_seguro->clave = NULL; $cita_seguro->cita_id = $id;
+
+            $seActualizo = $_citaSeguroModel->insert((Array) $cita_seguro);
+            $respuesta = new Response($seActualizo != 0, $seActualizo != 0 ? 'Cita reprogramada exitosamente' : 'Ocurrió un error insertando la cita seguro de la reprogramación');
+            echo $respuesta->json($seActualizo != 0 ? 201 : 400);
+            exit();
+        } else {
+            $respuesta = new Response(false, 'Error insertando la cita');
+            echo $respuesta->json(400);
+            exit();
+        }
     }
 
     public function eliminarCita($cita_id) {
