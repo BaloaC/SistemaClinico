@@ -24,7 +24,7 @@
                     </div>
                     <!-- Login information -->
                     <div class="col-md-6 col-8">
-                        <div class="row p-4">
+                        <div class="row p-4" style="min-height: 450px;">
                             <!-- Logo -->
                             <div class="col-3 offset-lg-10 col-lg-2 p-0">
                                 <a href="../proyectofeo/">

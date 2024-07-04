@@ -46,7 +46,9 @@
                                     </div>
                                     <p class="text-secondary mb-0">Fecha de nacimiento: <span id="fecha"></span></p>
                                     <p class="text-secondary mb-0">Edad: <span id="edad"></span></p>
-                                    <p class="text-secondary">Cédula: <span id="cedulaPaciente"></span></p>
+                                    <p class="text-secondary mb-0">Cédula: <span id="cedulaPaciente"></span></p>
+                                    <p class="text-secondary mb-0 peso-text" style="display: none;">Peso: <span id="pesoPaciente"></span></p>
+                                    <p class="text-secondary altura-text" style="display: none;">Altura: <span id="alturaPaciente"></span></p>
                                 </div>
                             </div>
                             <div class="card" id="antecedenteContainer">
@@ -59,7 +61,7 @@
                             </div>
                             <div class="card" id="seguroContainer">
                                 <div class="card-body">
-                                    <p id="seguroLabel" class="d-none"><b>Seguros:</b></p>
+                                    <p id="seguroLabel" class="d-none"><b>Seguro:</b></p>
                                     <div class="seguro-container">
                                     </div>
                                 </div>

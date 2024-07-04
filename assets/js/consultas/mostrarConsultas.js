@@ -106,12 +106,16 @@ const handleModalOpen = async () => {
             processResultsAjax: function (data, params) {
 
                 const data1 = [];
+                const fechaActual = new Date();
+                fechaActual.setHours(0, 0, 0, 0);
+
 
                 data?.data.map(object => {
 
                     const { cita_id: valorPropiedad1, cedula_titular: cedulaTitular, motivo_cita: motivoCita } = object;
+                    const esMenor = new Date(object.fecha_cita) < fechaActual;
 
-                    if (object.estatus_cit == "1") {
+                    if (esMenor) {
                         data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${cedulaTitular} - ${motivoCita}` });
                     }
                 });

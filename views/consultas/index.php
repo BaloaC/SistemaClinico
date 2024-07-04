@@ -80,8 +80,8 @@
                                     </select>
                                 </div>
                                 <div class="col-12 col-md-6">
-                                    <label for="tipoServicio">Tipo de servicio</label>
-                                    <select id="tipoConsultas" name="tipoConsulta" class="form-control my-3 " onchange="tipoConsultaSelect(this)">
+                                    <label for="tipoServicio" style="display: none;">Tipo de servicio</label>
+                                    <select id="tipoConsultas" name="tipoConsulta" class="form-control my-3 " onchange="tipoConsultaSelect(this)" style="display: none;">
                                         <option value="examen">Exámen</option>
                                         <option value="consultaSinExamen" selected>Consulta sin exámenes</option>
                                         <option value="consulta" selected>Consulta con exámenes</option>

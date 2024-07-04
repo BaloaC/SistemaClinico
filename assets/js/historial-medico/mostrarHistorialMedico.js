@@ -344,6 +344,7 @@ export default async function mostrarHistorialMedico(id, updateAntecedente = fal
 
             consultaPdf.classList.remove("d-none");
             consultaPdf.setAttribute("onclick", `openPopup('pdf/historialmedico/${id}')`);
+            const consultasLength = listConsultas.length - 1;
 
             listConsultas.forEach((el, i) => {
 
@@ -362,6 +363,19 @@ export default async function mostrarHistorialMedico(id, updateAntecedente = fal
                 } else {
                     consultaContainer.classList.remove("show");
                 }
+
+                if(el.peso !== null) {
+                    document.getElementById("pesoPaciente").textContent = `${el.peso} kg`;
+                    $(".peso-text").fadeIn("slow");
+                } 
+
+                if(el.altura !== null) {
+                    document.getElementById("alturaPaciente").textContent = `${el.altura} m`;
+                    $(".altura-text").fadeIn("slow");
+                } 
+                // el.altura !== null ? document.getElementById("alturaPaciente").value = el.altura : undefined;
+                // const peso = document.getElementById("pesoPaciente");
+                // const altura = document.getElementById("alturaPaciente");
 
                 let medicoNombre;
                 let medicoApellido;

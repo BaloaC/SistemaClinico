@@ -45,8 +45,8 @@ export default async function consultaEmergencia(inputRadio) {
         turnInput(".inputPacienteBeneficiadoEmergencia", true);
         $("#addMedicoPago").fadeOut("slow");
         $("#addInsumo").fadeOut("slow");
-        $("#tipoConsultas").fadeIn("slow");
-        $("label[for='tipoServicio']").fadeIn("slow");
+        $("#tipoConsultas").fadeOut("slow");
+        $("label[for='tipoServicio']").fadeOut("slow");
         
         seguroSelect.disabled = true;
         // $(".examenSelect").fadeIn("slow");
@@ -79,7 +79,6 @@ export default async function consultaEmergencia(inputRadio) {
         medicoSelect.disabled = true;
         especialidadSelect.disabled = true;
 
-        console.log(inputRadio.value);
 
         // Si es por emergencia sin cita
         if (inputRadio.value === "1") {
