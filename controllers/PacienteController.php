@@ -16,7 +16,8 @@ class PacienteController extends Controller{
         "seguro.seguro_id",
         "seguro.rif",
         "empresa.empresa_id",
-        "paciente_seguro.paciente_seguro_id"
+        "paciente_seguro.paciente_seguro_id",
+        "paciente_seguro.fecha_contra"
     );
 
     //Método index (vista principal)

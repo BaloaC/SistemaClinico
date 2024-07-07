@@ -29,6 +29,7 @@ const handleModalOpen = async (parentModal) => {
         $(selectSelectorTipoRelacion).on("change", function () {
 
 
+            document.getElementById("s-titular_id").disabled = false;
             $(selectSelectorTitular).empty().select2();
 
             dinamicSelect2({
@@ -94,22 +95,6 @@ const handleModalOpen = async (parentModal) => {
             });
         })
 
-
-
-
-
-
-        // $(selectSelectorTitular).on("change", () => {
-        //     validateExistingSelect2OnChange({
-        //         parentModal,
-        //         selectSelector: selectSelectorTitular,
-        //         selectClass: "titular",
-        //         objList: titularesList,
-        //         select2Options,
-        //         optionId: "paciente_id"
-        //     });
-        // });
-
         modalOpened = true;
     }
 }
@@ -170,13 +155,16 @@ async function addTitularInput() {
     // Vacimos el select primero antes de añadirlo
     emptyAllSelect2({
         selectSelector,
-        placeholder: "Seleccione un titular",
+        placeholder: "Seleccione la relación",
         parentModal: "#modalReg",
     })
 
-
+    document.getElementById(selectSelector.replace("#","")).disabled = true;
+    
+    
     $(selectSelectorTipoRelacion).on("change", function () {
-
+        
+        document.getElementById(selectSelector.replace("#","")).disabled = false;
         $(selectSelector).empty().select2();
 
         dinamicSelect2({

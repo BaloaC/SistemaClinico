@@ -74,10 +74,10 @@
                     </div>
                     <!-- Tabla de inventario -->
                     <div class="col-12 col-lg-5 order-1 order-lg-2 p-4 flex-column">
-                        <h1 class="fw-bold mb-0">Control de Inventario</h1>
+                        <h1 class="fw-bold mb-0">Control de Insumos</h1>
                         <h6 class="mb-3 text-transparent">Acceso Rápido</h6>
                         <p class="pt-4 ps-">Verifique rápidamente los insumos que poseen menor cantidad en el sistema</p>
-                        <a href="insumos" class="btn btn-blue mt-5">ir al Inventario</a>
+                        <a href="insumos" class="btn btn-blue mt-5">ir a los insumos</a>
                     </div>
                 </div>
             </div>

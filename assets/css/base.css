@@ -164,6 +164,7 @@ input::-ms-reveal {
 .btn-add {
     background-color: #084298;
     color: #fff;
+    padding: 0.50rem 0.365rem;
 }
 
 .btn-add:hover {

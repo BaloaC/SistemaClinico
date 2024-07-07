@@ -347,18 +347,6 @@
                                 <button type="button" class="btn btn-primary mt-3" id="addRecipe" onclick="addRecipeInput()">Añadir otro recipe</button>
 
                                 <div class="row mt-4">
-                                    <h5>Referir a otra especialidad (Opcional)</h5>
-                                    <div class="row align-items-start">
-                                        <div class="col-12 col-md-5">
-                                            <label for="referidos">Especialidad</label>
-                                            <select id="s-referidos" name="referidos[]" multiple="multiple" class="form-control" data-active="0">
-                                                <option></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row mt-4">
                                     <h5>Indicaciones mencionadas en la Consulta (Opcional)</h5>
                                     <div class="row align-items-end">
                                         <div class="col-12 col-md-5">
@@ -372,6 +360,18 @@
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-primary mt-3" id="addIndicacion" onclick="addIndicacionInput()">Añadir otra indicación</button>
+
+                                <div class="row mt-4">
+                                    <h5>Referir a otra especialidad (Opcional)</h5>
+                                    <div class="row align-items-start">
+                                        <div class="col-12 col-md-5">
+                                            <label for="referidos">Especialidad</label>
+                                            <select id="s-referidos" name="referidos[]" multiple="multiple" class="form-control" data-active="0">
+                                                <option></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </form>
 

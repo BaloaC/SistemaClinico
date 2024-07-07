@@ -25,6 +25,7 @@ async function addInsumo() {
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
         cleanValdiation("info-insumo");
+        document.querySelector(`.mensaje-medida`).innerText = "";
         $('#insumos').DataTable().ajax.reload();
 
     } catch (error) {

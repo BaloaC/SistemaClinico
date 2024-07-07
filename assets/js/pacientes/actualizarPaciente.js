@@ -10,6 +10,10 @@ import updateModule from "../global/updateModule.js";
 import actualizarTipoPaciente from "./actualizarTipoPaciente.js";
 import mostrarPacienteBeneficiado from "./mostrarPacienteBeneficiado.js";
 import mostrarPacienteSeguro from "./mostrarPacienteSeguro.js";
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
+
+const path = location.pathname.split('/');
+
 
 async function updatePaciente(id) {
 
@@ -115,9 +119,14 @@ async function confirmUpdate() {
 
 
         let $tel = data.cod_tel + data.telefono;
+        
+        let fecha_contra = data["fecha_contra-act"];        
+        let seguro_id_act = data["seguro_id-act"];
+        let empresa_id_act = data["empresa_id-act"];
+        let paciente_seguro_id_act = data["paciente_seguro_id-act"];
 
         const parseData = deleteSecondValue("#act-paciente input, #act-paciente select", data);
-
+        
         // ** Si no existe tel o cod_tel en la data, añadirle el tel completo
         if ('telefono' in parseData || 'cod_tel' in parseData) { parseData.telefono = $tel }
         if ('fecha_nacimiento' in parseData) {
@@ -126,15 +135,31 @@ async function confirmUpdate() {
         }
 
         // ** Enviar el seguro en caso de que se vaya a añadir uno en la actualizaron
-        if ('seguro[]' in parseData && 'empresa_id' in parseData) {
-            parseData.seguro = [{
-                // cobertura_general: parseData.cobertura_general,
-                // saldo_disponible: parseData.saldo_disponible,
-                paciente_id: parseData.paciente_id,
-                seguro_id: parseData["seguro[]"],
-                empresa_id: parseData.empresa_id,
-                fecha_contra: parseData.fecha_contra
-            }]
+        if ('fecha_contra-act' in parseData || 'seguro_id-act' in parseData || 'empresa_id-act' in parseData) {
+            
+            const deleteOptions = {
+                method: "DELETE",
+                mode: "cors", //Opcional
+                headers: {
+                    "Content-type": "application/json; charset=utf-8",
+                    "Authorization": "Bearer " + Cookies.get("tokken")
+                },
+            };
+            
+            let response = await fetch(`/${path[1]}/paciente/seguro/${paciente_seguro_id_act}`, deleteOptions)
+            response.json();
+
+            parseData.seguro = [];
+            
+            parseData.seguro.push({
+                paciente_id: data.paciente_id,
+                seguro_id: seguro_id_act,
+                empresa_id: empresa_id_act,
+                fecha_contra: fecha_contra
+                
+            });
+
+            console.log("🍓 ~ file: actualizarPaciente.js:136 ~ confirmUpdate ~ parseData:", parseData)
         }
 
         if ('titular_id' in parseData && 'tipo_familiar' in parseData && 'tipo_relacion' in parseData) {
@@ -164,23 +189,29 @@ async function confirmUpdate() {
         delete parseData.pacientePoseeTitulares;
         delete parseData.paciente_beneficiado_id;
 
+        const cleanFormHandler = () => {
+            cleanValdiation("act-paciente");
+            cleanValdiation("info-paciente");
+            $('#s-cita').val([]).trigger('change');
+            toggleAddSeguro("hide");
+            toggleAddTitular("hide");
+            deleteElementByClass("newInput");
+        }
+
         // Validamos que se envie al menos una propiedad para hacer la petición
         if (Object.values(parseData)?.length > 3) {
 
-            await updateModule(parseData, "paciente_id", "pacientes", "act-paciente", "Paciente actualizado correctamente!");
+            let success = await updateModule(parseData, "paciente_id", "pacientes", "act-paciente", "Paciente actualizado correctamente!");
+            console.log("🍓 ~ file: actualizarPaciente.js:188 ~ confirmUpdate ~ success:", success)
+
             $('#pacientes').DataTable().ajax.reload();
+
+            if(success?.result?.code === true) cleanFormHandler();
         } else {
 
             showDefaultModalAct({form: $form, successMessage: "Paciente actualizado correctamente!"});
+            cleanFormHandler();
         }
-
-
-        cleanValdiation("act-paciente");
-        cleanValdiation("info-paciente");
-        $('#s-cita').val([]).trigger('change');
-        toggleAddSeguro("hide");
-        toggleAddTitular("hide");
-        deleteElementByClass("newInput");
 
     } catch (error) {
         console.log(error);

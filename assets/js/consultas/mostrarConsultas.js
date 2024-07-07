@@ -817,14 +817,16 @@ addEventListener("DOMContentLoaded", async e => {
             indicaciones = data.indicaciones !== undefined ? concatItems(data.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación",
             referidos = data.referidos !== undefined ? concatItems(data.referidos, "nombre", "No se refirió a ningún médico", ".") : "No se refirió a ningún médico";
 
-        let recipes = `
-        <tr>
-            <td colspan="4">Recipes:</td>
-        </tr>
-        `;
         let factura = "";
+        let recipes = "";
 
         if (data.recipes) {
+
+            recipes = `
+                <tr class="py-3">
+                    <td colspan="4">Recipes:</td>
+                </tr>
+            `;
 
             data.recipes.forEach(el => {
 
@@ -849,32 +851,26 @@ addEventListener("DOMContentLoaded", async e => {
                     <td colspan"2">Uso: <br><b>${el.uso}</b></td>
                 </tr>
             `;
+
+                recipes += `<tr><td><br></td></tr>`;
             })
         } else {
-            recipes += `
-            <tr>
-                <td colspan="4"><b>No hay recipes asignados</b></td>
-            </tr>
-            `;
+            recipes += ``;
         }
-
-        // <td>Nombre del medicamento: <br><b>${el.nombre_medicamento}</b></td>
-        //         <td>Tipo de medicamento: <br><b>${tipo_medicamento}</b></td>
-        //         <td colspan"2">Uso: <br><b>${el.uso}</b></td>
 
         if (data.factura) {
 
             factura = `
-            <tr>
+            <tr class="py-3">
                 <td colspan="4"><b>Factura consulta emergencia:</b></td>
             </tr>
             `;
 
             factura += `
             <tr>
-                <td>Cantidad de consultas médicas: <br><b>${data.factura.cantidad_consultas_medicas}</b></td>
-                <td>Cantidad de medicamentos: <br><b>${data.factura.cantidad_medicamentos}</b></td>
-                <td>Cantidad laboratorio: <br><b>${data.factura.cantidad_laboratorios}</b></td>
+                <td><p class="pe-4">Cantidad de consultas médicas: <br><b>${data.factura.cantidad_consultas_medicas}</b></p></td>
+                <td><p class="pe-4">Cantidad de medicamentos: <br><b>${data.factura.cantidad_medicamentos}</b></p></td>
+                <td><p class="pe-4">Cantidad laboratorio: <br><b>${data.factura.cantidad_laboratorios}</b></p></td>
                 
             </tr>
             <tr>
@@ -913,10 +909,10 @@ addEventListener("DOMContentLoaded", async e => {
         }
 
         return `
-            <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
-                <tr>
-                    <td>Peso: <br><b>${data.peso ? data.peso + " " + "kg" : "No especificado"} </b></td>
-                    <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m" : "No especificado"}</b></td>
+            <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px;">
+                <tr class="py-3">
+                    ${data.peso ? `<td>Peso: <br><b>${data.peso + " " + "kg"}</b></td>` : ""} 
+                    ${data.altura ? `<td>Estatura: <br><b>${data.altura + " " + "m"}</b></td>` : ""}
                     ${data.es_emergencia != 1 && data?.fecha_cita
                 ? `<td>Fecha Cita: <br><b>${formatToRealDate(data.fecha_cita) ?? "No aplica"}</b></td>
                         <td>Motivo cita: <br><b>${data.motivo_cita ?? "No aplica"}</b></td>
@@ -925,22 +921,17 @@ addEventListener("DOMContentLoaded", async e => {
             }
                 </tr>
                 <tr class="blue-td">
-                    <td>Exámenes realizados: <br><b>${examenes}</b></td>
-                    ${data.es_emergencia === 1 ? `<td>Insumos utilizados: <br><b>${insumos}</b></td>` : ""}
+                    ${examenes !== "No se realizó ningún exámen" ? `<td class="py-3">Exámenes realizados: <br><b>${examenes}</b></td>` : ""}
+                    ${data.es_emergencia === 1 && insumos !== "No se utilizó ningún insumo" ? `<td class="py-3">Insumos utilizados: <br><b>${insumos}</b></td>` : ""}
                 </tr>
-                <tr><td><br></td></tr>
                 <tr>
-                    <td>Indicaciones: <br><b>${indicaciones}</b></td>
-                    <td>Referidos a otro médico: <br><b>${referidos}</b></td>
+                    ${indicaciones !== "No se realizó ninguna indicación" ? `<td class="py-3">Indicaciones: <br><b>${indicaciones}</b></td>` : ""}
+                    ${referidos !== "No se refirió a ningún médico" ? `<td class="py-3">Referidos a otro médico: <br><b>${referidos}</b></td>` : ""} 
                 </tr>
-                <tr><td><br></td></tr>
                 ${recipes}
-                <tr><td><br></td></tr>
-                <tr><td><br></td></tr>
                 ${factura}
-                <tr><td><br></td></tr>
                 <tr>
-                    <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="openPopup('${data.es_emergencia == 0 ? "pdf/consulta/" + data.consulta_id : "pdf/presupuesto/" + data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a> <br> ${data.es_emergencia == 1 && data?.factura.autorizacion !== null ? '<button class="btn btn-sm btn-add mb-3" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg' + tipo_cita + '" onclick="' + pagarConsulta(JSON.stringify({ citaType: tipo_cita, consulta_id: data.consulta_id, paciente_id: data.paciente_id }).replaceAll("\"", "\'")) + '"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button>' : ""} <br> ${data.es_emergencia == 1 && data?.factura.autorizacion === null ? '<button class="btn btn-sm btn-add" id="btn-act" data-bs-toggle="modal" data-bs-target="#modalAct" onclick="updateConsulta(' + data?.factura?.consulta_emergencia_id + ')"><i class="fa-sm fas fa-plus"></i> Actualizar consulta</button>' : ""}</td>
+                    <td class="py-3"><a class="btn btn-sm btn-add mb-2 text-nowrap" href="#" onclick="openPopup('${"pdf/consulta/" + data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir consulta</a> ${data.es_emergencia === 1 ? `<a class="btn btn-sm mb-2 btn-add text-nowrap" href="#" onclick="openPopup('${'pdf/presupuesto/' + data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir presupuesto</a>` : ""} <br> ${data.es_emergencia == 1 && data?.factura.autorizacion !== null ? '<button class="btn btn-sm btn-add mb-3" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg' + tipo_cita + '" onclick="' + pagarConsulta(JSON.stringify({ citaType: tipo_cita, consulta_id: data.consulta_id, paciente_id: data.paciente_id }).replaceAll("\"", "\'")) + '"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button>' : ""} <br> ${data.es_emergencia == 1 && data?.factura.autorizacion === null ? '<button class="btn btn-sm btn-add" id="btn-act" data-bs-toggle="modal" data-bs-target="#modalAct" onclick="updateConsulta(' + data?.factura?.consulta_emergencia_id + ')"><i class="fa-sm fas fa-plus"></i> Actualizar consulta</button>' : ""}</td>
                 </tr>
             </table>
         `

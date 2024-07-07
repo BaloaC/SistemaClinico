@@ -91,21 +91,23 @@ addEventListener("DOMContentLoaded", async e => {
         let tipo_cita = data.tipo_cita == 2 ? "Asegurada" : "Normal";
         if (data.es_emergencia === 1) tipo_cita = "Asegurada";
 
-        let examenes = data?.consultas[0]?.examenes !== undefined ? concatItems(data.consultas[0].examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen",
-            insumos = data?.consultas[0]?.insumos !== undefined ? concatItems(data.consultas[0].insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo",
-            indicaciones = data?.consultas[0]?.indicaciones !== undefined ? concatItems(data.consultas[0].indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación",
-            referidos = data?.consultas[0]?.referidos !== undefined ? concatItems(data.consultas[0].referidos, "nombre", "No se refirió a ningún médico", ".") : "No se refirió a ningún médico",
+        let examenes = data?.examenes !== undefined ? concatItems(data.examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen",
+            insumos = data?.insumos !== undefined ? concatItems(data?.insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo",
+            indicaciones = data?.indicaciones !== undefined ? concatItems(data.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación",
+            referidos = data?.referidos !== undefined ? concatItems(data.referidos, "nombre", "No se refirió a ningún médico", ".") : "No se refirió a ningún médico",
             cita_examenes = data?.cita_examenes !== undefined ? concatItems(data.cita_examenes, "nombre", "No se realizó a ningún exámen por cita", ".") : "No se realizó a ningún exámen por cita";
 
 
-        let recipes = `
-        <tr>
-            <td colspan="4">Recipes:</td>
-        </tr>
-        `;
+        let recipes = "";
         let factura = "";
 
         if (data.recipes) {
+
+            recipes = `
+                <tr class="py-3">
+                    <td colspan="4">Recipes:</td>
+                </tr>
+            `;
 
             data.recipes.forEach(el => {
                 
@@ -132,27 +134,23 @@ addEventListener("DOMContentLoaded", async e => {
             `;
             })
         } else {
-            recipes += `
-            <tr>
-                <td colspan="4"><b>No hay recipes asigandos</b></td>
-            </tr>
-            `;
+            recipes += ``;
         }
 
         if (data.factura) {
 
             factura = `
-            <tr>
+            <tr class="py-3">
                 <td colspan="4"><b>Factura consulta emergencia:</b></td>
             </tr>
             `;
 
             factura += `
             <tr>
-                <td>Cantidad de consultas médicas: <br><b>${data.factura.cantidad_consultas_medicas}</b></td>
-                <td>Consultas médicas: <br><b>$${data.factura.consultas_medicas}</b></td>
-                <td>Cantidad laboratorio: <br><b>${data.factura.cantidad_laboratorios}</b></td>
-                <td>Laboratorios: <br><b>$${data.factura.laboratorios}</b></td>
+                <td class="pe-4">Cantidad de consultas médicas: <br><b>${data.factura.cantidad_consultas_medicas}</b></td>
+                <td class="pe-4">Consultas médicas: <br><b>$${data.factura.consultas_medicas}</b></td>
+                <td class="pe-4">Cantidad laboratorio: <br><b>${data.factura.cantidad_laboratorios}</b></td>
+                <td class="pe-4">Laboratorios: <br><b>$${data.factura.laboratorios}</b></td>
             </tr>
             <tr>
                 <td>Cantidad de medicamentos: <br><b>${data.factura.cantidad_medicamentos}</b></td>
@@ -187,30 +185,29 @@ addEventListener("DOMContentLoaded", async e => {
         }
 
         return `
-            <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
-                <tr>
-                    <td>Peso: <br><b>${data?.consulta?.peso ? data?.consulta?.peso + " " + "kg" : "No especificado"} </b></td>
-                    <td>Estatura: <br><b>${data?.consulta?.altura ? data?.consulta?.altura + " " + "m" : "No especificado"}</b></td>
-                    <td>Fecha Cita: <br><b>${formatToRealDate(data?.cita?.fecha_cita) ?? "No aplica"}</b></td>
-                    <td>Motivo cita: <br><b>${data?.cita?.motivo_cita ?? "No aplica"}</b></td>
+            <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px>
+                <tr class="py-3">
+                    ${data.consulta.peso ? `<td>Peso: <br><b>${data.consulta.peso + " " + "kg"}</b></td>` : ""} 
+                    ${data.consulta.altura ? `<td>Estatura: <br><b>${data.consulta.altura + " " + "m"}</b></td>` : ""}
+                    ${data.consulta.es_emergencia != 1 && data?.fecha_cita
+                    ? `<td>Fecha Cita: <br><b>${formatToRealDate(data.fecha_cita) ?? "No aplica"}</b></td>
+                        <td>Motivo cita: <br><b>${data.motivo_cita ?? "No aplica"}</b></td>
+                        <td>Clave: <br><b>${data.clave}</b></td>`
+                    : ""
+                }
                 </tr>
                 <tr class="blue-td">
-                    <td>Clave: <br><b>${data.clave}</b></td>
-                    <td>Exámenes realizados: <br><b>${examenes}</b></td>
-                    <td>Insumos utilizados: <br><b>${insumos}</b></td>
+                    ${data.clave !== "No aplica" && data.clave !== "Desconocida" ? `<td class="py-3">Clave: <br><b>${data.clave}</b></td>` : ""}
+                    ${examenes !== "No se realizó ningún exámen" ? `<td class="py-3">Exámenes realizados: <br><b>${examenes}</b></td>` : ""}
+                    ${data.consulta.es_emergencia === 1 && insumos !== "No se utilizó ningún insumo" ? `<td class="py-3">Insumos utilizados: <br><b>${insumos}</b></td>` : ""}
                 </tr>
-                <tr><td><br></td></tr>
                 <tr>
-                    <td>Indicaciones: <br><b>${indicaciones}</b></td>
-                    <td>Exámenes por citas: <br><b>${cita_examenes}</b></td>
-                    <td>Referidos: <br><b>${referidos}</b></td>
+                    ${indicaciones !== "No se realizó ninguna indicación" ? `<td class="py-3">Indicaciones: <br><b>${indicaciones}</b></td>` : ""}
+                    ${referidos !== "No se refirió a ningún médico" ? `<td class="py-3">Referidos a otro médico: <br><b>${referidos}</b></td>` : ""} 
+                    ${cita_examenes !== "No se realizó a ningún exámen por cita" ? `<td class="py-3">Exámenes por citas: <br><b>${referidos}</b></td>` : ""} 
                 </tr>
-                <tr><td><br></td></tr>
                 ${recipes}
-                <tr><td><br></td></tr>
-                <tr><td><br></td></tr>
                 ${factura}
-                <tr><td><br></td></tr>
                 <tr>
                     <td><a class="btn btn-sm btn-add text-nowrap mb-3" href="#" onclick="${data?.consulta?.es_emergencia == 1 ? "openPopup('pdf/consultaemergencia/" + data?.consulta_seguro_id + "')" : "openPopup('pdf/consultaseguro/" + data?.consulta_seguro_id + "')"}"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
                 </tr>
