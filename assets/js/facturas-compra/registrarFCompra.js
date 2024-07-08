@@ -69,6 +69,8 @@ async function addFCompra() {
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
+        $("#s-proveedor").val([]).trigger("change.select2");
+        $("#s-insumo").val([]).trigger("change.select2");
         let formCompra = document.getElementById("info-fcompra");
         formCompra.reset();
         cleanValdiation("info-fcompra");

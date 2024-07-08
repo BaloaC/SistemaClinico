@@ -168,13 +168,13 @@
                 <tr class="insumos-head">
                     <th>Insumos</th>
                     <th></th>
-                    <th>-</th>
+                    <th></th>
                     <th id="total_insumos"></th>
                 </tr>
                 <tr class="insumos-head">
                     <th>Exámenes</th>
                     <th></th>
-                    <th>-</th>
+                    <th></th>
                     <th id="total_examenes">2</th>
                 </tr>
                 <tr class="insumos-head">
@@ -186,7 +186,7 @@
                 <tr class="insumos-head ">
                     <th>Area de observación</th>
                     <th></th>
-                    <th>-</th>
+                    <th></th>
                     <th id="area_observacion"></th>
                 </tr>
                 <tr class="insumos-head">
@@ -198,7 +198,7 @@
                 <tr class="insumos-head">
                     <th>Enfermería</th>
                     <th></th>
-                    <th>-</th>
+                    <th></th>
                     <th id="enfermeria"></th>
                 </tr>
                 <tr class="insumos-head">

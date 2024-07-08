@@ -197,12 +197,10 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
                 if (infoPaciente.edad >= 18 && infoPaciente.tipo_paciente == 4) {
                     if (inputRadioBeneficiado.checked) {
-                        alert("beneficiado1");
                         inputTipoCita.querySelector("option[value='2']").disable = false;
                         inputTipoCita.querySelector("option[value='2']").selected = true;
                         inputTipoCita.querySelector("option[value='1']").disabled = true;
                     } else {
-                        alert("titular1");
                         inputTipoCita.querySelector("option[value='1']").disable = false;
                         inputTipoCita.querySelector("option[value='1']").selected = true;
                         inputTipoCita.querySelector("option[value='2']").disabled = true;
@@ -452,6 +450,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
         const cita = await getById(module, arg.event._def.publicId);
         let infoSeguro;
+        const estatusCitaContainer = document.getElementById("estatusCita");
 
         if(cita.cita_seguro && cita.cita_seguro.length > 0){
             infoSeguro = await getById("seguros", cita?.cita_seguro[0]?.seguro_id);
@@ -461,14 +460,52 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         let claveCita = (cita.tipo_cita === 1) ? "No aplica" : ((cita.cita_seguro && cita.cita_seguro[0]) ? cita.cita_seguro[0].clave : "Por asignar");
 
         switch (cita.estatus_cit) {
-            case "1": estatusCita = "Asignada"; break;
-            case "2": estatusCita = "Eliminada"; break;
-            case "3": estatusCita = "Pendiente"; break;
-            case "4": estatusCita = "Vista"; break;
-            case "5": estatusCita = "Reasignada"; break;
+
+            case "1": estatusCita = "Asignada"; 
+                estatusCitaContainer.classList.remove("badge-warning");
+                estatusCitaContainer.classList.remove("badge-success");
+                estatusCitaContainer.classList.remove("badge-secondary");
+                estatusCitaContainer.classList.remove("badge-danger");
+                estatusCitaContainer.classList.add("badge-primary");
+            break;
+            case "2": estatusCita = "Eliminada"; 
+                estatusCitaContainer.classList.remove("badge-warning");
+                estatusCitaContainer.classList.remove("badge-success");
+                estatusCitaContainer.classList.remove("badge-secondary");
+                estatusCitaContainer.classList.remove("badge-primary");
+                estatusCitaContainer.classList.add("badge-danger");
+                break;
+            case "3": estatusCita = "Pendiente"; 
+                estatusCitaContainer.classList.remove("badge-primary");
+                estatusCitaContainer.classList.remove("badge-danger");
+                estatusCitaContainer.classList.remove("badge-warning");
+                estatusCitaContainer.classList.remove("badge-success");
+                estatusCitaContainer.classList.add("badge-secondary");
+                break;
+            case "4": estatusCita = "Vista"; 
+                estatusCitaContainer.classList.remove("badge-secondary");
+                estatusCitaContainer.classList.remove("badge-primary");
+                estatusCitaContainer.classList.remove("badge-danger");
+                estatusCitaContainer.classList.remove("badge-warning");
+                estatusCitaContainer.classList.add("badge-success");
+                break;
+            case "5": estatusCita = "Reasignada";  
+                estatusCitaContainer.classList.remove("badge-secondary");
+                estatusCitaContainer.classList.remove("badge-primary");
+                estatusCitaContainer.classList.remove("badge-success");
+                estatusCitaContainer.classList.remove("badge-danger");
+                estatusCitaContainer.classList.add("badge-warning");
+            break;
         }
 
-        if (cita.estatus_cit == 5) estatusCita = "Reasignada";
+        if (cita.estatus_cit == 5){
+            estatusCitaContainer.classList.remove("badge-secondary");
+            estatusCitaContainer.classList.remove("badge-primary");
+            estatusCitaContainer.classList.remove("badge-success");
+            estatusCitaContainer.classList.remove("badge-danger");
+            estatusCitaContainer.classList.add("badge-warning");
+            estatusCita = "Reasignada";
+        } 
 
         if (cita.cita_seguro && cita.cita_seguro[0]) {
             claveCita = cita.cita_seguro[0].clave;
@@ -479,7 +516,13 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         if (cita.tipo_cita == 1) {
             claveCita = "No aplica";
         }
+        
+        if(claveCita === "No aplica" || claveCita === "Por asignar"){
 
+            document.querySelector(".claveCitaContainer").classList.add("d-none");
+        } else {
+            document.querySelector(".claveCitaContainer").classList.remove("d-none");
+        }
 
 
         document.getElementById("paciente").textContent = `${cita.nombre_paciente} ${cita.apellido_paciente}`;

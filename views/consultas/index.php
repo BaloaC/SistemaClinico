@@ -436,6 +436,8 @@
                     <div class="modal-body">
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-consulta" class="p-3 px-4">
+                            <p for="monto-consulta"><b>Monto total de la consulta: <span id="montoTotalConsulta"></span></b></p>
+                            
                             <label for="clave">Clave</label>
                             <input type="text" name="autorizacion" id="clave" class="form-control mb-3">
                             <label for="monto" class="">Monto aprobado</label>

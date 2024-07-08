@@ -48,6 +48,11 @@
             text-align: center;
             line-height: 2.5;
         }
+
+        h3 {
+            text-align: center;
+            margin: 2rem auto;
+        }
     </style>
 </head>
 
@@ -68,6 +73,10 @@
                 <tr>
                     <th>C.I.</th>
                     <td colspan="3" id="cedulaPaciente">Cargando</td>
+                </tr>
+                <tr>
+                    <th>Edad</th>
+                    <td colspan="3" id="edadPaciente">Cargando</td>
                 </tr>
                 <tr>
                     <th>Titular</th>

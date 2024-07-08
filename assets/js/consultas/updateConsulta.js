@@ -1,10 +1,16 @@
 import deleteSecondValue from "../global/deleteSecondValue.js";
+import getById from "../global/getById.js";
 import updateModule from "../global/updateModule.js";
-async function updateConsulta(id) {
+async function updateConsulta(id, consulta_id) {
 
     const $form = document.getElementById("act-consulta");
     
     try {
+
+        
+        const json = await getById("consultas", consulta_id);
+        document.getElementById("montoTotalConsulta").innerText = `$${json[0]?.factura?.total_consulta}`;
+
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";

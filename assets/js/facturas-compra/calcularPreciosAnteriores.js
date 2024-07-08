@@ -8,7 +8,7 @@ async function calcularPreciosAnteriores(input){
     const precioNuevoLabel = divElement.querySelector("#precioNuevoLabel");
 
     if(!input.value){
-        precioAnteriorLabel.innerText = `Mantener precio anterior ($0.00)`;
+        precioAnteriorLabel.innerText = `El insumo no es cobrado`;
         precioNuevoLabel.innerText = `Actualizar nuevo precio ($0.00)`;
     }
 
@@ -17,7 +17,7 @@ async function calcularPreciosAnteriores(input){
 
   
 
-    precioAnteriorLabel.innerText = `Mantener precio anterior ($${insumo.precio.toFixed(2)})`;
+    precioAnteriorLabel.innerText = insumo.precio === 0 ? "El insumo no es cobrado" : `Mantener precio anterior ($${insumo.precio.toFixed(2)})`;
 
     let porcentajePrecioNuevo = (parseFloat(insumo.precio) * (parseFloat(porcentajeGlobal[2].value) / 100));
 
