@@ -382,9 +382,9 @@ class ConsultaService {
 
             if(isset($params['search'])) {
                 if (is_array($params['search']) && strlen($params['search']['value']) > 0) {
-                    $_consultaCitaModel->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']['value']}%");
+                    $_consultaCitaModel->where("CONCAT(consulta.consulta_id, COALESCE(consulta.observaciones, ''), paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']['value']}%");
                 } else if (!is_array($params['search']) && strlen($params['search']) > 0 && $params['select']) {
-                    $_consultaCitaModel->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
+                    $_consultaCitaModel->where("CONCAT(consulta.consulta_id, COALESCE(consulta.observaciones, ''), paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
                 }
             }
         }
@@ -392,8 +392,9 @@ class ConsultaService {
         $inners = $_consultaCitaModel->listInner(["consulta" => "consulta_cita", "cita" => "consulta_cita", "paciente" => "cita"]);
         $select = ["consulta.consulta_id", "consulta.observaciones", "paciente.nombre", "paciente.apellidos"];
         $lista = $_consultaCitaModel->where('cita.tipo_cita', '=', '2')->innerJoin($select, $inners, "consulta_cita");
+        
         $_consultaCitaModel->resetValues();
-
+        
         if ( isset($params['search']) ) {
             if (!is_array($params['search']) && strlen($params['search']) > 0 && $params['select']) {
                 $_consultaCitaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
@@ -411,7 +412,7 @@ class ConsultaService {
         if (isset($params['estatus'])) {
             $_consultaCitaModel->where('consulta.estatus_con', '=', $params['estatus']);
         }
-
+        
         $lista_count = $_consultaCitaModel->innerJoin($select, $inners, "consulta_cita");
         return ['lista_count' => $lista_count, 'lista' => $lista];
     }
@@ -442,9 +443,9 @@ class ConsultaService {
 
             if(isset($params['search'])) {
                 if (is_array($params['search']) && strlen($params['search']['value']) > 0) {
-                    $_consultaModel->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']['value']}%");
+                    $_consultaModel->where("CONCAT(consulta.consulta_id, COALESCE(consulta.observaciones, ''), paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']['value']}%");
                 } else if (!is_array($params['search']) && strlen($params['search']) > 0 && $params['select']) {
-                    $_consultaModel->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
+                    $_consultaModel->where("CONCAT(consulta.consulta_id, COALESCE(consulta.observaciones, ''), paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
                 }
             }
         }
@@ -456,9 +457,9 @@ class ConsultaService {
         
         if ( isset($params['search']) ) {
             if (!is_array($params['search']) && strlen($params['search']) > 0 && $params['select']) {
-                $_consultaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
+                $_consultaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, COALESCE(consulta.observaciones, ''), paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']}%");
             } else if ( strlen($params['search']['value']) > 0) {
-                $_consultaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, consulta.observaciones, paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']['value']}%");
+                $_consultaModel->setSelect('COUNT(*) AS total')->where("CONCAT(consulta.consulta_id, COALESCE(consulta.observaciones, ''), paciente.nombre, paciente.apellidos)", 'LIKE', "%{$params['search']['value']}%");
             } else {
                 $_consultaModel->setSelect('COUNT(*) AS total');
             }

@@ -327,6 +327,7 @@ class ConsultaController extends Controller {
     public function listarConsultasAseguradas() {
         $consultas_aseguradas = ConsultaService::obtenerConsultasAseguradas($_GET);
         $consultas_por_emergencia = ConsultaService::obtenerConsultasPorEmergencia($_GET);
+        
         $cantidad_registros = count($consultas_aseguradas['lista_count']) + count($consultas_por_emergencia['lista_count']);
         $consultas = array_merge($consultas_aseguradas['lista'], $consultas_por_emergencia['lista']);
         
