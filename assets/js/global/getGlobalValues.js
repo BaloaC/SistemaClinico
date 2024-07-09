@@ -12,7 +12,7 @@ export default async function getGlobalValues() {
 
 	if (currencyExchange !== null) {
 
-		fetch("https://pydolarvenezuela-api.vercel.app/api/v1/dollar?page=bcv")
+		fetch("https://pydolarvenezuela-api.vercel.app/api/v11/dollar?page=bcv")
 			.then(response => {
 				if (response.status !== 200) {
 					throw response;
@@ -27,13 +27,13 @@ export default async function getGlobalValues() {
 				// Converter price_old usando los mismos números
 				// const priceOld = `${priceIntegers}.${json.monitors.bcv.price_old.toString().slice(-6)}`;
 
-				currencyExchange.innerText = `${convertCurrencyToVES(json.monitors.usd.price_old)} Bs`;
+				currencyExchange.innerText = `${convertCurrencyToVES(json.monitors.usd.price_old.toFixed(2))} Bs`;
 
 				return globalValues[1]["value"];
 			})
 			.then(valorBack => confirmUpdateCurrencyExchange(valorBack, false))
 			.catch(() => {
-				currencyExchange.innerText = `${convertCurrencyToVES(globalValues[1]["value"])} Bs`;
+				currencyExchange.innerText = `${convertCurrencyToVES(parseFloat(globalValues[1]["value"]).toFixed(2))} Bs`;
 			})
 	}
 
