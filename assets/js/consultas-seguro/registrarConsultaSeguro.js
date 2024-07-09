@@ -23,7 +23,7 @@ export const updateConsultaSeguroSelect = async (modalParent) => {
         placeholder: "Seleccione una consulta",
         defaultLabel: ["Consulta por emergencia"],
         ajax: true,
-        ajaxUrl: "consultas/aseguradas?estatus=1",
+        ajaxUrl: "consultas/aseguradas?estatus=1&con_clave=1",
         processResultsAjax: function (data, params) {
 
             const data1 = [];
