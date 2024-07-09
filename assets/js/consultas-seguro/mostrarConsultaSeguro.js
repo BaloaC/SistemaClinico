@@ -168,14 +168,19 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
                 if (data.especialidad && data.especialidad.nombre) {
                     return data.especialidad.nombre;
-                } else if (data?.medico[0]?.nombre_especialidad) {
-                    return data?.medico[0]?.nombre_especialidad
+                // } else if (data?.medico[0]?.nombre_especialidad) {
+                //     return data?.medico[0]?.nombre_especialidad
                 } else {
-                    return 'Desconocido';
+                    return 'Consulta por emergencia';
                 }
             }
         },
-        { data: "tipo_servicio" },
+        { 
+            data: null, 
+            render: function (data, type, row){
+                return row?.consulta.tipo_servicio == 1 ? "Exámenes" : "Consulta";
+            }
+        },
         {
             data: "fecha_ocurrencia",
             render: function (data, type, row) {
@@ -230,15 +235,19 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
             info.examenes = data.examenes !== undefined ? concatItems(data.examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen";
             info.insumos = data.insumos !== undefined ? concatItems(data.insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo";
             info.indicaciones = data.indicaciones !== undefined ? concatItems(data.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación";
+            info.referidos = data?.referidos !== undefined ? concatItems(data.referidos, "nombre", "No se refirió a ningún médico", ".") : "No se refirió a ningún médico",
+            info.cita_examenes = data?.cita_examenes !== undefined ? concatItems(data.cita_examenes, "nombre", "No se realizó a ningún exámen por cita", ".") : "No se realizó a ningún exámen por cita";
 
-            info.recipes = `
-            <tr>
-                <td colspan="4">Recipes:</td>
-            </tr>
-            `;
+            info.recipes = "";
             info.factura = "";
 
             if (data.recipes) {
+
+                info.recipes = `
+                <tr>
+                    <td colspan="4">Recipes:</td>
+                </tr>
+                `;
 
                 data.recipes.forEach(el => {
 
@@ -265,62 +274,56 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                 `;
                 })
             } else {
-                info.recipes += `
-                <tr>
-                    <td colspan="4"><b>No hay recipes asigandos</b></td>
-                </tr>
-                `;
+                info.recipes += ``;
             }
 
             // <td>Nombre del medicamento: <br><b>${el.nombre_medicamento}</b></td>
             //         <td>Tipo de medicamento: <br><b>${tipo_medicamento}</b></td>
             //         <td colspan"2">Uso: <br><b>${el.uso}</b></td>
 
-            if (data.consulta_emergencia) {
+            if (data.factura) {
 
                 info.factura = `
-                <tr><td><br></td></tr>
-                <tr><td><br></td></tr>
-                <tr>
+                <tr class="py-3">
                     <td colspan="4"><b>Factura consulta emergencia:</b></td>
                 </tr>
                 `;
-
+    
                 info.factura += `
                 <tr>
-                    <td>Cantidad de consultas médicas: <br><b>${data.consulta_emergencia.cantidad_consultas_medicas}</b></td>
-                    <td>Consultas médicas: <br><b>${data.consulta_emergencia.consultas_medicas}</b></td>
-                    <td>Cantidad laboratorio: <br><b>${data.consulta_emergencia.cantidad_laboratorios}</b></td>
-                    <td>Laboratorios: <br><b>${data.consulta_emergencia.laboratorios}</b></td>
+                    <td class="pe-4">Cantidad de consultas médicas: <br><b>${data.factura.cantidad_consultas_medicas}</b></td>
+                    <td class="pe-4">Consultas médicas: <br><b>$${data.factura.consultas_medicas}</b></td>
+                    <td class="pe-4">Cantidad laboratorio: <br><b>${data.factura.cantidad_laboratorios}</b></td>
+                    <td class="pe-4">Laboratorios: <br><b>$${data.factura.laboratorios}</b></td>
                 </tr>
                 <tr>
-                    <td>Cantidad de medicamentos: <br><b>${data.consulta_emergencia.cantidad_medicamentos}</b></td>
-                    <td>Medicamentos: <br><b>${data.consulta_emergencia.medicamentos}</b></td>
-                    <td>Area de observación: <br><b>${data.consulta_emergencia.area_observacion}</b></td>
-                    <td>Enfermería: <br><b>${data.consulta_emergencia.enfermeria}</b></td>
+                    <td>Cantidad de medicamentos: <br><b>${data.factura.cantidad_medicamentos}</b></td>
+                    <td>Medicamentos: <br><b>$${data.factura.medicamentos}</b></td>
+                    <td>Area de observación: <br><b>$${data.factura.area_observacion}</b></td>
+                    <td>Enfermería: <br><b>$${data.factura.enfermeria}</b></td>
                 </tr>
                 <tr>
-                    <td>Total insumos: <br><b>${data.consulta_emergencia.total_insumos}</b></td>
-                    <td>Total exámenes: <br><b>${data.consulta_emergencia.total_examenes}</b></td>
-                    <td>Total consulta: <br><b>${data.consulta_emergencia.total_consulta}</b></td>
+                    <td>Total insumos: <br><b>$${data.factura.total_insumos}</b></td>
+                    <td>Total exámenes: <br><b>$${data.factura.total_examenes}</b></td>
+                    <td>Total consulta: <br><b>$${data.factura.total_consulta}</b></td>
                 </tr>
                 <tr><td><br></td></tr>
                 <tr>
                     <td colspan="4"><b>Monto en bs:</b></td>
                 </tr>
-                <tr>
-                    <td>Consultas médicas: <br><b>${data.consulta_emergencia.consultas_medicas_bs} Bs</b></td>
-                    <td>Laboratorios: <br><b>${data.consulta_emergencia.laboratorios_bs} Bs</b></td>
+                 <tr>
+                    <td>Consultas médicas: <br><b>${data.factura.consultas_medicas_bs} Bs</b></td>
+                    <td>Laboratorios: <br><b>${data.factura.laboratorios_bs} Bs</b></td>
                 </tr>
                 <tr>
-                    <td>Medicamentos: <br><b>${data.consulta_emergencia.medicamentos_bs} Bs</b></td>
-                    <td>Area de observación: <br><b>${data.consulta_emergencia.area_observacion_bs} Bs</b></td>
-                    <td>Enfermería: <br><b>${data.consulta_emergencia.enfermeria_bs} Bs</b></td>
+                    <td>Medicamentos: <br><b>${data.factura.medicamentos_bs} Bs</b></td>
+                    <td>Area de observación: <br><b>${data.factura.area_observacion_bs} Bs</b></td>
+                    <td>Enfermería: <br><b>${data.factura.enfermeria_bs} Bs</b></td>
                 </tr>
                 <tr>
-                    <td>Total insumos: <br><b>${data.consulta_emergencia.total_insumos_bs} Bs</b></td>
-                    <td>Total exámenes: <br><b>${data.consulta_emergencia.total_examenes_bs} Bs</b></td>
-                    <td>Total consulta: <br><b>${data.consulta_emergencia.total_consulta_bs} Bs</b></td>
+                    <td>Total insumos: <br><b>${data.factura.total_insumos_bs} Bs</b></td>
+                    <td>Total exámenes: <br><b>${data.factura.total_examenes_bs} Bs</b></td>
+                    <td>Total consulta: <br><b>${data.factura.total_consulta_bs} Bs</b></td>
                 </tr>
             `;
             }
@@ -365,40 +368,49 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
                 info.medico += `
                 <tr>
-                    <td>Cédula: <br><b>${data?.medico[0]?.cedula ?? data?.medico?.cedula}</b></td>
-                    <td>Nombres: <br><b>${data?.medico[0]?.nombre_medico ?? data?.medico?.cedula}</b></td>
-                    <td>Apellidos: <br><b>${data?.medico[0]?.apellidos_medico ?? data?.medico?.cedula}</b></td>
+                    <td>Cédula: <br><b>${data?.medico?.cedula}</b></td>
+                    <td>Nombres: <br><b>${data?.medico?.nombre}</b></td>
+                    <td>Apellidos: <br><b>${data?.medico?.apellidos}</b></td>
                 </tr>
                 <tr>
                     <td>Especialidad: <br><b>${data?.medico[0]?.nombre_especialidad ?? data?.especialidad.nombre}</b></td>
                 </tr>
-
-                <tr><td><br></td></tr>
-                <tr><td><br></td></tr>
             `;
             }
         }
 
         return `
-        <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
+        <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px;>
             <tr>
                 <td colspan="4"><b>Información consulta:</b></td>
             </tr>
-            <tr>
-                <td>Peso: <br><b>${data.peso ? data?.peso + " " + "kg" : "No especificado"} </b></td>
-                <td>Estatura: <br><b>${data.altura ? data.altura + " " + "m" : "No especificado"}</b></td>
-                <td>Fecha Cita: <br><b>${formatToRealDate(info.data?.cita?.fecha_cita) ?? "No aplica"}</b></td>
-                <td>Motivo cita: <br><b>${info.data?.cita?.motivo_cita ?? "No aplica"}</b></td>
+            <tr class="py-3">
+                    ${data.consulta.peso ? `<td class="pe-4">Peso: <br><b>${data.consulta.peso + " " + "kg"}</b></td>` : ""} 
+                    ${data.consulta.altura ? `<td class="pe-4">Estatura: <br><b>${data.consulta.altura + " " + "m"}</b></td>` : ""}
+                    ${data.consulta.es_emergencia != 1 && data?.cita
+                    ? `<td class="pe-4">Fecha Cita: <br><b>${formatToRealDate(data?.cita.fecha_cita) ?? "No aplica"}</b></td>
+                        <td class="pe-4">Motivo cita: <br><b>${data?.cita.motivo_cita ?? "No aplica"}</b></td>
+                        <td class="pe-4">Clave: <br><b>${data?.cita.clave}</b></td>`
+                    : ""
+                }
+            </tr>
+            <tr class="py-3">
+                ${data.consulta.tipo_servicio ? `<td class="pe-4 py-3">Tipo de servicio: <br><b>${data?.consulta?.tipo_servicio == 1 ? "Exámenes" : "Consulta"}</b></td>` : ""}
+                ${data.monto_consulta_usd ? `<td class="pe-4 py-3">Monto consulta BS: <br><b>$${data.monto_consulta_usd}</b></td>` : ""}
+                ${data.monto_consulta_bs ? `<td class="pe-4 py-3">Monto consulta USD: <br><b>$${data.monto_consulta_bs}</b></td>` : ""}
             </tr>
             <tr class="blue-td">
-                <td>Clave: <br><b>${data.clave}</b></td>
-                <td>Exámenes realizados: <br><b>${info?.examenes}</b></td>
-                <td>Insumos utilizados: <br><b>${info?.insumos}</b></td>
+                ${info.examenes !== "No se realizó ningún exámen" ? `<td class="py-3 pe-3">Exámenes realizados: <br><b>${info.examenes}</b></td>` : ""}
+                ${data.consulta.es_emergencia === 1 && info.insumos !== "No se utilizó ningún insumo" ? `<td class="py-3">Insumos utilizados: <br><b>${info.insumos}</b></td>` : ""}
+            </tr>
+            <tr>
+                ${info.indicaciones !== "No se realizó ninguna indicación" ? `<td class="py-3">Indicaciones: <br><b>${info.indicaciones}</b></td>` : ""}
+                ${info.referidos !== "No se refirió a ningún médico" ? `<td class="py-3">Referidos a otro médico: <br><b>${info.referidos}</b></td>` : ""} 
+                ${info.cita_examenes !== "No se realizó a ningún exámen por cita" ? `<td class="py-3">Exámenes por citas: <br><b>${info.cita_examenes}</b></td>` : ""} 
             </tr>
             ${info.paciente_beneficiado}
             ${info.medico}
             ${info.factura}
-            <tr><td><br></td></tr>
             <tr>
                 <td><a class="btn btn-sm btn-add" href="#" onclick="${info?.data?.consulta?.es_emergencia == 1 ? "openPopup('pdf/consultaemergencia/" + info?.data?.consulta_seguro_id + "')" : "openPopup('pdf/consultaseguro/" + info?.data?.consulta_seguro_id + "')"}"><i class="fa-sm fas fa-file-export"></i> Imprimir documento PDF</a></td>
             </tr>

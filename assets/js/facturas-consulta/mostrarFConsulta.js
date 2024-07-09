@@ -3,6 +3,7 @@ import getAll from "../global/getAll.js";
 import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
 import formatToRealDate from "../global/formatToRealDate.js";
 import createDataTable from "../global/createDataTable.js";
+import concatItems from "../global/concatItems.js";
 
 const path = location.pathname.split('/');
 
@@ -208,16 +209,31 @@ addEventListener("DOMContentLoaded", e => {
 
     const format = (data) => {
 
+        let cita_examenes = data?.cita_examenes !== undefined ? concatItems(data.cita_examenes, "nombre", "No se realizó a ningún exámen por cita", ".") : "No se realizó a ningún exámen por cita";
+        let examenes = data?.examenes !== undefined ? concatItems(data.examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen",
+            insumos = data?.insumos !== undefined ? concatItems(data?.insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo",
+            indicaciones = data?.indicaciones !== undefined ? concatItems(data.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación",
+            referidos = data?.referidos !== undefined ? concatItems(data.referidos, "nombre", "No se refirió a ningún médico", ".") : "No se refirió a ningún médico";
+
         return `
-            <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
+            <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px;>
                 <tr>
                     <td colspan="4"><b>Información consulta:</b></td>
                 </tr>
                 <tr>
-                    <td>Nombre médico: <br><b>${data?.nombre_medico ? data?.nombre_medico + " " + data?.apellidos_medico : "Desconocido"}</b></td>
-                    <td>Especialidad: <br><b>${data?.nombre_especialidad ?? "Desconocido"}</b></td>
-                    <td>Monto consulta BS: <br><b>${data?.monto_consulta_bs ?? "Desconocido"} Bs</b></td>
-                    <td>Monto consulta USD: <br><b>$${data?.monto_consulta_usd ?? "Desconocido"}</b></td>
+                    <td class="py-3 pe-3">Nombre médico: <br><b>${data?.nombre_medico ? data?.nombre_medico + " " + data?.apellidos_medico : "Desconocido"}</b></td>
+                    <td class="py-3 pe-3">Especialidad: <br><b>${data?.nombre_especialidad ?? "Desconocido"}</b></td>
+                    <td class="py-3 pe-3">Monto consulta BS: <br><b>${data?.monto_consulta_bs ?? "Desconocido"} Bs</b></td>
+                    <td class="py-3 pe-3">Monto consulta USD: <br><b>$${data?.monto_consulta_usd ?? "Desconocido"}</b></td>
+                </tr>
+                <tr>
+                    ${examenes !== "No se realizó ningún exámen" ? `<td class="py-3">Exámenes realizados: <br><b>${examenes}</b></td>` : ""}
+                    ${data.es_emergencia == true && insumos !== "No se utilizó ningún insumo" ? `<td class="py-3">Insumos utilizados: <br><b>${insumos}</b></td>` : ""}
+                    ${cita_examenes !== "No se realizó a ningún exámen por cita" ? `<td class="py-3">Exámenes por citas: <br><b>${cita_examenes}</b></td>` : ""} 
+                </tr>
+                <tr>
+                    ${indicaciones !== "No se realizó ninguna indicación" ? `<td class="py-3">Indicaciones: <br><b>${indicaciones}</b></td>` : ""}
+                    ${referidos !== "No se refirió a ningún médico" ? `<td class="py-3">Referidos a otro médico: <br><b>${referidos}</b></td>` : ""} 
                 </tr>
                 <tr><td><br></td></tr>
                 <tr>

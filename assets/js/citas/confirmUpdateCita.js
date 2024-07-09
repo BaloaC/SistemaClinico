@@ -1,4 +1,5 @@
 import deleteSecondValue from "../global/deleteSecondValue.js";
+import cleanValdiation from "../global/cleanValidations.js";
 import updateModule from "../global/updateModule.js";
 import { calendar } from "./calendarioCitas.js";
 
@@ -56,6 +57,8 @@ async function confirmUpdate() {
 
         await updateModule(parseData, "cita_id", "citas", "act-cita", "Cita actualizada exitosamente!");
         calendar.refetchEvents();
+
+        cleanValdiation("act-cita");
 
     } catch (error) {
         console.log(error);

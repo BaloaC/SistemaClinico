@@ -128,7 +128,7 @@
 
         <div class="firma">
             <p>_____________________________________</p>
-            <p>Firma y sello de especialista</p>
+            <p>Firma del especialista</p>
         </div>
     </div>
 

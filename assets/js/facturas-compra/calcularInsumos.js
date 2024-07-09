@@ -1,4 +1,7 @@
-function calcularMonto(input) {
+import getAll from "../global/getAll.js";
+import getById from "../global/getById.js";
+
+async function calcularMonto(input) {
 
     const insumoContainer = input.parentElement.parentElement;
     let unidades = insumoContainer.querySelector("input[name='unidades']").value,
@@ -13,7 +16,24 @@ function calcularMonto(input) {
 
     let [montoTotalProducto, iva, montoTotalProductoSinIva] = [0, 0, 0];
 
-    if (insumo === "" || precioUnitario === "" || unidades === "") return;
+    if (insumo === "" || precioUnitario === "") return;
+
+    // Lógica para actualizar los precios de los insumos
+    const precioNuevoLabel = insumoContainer.querySelector("#precioNuevoLabel");
+    const porcentajeGlobal = await getAll("globals");
+
+    let precioUnitarioEnDolares = parseFloat(precioUnitario) / parseFloat(porcentajeGlobal[1].value);
+    precioNuevoLabel.innerText = `Actualizar nuevo precio ($${(precioUnitarioEnDolares).toFixed(2)})`;
+
+    if(impuesto) {
+        // Actualizar el precio en dolares si se selecciona el impuesto
+        let ivaPreciUnitarioEnDolares = precioUnitarioEnDolares * 0.16;
+        precioUnitarioEnDolares += ivaPreciUnitarioEnDolares
+        precioNuevoLabel.innerText = `Actualizar nuevo precio ($${(precioUnitarioEnDolares).toFixed(2)})`;
+    }
+
+    // Validamos que se envie las unidades para poder actualizar todos los montos
+    if(unidades === "") return;
 
     montoTotalProducto = parseFloat(precioUnitario) * parseFloat(unidades);
     montoTotalProductoSinIva = montoTotalProducto;

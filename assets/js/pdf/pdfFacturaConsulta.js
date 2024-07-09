@@ -1,3 +1,4 @@
+import concatItems from "../global/concatItems.js";
 import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
 import formatToRealDate from "../global/formatToRealDate.js";
 import getById from "../global/getById.js";
@@ -17,6 +18,16 @@ document.getElementById("nombre_paciente").textContent = `${dataFactura.nombre_p
 document.getElementById("metodo_pago").textContent = dataFactura.metodo_pago;
 document.getElementById("pago_total_bs").textContent = `${convertCurrencyToVES(dataFactura.monto_total_bs ?? dataFactura.monto_consulta_bs)} Bs`;
 document.getElementById("pago_total_usd").textContent = `$${dataFactura.monto_total_usd ?? dataFactura.monto_consulta_usd}`;
+
+if(dataFactura?.examenes && dataFactura?.examenes?.length > 0) {
+    document.getElementById("examenesPaciente").innerText = concatItems(dataFactura.examenes, "nombre", "No hay examenes", ",");
+    document.querySelector(".examenesRealizados").style = "display: contents";
+}
+
+if(dataFactura?.cita_examenes && dataFactura?.cita_examenes?.length > 0) {
+    document.getElementById("examenesPacienteCita").innerText = concatItems(dataFactura.cita_examenes, "nombre", "No hay examenes", ",");
+    document.querySelector(".examenesRealizadosCita").style = "display: contents";
+}
 
 
 window.print();

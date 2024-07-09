@@ -18,7 +18,7 @@ document.getElementById("s-tipo_paciente").addEventListener("change", e => {
 
             let fechaNacimiento = document.getElementById("fecha_nacimiento").value.split("-");
             let edad = getAge(fechaNacimiento[0], fechaNacimiento[1], fechaNacimiento[2]);
-
+            
             const cedulaInput = document.getElementById("cedula");
             const telefonoInput = document.getElementById("telefono");
             const codTelInput = document.getElementById("cod-tel");
@@ -110,6 +110,8 @@ document.getElementById("s-tipo_paciente").addEventListener("change", e => {
             }, 550);
         }
 
+        const selectTitular = document.getElementById("s-titular_id");
+        if(selectTitular.value === "") document.getElementById("s-titular_id").disabled = true;
         counter++;
     }
 })

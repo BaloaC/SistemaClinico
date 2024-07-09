@@ -19,7 +19,7 @@ dinamicSelect2({
 });
 
 dinamicSelect2({
-    obj: [{ id: "month", text: "Mensual" }],
+    obj: [{ id: "month", text: "Mes Actual" }],
     selectNames: ["text"],
     selectValue: "id",
     selectSelector: "#s-fecha",

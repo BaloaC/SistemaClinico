@@ -29,7 +29,7 @@ export default async function parseCitas(citas) {
                 color = "green";
             }
 
-            if (el.estatus_cit === "5") {
+            if (el.estatus_cit == 5) {
                 color = "coral";
             }
 

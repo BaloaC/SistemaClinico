@@ -78,6 +78,7 @@
 
         .tabla>table {
             width: 100%;
+            padding: 0.6rem;
         }
 
         #title {
@@ -111,6 +112,11 @@
 
         .row.end {
             justify-content: start;
+            padding: 0.5rem;
+        }
+
+        .row.header {
+            padding: 0.5rem;
         }
 
         .row p {
@@ -137,7 +143,7 @@
         <p>SHENQUE C.A <br> J 29656003-0 <br> AUTORIZADO DE INGRESO</p>
         <img src="<?php echo Url::to('assets/img/logo.png'); ?>" alt="logo">
     </header>
-    <div class="row">
+    <div class="row header">
         <p>AUTORIZADO: <span id="clave"></span></p>
         <p>Fecha Ingreso: <span id="fechaIngreso">2022-03-01</span></p>
     </div>
@@ -164,6 +170,10 @@
                     <th colspan="2" class="underline" id="telefono"></th>
                 </tr>
                 <tr>
+                    <th colspan="1">Procesador por:</th>
+                    <th colspan="2" class="underline" id="procesadoPor"></th>
+                </tr>
+                <tr>
                     <th colspan="1">Seguro:</th>
                     <th colspan="2" class="underline" id="seguro"></th>
                 </tr>
@@ -174,10 +184,6 @@
                 <tr>
                     <th colspan="1">Medico Tratante:</th>
                     <th colspan="2" class="underline" id="nombreMedico"></th>
-                </tr>
-                <tr>
-                    <th colspan="1">DXM:</th>
-                    <th colspan="2" class="underline"></th>
                 </tr>
                 <tr>
                     <th colspan="1">
@@ -200,10 +206,6 @@
                 <tr>
                     <th colspan="1">Titular:</th>
                     <th colspan="3"><span style="margin-right: 1rem" class="underline" id="nombreTitular">Maria del carmen gonzalez </span> Cédula: <span id="cedulaTitular">29527505</span></th>
-                </tr>
-                <tr>
-                    <th colspan="1">Empresa:</th>
-                    <th colspan="2" class="underline" id="nombreEmpresa"></th>
                 </tr>
                 <tr>
                     <th colspan="1">
@@ -231,7 +233,7 @@
                 </tr> -->
                 <tr>
                     <th colspan="1">Paciente:</th>
-                    <th colspan="3"><span style="margin-right: 0rem" id="nombrePaciente2">Maria del carmen gonzalez </span> Cuenta: <span id="cedulaPaciente2">29527505</span></th>
+                    <th colspan="3"><span style="margin-right: 0rem" id="nombrePaciente2"> </span> Cuenta: <span id="cedulaPaciente2">29527505</span></th>
                     <th colspan="2"><span id="fechaNacimiento2">2001-01-28</span></th>
                 </tr>
             </thead>

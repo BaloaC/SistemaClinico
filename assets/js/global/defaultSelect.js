@@ -23,6 +23,10 @@ export const defaultSelect = () => {
                 if (select.value !== "") {
                     select.classList.remove("default-select");
                 } else {
+
+                    const selectOptions = select.options;
+                    let selectHasOptions = selectOptions?.length > 0;
+                    
                     if(selectHasOptions){
                         selectOptions[0].disabled = true;
                         selectOptions[0].selected = true;

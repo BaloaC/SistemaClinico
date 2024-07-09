@@ -164,6 +164,7 @@ input::-ms-reveal {
 .btn-add {
     background-color: #084298;
     color: #fff;
+    padding: 0.50rem 0.365rem;
 }
 
 .btn-add:hover {
@@ -241,6 +242,17 @@ input::-ms-reveal {
     background-color: #fff0e1;
     color: #ff7a01;
 }
+
+.light.badge-primary {
+    background-color: #cfe2ff;
+    color: #084298;
+}
+
+.light.badge-secondary{
+    background-color: #e2e3e5;
+    color: #41464b;
+}
+
 
 .card {
     box-shadow: -1px 3px 8px 2px #cdcdcd;

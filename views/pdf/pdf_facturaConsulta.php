@@ -160,6 +160,14 @@
                     <th>Fecha pago</th>
                     <th id="fecha"></th>
                 </tr>
+                <tr class="insumos-head light examenesRealizados" style="display: none;">
+                    <th>Exámenes realizados</th>
+                    <th id="examenesPaciente">Enrique Chacón</th>
+                </tr>
+                <tr class="insumos-head light examenesRealizadosCita" style="display: none;">
+                    <th>Exámenes realizados por Cita</th>
+                    <th id="examenesPacienteCita">Enrique Chacón</th>
+                </tr>
             </thead>
         </table>
 

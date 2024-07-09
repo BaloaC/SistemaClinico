@@ -67,9 +67,9 @@ export function examenesPagination(registros, buscarRegistros = "") {
                 } else {
                     if (p1 === "tipo") {
                         switch (registro[p1]) {
-                            case "1": return "Ecografía";
+                            case "1": return "Imágenes";
                             case "2": return "Laboratorio";
-                            case "3": return "Ultrasonido";
+                            case "3": return "Físicos";
                             default: return "Desconocido";
                         }
                     } else if (p1 === "precio_examen") {

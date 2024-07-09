@@ -69,9 +69,9 @@
                             <label for="tipo">Tipo</label>
                             <select name="tipo" id="s-tipo" class="form-control mb-3" required>
                                 <option value="" disabled selected>Seleccione el tipo de examen</option>
-                                <option value="1">Ecografía</option>
+                                <option value="1">Imágenes</option>
                                 <option value="2">Laboratorio</option>
-                                <option value="3">Ultrasonido</option>
+                                <option value="3">Físicos</option>
                             </select>
                             <label for="especialidades">Especialidades asociadas</label>
                             <select name="especialidades[]" id="s-especialidad" class="form-control mb-3" data-active="0" multiple="multiple" required>
@@ -129,9 +129,9 @@
                             <label for="tipo">Tipo</label>
                             <select name="tipo" id="s-tipo" class="form-control mb-3" required>
                                 <option value="" disabled selected>Seleccione el tipo de examen</option>
-                                <option value="1">Ecografía</option>
+                                <option value="1">Imágenes</option>
                                 <option value="2">Laboratorio</option>
-                                <option value="3">Ultrasonido</option>
+                                <option value="3">Físicos</option>
                             </select>
                             <label for="especialidades">Especialidades asociadas</label>
                             <select name="especialidades[]" id="s-especialidad-act" class="form-control mb-3" data-active="0" multiple="multiple">

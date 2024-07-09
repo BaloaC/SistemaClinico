@@ -16,13 +16,13 @@ if (infoCintillo.consultas?.length > 0) {
 
             nombrePaciente = `${consulta.beneficiado.nombre} ${consulta.beneficiado.apellidos}`;
             cedulaPaciente = consulta.beneficiado.cedula;
-            especialidad = consulta.medico[0]?.nombre_especialidad ?? "Desconocido";
+            especialidad = consulta?.especialidad?.nombre ?? "Consulta por emergencia";
 
         } else if (consulta?.paciente_beneficiado?.nombre) {
 
             nombrePaciente = `${consulta.paciente_beneficiado.nombre} ${consulta.paciente_beneficiado.apellidos}`;
             cedulaPaciente = consulta.paciente_beneficiado.cedula;
-            especialidad = consulta.especialidad.nombre ?? "Desconocido";
+            especialidad = consulta?.especialidad?.nombre ?? "Consulta por emergencia";
 
         } else {
 

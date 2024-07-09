@@ -12,6 +12,7 @@ const seguroInfo = await getById("seguros/", data[0].factura.seguro_id);
 
 document.getElementById("nombrePaciente").innerText = `${data[0].beneficiado.nombre} ${data[0].beneficiado.apellidos}`.toUpperCase();
 document.getElementById("cedulaPaciente").innerText = data[0].beneficiado.cedula;
+document.getElementById("edadPaciente").innerText = data[0].beneficiado.edad;
 document.getElementById("nombreTitular").innerText = `${data[0].titular.nombre} ${data[0].titular.apellidos}`.toUpperCase();
 document.getElementById("cedulaTitular").innerText = data[0].titular.cedula;
 document.getElementById("empresaNombre").innerText = data[0].empresas[0].nombre.toUpperCase();

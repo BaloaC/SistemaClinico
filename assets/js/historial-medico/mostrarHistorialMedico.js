@@ -17,6 +17,8 @@ export default async function mostrarHistorialMedico(id, updateAntecedente = fal
         const fecha = document.getElementById("fecha");
         const edad = document.getElementById("edad");
         const cedulaPaciente = document.getElementById("cedulaPaciente");
+        const telefonoPaciente = document.getElementById("telefonoPaciente");
+        const direccionPaciente = document.getElementById("direccionPaciente");
         const tipo_paciente = document.getElementById("tipo_paciente");
         const consultaPdf = document.getElementById("consulta-pdf");
         const seguroContainer = document.querySelector(".seguro-container");
@@ -148,6 +150,8 @@ export default async function mostrarHistorialMedico(id, updateAntecedente = fal
         nombre.textContent = `${infoPaciente.nombre || infoPaciente.nombre_paciente} ${infoPaciente.apellidos}`;
         fecha.textContent = `${formatToRealDate(infoPaciente.fecha_nacimiento)}`;
         edad.textContent = `${infoPaciente.edad}`;
+        telefonoPaciente.textContent = `${infoPaciente.telefono}`;
+        direccionPaciente.textContent = `${infoPaciente.direccion}`;
         cedulaPaciente.textContent = `${infoPaciente.cedula}`;
 
         switch (infoPaciente.tipo_paciente) {
@@ -347,6 +351,15 @@ export default async function mostrarHistorialMedico(id, updateAntecedente = fal
             const consultasLength = listConsultas.length - 1;
 
             listConsultas.forEach((el, i) => {
+
+                // getById("consultas", el.consulta_id)
+                // .then(res => console.log(res))
+                // .then(json => {
+                //     console.log(json);
+                // })
+                // .catch(error => console.log(error));
+               
+
 
                 let dropdownLink = templateConsulta.querySelector(".btn-link");
                 let consultaContainer = templateConsulta.querySelector(".collapse");

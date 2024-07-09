@@ -130,7 +130,7 @@
                                                 <option></option>
                                             </select>
                                             <div class="examenInput" style="display: none;">
-                                                <label for="examenes">Exámenes a realizar (Opcional)</label>
+                                                <label for="examenes">Exámenes a realizar</label>
                                                 <select name="examenes[]" id="s-examen" class="form-control mb-3" data-active="0" multiple="multiple" disabled>
                                                     <option></option>
                                                 </select>
@@ -290,8 +290,10 @@
                         </form>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <p id="montoDisponible"></p>
-                        <i class="fas fa-eraser cursor-pointer" onclick="cleanForm('act-cita')"></i>
+                        <div class="d-flex flex-column-reverse ms-3">
+                            <i class="fas fa-eraser cursor-pointer me-3" onclick="cleanForm('act-cita')"></i>
+                            <p id="montoDisponible"></p>
+                        </div>
                         <button type="button" id="btn-actualizarInfo" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
                     </div>
                 </div>
@@ -396,12 +398,12 @@
                             <p>Especialidad: <span id="nombreEspecialidad"></span></p>
                             <p>Tipo de cita: <span id="tipoCita"></span></p>
                             <p>Exámenes: <span id="examenesCita"></span></p>
-                            <p>Estatus: <span id="estatusCita"></span></p>
-                            <p>Clave cita: <span id="claveCita"></span></p>
+                            <p>Estatus: <span class="badge light" id="estatusCita"></span></p>
+                            <p>Motivo cita: <span id="motivoCita"></span></p>
+                            <p class="claveCitaContainer">Clave cita: <span id="claveCita"></span></p>
                             <p>Fecha cita: <input type="date" id="fechaCita" class="form-control w-50" disabled></p>
                             <p>Hora entrada: <input type="time" id="horaEntradaCita" class="form-control w-50" disabled></p>
                             <p>Hora salida: <input type="time" id="horaSalidaCita" class="form-control w-50" disabled></p>
-                            <p>Motivo cita: <span id="motivoCita"></span></p>
                             <button type="button" id="btn-reprogramar" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalReprogramar">Reprogramar Cita</button>
                         </div>
                     </div>
