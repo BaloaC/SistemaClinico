@@ -11,6 +11,8 @@ class GlobalController extends Controller{
     }
 
     public function actualizarPorcentaje(/*Request $request*/){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'global';
 
         $_POST = json_decode(file_get_contents('php://input'), true);
         

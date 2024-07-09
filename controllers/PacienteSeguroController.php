@@ -2,30 +2,6 @@
 
 class PacienteSeguroController extends Controller{
 
-    // public function insertarPacienteSeguro($form, $id){
-
-    //     $paciente_id = $id;
-        
-    //     foreach ($form as $forms) {
-                
-    //         $forms['paciente_id'] = $paciente_id;
-    //         $validarPacienteSeguro = new validate();
-    //         // Creando los strings para las validaciones
-            
-    //         $data = $validarPacienteSeguro->dataScape($forms);
-    //         $_pacienteSeguroModel = new PacienteSeguroModel();
-    //         $id = $_pacienteSeguroModel->insert($data);
-    //         $mensaje = ($id > 0);
-            
-    //         if (!$mensaje) {  
-
-    //             $respuesta = new Response('INSERCION_FALLIDA');
-    //             return $respuesta->json(400);
-    //         }
-    //     }
-    //     return false;
-    // }
-
     public function listarPacienteSeguroPorPaciente($paciente_id) {
 
         $_pacienteSeguroModel = new PacienteModel();
@@ -38,13 +14,17 @@ class PacienteSeguroController extends Controller{
     }
 
     public function eliminarPacienteSeguro($paciente_seguro_id){
+        global $isEnabledAudit;
+        $isEnabledAudit = 'paciente_seguro';
 
         $_pacienteSeguroModel = new PacienteSeguroModel();
         $data = array(
             "estatus_pac" => "2"
         );
 
+        // $paciente = $_pacienteSeguroModel->where('paciente_seguro_id','=',$paciente_seguro_id)->getFirst();
         $eliminado = $_pacienteSeguroModel->where('paciente_seguro_id','=',$paciente_seguro_id)->update($data);
+
         $mensaje = ($eliminado > 0);
 
         $respuesta = new Response($mensaje ? 'ELIMINACION_EXITOSA' : 'NOT_FOUND');

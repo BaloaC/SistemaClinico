@@ -12,14 +12,20 @@ class AuditGlobal extends AuditMiddleware {
         $this->getUsuario();
         global $isEnabledAudit;
 
-        if ($this->method == 'PUT') {
-            $row = "El usuario ".$this->usuario->nombre." actualizó el valor de  la orden de ".$isEnabledAudit;
+        if (array_key_exists('porcentaje_medico', $_POST)) {
+            $row = "El usuario ".$this->usuario->nombre." Actualizó el porcentaje de pago al médico a ".$_POST['porcentaje_medico'];
         }
         
+        date_default_timezone_set('America/Caracas');
+        $hoy = new DateTime();
+        $hoy_formateado = $hoy->format('Y-m-d H:i:s');
+
         $this->row = [
             "usuario_id" => $this->usuario->usuario_id,
             "accion" => 'actualización',
-            "descripcion" => $row
+            "descripcion" => $row,
+            "modulo" => 'médicos',
+            "fecha_creacion" => $hoy_formateado,
         ];
 
         $this->handleResponse();
