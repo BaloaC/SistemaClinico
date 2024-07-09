@@ -111,7 +111,6 @@ document.getElementById("s-tipo_paciente").addEventListener("change", e => {
         }
 
         const selectTitular = document.getElementById("s-titular_id");
-        console.log(selectTitular.value === "");
         if(selectTitular.value === "") document.getElementById("s-titular_id").disabled = true;
         counter++;
     }

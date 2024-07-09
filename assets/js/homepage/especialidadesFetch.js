@@ -28,4 +28,4 @@ async function getEspecialidades() {
     }
 
 }
-await getEspecialidades();
+// await getEspecialidades();

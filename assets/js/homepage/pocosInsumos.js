@@ -8,8 +8,6 @@ $(document).ready(async function () {
 
     const insumosPorAgotarse = (insumosList?.result && !insumosList?.result?.code) ? [] : insumosList.filter(insumos => insumos.cantidad < insumos.cantidad_min);
 
-    console.log(insumosPorAgotarse);
-
     let tabla = $('#pocosInsumos').DataTable({
         data: insumosPorAgotarse ?? [],
         columns: [
@@ -63,3 +61,17 @@ $(document).ready(async function () {
     // Ocultar paginación
     document.getElementById("pocosInsumos_paginate").classList.add("d-none");
 });
+console.log("🍓 ~ file: pocosInsumos.js:66 ~ insumosPorAgotarse:", insumosPorAgotarse)
+
+console.log("🍓 ~ file: pocosInsumos.js:66 ~ insumosPorAgotarse:", insumosPorAgotarse)
+
+console.log("🍓 ~ file: pocosInsumos.js:66 ~ insumosPorAgotarse:", insumosPorAgotarse)
+
+console.log("🍓 ~ file: pocosInsumos.js:66 ~ insumosPorAgotarse:", insumosPorAgotarse)
+
+console.log("🍓 ~ file: pocosInsumos.js:66 ~ insumosPorAgotarse:", insumosPorAgotarse)
+
+console.log("🍓 ~ file: pocosInsumos.js:66 ~ insumosPorLAgotarse:", insumosPorLAgotarse)
+
+console.log("🍓 ~ file: pocosInsumos.js:66 ~ insumosPorAgotarse:", insumosPorAgotarse)
+

@@ -83,7 +83,7 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="fecha_compra">Fecha de compra</label>
-                                    <input type="date" name="fecha_compra" data-validate="true" data-type="date" class="form-control mb-3" required>
+                                    <input type="date" name="fecha_compra" data-validate="true" data-type="date" class="form-control mb-3" oninput="dateBeforeToday(this)" required>
                                 </div>
                                 <h5 class=""></h5>
                                 <div class="col-12">
@@ -206,6 +206,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/facturas-compra/deleteInsumoInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-compra/calcularInsumos.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-compra/calcularPreciosAnteriores.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/global/dateBeforeToday.js'); ?>"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (e) => {
             document.getElementsByName("fecha_compra")[0].max = new Date().toISOString().split('T')[0];

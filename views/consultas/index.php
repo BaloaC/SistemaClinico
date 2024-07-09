@@ -199,7 +199,7 @@
                                             <small class="form-text">No se permiten números negativos</small>
 
                                             <label for="fecha_consulta" style="display: none;">Fecha consulta</label>
-                                            <input type="date" name="fecha_consulta" id="fecha_consulta_input" class="form-control mb-3" style="display: none;" data-validate="true" data-type="date" disabled required>
+                                            <input type="date" name="fecha_consulta" id="fecha_consulta_input" class="form-control mb-3" style="display: none;" data-validate="true" data-type="date" oninput="dateBeforeToday(this)" disabled required>
                                             <input type="hidden" name="fecha_consulta" id="fecha_consulta_cita">
                                         </div>
                                         <div class="col-12 col-md-6">
@@ -437,7 +437,7 @@
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-consulta" class="p-3 px-4">
                             <p for="monto-consulta"><b>Monto total de la consulta: <span id="montoTotalConsulta"></span></b></p>
-                            
+
                             <label for="clave">Clave</label>
                             <input type="text" name="autorizacion" id="clave" class="form-control mb-3">
                             <label for="monto" class="">Monto aprobado</label>
@@ -565,6 +565,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/consultas/pagarConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/tipoConsulta.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/updateConsulta.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/global/dateBeforeToday.js'); ?>"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (e) => {
             document.getElementsByName("fecha_consulta")[0].max = new Date().toISOString().split('T')[0];

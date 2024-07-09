@@ -1,4 +1,5 @@
 import getAll from "../global/getAll.js";
+import { patterns } from "../global/patternsValidation.js";
 import questions from "../global/questions.js";
 import validateInputs from "../global/validateInputs.js";
 function template(infoUser) {
@@ -146,8 +147,8 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
 
         if (!event.target.checkValidity()) { event.target.reportValidity(); return; }
         if (data.clave !== data.confirmarClave) throw { message: "Las contraseñas no coinciden" };
-        if (!((/^(?=.*\d)[\d\w@-]{8,20}$/i).test(data.clave))) throw { message: "Contraseña inválida" };
-        if (!((/^(?=.*\d)[\d\w@-]{8,20}$/i).test(data.confirmarClave))) throw { message: "Contraseña inválida" };
+        if (!((patterns.password).test(data.clave))) throw { message: "La clave no cumple con los requerimientos mínimos" };
+        if (!((patterns.password).test(data.confirmarClave))) throw { message: "La clave no cumple con los requerimientos mínimos" };
 
         const options = {
 

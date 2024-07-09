@@ -74,8 +74,16 @@ export default class CitasManager {
 
                     } else { //Si no es en el registro de citas (reprogramar citas), no limitar las horas
                         this.mostrarCitasDelDia(listCitasByDate, { citasTableClass: "#citas-table-reschedule", citasTableBodyClass: "#citas-table-reschedule tbody", withoutCitasClass: ".withoutCitasReschedule", modalRegClass: "#modalReprogramar .modal-body" });
-                        this.inputHoraEntraCita(null, "#hora_entrada2");
-                        this.inputHoraSalidaCita(null, null, "#hora_salida2");
+
+                        if (horarioDelDia && horarioDelDia.length > 0) {
+
+                            this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) }, "#hora_entrada2");
+                            this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) }, null, "#hora_salida2");
+
+                        } else {
+                            this.inputHoraEntraCita(null, "#hora_entrada2");
+                            this.inputHoraSalidaCita(null, null, "#hora_salida2");
+                        }
                     }
 
                     // Validamos que el mensaje de contacto con el médico aparezca si se hace click en un día fuera de su horario
@@ -87,31 +95,32 @@ export default class CitasManager {
                         $(".contact-medico1").fadeOut("slow");
                     };
 
-                    if(inputId === "fecha_cita_reprogramada"){
+                    if (inputId === "fecha_cita_reprogramada") {
 
-                        
                         let self = this;
-                        
-                        document.getElementById("hora_salida2").addEventListener("change", function(element) {
 
-                            if((self.convertirAHoras(horarioDelDia[0].hora_salida) < self.convertirAHoras(element.target.value)) || (self.convertirAHoras(horarioDelDia[0].hora_entrada) > self.convertirAHoras(element.target.value))){
-                                $(".outOfSchedule").fadeIn("slow");
-                            } else {
-                                $(".outOfSchedule").fadeOut("slow");
-                            }
-                        })
-                        
-                        document.getElementById("hora_entrada2").addEventListener("change", function(element) {
+                        document.getElementById("hora_salida2").addEventListener("change", function (element) {
 
-                            if((self.convertirAHoras(horarioDelDia[0].hora_salida) < self.convertirAHoras(element.target.value)) || (self.convertirAHoras(horarioDelDia[0].hora_entrada) > self.convertirAHoras(element.target.value))){
+                            if ((self.convertirAHoras(horarioDelDia[0]?.hora_salida) < self.convertirAHoras(element.target.value)) || (self.convertirAHoras(horarioDelDia[0]?.hora_entrada) > self.convertirAHoras(element.target.value))) {
                                 $(".outOfSchedule").fadeIn("slow");
                             } else {
                                 $(".outOfSchedule").fadeOut("slow");
                             }
                         })
 
-                        if(horarioDelDia && horarioDelDia.length === 0){
+                        document.getElementById("hora_entrada2").addEventListener("change", function (element) {
+
+                            if ((self.convertirAHoras(horarioDelDia[0]?.hora_salida) < self.convertirAHoras(element.target.value)) || (self.convertirAHoras(horarioDelDia[0]?.hora_entrada) > self.convertirAHoras(element.target.value))) {
+                                $(".outOfSchedule").fadeIn("slow");
+                            } else {
+                                $(".outOfSchedule").fadeOut("slow");
+                            }
+                        })
+
+                        if (horarioDelDia && horarioDelDia.length === 0) {
                             $(".outOfSchedule").fadeIn("slow");
+                        } else {
+                            $(".outOfSchedule").fadeOut("slow");
                         }
                     }
                 },
@@ -146,45 +155,66 @@ export default class CitasManager {
 
                         inputId === "fecha_cita" ? this.mostrarCitasDelDia(listCitasByDate) : this.mostrarCitasDelDia(listCitasByDate, { citasTableClass: "#citas-table-reschedule tbody", withoutCitasClass: ".withoutCitasReschedule", modalRegClass: "#modalReprogramar .modal-body" });
 
-                        if (horarioDelDia && horarioDelDia.length > 0) {
-                            this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
-                            this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
-                        } else {
-                            this.inputHoraEntraCita(null)
-                            this.inputHoraSalidaCita(null);
+                        if (inputId === "fecha_cita") {
+                            if (horarioDelDia && horarioDelDia.length > 0) {
+                                this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
+                                this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) })
+                                $(".contact-medico").fadeOut("slow");
+                            } else {
+                                $(".contact-medico").fadeIn("slow");
+                                this.inputHoraEntraCita(null)
+                                this.inputHoraSalidaCita(null);
+                            }
+                        } else { //Si no es en el registro de citas (reprogramar citas), no limitar las horas
+
+                            if (horarioDelDia && horarioDelDia.length > 0) {
+
+                                this.inputHoraEntraCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) }, "#hora_entrada2");
+                                this.inputHoraSalidaCita({ hora_entrada: horarioDelDia[0]?.hora_entrada.substring(0, 5), hora_salida: horarioDelDia[0]?.hora_salida.substring(0, 5) }, null, "#hora_salida2");
+
+                            } else {
+                                this.inputHoraEntraCita(null, "#hora_entrada2");
+                                this.inputHoraSalidaCita(null, null, "#hora_salida2");
+                            }
+
                         }
 
 
-                        if(inputId === "fecha_cita_reprogramada"){
 
-                        
+                        if (inputId === "fecha_cita_reprogramada") {
+
+
                             let self = this;
-                            
-                            document.getElementById("hora_salida2").addEventListener("change", function(element) {
-    
-                                if((self.convertirAHoras(horarioDelDia[0].hora_salida) < self.convertirAHoras(element.target.value)) || (self.convertirAHoras(horarioDelDia[0].hora_entrada) > self.convertirAHoras(element.target.value))){
+
+                            document.getElementById("hora_salida2").addEventListener("change", function (element) {
+
+                                if ((self.convertirAHoras(horarioDelDia[0].hora_salida) < self.convertirAHoras(element.target.value)) || (self.convertirAHoras(horarioDelDia[0].hora_entrada) > self.convertirAHoras(element.target.value))) {
                                     $(".outOfSchedule").fadeIn("slow");
                                 } else {
                                     $(".outOfSchedule").fadeOut("slow");
                                 }
                             })
-                            
-                            document.getElementById("hora_entrada2").addEventListener("change", function(element) {
-    
-                                if((self.convertirAHoras(horarioDelDia[0].hora_salida) < self.convertirAHoras(element.target.value)) || (self.convertirAHoras(horarioDelDia[0].hora_entrada) > self.convertirAHoras(element.target.value))){
+
+                            document.getElementById("hora_entrada2").addEventListener("change", function (element) {
+
+                                if ((self.convertirAHoras(horarioDelDia[0].hora_salida) < self.convertirAHoras(element.target.value)) || (self.convertirAHoras(horarioDelDia[0].hora_entrada) > self.convertirAHoras(element.target.value))) {
                                     $(".outOfSchedule").fadeIn("slow");
                                 } else {
                                     $(".outOfSchedule").fadeOut("slow");
                                 }
                             })
-    
-                            if(horarioDelDia && horarioDelDia.length === 0){
+
+                            if (horarioDelDia && horarioDelDia.length === 0) {
                                 $(".outOfSchedule").fadeIn("slow");
+                                $(".contact-medico1").fadeIn("slow");
+                            } else {
+                                $(".contact-medico1").fadeOut("slow");
+                                $(".outOfSchedule").fadeOut("slow");
                             }
                         }
                     };
 
-                    
+
                 },
                 "disable": [
                     function (date) { return (date.getDay() === 0); }
