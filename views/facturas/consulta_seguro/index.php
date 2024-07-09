@@ -67,7 +67,7 @@
                         <h6>Seleccione una fecha para obtener su resumen mensual</h6>
                         <div class="date-filter justify-content-end">
                             <input type="month" id="month-year-input" class="form-control border-right-none w-75">
-                            <button id="search-button" class="form-control input-search-icon btn-add" onclick="getConsultasSegurosMesByClick()"><i class="fas fa-search"></i></button>
+                            <button id="search-button" class="form-control input-search-icon p-3 btn-add" onclick="getConsultasSegurosMesByClick()"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                     <h4 id="factura-doesnt-exist" class="text-center my-5" style="display: none;">No hay recibo disponible actualmente para este mes</h4>
                     <div class="col-12 seg-container">
                         <div class="card">
-                            <div class="card-header factura-header" style="display: none;">
+                            <div class="card-header factura-header p-4" style="display: none;">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <h4 class="card-title text-dark m-1"><b>Recibo N-<span id="factura_id"></span></b></h4>
@@ -92,7 +92,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body" style="display: none;">
+                            <div class="card-body p-4" style="display: none;">
                                 <div class="table-responsive">
                                     <table id="consultaSeguro" class="table table-compact">
                                         <thead>
@@ -114,7 +114,7 @@
                             </div>
                         </div>
                         <div class="total-amount" style="display: none;">
-                            <h5 class="card total-amount-price"><b>Monto Total:</b> <span id="total-price"></span></h5>
+                            <h5 class="card total-amount-price py-3 px-4"><b>Monto Total:</b> <span id="total-price"></span></h5>
                         </div>
                     </div>
                 </div>

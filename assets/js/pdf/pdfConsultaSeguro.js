@@ -1,4 +1,5 @@
 import formatToRealDate from "../global/formatToRealDate.js";
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
 import getById from "../global/getById.js";
 
 const id = location.pathname.split("/")[4];
@@ -29,5 +30,6 @@ document.getElementById("nombreMedico").textContent = `${data?.medico?.nombre} $
 document.getElementById("nombreTitular").textContent = `${data?.paciente_titular?.nombre} ${data?.paciente_titular?.apellidos}`;
 document.getElementById("cedulaTitular").textContent = `${data?.paciente_titular?.cedula}`;
 document.getElementById("observaciones").textContent = `${data?.consulta?.observaciones ?? "Sin observaciones"}`;
+document.getElementById("procesadoPor").innerText = Cookies.get("nombreUsuario").toUpperCase();
 
 window.print();

@@ -196,15 +196,19 @@ addEventListener("DOMContentLoaded", async e => {
                     : ""
                 }
                 </tr>
+                <tr class="py-3">
+                    ${data.consulta.tipo_servicio ? `<td class="pe-4 py-3">Tipo de servicio: <br><b>${data?.consulta?.tipo_servicio == 1 ? "Exámenes" : "Consulta"}</b></td>` : ""}
+                    ${data.monto_consulta_usd ? `<td class="pe-4 py-3">Monto consulta BS: <br><b>$${data.monto_consulta_usd}</b></td>` : ""}
+                    ${data.monto_consulta_bs ? `<td class="pe-4 py-3">Monto consulta USD: <br><b>$${data.monto_consulta_bs}</b></td>` : ""}
+                </tr>
                 <tr class="blue-td">
-                    ${data.clave !== "No aplica" && data.clave !== "Desconocida" ? `<td class="py-3">Clave: <br><b>${data.clave}</b></td>` : ""}
                     ${examenes !== "No se realizó ningún exámen" ? `<td class="py-3">Exámenes realizados: <br><b>${examenes}</b></td>` : ""}
                     ${data.consulta.es_emergencia === 1 && insumos !== "No se utilizó ningún insumo" ? `<td class="py-3">Insumos utilizados: <br><b>${insumos}</b></td>` : ""}
                 </tr>
                 <tr>
                     ${indicaciones !== "No se realizó ninguna indicación" ? `<td class="py-3">Indicaciones: <br><b>${indicaciones}</b></td>` : ""}
                     ${referidos !== "No se refirió a ningún médico" ? `<td class="py-3">Referidos a otro médico: <br><b>${referidos}</b></td>` : ""} 
-                    ${cita_examenes !== "No se realizó a ningún exámen por cita" ? `<td class="py-3">Exámenes por citas: <br><b>${referidos}</b></td>` : ""} 
+                    ${cita_examenes !== "No se realizó a ningún exámen por cita" ? `<td class="py-3">Exámenes por citas: <br><b>${cita_examenes}</b></td>` : ""} 
                 </tr>
                 ${recipes}
                 ${factura}

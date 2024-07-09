@@ -921,6 +921,7 @@ addEventListener("DOMContentLoaded", async e => {
             }
                 </tr>
                 <tr class="blue-td">
+                    ${data.tipo_servicio ? `<td class="pe-4 py-3">Tipo de servicio: <br><b>${data?.consulta?.tipo_servicio == 1 ? "Exámenes" : "Consulta"}</b></td>` : ""}
                     ${examenes !== "No se realizó ningún exámen" ? `<td class="py-3">Exámenes realizados: <br><b>${examenes}</b></td>` : ""}
                     ${data.es_emergencia === 1 && insumos !== "No se utilizó ningún insumo" ? `<td class="py-3">Insumos utilizados: <br><b>${insumos}</b></td>` : ""}
                 </tr>

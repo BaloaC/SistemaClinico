@@ -352,6 +352,15 @@ export default async function mostrarHistorialMedico(id, updateAntecedente = fal
 
             listConsultas.forEach((el, i) => {
 
+                // getById("consultas", el.consulta_id)
+                // .then(res => console.log(res))
+                // .then(json => {
+                //     console.log(json);
+                // })
+                // .catch(error => console.log(error));
+               
+
+
                 let dropdownLink = templateConsulta.querySelector(".btn-link");
                 let consultaContainer = templateConsulta.querySelector(".collapse");
                 let consulta_id = templateConsulta.getElementById("consulta_id");
