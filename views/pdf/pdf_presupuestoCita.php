@@ -98,28 +98,24 @@
                     <th>Monto aprobado</th>
                     <td colspan="3" id="montoAprobado">Cargando</td>
                 </tr>
-                <tr>
-                    <th>DXM</th>
-                    <td colspan="3">0</td>
-                </tr>
 
                 <tr>
-                    <th>Código</th>
+                    <!-- <th>Código</th> -->
                     <th colspan="3">Descripción</th>
                     <th colspan="2">Monto $</th>
                 </tr>
                 <tr>
-                    <td></td>
+                    <!-- <td></td> -->
                     <td colspan="3">EXÁMENES</td>
                     <td id="examenesUsd"></td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <!-- <td></td> -->
                     <td colspan="3">CONSULTA</td>
                     <td id="consultaUsd"></td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <!-- <td></td> -->
                     <td colspan="3">Total.</td>
                     <td id="totalUsd"></td>
                 </tr>

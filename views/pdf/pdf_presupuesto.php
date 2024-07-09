@@ -68,84 +68,80 @@
             <thead>
                 <tr>
                     <th>Paciente</th>
-                    <td colspan="3" id="nombrePaciente">Cargando</td>
+                    <td colspan="4" id="nombrePaciente">Cargando</td>
                 </tr>
                 <tr>
                     <th>C.I.</th>
-                    <td colspan="3" id="cedulaPaciente">Cargando</td>
+                    <td colspan="4" id="cedulaPaciente">Cargando</td>
                 </tr>
                 <tr>
                     <th>Edad</th>
-                    <td colspan="3" id="edadPaciente">Cargando</td>
+                    <td colspan="4" id="edadPaciente">Cargando</td>
                 </tr>
                 <tr>
                     <th>Titular</th>
-                    <td colspan="3" id="nombreTitular">Cargando</td>
+                    <td colspan="4" id="nombreTitular">Cargando</td>
                 </tr>
                 <tr>
                     <th>Cédula</th>
-                    <td colspan="3" id="cedulaTitular">Cargando</td>
+                    <td colspan="4" id="cedulaTitular">Cargando</td>
                 </tr>
                 <tr>
                     <th>Empresa</th>
-                    <td colspan="3" id="empresaNombre">Cargando</td>
+                    <td colspan="4" id="empresaNombre">Cargando</td>
                 </tr>
                 <tr>
                     <th>Procesador</th>
-                    <td colspan="3" id="procesadorPor">Cargando</td>
+                    <td colspan="4" id="procesadorPor">Cargando</td>
                 </tr>
                 <tr>
                     <th>Seguro</th>
-                    <td colspan="3" id="seguroNombre">Cargando</td>
-                </tr>
-                <tr>
-                    <th>DXM</th>
-                    <td colspan="3">0</td>
+                    <td colspan="4" id="seguroNombre">Cargando</td>
                 </tr>
 
                 <tr>
-                    <th>Código</th>
+                    <!-- <th>Código</th> -->
                     <th colspan="3">Descripción</th>
                     <th colspan="2">Monto $</th>
                 </tr>
                 <tr>
-                    <td></td>
+                    <!-- <td></td> -->
                     <td colspan="3">EXÁMENES</td>
                     <td id="examenesUsd"></td>
                     <td id="examenesBs"></td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <!-- <td></td> -->
                     <td colspan="3">INSUMOS</td>
                     <td id="insumoUsd">30</td>
                     <td id="insumoBs"></td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <!-- <td></td> -->
                     <td colspan="3">LABORATORIO</td>
                     <td id="laboratorioUsd">30</td>
                     <td id="laboratorioBs"></td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <!-- <td></td> -->
                     <td colspan="3">SERVICIO DE ENFERMERÍA</td>
                     <td id="enfermeriaUsd">30</td>
                     <td id="enfermeriaBs"></td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <!-- <td></td> -->
                     <td colspan="3">ÁREA DE OBSERVACIÓN</td>
                     <td id="observacionUsd"></td>
                     <td id="observacionBs"></td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <!-- <td></td> -->
                     <td colspan="3">CONSULTA</td>
                     <td id="consultaUsd"></td>
                     <td id="consultaBs"></td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <!-- <td></td> -->
                     <td colspan="3">Totales Bs.</td>
                     <td id="totalUsd"></td>
                     <td id="totalBs"></td>
