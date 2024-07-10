@@ -879,6 +879,7 @@
                 <p><b>Cédula:</b> <span id="cedula"></span></p>
                 <p><b>Edad:</b> <span id="edad"></span></p>
                 <p><b>Relación:</b> <span id="relacion"></span></p>
+                <p><b>Tipo de relación:</b> <span id="tipo_relacion"></span></p>
             </div>
         </template>
 

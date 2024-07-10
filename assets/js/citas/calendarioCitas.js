@@ -127,12 +127,10 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
 
             if (infoPaciente.edad >= 18 && infoPaciente.tipo_paciente == 4) {
                 if (inputRadioBeneficiado.checked) {
-                    alert("beneficiado");
                     inputTipoCita.querySelector("option[value='2']").disable = false;
                     inputTipoCita.querySelector("option[value='2']").selected = true;
                     inputTipoCita.querySelector("option[value='1']").disabled = true;
                 } else {
-                    alert("titular");
                     inputTipoCita.querySelector("option[value='1']").disable = false;
                     inputTipoCita.querySelector("option[value='1']").selected = true;
                     inputTipoCita.querySelector("option[value='2']").disabled = true;

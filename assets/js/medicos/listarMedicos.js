@@ -14,7 +14,7 @@ export default async function listarMedicos() {
 
     } catch (error) {
 
-        alert(error);
+        console.log(error);
     }
 }
 

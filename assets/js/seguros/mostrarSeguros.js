@@ -23,7 +23,7 @@ async function getSeguro(id) {
 
     } catch (error) {
 
-        alert(error);
+        console.log(error);
     }
 }
 

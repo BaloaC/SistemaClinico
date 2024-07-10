@@ -61,7 +61,6 @@ async function updateSeguro(id) {
 
     } catch (error) {
         console.log(error);
-        alert(error);
     }
 }
 

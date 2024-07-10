@@ -213,12 +213,14 @@ export default async function mostrarHistorialMedico(id, updateAntecedente = fal
                 let cedula = templateTitular.getElementById("cedula");
                 let edad = templateTitular.getElementById("edad");
                 let relacion = templateTitular.getElementById("relacion");
+                let tipoDeRelacion = templateTitular.getElementById("tipo_relacion");
 
                 nombre.textContent = `${el.nombre} ${el.apellidos}`;
                 nombre.href = `../historialmedico/${el.paciente_id}`;
                 cedula.textContent = el.cedula;
                 edad.textContent = el.edad;
                 relacion.textContent = tipo_familiar[el.tipo_familiar];
+                tipoDeRelacion.textContent = el.tipo_relacion == 1 ? "Asegurada" : "Natural";
 
                 let clone = document.importNode(templateTitular, true);
                 titularFragment.appendChild(clone);
@@ -350,16 +352,11 @@ export default async function mostrarHistorialMedico(id, updateAntecedente = fal
             consultaPdf.setAttribute("onclick", `openPopup('pdf/historialmedico/${id}')`);
             const consultasLength = listConsultas.length - 1;
 
-            listConsultas.forEach((el, i) => {
-
-                // getById("consultas", el.consulta_id)
-                // .then(res => console.log(res))
-                // .then(json => {
-                //     console.log(json);
-                // })
-                // .catch(error => console.log(error));
-               
-
+            let i = 0;
+            for (const consulta of listConsultas) {
+                
+                let el = await getById("consultas", consulta.consulta_id);
+                el = el[0];
 
                 let dropdownLink = templateConsulta.querySelector(".btn-link");
                 let consultaContainer = templateConsulta.querySelector(".collapse");
@@ -393,6 +390,7 @@ export default async function mostrarHistorialMedico(id, updateAntecedente = fal
                 let medicoNombre;
                 let medicoApellido;
                 let medicoEspecialidad;
+
                 if (el?.medico && el?.medico.length > 0) {
                     medicoNombre = el.medico[0].nombre_medico;
                     medicoApellido = el.medico[0].apellidos_medico;
@@ -404,7 +402,7 @@ export default async function mostrarHistorialMedico(id, updateAntecedente = fal
                 especialidad.textContent = el.nombre_especialidad ?? medicoEspecialidad ?? "Consulta por emergencia";
                 fecha_consulta.textContent = formatToRealDate(el.fecha_consulta);
                 observaciones.textContent = el.observaciones || "Sin observaciones";
-                motivo_cita.textContent = el.motivo_cita ?? "La consulta es de emergencia";
+                motivo_cita.textContent = el.es_emergencia == true ? "La consulta es de emergencia" : el.motivo_cita ?? `No aplica`;
                 indicaciones.textContent = el.indicaciones !== undefined ? concatItems(el.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación";
 
                 dropdownLink.innerHTML = `<b>Especialidad:</b> ${especialidad.textContent} <br> <b>Fecha:</b> ${fecha_consulta.textContent}`;
@@ -414,7 +412,8 @@ export default async function mostrarHistorialMedico(id, updateAntecedente = fal
 
                 let clone = document.importNode(templateConsulta, true);
                 consultaFragment.appendChild(clone);
-            });
+
+            }
 
             // Actualizamos el contenedor e insertamos los datos
             consultaContainer.replaceChildren();
