@@ -249,6 +249,21 @@ class PacienteController extends Controller{
         global $isEnabledAudit;
         $isEnabledAudit = 'pacientes';
 
+        $_consultaSinCita =  new ConsultaSinCitaModel();
+        $consultaSinCita = $_consultaSinCita->where('paciente_id', '=', $paciente_id)->where('estatus_con', '!=', '2')->getFirst();
+
+        $_citaModel = new CitaModel();
+        $cita = $_citaModel->where('paciente_id', '=', $paciente_id)->where('estatus_cit', '!=', 2)->getFirst();
+
+        $_consultaEmergencia = new ConsultaEmergenciaModel();
+        $consulta_emergencia = $_consultaEmergencia->where('paciente_id', '=', $paciente_id)->getFirst();
+
+        if (!is_null($consultaSinCita) || !is_null($cita) || !is_null($consulta_emergencia) ) {
+            $respuesta = new Response(false, 'No se puede eliminar a un paciente con consultas registradas');
+            echo $respuesta->json(400);
+            exit();
+        }
+
         $_pacienteModel = new PacienteModel();
         $data = array(
             "estatus_pac" => "2"

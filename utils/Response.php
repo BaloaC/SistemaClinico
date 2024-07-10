@@ -156,10 +156,18 @@ class Response{
                 $auditMedicamento = new AuditMedicamento();
                 $auditMedicamento->handleRequest();
 
+            } else if ($isEnabledAudit == 'paciente_seguro') {
+                $auditPaciente = new AuditPacienteSeguro();
+                $auditPaciente->handleRequest();
+                
+            } else if ($isEnabledAudit == 'global') {
+                $auditGlobal = new AuditGlobal();
+                $auditGlobal->handleRequest();
+                
             } else if ( count(explode(' ', $isEnabledAudit)) > 2) {
                 $auditFactura = new AuditFactura();
                 $auditFactura->handleRequest($this->data);
-                
+            
             } else {
                 $auditMiddleware = new AuditMiddleware();
                 $auditMiddleware->setValues($this->code, $this->data);

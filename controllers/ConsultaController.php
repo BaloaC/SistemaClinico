@@ -281,14 +281,14 @@ class ConsultaController extends Controller {
     }
 
     public function listarConsultaPorId($consulta_id) {
-
+        
         $_consultaModel = new ConsultaModel();
         $_consultaModel->where('consulta_id', '=', $consulta_id);
 
         if (isset($_GET['status'])) {
             $_consultaModel->where('estatus_con', '=', $_GET['status']);
         } else {
-            $_consultaModel->where('estatus_con', '=', 1);
+            $_consultaModel->where('estatus_con', '!=', 2);
         }
         
         $consultaList = $_consultaModel->getFirst();

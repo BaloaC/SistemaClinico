@@ -27,7 +27,52 @@ class AuditAntecedente extends AuditMiddleware {
         }
         
         if ($this->method == 'POST') {
-            $row = "El usuario ".$this->usuario->nombre." insertó un nuevo antecedente médico de tipo ".$_POST['tipo_antecedente_id']." al paciente ".$paciente->nombre." con cédula ".$paciente->cedula;
+
+            $tipo_medicamento = "";
+
+            switch ($_POST['tipo_antecedente_id']) {
+                case '1':
+                    $tipo_medicamento = "antecedente patológico";
+                    break;
+                
+                case '2':
+                    $tipo_medicamento = "antecedentes psicológicos";
+                    break;
+    
+                case '3':
+                    $tipo_medicamento = "antecedentes médicos familiares";
+                    break;
+    
+                case '4':
+                    $tipo_medicamento = "cirugía/traumatismo";
+                    break;
+
+                case '5':
+                    $tipo_medicamento = "alergia";
+                    break;
+
+                case '6':
+                    $tipo_medicamento = "reacción a medicamentos";
+                    break;
+                
+                case '7':
+                    $tipo_medicamento = "enfermedad Padecida";
+                    break;
+
+                case '8':
+                    $tipo_medicamento = "tratamiento";
+                    break;
+                
+                case '9':
+                    $tipo_medicamento = "hábito de salud";
+                    break;
+                    
+                default:
+                    $tipo_medicamento = "";
+                    break;
+            }
+
+            $row = "El usuario ".$this->usuario->nombre." insertó un nuevo antecedente médico de tipo ".$tipo_medicamento." al paciente ".$paciente->nombre." con cédula ".$paciente->cedula;
             $accion = 'inserción';
         
         } else if ($this->method == 'PUT') {
