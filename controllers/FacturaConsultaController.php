@@ -147,9 +147,16 @@ class FacturaConsultaController extends Controller {
     }
 
     public function listarFacturaConsultaPorId($factura_consulta_id) {
-
+        
         $consultaList = FacturaConsultaService::listarFacturaPorId($factura_consulta_id);
         $mensaje = ( count($consultaList) > 0);
+        if ( count($consultaList) > 0 ) {
+            $_consultaSeguroModel = new ConsultaSeguroModel();
+            $consulta_seguro = $_consultaSeguroModel->where('consulta_id', '=', $consultaList['consulta_id'])->getFirst();
+            if (!is_null($consulta_seguro)) {
+                $consultaList['consulta_seguro_id'] = $consulta_seguro->consulta_seguro_id;
+            }
+        }
         FacturaConsultaHelpers::RetornarMensaje($mensaje, $consultaList);
     }
 }
