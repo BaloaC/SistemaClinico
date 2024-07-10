@@ -8,7 +8,7 @@ class FacturaConsultaService {
             "factura_consulta.factura_consulta_id",
             "factura_consulta.consulta_id",
             "factura_consulta.tipo_consulta",
-            "factura_consulta.metodo_pago",
+            // "factura_consulta.metodo_pago",
             "factura_consulta.monto_consulta_bs",
             "factura_consulta.monto_consulta_usd",
             "factura_consulta.estatus_fac",
@@ -137,7 +137,7 @@ class FacturaConsultaService {
         $selectConsulta = array(
             "factura_consulta.factura_consulta_id",
             "factura_consulta.consulta_id",
-            "factura_consulta.metodo_pago",
+            // "factura_consulta.metodo_pago",
             "factura_consulta.monto_consulta_bs",
             "factura_consulta.monto_consulta_usd",
             "factura_consulta.estatus_fac",

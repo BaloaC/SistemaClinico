@@ -400,7 +400,7 @@ CREATE TABLE  IF NOT EXISTS `paciente_seguro` (
 
 CREATE TABLE  IF NOT EXISTS `examen` (
     `examen_id` int(11) NOT NULL AUTO_INCREMENT,
-    `nombre` varchar(45) NOT NULL,
+    `nombre` TEXT NOT NULL,
     `precio_examen` int(11) DEFAULT NULL,
     `tipo` enum('1','2','3') NOT NULL,
     -- `hecho_aqui` tinyint(1) NOT NULL DEFAULT 0,
@@ -738,7 +738,7 @@ CREATE TABLE  IF NOT EXISTS `factura_consulta` (
     `factura_consulta_id` int(8) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
     `consulta_id` int(11) NOT NULL,
     `paciente_id` int(11) NOT NULL,
-    `metodo_pago` varchar(20) NOT NULL,
+    `metodo_pago` varchar(20) NULL,
     `monto_consulta_bs` float NOT NULL,
     `monto_consulta_usd` float NOT NULL,
     `tipo_consulta` ENUM('1','2') NOT NULL,
