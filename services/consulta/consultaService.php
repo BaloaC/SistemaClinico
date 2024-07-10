@@ -231,7 +231,7 @@ class ConsultaService {
         if (isset($_GET['status'])) {
             $_consultaCita->where('consulta.estatus_con','=',$_GET['status']);
         } else {
-            $_consultaCita->where('consulta.estatus_con','=',1);
+            $_consultaCita->where('consulta.estatus_con','!=',2);
         }
 
         $es_citada = $_consultaCita->innerJoin(ConsultaService::$selectConsultaCita, $innersCita, "consulta_cita");
