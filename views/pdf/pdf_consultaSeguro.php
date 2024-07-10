@@ -222,19 +222,19 @@
                     </th>
                 </tr>
                 <tr>
-                    <th colspan="3">
+                    <th colspan="2">
                         <p>&emsp13;</p>
                     </th>
-                    <th colspan="1">SELLO</p>
+                    <th colspan="2" style="text-align: center !important">SELLO</p>
                     </th>
                 </tr>
                 <!-- <tr>
                     <th colspan="1"><p>&emsp13;</p></th>
                 </tr> -->
                 <tr>
-                    <th colspan="1">Paciente:</th>
-                    <th colspan="3"><span style="margin-right: 0rem" id="nombrePaciente2"> </span> Cuenta: <span id="cedulaPaciente2">29527505</span></th>
-                    <th colspan="2"><span id="fechaNacimiento2">2001-01-28</span></th>
+                    <th colspan="2" style="text-align: center !important">Paciente: <span style="margin-right: 0rem" id="nombrePaciente2"> </span></th>
+                    <th colspan="1" style="text-align: center !important">Cuenta: <span id="cedulaPaciente2">29527505</span></th>
+                    <th colspan="1" style="text-align: center !important"><span id="fechaNacimiento2">2001-01-28</span></th>
                 </tr>
             </thead>
         </table>

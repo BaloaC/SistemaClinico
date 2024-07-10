@@ -216,14 +216,14 @@
                 <tr>
                     <th>Seguro</th>
                     <th></th>
-                    <th id="">-</th>
+                    <th id=""></th>
                     <th id="cobertura"></th>
                 </tr>
 
                 <tr>
                     <th>Paciente</th>
                     <th></th>
-                    <th id="">-</th>
+                    <th id=""></th>
                     <th id="diferenciaPaciente"></th>
                 </tr>
 

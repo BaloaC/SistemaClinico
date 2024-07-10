@@ -351,7 +351,7 @@
                                     <div class="row align-items-end">
                                         <div class="col-12 col-md-5">
                                             <label for="indicacion">Descripción de la indicación</label>
-                                            <input type="text" data-validate="true" data-type="address" class="form-control indicaciones">
+                                            <input type="text" class="form-control indicaciones">
                                             <small class="form-text">El campo debe contener al menos 3 letras y solo se permiten los siguientes simbolos "@#+_,-"</small>
                                         </div>
                                         <!-- <div class="col-3 col-md-1 pt-4-5 d-none">

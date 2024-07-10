@@ -64,7 +64,7 @@
                         <div class="alert d-none" role="alert"></div>
                         <form action="" id="info-examen" class="form-reg p-3 px-4">
                             <label for="nombre">Nombre examen</label>
-                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameExam" data-max-length="45" required>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameExam" required>
                             <small class="form-text">El nombre solo debe contener al menos 3 letras sin caracteres especiales</small>
                             <label for="tipo">Tipo</label>
                             <select name="tipo" id="s-tipo" class="form-control mb-3" required>
@@ -124,7 +124,7 @@
                         <div id="actAlert" class="alert d-none" role="alert"></div>
                         <form action="" id="act-examen" class="p-3 px-4">
                             <label for="nombre">Nombre examen</label>
-                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameExam" data-max-length="45" required>
+                            <input type="text" name="nombre" class="form-control mb-3" data-validate="true" data-type="nameExam" required>
                             <small class="form-text">El nombre solo debe contener al menos 3 letras sin caracteres especiales</small>
                             <label for="tipo">Tipo</label>
                             <select name="tipo" id="s-tipo" class="form-control mb-3" required>
