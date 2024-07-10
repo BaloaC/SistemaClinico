@@ -83,6 +83,7 @@
                                     <option value="recibo de pago médico">Recibo de pago médico</option>
                                     <option value="recibo de mensajería">Recibo de mensajería</option>
                                     <option value="recibo de seguros">Recibo de seguros</option>
+                                    <option value="base de datos">Base de datos</option>
                                 </select>
                             </div>
                         </div>

@@ -514,20 +514,26 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
         if (cita.tipo_cita == 1) {
             claveCita = "No aplica";
         }
+
+        console.log(claveCita);
         
-        if(claveCita === "No aplica" || claveCita === "Por asignar"){
+        if(claveCita === "No aplica" || claveCita === "Por asignar" || claveCita === null){
 
             document.querySelector(".claveCitaContainer").classList.add("d-none");
         } else {
             document.querySelector(".claveCitaContainer").classList.remove("d-none");
         }
-
+        
+        console.log(cita?.examenes?.length > 0);
+        cita?.examenes?.length > 0 ? document.querySelector(".examenesDetalleCitaContainer").classList.remove("d-none") : document.querySelector(".examenesDetalleCitaContainer").classList.add("d-none");
+            
 
         document.getElementById("paciente").textContent = `${cita.nombre_paciente} ${cita.apellido_paciente}`;
         document.getElementById("cedula-titular").textContent = `C.I: ${cita.cedula_titular}`;
         document.getElementById("nombreMedico").textContent = `${cita.nombre_medico} ${cita.apellido_medico}`;
         document.getElementById("nombreEspecialidad").textContent = cita.nombre_especialidad;
         document.getElementById("tipoCita").textContent = (cita.tipo_cita == 1) ? "Normal" : "Asegurada";
+        document.getElementById("tipoServicio").textContent = (cita.tipo_servicio == 1) ? "Exámenes" : "Consulta";
         document.getElementById("estatusCita").textContent = estatusCita;
         (cita.estatus_cit == 1 || cita.estatus_cit == 3) ? document.getElementById("btn-reprogramar").setAttribute("onclick", `reprogramationCita(${cita.cita_id})`) : null;
         document.getElementById("fechaCita").value = cita.fecha_cita;

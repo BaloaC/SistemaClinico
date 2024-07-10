@@ -110,6 +110,7 @@
                     <th>Item</th>
                     <th>Usuario</th>
                     <th>Acción</th>
+                    <th>Módulo</th>
                     <th>Descripción</th>
                     <th>Fecha</th>
                 </tr>
