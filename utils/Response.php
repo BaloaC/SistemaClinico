@@ -160,6 +160,10 @@ class Response{
                 $auditPaciente = new AuditPacienteSeguro();
                 $auditPaciente->handleRequest();
                 
+            } else if ($isEnabledAudit == 'importarBD' || $isEnabledAudit == 'exportarBD') {
+                $auditDatabase = new AuditHandleDatabase();
+                $auditDatabase->handleRequest();
+            
             } else if ($isEnabledAudit == 'global') {
                 $auditGlobal = new AuditGlobal();
                 $auditGlobal->handleRequest();

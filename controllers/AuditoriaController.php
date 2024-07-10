@@ -314,6 +314,8 @@ class AuditoriaController extends Controller {
     }
 
     public function exportarBd() {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'exportarBD';
 
         $fecha = date("Ymd---His");
 
@@ -356,6 +358,8 @@ class AuditoriaController extends Controller {
     }
 
     public function importarBd() {
+        global $isEnabledAudit;
+        $isEnabledAudit = 'importarBD';
 
         $conexionBd = new Database();
         $archivoSql = $_FILES["archivosql"];

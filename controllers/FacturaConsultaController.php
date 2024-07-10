@@ -126,7 +126,7 @@ class FacturaConsultaController extends Controller {
 
         // $total_registros = $_facturaConsultaModel->getAll();
         $innersConsulta = $_facturaConsultaModel->listInner(array("consulta" => "factura_consulta"));
-        $selectConsulta = array("factura_consulta.factura_consulta_id","factura_consulta.consulta_id","factura_consulta.tipo_consulta","factura_consulta.metodo_pago","factura_consulta.monto_consulta_bs","factura_consulta.monto_consulta_usd","factura_consulta.estatus_fac","consulta.fecha_consulta","consulta.es_emergencia");
+        $selectConsulta = array("factura_consulta.factura_consulta_id","factura_consulta.consulta_id","factura_consulta.tipo_consulta","factura_consulta.monto_consulta_bs","factura_consulta.monto_consulta_usd","factura_consulta.estatus_fac","consulta.fecha_consulta","consulta.es_emergencia");
 
         if ( array_key_exists('date', $_GET) ) {
             
@@ -147,9 +147,16 @@ class FacturaConsultaController extends Controller {
     }
 
     public function listarFacturaConsultaPorId($factura_consulta_id) {
-
+        
         $consultaList = FacturaConsultaService::listarFacturaPorId($factura_consulta_id);
         $mensaje = ( count($consultaList) > 0);
+        if ( count($consultaList) > 0 ) {
+            $_consultaSeguroModel = new ConsultaSeguroModel();
+            $consulta_seguro = $_consultaSeguroModel->where('consulta_id', '=', $consultaList['consulta_id'])->getFirst();
+            if (!is_null($consulta_seguro)) {
+                $consultaList['consulta_seguro_id'] = $consulta_seguro->consulta_seguro_id;
+            }
+        }
         FacturaConsultaHelpers::RetornarMensaje($mensaje, $consultaList);
     }
 }
