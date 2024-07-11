@@ -4,6 +4,10 @@ async function uploadBd() {
 
     const loadingMessage = document.getElementById("loadingMessage");
     const sqlFile = document.getElementById("sqlFile");
+    const file = sqlFile.files[0];
+    const allowedExtensions = ['sql'];
+    const fileName = file.name;
+    const extension = fileName.slice(fileName.lastIndexOf('.') + 1).toLowerCase();
     const form = new FormData();
     form.append("archivosql", sqlFile.files[0]);
 
@@ -15,22 +19,26 @@ async function uploadBd() {
         }
     }
 
-    const showTokenFailedMessage = async () => {
+    const showTokenFailedMessage = async (message) => {
 
         const $alert = document.getElementById("uploadAlert");
         $alert.classList.remove("d-none");
         $alert.classList.add("alert-danger");
-        let message = "No se ha podido validar la sesión intente nuevamente"
         $alert.textContent = message;
 
         setTimeout(() => {
             $alert.classList.add("d-none");
-            $("#modalUpload").modal("hide");
+            // $("#modalUpload").modal("hide");
         }, 3000)
     }
+
+    if (!allowedExtensions.includes(extension)) {
+        await showTokenFailedMessage("Solo se permiten archivos con la extensión .sql");
+        return;
+    } 
     
     if (Cookies.get("authT") === undefined){
-        await showTokenFailedMessage(); 
+        await showTokenFailedMessage("No se ha podido validar la sesión intente nuevamente"); 
         return;
     } 
 
@@ -39,7 +47,7 @@ async function uploadBd() {
         const partsToken = authToken.split("||");
 
         if (parseInt(partsToken[2]) !== 0){
-            await showTokenFailedMessage();
+            await showTokenFailedMessage("No se ha podido validar la sesión intente nuevamente");
             return;
         }
     }
