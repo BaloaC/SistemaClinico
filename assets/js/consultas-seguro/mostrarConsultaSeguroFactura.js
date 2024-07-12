@@ -198,8 +198,8 @@ addEventListener("DOMContentLoaded", async e => {
                 </tr>
                 <tr class="py-3">
                     ${data.consulta.tipo_servicio ? `<td class="pe-4 py-3">Tipo de servicio: <br><b>${data?.consulta?.tipo_servicio == 1 ? "Exámenes" : "Consulta"}</b></td>` : ""}
-                    ${data.monto_consulta_usd ? `<td class="pe-4 py-3">Monto consulta BS: <br><b>$${data.monto_consulta_usd}</b></td>` : ""}
-                    ${data.monto_consulta_bs ? `<td class="pe-4 py-3">Monto consulta USD: <br><b>$${data.monto_consulta_bs}</b></td>` : ""}
+                    ${data.monto_consulta_bs ? `<td class="pe-4 py-3">Monto consulta BS: <br><b>$${data.monto_consulta_bs}</b></td>` : ""}
+                    ${data.monto_consulta_usd ? `<td class="pe-4 py-3">Monto consulta USD: <br><b>$${data.monto_consulta_usd}</b></td>` : ""}
                 </tr>
                 <tr class="blue-td">
                     ${examenes !== "No se realizó ningún exámen" ? `<td class="py-3">Exámenes realizados: <br><b>${examenes}</b></td>` : ""}
