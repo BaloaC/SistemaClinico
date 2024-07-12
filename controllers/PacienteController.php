@@ -187,6 +187,7 @@ class PacienteController extends Controller{
                                                             ->getAll();
                                                             
                         $infoBeneficiado[0]->tipo_familiar = $beneficiado->tipo_familiar;
+                        $infoBeneficiado[0]->paciente_beneficiado_id = $beneficiado->paciente_beneficiado_id;
                         $beneficiadosList[] = $infoBeneficiado[0];
                     }
                     
@@ -218,6 +219,7 @@ class PacienteController extends Controller{
 
                     $infoTitular->tipo_familiar = $titular->tipo_familiar;
                     $infoTitular->tipo_relacion = $titular->tipo_relacion;
+                    $infoTitular->titular_beneficiado_id = $titular->titular_beneficiado_id;
 
                     // Obtenemos los seguros del titular
                     $_pacienteSeguroModel = new PacienteSeguroModel();

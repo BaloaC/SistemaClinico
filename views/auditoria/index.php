@@ -83,6 +83,7 @@
                                     <option value="recibo de pago médico">Recibo de pago médico</option>
                                     <option value="recibo de mensajería">Recibo de mensajería</option>
                                     <option value="recibo de seguros">Recibo de seguros</option>
+                                    <option value="base de datos">Base de datos</option>
                                 </select>
                             </div>
                         </div>
@@ -153,6 +154,7 @@
                             <div class="p-4">
                                 <label for="formFile" class="form-label">Archivo sql</label>
                                 <input class="form-control" type="file" id="sqlFile" accept=".sql">
+                                <p id="loadingMessage" class="m-auto mt-3 text-center" style="display: none;">Cargando...</p>
                             </div>
                         </form>
                     </div>
@@ -209,7 +211,6 @@
                             <div class="p-4 pt-0">
                                 <label for="formFile" class="form-label">Clave del usuario</label>
                                 <input class="form-control" type="password" id="claveUserImport">
-                                <p id="loadingMessage" class="m-auto mt-3 text-center" style="display: none;">Cargando...</p>
                             </div>
                         </form>
                     </div>

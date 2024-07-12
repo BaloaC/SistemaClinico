@@ -223,8 +223,11 @@ addEventListener("DOMContentLoaded", e => {
                 <tr>
                     <td class="py-3 pe-3">Nombre médico: <br><b>${data?.nombre_medico ? data?.nombre_medico + " " + data?.apellidos_medico : "Desconocido"}</b></td>
                     <td class="py-3 pe-3">Especialidad: <br><b>${data?.nombre_especialidad ?? "Desconocido"}</b></td>
-                    <td class="py-3 pe-3">Monto consulta BS: <br><b>${data?.monto_consulta_bs ?? "Desconocido"} Bs</b></td>
-                    <td class="py-3 pe-3">Monto consulta USD: <br><b>$${data?.monto_consulta_usd ?? "Desconocido"}</b></td>
+                    ${!data.consulta_seguro_id ? `
+                        <td class="py-3 pe-3">Monto consulta BS: <br><b>${data?.monto_consulta_bs ?? "Desconocido"} Bs</b></td>
+                        <td class="py-3 pe-3">Monto consulta USD: <br><b>$${data?.monto_consulta_usd ?? "Desconocido"}</b></td>
+                    ` : ""}
+                   
                 </tr>
                 <tr>
                     ${examenes !== "No se realizó ningún exámen" ? `<td class="py-3">Exámenes realizados: <br><b>${examenes}</b></td>` : ""}

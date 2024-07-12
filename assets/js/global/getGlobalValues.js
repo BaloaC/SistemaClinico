@@ -12,7 +12,7 @@ export default async function getGlobalValues() {
 
 	if (currencyExchange !== null) {
 
-		fetch("https://pydolarvenezuela-api.vercel.app/api/v11/dollar?page=bcv")
+		fetch("https://pydolarvenezuela-api.vercel.app/api/v1/dollar?page=bcv")
 			.then(response => {
 				if (response.status !== 200) {
 					throw response;

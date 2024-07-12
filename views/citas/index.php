@@ -397,7 +397,8 @@
                             <p>Médico: <span id="nombreMedico"></span></p>
                             <p>Especialidad: <span id="nombreEspecialidad"></span></p>
                             <p>Tipo de cita: <span id="tipoCita"></span></p>
-                            <p>Exámenes: <span id="examenesCita"></span></p>
+                            <p>Tipo de servicio: <span id="tipoServicio"></span></p>
+                            <p class="examenesDetalleCitaContainer d-none">Exámenes: <span id="examenesCita"></span></p>
                             <p>Estatus: <span class="badge light" id="estatusCita"></span></p>
                             <p>Motivo cita: <span id="motivoCita"></span></p>
                             <p class="claveCitaContainer">Clave cita: <span id="claveCita"></span></p>

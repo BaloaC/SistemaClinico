@@ -846,6 +846,64 @@
             </div>
         </div>
 
+        <!-- Modal Confirmar Eliminación -->
+        <div class="modal fade" id="modalDeleteSeguroRelacion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteSeguroRelacionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalDeleteSeguroRelacionLabel">Eliminar Seguro</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="delAlertSeguroRelacion" class="alert d-none" role="alert"></div>
+                        ¿Está seguro que desea eliminar la relación con el seguro médico?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-confirmDeleteSeguroRelacion" class="btn btn-danger" onclick="confirmSeguroRelacion()">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Confirmar Eliminación -->
+        <div class="modal fade" id="modalDeleteTitularRelacion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteSeguroRelacionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalDeleteTitularRelacionLabel">Eliminar Titular</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="delAlertTitularRelacion" class="alert d-none" role="alert"></div>
+                        ¿Está seguro que desea eliminar la relación con este titular?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-confirmDeleteTitularRelacion" class="btn btn-danger" onclick="confirmTitularRelacion()">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Confirmar Eliminación -->
+        <div class="modal fade" id="modalDeleteBeneficiadoRelacion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteBeneficiadoRelacionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalDeleteBeneficiadoRelacionLabel">Eliminar Titular</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="delAlertBeneficiadoRelacion" class="alert d-none" role="alert"></div>
+                        ¿Está seguro que desea eliminar la relación con este beneficiado?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-confirmDeleteBeneficiadoRelacion" class="btn btn-danger" onclick="confirmBeneficiadoRelacion()">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <template id="template-antecedente">
             <div class="antecedente">
                 <p><b>Tipo de antecedente:</b> <span id="tipo_antedecente"></span></p>
@@ -861,6 +919,9 @@
             <div class="seguro">
                 <p><b>Nombre de la empresa:</b> <span id="nombre_empresa"></span></p>
                 <p><b>Nombre del seguro:</b> <span id="nombre_seguro"></span></p>
+                <div class="actions text-end">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalDeleteSeguroRelacion" class="del-seguroRelacion"><i class="fas fa-trash del-seguroRelacion"></i></a>
+                </div>
             </div>
         </template>
 
@@ -870,6 +931,9 @@
                 <p><b>Cédula:</b> <span id="cedula"></span></p>
                 <p><b>Edad:</b> <span id="edad"></span></p>
                 <p><b>Relación:</b> <span id="relacion"></span></p>
+                <div class="actions text-end">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalDeleteBeneficiadoRelacion" class="del-beneficiadoRelacion"><i class="fas fa-trash del-beneficiadoRelacion"></i></a>
+                </div>
             </div>
         </template>
 
@@ -880,6 +944,9 @@
                 <p><b>Edad:</b> <span id="edad"></span></p>
                 <p><b>Relación:</b> <span id="relacion"></span></p>
                 <p><b>Tipo de relación:</b> <span id="tipo_relacion"></span></p>
+                <div class="actions text-end">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalDeleteTitularRelacion" class="del-titularRelacion"><i class="fas fa-trash del-titularRelacion"></i></a>
+                </div>
             </div>
         </template>
 
@@ -938,6 +1005,9 @@
     <script type="module" src="<?php echo Url::to('assets/js/historial-medico/addAntecedente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/historial-medico/updateAntecedente.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/historial-medico/deleteAntecedente.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/historial-medico/deleteSeguroRelacion.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/historial-medico/deleteTitularRelacion.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/historial-medico/deleteBeneficiadoRelacion.js'); ?>"></script>
     <!-- <script type="module" src="<?php echo Url::to('assets/js/historial-medico/registrarConsulta.js'); ?>"></script> -->
     <script type="module" src="<?php echo Url::to('assets/js/consultas/mostrarConsultas.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/consultas/registrarConsulta.js'); ?>"></script>
