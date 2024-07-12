@@ -38,7 +38,6 @@
                                             <th>Detalles</th>
                                             <th>Item</th>
                                             <th>Nombre paciente</th>
-                                            <th>Método pago</th>
                                             <th>Monto total BS</th>
                                             <th>Monto total USD</th>
                                             <th>Fecha Consulta</th>
@@ -79,10 +78,10 @@
                                     <select name="consulta_id" id="s-consulta-normal" class="form-control" data-active="0" required disabled>
                                         <option></option>
                                     </select>
-                                    <label for="monto_con_iva">Método de pago</label>
+                                    <!-- <label for="monto_con_iva">Método de pago</label>
                                     <select name="metodo_pago" id="s-metodo-pago" class="form-control" data-active="0" required>
                                         <option></option>
-                                    </select>
+                                    </select> -->
                                     <!-- <label for="monto_sin_iva">Monto</label><br>
                                     <small class="text-secondary">(El valor ingresado es en dólares)</small>
                                     <input type="number" step="any" name="monto_consulta_usd" id="monto_consulta_usd_consulta" class="form-control mb-3" data-validate="true" data-type="price" data-max-length="8">
