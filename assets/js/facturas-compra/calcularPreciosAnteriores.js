@@ -42,10 +42,6 @@ export async function calcularPreciosAnteriores(input){
         precioAnteriorLabel.innerText = `Mantener precio anterior ($${insumo.precio.toFixed(2)})`;
         precioNuevoLabel.innerText = `Actualizar nuevo precio ($${(parseFloat(insumo.precio) + parseFloat(porcentajePrecioNuevo)).toFixed(2)})`;
     }
-  
-
-
-
 }
 
 window.calcularPreciosAnteriores = calcularPreciosAnteriores;
