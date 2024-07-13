@@ -95,7 +95,7 @@ addEventListener("DOMContentLoaded", async e => {
             insumos = data?.insumos !== undefined ? concatItems(data?.insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo",
             indicaciones = data?.indicaciones !== undefined ? concatItems(data.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación",
             referidos = data?.referidos !== undefined ? concatItems(data.referidos, "nombre", "No se refirió a ningún médico", ".") : "No se refirió a ningún médico",
-            cita_examenes = data?.cita_examenes !== undefined ? concatItems(data.cita_examenes, "nombre", "No se realizó a ningún exámen por cita", ".") : "No se realizó a ningún exámen por cita";
+            cita_examenes = data?.cita_examenes !== undefined ? concatItems(data.cita_examenes, "nombre", "No se realizó a ningún exámen por cita", ".", "precio_examen_usd") : "No se realizó a ningún exámen por cita";
 
 
         let recipes = "";

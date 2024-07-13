@@ -170,11 +170,6 @@ addEventListener("DOMContentLoaded", e => {
         },
         {
             data: function (row) {
-                return row.metodo_pago;
-            }
-        },
-        {
-            data: function (row) {
                 return `${convertCurrencyToVES(row.monto_total_bs ?? 0)} Bs`;
             }
         },
@@ -209,7 +204,7 @@ addEventListener("DOMContentLoaded", e => {
 
     const format = (data) => {
 
-        let cita_examenes = data?.cita_examenes !== undefined ? concatItems(data.cita_examenes, "nombre", "No se realizó a ningún exámen por cita", ".") : "No se realizó a ningún exámen por cita";
+        let cita_examenes = data?.cita_examenes !== undefined ? concatItems(data.cita_examenes, "nombre", "No se realizó a ningún exámen por cita", ".", "precio_examen_usd") : "No se realizó a ningún exámen por cita";
         let examenes = data?.examenes !== undefined ? concatItems(data.examenes, "nombre", "No se realizó ningún exámen") : "No se realizó ningún exámen",
             insumos = data?.insumos !== undefined ? concatItems(data?.insumos, "nombre", "No se utilizó ningún insumo") : "No se utilizó ningún insumo",
             indicaciones = data?.indicaciones !== undefined ? concatItems(data.indicaciones, "descripcion", "No se realizó ninguna indicación", ".") : "No se realizó ninguna indicación",

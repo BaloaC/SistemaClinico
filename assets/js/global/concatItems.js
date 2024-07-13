@@ -1,9 +1,12 @@
-export default function concatItems(items, propItem, noneMessage, separator = ",") {
+export default function concatItems(items, propItem, noneMessage, separator = ",", propItem2 = null) {
     let concatString = "";
     if (items === undefined || items.length === 0) {
         concatString = noneMessage;
     } else {
-        items.forEach(item => { concatString += item[propItem] + `${separator} `; });
+        items.forEach(item => { 
+            console.log(item[propItem]  + `${separator} `);
+            concatString += item[propItem] + `${propItem2 !== null ? ` $${item[propItem2]}` : ""}` + `${separator} <br>`; 
+        });
         concatString = concatString.trimEnd().slice(0, -1);
     }
     return concatString;
