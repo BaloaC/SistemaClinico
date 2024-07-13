@@ -115,7 +115,7 @@
                                                 <td><b class="monto-total-p">0.00 Bs</b></td>
                                                 <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
                                                 <td>
-                                                    <div class="actualizarPrecio-insumo" style="display: none;">
+                                                    <div class="actualizarPrecio-insumo">
                                                         <input type="radio" name="actualizar_precio" value="0" id="antiguoPrecio"><label id="precioAnteriorLabel" class="d-inline mx-1">Mantener precio anterior ($0.00)</label> <br>
                                                         <input type="radio" class="actualizarPrecioInsumo" name="actualizar_precio" value="1" id="nuevoPrecio"><label id="precioNuevoLabel" class="d-inline mx-1">Actualizar nuevo precio ($0.00)</label>
                                                     </div>
