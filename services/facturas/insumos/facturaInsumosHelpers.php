@@ -36,6 +36,10 @@ class FacturaInsumoHelpers {
                     $nuevoPrecio = ($insumoNuevo['precio_unit_usd'] * $valorPorcentaje) / 100;
                     $actualizar['precio'] = round($insumoNuevo['precio_unit_usd'] + $nuevoPrecio, 2);
                 }
+
+                if (isset($insumo['iva'])) {
+                    $actualizar['precio'] = ($actualizar['precio'] * 0.16 );
+                }
                 
                 $actualizar['cantidad_capacidad'] = ($unidadesPosts * $insumo_factura->capacidad_unidad);
 
