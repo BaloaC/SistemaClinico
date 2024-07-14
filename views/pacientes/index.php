@@ -169,30 +169,31 @@
                                     </div>
                                     <div class="submenu-seguro row opacity-0 d-none">
                                         <h5 class="mt-4 mb-3">Información del seguro</h5>
-                                        <div class="col-12 col-md-6">
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
 
-                                            <label for="empresa">Empresa</label>
-                                            <select name="empresa_id" id="s-empresa" class="form-control mb-3" data-active="0" disabled required>
-                                                <option value="">Consultar empresas</option>
-                                            </select>
+                                                <label for="empresa">Empresa</label>
+                                                <select name="empresa_id" id="s-empresa" class="form-control mb-3" data-active="0" disabled required>
+                                                    <option value="">Consultar empresas</option>
+                                                </select>
 
-                                            <label for="seguro">Seguro</label>
-                                            <select name="seguro[]" id="s-seguro" class="form-control mb-3" data-active="0" disabled required>
-                                                <option value="">Seleccione un seguro</option>
-                                            </select>
+                                                <label for="seguro">Seguro</label>
+                                                <select name="seguro[]" id="s-seguro" class="form-control mb-3" data-active="0" disabled required>
+                                                    <option value="">Seleccione un seguro</option>
+                                                </select>
 
-                                            <!-- <label for="saldo_disponible">Saldo disponible</label>
+                                                <!-- <label for="saldo_disponible">Saldo disponible</label>
                                             <input type="number" step="any" name="saldo_disponible" class="form-control mb-3" disabled required> -->
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <label for="fecha_contra">Fecha de Contratación</label>
-                                            <input type="date" name="fecha_contra" class="form-control mb-3" disabled required>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label for="fecha_contra">Fecha de Contratación</label>
+                                                <input type="date" name="fecha_contra" class="form-control mb-3" disabled required>
 
-                                            <!-- <label for="cobertura_general">Cobertura General</label>
+                                                <!-- <label for="cobertura_general">Cobertura General</label>
                                             <input type="number" step="any" name="cobertura_general" class="form-control mb-3" disabled required> -->
+                                            </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </form>
@@ -347,35 +348,33 @@
 
                                 <div class="submenu-seguro row" style="display: none;">
                                     <h5 class="mt-4 mb-3" id="submenu-seguro-title">Información del seguro</h5>
-                                    <!-- <div class="buttons-submenus-add my-4"> -->
-                                        <!-- <button type="button" id="btn-add-seguro" class="btn btn-primary w-25 gap-3" value="show" onclick="toggleAddSeguro(this.value)">Añadir seguro</button> -->
-                                        <!-- <button type="button" id="btn-hide-seguro" class="btn btn-danger w-25" value="hide" onclick="toggleAddSeguro(this.value)" style="display:none;">Ocultar información</button> -->
-                                    <!-- </div> -->
-                                    <!-- <h5 id="new-seguro-title" style="display: none;">Añadir nuevo seguro</h5> -->
-                                    <!-- <div class="col-12 col-md-6 new-seguro-input" style="display: none;">
-                                        <label for="seguro">Seguro</label>
-                                        <select name="seguro[]" id="s-seguro-act" class="form-control mb-3" data-active="0" disabled multiple="multiple" required>
-                                            <option value="">Seleccione un seguro</option>
-                                        </select>
+                                    <div class="buttons-submenus-add my-4">
+                                        <h5 id="pacienteSinSeguroMessage" class="mb-3" style="display: none;">El paciente no posee seguros registrados</h5>
+                                        <button type="button" id="btn-add-seguro" class="btn btn-primary w-25 gap-3" value="show" onclick="toggleAddSeguro(this.value)" style="display: none;">Añadir seguro</button>
+                                        <button type="button" id="btn-hide-seguro" class="btn btn-danger w-25" value="hide" onclick="toggleAddSeguro(this.value)" style="display:none;">Ocultar información</button>
+                                        <!-- </div> -->
+                                        <!-- <h5 id="new-seguro-title" style="display: none;">Añadir nuevo seguro</h5> -->
+                                        <div class="row">
+                                            <div class="col-12 col-md-6 new-seguro-input" style="display: none;">
 
-                                        <label for="empresa">Empresa</label>
-                                        <select name="empresa_id" id="s-empresa-act" class="form-control mb-3" data-active="0" disabled required>
-                                            <option value="">Consultar empresas</option>
-                                        </select> -->
-                                        <!-- 
-                                        <label for="saldo_disponible">Saldo disponible</label>
-                                        <input type="number" step="any" name="saldo_disponible" class="form-control mb-3" disabled required> -->
+                                                <label for="empresa">Empresa</label>
+                                                <select name="empresa_id-act" id="s-empresa-act" class="form-control mb-3" data-active="0" disabled required>
+                                                    <option value="">Consultar empresas</option>
+                                                </select>
 
-                                    <!-- </div> -->
-                                    <div class="col-12 col-md-6 new-seguro-input" style="display: none;">
-                                        <label for="fecha_contra">Fecha de Contratación</label>
-                                        <input type="date" name="fecha_contra" class="form-control mb-3" disabled required>
+                                                <label for="seguro">Seguro</label>
+                                                <select name="seguro_id-act" id="s-seguro-act" class="form-control mb-3" data-active="0" disabled required>
+                                                    <option value="">Seleccione un seguro</option>
+                                                </select>
 
-                                        <!-- <label for="cobertura_general">Cobertura General</label>
-                                        <input type="number" step="any" name="cobertura_general" class="form-control mb-3" disabled required> -->
+                                            </div>
+                                            <div class="col-12 col-md-6 new-seguro-input" style="display: none;">
+                                                <label for="fecha_contra">Fecha de Contratación</label>
+                                                <input type="date" name="fecha_contra-act" class="form-control mb-3" disabled required>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                         </form>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">

@@ -44,11 +44,11 @@ async function updatePaciente(id) {
         }
 
         if (json.tipo_paciente == "4") {
-            const titulares = await getById("titulares", json.paciente_id) ?? [];   
+            const titulares = await getById("titulares", json.paciente_id) ?? [];
             titularesPaciente = titulares;
             mostrarPacienteBeneficiado(titulares);
         }
-        
+
         //Establecer el option con los datos del usuario
         $form.nombre.value = json.nombre || json.nombre_paciente;
         $form.nombre.dataset.secondValue = json.nombre || json.nombre_paciente;
@@ -66,7 +66,7 @@ async function updatePaciente(id) {
         // $form.tipo_paciente.dataset.secondValue = json.tipo_paciente;
 
         actualizarTipoPaciente(json.tipo_paciente);
-        
+
 
         const $inputId = document.createElement("input");
         $inputId.type = "hidden";
@@ -115,18 +115,18 @@ async function confirmUpdate() {
         if (!(patterns.address.test(data.direccion))) throw { message: "La direccion ingresada no es válida" };
         if ((isNaN(data?.telefono) || data.telefono?.length != 7) && data.tipo_paciente !== "4") throw { message: "El número ingresado no es válido" };
         if ((isNaN(data?.cod_tel) || data.cod_tel?.length != 4) && data.tipo_paciente !== "4") throw { message: "El número ingresado no es válido" };
-        if(data.pacientePoseeTitulares === "false" && data.tipo_paciente === "4" && !data?.titular_id) throw { message: "Debe ingresar al menos un representante" }
+        if (data.pacientePoseeTitulares === "false" && data.tipo_paciente === "4" && !data?.titular_id) throw { message: "Debe ingresar al menos un representante" }
 
 
         let $tel = data.cod_tel + data.telefono;
-        
-        let fecha_contra = data["fecha_contra-act"];        
+
+        let fecha_contra = data["fecha_contra-act"];
         let seguro_id_act = data["seguro_id-act"];
         let empresa_id_act = data["empresa_id-act"];
         let paciente_seguro_id_act = data["paciente_seguro_id-act"];
 
         const parseData = deleteSecondValue("#act-paciente input, #act-paciente select", data);
-        
+
         // ** Si no existe tel o cod_tel en la data, añadirle el tel completo
         if ('telefono' in parseData || 'cod_tel' in parseData) { parseData.telefono = $tel }
         if ('fecha_nacimiento' in parseData) {
@@ -136,7 +136,7 @@ async function confirmUpdate() {
 
         // ** Enviar el seguro en caso de que se vaya a añadir uno en la actualizaron
         if ('fecha_contra-act' in parseData || 'seguro_id-act' in parseData || 'empresa_id-act' in parseData) {
-            
+
             const deleteOptions = {
                 method: "DELETE",
                 mode: "cors", //Opcional
@@ -145,29 +145,28 @@ async function confirmUpdate() {
                     "Authorization": "Bearer " + Cookies.get("tokken")
                 },
             };
-            
+
             let response = await fetch(`/${path[1]}/paciente/seguro/${paciente_seguro_id_act}`, deleteOptions)
             response.json();
 
             parseData.seguro = [];
-            
+
             parseData.seguro.push({
                 paciente_id: data.paciente_id,
                 seguro_id: seguro_id_act,
                 empresa_id: empresa_id_act,
                 fecha_contra: fecha_contra
-                
+
             });
 
-            console.log("🍓 ~ file: actualizarPaciente.js:136 ~ confirmUpdate ~ parseData:", parseData)
         }
 
         if ('titular_id' in parseData && 'tipo_familiar' in parseData && 'tipo_relacion' in parseData) {
 
-            if(data.edad < 18 && data.cedula_beneficiario == 0 && data.pacientePoseeTitulares === "false"){
+            if (data.edad < 18 && data.cedula_beneficiario == 0 && data.pacientePoseeTitulares === "false") {
 
                 let titular_id = document.getElementById("s-titular_id-act").value;
-                const infoTitular =  await getById("pacientes",titular_id);
+                const infoTitular = await getById("pacientes", titular_id);
                 const titulareAct = await getById("titulares", data.paciente_id) ?? [];
                 parseData.cedula = infoTitular.cedula;
                 parseData.telefono = infoTitular.telefono;
@@ -179,7 +178,7 @@ async function confirmUpdate() {
                 tipo_relacion: parseData.tipo_relacion,
                 tipo_familiar: parseData.tipo_familiar
             }]
-            
+
             // await addModule(`titular/${parseData.paciente_beneficiado_id}`, "act-paciente", parseData.titular, "");
 
             // delete parseData.titular;
@@ -202,14 +201,13 @@ async function confirmUpdate() {
         if (Object.values(parseData)?.length > 3) {
 
             let success = await updateModule(parseData, "paciente_id", "pacientes", "act-paciente", "Paciente actualizado correctamente!");
-            console.log("🍓 ~ file: actualizarPaciente.js:188 ~ confirmUpdate ~ success:", success)
 
             $('#pacientes').DataTable().ajax.reload();
 
-            if(success?.result?.code === true) cleanFormHandler();
+            if (success?.result?.code === true) cleanFormHandler();
         } else {
 
-            showDefaultModalAct({form: $form, successMessage: "Paciente actualizado correctamente!"});
+            showDefaultModalAct({ form: $form, successMessage: "Paciente actualizado correctamente!" });
             cleanFormHandler();
         }
 

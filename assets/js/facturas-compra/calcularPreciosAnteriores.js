@@ -1,12 +1,13 @@
 import getAll from "../global/getAll.js";
 import getById from "../global/getById.js";
+import truncateToTwoDecimals from "../global/truncateToTwoDecimals.js";
 
 export async function calcularPreciosAnteriores(input){
 
     const divElement = input.parentElement.parentElement.querySelectorAll("td")[5].querySelector("div");
     const mantenerPrecioRadioInput = divElement.querySelector("#antiguoPrecio");
-    const nuevoPrecioRadioInput = divElement.querySelector("#nuevoPrecio");
     const precioAnteriorLabel = divElement.querySelector("#precioAnteriorLabel");
+    const nuevoPrecioRadioInput = divElement.querySelector("#nuevoPrecio");
     const precioNuevoLabel = divElement.querySelector("#precioNuevoLabel");
     $(".actualizarPrecio-insumo").fadeIn("slow");
 
@@ -39,7 +40,8 @@ export async function calcularPreciosAnteriores(input){
         mantenerPrecioRadioInput.style = "display:none";
         
     } else {
-        precioAnteriorLabel.innerText = `Mantener precio anterior ($${insumo.precio.toFixed(2)})`;
+        precioAnteriorLabel.innerText = `Mantener precio anterior ($${truncateToTwoDecimals(insumo.precio)})`;
+
         precioNuevoLabel.innerText = `Actualizar nuevo precio ($${(parseFloat(insumo.precio) + parseFloat(porcentajePrecioNuevo)).toFixed(2)})`;
     }
 }

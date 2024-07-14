@@ -1,9 +1,14 @@
 import deleteElementByClass from "../global/deleteElementByClass.js";
 import dinamicSelect2, { emptySelect2 } from "../global/dinamicSelect2.js";
+import toggleAddSeguro from "./toggleAddSeguro.js";
 
 export default function mostrarPacienteSeguro(seguros){
     
     if(seguros.length > 0){
+
+        toggleAddSeguro("hide");
+        $("#btn-add-seguro").fadeOut("slow");
+        $("#pacienteSinSeguroMessage").fadeOut("slow");
 
         let template = "";
 
@@ -18,14 +23,14 @@ export default function mostrarPacienteSeguro(seguros){
                         </select>
                     </div>
                     <div class="col-12 col-md-5">
+                        <label for="titular">Fecha contratación</label>
+                        <input type="date" class="form-control mb-3" name="fecha_contra-act" data-second-value="${el.fecha_contra}" data-validation="true" date-type="date" id="act-fecha_contra" value="${el.fecha_contra}">
+                    </div>
+                     <div class="col-12 col-md-5">
                         <label for="titular">Nombre Seguro</label>
                         <select id="act-s-seguro_id" name="seguro_id-act" data-second-value="${el.seguro_id}" class="form-control mb-3">
                             <option value="${el.seguro_id}">${el.nombre_seguro}</option>
                         </select>
-                    </div>
-                    <div class="col-12 col-md-5">
-                        <label for="titular">Fecha contratación</label>
-                        <input type="date" class="form-control mb-3" name="fecha_contra-act" data-second-value="${el.fecha_contra}" data-validation="true" date-type="date" id="act-fecha_contra" value="${el.fecha_contra}">
                     </div>
                     <input type="hidden" name="paciente_seguro_id-act" data-second-value="${el.paciente_seguro_id}" value="${el.paciente_seguro_id}">
                 </div>
@@ -119,6 +124,8 @@ export default function mostrarPacienteSeguro(seguros){
         
     } else{
         deleteElementByClass("newInput");
+        $("#btn-add-seguro").fadeIn("slow");
+        $("#pacienteSinSeguroMessage").fadeIn("slow");
     }
     
 }

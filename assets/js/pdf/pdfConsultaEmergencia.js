@@ -1,6 +1,7 @@
 import convertCurrencyToVES from "../global/convertCurrencyToVES.js";
 import formatToRealDate from "../global/formatToRealDate.js";
 import getById from "../global/getById.js";
+import Cookies from "../../libs/jscookie/js.cookie.min.js";
 
 const id = location.pathname.split("/")[4];
 const dataFactura = await getById(`factura/consultaSeguro`,id);
@@ -23,7 +24,10 @@ document.getElementById("enfermeria").textContent = dataFactura.factura?.enferme
 document.getElementById("cant_consultas").textContent = dataFactura.factura?.cantidad_consultas_medicas ?? "-";
 document.getElementById("total_consultas").textContent = dataFactura.factura?.consultas_medicas_bs ? `${convertCurrencyToVES(dataFactura.factura?.consultas_medicas_bs)} Bs` : `${convertCurrencyToVES(dataFactura.monto_consulta_bs)} Bs`;
 document.getElementById("monto_total_consulta").textContent = dataFactura?.monto_consulta_bs ? `${convertCurrencyToVES(dataFactura?.monto_consulta_bs ?? 0)} Bs` : `${convertCurrencyToVES(dataFactura.monto_total_bs ?? 0)} Bs`;
-document.getElementById("cobertura").textContent = dataFactura?.cobertura_seguro;
-document.getElementById("diferenciaPaciente").textContent = parseFloat(dataFactura?.monto_total_usd) - parseFloat(dataFactura?.cobertura_seguro);
+document.getElementById("cobertura").textContent = Math.abs(dataFactura?.cobertura_seguro);
+document.getElementById("diferenciaPaciente").textContent = Math.abs(parseFloat(dataFactura?.monto_total_usd) - parseFloat(dataFactura?.cobertura_seguro));
+document.getElementById("procesadoPor").innerText = Cookies.get("nombreUsuario").toUpperCase();
+document.getElementById("nombrePaciente").textContent = `${dataFactura?.beneficiado?.nombre} ${dataFactura?.beneficiado?.apellidos}`;
+document.getElementById("cedulaPaciente").innerText = dataFactura.beneficiado.cedula;
 
 window.print();

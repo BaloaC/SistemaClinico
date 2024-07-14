@@ -71,7 +71,7 @@ const handleModalOpen = async (modalParent) => {
         $("#s-paciente-consulta").on("change", async function () {
 
             let paciente_id = this.value;
-            const consultasAseguradas = await getAll(`consultas/paciente/${paciente_id}?tipo_cita=2&status=4`);
+            const consultasAseguradas = await getAll(`consultas/paciente/${paciente_id}?estatus=4&emergencia=1`);
 
             $("#s-consulta-normal").empty().select2();
             
@@ -83,27 +83,31 @@ const handleModalOpen = async (modalParent) => {
                 placeholder: "Seleccione una consulta",
                 defaultLabel: ["Consulta por emergencia"],
                 ajax: true,
-                ajaxUrl: `consultas/paciente/${paciente_id}?emergencia=1`,
+                ajaxUrl: `consultas/paciente/${paciente_id}`,
                 processResultsAjax: function (data, params) { 
 
                     const data1 = [];
 
                     if (typeof data === "object" && data?.data?.consultas !== 0) {
                         data?.data?.consultas?.forEach(object => {
-                            
+
                             const { consulta_id: valorPropiedad1, observaciones } = object;
                             
-                            data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${observaciones ?? "Sin observaciones"}` });
+                            if(object.estatus_con !== "4"){
+                                data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${observaciones ?? "Sin observaciones"}` });
+                            }
                         });
                     }
 
                     if (typeof consultasAseguradas === "object" && consultasAseguradas?.consultas.length !== 0) {
                         consultasAseguradas?.consultas?.forEach(object => {
-                            
+
                             const { consulta_id: valorPropiedad1, es_emergencia, observaciones } = object;
                             let consultaText = es_emergencia == 1 && observaciones ? "Consulta por emergencia" : (observaciones ?? "Consulta asegurada");
 
-                            data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${consultaText}` });
+                            if(object.estatus_con === "4"){
+                                data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${consultaText}` });
+                            }
                         });
                     }
 
@@ -115,6 +119,9 @@ const handleModalOpen = async (modalParent) => {
 
                 
             });
+
+
+
 
 
             const consultaSelect = document.getElementById("s-consulta-normal");

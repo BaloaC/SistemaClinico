@@ -31,7 +31,7 @@
                         <i class="fas fa-user-tie"></i>Salud
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item rol-1 rol-2 rol-5" href="<?php echo Url::base() . "/consultas" ?>">Consultas</a>
+                        <li><a class="dropdown-item rol-1 rol-2 rol-5" href="<?php echo Url::base() . "/consultas" ?>">Consultas Por Procesar</a>
                         <li><a class="dropdown-item rol-1 rol-2 rol-4 rol-5" href="<?php echo Url::base() . "/citas" ?>">Citas</a></li>
                         <li><a class="dropdown-item rol-1 rol-2 rol-5" href="<?php echo Url::base() . "/examenes" ?>">Exámenes</a></li>
                         <li><a class="dropdown-item rol-1 rol-2 rol-5" href="<?php echo Url::base() . "/laboratorios" ?>">Laboratorios</a></li>

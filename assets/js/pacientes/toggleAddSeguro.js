@@ -1,4 +1,4 @@
-function toggleAddSeguro(value) {
+export default function toggleAddSeguro(value) {
 
     const newSeguro = document.querySelectorAll(".new-seguro-input");
     const newSeguroContent = document.querySelectorAll(".new-seguro-input > *");

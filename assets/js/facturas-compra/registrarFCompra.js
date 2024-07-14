@@ -18,6 +18,7 @@ async function addFCompra() {
         const $insumosUPrecio = document.querySelectorAll(".insumo-uprecio");
         const $insumosTPrecio = document.querySelectorAll(".monto-total-p");
         const $actualizarPrecio = document.querySelectorAll(".actualizarPrecioInsumo");
+        const impuestoInput = document.querySelectorAll(".impuestoInput");
         let monto_sin_iva = document.getElementById("monto-sin-iva").textContent;
         monto_sin_iva = monto_sin_iva.substring(0, monto_sin_iva.length - 3);
         let monto_con_iva = document.getElementById("monto-total").textContent;
@@ -48,9 +49,11 @@ async function addFCompra() {
                 unidades: $insumosUnid[key].value,
                 precio_unit_bs: $insumosUPrecio[key].value,
                 precio_total_bs: $insumosTPrecio[key].textContent.substring(0, $insumosTPrecio[key].textContent.length - 3),
-                actualizar_precio: $actualizarPrecio[key].checked
+                actualizar_precio: $actualizarPrecio[key].checked,
+                iva: impuestoInput[key].checked
             }
 
+            if(!insumo.iva) delete insumo.iva;
             delete data[`${$actualizarPrecio[key].name}`];
             insumos.push(insumo);
         })
