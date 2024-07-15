@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
 
-    <title>Proyecto 4 | Recibos de Médicos</title>
+    <title>Proyecto 4 | Acumulados de consultas</title>
 </head>
 
 <body>
@@ -20,16 +20,16 @@
             <!-- Cabezera -->
             <div class="row">
                 <div class="col-6">
-                    <h4 class="pt-5 pb-2 text-grey">Recibos Médicos</h4>
+                    <h4 class="pt-5 pb-2 text-grey">Acumulados de consultas</h4>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
-                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Recibo</button>
+                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Calcular acumulado</button>
                 </div>
                 <hr class="border-white">
-                <div class="help-message d-flex align-items-center mb-3">
-                    <i class="fas fa-info-circle text-secondary me-3"></i>
-                    <p class="text-secondary m-0">Para actualizar el estatus del recibo, debe hacer click directamente en el estatus de <span class='badge light badge-warning'>Pagar</span></p>
-                </div>
+                <!-- <div class="help-message d-flex align-items-center mb-3"> -->
+                    <!-- <i class="fas fa-info-circle text-secondary me-3"></i> -->
+                    <!-- <p class="text-secondary m-0">Para actualizar el estatus del recibo, debe hacer click directamente en el estatus de <span class='badge light badge-warning'>Pagar</span></p> -->
+                <!-- </div> -->
             </div>
             <!-- Factura médicos -->
             <div class="row">
@@ -46,10 +46,10 @@
                                             <th>Sumatoria consultas aseguradas</th>
                                             <th>Acumulado seguro</th>
                                             <th>Acumulado consulta</th>
-                                            <th>Fecha de pago</th>
+                                            <!-- <th>Fecha de pago</th> -->
                                             <th>Fecha emisión</th>
-                                            <th>Total a pagar</th>
-                                            <th>Estatus</th>
+                                            <th>Total acumulado</th>
+                                            <!-- <th>Estatus</th> -->
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>

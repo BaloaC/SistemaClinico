@@ -19,11 +19,16 @@ async function addFMedico() {
         const fechaActual = luxon.DateTime.local();
 
         // Formatear la fecha en el formato deseado
-        const fechaFormateada = fechaActual.toFormat('yyyy-MM-dd');
+        const fechaFormateada = fechaActual.minus({ days: 1 }).toFormat('yyyy-MM-dd');
 
-        const facturaMedico = await getAll(`facturaMedico/medico?fecha=${fechaFormateada}&medico=${data.medico_id}`);
+        const facturaMedico = {
+            fecha_actual: fechaFormateada,
+            medico_id: data.medico_id
+        }
 
-        const registroExitoso = await addModule("factura/medico", "info-fmedico", facturaMedico, "Factura médico registrada correctamente!");
+        // const facturaMedico = await getAll(`facturaMedico/medico?fecha=${fechaFormateada}&medico=${data.medico_id}`);
+
+        const registroExitoso = await addModule("facturas/all", "info-fmedico", facturaMedico, "Factura médico registrada correctamente!");
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
