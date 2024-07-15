@@ -72,8 +72,6 @@ async function addFCompra() {
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
-        $("#s-proveedor").val([]).trigger("change.select2");
-        $("#s-insumo").val([]).trigger("change.select2");
         let formCompra = document.getElementById("info-fcompra");
         $(".actualizarPrecio-insumo").fadeOut("slow");
         formCompra.reset();
@@ -86,6 +84,9 @@ async function addFCompra() {
         document.getElementById("monto-total").textContent = "0.00 Bs";
         $('#fCompra').DataTable().ajax.reload();
         document.querySelectorAll(".insumo-id")[0].classList.remove("is-valid");
+        
+        $("#s-proveedor").val([]).trigger("change.select2");
+        $("#s-insumo").val([]).trigger("change.select2");
         $("#s-proveedor").removeClass("is-valid");
 
     } catch (error) {

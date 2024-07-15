@@ -89,20 +89,22 @@
             </div>
         </div>
 
-        <!-- Modal Confirmar Eliminación -->
+        <!-- Modal Actualizar-->
         <div class="modal fade" id="modalAct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar estatus del recibo pago</h1>
+                        <h1 class="modal-title fs-3" id="modalActLabel">A</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body" id="modalActBody">
-                        <div id="actAlert" class="alert d-none" role="alert"></div>
-                        ¿Está seguro que desea actualizar este recibo?
+                    <div class="modal-body">
+                        <div id="actAlert" class="alert alert-success d-none" role="alert">
+                            Calcular todos los acumulados
+                        </div>
+                            ¿Está seguro que desea calcular todos los acumulados?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn-actualizarInfo1" class="btn btn-primary">Actualizar</button>
+                        <button type="button" id="btn-actualizar" class="btn btn-primary" onclick="actualizarFSeguro()">Actualizar</button>
                     </div>
                 </div>
             </div>
