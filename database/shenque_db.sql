@@ -245,6 +245,8 @@ CREATE TABLE  IF NOT EXISTS `compra_insumo` (
     `precio_total_bs` float NOT NULL,
     `precio_unit_usd` float NOT NULL,
     `precio_total_usd` float NOT NULL,
+    `precio_usd_iva` FLOAT NULL,
+    `precio_total_usd` FLOAT NULL,
     PRIMARY KEY (`compra_insumo_id`),
     FOREIGN KEY (`insumo_id`) REFERENCES `insumo` (`insumo_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY (`factura_compra_id`) REFERENCES `factura_compra` (`factura_compra_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
