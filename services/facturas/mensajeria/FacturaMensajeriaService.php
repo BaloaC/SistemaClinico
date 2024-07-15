@@ -31,7 +31,7 @@ class FacturaMensajeriaService {
         
         $formulario['total_mensajeria_bs'] = $factura_total['monto_total_bs'];
         $formulario['total_mensajeria_usd'] = $factura_total['monto_total_usd'];
-
+        
         $_facturaMensajeriaModel = new FacturaMensajeriaModel();
         $factura_mensajeria_id = $_facturaMensajeriaModel->insert($formulario);
         

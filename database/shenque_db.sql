@@ -664,7 +664,7 @@ CREATE TABLE  IF NOT EXISTS `consulta_seguro` (
     `tipo_servicio` varchar(50) NOT NULL,
     `fecha_ocurrencia` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
     `monto_consulta_usd` float NOT NULL,
-    `estatus_con` enum('1','2') NOT NULL DEFAULT '1',
+    `estatus_con` enum('1','2', '3') NOT NULL DEFAULT '1',
     `monto_consulta_bs` float NOT NULL,
     `cobertura_seguro` FLOAT NOT NULL,
     PRIMARY KEY (`consulta_seguro_id`),
