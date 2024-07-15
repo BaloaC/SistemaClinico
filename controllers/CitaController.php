@@ -367,7 +367,7 @@ class CitaController extends Controller {
 
         $_citaModel = new CitaModel();
         $cita = $_citaModel->where('cita_id', '=', $cita_id)->getFirst();
-
+        
         CitasValidaciones::validarReprogramacion($cita);
 
         // Le actualizamos el estatus a la cita original
@@ -399,11 +399,23 @@ class CitaController extends Controller {
         $id = $_cita->insert($newCita);
 
         if ($id > 0) {
+            $_citaExamen = new CitaExamenModel();
+            $examenes = $_citaExamen->where('cita_id', '=', $cita_id)->getAll();
+            $examen = ['examenes' => json_decode(json_encode($examenes), true) ];
+            if (!is_null($examenes)) {
+                CitasHelpers::insertarCitaExamen($examen, $id);
+            }
+
             $_citaSeguroModel = new CitaSeguroModel();
             $cita_seguro = $_citaSeguroModel->where('cita_id', '=', $cita_id)->getFirst();
-            $cita_seguro->clave = NULL; $cita_seguro->cita_id = $id;
+            if (!is_null($cita_seguro)) {
+                
+                $cita_seguro->clave = NULL; $cita_seguro->cita_id = $id;
+                $seActualizo = $_citaSeguroModel->insert((Array) $cita_seguro);
+            } else {
+                $seActualizo = 1;
+            }
 
-            $seActualizo = $_citaSeguroModel->insert((Array) $cita_seguro);
             $respuesta = new Response($seActualizo != 0, $seActualizo != 0 ? 'Cita reprogramada exitosamente' : 'Ocurrió un error insertando la cita seguro de la reprogramación');
             echo $respuesta->json($seActualizo != 0 ? 201 : 400);
             exit();
