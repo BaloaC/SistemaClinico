@@ -12,7 +12,7 @@ async function addConsulta() {
     let defaultAlert = ".alert";
 
     // Validamos si se hace desde el historial-medico o desde el módulo de consultas
-    if(document.querySelector(".alertHistorialMedicoConsulta") !== null){
+    if (document.querySelector(".alertHistorialMedicoConsulta") !== null) {
         defaultAlert = ".alertHistorialMedicoConsulta";
     }
 
@@ -29,11 +29,11 @@ async function addConsulta() {
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
 
-        data.es_emergencia === "2" || data.es_emergencia === "0" ?  data.es_emergencia = false : data.es_emergencia = true;
-        data.tipoConsulta === "examen" ? data.tipo_servicio = "1" : data.tipo_servicio = "2"; 
+        data.es_emergencia === "2" || data.es_emergencia === "0" ? data.es_emergencia = false : data.es_emergencia = true;
+        data.tipoConsulta === "examen" ? data.tipo_servicio = "1" : data.tipo_servicio = "2";
 
         // En caso de que sea de emergencia y titular únicamente
-        if(data.pacienteBeneficiadoEmergencia === "0" && data.es_emergencia){
+        if (data.pacienteBeneficiadoEmergencia === "0" && data.es_emergencia) {
 
             const infoPaciente = await getById("pacientes", data.paciente_id);
             data.cedula_beneficiado = infoPaciente.cedula;
@@ -121,11 +121,11 @@ async function addConsulta() {
 
         if (indicaciones.length != 0 && indicaciones[0].descripcion != "") { data.indicaciones = indicaciones; }
 
-        if(!data.fecha_consulta) {data.fecha_consulta = new Date().toISOString().slice(0, 10);}
-        if(!data.es_emergencia && data.seguro_id) delete data.seguro_id;
-        if(data.es_emergencia) data.tipo_servicio = "2";
-        if(!data.es_emergencia || document.getElementById("tipoConsultas").value === "examen") delete data.es_emergencia;
-        if(data.pacienteBeneficiadoEmergencia === "0") delete data.pacienteBeneficiadoEmergencia;
+        if (!data.fecha_consulta) { data.fecha_consulta = new Date().toISOString().slice(0, 10); }
+        if (!data.es_emergencia && data.seguro_id) delete data.seguro_id;
+        if (data.es_emergencia) data.tipo_servicio = "2";
+        if (!data.es_emergencia || document.getElementById("tipoConsultas").value === "examen") delete data.es_emergencia;
+        if (data.pacienteBeneficiadoEmergencia === "0") delete data.pacienteBeneficiadoEmergencia;
         if (data.total_insumos > 0 && !("insumos" in data)) throw { message: "Debe especificar los insumos utilizados" }
 
         if (data.consultaPorEmergencia === "0" && data.consultaSinCitaPrevia === "0") {
@@ -137,7 +137,7 @@ async function addConsulta() {
             data.tipo_servicio = infoCita.tipo_servicio;
         }
 
-        const registroExitoso = await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!", "#modalReg", defaultAlert, {success: false, error: true});
+        const registroExitoso = await addModule("consultas", "info-consulta", data, "Consulta registrada correctamente!", "#modalReg", defaultAlert, { success: false, error: true });
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
@@ -154,14 +154,14 @@ async function addConsulta() {
         // En caso de que se decida registrar la consulta a la factura por emergencia
         if (registroExitoso.data !== null && data?.registrarFacturaBool === "1") {
 
-            const facturaExitosa = await addModule("factura/consultaSeguro", "info-consulta", { consulta_id: registroExitoso.data.consulta_id, tipo_servicio: "consulta" }, "Consulta registrada correctamente!", "#modalReg", ".alert", {success: false, error: false});
+            const facturaExitosa = await addModule("factura/consultaSeguro", "info-consulta", { consulta_id: registroExitoso.data.consulta_id, tipo_servicio: "consulta" }, "Consulta registrada correctamente!", "#modalReg", ".alert", { success: false, error: false });
 
             if (facturaExitosa?.result?.code === false) { registroFacturaExitoso = false; }
         }
 
         const hideModalHandler = ({ registroFacturaExitoso }) => {
 
-            if(registroFacturaExitoso === false){
+            if (registroFacturaExitoso === false) {
                 $alert.classList.remove("alert-success");
                 $alert.classList.remove("alert-danger");
                 $alert.classList.add("alert-warning");
@@ -185,8 +185,13 @@ async function addConsulta() {
         $('#consultas').DataTable().ajax.reload();
 
         // Si el registro se hace por el módulo de consultas actualizar el select de las consultas aseguradas
-        if(document.getElementById("consulta") !== null) await updateConsultaSeguroSelect("#modalRegAsegurada");
-        
+        if (document.getElementById("consulta") !== null) await updateConsultaSeguroSelect("#modalRegAsegurada");
+
+        await tipoConsultaSelect({ value: "consulta" });
+        $("#s-paciente").val([]).trigger("change.select2");
+        $("#cedula_beneficiado").val([]).trigger("change.select2");
+        $("#s-seguro-emergencia").val([]).trigger("change.select2");
+        cleanValdiation("info-consulta");
 
     } catch (error) {
         console.log(error);

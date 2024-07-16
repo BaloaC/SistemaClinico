@@ -4,18 +4,26 @@ function turnInput(container, disabled) {
     const containerParent = document.querySelector(container);
     const elements = containerParent.querySelectorAll("input, select");
     elements.forEach((element) => {
+        
         element.disabled = disabled;
+
+        if(element.classList.contains("omitDisabled") && disabled === false) {
+            element.disabled = true;
+        } 
     });
 }
 
-async function tipoConsultaSelect(input) {
+export default async function tipoConsultaSelect(input) {
+
     if (input.value === "examen") {
+        
         turnInput(".info-consultaSinExamenes", true);
         $(".info-consultaSinExamenes").fadeOut("slow");
         turnInput(".info-examenes", false);
         $(".info-examenes").fadeIn("slow");
         turnInput(".examenSelect", true);
         $(".examenSelect").fadeOut("slow");
+        
     } else {
 
         turnInput(".info-examenes", true);

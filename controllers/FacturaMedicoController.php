@@ -276,8 +276,8 @@ class FacturaMedicoController extends Controller{
         
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
-        
-        if ( $validarFactura->isDate($_POST['fecha_inicio']) || $validarFactura->isDate($_POST['fecha_fin']) ) {
+
+        if ( $validarFactura->isDate($_GET['fecha_inicio']) || $validarFactura->isDate($_GET['fecha_fin']) ) {
             $respuesta = new Response('FECHA_INVALIDA');
             return $respuesta->json(400);
 
@@ -304,7 +304,7 @@ class FacturaMedicoController extends Controller{
             if ( isset($_GET['medico']) && !is_null($_GET['medico']) ) {
                 $_facturaMedicoModel->where('factura_medico.medico_id', '=', $_GET['medico']);
             }
-            $lista = $_facturaMedicoModel->whereDate('factura_medico.fecha_pago',$_POST['fecha_inicio'],$_POST['fecha_fin'])->innerJoin($this->arraySelect, $inners, "factura_medico");
+            $lista = $_facturaMedicoModel->whereDate('factura_medico.fecha_pago',$_GET['fecha_inicio'],$_GET['fecha_fin'])->innerJoin($this->arraySelect, $inners, "factura_medico");
             
             $_facturaMedicoModel->resetValues();
             
@@ -318,7 +318,7 @@ class FacturaMedicoController extends Controller{
             if ( isset($_GET['medico']) && !is_null($_GET['medico']) ) {
                 $_facturaMedicoModel->where('factura_medico.medico_id', '=', $_GET['medico']);
             }
-            $total_registros = $_facturaMedicoModel->whereDate('factura_medico.fecha_pago',$_POST['fecha_inicio'],$_POST['fecha_fin'])->innerJoin($this->arraySelect, $inners, "factura_medico");
+            $total_registros = $_facturaMedicoModel->whereDate('factura_medico.fecha_pago',$_GET['fecha_inicio'],$_GET['fecha_fin'])->innerJoin($this->arraySelect, $inners, "factura_medico");
             Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($lista), $lista);
         }        
     }
