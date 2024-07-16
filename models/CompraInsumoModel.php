@@ -11,6 +11,8 @@ class CompraInsumoModel extends GenericModel {
     protected $precio_total_bs;
     protected $precio_unit_usd;
     protected $precio_total_usd;
+    protected $precio_usd_iva;
+    protected $precio_bs_iva;
 
     public function __construct($propiedades = null) {
         parent::__construct('compra_insumo', CompraInsumoModel::class, $propiedades);
@@ -24,6 +26,8 @@ class CompraInsumoModel extends GenericModel {
     public function getPrecioTotalBs(){return $this->precio_total_bs;}
     public function getPrecioUnitUsd(){return $this->precio_unit_usd;}
     public function getPrecioTotalUsd(){return $this->precio_total_usd;}
+    public function getPrecioUsdIva(){return $this->precio_usd_iva;}
+    public function getPrecioBsIva(){return $this->precio_bs_iva;}
 
     /* Setters */
     public function setInsumoId($insumo_id){return $this->insumo_id = $insumo_id;}
@@ -33,6 +37,8 @@ class CompraInsumoModel extends GenericModel {
     public function setPrecioTotalBs($precio_total_bs){return $this->precio_total_bs = $precio_total_bs;}
     public function setPrecioUnitUsd($precio_unit_usd){return $this->precio_unit_usd = $precio_unit_usd;}
     public function setPrecioTotalUsd($precio_total_usd){return $this->precio_total_usd = $precio_total_usd;}
+    public function setPrecioUsdIva($precio_usd_iva){return $this->precio_usd_iva = $precio_usd_iva;}
+    public function setPrecioBsIva($precio_bs_iva){return $this->precio_bs_iva = $precio_bs_iva;}
 }
 
 ?>

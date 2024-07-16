@@ -35,7 +35,7 @@ class CitaExamenModel extends GenericModel {
     public function setMontoCubiertoBs($monto_cubierto_bs){return $this->monto_cubierto_bs = $monto_cubierto_bs;}
     public function setMontoCubiertoUsd($monto_cubierto_usd){return $this->monto_cubierto_usd = $monto_cubierto_usd;}
     public function setCubiertoPor($cubierto_por){return $this->cubierto_por = $cubierto_por;}
-    public function setEstatusCi($estatus_cit){return $this->estatus_cit = $estatus_cit;}
+    public function setEstatusCit($estatus_cit){return $this->estatus_cit = $estatus_cit;}
 }
 
 ?>

@@ -9,6 +9,7 @@ class FacturaSeguroHelpers {
     public static function innerFacturaSeguro($seguro_id, $mes, $anio) {
         
         $consultaInner = array (
+            "consulta_seguro" => "factura_mensajeria_consultas",
             "consulta" => "consulta_seguro"
         );
     
@@ -29,10 +30,10 @@ class FacturaSeguroHelpers {
         $inners = $_consultaSeguro->listInner($consultaInner);
         $consultaList = $_consultaSeguro->where('consulta_seguro.estatus_con', '!=', '2')
                                         ->where('consulta_seguro.seguro_id', '=', $seguro_id)
-                                        ->where('YEAR(consulta_seguro.fecha_ocurrencia)', '=', $anio)
-                                        ->where('MONTH(consulta_seguro.fecha_ocurrencia)', '=', $mes)
-                                        ->innerJoin($consultaSelect, $inners, "consulta_seguro");
-
+                                        ->where('YEAR(factura_mensajeria_consultas.fecha_mensajeria_consultas)', '=', $anio)
+                                        ->where('MONTH(factura_mensajeria_consultas.fecha_mensajeria_consultas)', '=', $mes)
+                                        ->innerJoin($consultaSelect, $inners, "factura_mensajeria_consultas");
+        
         return $consultaList;
     }
 

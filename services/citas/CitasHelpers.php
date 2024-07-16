@@ -56,6 +56,10 @@ class CitasHelpers {
             $examen['cita_id'] = $cita_id;
             $examen['precio_examen_usd'] = 0;
             
+            // dejando en blanco los montos que fueron actualizados al insertar la clave
+            $examen['monto_cubierto_usd'] = 0;
+            $examen['cubierto_por'] = 1;
+
             if (array_key_exists('seguro_id', $formulario)) {
                 
                 $_seguroExamenModel = new SeguroExamenModel();
@@ -99,7 +103,8 @@ class CitasHelpers {
             
             $_citaExamenModel = new CitaExamenModel();
             $cita_exa = $_citaExamenModel->where('cita_examen_id', '=', $cita_examen['cita_examen_id'])->getFirst();
-            
+            $info_actualizar['estatus_cit'] = $cita_examen['estatus_cit'];
+
             $info_actualizar['cubierto_por'] = $cita_examen['cubierto_por'];
             if ($cita_examen['cubierto_por'] != 2 ) {
                 $_examenModel = new ExamenModel();

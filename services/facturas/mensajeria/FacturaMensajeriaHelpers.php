@@ -33,18 +33,16 @@ class FacturaMensajeriaHelpers {
         );
 
         foreach ($consultas as $consulta) {
-            
-            $consulta = ConsultaSeguroService::listarConsultasSeguroId($consulta['consulta_seguro_id']);
+            $consulta_actual = ConsultaSeguroService::listarConsultasSeguroId($consulta['consulta_seguro_id']);
             $valorDivisa = GlobalsHelpers::obtenerValorDivisa();
-                
-            if ( !isset($consulta[0]['monto_total_usd']) ) {
-                $monto['monto_total_usd'] = $consulta[0]["factura"]->monto_aprobado;
-                $monto['monto_total_bs'] = round( $consulta[0]["factura"]->monto_aprobado * $valorDivisa , 2);
-                
+            
+            if ( isset($consulta_actual[0]['factura']) ) {
+                $monto['monto_total_usd'] += $consulta_actual[0]["factura"]->monto_aprobado;
+                $monto['monto_total_bs'] += round( $consulta_actual[0]["factura"]->monto_aprobado * $valorDivisa , 2);
                 
             } else {
-                $monto['monto_total_usd'] += $consulta[0]['cobertura_seguro'];
-                $monto['monto_total_bs'] += round( $consulta[0]['cobertura_seguro'] * $valorDivisa, 2);
+                $monto['monto_total_usd'] += $consulta_actual[0]['cobertura_seguro'];
+                $monto['monto_total_bs'] += round( $consulta_actual[0]['cobertura_seguro'] * $valorDivisa, 2);
             }
         }
         

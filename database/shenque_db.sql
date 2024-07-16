@@ -245,6 +245,8 @@ CREATE TABLE  IF NOT EXISTS `compra_insumo` (
     `precio_total_bs` float NOT NULL,
     `precio_unit_usd` float NOT NULL,
     `precio_total_usd` float NOT NULL,
+    `precio_usd_iva` FLOAT NULL,
+    `precio_total_usd` FLOAT NULL,
     PRIMARY KEY (`compra_insumo_id`),
     FOREIGN KEY (`insumo_id`) REFERENCES `insumo` (`insumo_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY (`factura_compra_id`) REFERENCES `factura_compra` (`factura_compra_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -662,7 +664,7 @@ CREATE TABLE  IF NOT EXISTS `consulta_seguro` (
     `tipo_servicio` varchar(50) NOT NULL,
     `fecha_ocurrencia` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
     `monto_consulta_usd` float NOT NULL,
-    `estatus_con` enum('1','2') NOT NULL DEFAULT '1',
+    `estatus_con` enum('1','2', '3') NOT NULL DEFAULT '1',
     `monto_consulta_bs` float NOT NULL,
     `cobertura_seguro` FLOAT NOT NULL,
     PRIMARY KEY (`consulta_seguro_id`),

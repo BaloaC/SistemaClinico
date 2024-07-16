@@ -348,6 +348,9 @@ class AuditoriaController extends Controller {
             $zip->addFile($salida_sql);
             $zip->close();
         
+            $auditDatabase = new AuditHandleDatabase();
+            $auditDatabase->handleRequest();
+
             unlink($salida_sql); //Eliminamos el archivo temporal SQL
             header("location: $salida_zip");
         

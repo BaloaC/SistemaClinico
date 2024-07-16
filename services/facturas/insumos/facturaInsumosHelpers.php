@@ -32,11 +32,16 @@ class FacturaInsumoHelpers {
                 $actualizar = array('cantidad_unidad' => $unidadesPosts, 'estatus_ins' => 1);
                 
                 if ($insumo['actualizar_precio']) {
+                    
                     $valorPorcentaje = GlobalsHelpers::obtenerPorcentajeInsumo();
                     $nuevoPrecio = ($insumoNuevo['precio_unit_usd'] * $valorPorcentaje) / 100;
                     $actualizar['precio'] = round($insumoNuevo['precio_unit_usd'] + $nuevoPrecio, 2);
+
+                    if (isset($insumo['iva'])) {
+                        $actualizar['precio'] = round($actualizar['precio'] + ($actualizar['precio'] * 0.16 ), 2);
+                    }
                 }
-                
+
                 $actualizar['cantidad_capacidad'] = ($unidadesPosts * $insumo_factura->capacidad_unidad);
 
                 // actualizando el stock del insumo
