@@ -25,20 +25,23 @@ async function calcularMonto(input) {
     const precioAntiguoLabel = insumoContainer.querySelector("#precioAnteriorLabel");
     const precioAnteriorRadioInput = insumoContainer.querySelector("#antiguoPrecio");
     const porcentajeGlobal = await getAll("globals");
-
+    
     let precioUnitarioEnDolares = parseFloat(precioUnitario) / parseFloat(porcentajeGlobal[1].value);
-
-    precioUnitarioEnDolares = parseFloat((precioUnitarioEnDolares * porcentajeGlobal[2].value) / 100);
-    precioNuevoLabel.innerText = `Actualizar nuevo precio ($${truncateToTwoDecimals((precioUnitarioEnDolares))})`;
+    let precioOriginalUnitario = precioUnitarioEnDolares;
+    let porcentajePrecioUnitario = parseFloat((precioUnitarioEnDolares * porcentajeGlobal[2].value) / 100);
+    precioUnitarioEnDolares = Math.round((precioOriginalUnitario + porcentajePrecioUnitario) * 100) / 100;
+    
+    // calculo del precio total
+    precioNuevoLabel.innerText = `Actualizar nuevo precio ($${( (precioUnitarioEnDolares) )})`;
     precioNuevoRadioInput.style = "display: inline !important";
     precioAntiguoLabel.style = "display: inline !important";
     precioAnteriorRadioInput.style = "display: inline !important";
-
+    
     if(impuesto) {
         // Actualizar el precio en dolares si se selecciona el impuesto
         let ivaPreciUnitarioEnDolares = precioUnitarioEnDolares * 0.16;
         precioUnitarioEnDolares += ivaPreciUnitarioEnDolares;
-        precioNuevoLabel.innerText = `Actualizar nuevo precio ($${truncateToTwoDecimals(precioUnitarioEnDolares)})`;
+        precioNuevoLabel.innerText = `Actualizar nuevo precio ($${ Math.round(precioUnitarioEnDolares * 100) / 100 })`;
     }
 
     if(truncateToTwoDecimals(precioUnitarioEnDolares) === "0.00") {
@@ -60,7 +63,7 @@ async function calcularMonto(input) {
         montoTotalProducto += iva;
     }
 
-    monto.textContent = (montoTotalProducto == NaN) ? "0.00 Bs" : `${truncateToTwoDecimals(montoTotalProducto)} Bs`;
+    monto.textContent = (montoTotalProducto == NaN) ? "0.00 Bs" : `${ Math.round( (montoTotalProducto) * 100 ) / 100} Bs`;
     monto.dataset.iva = iva;
     monto.dataset.montoSinIva = montoTotalProductoSinIva;
 
@@ -77,10 +80,10 @@ async function calcularMonto(input) {
 
     if (montoTotalFactura == NaN || totalIvaFactura == NaN || montoTotalFacturaSinIva == NaN || totalUnidades == NaN) return;
 
-    montoSinIva.textContent = (montoTotalFacturaSinIva == NaN) ? "0.00 Bs" : `${truncateToTwoDecimals(montoTotalFacturaSinIva)} Bs`;
+    montoSinIva.textContent = (montoTotalFacturaSinIva == NaN) ? "0.00 Bs" : `${ Math.round( (montoTotalFacturaSinIva) * 100 ) / 100} Bs`;
     productosTotales.textContent = (totalUnidades == NaN) ? "0" : `${totalUnidades}`;
-    totalIva.textContent = (totalIvaFactura == NaN) ? "0.00 Bs" : `${truncateToTwoDecimals(totalIvaFactura)} Bs`;
-    total.textContent = (montoTotalFactura == NaN) ? "0.00 Bs" : `${truncateToTwoDecimals(montoTotalFactura)} Bs`;
+    totalIva.textContent = (totalIvaFactura == NaN) ? "0.00 Bs" : `${ Math.round( (totalIvaFactura) * 100 ) / 100} Bs`;
+    total.textContent = (montoTotalFactura == NaN) ? "0.00 Bs" : `${ Math.round( (montoTotalFactura) * 100 ) / 100} Bs`;
 
 }
 
