@@ -44,7 +44,7 @@ async function calcularMonto(input) {
         precioNuevoLabel.innerText = `Actualizar nuevo precio ($${ Math.round(precioUnitarioEnDolares * 100) / 100 })`;
     }
 
-    if(truncateToTwoDecimals(precioUnitarioEnDolares) === "0.00") {
+    if((Math.round(precioUnitarioEnDolares * 100) / 100) === 0) {
         precioNuevoLabel.innerText = "El precio debe ser mayor a 0 para actualizarlo";
         precioNuevoRadioInput.style = "display: none !important";
         precioAntiguoLabel.style = "display: none !important";
