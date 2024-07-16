@@ -9,12 +9,15 @@ removeAddAccountant();
 removeAddAnalist();
 const path = location.pathname.split('/');
 
-let modalOpened = false;
+let modalOpened = {
+    "#modalReg": false,
+    "#modalAct": false
+}
 const modalRegister = document.getElementById("modalReg") ?? undefined;
 const modalUpdate = document.getElementById("modalAct") ?? undefined;
 
 const handleModalOpen = async (modalParent) => {
-    if (modalOpened === false) {
+    if (!modalOpened[modalParent]) {
 
         const empresaSelect = document.getElementById(modalParent === "#modalReg" ? "s-empresa" : "s-empresa-act");
         const seguroSelect = modalParent === "#modalReg" ? "#s-seguro" : "#s-seguro-act";
@@ -37,7 +40,7 @@ const handleModalOpen = async (modalParent) => {
             selectSelector: empresaSelect,
             selectValue: "empresa_id",
             selectNames: ["rif", "nombre_empresa"],
-            parentModal: "#modalReg",
+            parentModal: modalParent,
             placeholder: "Seleccione una empresa",
             ajax: true,
             ajaxUrl: "empresas/consulta",
@@ -72,7 +75,7 @@ const handleModalOpen = async (modalParent) => {
                 selectSelector: seguroSelect,
                 selectValue: "seguro_id",
                 selectNames: ["rif", "nombre"],
-                parentModal: "#modalReg",
+                parentModal: modalParent,
                 placeholder: "Debe seleccionar una empresa primero",ajax: true,
                 ajaxUrl: `seguros/empresas/${this.value}`,
                 queryPage: false,
@@ -98,7 +101,7 @@ const handleModalOpen = async (modalParent) => {
             });
         });
 
-        modalOpened = true;
+        modalOpened[modalParent] = true;
     }
 }
 

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/css/custom-datatables.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
-    <title>Proyecto 4 | Consultas</title>
+    <title>Proyecto 4 | Consultas Por Procesar</title>
 </head>
 
 <body>
@@ -19,7 +19,7 @@
             <!-- Cabezera -->
             <div class="row">
                 <div class="col-6">
-                    <h4 class="pt-5 pb-2 text-grey">Consultas</h4>
+                    <h4 class="pt-5 pb-2 text-grey">Consultas Por Procesar</h4>
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
                     <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Consulta</button>
@@ -150,7 +150,7 @@
 
                                             <div class="inputCedulaBeneficiado" style="display: none;">
                                                 <label for="cedula" id="cedula_beneficiado-label" style="display: none;">Cédula beneficiado</label>
-                                                <select name="cedula_beneficiado" id="cedula_beneficiado" class="form-control mb-3" style="display: none;" disabled required>
+                                                <select name="cedula_beneficiado" id="cedula_beneficiado" class="form-control omitDisabled mb-3" style="display: none;" disabled required>
                                                     <option></option>
                                                 </select>
                                             </div>
@@ -235,7 +235,7 @@
                                             <input type="number" name="total_insumos" class="form-control mb-3" data-validate="true" data-type="number" data-max-length="6" value="0" disabled required>
                                             <small class="form-text">No se permiten números negativos</small> -->
                                             <label for="seguro">Seguro</label>
-                                            <select id="s-seguro-emergencia" name="seguro_id" class="form-control seguro-emergencia" data-active="0" disabled required>
+                                            <select id="s-seguro-emergencia" name="seguro_id" class="form-control omitDisabled seguro-emergencia" data-active="0" disabled required>
                                                 <option></option>
                                             </select>
                                         </div>

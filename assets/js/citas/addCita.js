@@ -49,17 +49,20 @@ async function addCita() {
         data.hora_entrada = `${data.hora_entrada}:00`;
         data.hora_salida = `${data.hora_salida}:00`;
 
-        const horaEntradaObj = new Date();
+        const horaEntradaObj = new Date(data.fecha_cita);
         const horaEntrada = data.hora_entrada.split(":");
-        horaEntradaObj.setHours(horaEntrada[0],horaEntrada[1]);
+        horaEntradaObj.setHours(horaEntrada[0], horaEntrada[1]);
 
-        const horaSalidaObj = new Date();
+        const horaSalidaObj = new Date(data.fecha_cita);
         const horaSalida = data.hora_salida.split(":");
-        horaSalidaObj.setHours(horaSalida[0],horaSalida[1]);
+        horaSalidaObj.setHours(horaSalida[0], horaSalida[1]);
+
+        const fechaActual = new Date();
 
         if (data.hora_entrada === data.hora_salida) throw { message: "La hora de salida debe ser superior a la hora de entrada" };
         if (horaEntradaObj > horaSalidaObj) throw { message: "La hora de entrada no puede ser superior a la de salida" }
         if (!(parseInt(data.hora_entrada.split(":")[0]) >= 8 && (parseInt(data.hora_entrada.split(":")[0]) <= 17)) || !(parseInt(data.hora_salida.split(":")[0]) >= 8 && (parseInt(data.hora_salida.split(":")[0]) <= 17))) throw { message: "Las citas no pueden ser fuera de horario laboral del centro médico" }
+        if (horaEntradaObj < fechaActual) throw { message: "No se permiten citas antes de la hora actual" }
 
         if (data.tipo_servicio === "3") data.tipo_servicio = 2;
 

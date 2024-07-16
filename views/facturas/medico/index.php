@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.searchPanes.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo Url::to('assets/libs/datatables/dataTables.select.min.css'); ?>">
 
-    <title>Proyecto 4 | Recibos de Médicos</title>
+    <title>Proyecto 4 | Acumulados de consultas</title>
 </head>
 
 <body>
@@ -20,16 +20,46 @@
             <!-- Cabezera -->
             <div class="row">
                 <div class="col-6">
-                    <h4 class="pt-5 pb-2 text-grey">Recibos Médicos</h4>
+                    <h4 class="pt-5 mb-4 text-grey">Acumulados de consultas</h4>
+                    <h5 class="text-grey d-inline">Filtrar por:</h5>
+
+                    <form id="filtrarPor">
+                        <!-- <div class="sub-menus"> -->
+                        <div class="submenu-fecha row">
+                            <div class="d-flex align-items-end justify-content-start mt-3">
+                                <input type="checkbox" name="fecha" class="form-check-input me-3" onchange="filtrarFacturasMedicoInput(this)">
+                                <h6 class="mb-0 form-check-label" for="fecha">Por fecha</h6>
+                                <!-- <p class="m-0 form-check-label">Cubrir costo consulta: <span id="costoConsulta"></span></p> -->
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="titular">Fecha inicio</label>
+                                <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control mb-3" required disabled>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="tipo_relacion">Fecha fin</label>
+                                <input type="date" name="fecha_fin" id="fecha_fin" class="form-control mb-3" required disabled>
+                            </div>
+                        </div>
+                        <div class="submenu-usuario row">
+                            <div class="col-12 col-md-6">
+                                <div class="d-flex align-items-end justify-content-start mt-2 mb-3">
+                                    <input type="checkbox" name="usuario" class="form-check-input me-3" onchange="filtrarFacturasMedicoInput(this)">
+                                    <h6 class="mb-0 form-check-label" for="usuario">Usuario</h6>
+                                </div>
+                                <select name="medico_id" id="s-medico-filter" class="form-control mb-3" data-active="0" required disabled>
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- </div> -->
+                        <button type="button" id="btn-registrar" class="btn btn-sm mb-3 btn-add d-inline" onclick="filtrarFacturaMedico(event)"><i class="fas fa-sm fa-filter"></i> Filtrar</button>
+                    </form>
                 </div>
-                <div class="col-6 d-flex align-items-center justify-content-end">
-                    <button class="btn btn-sm btn-add" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Recibo</button>
+                <div class="col-6 d-flex align-items-end justify-content-end">
+                    <button class="btn btn-sm btn-add me-3 mb-3" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalAct"><i class="fa-sm fas fa-plus"></i> Calcular todos los acumulados</button>
+                    <button class="btn btn-sm btn-add mb-3" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg"><i class="fa-sm fas fa-plus"></i> Calcular acumulado</button>
                 </div>
                 <hr class="border-white">
-                <div class="help-message d-flex align-items-center mb-3">
-                    <i class="fas fa-info-circle text-secondary me-3"></i>
-                    <p class="text-secondary m-0">Para actualizar el estatus del recibo, debe hacer click directamente en el estatus de <span class='badge light badge-warning'>Pagar</span></p>
-                </div>
             </div>
             <!-- Factura médicos -->
             <div class="row">
@@ -46,10 +76,10 @@
                                             <th>Sumatoria consultas aseguradas</th>
                                             <th>Acumulado seguro</th>
                                             <th>Acumulado consulta</th>
-                                            <th>Fecha de pago</th>
+                                            <!-- <th>Fecha de pago</th> -->
                                             <th>Fecha emisión</th>
-                                            <th>Total a pagar</th>
-                                            <th>Estatus</th>
+                                            <th>Total acumulado</th>
+                                            <!-- <th>Estatus</th> -->
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -89,20 +119,22 @@
             </div>
         </div>
 
-        <!-- Modal Confirmar Eliminación -->
+        <!-- Modal Actualizar-->
         <div class="modal fade" id="modalAct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalActLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalActLabel">Actualizar estatus del recibo pago</h1>
+                        <h1 class="modal-title fs-3" id="modalActLabel">Calcular todos los acumulados</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body" id="modalActBody">
-                        <div id="actAlert" class="alert d-none" role="alert"></div>
-                        ¿Está seguro que desea actualizar este recibo?
+                    <div class="modal-body">
+                        <div id="actAlert" class="alert alert-success d-none" role="alert">
+                            Todos los acumulados se generaron exitosamente!
+                        </div>
+                        ¿Está seguro que desea calcular todos los acumulados?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn-actualizarInfo1" class="btn btn-primary">Actualizar</button>
+                        <button type="button" id="btn-actualizar" class="btn btn-primary" onclick="generarTodosLosAcumulados()">Actualizar</button>
                     </div>
                 </div>
             </div>
@@ -134,6 +166,9 @@
     <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/registrarFMedico.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/eliminarFMedico.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/marcarComoPagado.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/filtrarFacturasMedicoInput.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/generarTodosLosAcumulados.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/filtrarFacturaMedico.js'); ?>"></script>
 </body>
 
 </html>

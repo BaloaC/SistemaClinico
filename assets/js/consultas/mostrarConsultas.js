@@ -556,10 +556,11 @@ const handleModalOpen = async () => {
                 placeholder: "Seleccione un seguro"
             });
 
-            // const consultaSinCita = document.getElementById("s-tipo_consulta").value;
-            // document.getElementById("s-seguro-emergencia").disabled = consultaSinCita == 1 ? true : false;
-            if (document.getElementById("s-seguro-emergencia").value) document.getElementById("s-seguro-emergencia").classList.add("is-valid");
 
+
+            const consultaSinCita = document.getElementById("s-tipo_consulta").value;
+            document.getElementById("s-seguro-emergencia").disabled = consultaSinCita == 1 ? false : true;
+            if (document.getElementById("s-seguro-emergencia").value) document.getElementById("s-seguro-emergencia").classList.add("is-valid");
 
             const popover = new bootstrap.Popover(document.getElementById('cedula_beneficiado'), {
                 container: 'body',

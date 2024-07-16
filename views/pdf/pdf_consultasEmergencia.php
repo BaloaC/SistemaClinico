@@ -154,7 +154,16 @@
                     <th colspan="4">Rif: <span id="rif"></span></th>
                 </tr>
                 <tr>
-                    <th colspan="4" class="separator-section-bottom">Dirección: <span id="direccion"></span></th>
+                    <th colspan="4">Dirección: <span id="direccion"></span></th>
+                </tr>
+                <tr>
+                    <th colspan="4" class="separator-section-bottom">Procesado Por: <span id="procesadoPor"></span></th>
+                </tr>
+                <tr>
+                    <th colspan="4">Paciente: <span id="nombrePaciente"></span></th>
+                </tr>
+                <tr>
+                    <th colspan="4" class="separator-section-bottom">Cédula paciente: <span id="cedulaPaciente"></span></th>
                 </tr>
                 <tr>
                     <td><br></td>
@@ -190,19 +199,19 @@
                     <th id="area_observacion"></th>
                 </tr>
                 <tr class="insumos-head">
-                    <th>Medicamentos</th>
+                    <th>Administración de Medicamentos</th>
                     <th></th>
                     <th id="cant_medicamentos"></th>
                     <th id="total_medicamentos"></th>
                 </tr>
                 <tr class="insumos-head">
-                    <th>Enfermería</th>
+                    <th>Servicio de Enfermería</th>
                     <th></th>
                     <th></th>
                     <th id="enfermeria"></th>
                 </tr>
                 <tr class="insumos-head">
-                    <th>Consultas</th>
+                    <th>Consultas médicas</th>
                     <th></th>
                     <th id="cant_consultas"></th>
                     <th id="total_consultas"></th>
@@ -214,7 +223,7 @@
                     <th class="separator-section-top"></th>
                 </tr>
                 <tr>
-                    <th>Seguro</th>
+                    <th>Cobertura (Seguro)</th>
                     <th></th>
                     <th id=""></th>
                     <th id="cobertura"></th>

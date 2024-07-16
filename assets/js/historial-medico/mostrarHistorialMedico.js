@@ -199,10 +199,27 @@ export default async function mostrarHistorialMedico(id, updateAntecedente = fal
 
         } else {
 
-            // Ocultamos el container
-            const seguroContainer = document.getElementById("seguroContainer");
-            seguroContainer.classList.add("d-none");
-            seguroContainer.classList.add("invisible");
+            if(infoPaciente.tipo_paciente === "3"){
+
+                const seguroContainer = document.querySelector(".seguro-container");
+                const seguroLabel = document.getElementById("seguroLabel");
+
+                seguroLabel.classList.remove("d-none");
+
+                seguroContainer.innerHTML = `<div class="help-message d-flex align-items-center mb-3">
+                    <i class="fas fa-exclamation-triangle text-secondary me-3"></i>
+                    <h6 class="m-0">El paciente no posee un seguro asignado</h6>
+                </div>`;
+
+
+            } else {
+
+                // Ocultamos el container
+                const seguroContainer = document.getElementById("seguroContainer");
+                seguroContainer.classList.add("d-none");
+                seguroContainer.classList.add("invisible");
+            }
+            
         }
 
         // ** Validamos si el paciente es beneficiado y tiene titulares

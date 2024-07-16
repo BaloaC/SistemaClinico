@@ -61,17 +61,3 @@ $(document).ready(async function () {
     // Ocultar paginación
     document.getElementById("pocosInsumos_paginate").classList.add("d-none");
 });
-console.log("🍓 ~ file: pocosInsumos.js:66 ~ insumosPorAgotarse:", insumosPorAgotarse)
-
-console.log("🍓 ~ file: pocosInsumos.js:66 ~ insumosPorAgotarse:", insumosPorAgotarse)
-
-console.log("🍓 ~ file: pocosInsumos.js:66 ~ insumosPorAgotarse:", insumosPorAgotarse)
-
-console.log("🍓 ~ file: pocosInsumos.js:66 ~ insumosPorAgotarse:", insumosPorAgotarse)
-
-console.log("🍓 ~ file: pocosInsumos.js:66 ~ insumosPorAgotarse:", insumosPorAgotarse)
-
-console.log("🍓 ~ file: pocosInsumos.js:66 ~ insumosPorLAgotarse:", insumosPorLAgotarse)
-
-console.log("🍓 ~ file: pocosInsumos.js:66 ~ insumosPorAgotarse:", insumosPorAgotarse)
-

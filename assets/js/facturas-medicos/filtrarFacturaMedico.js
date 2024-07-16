@@ -1,41 +1,32 @@
-import dinamicSelect2 from "../global/dinamicSelect2.js";
-import formatToRealDate from "../global/formatToRealDate.js";
 import createDataTable from "../global/createDataTable.js";
+import formatToRealDate from "../global/formatToRealDate.js";
 
 const path = location.pathname.split('/');
 
-dinamicSelect2({
-    selectSelector: "#s-medico",
-    selectValue: "medico_id",
-    selectNames: ["cedula", "nombre-apellidos"],
-    parentModal: "#modalReg",
-    placeholder: "Seleccione un médico",
-    selectWidth: "100%",
-    ajax: true,
-    ajaxUrl: "medicos/consulta",
-    processResultsAjax: function (data, params) {
+async function filtrarFacturaMedico(e) {
+    e.preventDefault();
 
-        params.page = params.page || 1;
+    const $form = document.getElementById("filtrarPor");
+    const formData = new FormData($form),
+        data = {};
 
-        const data1 = data?.data?.map(object => {
-            const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico } = object;
-            return { id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` };
-        });
+    formData.forEach((value, key) => (data[key] = value));
 
-        // Transforms the top-level key of the response object from 'data' to 'results'
-        return {
-            results: data1 ?? [],
-            pagination: {
-                more: data1?.length
-            }
-        };
-    }
-});
+    console.log(data);
+    if (!$form.checkValidity()) { $form.reportValidity(); return; }
 
-addEventListener("DOMContentLoaded", e => {
+    let filtroUrl = "";
 
-    // Para permitir que se filtre con la fecha formateada
-    $.fn.dataTable.moment('DD-MM-YYYY');
+    if(data.medico_id) filtroUrl += `?medico_id=${data.medico_di}`;
+    if(data.fecha_inicio) filtroUrl += `&fecha_inicio=${data.fecha_inicio}&fecha_fin=${data.fecha_fin}`;   
+
+    // Nos aseguramos de que los queryparam inicien con el signo de interrogación
+    filtroUrl = `?${filtroUrl.slice(1)}`;
+
+    (filtroUrl !== "") ? filtroUrl = `/${path[1]}/factura/fecha${filtroUrl}` :  filtroUrl = `/${path[1]}/factura/medico/consulta/`;
+
+    $('#fMedicos').DataTable().clear();
+    $('#fMedicos').DataTable().destroy();
 
     const fMedicosColumns = [
         { data: "factura_medico_id" },
@@ -101,13 +92,19 @@ addEventListener("DOMContentLoaded", e => {
 
     const order = [[6, 'desc']];
 
+
     createDataTable({
         id: "#fMedicos",
-        url: `/${path[1]}/factura/medico/consulta/`,
+        url: filtroUrl,
         columns: fMedicosColumns,
         order,
         processing: true,
-        serverSide: true
+        serverSide: true,
+        requestData: {
+            fecha_inicio: "2024-06-01",
+            fecha_fin: "2024-06-30"
+        }
     })
+}
 
-});
+window.filtrarFacturaMedico = filtrarFacturaMedico;

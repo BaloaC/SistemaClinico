@@ -319,18 +319,18 @@ class AuditoriaController extends Controller {
 
         $fecha = date("Ymd---His");
 
-        $db_host = 'localhost'; // Servidor
+        $db_host = 'localhost';
         
-        $usuario = 'root'; // Usuario de la base de datos
+        $usuario = 'root';
         
-        $password = ''; //Contraseña bd
+        $password = '';
         
-        $bd = 'shenque_db'; //Nombre de la base de datos
+        $bd = 'shenque_db';
         
-        $salida_sql = $bd . '_' . $fecha . '.sql'; //Nombre del archivo .sql
+        $salida_sql = $bd . '_' . $fecha . '.sql';
         
         // Comando local:
-        $execute = "c:\\xampp\\mysql\\bin\\mysqldump.exe -u $usuario --password=$password --opt $bd > $salida_sql"; //Funciones para exportar la base de datos
+        $execute = "c:\\xampp\\mysql\\bin\\mysqldump.exe -u $usuario --password=$password --opt $bd > $salida_sql";
         // Comando del servidor:
         // $execute = "mysqldump -h mysql-shenque.alwaysdata.net -u shenque --password=ShenqueAdmin123$ shenque_db > $salida_sql";
 
@@ -338,25 +338,24 @@ class AuditoriaController extends Controller {
         
         //Se construye el nombre del archivo ZIP ejemplo: mibase_20220101.zip
         
-        $zip = new ZipArchive(); // Objeto de la libreria interna ZipArchive
+        $zip = new ZipArchive();
         
-        $salida_zip = 'respaldo/'. $bd. '_' .$fecha . '.zip'; // Nombre del archivo ZIP
-        
+        $salida_zip = 'respaldo/'. $bd. '_' .$fecha . '.zip'; 
+
         if($zip->open($salida_zip,ZIPARCHIVE::CREATE) === true){
         
             //Creamos y abrimos el archivo ZIP
-        
-            $zip->addFile($salida_sql); //Agregamos el archivo SQL a ZIP
-            $zip->close(); // Cerramos el ZIP
+            $zip->addFile($salida_sql);
+            $zip->close();
         
             $auditDatabase = new AuditHandleDatabase();
             $auditDatabase->handleRequest();
 
             unlink($salida_sql); //Eliminamos el archivo temporal SQL
-            header("location: $salida_zip"); // Redireccionamos para descargar el archivo ZIP
-
+            header("location: $salida_zip");
+        
         } else{
-            echo 'Error'; // Enviamos el mensaje de error
+            echo 'Error';
         }
     }
 

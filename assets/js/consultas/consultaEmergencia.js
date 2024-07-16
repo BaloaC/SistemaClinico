@@ -13,8 +13,6 @@ function turnInput(container, disabled) {
 
 export default async function consultaEmergencia(inputRadio) {
 
-    
-
     const pacienteSelect = document.getElementById("s-paciente");
     const pacienteBeneficiado = document.getElementById("cedula_beneficiado");
     const seguroSelect = document.getElementById("s-seguro-emergencia");
@@ -30,7 +28,7 @@ export default async function consultaEmergencia(inputRadio) {
     // const sinCitaNo = document.getElementById("consultaCitaNo");
 
     // No es por emergencia
-    if (inputRadio.value === "0") {
+    if (inputRadio.value === "0") { 
 
         const popover = bootstrap.Popover.getOrCreateInstance(document.getElementById('cedula_beneficiado'));
         if (popover._isEnabled) popover.hide();
@@ -99,7 +97,7 @@ export default async function consultaEmergencia(inputRadio) {
             const changeEventConsultaTipo = new Event("change");
             document.getElementById("tipoConsultas").dispatchEvent(changeEventConsultaTipo);
 
-            pacienteBeneficiado.disabled = false;
+            pacienteBeneficiado.disabled = true;
             $("#cedula_beneficiado").empty().select2();
 
             dinamicSelect2({
@@ -258,6 +256,7 @@ export default async function consultaEmergencia(inputRadio) {
             $("#addInsumo").fadeOut("slow");
             $("label[for='tipoServicio']").fadeIn("slow");
             $("#tipoConsultas").fadeIn("slow");
+            document.getElementById("s-seguro-emergencia").disabled = true;
             pacienteBeneficiado.disabled = true;
 
 
@@ -330,6 +329,32 @@ export default async function consultaEmergencia(inputRadio) {
         inputDateConsulta.disabled = false;
         $(inputDateConsultaLabel).fadeIn("slow");
         inputDateConsultaHidden.disabled = true;
+
+        if(inputRadio.value === "1") {
+
+            let paciente_id = document.getElementById("s-paciente").value;
+    
+            const pacientesBeneficiados = await getAll(`titularesBeneficiado/${paciente_id}`);
+
+            console.log(pacientesBeneficiados);
+
+            if (pacientesBeneficiados?.length > 0) {
+                $(".inputPacienteBeneficiadoEmergencia").fadeIn("slow");
+                $("#pacienteBeneficiadoEmergenciaLabel").fadeIn("slow");
+
+            } else {
+
+                $(".inputPacienteBeneficiadoEmergencia").fadeOut("slow");
+                $("#pacienteBeneficiadoEmergenciaLabel").fadeOut("slow");
+                const inputRadioPacienteBeneficiadoNo = document.getElementById("pacienteBeneficiadoEmergenciaNo");
+                inputRadioPacienteBeneficiadoNo.checked = true;
+
+                // Creamos un evento onchange para que no se muestre el select de los beneficiados
+                const changeEvent = new Event("change");
+                inputRadioPacienteBeneficiadoNo.dispatchEvent(changeEvent);
+            }
+
+        }
     }
 
 }

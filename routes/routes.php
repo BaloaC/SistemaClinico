@@ -346,11 +346,12 @@ Router::get('/factura/medico/actualizar/:id', FacturaMedicoController::class . '
 Router::get('/factura/medico/consulta', FacturaMedicoController::class . '@listarFacturaMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::get('/factura/medico/:id', FacturaMedicoController::class . '@listarFacturaMedicoPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::get('/factura/medico/medico/:id', FacturaMedicoController::class . '@listarFacturaPorMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
-Router::get('/factura/fecha/', FacturaMedicoController::class . '@listarFacturaPorFecha', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+Router::get('/factura/fecha', FacturaMedicoController::class . '@listarFacturaPorFecha', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+Router::get('/factura/consultas/:id', FacturaMedicoController::class . '@listarConsultasPorAcumulado', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 
 Router::get('/facturaMedico/medico', FacturaMedicoController::class . '@calcularFacturaMedicoId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 
-Router::post('/facturas/all', FacturaMedicoController::class . '@solicitarFacturasMedicos', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
+Router::post('/facturas/all', FacturaMedicoController::class . '@insertarAcumuladosConsultas', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::post('/factura/medico', FacturaMedicoController::class . '@insertarFacturaMedicoPorId', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::put('/factura/medico/:id', FacturaMedicoController::class . '@actualizarFacturaMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);
 Router::delete('/factura/medico/:id', FacturaMedicoController::class . '@eliminarFacturaMedico', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("2","3") )]);

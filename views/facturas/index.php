@@ -113,7 +113,7 @@
                                                     <small class="text-warning-insumo" style="display: none;">Advertencia: al ingresar una cantidad en decimales, indica que la siguiente unidad estará incompleta</small>
                                                 </td>
                                                 <td><b class="monto-total-p">0.00 Bs</b></td>
-                                                <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
+                                                <td><input type="checkbox" name="impuesto" class="impuestoInput" oninput="calcularMonto(this)"></td>
                                                 <td>
                                                     <div class="actualizarPrecio-insumo" style="display: none;">
                                                         <input type="radio" name="actualizar_precio" value="0" id="antiguoPrecio"><label id="precioAnteriorLabel" class="d-inline mx-1">Mantener precio anterior ($0.00)</label> <br>
@@ -161,7 +161,7 @@
                     <small class="text-warning-insumo" style="display: none;">Advertencia: al ingresar una cantidad en decimales, indica que la siguiente unidad estará incompleta</small>
                 </td>
                 <td><b class="monto-total-p">0.00 Bs</b></td>
-                <td><input type="checkbox" name="impuesto" oninput="calcularMonto(this)"></td>
+                <td><input type="checkbox" name="impuesto" class="impuestoInput" oninput="calcularMonto(this)"></td>
                 <td>
                     <div>
                         <input type="radio" value="0" id="antiguoPrecio"><label id="precioAnteriorLabel" class="d-inline mx-1">Mantener precio anterior ($0.00)</label> <br>
