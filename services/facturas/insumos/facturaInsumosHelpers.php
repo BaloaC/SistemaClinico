@@ -35,10 +35,12 @@ class FacturaInsumoHelpers {
                     
                     $valorPorcentaje = GlobalsHelpers::obtenerPorcentajeInsumo();
                     $nuevoPrecio = ($insumoNuevo['precio_unit_usd'] * $valorPorcentaje) / 100;
-                    $actualizar['precio'] = round($insumoNuevo['precio_unit_usd'] + $nuevoPrecio, 2);
+                    $precio_general = round($insumoNuevo['precio_unit_usd'] + $nuevoPrecio, 2);
+                    $actualizar['precio'] = round( $precio_general / $insumo_factura['capacidad_unidad'], 2 );
 
                     if (isset($insumo['iva'])) {
-                        $actualizar['precio'] = round($actualizar['precio'] + ($actualizar['precio'] * 0.16 ), 2);
+                        $precio_general = round($actualizar['precio'] + ($actualizar['precio'] * 0.16 ), 2);
+                        $actualizar['precio'] = round( $precio_general / $insumo_factura['capacidad_unidad'], 2 );
                     }
                 }
 
