@@ -109,7 +109,7 @@
                     <td colspan="3">EXÁMENES</td>
                     <td id="examenesUsd"></td>
                 </tr>
-                <tr>
+                <tr class="consultaMontos">
                     <!-- <td></td> -->
                     <td colspan="3">CONSULTA</td>
                     <td id="consultaUsd"></td>

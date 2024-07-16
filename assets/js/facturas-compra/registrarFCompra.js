@@ -66,6 +66,7 @@ async function addFCompra() {
         data.total_productos = total_productos;
         data.excento = excento;
 
+        if(data.excento === "0") delete data.excento;
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
 
         const registroExitoso = await addModule("factura/compra", "info-fcompra", data, "Factura compra registrada correctamente!");
@@ -84,6 +85,7 @@ async function addFCompra() {
         document.getElementById("monto-total").textContent = "0.00 Bs";
         $('#fCompra').DataTable().ajax.reload();
         document.querySelectorAll(".insumo-id")[0].classList.remove("is-valid");
+        document.getElementById("precioAnteriorLabel").style = "display: none !important";
         
         $("#s-proveedor").val([]).trigger("change.select2");
         $("#s-insumo").val([]).trigger("change.select2");

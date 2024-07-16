@@ -14,7 +14,7 @@ document.getElementById("nombre_seguro").textContent = dataFactura.seguro?.nombr
 document.getElementById("rif").textContent = dataFactura.seguro?.rif ?? "Desconocido";
 document.getElementById("direccion").textContent = dataFactura.seguro?.direccion ?? "Desconocida";
 document.getElementById("total_insumos").textContent = dataFactura.factura?.total_insumos_bs ?? "-";
-document.getElementById("total_examenes").textContent = dataFactura.factura?.total_examenes ?? "-";
+// document.getElementById("total_examenes").textContent = dataFactura.factura?.total_examenes ?? "-";
 document.getElementById("cant_laboratorio").textContent = dataFactura.factura?.cantidad_laboratorios ?? "-";
 document.getElementById("total_laboratorio").textContent = dataFactura.factura?.laboratorios_bs ?? "-";
 document.getElementById("area_observacion").textContent = dataFactura.factura?.area_observacion_bs ?? "-";
@@ -29,5 +29,24 @@ document.getElementById("diferenciaPaciente").textContent = Math.abs(parseFloat(
 document.getElementById("procesadoPor").innerText = Cookies.get("nombreUsuario").toUpperCase();
 document.getElementById("nombrePaciente").textContent = `${dataFactura?.beneficiado?.nombre} ${dataFactura?.beneficiado?.apellidos}`;
 document.getElementById("cedulaPaciente").innerText = dataFactura.beneficiado.cedula;
+
+if(dataFactura?.examenes && dataFactura?.examenes.length > 0) {
+    let examenes = "";
+
+    dataFactura.examenes.forEach(examen => {
+
+        examenes += `
+            <tr class="insumos-head">
+                <th>${examen.nombre}</th>
+                <th></th>
+                <th id="cant_medicamentos"></th>
+                <th id="total_medicamentos">${examen.precio_examen_bs}</th>
+            </tr>
+        `;
+    })
+
+    console.log(examenes);
+    document.querySelector(".examenesRealizados").insertAdjacentHTML("afterend", examenes);
+}
 
 window.print();

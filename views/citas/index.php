@@ -94,15 +94,16 @@
                                                 <option value="2">Asegurada</option>
                                             </select>
 
+                                            <label for="titular_id" class="d-none">Titular</label>
+                                            <select name="titular_id" id="s-titular" class="form-control d-none" data-active="0" data-create="0">
+                                                <option></option>
+                                            </select>
+
                                             <label for="seguro" class="d-none">Seguro</label>
                                             <select name="seguro_id" id="s-seguro" class="form-control mb-3 d-none" data-active="0" data-create="0">
                                                 <option></option>
                                             </select>
 
-                                            <label for="titular_id" class="d-none">Titular</label>
-                                            <select name="titular_id" id="s-titular" class="form-control d-none" data-active="0" data-create="0">
-                                                <option></option>
-                                            </select>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <label for="motivo_cita">Motivo cita</label>
@@ -163,11 +164,11 @@
                                             <label for="input-radios-container">¿El médico autorizó la asignación de la cita fuera de su horario establecido?</label>
                                             <div class="input-radios-container">
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_si" value="true">
+                                                    <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_si" value="true" data-modaltarget="registro" onchange="forzarCitasHorario(this)">
                                                     <label class="form-check-label" for="inlineRadio1">Sí</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_no" value="false" checked>
+                                                    <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_no" value="false" data-modaltarget="registro" onchange="forzarCitasHorario(this)" checked>
                                                     <label class="form-check-label" for="inlineRadio2">No</label>
                                                 </div>
                                             </div>
@@ -194,7 +195,7 @@
                                 <div class="row mt-4">
                                     <div class="col-12 col-md-6">
                                         <label for="hora_entrada">Hora entrada</label>
-                                        <input type="time" name="hora_entrada" id="hora_entrada" step="1" disabled class="form-control hora_entrada flatpickr-input-readonly mb-3">
+                                        <input type="time" name="hora_entrada" id="hora_entrada" step="1" disabled class="form-control hora_entrada hora_entrada_registro flatpickr-input-readonly mb-3">
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <label for="hora_salida">Hora salida</label>
@@ -254,7 +255,7 @@
                                     <input type="text" name="clave" id="clave" data-max-length="15" data-type="nameExam" data-validate="true" class="form-control mb-3">
                                     <small class="form-text">Solo se permiten números y letras con un mínimo de 3 caracteres</small>
 
-                                    <div class="d-flex align-items-center justify-content-start">
+                                    <div class="d-flex align-items-center justify-content-start cubrirConsultaContainer">
                                         <input type="checkbox" class="form-check-input me-3" onclick="return false;" checked>
                                         <p class="m-0 form-check-label">Cubrir costo consulta: <span id="costoConsulta"></span></p>
                                     </div>
@@ -453,6 +454,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/citas/montoAprobadoHandler.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/checkExamenHandler.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/citas/deleteExamenCoberture.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/citas/forzarCitasHorario.js'); ?>"></script>
 </body>
 
 </html>

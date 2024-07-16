@@ -101,6 +101,10 @@ addEventListener("DOMContentLoaded", async e => {
         let recipes = "";
         let factura = "";
 
+        if(data?.consulta?.es_emergencia === 1){
+            delete data?.consulta?.tipo_servicio;
+        }
+
         if (data.recipes) {
 
             recipes = `
@@ -145,15 +149,17 @@ addEventListener("DOMContentLoaded", async e => {
             </tr>
             `;
 
+            // <td>Cantidad de medicamentos: <br><b>${data.factura.cantidad_medicamentos}</b></td>
+            // <td class="pe-4">Cantidad de consultas médicas: <br><b>${data.factura.cantidad_consultas_medicas}</b></td>
+
             factura += `
             <tr>
-                <td class="pe-4">Cantidad de consultas médicas: <br><b>${data.factura.cantidad_consultas_medicas}</b></td>
                 <td class="pe-4">Consultas médicas: <br><b>$${data.factura.consultas_medicas}</b></td>
                 <td class="pe-4">Cantidad laboratorio: <br><b>${data.factura.cantidad_laboratorios}</b></td>
                 <td class="pe-4">Laboratorios: <br><b>$${data.factura.laboratorios}</b></td>
             </tr>
             <tr>
-                <td>Cantidad de medicamentos: <br><b>${data.factura.cantidad_medicamentos}</b></td>
+                
                 <td>Medicamentos: <br><b>$${data.factura.medicamentos}</b></td>
                 <td>Area de observación: <br><b>$${data.factura.area_observacion}</b></td>
                 <td>Enfermería: <br><b>$${data.factura.enfermeria}</b></td>

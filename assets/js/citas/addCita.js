@@ -3,6 +3,7 @@ import cleanValdiation from "../global/cleanValidations.js";
 import getById from "../global/getById.js";
 import scrollTo from "../global/scrollTo.js";
 import { calendar } from "./calendarioCitas.js";
+import tipoServicio from "./tipoServicio.js";
 
 async function addCita() {
 
@@ -61,6 +62,7 @@ async function addCita() {
 
         if (data.hora_entrada === data.hora_salida) throw { message: "La hora de salida debe ser superior a la hora de entrada" };
         if (horaEntradaObj > horaSalidaObj) throw { message: "La hora de entrada no puede ser superior a la de salida" }
+        if (!data.paciente_id) throw { message: "No se ha seleccionado un paciente" }
         if (!(parseInt(data.hora_entrada.split(":")[0]) >= 8 && (parseInt(data.hora_entrada.split(":")[0]) <= 17)) || !(parseInt(data.hora_salida.split(":")[0]) >= 8 && (parseInt(data.hora_salida.split(":")[0]) <= 17))) throw { message: "Las citas no pueden ser fuera de horario laboral del centro médico" }
         if (horaEntradaObj < fechaActual) throw { message: "No se permiten citas antes de la hora actual" }
 
@@ -71,6 +73,11 @@ async function addCita() {
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
         calendar.refetchEvents();
+
+        document.getElementById("s-tipo-servicio").value = 2;
+
+        tipoServicio({value: 2});
+        $("#s-examen").val([]).trigger("change.select2");
         cleanValdiation("info-cita");
 
     } catch (error) {

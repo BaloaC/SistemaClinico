@@ -148,22 +148,22 @@
                     <th colspan="3" id="title">Fecha: <span id="fecha"></span></th>
                 </tr>
                 <tr>
-                    <th colspan="4" class="separator-section-top">Razón Social: <span id="nombre_seguro"></span></th>
+                    <th colspan="2" class="separator-section-top">Razón Social: <span id="nombre_seguro"></span></th>
+                    <th colspan="2" class="separator-section-top">Procesado Por: <span id="procesadoPor"></span></th>
                 </tr>
                 <tr>
-                    <th colspan="4">Rif: <span id="rif"></span></th>
+                    <th colspan="2">Rif: <span id="rif"></span></th>
+                    <th colspan="2">Dirección: <span id="direccion"></span></th>
                 </tr>
                 <tr>
-                    <th colspan="4">Dirección: <span id="direccion"></span></th>
+
                 </tr>
                 <tr>
-                    <th colspan="4" class="separator-section-bottom">Procesado Por: <span id="procesadoPor"></span></th>
+                    <th colspan="2" class="separator-section-bottom">Paciente: <span id="nombrePaciente"></span></th>
+                    <th colspan="2" class="separator-section-bottom">Cédula paciente: <span id="cedulaPaciente"></span></th>
                 </tr>
                 <tr>
-                    <th colspan="4">Paciente: <span id="nombrePaciente"></span></th>
-                </tr>
-                <tr>
-                    <th colspan="4" class="separator-section-bottom">Cédula paciente: <span id="cedulaPaciente"></span></th>
+
                 </tr>
                 <tr>
                     <td><br></td>
@@ -180,11 +180,7 @@
                     <th></th>
                     <th id="total_insumos"></th>
                 </tr>
-                <tr class="insumos-head">
-                    <th>Exámenes</th>
-                    <th></th>
-                    <th></th>
-                    <th id="total_examenes">2</th>
+                <tr class="examenesRealizados">
                 </tr>
                 <tr class="insumos-head">
                     <th>Laboratorio</th>

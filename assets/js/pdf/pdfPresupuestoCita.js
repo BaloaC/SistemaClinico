@@ -27,4 +27,6 @@ document.getElementById("examenesUsd").innerText = `$${examenMonto}`;
 document.getElementById("consultaUsd").innerText = `$${data.costo_especialidad}`;
 document.getElementById("totalUsd").innerText = `$${data.costo_especialidad + examenMonto}`;
 
+if(data.tipo_servicio == 1) document.querySelector(".consultaMontos").style = "display:none";
+
 window.print();

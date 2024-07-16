@@ -104,31 +104,32 @@
         <table class="tabla">
             <thead>
                 <tr>
-                    <th colspan="6" class="text-center" id="title">Recibo de Compra</th>
+                    <th colspan="7" class="text-center" id="title">Recibo de Compra</th>
                 </tr>
                 <tr class="insumos-head">
-                    <th colspan="3">Nombre del proveedor: <span id="proveedor">EMPRESAS TE QUIERO MUCHO C.A</span></th>
-                    <th colspan="3">Nro. de Recibo de Compra: <span id="factura_id">13</spani></th>
+                    <th colspan="3">Nombre del proveedor: <span id="proveedor"></span></th>
+                    <th colspan="4">Nro. de Recibo de Compra: <span id="factura_id"></spani></th>
                 </tr>
                 <tr class="insumos-head">
-                    <th colspan="3">Monto total sin iva: <span id="monto_sin_iva">1111.23</span></th>
-                    <th colspan="3">Fecha de compra: <span id="fecha_compra">2022-08-30</span></th>
+                    <th colspan="3">Monto total sin iva: <span id="monto_sin_iva"></span></th>
+                    <th colspan="4">Fecha de compra: <span id="fecha_compra"></span></th>
                 </tr>
                 <tr class="insumos-head">
-                    <th colspan="3">Monto total con iva: <span id="monto_con_iva">32323.12</span></th>
-                    <th colspan="3">Excento: <span id="excento">222.32</span></th>
+                    <th colspan="3">Monto total con iva: <span id="monto_con_iva"></span></th>
+                    <th colspan="4">Excento: <span id="excento"></span></th>
                 </tr>
                 <tr class="insumos-head">
                     <th colspan="3">Monto total USD: <span id="monto_usd">$0.00</span></th>
-                    <th colspan="3"></span></th>
+                    <th colspan="4"></span></th>
                 </tr>
                 <tr>
-                    <th colspan="6" class="text-center">Insumos comprados</th>
+                    <th colspan="7" class="text-center">Insumos comprados</th>
                 </tr>
                 <tr class="insumos-head">
                     <th>Nombre insumo</th>
                     <th>Unidades adquiridas</th>
                     <th>Precio unitario USD</th>
+                    <th>Precio IVA USD</th>
                     <th>Precio total USD</th>
                     <th>Precio unitario</th>
                     <th>Precio total</th>

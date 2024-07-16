@@ -288,16 +288,17 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
                     <td colspan="4"><b>Factura consulta emergencia:</b></td>
                 </tr>
                 `;
+
+                // <td class="pe-4">Cantidad de consultas médicas: <br><b>${data.factura.cantidad_consultas_medicas}</b></td>
+                // <td>Cantidad de medicamentos: <br><b>${data.factura.cantidad_medicamentos}</b></td>
     
                 info.factura += `
                 <tr>
-                    <td class="pe-4">Cantidad de consultas médicas: <br><b>${data.factura.cantidad_consultas_medicas}</b></td>
                     <td class="pe-4">Consultas médicas: <br><b>$${data.factura.consultas_medicas}</b></td>
                     <td class="pe-4">Cantidad laboratorio: <br><b>${data.factura.cantidad_laboratorios}</b></td>
                     <td class="pe-4">Laboratorios: <br><b>$${data.factura.laboratorios}</b></td>
                 </tr>
                 <tr>
-                    <td>Cantidad de medicamentos: <br><b>${data.factura.cantidad_medicamentos}</b></td>
                     <td>Medicamentos: <br><b>$${data.factura.medicamentos}</b></td>
                     <td>Area de observación: <br><b>$${data.factura.area_observacion}</b></td>
                     <td>Enfermería: <br><b>$${data.factura.enfermeria}</b></td>
