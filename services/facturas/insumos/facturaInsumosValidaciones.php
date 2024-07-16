@@ -5,7 +5,7 @@ class FacturaInsumosValidaciones {
     public static function validacionesFactura($formulario) {
         
         $validarFactura = new Validate;
-        $camposNumericos = array('proveedor_id', 'total_productos', 'monto_con_iva', 'monto_sin_iva', 'excento', 'actualizar_precio');
+        $camposNumericos = array('proveedor_id', 'total_productos', 'monto_con_iva', 'monto_sin_iva', 'actualizar_precio');
         $exclude = ['actualizar_precio'];
 
         if ( ($validarFactura->isEmpty($formulario, $exclude)) ) {
