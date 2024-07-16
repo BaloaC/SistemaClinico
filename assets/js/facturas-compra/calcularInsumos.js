@@ -18,7 +18,7 @@ async function calcularMonto(input) {
     let [montoTotalProducto, iva, montoTotalProductoSinIva] = [0, 0, 0];
 
     if (insumo === "" || precioUnitario === "") return;
-
+    
     // Lógica para actualizar los precios de los insumos
     const precioNuevoLabel = insumoContainer.querySelector("#precioNuevoLabel");
     const precioNuevoRadioInput = insumoContainer.querySelector("#nuevoPrecio");
