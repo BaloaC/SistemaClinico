@@ -21,6 +21,7 @@ data.insumos.forEach(e => {
             <td>${e.insumo_nombre}</td>
             <td>${e.unidades}</td>
             <td>$${e.precio_unit_usd}</td>
+            <td>$${e.precio_usd_iva ?? 0}</td>
             <td>$${e.precio_total_usd}</td>
             <td>${convertCurrencyToVES(e.precio_unit_bs)} Bs</td>
             <td>${convertCurrencyToVES(e.precio_total_bs)} Bs</td>

@@ -868,12 +868,12 @@ addEventListener("DOMContentLoaded", async e => {
             </tr>
             `;
 
+            // <td><p class="pe-4">Cantidad de consultas médicas: <br><b>${data.factura.cantidad_consultas_medicas}</b></p></td>
+            // <td><p class="pe-4">Cantidad de medicamentos: <br><b>${data.factura.cantidad_medicamentos}</b></p></td>
+
             factura += `
             <tr>
-                <td><p class="pe-4">Cantidad de consultas médicas: <br><b>${data.factura.cantidad_consultas_medicas}</b></p></td>
-                <td><p class="pe-4">Cantidad de medicamentos: <br><b>${data.factura.cantidad_medicamentos}</b></p></td>
-                <td><p class="pe-4">Cantidad laboratorio: <br><b>${data.factura.cantidad_laboratorios}</b></p></td>
-                
+                <td><p class="pe-4">Cantidad laboratorio: <br><b>${data.factura.cantidad_laboratorios}</b></p></td> 
             </tr>
             <tr>
                 <td>Consultas médicas: <br><b>$${data.factura.consultas_medicas}</b></td>
@@ -934,7 +934,7 @@ addEventListener("DOMContentLoaded", async e => {
                 ${recipes}
                 ${factura}
                 <tr>
-                    <td class="py-3"><a class="btn btn-sm btn-add mb-2 text-nowrap" href="#" onclick="openPopup('${"pdf/consulta/" + data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir consulta</a> ${data.es_emergencia === 1 ? `<a class="btn btn-sm mb-2 btn-add text-nowrap" href="#" onclick="openPopup('${'pdf/presupuesto/' + data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir presupuesto</a>` : ""} <br> ${data.es_emergencia == 1 && data?.factura.autorizacion !== null ? '<button class="btn btn-sm btn-add mb-3" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg' + tipo_cita + '" onclick="' + pagarConsulta(JSON.stringify({ citaType: tipo_cita, consulta_id: data.consulta_id, paciente_id: data.paciente_id }).replaceAll("\"", "\'")) + '"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button>' : ""} <br> ${data.es_emergencia == 1 && data?.factura.autorizacion === null ? '<button class="btn btn-sm btn-add" id="btn-act" data-bs-toggle="modal" data-bs-target="#modalAct" onclick="updateConsulta(' + data?.factura?.consulta_emergencia_id + ', ' + data.consulta_id + ' )"><i class="fa-sm fas fa-plus"></i> Actualizar consulta</button>' : ""}</td>
+                    <td class="py-3"><a class="btn btn-sm btn-add mb-2 text-nowrap" href="#" onclick="openPopup('${data.es_emergencia === 1 ? "pdf/consultaemergencia/" + data?.factura?.consulta_emergencia_id.toString().padStart(8, '0') : "pdf/consulta/" + data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir consulta</a> ${data.es_emergencia === 1 ? `<a class="btn btn-sm mb-2 btn-add text-nowrap" href="#" onclick="openPopup('${'pdf/presupuesto/' + data.consulta_id}')"><i class="fa-sm fas fa-file-export"></i> Imprimir presupuesto</a>` : ""} <br> ${data.es_emergencia == 1 && data?.factura.autorizacion !== null ? '<button class="btn btn-sm btn-add mb-3" id="btn-add" data-bs-toggle="modal" data-bs-target="#modalReg' + tipo_cita + '" onclick="' + pagarConsulta(JSON.stringify({ citaType: tipo_cita, consulta_id: data.consulta_id, paciente_id: data.paciente_id }).replaceAll("\"", "\'")) + '"><i class="fa-sm fas fa-plus"></i> Pagar consulta</button>' : ""} <br> ${data.es_emergencia == 1 && data?.factura.autorizacion === null ? '<button class="btn btn-sm btn-add" id="btn-act" data-bs-toggle="modal" data-bs-target="#modalAct" onclick="updateConsulta(' + data?.factura?.consulta_emergencia_id + ', ' + data.consulta_id + ' )"><i class="fa-sm fas fa-plus"></i> Actualizar consulta</button>' : ""}</td>
                 </tr>
             </table>
         `

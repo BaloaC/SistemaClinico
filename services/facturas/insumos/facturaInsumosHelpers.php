@@ -77,7 +77,8 @@ class FacturaInsumoHelpers {
             "compra_insumo.precio_unit_bs", 
             "compra_insumo.precio_total_bs",
             "compra_insumo.precio_unit_usd", 
-            "compra_insumo.precio_total_usd" 
+            "compra_insumo.precio_total_usd",
+            "compra_insumo.precio_usd_iva"
         );
 
         $_compraInsumoModel = new CompraInsumoModel();
