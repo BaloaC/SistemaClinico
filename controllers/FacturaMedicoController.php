@@ -383,7 +383,7 @@ class FacturaMedicoController extends Controller{
 
         $respuesta = new Response( 'CORRECTO');
         $respuesta->setData($consultas_totales);
-         return $respuesta->json( 200);
+        return $respuesta->json(200);
     }
 
     // Los listar traen los get de facturas registradas en base de datos

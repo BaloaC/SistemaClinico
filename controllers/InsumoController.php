@@ -94,6 +94,10 @@ class InsumoController extends Controller{
         $lista = $_insumoModel->getAll();
         $_insumoModel->resetValues();
 
+        if (isset($_GET['agotado']) && $_GET['agotado'] == 'false') {
+            $_insumoModel->where('cantidad_unidad', '!=', '0');
+        }
+        
         if ( isset($_GET['search']) ) {
             if (!is_array($_GET['search']) && strlen($_GET['search']) > 0 && $_GET['select']) {
                 $_insumoModel->setSelect('COUNT(*) AS total')->where('CONCAT(nombre)', 'LIKE', "%{$_GET['search']}%");
