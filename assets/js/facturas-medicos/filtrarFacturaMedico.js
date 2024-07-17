@@ -1,7 +1,36 @@
 import createDataTable from "../global/createDataTable.js";
+import dinamicSelect2 from "../global/dinamicSelect2.js";
 import formatToRealDate from "../global/formatToRealDate.js";
 
 const path = location.pathname.split('/');
+
+dinamicSelect2({
+    selectSelector: "#s-medico-filter",
+    selectValue: "medico_id",
+    selectNames: ["cedula", "nombre-apellidos"],
+    ajax: true,
+    ajaxUrl: `medicos/consulta`,
+    parentModal: "body",
+    placeholder: "Seleccione un médico",
+    queryPage: false,
+    processResultsAjax: function (data, params) {
+
+        params.page = params.page || 1;
+
+        const data1 = [];
+
+        data?.data.map(object => {
+            const { medico_id: valorPropiedad1, nombre: nombreMedico, cedula: cedulaMedico, apellidos: apellidoMedico, especialidad } = object;
+            data1.push({ id: valorPropiedad1, text: `${cedulaMedico} - ${nombreMedico} ${apellidoMedico}` });
+
+        });
+
+        // Transforms the top-level key of the response object from 'data' to 'results'
+        return {
+            results: data1
+        };
+    }
+});
 
 async function filtrarFacturaMedico(e) {
     e.preventDefault();
@@ -17,7 +46,7 @@ async function filtrarFacturaMedico(e) {
 
     let filtroUrl = "";
 
-    if(data.medico_id) filtroUrl += `?medico_id=${data.medico_di}`;
+    if(data.medico_id) filtroUrl += `?medico=${data.medico_id}`;
     if(data.fecha_inicio) filtroUrl += `&fecha_inicio=${data.fecha_inicio}&fecha_fin=${data.fecha_fin}`;   
 
     // Nos aseguramos de que los queryparam inicien con el signo de interrogación
@@ -100,10 +129,10 @@ async function filtrarFacturaMedico(e) {
         order,
         processing: true,
         serverSide: true,
-        requestData: {
-            fecha_inicio: "2024-06-01",
-            fecha_fin: "2024-06-30"
-        }
+        // requestData: {
+        //     fecha_inicio: "2024-06-01",
+        //     fecha_fin: "2024-06-30"
+        // }
     })
 }
 

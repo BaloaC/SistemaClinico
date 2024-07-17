@@ -44,7 +44,7 @@
                             <div class="col-12 col-md-6">
                                 <div class="d-flex align-items-end justify-content-start mt-2 mb-3">
                                     <input type="checkbox" name="usuario" class="form-check-input me-3" onchange="filtrarFacturasMedicoInput(this)">
-                                    <h6 class="mb-0 form-check-label" for="usuario">Usuario</h6>
+                                    <h6 class="mb-0 form-check-label" for="usuario">Médico</h6>
                                 </div>
                                 <select name="medico_id" id="s-medico-filter" class="form-control mb-3" data-active="0" required disabled>
                                     <option></option>
@@ -70,6 +70,7 @@
                                 <table id="fMedicos" class="table table-compact">
                                     <thead>
                                         <tr>
+                                            <th>Detalles</th>
                                             <th>Item</th>
                                             <th>Nombre médico</th>
                                             <th>Sumatoria consultas naturales</th>
@@ -98,7 +99,7 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-3" id="modalRegLabel">Registrar recibo médico</h1>
+                        <h1 class="modal-title fs-3" id="modalRegLabel">Generar acumulado médico</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="modalRegBody">
@@ -140,25 +141,70 @@
             </div>
         </div>
 
-
-        <!-- Modal Confirmar Eliminación -->
-        <div class="modal fade" id="modalDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal fade" id="modalAcumulado" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAcumuladoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar recibo pago</h1>
+                        <h1 class="modal-title fs-3" id="modalAcumuladoLabel">Consultas del acumulado</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <div id="delAlert" class="alert d-none" role="alert"></div>
-                        ¿Está seguro que desea eliminar este recibo?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="btn-confirmDelete" class="btn btn-danger">Eliminar</button>
+                    <div class="modal-body" id="modalConsultas">
+
+                        <h5 class="loadingMessage">Cargando...</h5>
+
+                        <!-- <h3 class="mx-3 p-5 pb-1 text-grey consultaLabel" style="display: none">Consultas enviadas a mensajería</h3> -->
+                        <div class="accordion consulta-accordion p-5" id="consultaAccordion">
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <template id="template-consulta">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <a class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#consulta1" aria-expanded="false" aria-controls="consulta1">
+                        </a>
+                    </h2>
+                </div>
+                <div id="consulta1" class="collapse show" data-parent="#consultaAccordion">
+                    <div class="card-body">
+                        <p><b>Item:</b> <span id="consulta_id"></span> <br>
+                            <b>Nombre médico:</b> <span id="nombre_medico"></span> <br>
+                            <b>Especialidad:</b> <span id="especialidad"></span> <br>
+                            <b>Fecha consulta:</b> <span id="fecha_consulta"></span> <br>
+                            <b>Motivo cita:</b> <span id="motivo_cita"></span> <br>
+                            <b>Indicaciones:</b> <span id="indicaciones"></span> <br>
+                            <b>Observaciones:</b> <span id="observaciones"></span> <br>
+                            <!-- <b>Monto total en USD:</b> <span id="monto_total_usd"></span> <br>
+                            <b>Monto total en BS:</b> <span id="monto_total_bs"></span> -->
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+
+            <!-- Modal Confirmar Eliminación -->
+            <div class="modal fade" id="modalDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="modalDeleteLabel">Eliminar recibo pago</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="delAlert" class="alert d-none" role="alert"></div>
+                            ¿Está seguro que desea eliminar este recibo?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="btn-confirmDelete" class="btn btn-danger">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </main>
 
     <?php include PATH_VIEWS . '/partials/footer.php'; ?>
@@ -169,6 +215,7 @@
     <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/filtrarFacturasMedicoInput.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/generarTodosLosAcumulados.js'); ?>"></script>
     <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/filtrarFacturaMedico.js'); ?>"></script>
+    <script type="module" src="<?php echo Url::to('assets/js/facturas-medicos/openModalFacturaMedico.js'); ?>"></script>
 </body>
 
 </html>

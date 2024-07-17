@@ -15,7 +15,7 @@
 
     <h5 class="loadingMessage">Cargando...</h5>
 
-    <h5 class="mx-3 p-5 pb-1 text-grey consultaLabel" style="display: none">Consultas enviadas a mensajería</h5>
+    <h3 class="mx-3 p-5 pb-1 text-grey consultaLabel" style="display: none">Consultas enviadas a mensajería</h3>
     <div class="accordion consulta-accordion p-5" id="consultaAccordion">
 
     </div>

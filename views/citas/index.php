@@ -199,7 +199,7 @@
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <label for="hora_salida">Hora salida</label>
-                                        <input type="time" name="hora_salida" id="hora_salida" step="1" disabled class="form-control hora_salida flatpickr-input-readonly mb-3">
+                                        <input type="time" name="hora_salida" id="hora_salida" step="1" disabled class="form-control hora_salida hora_salida_registro  flatpickr-input-readonly mb-3">
                                     </div>
                                     <div class="col-12">
                                         <h6 class="my-3 fw-bolder citaScheduleLabel" style="display: none;">Citas asigandas del día</h6>
@@ -344,19 +344,19 @@
                                 <label for="input-radios-container">¿El médico autorizó la asignación de la cita fuera de su horario establecido?</label>
                                 <div class="input-radios-container">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_si" value="true">
+                                        <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_si1" value="true" data-modaltarget="reprogramar" onchange="forzarCitasHorario(this)">
                                         <label class="form-check-label" for="inlineRadio1">Sí</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_no" value="false" checked>
+                                        <input class="form-check-input" type="radio" name="forzar_hora" id="forzar_cita_no1" value="false" data-modaltarget="reprogramar" onchange="forzarCitasHorario(this)" checked>
                                         <label class="form-check-label" for="inlineRadio2">No</label>
                                     </div>
                                 </div>
                             </div>
                             <label for="hora_entrada">Hora entrada</label>
-                            <input type="time" name="hora_entrada" id="hora_entrada2" data-type="timeAppointment" step="1" class="form-control hora_entrada2 flatpickr-input-readonly mb-3" disabled>
+                            <input type="time" name="hora_entrada" id="hora_entrada2" data-type="timeAppointment" step="1" class="form-control hora_entrada2 hora_entrada_reprogramar flatpickr-input-readonly mb-3" disabled>
                             <label for="hora_salida">Hora salida</label>
-                            <input type="time" name="hora_salida" id="hora_salida2" data-type="timeAppointment" step="1" class="form-control hora_salida2 flatpickr-input-readonly mb-3" disabled>
+                            <input type="time" name="hora_salida" id="hora_salida2" data-type="timeAppointment" step="1" class="form-control hora_salida2 hora_salida_reprogramar flatpickr-input-readonly mb-3" disabled>
                             <div class="outOfSchedule my-3" style="display: none;">
                                 <p><b>Importante:</b> La cita se reasiganará fuera del horario del médico</p>
                             </div>
