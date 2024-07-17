@@ -6,11 +6,11 @@ const id = location.pathname.split("/")[4];
 function openPopupDatelleFactura(id){
 
     let basePath = `${location.origin}/${location.pathname.split("/")[1]}/consulta/mensajeriaDetalle/${id}`;
-    const windowFeatures = "left=100,top=100,width=800,height=600,popup=true";
-    const openPopup = window.open(basePath,"_blank",windowFeatures);
-
-    openPopup.moveTo(0,0);
-    // openPopup.resizeTo(screen.availWidth,screen.availHeight);
+    
+    const a = document.createElement('a');
+    a.href = basePath;
+    a.target = '_blank';
+    a.click();
 }    
 
 window.openPopupDatelleFactura = openPopupDatelleFactura;
@@ -51,8 +51,8 @@ if (id) {
             }
 
             consulta_id.textContent = el.consulta_id;
-            nombre_medico.textContent = `${el.nombre_medico ?? el?.medico[0]?.nombre_medico ?? el?.medico?.nombre ?? "Consulta por emergencia"} ${el.apellidos_medico ?? el?.medico[0]?.apellidos_medico ?? el?.medico?.apellidos ?? ""}`;
-            especialidad.textContent = el.nombre_especialidad ?? el?.medico[0]?.nombre_especialidad ?? el?.especialidad?.nombre;
+            nombre_medico.textContent = `${el.nombre_medico ?? el?.medico?.nombre ?? "Consulta por emergencia"} ${el.apellidos_medico ?? el?.medico?.apellidos_medico ?? el?.medico?.apellidos ?? ""}`;
+            especialidad.textContent = el.nombre_especialidad ?? el?.medico?.nombre_especialidad ?? el?.especialidad?.nombre;
             fecha_consulta.textContent = formatToRealDate(el?.consulta?.fecha_consulta);
             observaciones.textContent = el?.consulta?.observaciones || "Sin observaciones";
             motivo_cita.textContent = el.motivo_cita ?? el?.cita?.motivo_cita ?? "La consulta es de emergencia";
@@ -75,11 +75,13 @@ if (id) {
 
     } else {
 
-        const h6 = document.createElement("h6");
-        h6.textContent = "El paciente no posee consultas";
+        const h3 = document.createElement("h3");
+        h3.textContent = "El paciente no posee consultas";
 
         // Actualizamos el contenedor e insertamos los datos
         consultaContainer.replaceChildren();
-        consultaContainer.appendChild(h6);
+        consultaContainer.appendChild(h3);
+
+        $(".loadingMessage").fadeOut("slow");
     }
 }

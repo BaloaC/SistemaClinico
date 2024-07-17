@@ -38,6 +38,12 @@ addEventListener("DOMContentLoaded", e => {
     $.fn.dataTable.moment('DD-MM-YYYY');
 
     const fMedicosColumns = [
+        {
+            "className": 'dt-control',
+            "orderable": false,
+            "data": null,
+            "defaultContent": ''
+        },
         { data: "factura_medico_id" },
         {
             data: "nombre",
@@ -101,11 +107,22 @@ addEventListener("DOMContentLoaded", e => {
 
     const order = [[6, 'desc']];
 
+    const format = (data) => {
+        return `
+            <table cellpadding="5" cellspacing="0" border="0" style=" padding-left:50px; width: 100%">
+                <tr>
+                    <td><p class="link-primary cursor-pointer" onclick="openModalFacturaMedico('${data.factura_medico_id}')">Visualizar consultas de los acumulados</p></td>
+                </tr>
+            </table>
+        `;
+    }
+
     createDataTable({
         id: "#fMedicos",
         url: `/${path[1]}/factura/medico/consulta/`,
         columns: fMedicosColumns,
         order,
+        format,
         processing: true,
         serverSide: true
     })

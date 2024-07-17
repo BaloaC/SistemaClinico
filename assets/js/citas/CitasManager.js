@@ -328,7 +328,7 @@ export default class CitasManager {
             config.defaultDate = this.aumentarDecrementar30Minutos(dateStr ?? horario?.hora_entrada, true);
         } else {
 
-            config.defaultDate = "08:00";
+            config.defaultDate = "08:30";
             config.minTime = this.aumentarDecrementar30Minutos(dateStr ?? horario?.hora_entrada, true);
             config.maxTime = "17:00";
             // delete config.maxTime;

@@ -8,6 +8,7 @@ import sortScheduleByDay from "../global/sortScheduleByDay.js";
 import to12HourFormat from "../global/to12HoursFormat.js";
 import CitasManager from "./CitasManager.js";
 import { cachedCitas } from "./cachedCitas.js";
+import forzarCitasHorario from "./forzarCitasHorario.js";
 import { citas } from "./parseCitas.js";
 import parseCitas from "./parseCitas.js?v=1";
 import tipoAsegurado from "./tipoAsegurado.js";
@@ -370,6 +371,7 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             const horariosOrdenados = sortScheduleByDay(infoMedico[0]?.horario);
             const forzarCitaSi = document.getElementById("forzar_cita_si");
             const forzarCitaNo = document.getElementById("forzar_cita_no");
+            const forzarCitaNo1 = document.getElementById("forzar_cita_no1");
             const numeroTelefonicoCita = document.getElementById("numeroTelefonicoMedico");
             const numeroTelefonicoCita1 = document.getElementById("numeroTelefonicoMedico1");
 
@@ -380,8 +382,8 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
             citasManager.obtenerCitas();
 
             // Para resetear los inputs y poder colocar hora fuera de los horarios en caso sea sí
-            forzarCitaSi.onchange = () => citasManager.resetInputHoras();
-            forzarCitaNo.onchange = () => citasManager.resetInputHoras();
+            // forzarCitaSi.onchange = () => citasManager.resetInputHoras();
+            // forzarCitaNo.onchange = () => citasManager.resetInputHoras();
 
 
             let listHorarios = "";
@@ -407,12 +409,8 @@ export const calendar = new FullCalendar.Calendar(calendarEl, {
                 $("#horarios-tableNotFound").fadeIn("slow");
             }
 
-            // Subir el scroll hasta inicio para visualizar mejor el mensaje de error
-            // modalReg.scrollTo({
-            //     top: modalReg.scrollHeight,
-            //     bottom: 0,
-            //     behavior: 'smooth'
-            // });
+            forzarCitasHorario(forzarCitaNo1);
+            forzarCitasHorario(forzarCitaNo);
         });
 
         $("#s-tipo_cita").on("change", function (e) {
