@@ -260,7 +260,7 @@ class FacturaMedicoController extends Controller{
                 $consultas_por_citas[] = ConsultaService::obtenerConsultaNormal($consulta_cita, false);
             }
         }
-
+        
         $_consultaSinCita = new ConsultaSinCitaModel();
         $inner_consulta = $_consultaSinCita->listInner(['consulta' => 'consulta_sin_cita']);
         $consultas_medicos = $_consultaSinCita->where('consulta_sin_cita.medico_id', '=', $factura->medico_id)
@@ -270,11 +270,11 @@ class FacturaMedicoController extends Controller{
         $consultas_sin_citas = [];
         if (!is_null($consultas_medicos)) {
             foreach ($consultas_medicos as $consulta) {
-                $consultas_sin_citas[] = ConsultaService::obtenerConsultaNormal($consulta_cita, false);
+                $consultas_sin_citas[] = ConsultaService::obtenerConsultaNormal($consulta, false);
             }
         }
         
-        $consultas_totales = array_merge((Array) $consultas_por_citas, (Array) $consultas_por_citas);
+        $consultas_totales = array_merge((Array) $consultas_por_citas, (Array) $consultas_sin_citas);
 
         $respuesta = new Response( 'CORRECTO');
         $respuesta->setData($consultas_totales);
