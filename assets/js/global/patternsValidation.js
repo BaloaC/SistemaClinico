@@ -6,7 +6,7 @@ export const patterns = {
     phone: /^\d{7}$/, // Patrón para número de teléfono
     rif: /^\d{9}$/, // Patrón para RIF
     pin: /^\d{6,}$/, // Patrón para el pin
-    dni: /^\d{6,8}$/, //Patrón para la cédula
+    dni: /^(?!-)[0-9-]+$/, //Patrón para la cédula
     address: /^(?=.*[^\s])(?=.*[a-zA-Z0-9 @#+_,-])[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ @#+_,-.]{3,255}$/, // Patrón para dirección
     name: /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]{3,}$/, // Patrón para nombres
     nameCompany: /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s,.0-9]{6,}$/, // Patrón para nombres de empresas, seguros, etc...

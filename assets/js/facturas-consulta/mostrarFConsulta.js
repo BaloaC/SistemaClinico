@@ -93,11 +93,13 @@ const handleModalOpen = async (modalParent) => {
 
                             const { consulta_id: valorPropiedad1, observaciones } = object;
                             
-                            if(object.estatus_con !== "4"){
+                            if(object.estatus_con !== "4" && Object.estatus_con !== "3"){
                                 data1.push({ id: valorPropiedad1, text: `${valorPropiedad1} - ${observaciones ?? "Sin observaciones"}` });
                             }
                         });
                     }
+
+                    console.log(data1);
 
                     if (typeof consultasAseguradas === "object" && consultasAseguradas?.consultas.length !== 0) {
                         consultasAseguradas?.consultas?.forEach(object => {

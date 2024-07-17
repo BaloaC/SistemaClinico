@@ -48,7 +48,7 @@
                 </div>
             </div>
         </section>
-        <section>
+        <section class="insumosSection">
             <div class="container">
                 <div class="row">
                     <div class="col-12 col-lg-7 order-2 order-lg-1">

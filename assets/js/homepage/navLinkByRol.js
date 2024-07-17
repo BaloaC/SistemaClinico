@@ -7,6 +7,7 @@ const atencionModule = document.querySelector(".atencion-module");
 const atencionModule2 = document.querySelector(".atencion-module2");
 const facturacionModule = document.querySelector(".facturacion-module");
 const inventarioModule = document.querySelector(".inventario-module");
+const insumosSection = document.querySelector(".insumosSection");
 const pdfLink = document.getElementById("pdfLink");
 
 const deleteOffsetMargin = () => {
@@ -34,9 +35,10 @@ if (rol === "3") {
     deleteOffsetMargin();
     facturacionModule.style = "min-width: 400px";
     inventarioModule.style = "min-width: 400px";
+    insumosSection.style = "display: none";
 }
 
-if(rol === "4") {
+if (rol === "4") {
     adminModule.classList.add("d-none");
     personalModule.classList.add("d-none");
     facturacionModule.classList.add("d-none");
@@ -48,12 +50,13 @@ if(rol === "4") {
     deleteOffsetMargin();
 }
 
-if(rol === "5") {
+if (rol === "5") {
     adminModule.classList.add("d-none");
     personalModule.classList.add("d-none");
     facturacionModule.classList.add("d-none");
     inventarioModule.classList.add("d-none");
     atencionModule.classList.add("w-50");
     pdfLink.href = "./assets/manuales/salud.pdf";
+    insumosSection.style = "display: none";
     deleteOffsetMargin()
 }

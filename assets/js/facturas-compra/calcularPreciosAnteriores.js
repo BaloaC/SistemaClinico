@@ -14,6 +14,7 @@ export async function calcularPreciosAnteriores(input) {
 
     mantenerPrecioRadioInput.checked = true;
     mantenerPrecioRadioInput.style = "display:inline !important";
+    precioAnteriorLabel.style = "display:inline !important";
     nuevoPrecioRadioInput.style = "display:inline !important";
     precioNuevoLabel.style = "display:inline !important";
 
@@ -22,9 +23,9 @@ export async function calcularPreciosAnteriores(input) {
         precioAnteriorLabel.innerText = `El insumo no es cobrado`;
         precioNuevoLabel.innerText = `El insumo no es cobrado`;
         mantenerPrecioRadioInput.checked = true;
-        mantenerPrecioRadioInput.style = "display:none";
-        nuevoPrecioRadioInput.style = "display:none";
-        precioNuevoLabel.style = "display:none";
+        mantenerPrecioRadioInput.style = "display:none !important";
+        nuevoPrecioRadioInput.style = "display:none !important";
+        precioNuevoLabel.style = "display:none !important";
 
     }
     const insumo = await getById("insumos", input.value);
@@ -32,14 +33,14 @@ export async function calcularPreciosAnteriores(input) {
     let porcentajePrecioNuevo = (parseFloat(insumo.precio) + (parseFloat(porcentajeGlobal[2].value) / 100));
     porcentajePrecioNuevo = porcentajePrecioNuevo / insumo.capacidad_unidad;
 
-    if (insumo.precio === 0) {
+    if (insumo.es_cobrado == 0) {
 
         precioAnteriorLabel.innerText = "El insumo no es cobrado";
         precioNuevoLabel.innerText = "El insumo no es cobrado";
         mantenerPrecioRadioInput.checked = true;
         nuevoPrecioRadioInput.style = "display:none !important";
         precioNuevoLabel.style = "display:none !important";
-        mantenerPrecioRadioInput.style = "display:none";
+        mantenerPrecioRadioInput.style = "display:none !important";
 
     } else {
         precioAnteriorLabel.innerText = `Mantener precio anterior ($${Math.round(insumo.precio * 100) / 100})`;

@@ -2,7 +2,7 @@ import getAge from "../global/getAge.js";
 
 const disabledInputs = document.querySelectorAll(".form-control[disabled]");
 
-document.getElementById("s-tipo_paciente").addEventListener("change", e => {
+export function tipoPacienteChange(e) {
 
     const subMenus = document.querySelector(".sub-menus");
     const modalRegContent = document.getElementById("modalRegBody");
@@ -18,7 +18,7 @@ document.getElementById("s-tipo_paciente").addEventListener("change", e => {
 
             let fechaNacimiento = document.getElementById("fecha_nacimiento").value.split("-");
             let edad = getAge(fechaNacimiento[0], fechaNacimiento[1], fechaNacimiento[2]);
-            
+
             const cedulaInput = document.getElementById("cedula");
             const telefonoInput = document.getElementById("telefono");
             const codTelInput = document.getElementById("cod-tel");
@@ -66,12 +66,12 @@ document.getElementById("s-tipo_paciente").addEventListener("change", e => {
                 setTimeout(() => {
                     cedulaMenorLabel.classList.add("d-none");
                 }, 550);
-        
+
                 cedulaMenorContainer.classList.add("opacity-0");
                 setTimeout(() => {
                     cedulaMenorContainer.classList.add("d-none");
                 }, 550);
-        
+
                 cedulaInput.disabled = false;
                 telefonoInput.disabled = false;
                 codTelInput.disabled = false;
@@ -101,6 +101,9 @@ document.getElementById("s-tipo_paciente").addEventListener("change", e => {
 
         } else {
 
+            const cedulaMenorLabel = document.querySelector("label[for='pacienteMenorLabel']");
+            const cedulaMenorContainer = document.querySelector(".pacienteMenorContainer");
+
             subMenuInputs.forEach(el => {
                 el.disabled = true;
             })
@@ -108,10 +111,18 @@ document.getElementById("s-tipo_paciente").addEventListener("change", e => {
             setTimeout(() => {
                 subMenu.classList.add("d-none");
             }, 550);
+
+            if(selectedSubMenu === "") {
+                cedulaMenorContainer.classList.add("d-none");
+                cedulaMenorLabel.classList.add("d-none");
+            }
         }
 
         const selectTitular = document.getElementById("s-titular_id");
-        if(selectTitular.value === "") document.getElementById("s-titular_id").disabled = true;
+        if (selectTitular.value === "") document.getElementById("s-titular_id").disabled = true;
         counter++;
     }
-})
+}
+
+
+document.getElementById("s-tipo_paciente").addEventListener("change", event => tipoPacienteChange(event))

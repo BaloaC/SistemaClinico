@@ -86,10 +86,13 @@ async function addFCompra() {
         $('#fCompra').DataTable().ajax.reload();
         document.querySelectorAll(".insumo-id")[0].classList.remove("is-valid");
         document.getElementById("precioAnteriorLabel").style = "display: none !important";
+        document.getElementById("precioNuevoLabel").style = "display: none !important";
         
         $("#s-proveedor").val([]).trigger("change.select2");
         $("#s-insumo").val([]).trigger("change.select2");
         $("#s-proveedor").removeClass("is-valid");
+
+        $(".actualizarPrecio-insumo").fadeOut("slow");
 
     } catch (error) {
         console.log(error);

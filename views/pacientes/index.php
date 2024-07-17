@@ -289,7 +289,7 @@
 
 
                                     <label for="cedula">Cédula</label>
-                                    <input type="number" name="cedula" id="cedula-act" class="form-control" data-validate="true" data-type="dni" data-max-length="8" required>
+                                    <input type="text" name="cedula" id="cedula-act" class="form-control" data-validate="true" data-type="dni" data-max-length="12" oninput="this.value = this.value.replace(/[^0-9\-]/g, '')" required>
                                     <small class="form-text">La cédula debe contener entre 6 o 8 números</small>
                                     <label for="pacienteMenorLabelAct" class="mt-3 opacity-0 d-none">¿El paciente posee cédula de identidad?</label>
                                     <div class="pacienteMenorContainerAct input-radios-container opacity-0 d-none">

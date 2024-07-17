@@ -126,6 +126,8 @@ export default function mostrarPacienteSeguro(seguros){
         deleteElementByClass("newInput");
         $("#btn-add-seguro").fadeIn("slow");
         $("#pacienteSinSeguroMessage").fadeIn("slow");
+        document.getElementById("s-empresa-act").disabled = true;
+        document.getElementById("s-seguro-act").disabled = true;
     }
     
 }

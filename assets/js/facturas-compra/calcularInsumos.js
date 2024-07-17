@@ -25,11 +25,12 @@ async function calcularMonto(input) {
     const precioAntiguoLabel = insumoContainer.querySelector("#precioAnteriorLabel");
     const precioAnteriorRadioInput = insumoContainer.querySelector("#antiguoPrecio");
     const porcentajeGlobal = await getAll("globals");
+    const insumoInfo = await getById("insumos", insumo);
     
     let precioUnitarioEnDolares = parseFloat(precioUnitario) / parseFloat(porcentajeGlobal[1].value);
     let precioOriginalUnitario = precioUnitarioEnDolares;
     let porcentajePrecioUnitario = parseFloat((precioUnitarioEnDolares * porcentajeGlobal[2].value) / 100);
-    precioUnitarioEnDolares = Math.round((precioOriginalUnitario + porcentajePrecioUnitario) * 100) / 100;
+    precioUnitarioEnDolares = Math.round(((precioOriginalUnitario + porcentajePrecioUnitario) / parseFloat(insumoInfo.capacidad_unidad)) * 100) / 100;
     
     // calculo del precio total
     precioNuevoLabel.innerText = `Actualizar nuevo precio ($${( (precioUnitarioEnDolares) )})`;
@@ -44,13 +45,13 @@ async function calcularMonto(input) {
         precioNuevoLabel.innerText = `Actualizar nuevo precio ($${ Math.round(precioUnitarioEnDolares * 100) / 100 })`;
     }
 
-    if((Math.round(precioUnitarioEnDolares * 100) / 100) === 0) {
-        precioNuevoLabel.innerText = "El precio debe ser mayor a 0 para actualizarlo";
-        precioNuevoRadioInput.style = "display: none !important";
-        precioAntiguoLabel.style = "display: none !important";
-        precioAnteriorRadioInput.style = "display: none !important";
-        precioAnteriorRadioInput.checked = true;
-    }
+    // if((Math.round(precioUnitarioEnDolares * 100) / 100) === 0) {
+    //     precioNuevoLabel.innerText = "El precio debe ser mayor a 0 para actualizarlo";
+    //     precioNuevoRadioInput.style = "display: none !important";
+    //     precioAntiguoLabel.style = "display: none !important";
+    //     precioAnteriorRadioInput.style = "display: none !important";
+    //     precioAnteriorRadioInput.checked = true;
+    // }
 
     // Validamos que se envie las unidades para poder actualizar todos los montos
     if(unidades === "") return;

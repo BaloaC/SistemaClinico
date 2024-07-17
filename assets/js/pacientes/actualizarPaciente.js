@@ -22,6 +22,8 @@ async function updatePaciente(id) {
     try {
         const json = await getById("pacientes", id);
         let titularesPaciente;
+        document.getElementById("s-empresa-act").disabled = true;
+        document.getElementById("s-seguro-act").disabled = true;
 
         // Obtener código telefónico
         let $telCod = json.telefono.slice(0, 4),
@@ -43,10 +45,16 @@ async function updatePaciente(id) {
             mostrarPacienteSeguro(json.seguro);
         }
 
+        $form.cedula.disabled = false;
+
         if (json.tipo_paciente == "4") {
             const titulares = await getById("titulares", json.paciente_id) ?? [];
             titularesPaciente = titulares;
             mostrarPacienteBeneficiado(titulares);
+
+            if(json.cedula.includes("-")) {
+                $form.cedula.disabled = true;
+            }
         }
 
         //Establecer el option con los datos del usuario
@@ -189,22 +197,25 @@ async function confirmUpdate() {
         delete parseData.paciente_beneficiado_id;
 
         const cleanFormHandler = () => {
-            cleanValdiation("act-paciente");
-            cleanValdiation("info-paciente");
             $('#s-cita').val([]).trigger('change');
             toggleAddSeguro("hide");
             toggleAddTitular("hide");
             deleteElementByClass("newInput");
+            cleanValdiation("act-paciente");
+            cleanValdiation("info-paciente");
+            console.log("a");
         }
+    
+        console.log(Object.values(parseData)?.length);
 
         // Validamos que se envie al menos una propiedad para hacer la petición
-        if (Object.values(parseData)?.length > 3) {
+        if (Object.values(parseData)?.length > 2) {
 
             let success = await updateModule(parseData, "paciente_id", "pacientes", "act-paciente", "Paciente actualizado correctamente!");
 
             $('#pacientes').DataTable().ajax.reload();
 
-            if (success?.result?.code === true) cleanFormHandler();
+            cleanFormHandler();
         } else {
 
             showDefaultModalAct({ form: $form, successMessage: "Paciente actualizado correctamente!" });

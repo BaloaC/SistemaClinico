@@ -64,7 +64,7 @@ async function confirmUpdate() {
 
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         if (!data.nombre_medicamento.length > 3) throw { message: "El nombre debe contener al menos 3 caracteres" };
-        if (!(patterns.nameExam.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
+        // if (!(patterns.nameExam.test(data.nombre))) throw { message: "El nombre ingresado no es válido" };
 
         const parseData = deleteSecondValue("#act-medicamento input, #act-medicamento select", data);
 
