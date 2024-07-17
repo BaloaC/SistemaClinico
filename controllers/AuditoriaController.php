@@ -380,9 +380,6 @@ class AuditoriaController extends Controller {
     }
 
     public function importarBd() {
-        global $isEnabledAudit;
-        $isEnabledAudit = 'importarBD';
-
         $conexionBd = new Database();
         $archivoSql = $_FILES["archivosql"];
 
