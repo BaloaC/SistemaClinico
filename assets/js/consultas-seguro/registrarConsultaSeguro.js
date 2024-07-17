@@ -85,7 +85,7 @@ async function addFSeguro() {
         // if (!(patterns.price.test(data.monto_consulta_usd))) throw { message: "El precio ingresado es inválido" };
 
 
-        const registroExitoso = await addModule("factura/consultaSeguro", "info-fseguro", data, "La factura seguro ha sido generada correctamente!", "#modalRegAsegurada", ".alertConsultaSeguro");
+        const registroExitoso = await addModule("factura/consultaSeguro", "info-fseguro", data, "El recibo seguro ha sido generado correctamente!", "#modalRegAsegurada", ".alertConsultaSeguro");
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 

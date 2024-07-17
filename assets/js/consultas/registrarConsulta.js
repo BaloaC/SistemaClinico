@@ -165,7 +165,7 @@ async function addConsulta() {
                 $alert.classList.remove("alert-success");
                 $alert.classList.remove("alert-danger");
                 $alert.classList.add("alert-warning");
-                $alert.innerText = "La consulta fue registrada correctamente, pero la factura no pudo ser procesada por lo que deberá realizarla manualmente";
+                $alert.innerText = "La consulta fue registrada correctamente, pero el recibo no pudo ser procesada por lo que deberá realizarla manualmente";
                 $alert.classList.remove("d-none");
             }
 

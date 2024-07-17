@@ -28,7 +28,7 @@ async function addFMedico() {
 
         // const facturaMedico = await getAll(`facturaMedico/medico?fecha=${fechaFormateada}&medico=${data.medico_id}`);
 
-        const registroExitoso = await addModule("facturas/all", "info-fmedico", facturaMedico, "Factura médico registrada correctamente!");
+        const registroExitoso = await addModule("facturas/all", "info-fmedico", facturaMedico, "Acumulado médico registrado correctamente!");
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 

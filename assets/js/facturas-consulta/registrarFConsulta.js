@@ -23,7 +23,7 @@ async function addFConsulta() {
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
         // if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto_consulta_usd))) throw { message: "El monto ingresado en usd es inválido" };
 
-        const registroExitoso = await addModule("factura/consulta","info-fconsulta",data,"La factura consulta ha generada correctamente!", "#modalRegNormal", ".alertConsulta");
+        const registroExitoso = await addModule("factura/consulta","info-fconsulta",data,"El recibo consulta ha generado correctamente!", "#modalRegNormal", ".alertConsulta");
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
         

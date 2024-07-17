@@ -69,7 +69,7 @@ async function addFCompra() {
         if(data.excento === "0") delete data.excento;
         if (!$form.checkValidity()) { $form.reportValidity(); return; }
 
-        const registroExitoso = await addModule("factura/compra", "info-fcompra", data, "Factura compra registrada correctamente!");
+        const registroExitoso = await addModule("factura/compra", "info-fcompra", data, "Recibo compra registrado correctamente!");
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 

@@ -15,7 +15,7 @@ async function confirmDelete(id){
         
         if(!motivo_cancelacion.value || motivo_cancelacion.value.length <= 0) throw { message: "El motivo ingresado no es válido" };
 
-        await deleteModule("factura/compra", id, "Factura compra eliminada exitosamente!","#modalDelete", "delAlert",{motivo_cancelacion: motivo_cancelacion.value});
+        await deleteModule("factura/compra", id, "Recibo compra eliminado exitosamente!","#modalDelete", "delAlert",{motivo_cancelacion: motivo_cancelacion.value});
         motivo_cancelacion.value = "";
         $('#fCompra').DataTable().ajax.reload();
 

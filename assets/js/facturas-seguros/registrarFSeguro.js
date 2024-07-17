@@ -16,7 +16,7 @@ async function addFSeguro() {
         if (!(/^[0-9]*\.?[0-9]+$/.test(data.monto))) throw { message: "El precio ingresado es inválido" };
 
 
-        const registroExitoso = await addModule("factura/seguro","info-fseguro",data,"Factura seguro registrada correctamente!");
+        const registroExitoso = await addModule("factura/seguro","info-fseguro",data,"Recibo seguro registrado correctamente!");
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 

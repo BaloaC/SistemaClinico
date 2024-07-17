@@ -285,7 +285,7 @@ export async function getConsultasSegurosMes({ seguro = "", anio = "", mes = "" 
 
                 info.factura = `
                 <tr class="py-3">
-                    <td colspan="4"><b>Factura consulta emergencia:</b></td>
+                    <td colspan="4"><b>Recibo consulta emergencia</b></td>
                 </tr>
                 `;
 

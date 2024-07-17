@@ -5,7 +5,7 @@ function deleteFMedico(id) {
 }
 
 async function confirmDelete(id){
-    await deleteModule("factura/medico", id, "Factura medico eliminada exitosamente!");
+    await deleteModule("factura/medico", id, "Acumulado eliminado exitosamente!");
     $('#fMedicos').DataTable().ajax.reload();
 }
 

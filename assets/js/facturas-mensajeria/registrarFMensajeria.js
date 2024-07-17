@@ -127,7 +127,7 @@ async function addFMensajeria() {
 
         data.consultas = consultas;
 
-        const registroExitoso = await addModule("factura/mensajeria","info-fconsulta",data,"Factura mensajería registrada correctamente!", "#modalRegNormal", ".alertConsulta");
+        const registroExitoso = await addModule("factura/mensajeria","info-fconsulta",data,"Recibo de mensajería registrado correctamente!", "#modalRegNormal", ".alertConsulta");
 
         if (!registroExitoso.code) throw { result: registroExitoso.result };
 
