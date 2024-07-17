@@ -30,6 +30,7 @@ export async function calcularPreciosAnteriores(input) {
     const insumo = await getById("insumos", input.value);
     const porcentajeGlobal = await getAll("globals");
     let porcentajePrecioNuevo = (parseFloat(insumo.precio) + (parseFloat(porcentajeGlobal[2].value) / 100));
+    porcentajePrecioNuevo = porcentajePrecioNuevo / insumo.capacidad_unidad;
 
     if (insumo.precio === 0) {
 

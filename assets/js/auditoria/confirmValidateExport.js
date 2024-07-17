@@ -37,6 +37,19 @@ async function confirmValidateExport() {
                 document.getElementById("info-validarExport").reset();
                 location.href = "./exportarBd";
 
+                // fetch("./exportarBd", {headers: {"Authorization": "Bearer " + Cookies.get("tokken")}, method: "GET"})
+                // .then(response => response.blob())
+                // .then(blob => {
+
+                //     // Crear un enlace de descarga
+                //     const enlace = document.createElement('a');
+                //     const urlBlob = URL.createObjectURL(blob);
+                //     enlace.href = urlBlob;
+                //     enlace.download = '.zip';
+                //     document.body.appendChild(enlace);
+                //     enlace.click();
+                // })
+
             } else {
 
                 $alert.classList.remove("d-none");
