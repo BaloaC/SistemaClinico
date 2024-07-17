@@ -86,14 +86,23 @@ class FacturaConsultaService {
 
                     $consulta_info = FacturaConsultaHelpers::obtenerInformacion($factura, $es_asegurada);
                     // $insumos_consulta = FacturaConsultaHelpers::obtenerInsumos($factura);
-                    
-                    if (!isset($consulta_info['nombre_paciente'])) {
+                    // echo '<pre>';
+                    // var_dump($consulta_info);
+                    if (!isset($consulta_info['nombre_paciente']) && $consulta_info['es_emergencia'] == 0) {
                         $_consultaCitaModel = new ConsultaCitaModel();
                         $inners = $_consultaCitaModel->listInner(['cita' => 'consulta_cita', 'paciente' => 'cita']);
                         $informacion_paciente = $_consultaCitaModel->where('consulta_cita.consulta_id', '=', $factura->consulta_id)
                                                         ->innerJoin(['paciente.nombre AS nombre_paciente', 'paciente.apellidos'], $inners, 'consulta_cita');
                         
                         $consulta_info = array_merge($consulta_info, (array) $informacion_paciente[0]);
+
+                    } else if ($consulta_info['es_emergencia']) {
+                        $_consultaEmergencia = new ConsultaEmergenciaModel();
+                        $inners = $_consultaEmergencia->listInner(['paciente' => 'consulta_emergencia']);
+                        $cta_emergencia = $_consultaEmergencia->where('consulta_id', '=', $factura->consulta_id)
+                                                                ->innerJoin(['paciente.nombre AS nombre_paciente', 'paciente.apellidos'], $inners, 'consulta_emergencia');
+
+                        $consulta_info = array_merge($consulta_info, (array) $cta_emergencia[0]);
                     }
     
                     $examenes_consulta = FacturaConsultaHelpers::obtenerExamenes($factura);

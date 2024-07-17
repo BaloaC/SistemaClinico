@@ -25,7 +25,7 @@ class FacturaMedicoController extends Controller{
         "factura_medico.pago_total",
         "factura_medico.pacientes_seguro",
         "factura_medico.pacientes_consulta",
-        "factura_medico.fecha_pago",
+        // "factura_medico.fecha_pago",
         "factura_medico.fecha_emision",
         "factura_medico.estatus_fac"
         // "factura_medico.precio_dolar"
@@ -105,118 +105,6 @@ class FacturaMedicoController extends Controller{
         exit();
     }
 
-    // public function solicitarFacturasMedicos(/*Request $request*/) { // método para obtener todas las facturas
-    //     global $isEnabledAudit;
-    //     $isEnabledAudit = 'recibo de pago médico';
-
-    //     $_POST = json_decode(file_get_contents('php://input'), true);
-    //     FacturaMedicoValidate::validacionesPrincipales($_POST);
-    //     $validarFactura = new Validate;
-        
-    //     $_medicoModel = new MedicoModel();
-    //     $medicoList = $_medicoModel->where('estatus_med','=', 1)->getAll();
-    //     $data = $validarFactura->dataScape($_POST);
-
-    //     $_facturaMedicoModel = new FacturaMedicoModel();
-
-    //     foreach ($medicoList as $medico) {
-            
-    //         $factura = array(
-    //             "fecha_actual" => $data['fecha_actual'],
-    //             "medico_id" => $medico->medico_id
-    //         );
-
-    //         $facturaMedico = FacturaMedicoService::contabilizarFactura($factura);
-    //         $estaDuplicado = FacturaMedicoValidate::validarFacturaMes($factura);
-
-    //         if (!$estaDuplicado) {
-    //             $isInserted = $_facturaMedicoModel->insert($facturaMedico);
-
-    //             if ( !($isInserted  > 0) ) {
-    //                 $respuesta = new Response('INSERCION_FALLIDA');
-    //                 $respuesta->setData('Error generando la factura del medico_id' + $medico->medico_id);
-    //                 echo $respuesta->json(400);
-    //                 exit();
-
-    //             } else {
-    //                 FacturaMedicoHelpers::reiniciarAcumuladoMedico($medico->medico_id);
-    //             }
-
-    //         } else {
-    //             $_facturaMedicoModel = new FacturaMedicoModel();
-    //             $factura = $_facturaMedicoModel->where('factura_medico_id', '=', $estaDuplicado->factura_medico_id)->update($facturaMedico);
-
-    //             if ( !($factura <= 0) ) {
-    //                 $respuesta = new Response('ACTUALIZACION_FALLIDA');
-    //                 $respuesta->setData('Error generando la factura del medico_id' + $medico->medico_id);
-    //                 echo $respuesta->json(400);
-    //                 exit();
-    //             }
-    //         }
-    //     }
-
-    //     $respuesta = new Response('INSERCION_EXITOSA');
-    //     echo $respuesta->json(201);
-    //     exit();
-    // }
-
-    // public function insertarFacturaMedicoPorId(/*Request $request*/){
-    //     global $isEnabledAudit;
-    //     $isEnabledAudit = 'recibo de pago médico';
-
-    //     $_POST = json_decode(file_get_contents('php://input'), true);
-    //     FacturaMedicoValidate::validateInsertMedico($_POST);
-
-    //     $validarFactura = new Validate;
-    //     $data = $validarFactura->dataScape($_POST);
-        
-    //     $_facturaMedicoModel = new FacturaMedicoModel();
-    //     $id = $_facturaMedicoModel->insert($data);
-    //     $data['factura_id'] = $id;
-    //     $mensaje = ($id > 0);
-
-    //     if ($mensaje) {
-    //         FacturaMedicoHelpers::reiniciarAcumuladoMedico($_POST['medico_id']);
-    //     }
-
-    //     $respuesta = new Response($mensaje ? 'INSERCION_EXITOSA' : 'INSERCION_FALLIDA');
-    //     $respuesta->setData($data);
-    //     return $respuesta->json($mensaje ? 201 : 400);
-    // }
-
-    // public function actualizarFacturaMedico($factura_medico_id){
-    //     global $isEnabledAudit;
-    //     $isEnabledAudit = 'recibo de pago médico';
-
-    //     $_facturaMedico = new FacturaMedicoModel();
-    //     $factura_medico = $_facturaMedico->where('factura_medico_id', '=', $factura_medico_id)->getFirst();
-
-    //     if (is_null($factura_medico)) {
-    //         $respuesta = new Response(false, 'La factura indicada no existe');
-    //         $respuesta->setData($factura_medico_id);
-    //         echo $respuesta->json(400);
-    //         exit();
-    //     }
-
-    //     if ($factura_medico->estatus_fac != '1') {
-    //         $respuesta = new Response(false, 'No puede realizar operaciones con una factura ya cancelada o eliminada');
-    //         $respuesta->setData("Error al actualizar la factura $factura_medico_id con estatus ".($factura_medico->estatus_fac == '2' ? 'anulada' : 'pagado'));
-    //         return $respuesta->json(400);
-    //     }
-
-    //     date_default_timezone_set('America/Caracas');
-    //     $data = array(
-    //         'estatus_fac' => '3',
-    //         'fecha_pago' => date("Y-m-d H:i:s")
-    //     );
-        
-    //     $actualizado = $_facturaMedico->where('factura_medico_id', '=', $factura_medico_id)->update($data);
-        
-    //     $isTrue = ($actualizado > 0);
-    //     $respuesta = new Response($isTrue ? 'ACTUALIZACION_EXITOSA' : 'ACTUALIZACION_FALLIDA');
-    //     return $respuesta->json($isTrue ? 200 : 400);
-    // }
-
     // Los listar traen los get de facturas registradas en base de datos
 
     public function listarFacturaMedico(){
@@ -254,6 +142,13 @@ class FacturaMedicoController extends Controller{
         Helpers::retornarGet((isset($_GET['draw']) ? $_GET['draw'] : 0), count($total), $id);
     }
 
+    public function listarFacturaMedicoPorId($factura_medico_id){
+        $_facturaMedicoModel = new FacturaMedicoModel();
+        $inners = $_facturaMedicoModel->listInner($this->arrayInner);
+        $id = $_facturaMedicoModel->where('factura_medico_id','=',$factura_medico_id)->innerJoin($this->arraySelect, $inners, "factura_medico");
+        $factura_total = FacturaMedicoHelpers::calcularMontosBs($id[0]);
+        Helpers::retornarMensaje($id, $factura_total);
+    }
     // public function listarFacturaMedicoPorId($factura_medico_id){
         
     //     $_facturaMedicoModel = new FacturaMedicoModel();
@@ -277,7 +172,7 @@ class FacturaMedicoController extends Controller{
         $_POST = json_decode(file_get_contents('php://input'), true);
         $validarFactura = new Validate;
         
-        if ( !is_null($_POST) && ( $validarFactura->isDate($_POST['fecha_inicio']) || $validarFactura->isDate($_POST['fecha_fin']) ) ) {
+        if ( isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin']) && ($validarFactura->isDate($_GET['fecha_inicio']) || $validarFactura->isDate($_GET['fecha_fin'] )) ) {
             $respuesta = new Response('FECHA_INVALIDA');
             return $respuesta->json(400);
 
@@ -305,8 +200,8 @@ class FacturaMedicoController extends Controller{
                 $_facturaMedicoModel->where('factura_medico.medico_id', '=', $_GET['medico']);
             }
 
-            if ( !is_null($_POST)) {
-                $_facturaMedicoModel->whereDate('factura_medico.fecha_pago',$_POST['fecha_inicio'],$_POST['fecha_fin']);
+            if ( isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin']) ) {
+                $_facturaMedicoModel->whereDate('factura_medico.fecha_emision',$_GET['fecha_inicio'],$_GET['fecha_fin']);
             }
 
             $lista = $_facturaMedicoModel->innerJoin($this->arraySelect, $inners, "factura_medico");
@@ -324,8 +219,8 @@ class FacturaMedicoController extends Controller{
                 $_facturaMedicoModel->where('factura_medico.medico_id', '=', $_GET['medico']);
             }
 
-            if ( !is_null($_POST)) {
-                $_facturaMedicoModel->whereDate('factura_medico.fecha_pago',$_POST['fecha_inicio'],$_POST['fecha_fin']);
+            if ( isset($_GET['fecha_inicio']) && isset($_GET['fecha_fin']) ) {
+                $_facturaMedicoModel->whereDate('factura_medico.fecha_emision',$_GET['fecha_inicio'],$_GET['fecha_fin']);
             }
 
             $total_registros = $_facturaMedicoModel->innerJoin($this->arraySelect, $inners, "factura_medico");
@@ -365,7 +260,7 @@ class FacturaMedicoController extends Controller{
                 $consultas_por_citas[] = ConsultaService::obtenerConsultaNormal($consulta_cita, false);
             }
         }
-
+        
         $_consultaSinCita = new ConsultaSinCitaModel();
         $inner_consulta = $_consultaSinCita->listInner(['consulta' => 'consulta_sin_cita']);
         $consultas_medicos = $_consultaSinCita->where('consulta_sin_cita.medico_id', '=', $factura->medico_id)
@@ -375,34 +270,15 @@ class FacturaMedicoController extends Controller{
         $consultas_sin_citas = [];
         if (!is_null($consultas_medicos)) {
             foreach ($consultas_medicos as $consulta) {
-                $consultas_sin_citas[] = ConsultaService::obtenerConsultaNormal($consulta_cita, false);
+                $consultas_sin_citas[] = ConsultaService::obtenerConsultaNormal($consulta, false);
             }
         }
         
-        $consultas_totales = array_merge((Array) $consultas_por_citas, (Array) $consultas_por_citas);
+        $consultas_totales = array_merge((Array) $consultas_por_citas, (Array) $consultas_sin_citas);
 
         $respuesta = new Response( 'CORRECTO');
         $respuesta->setData($consultas_totales);
-         return $respuesta->json( 200);
+        return $respuesta->json(200);
     }
-
-    // Los listar traen los get de facturas registradas en base de datos
-
-    // public function calcularFacturaMedicoId() {
-        
-    //     $_POST = json_decode(file_get_contents('php://input'), true);
-    //     FacturaMedicoValidate::validateGeneral($_GET); // Validaciones
-            
-    //     $formulario = [
-    //         "fecha_actual" => $_GET['fecha'],
-    //         "medico_id" => $_GET['medico'],
-    //     ];
-        
-    //     $factura = FacturaMedicoService::contabilizarFactura($formulario);
-        
-    //     $respuesta = new Response( ( count($factura) > 0) ? 'CORRECTO' : 'NOT_FOUND');
-    //     $respuesta->setData($factura);
-    //     return $respuesta->json( ( count($factura) > 0) ? 201 : 400);
-    // }
 
 }

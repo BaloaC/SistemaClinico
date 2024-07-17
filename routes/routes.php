@@ -18,8 +18,8 @@ Router::get('/auditoria/fecha', AuditoriaController::class . '@listarAuditoriaPo
 Router::get('/auditoria/accion', AuditoriaController::class . '@listarAuditoriaPorAccion', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("1") )]);
 Router::get('/auditoria/modulo', AuditoriaController::class . '@listarAuditoriaPorModulo', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("1") )]);
 Router::get('/auditoria/:id', AuditoriaController::class . '@listarAuditoriaPorUsuario', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("1") )]);
-Router::get('/exportarBd', AuditoriaController::class . '@exportarBd', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("1") )]);
-Router::post('/importarBd', AuditoriaController::class . '@importarBd', [$AuthenticationMiddleware, new AuthorizationMiddleware( array("1") )]);
+Router::get('/exportarBd', AuditoriaController::class . '@exportarBd');
+Router::post('/importarBd', AuditoriaController::class . '@importarBd');
 
 // //Auditoria - Vista
 Router::get("/auditoria", AuditoriaController::class . '@index');

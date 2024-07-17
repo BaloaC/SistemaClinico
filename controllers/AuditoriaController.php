@@ -314,9 +314,10 @@ class AuditoriaController extends Controller {
     }
 
     public function exportarBd() {
-        global $isEnabledAudit;
-        $isEnabledAudit = 'exportarBD';
-
+        // global $isEnabledAudit;
+        // $isEnabledAudit = 'exportarBD';
+        // $auditDatabase = new AuditHandleDatabase();
+        
         $fecha = date("Ymd---His");
 
         $db_host = 'localhost';
@@ -348,8 +349,27 @@ class AuditoriaController extends Controller {
             $zip->addFile($salida_sql);
             $zip->close();
         
-            $auditDatabase = new AuditHandleDatabase();
-            $auditDatabase->handleRequest();
+            // auditoría
+            $accion_realizada = 'Exportó';
+            $_usuarioModel = new UsuarioModel();
+            $usuario = $_usuarioModel->where('rol', '=', 1)->getFirst();
+            $description = "El usuario ".$usuario->nombre." exportó la base de datos";
+            
+            date_default_timezone_set('America/Caracas');
+            $hoy = new DateTime();
+            $hoy_formateado = $hoy->format('Y-m-d H:i:s');
+
+            $row = [
+                "usuario_id" => $usuario->usuario_id,
+                "accion" => 'respaldo/restauración',
+                "descripcion" => $description,
+                "modulo" => 'base de datos',
+                "fecha_creacion" => $hoy_formateado,
+            ];
+
+            $_auditModel = new AuditoriaModel();
+            $inserted = $_auditModel->insert($row);
+            // auditoría
 
             unlink($salida_sql); //Eliminamos el archivo temporal SQL
             header("location: $salida_zip");
@@ -368,6 +388,27 @@ class AuditoriaController extends Controller {
 
         $conexionBd->connect()->exec(file_get_contents($archivoSql["tmp_name"]));
         
+        // auditoría
+        $_usuarioModel = new UsuarioModel();
+        $usuario = $_usuarioModel->where('rol', '=', 1)->getFirst();
+        $description = "El usuario ".$usuario->nombre." importó la base de datos";
+
+        date_default_timezone_set('America/Caracas');
+        $hoy = new DateTime();
+        $hoy_formateado = $hoy->format('Y-m-d H:i:s');
+
+        $row = [
+            "usuario_id" => $usuario->usuario_id,
+            "accion" => 'respaldo/restauración',
+            "descripcion" => $description,
+            "modulo" => 'base de datos',
+            "fecha_creacion" => $hoy_formateado,
+        ];
+
+        $_auditModel = new AuditoriaModel();
+        $inserted = $_auditModel->insert($row);
+        // auditoría
+
         $respuesta = new Response(true, 'Se ha realizado correctamente la importación de la base de datos');
         return $respuesta->json(200);
     }
